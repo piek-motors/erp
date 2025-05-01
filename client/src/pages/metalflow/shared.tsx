@@ -2,7 +2,6 @@ import { UilArrowLeft, UilPen } from '@iconscout/react-unicons'
 
 import {
   Box,
-  Breakpoint,
   Divider,
   IconButton,
   Stack,
@@ -49,7 +48,6 @@ interface FormProps {
   beforeFormComp?: any
   lastSection?: JSX.Element
   nameComponent?: JSX.Element
-  containerMaxWidth?: Breakpoint
 }
 
 export function GenericForm(props: FormProps) {

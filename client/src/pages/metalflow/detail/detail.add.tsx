@@ -67,7 +67,6 @@ export function DetailAdd() {
 
   return (
     <GenericForm
-      containerMaxWidth="sm"
       header={t.AddDetail}
       goBackUrl={MetalFlowSys.details}
       lastSection={actionSection}

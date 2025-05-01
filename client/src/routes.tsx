@@ -1,5 +1,5 @@
 import help from 'src/pages/help/main'
-import metal_flow from 'src/pages/metal_flow/main'
+import metalflow from 'src/pages/metalflow/main'
 import Archive from 'src/pages/orders/archive'
 import Production from 'src/pages/orders/production'
 import RecentOrders from 'src/pages/orders/recently'
@@ -21,6 +21,6 @@ export const protectedRoutes: RouteConfig[] = [
   ...order_detail,
   ...reclamations,
   ...settings,
-  ...metal_flow,
+  ...metalflow,
   ...help
 ]

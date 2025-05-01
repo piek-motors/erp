@@ -71,7 +71,6 @@ export function DetailUpdate() {
 
   return (
     <GenericForm
-      containerMaxWidth="sm"
       header={t.EditDetail}
       goBackUrl={MetalFlowSys.details}
       lastSection={<MutationWithStatus mutation={handleSave} />}

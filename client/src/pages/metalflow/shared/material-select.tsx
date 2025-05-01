@@ -1,7 +1,7 @@
 import { Box } from '@mui/material'
 import { useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { Material } from 'src/pages/metal_flow/domain/material'
+import { Material } from 'src/pages/metalflow/domain/material'
 import { P } from 'src/shortcuts'
 import { useGetMaterialsQuery } from 'src/types/graphql-shema'
 import { useStockStore } from '../stock'

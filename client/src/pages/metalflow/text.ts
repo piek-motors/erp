@@ -1,5 +1,6 @@
 export const t = {
   Add: 'Добавить',
+  Action: "Действие",
   AddDetail: 'Добавить деталь',
   AddMaterial: 'Добавить материал',
   AddSupply: 'Добавить поставку', // Align with "События поставок"

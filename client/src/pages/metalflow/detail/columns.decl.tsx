@@ -18,7 +18,7 @@ export const columnList: Column<DetailDto>[] = [
     accessor: 'name'
   },
   {
-    Header: 'Действие',
+    Header: t.Action,
     accessor: data => (
       <EditIconButton
         url={goTo(MetalFlowSys.detail_update, data.id)}

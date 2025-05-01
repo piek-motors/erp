@@ -1,7 +1,7 @@
 import { Button } from '@mui/material'
 import { useState } from 'react'
 import { MetalFlowSys } from 'src/lib/routes'
-import { Material } from 'src/pages/metal_flow/domain/material'
+import { Material } from 'src/pages/metalflow/domain/material'
 import { useInsertMaterialSupplyMutation } from 'src/types/graphql-shema'
 import { ErrorHint, GenericForm, QtyInputWithUnit, SavedHint } from '../shared'
 import { MaterialSelect } from '../shared/material-select'
