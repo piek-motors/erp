@@ -1,0 +1,17 @@
+{
+  "name": "shared",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "tsc -p tsconfig.json"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "exports": {
+    ".": "./dist/index.js",
+    "./enumerations": "./dist/enumerations.js"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.2"
+  }
+}

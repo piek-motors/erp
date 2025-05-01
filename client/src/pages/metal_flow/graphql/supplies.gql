@@ -1,0 +1,24 @@
+mutation InsertMaterialSupply($object: metal_pdo_supplies_insert_input!) {
+  insert_metal_pdo_supplies_one(object: $object) {
+    id
+  }
+}
+
+query GetSupplies {
+  metal_pdo_supplies(order_by: { id: desc }) {
+    id
+    material_id
+    qty
+    supplied_at
+    supplier_name
+    material {
+      ...MaterialFragment
+    }
+  }
+}
+
+mutation DeleteSupply($id: Int!) {
+  delete_metal_pdo_supplies_by_pk(id: $id) {
+    id
+  }
+}

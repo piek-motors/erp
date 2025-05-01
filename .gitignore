@@ -1,0 +1,12 @@
+.DS_STORE
+node_modules
+.env
+**/dist/
+**/.DS_Store
+*.tar
+*.tar.gz
+.vscode/settings.json
+.vscode/settings.json
+*.LICENSE.txt
+*.js.map
+*.sql

@@ -1,0 +1,27 @@
+mutation InsertMaterialWriteoff(
+  $objects: [metal_pdo_writeoffs_insert_input!]!
+) {
+  insert_metal_pdo_writeoffs(objects: $objects) {
+    affected_rows
+  }
+}
+
+query GetWrietOffs {
+  metal_pdo_writeoffs(order_by: { id: desc }) {
+    id
+    date
+    qty
+    type
+    type_data
+    reason
+    material {
+      ...MaterialFragment
+    }
+  }
+}
+
+mutation DeleteWriteOff($id: Int!) {
+  delete_metal_pdo_writeoffs_by_pk(id: $id) {
+    id
+  }
+}

@@ -1,0 +1,13 @@
+.dockerignore
+.git
+.gitignore
+.prettierrc
+.github
+.vscode
+**/node_modules
+**/build/
+**/dist
+**/*.test.ts
+**/*.test.tsx
+**/*.spec.ts
+**/*.spec.tsx

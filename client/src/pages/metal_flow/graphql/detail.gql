@@ -1,0 +1,97 @@
+query GetDetails {
+  metal_pdo_details {
+    id
+    name
+    detail_materials {
+      cost
+      material {
+        id
+        unit
+        shape
+        shape_data
+      }
+    }
+  }
+}
+
+query GetDetailByPk($id: Int!) {
+  metal_pdo_details_by_pk(id: $id) {
+    id
+    name
+    detail_materials {
+      cost
+      material {
+        id
+        unit
+        shape
+        shape_data
+      }
+    }
+  }
+}
+
+mutation InsertDetail($object: metal_pdo_details_insert_input!) {
+  insert_metal_pdo_details_one(object: $object) {
+    id
+    name
+  }
+}
+
+mutation UpdateDetail($_set: metal_pdo_details_set_input!, $id: Int!) {
+  update_metal_pdo_details_by_pk(pk_columns: { id: $id }, _set: $_set) {
+    id
+  }
+}
+
+mutation UpdateDetailMaterialCost(
+  $detail_id: Int!
+  $material_id: Int!
+  $cost: numeric!
+) {
+  update_metal_pdo_detail_materials_by_pk(
+    pk_columns: { detail_id: $detail_id, material_id: $material_id }
+    _set: { cost: $cost }
+  ) {
+    cost
+  }
+}
+
+mutation DeleteDetail($id: Int!) {
+  delete_metal_pdo_details_by_pk(id: $id) {
+    id
+  }
+}
+
+query GetDetailMaterials($_eq: Int!) {
+  metal_pdo_detail_materials(where: { material_id: { _eq: $_eq } }) {
+    material {
+      id
+      shape
+      shape_data
+    }
+  }
+}
+
+query GetDetailsMadeFromThatMaterial($_eq: Int!) {
+  metal_pdo_detail_materials(where: { material_id: { _eq: $_eq } }) {
+    detail {
+      id
+      name
+    }
+  }
+}
+
+mutation InsertDetailMaterials(
+  $objects: [metal_pdo_detail_materials_insert_input!]!
+) {
+  insert_metal_pdo_detail_materials(
+    objects: $objects
+    on_conflict: { constraint: detail_materials_p_key }
+  ) {
+    affected_rows
+    returning {
+      detail_id
+      material_id
+    }
+  }
+}
