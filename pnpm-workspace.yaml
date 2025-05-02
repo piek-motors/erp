@@ -1,4 +1,5 @@
 packages:
-  - 'shared'
-  - 'client'
-  - 'server'
+  - shared
+  - client
+  - server
+  - metal-flow-import

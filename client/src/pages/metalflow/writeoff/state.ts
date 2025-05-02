@@ -1,6 +1,6 @@
+import { Material } from 'shared/domain'
 import { EnWriteoffReason, EnWriteoffType } from 'shared/enumerations'
 import create from 'zustand'
-import { Material } from '../domain/material'
 
 export interface IWriteOff {
   id?: number

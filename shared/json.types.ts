@@ -52,6 +52,17 @@ export class PipeShapeData extends MaterialShape {
   }
 }
 
+export class SquareShapeData extends MaterialShape {
+  static shapeTitle = 'Квадрат'
+  /** Length in mm */
+  length!: string
+  /** Thickness (mm). */
+  thickness!: string
+  getIdentifier(): string {
+    return `${SquareShapeData.shapeTitle} ${this.length}x${this.thickness}`
+  }
+}
+
 /**
  * Unified type for material shapes.
  */
@@ -59,4 +70,5 @@ export type MaterialShapeData = {
   [EnMaterialShape.Circle]: CircleShapeData
   [EnMaterialShape.List]: ListShapeData
   [EnMaterialShape.Pipe]: PipeShapeData
+  [EnMaterialShape.Square]: SquareShapeData
 }

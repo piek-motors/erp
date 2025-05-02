@@ -3,7 +3,7 @@ import { UiUnit } from 'shared'
 import { MetalFlowSys } from 'src/lib/routes'
 import { Btn, P } from 'src/shortcuts'
 import { useInsertMaterialMutation } from 'src/types/graphql-shema'
-import { ErrorHint, GenericForm, LoadingHint, SavedHint } from '../shared'
+import { ErrorHint, SmallInputForm, LoadingHint, SavedHint } from '../shared'
 import { TakeLookHint } from '../shared/basic'
 import { MySelect } from '../shared/basic-select'
 import { goTo } from '../spa'
@@ -46,7 +46,7 @@ export function AddMaterial() {
   )
 
   return (
-    <GenericForm
+    <SmallInputForm
       header={t.AddMaterial}
       goBackUrl={MetalFlowSys.materials}
       lastSection={actionSection}
@@ -64,6 +64,6 @@ export function AddMaterial() {
           return { name: value, value: key }
         })}
       />
-    </GenericForm>
+    </SmallInputForm>
   )
 }

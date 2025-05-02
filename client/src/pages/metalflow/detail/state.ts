@@ -1,7 +1,7 @@
+import { Detail, Material } from 'shared/domain'
 import { GetDetailByPkQuery } from 'src/types/graphql-shema'
 import create from 'zustand'
-import { Detail } from '../domain/detail'
-import { Material } from '../domain/material'
+import { map } from '../domain-adapter'
 
 interface IDetail {
   id: number
@@ -76,7 +76,7 @@ export const useDetail = create<IDetail>(set => ({
     set({
       name: s?.name,
       id: s?.id,
-      materials: s?.detail_materials.map(e => Material.fromDto(e.material)),
+      materials: s?.detail_materials.map(e => map.material.fromDto(e.material)),
       materialCosts: s?.detail_materials.reduce(
         (acc, e) => ({
           ...acc,

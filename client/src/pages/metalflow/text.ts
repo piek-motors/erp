@@ -1,5 +1,7 @@
 export const t = {
+  PdoModuleTitle: 'ПДО: Планирование материалов',
   Add: 'Добавить',
+  Date: 'Дата',
   Action: "Действие",
   AddDetail: 'Добавить деталь',
   AddMaterial: 'Добавить материал',

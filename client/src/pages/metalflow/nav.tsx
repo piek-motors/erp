@@ -1,61 +1,46 @@
-import { UilCalculatorAlt } from '@iconscout/react-unicons'
 import { Box, Button, IconButton, Stack } from '@mui/material'
 import { Link } from 'react-router-dom'
 import { PageTitle } from 'src/components'
 import { P } from 'src/shortcuts'
-import { actions } from './actions'
+import { Action, actions } from './module.actions'
+import { t } from './text'
+import { UilCalculatorAlt } from '@iconscout/react-unicons';
 
-interface Props {}
-
-export const PdoModuleTitle = 'ПДО: Планирование материалов'
-
-export function Nav(props: Props) {
+export function Nav() {
   return (
-    <>
-      <Box
-        sx={{
-          p: 2
-        }}
-      >
-        <Stack gap={3}>
-          <PageTitle
-            title={PdoModuleTitle}
-            icon={<UilCalculatorAlt />}
-            sx={{ pb: 1 }}
-          />
-          {actions.map(each => {
-            return (
-              <Stack>
-                <Stack
-                  direction="row"
-                  alignItems={'center'}
-                  justifyContent="space-between"
-                  sx={{ cursor: 'pointer' }}
-                >
-                  <LinkableAction href={each.href} name={each.name} />
-                  {each.endBlock?.length && (
-                    <Stack pl={2}>
-                      {each.endBlock?.map(e => (
-                        <Box
-                          sx={{
-                            opacity: 0.6
-                          }}
-                        >
-                          <LinkableActionIcon
-                            href={e.href}
-                            icon={e.icon && <e.icon width={16} height={16} />}
-                          />
-                        </Box>
-                      ))}
-                    </Stack>
-                  )}
-                </Stack>
-              </Stack>
-            )
-          })}
+    <Stack gap={3} p={2}>
+      <PageTitle title={t.PdoModuleTitle} sx={{ pb: 1 }} icon={<UilCalculatorAlt />} />
+      {actions.map(each => RenderAction(each))}
+    </Stack>
+  )
+}
+
+function RenderAction(action: Action) {
+  return (
+    <Stack
+      direction="row"
+      alignItems={'center'}
+      justifyContent="space-between"
+      sx={{ cursor: 'pointer' }}
+    >
+      <LinkableAction href={action.href} name={action.name} />
+      {action.endBlock?.length && (
+        <Stack pl={2}>
+          {action.endBlock?.map(e => (
+            <Box
+              sx={{
+                opacity: 0.6
+              }}
+            >
+              <LinkableActionIcon
+                href={e.href}
+                icon={e.icon && <e.icon width={16} height={16} />}
+              />
+            </Box>
+          ))}
         </Stack>
-      </Box>
-    </>
+      )}
+    </Stack>
   )
 }
 

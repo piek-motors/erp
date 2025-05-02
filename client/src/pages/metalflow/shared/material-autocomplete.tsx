@@ -1,6 +1,7 @@
 import { Autocomplete, TextField } from '@mui/material'
+import { Material } from 'shared/domain'
 import { useGetMaterialsQuery } from '../../../types/graphql-shema'
-import { Material } from '../domain/material'
+import { map } from '../domain-adapter'
 import { t } from '../text'
 
 export function MaterialAutocomplete(props: {
@@ -11,7 +12,7 @@ export function MaterialAutocomplete(props: {
   const { data, value, onChange } = props
 
   const options =
-    data?.metal_pdo_materials.map(Material.fromDto).map(material => ({
+    data?.metal_pdo_materials.map(map.material.fromDto).map(material => ({
       label: material.getIdentifier(),
       material
     })) || []
@@ -51,7 +52,7 @@ export function MaterialAutocompleteMulti(props: {
   const { data, value, onChange } = props
 
   const options =
-    data?.metal_pdo_materials.map(Material.fromDto).map(material => ({
+    data?.metal_pdo_materials.map(map.material.fromDto).map(material => ({
       label: material.getIdentifier(),
       material
     })) || []

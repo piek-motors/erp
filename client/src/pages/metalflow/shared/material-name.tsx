@@ -10,7 +10,7 @@ export function MaterialName(props: {
 }) {
   switch (props.shape) {
     case EnMaterialShape.Circle: {
-      const d = props.shapeData as CircleShapeData
+      const d = props.shapeData as any as CircleShapeData
       return (
         <Stack direction="row" gap={1} alignItems="center">
           <pre>

@@ -1,9 +1,14 @@
 import { Button } from '@mui/material'
 import { useState } from 'react'
+import { Material } from 'shared/domain'
 import { MetalFlowSys } from 'src/lib/routes'
-import { Material } from 'src/pages/metalflow/domain/material'
 import { useInsertMaterialSupplyMutation } from 'src/types/graphql-shema'
-import { ErrorHint, GenericForm, QtyInputWithUnit, SavedHint } from '../shared'
+import {
+  ErrorHint,
+  QtyInputWithUnit,
+  SavedHint,
+  SmallInputForm
+} from '../shared'
 import { MaterialSelect } from '../shared/material-select'
 import { useStockStore } from '../stock'
 import { t } from '../text'
@@ -36,7 +41,7 @@ export function AddSuply() {
   const btnDisabled = !qty
 
   return (
-    <GenericForm header={t.SupplyAdd} goBackUrl={MetalFlowSys.materials}>
+    <SmallInputForm header={t.SupplyAdd} goBackUrl={MetalFlowSys.materials}>
       <MaterialSelect
         setMaterial={setMaterial}
         material={material}
@@ -54,6 +59,6 @@ export function AddSuply() {
       <Button variant="contained" onClick={save} disabled={btnDisabled}>
         {t.Save}
       </Button>
-    </GenericForm>
+    </SmallInputForm>
   )
 }

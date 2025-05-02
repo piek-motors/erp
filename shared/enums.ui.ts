@@ -20,7 +20,8 @@ export function formatWriteoffReason(reason?: EnWriteoffReason) {
 export const UiMaterialShape = {
   [EnMaterialShape.Circle]: 'Круг',
   [EnMaterialShape.List]: 'Лист',
-  [EnMaterialShape.Pipe]: 'Труба'
+  [EnMaterialShape.Pipe]: 'Труба',
+  [EnMaterialShape.Square]: 'Квадрат'
 }
 
 export function formatMaterialShape(shape: EnMaterialShape) {

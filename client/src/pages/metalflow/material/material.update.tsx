@@ -1,14 +1,14 @@
 import { Box, CircularProgress, Divider, Stack } from '@mui/material'
 import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
+import { Material } from 'shared/domain'
 import { MetalFlowSys } from 'src/lib/routes'
 import { Btn, P } from 'src/shortcuts'
 import {
   useGetMaterialByPkQuery,
   useUpdateMaterialMutation
 } from 'src/types/graphql-shema'
-import { Material } from '../domain/material'
-import { ErrorHint, GenericForm, LoadingHint, SavedHint } from '../shared'
+import { ErrorHint, LoadingHint, SavedHint, SmallInputForm } from '../shared'
 import { MaterialName } from '../shared/material-name'
 import { goTo } from '../spa'
 import { t } from '../text'
@@ -76,7 +76,7 @@ export function UpdateMaterial() {
 
   if (ready) {
     return (
-      <GenericForm
+      <SmallInputForm
         header={t.EditMaterial}
         goBackUrl={MetalFlowSys.materials}
         nameComponent={
@@ -116,7 +116,7 @@ export function UpdateMaterial() {
         lastSection={saveActionsBlock}
       >
         <Box>{getInputFormByShapeValue(state.shape)}</Box>
-      </GenericForm>
+      </SmallInputForm>
     )
   } else return <CircularProgress />
 }

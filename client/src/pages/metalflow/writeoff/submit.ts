@@ -1,3 +1,4 @@
+import { Detail, Material, WriteoffTroughDetail } from 'shared/domain'
 import { EnWriteoffType } from 'shared/enumerations'
 import {
   GetDetailByPkDocument,
@@ -8,9 +9,6 @@ import {
   Metal_Pdo_Writeoffs_Insert_Input
 } from 'src/types/graphql-shema'
 import { apolloClient } from '../../../api'
-import { Detail } from '../domain/detail'
-import { Material } from '../domain/material'
-import { WriteoffTroughDetail } from '../domain/writeoff'
 import { IWriteOff } from './state'
 
 export const handleSubmit = async (state: IWriteOff) => {

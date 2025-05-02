@@ -1,7 +1,7 @@
 import { Stack } from '@mui/material'
+import { Material } from 'shared/domain'
 import { EnUnit } from 'shared/enumerations'
 import { P } from '../../../shortcuts'
-import { Material } from '../domain/material'
 import { QtyInputWithUnit } from '../shared'
 import { useDetail } from './state'
 

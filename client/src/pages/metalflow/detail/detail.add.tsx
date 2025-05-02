@@ -1,11 +1,11 @@
+import { Detail } from 'shared/domain'
 import { MetalFlowSys } from 'src/lib/routes'
 import { Input } from 'src/shortcuts'
 import {
   useGetMaterialsQuery,
   useInsertDetailMutation
 } from 'src/types/graphql-shema'
-import { Detail } from '../domain/detail'
-import { GenericForm } from '../shared'
+import { SmallInputForm } from '../shared'
 import { MutationWithStatus, TakeLookHint } from '../shared/basic'
 import { MaterialAutocompleteMulti } from '../shared/material-autocomplete'
 import { goTo } from '../spa'
@@ -66,7 +66,7 @@ export function DetailAdd() {
   const { data: materials } = useGetMaterialsQuery()
 
   return (
-    <GenericForm
+    <SmallInputForm
       header={t.AddDetail}
       goBackUrl={MetalFlowSys.details}
       lastSection={actionSection}
@@ -87,6 +87,6 @@ export function DetailAdd() {
       />
 
       <DetailMaterialPropInput />
-    </GenericForm>
+    </SmallInputForm>
   )
 }

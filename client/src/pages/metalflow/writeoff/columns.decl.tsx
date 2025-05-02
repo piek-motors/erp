@@ -30,15 +30,15 @@ export function getColumns(props: {
       )
     },
     {
-      Header: 'Кол-во',
+      Header: t.Qty,
       accessor: data => `${data.qty} ${formatUnit(data.material?.unit)}`
     },
     {
-      Header: 'Дата расхода',
+      Header: t.Date,
       accessor: data => formatDateWithTime(data.date)
     },
     {
-      Header: 'Причина',
+      Header: t.WriteOffReason,
       accessor: data => formatWriteoffReason(data.reason)
     },
     {
@@ -52,7 +52,7 @@ export function getColumns(props: {
       }
     },
     {
-      Header: 'Действие',
+      Header: t.Action,
       accessor: data => (
         <DeleteWrireOff refetch={props.refetch} supplyId={data.id} />
       )

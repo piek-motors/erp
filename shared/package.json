@@ -2,6 +2,7 @@
   "name": "shared",
   "version": "1.0.0",
   "scripts": {
+    "barrels:generate": "barrelsby --config barrelsby.json",
     "build": "tsc -p tsconfig.json"
   },
   "author": "",
@@ -9,9 +10,11 @@
   "description": "",
   "exports": {
     ".": "./dist/index.js",
-    "./enumerations": "./dist/enumerations.js"
+    "./enumerations": "./dist/enumerations.js",
+    "./domain": "./dist/domain/index.js"
   },
   "devDependencies": {
+    "barrelsby": "^2.8.1",
     "typescript": "^5.8.2"
   }
 }

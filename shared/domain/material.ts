@@ -1,11 +1,7 @@
-import {
-  CircleShapeData,
-  MaterialShape,
-  formatMaterialShape,
-  formatUnit
-} from 'shared'
-import { EnMaterialShape, EnUnit } from 'shared/enumerations'
-import { GetMaterialsQuery } from 'src/types/graphql-shema'
+import { EnMaterialShape, EnUnit } from '../enumerations'
+import { formatMaterialShape, formatUnit } from '../enums.ui'
+import { CircleShapeData, MaterialShape } from '../json.types'
+
 
 export class Material {
   length?: number
@@ -26,11 +22,6 @@ export class Material {
     } else {
       return `${this.shape()} ${this.name}`
     }
-  }
-
-  // TODO: extract into adapters layer
-  static fromDto(dto: GetMaterialsQuery['metal_pdo_materials'][0]) {
-    return new Material(dto.id, dto.unit, dto.shape, dto.shape_data)
   }
 
   unit() {

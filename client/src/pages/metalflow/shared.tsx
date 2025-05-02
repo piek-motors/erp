@@ -50,13 +50,12 @@ interface FormProps {
   nameComponent?: JSX.Element
 }
 
-export function GenericForm(props: FormProps) {
+export function SmallInputForm(props: FormProps) {
   return (
     <Box maxWidth="sm">
       <Stack direction="row" alignItems={'center'} gap={1} pb={2}>
         <PageTitle title={props.header} icon={<></>} />
       </Stack>
-
       <PaperL1
         sx={{
           p: 2,
@@ -95,7 +94,7 @@ export const QtyInputWithUnit = (props: {
       <Input
         autoComplete="off"
         label={props.label}
-        value={qty || ''}
+        value={qty}
         defaultValue={props.defaultValue}
         onChange={e => {
           setQty(e.target.value)
@@ -157,7 +156,6 @@ export function ListPageHeader(props: {
   goto: MetalFlowSys
 }) {
   const navigate = useNavigate()
-
   return (
     <Stack
       direction="row"

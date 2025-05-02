@@ -2,7 +2,7 @@ import { Autocomplete } from '@mui/material'
 import { UiWriteoffReason, formatWriteoffReason } from 'shared'
 import { MetalFlowSys } from 'src/lib/routes'
 import { Input } from 'src/shortcuts'
-import { GenericForm } from '../shared'
+import { SmallInputForm } from '../shared'
 import { MutationWithStatus } from '../shared/basic'
 import { ShapeDependedTabs } from '../shared/shape-depended-tabs'
 import { t } from '../text'
@@ -15,7 +15,7 @@ export function AddWriteOff() {
   const state = useWriteOffStore()
   const { reason, setReason } = state
   return (
-    <GenericForm header={t.WriteOffAdd} goBackUrl={MetalFlowSys.materials}>
+    <SmallInputForm header={t.WriteOffAdd} goBackUrl={MetalFlowSys.materials}>
       {<MainForm />}
       <Autocomplete
         options={Object.entries(UiWriteoffReason).map(([k, v]) => ({
@@ -39,7 +39,7 @@ export function AddWriteOff() {
           })
         }
       />
-    </GenericForm>
+    </SmallInputForm>
   )
 }
 

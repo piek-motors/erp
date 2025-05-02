@@ -1,6 +1,7 @@
 import { Stack } from '@mui/material'
 import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
+import { Detail } from 'shared/domain'
 import { apolloClient } from '../../../api'
 import { MetalFlowSys } from '../../../lib/routes'
 import { Input, P } from '../../../shortcuts'
@@ -11,8 +12,7 @@ import {
   useGetDetailByPkQuery,
   useUpdateDetailMutation
 } from '../../../types/graphql-shema'
-import { Detail } from '../domain/detail'
-import { GenericForm } from '../shared'
+import { SmallInputForm } from '../shared'
 import { MutationWithStatus } from '../shared/basic'
 import { t } from '../text'
 import { DetailMaterialPropInput } from './shared'
@@ -70,7 +70,7 @@ export function DetailUpdate() {
   }
 
   return (
-    <GenericForm
+    <SmallInputForm
       header={t.EditDetail}
       goBackUrl={MetalFlowSys.details}
       lastSection={<MutationWithStatus mutation={handleSave} />}
@@ -94,6 +94,6 @@ export function DetailUpdate() {
 
         <DetailMaterialPropInput />
       </Stack>
-    </GenericForm>
+    </SmallInputForm>
   )
 }

@@ -1,4 +1,5 @@
 import { formatUnit } from 'shared'
+import { Material, Supply, Writeoff } from 'shared/domain'
 import create from 'zustand'
 import { apolloClient } from '../../api'
 import {
@@ -7,9 +8,6 @@ import {
   GetWrietOffsDocument,
   GetWrietOffsQuery
 } from '../../types/graphql-shema'
-import { Material } from './domain/material'
-import { Supply } from './domain/supply'
-import { Writeoff } from './domain/writeoff'
 
 interface IStock {
   stock: Map<number, number>

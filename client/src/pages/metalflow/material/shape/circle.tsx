@@ -1,6 +1,6 @@
 import { Stack, ToggleButton, ToggleButtonGroup } from '@mui/material'
-import { CircleShapeData } from 'shared'
 import { EnMaterialShape } from 'shared/enumerations'
+import { CircleShapeData } from 'shared/json.types'
 import { Input } from 'src/shortcuts'
 import { AlloyAutocomplete } from '../../shared/alloy-autocomplete'
 import { t } from '../../text'

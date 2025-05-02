@@ -1,0 +1,17 @@
+{
+  "name": "metal-flow-import",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {},
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@types/node": "^18.19.83",
+    "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "csv": "^6.3.11",
+    "shared": "workspace:*"
+  }
+}

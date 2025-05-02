@@ -1,9 +1,10 @@
 import { Box } from '@mui/material'
 import { useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { Material } from 'src/pages/metalflow/domain/material'
+import { Material } from 'shared/domain'
 import { P } from 'src/shortcuts'
 import { useGetMaterialsQuery } from 'src/types/graphql-shema'
+import { map } from '../domain-adapter'
 import { useStockStore } from '../stock'
 import { MaterialAutocomplete } from './material-autocomplete'
 
@@ -26,7 +27,7 @@ export function MaterialSelect(props: {
       const m = data?.metal_pdo_materials.find(each => each.id === +materialid)
       if (!m) throw Error(`material with this id not found`)
 
-      setMaterial(Material.fromDto(m))
+      setMaterial(map.material.fromDto(m))
     }
   }, [data])
 

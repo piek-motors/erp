@@ -6,7 +6,7 @@ export class Detail {
     readonly name: string,
     readonly materials: Material[],
     readonly costs: number[] = []
-  ) {}
+  ) { }
 
   calcCost(qty: number) {
     return this.materials.map((each, idx) => {

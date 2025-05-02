@@ -1,7 +1,7 @@
 import { Autocomplete, TextField } from '@mui/material'
+import { Detail } from 'shared/domain'
 import { useGetDetailsQuery } from '../../../types/graphql-shema'
-import { Detail } from '../domain/detail'
-import { Material } from '../domain/material'
+import { map } from '../domain-adapter'
 import { t } from '../text'
 
 export function DetailSelect(props: {
@@ -12,23 +12,13 @@ export function DetailSelect(props: {
   const options =
     details.data?.metal_pdo_details.map(each => ({
       label: each.name,
-      data: new Detail(
-        each.id,
-        each.name,
-        each.detail_materials.map(m => {
-          return Material.fromDto({
-            ...m.material,
-            shape_data: m.material.shape_data
-          })
-        }),
-        each.detail_materials.map(m => m.cost)
-      )
+      data: map.detail.fromDto(each)
     })) || []
 
   return (
     <Autocomplete
       disablePortal
-      onChange={(e, selected) => {
+      onChange={(_, selected) => {
         if (selected) {
           props.onChange(selected.data)
         }
