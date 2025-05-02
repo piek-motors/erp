@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "csv": "^6.3.11",
+    "yaml": "2.7.1",
     "shared": "workspace:*"
   }
 }

@@ -4,7 +4,7 @@ import { formatDateWithTime } from '../../../lib/date'
 import { GetSuppliesQuery } from '../../../types/graphql-shema'
 import { MaterialName } from '../shared/material-name'
 import { t } from '../text'
-import { DeleteSupply } from './supply.delete'
+import { DeleteSupply } from './supply.add'
 
 export type SupplyDto = GetSuppliesQuery['metal_pdo_supplies'][number]
 

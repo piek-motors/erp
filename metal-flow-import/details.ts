@@ -4,25 +4,19 @@ import path from 'node:path';
 import { CircleShapeData, ListShapeData, PipeShapeData, SquareShapeData } from 'shared';
 import { Detail, Material } from 'shared/domain';
 import { EnMaterialShape, EnUnit } from 'shared/enumerations';
+import YAML from 'yaml';
+
 
 const csv = fs.readFileSync(path.resolve(process.cwd(), './data/details.csv'));
 const log = console.log
 
-let i = 2
 parse(csv, { delimiter: ',' }, ((err, res) => {
   let materialDetails = new Map<Material, Array<Detail>>()
   let material: Material | undefined
 
   for (const line of res) {
-    // if (i > 1) {
-    //   i--;
-    //   continue
-    // }
-
     const id = line[0]
-
     if (id) {
-      // this line denotes material
       const name = line[1]
       if (name) {
         material = parseMaterialName(name)
@@ -55,48 +49,24 @@ parse(csv, { delimiter: ',' }, ((err, res) => {
     }
   }
 
-  const filtred = filterMaterialsWithNoDetails(materialDetails)
+  const MaterialDetails = filterMaterialsWithNoDetails(materialDetails)
+  const data = YAML.stringify(MaterialDetails)
+  fs.writeFileSync("./details-parsed.yaml", data)
+
 
   // log(filtred)
 }));
 
 function parseMaterialName(name: string): Material | undefined {
+  const parsers = new Parser()
   if (name.includes('круг')) {
-    const diameter = parseInt(name.split('ф')[1])
-    const alloy = name.split('ф')[1].split(' ')[1].trim()
-
-    const circle = new CircleShapeData()
-    circle.alloy = alloy
-    circle.diameter = Number(diameter)
-
-    return new Material(0, EnUnit.Kg, EnMaterialShape.Circle, circle)
+    return parsers.parseCircle(name)
   } else if (name.includes('труба')) {
-    const diameterMeta = (name.split('ф')[1])
-    const d = diameterMeta.split('x')
-    const diameter = parseInt(d[0])
-    const thickness = parseInt(d[1])
-    const alloy = name.split('ф')[1].split(' ')[1].trim()
-
-    const pipe = new PipeShapeData()
-    pipe.diameter = diameter
-    pipe.thickness = thickness
-    pipe.alloy = alloy
-
-    return new Material(0, EnUnit.Kg, EnMaterialShape.Pipe, pipe)
+    return parsers.parsePipe(name)
   } else if (name.includes('лист')) {
-    const g = Number(name.split("G")[1])
-    const list = new ListShapeData()
-    list.g = g
-    return new Material(0, EnUnit.Kg, EnMaterialShape.List, list)
+    return parsers.parseList(name)
   } else if (name.includes('квадрат')) {
-    const [_, size, alloy, allsoySecond] = name.split(' ')
-    const sideSize = Number(size.split('x')[1])
-    const square = new SquareShapeData()
-    square.length = sideSize
-    if (alloy) {
-      square.alloy = `${alloy}${allsoySecond || ''}`
-    }
-    return new Material(0, EnUnit.Kg, EnMaterialShape.Square, square)
+    return parsers.parseSquare(name)
   }
   else {
     log(`error: unrecognized material name: ${name}`)
@@ -113,3 +83,47 @@ function filterMaterialsWithNoDetails(details: Map<Material, Array<Detail>>) {
   return res
 }
 
+export class Parser {
+  parseSquare(name: string) {
+    const [_, size, alloy, allsoySecond] = name.split(' ')
+    const sideSize = Number(size.split('x')[1])
+    const square = new SquareShapeData()
+    square.length = sideSize
+    if (alloy) {
+      square.alloy = `${alloy}${allsoySecond || ''}`
+    }
+    return new Material(0, EnUnit.Kg, EnMaterialShape.Square, square)
+  }
+  parseList(name: string) {
+    const geee = name.split("G")[1]?.split(" ")[0].replace("=", "").replace(',', '.')
+    const g = Number(geee)
+    console.log(g, name.split("G")[1])
+    const list = new ListShapeData()
+    list.g = g
+    return new Material(0, EnUnit.Kg, EnMaterialShape.List, list)
+  }
+  parsePipe(name: string) {
+    const diameterMeta = (name.split('ф')[1])
+    const d = diameterMeta.split('x')
+    const diameter = parseInt(d[0])
+    const thickness = parseInt(d[1])
+    const alloy = name.split('ф')[1].split(' ')[1].trim()
+
+    const pipe = new PipeShapeData()
+    pipe.diameter = diameter
+    pipe.thickness = thickness
+    pipe.alloy = alloy
+
+    return new Material(0, EnUnit.Kg, EnMaterialShape.Pipe, pipe)
+  }
+  parseCircle(name: string) {
+    const diameter = parseInt(name.split('ф')[1])
+    const alloy = name.split('ф')[1].split(' ')[1].trim()
+
+    const circle = new CircleShapeData()
+    circle.alloy = alloy
+    circle.diameter = Number(diameter)
+
+    return new Material(0, EnUnit.Kg, EnMaterialShape.Circle, circle)
+  }
+}

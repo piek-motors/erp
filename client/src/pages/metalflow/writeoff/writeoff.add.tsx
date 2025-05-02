@@ -1,5 +1,5 @@
 import { Autocomplete } from '@mui/material'
-import { UiWriteoffReason, formatWriteoffReason } from 'shared'
+import { formatWriteoffReason, UiWriteoffReason } from 'shared'
 import { MetalFlowSys } from 'src/lib/routes'
 import { Input } from 'src/shortcuts'
 import { SmallInputForm } from '../shared'
@@ -8,15 +8,21 @@ import { ShapeDependedTabs } from '../shared/shape-depended-tabs'
 import { t } from '../text'
 import { useWriteOffStore } from './state'
 import { handleSubmit } from './submit'
-import { WriteoffThroughDetail } from './through-detail'
-import { WriteOffThroughMaterial } from './through-material'
 
 export function AddWriteOff() {
   const state = useWriteOffStore()
   const { reason, setReason } = state
   return (
     <SmallInputForm header={t.WriteOffAdd} goBackUrl={MetalFlowSys.materials}>
-      {<MainForm />}
+      {
+        <ShapeDependedTabs
+          data={{
+            [t.WriteoffThroughDetail]: <WriteoffThroughDetail />,
+            [t.WriteoffThroughMaterial]: <WriteOffThroughMaterial />
+          }}
+          handleChange={val => {}}
+        />
+      }
       <Autocomplete
         options={Object.entries(UiWriteoffReason).map(([k, v]) => ({
           label: v,
@@ -43,14 +49,167 @@ export function AddWriteOff() {
   )
 }
 
-function MainForm() {
+import { UilTrash } from '@iconscout/react-unicons'
+import { IconButton, Stack } from '@mui/material'
+import { useEffect } from 'react'
+import { useDeleteWriteOffMutation } from '../../../types/graphql-shema'
+import { notif } from '../../../utils/notification'
+
+export function DeleteWrireOff(props: {
+  supplyId: number
+  refetch: () => void
+}) {
+  const [mut, { data }] = useDeleteWriteOffMutation({
+    variables: { id: props.supplyId }
+  })
+
+  useEffect(() => {
+    if (data) {
+      notif('success', 'Событие поставки удалено')
+    }
+  }, [data])
+
   return (
-    <ShapeDependedTabs
-      data={{
-        [t.WriteoffThroughDetail]: <WriteoffThroughDetail />,
-        [t.WriteoffThroughMaterial]: <WriteOffThroughMaterial />
-      }}
-      handleChange={val => {}}
-    />
+    <Stack direction="row-reverse" gap={1} className="delete-btn">
+      <IconButton
+        size="small"
+        color="error"
+        sx={{
+          opacity: 0.8
+        }}
+        onClick={async () => {
+          await mut()
+          props.refetch()
+        }}
+      >
+        <UilTrash width={16} height={16} />
+      </IconButton>
+    </Stack>
+  )
+}
+
+import { useState } from 'react'
+import { Detail } from 'shared/domain/detail'
+import { WriteoffTroughDetail } from 'shared/domain/writeoff'
+import { EnWriteoffType } from 'shared/enumerations'
+import { P } from '../../../shortcuts'
+import { DetailSelect } from '../shared/detail-select'
+
+export function WriteoffThroughDetail() {
+  const [detail, setDetail] = useState<Detail>()
+  const state = useWriteOffStore()
+  const typeData = state.typeData as WriteoffTroughDetail
+
+  return (
+    <>
+      <DetailSelect
+        onChange={v => {
+          setDetail(v)
+          state.setType(EnWriteoffType.ThroughDetail)
+          state.addTypeDataProprty({
+            detailId: v.id
+          })
+        }}
+        value={detail}
+      />
+      <Input
+        label={t.Qty}
+        type="number"
+        value={typeData.qty || ''}
+        onChange={e => {
+          const isNumber = Number.isFinite(Number(e.target.value))
+          state.addTypeDataProprty({
+            qty: isNumber ? Number(e.target.value) : 0
+          })
+        }}
+      />
+      {detail && <TotalCost detail={detail} qty={typeData.qty} />}
+    </>
+  )
+}
+
+function TotalCost(props: { detail: Detail; qty: number }) {
+  const cost = props.detail.calcCost(Number(props.qty) || 0)
+  return (
+    <Stack p={1}>
+      {t.InResultWillBeSubtracted}
+
+      {cost.map(each => (
+        <P key={each.meterial.getIdentifier()}>
+          {each.cost} {each.meterial.unitId} - {each.meterial.getIdentifier()}
+        </P>
+      ))}
+    </Stack>
+  )
+}
+
+import { QtyInputWithUnit } from '../shared'
+import { MaterialSelect } from '../shared/material-select'
+
+export function WriteOffThroughMaterial() {
+  const state = useWriteOffStore()
+  const { material } = state
+  return (
+    <>
+      <MaterialSelect
+        setMaterial={m => {
+          state.setType(EnWriteoffType.DirectUnit)
+          state.setMaterial(m)
+        }}
+        material={material}
+      />
+      <QtyInputWithUnit
+        label={t.Qty}
+        setValue={v => state.setQty(Number(v))}
+        unitId={material?.unitId}
+        value={state.qty.toString()}
+      />
+    </>
+  )
+}
+
+/** @jsxImportSource @emotion/react */
+import { css } from '@emotion/react'
+import { Box } from '@mui/material'
+import { PaperL1 } from '../../../components/paper'
+import { useGetWrietOffsQuery } from '../../../types/graphql-shema'
+import { ListPageHeader } from '../shared'
+import { Table } from '../shared/table.impl'
+import { getColumns } from './columns.decl'
+
+export function WriteoffsList() {
+  const { data, refetch } = useGetWrietOffsQuery()
+  const [key, setKey] = useState(0)
+
+  return (
+    <>
+      <ListPageHeader
+        title={t.WriteoffsList}
+        btnText={t.WriteOffAdd}
+        goto={MetalFlowSys.writeoff_add}
+      />
+      <PaperL1 sx={{ gap: 2 }}>
+        <Box
+          css={css`
+            .delete-btn {
+              opacity: 0;
+              visibility: hidden;
+            }
+
+            tr:hover {
+              .delete-btn {
+                opacity: 1;
+                visibility: visible;
+              }
+            }
+          `}
+        >
+          <Table
+            columns={getColumns({ key, setKey, refetch })}
+            data={data?.metal_pdo_writeoffs || []}
+          />
+        </Box>
+      </PaperL1>
+    </>
   )
 }

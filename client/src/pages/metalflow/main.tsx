@@ -1,16 +1,11 @@
 import { MetalFlowSys } from 'src/lib/routes'
 import { RouteConfig } from 'src/types/global'
-import { DetailAdd } from './detail/detail.add'
-import { DetailUpdate } from './detail/detail.update'
-import { DetailsList } from './detail/details'
-import { AddMaterial } from './material/material.add'
-import { UpdateMaterial } from './material/material.update'
+import { DetailAdd, DetailsList, DetailUpdate } from './detail/componets'
+import { AddMaterial, UpdateMaterial } from './material/list'
 import { MaterialsList } from './material/materials'
 import { SPA } from './spa'
-import { AddSuply } from './supply/supply.add'
-import { SuppliesList } from './supply/supply.list'
-import { AddWriteOff } from './writeoff/writeoff.add'
-import { WriteoffsList } from './writeoff/writeoff.list'
+import { AddSuply, SuppliesList } from './supply/supply.add'
+import { AddWriteOff, WriteoffsList } from './writeoff/writeoff.add'
 
 const routes = [
   {

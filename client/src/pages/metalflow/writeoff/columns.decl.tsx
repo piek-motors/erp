@@ -5,7 +5,7 @@ import { formatDateWithTime } from '../../../lib/date'
 import { GetWrietOffsQuery } from '../../../types/graphql-shema'
 import { MaterialName } from '../shared/material-name'
 import { t } from '../text'
-import { DeleteWrireOff } from './writeoff.delete'
+import { DeleteWrireOff } from './writeoff.add'
 
 export type SupplyDto = GetWrietOffsQuery['metal_pdo_writeoffs'][number]
 
