@@ -8,7 +8,7 @@ export abstract class MaterialShape {
 export class CircleShapeData extends MaterialShape {
   static shapeTitle = 'Круг'
   /** Diameter mm  */
-  diameter!: string
+  diameter!: number
   /** Alloy type or material grade. */
   alloy!: string
   /**
@@ -18,7 +18,7 @@ export class CircleShapeData extends MaterialShape {
    */
   calibrated!: boolean
   /** Density in kilograms per cubic meter (kg/m³). */
-  density!: string
+  density!: number
   /** Linear mass in kilograms per meter (kg/m). */
   linearMass!: number
   getIdentifier(): string {
@@ -28,14 +28,9 @@ export class CircleShapeData extends MaterialShape {
 
 export class ListShapeData extends MaterialShape {
   static shapeTitle = 'Лист'
-  /** Length in centimeters (cm). */
-  length!: string
-  /** Width in centimeters (cm). */
-  width!: string
-  /** Thickness in centimeters (cm). */
-  thickness!: string
+  g!: number
   getIdentifier(): string {
-    return `${ListShapeData.shapeTitle} ${this.length}x${this.width}x${this.thickness}`
+    return `${ListShapeData.shapeTitle} G ${this.g}`
   }
 }
 
@@ -55,11 +50,11 @@ export class PipeShapeData extends MaterialShape {
 export class SquareShapeData extends MaterialShape {
   static shapeTitle = 'Квадрат'
   /** Length in mm */
-  length!: string
-  /** Thickness (mm). */
-  thickness!: string
+  length!: number
+  /** Alloy type or material grade. */
+  alloy!: string
   getIdentifier(): string {
-    return `${SquareShapeData.shapeTitle} ${this.length}x${this.thickness}`
+    return `${SquareShapeData.shapeTitle} ${this.length}x${this.alloy}`
   }
 }
 

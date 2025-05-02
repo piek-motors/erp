@@ -1,9 +1,9 @@
 import { parse, } from 'csv';
 import fs from 'node:fs';
 import path from 'node:path';
+import { CircleShapeData, ListShapeData, PipeShapeData, SquareShapeData } from 'shared';
 import { Detail, Material } from 'shared/domain';
 import { EnMaterialShape, EnUnit } from 'shared/enumerations';
-import { CircleShapeData, PipeShapeData } from '../shared/dist/json.types';
 
 const csv = fs.readFileSync(path.resolve(process.cwd(), './data/details.csv'));
 const log = console.log
@@ -14,10 +14,10 @@ parse(csv, { delimiter: ',' }, ((err, res) => {
   let material: Material | undefined
 
   for (const line of res) {
-    if (i > 0) {
-      i--;
-      continue
-    }
+    // if (i > 1) {
+    //   i--;
+    //   continue
+    // }
 
     const id = line[0]
 
@@ -33,7 +33,7 @@ parse(csv, { delimiter: ',' }, ((err, res) => {
       continue
     } else {
       if (!material) {
-        log(`Material is not set for detail`, line)
+        // log(`Material is not set for detail`, line)
         continue
       }
       // this branch defined details mad of material that we cath aboveconst name = line[1]
@@ -67,7 +67,7 @@ function parseMaterialName(name: string): Material | undefined {
 
     const circle = new CircleShapeData()
     circle.alloy = alloy
-    circle.diameter = diameter
+    circle.diameter = Number(diameter)
 
     return new Material(0, EnUnit.Kg, EnMaterialShape.Circle, circle)
   } else if (name.includes('труба')) {
@@ -83,8 +83,23 @@ function parseMaterialName(name: string): Material | undefined {
     pipe.alloy = alloy
 
     return new Material(0, EnUnit.Kg, EnMaterialShape.Pipe, pipe)
-  } else {
-    log(`Unrecognized material ${name}`)
+  } else if (name.includes('лист')) {
+    const g = Number(name.split("G")[1])
+    const list = new ListShapeData()
+    list.g = g
+    return new Material(0, EnUnit.Kg, EnMaterialShape.List, list)
+  } else if (name.includes('квадрат')) {
+    const [_, size, alloy, allsoySecond] = name.split(' ')
+    const sideSize = Number(size.split('x')[1])
+    const square = new SquareShapeData()
+    square.length = sideSize
+    if (alloy) {
+      square.alloy = `${alloy}${allsoySecond || ''}`
+    }
+    return new Material(0, EnUnit.Kg, EnMaterialShape.Square, square)
+  }
+  else {
+    log(`error: unrecognized material name: ${name}`)
   }
 }
 
