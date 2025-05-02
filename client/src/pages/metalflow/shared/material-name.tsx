@@ -1,45 +1,41 @@
 import { Box, Stack } from '@mui/material'
-import { CircleShapeData, MaterialShape, UiMaterialShape } from 'shared'
-import { EnMaterialShape } from 'shared/enumerations'
 import { P } from 'src/shortcuts'
-import { t } from '../text'
 
-export function MaterialName(props: {
-  shape: EnMaterialShape
-  shapeData: MaterialShape
-}) {
-  switch (props.shape) {
-    case EnMaterialShape.Circle: {
-      const d = props.shapeData as any as CircleShapeData
-      return (
-        <Stack direction="row" gap={1} alignItems="center">
-          <pre>
-            {UiMaterialShape[EnMaterialShape.Circle]} D{d.diameter}
-          </pre>
-          <P variant="caption" sx={{ whiteSpace: 'nowrap' }}>
-            {d.alloy}
-          </P>
-          <CalibratedTag isCalibrated={d.calibrated} />
-        </Stack>
-      )
-    }
-    case EnMaterialShape.List:
-      return <>Лист</>
-    default:
-      throw Error('Unknown shape')
-  }
+type Flag = {
+  color: number
+  text: string
 }
 
-function CalibratedTag(props: { isCalibrated: boolean }) {
+export interface ResourceNameProps {
+  name: string
+  caption?: string
+  flags?: Flag[]
+}
+
+export function ResourceName(props: ResourceNameProps) {
+  return (
+    <Stack direction="row" gap={1} alignItems="center">
+      <pre>{props.name}</pre>
+      <P variant="caption" sx={{ whiteSpace: 'nowrap' }}>
+        {props.caption}
+      </P>
+      {props.flags?.map(each => (
+        <Flag flag={each} />
+      ))}
+    </Stack>
+  )
+}
+
+function Flag(props: { flag: Flag }) {
   return (
     <Box
       sx={{
-        backgroundColor: 'var(--L2)',
+        backgroundColor: `var(--L${props.flag.color})`,
         padding: '0 4px',
         borderRadius: '4px'
       }}
     >
-      <P variant="caption">{props.isCalibrated ? t.Calibrated : ''}</P>
+      <P variant="caption">{props.flag.text}</P>
     </Box>
   )
 }

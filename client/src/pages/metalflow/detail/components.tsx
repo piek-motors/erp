@@ -83,12 +83,6 @@ export function DetailsList() {
         goto={MetalFlowSys.detail_add}
       />
       <PaperL1>
-        {/* <Search
-          placeholder={t.Detail}
-          onChange={() => {}}
-          value=""
-          children={<></>}
-        /> */}
         <Table
           columns={columnList}
           data={data?.metal_pdo_details || []}
@@ -101,7 +95,7 @@ export function DetailsList() {
   )
 }
 
-export function DetailUpdate() {
+export function DetailUpdateForm() {
   const id = Number(new URLSearchParams(useLocation().search).get('id'))
   if (!id) {
     return <>No id</>
@@ -181,7 +175,7 @@ export function DetailUpdate() {
   )
 }
 
-export function DetailAdd() {
+export function DetailAddForm() {
   const [mut, { data, reset }] = useInsertDetailMutation()
 
   const state = useDetail()

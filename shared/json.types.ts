@@ -1,8 +1,20 @@
 import { EnMaterialShape } from './enumerations'
 
+type Flag = {
+  color: number
+  text: string
+}
+
+export interface ResourceNameProps {
+  name: string
+  caption?: string
+  flags?: Flag[]
+}
+
 export abstract class MaterialShape {
   static shapeTitle: string
   abstract getIdentifier(): string
+  abstract getResourceNameProps(): ResourceNameProps
 }
 
 export class CircleShapeData extends MaterialShape {
@@ -24,6 +36,16 @@ export class CircleShapeData extends MaterialShape {
   getIdentifier(): string {
     return `${CircleShapeData.shapeTitle} D${this.diameter} ${this.alloy}`
   }
+  getResourceNameProps(): ResourceNameProps {
+    return {
+      name: `${CircleShapeData.shapeTitle} D${this.diameter}`,
+      caption: this.alloy,
+      flags: [{
+        color: 1,
+        text: this.calibrated ? "Калиброван" : ''
+      }]
+    }
+  }
 }
 
 export class ListShapeData extends MaterialShape {
@@ -31,6 +53,11 @@ export class ListShapeData extends MaterialShape {
   g!: number
   getIdentifier(): string {
     return `${ListShapeData.shapeTitle} G ${this.g}`
+  }
+  getResourceNameProps(): ResourceNameProps {
+    return {
+      name: `${ListShapeData.shapeTitle} G ${this.g}`,
+    }
   }
 }
 
@@ -45,6 +72,9 @@ export class PipeShapeData extends MaterialShape {
   getIdentifier(): string {
     return `${PipeShapeData.shapeTitle} D${this.diameter} ${this.alloy}`
   }
+  getResourceNameProps(): ResourceNameProps {
+    throw new Error('Method not implemented.')
+  }
 }
 
 export class SquareShapeData extends MaterialShape {
@@ -56,14 +86,18 @@ export class SquareShapeData extends MaterialShape {
   getIdentifier(): string {
     return `${SquareShapeData.shapeTitle} ${this.length}x${this.alloy}`
   }
+  getResourceNameProps(): ResourceNameProps {
+    throw new Error('Method not implemented.')
+  }
 }
 
 /**
  * Unified type for material shapes.
  */
-export type MaterialShapeData = {
-  [EnMaterialShape.Circle]: CircleShapeData
-  [EnMaterialShape.List]: ListShapeData
-  [EnMaterialShape.Pipe]: PipeShapeData
+export const MaterialShapeDataConstructor = {
+  [EnMaterialShape.Circle]: CircleShapeData,
+  [EnMaterialShape.List]: ListShapeData,
+  [EnMaterialShape.Pipe]: PipeShapeData,
   [EnMaterialShape.Square]: SquareShapeData
 }
+

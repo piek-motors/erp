@@ -15,10 +15,7 @@ export function ListShapeForm() {
 
   const handleChange = (field: string) => (value: string) => {
     state.setShape(EnMaterialShape.List)
-    state.setShapeData({
-      ...state.shapeData,
-      [field]: value
-    })
+    state.updateShapeDataProperty(field, value)
   }
 
   const d = state.setShapeData as any as ListShapeData

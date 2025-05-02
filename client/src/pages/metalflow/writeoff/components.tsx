@@ -1,11 +1,28 @@
-import { Autocomplete } from '@mui/material'
+/** @jsxImportSource @emotion/react */
+import { css } from '@emotion/react'
+import { UilTrash } from '@iconscout/react-unicons'
+import { Autocomplete, Box, IconButton, Stack } from '@mui/material'
+import { useEffect, useState } from 'react'
 import { formatWriteoffReason, UiWriteoffReason } from 'shared'
+import { Detail } from 'shared/domain/detail'
+import { WriteoffTroughDetail } from 'shared/domain/writeoff'
+import { EnWriteoffType } from 'shared/enumerations'
 import { MetalFlowSys } from 'src/lib/routes'
 import { Input } from 'src/shortcuts'
-import { SmallInputForm } from '../shared'
+import { PaperL1 } from '../../../components/paper'
+import { P } from '../../../shortcuts'
+import {
+  useDeleteWriteOffMutation,
+  useGetWrietOffsQuery
+} from '../../../types/graphql-shema'
+import { notif } from '../../../utils/notification'
+import { ListPageHeader, SmallInputForm } from '../shared'
 import { MutationWithStatus } from '../shared/basic'
+import { DetailSelect } from '../shared/detail-select'
 import { ShapeDependedTabs } from '../shared/shape-depended-tabs'
+import { Table } from '../shared/table.impl'
 import { t } from '../text'
+import { getColumns } from './columns.decl'
 import { useWriteOffStore } from './state'
 import { handleSubmit } from './submit'
 
@@ -49,12 +66,6 @@ export function AddWriteOff() {
   )
 }
 
-import { UilTrash } from '@iconscout/react-unicons'
-import { IconButton, Stack } from '@mui/material'
-import { useEffect } from 'react'
-import { useDeleteWriteOffMutation } from '../../../types/graphql-shema'
-import { notif } from '../../../utils/notification'
-
 export function DeleteWrireOff(props: {
   supplyId: number
   refetch: () => void
@@ -87,13 +98,6 @@ export function DeleteWrireOff(props: {
     </Stack>
   )
 }
-
-import { useState } from 'react'
-import { Detail } from 'shared/domain/detail'
-import { WriteoffTroughDetail } from 'shared/domain/writeoff'
-import { EnWriteoffType } from 'shared/enumerations'
-import { P } from '../../../shortcuts'
-import { DetailSelect } from '../shared/detail-select'
 
 export function WriteoffThroughDetail() {
   const [detail, setDetail] = useState<Detail>()
@@ -167,15 +171,6 @@ export function WriteOffThroughMaterial() {
     </>
   )
 }
-
-/** @jsxImportSource @emotion/react */
-import { css } from '@emotion/react'
-import { Box } from '@mui/material'
-import { PaperL1 } from '../../../components/paper'
-import { useGetWrietOffsQuery } from '../../../types/graphql-shema'
-import { ListPageHeader } from '../shared'
-import { Table } from '../shared/table.impl'
-import { getColumns } from './columns.decl'
 
 export function WriteoffsList() {
   const { data, refetch } = useGetWrietOffsQuery()

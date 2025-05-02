@@ -1,16 +1,43 @@
 /** @jsxImportSource @emotion/react */
-import { Stack } from '@mui/material'
-import { useNavigate } from 'react-router-dom'
+import { Box, Button, CircularProgress, Divider, Stack } from '@mui/material'
+import { useEffect, useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { UiUnit } from 'shared'
+import { EnMaterialShape } from 'shared/enumerations'
 import { Search } from 'src/components/search-input'
 import { MetalFlowSys } from 'src/lib/routes'
-import { useGetMaterialsQuery } from 'src/types/graphql-shema'
+import { Btn, P } from 'src/shortcuts'
+import {
+  useDeleteMaterialMutation,
+  useGetMaterialByPkQuery,
+  useGetMaterialsQuery,
+  useInsertMaterialMutation,
+  useUpdateMaterialMutation
+} from 'src/types/graphql-shema'
 import { PaperL1 } from '../../../components/paper'
-import { ListPageHeader } from '../shared'
+import { notif } from '../../../utils/notification'
+import { map } from '../domain-adapter'
+import {
+  ErrorHint,
+  ListPageHeader,
+  LoadingHint,
+  SavedHint,
+  SmallInputForm
+} from '../shared'
+import { TakeLookHint } from '../shared/basic'
+import { MySelect } from '../shared/basic-select'
+import { ResourceName } from '../shared/material-name'
+import { ShapeDependedTabs } from '../shared/shape-depended-tabs'
 import { Table } from '../shared/table.impl'
 import { goTo } from '../spa'
 import { useStockStore } from '../stock'
 import { t } from '../text'
 import { columnList } from './columns.decl'
+import { CircleShapeForm } from './shape/circle'
+import { ListShapeForm } from './shape/list'
+import { PipeShapeForm } from './shape/pipe'
+import { SquareShapeForm } from './shape/square'
+import { useMaterialStore } from './state'
 
 export function MaterialsList() {
   const { data } = useGetMaterialsQuery({})
@@ -50,15 +77,6 @@ export function StockAmount(props: { materialId: number }) {
   const stockStore = useStockStore()
   return stockStore.getByIdRounded(props.materialId)
 }
-
-import { Box } from '@mui/material'
-import { UiUnit } from 'shared'
-import { Btn, P } from 'src/shortcuts'
-import { useInsertMaterialMutation } from 'src/types/graphql-shema'
-import { ErrorHint, LoadingHint, SavedHint, SmallInputForm } from '../shared'
-import { TakeLookHint } from '../shared/basic'
-import { MySelect } from '../shared/basic-select'
-import { useMaterialStore } from './state'
 
 export function AddMaterial() {
   const [mut, { data, loading, error }] = useInsertMaterialMutation()
@@ -117,16 +135,6 @@ export function AddMaterial() {
   )
 }
 
-import { CircularProgress, Divider } from '@mui/material'
-import { useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom'
-import { Material } from 'shared/domain'
-import {
-  useGetMaterialByPkQuery,
-  useUpdateMaterialMutation
-} from 'src/types/graphql-shema'
-import { MaterialName } from '../shared/material-name'
-
 export function UpdateMaterial() {
   const id = Number(new URLSearchParams(useLocation().search).get('id'))
   if (!id) {
@@ -145,7 +153,6 @@ export function UpdateMaterial() {
     if (material) {
       const d = material.metal_pdo_materials_by_pk
       if (!d) throw Error('Material not found')
-      state.unpack(d)
       setReady(true)
     }
   }, [material])
@@ -156,7 +163,10 @@ export function UpdateMaterial() {
     await mut({
       variables: {
         id,
-        _set: state.pack()
+        _set: {
+          id,
+          shape: state.shape
+        }
       }
     })
   }
@@ -179,12 +189,7 @@ export function UpdateMaterial() {
     </>
   )
 
-  const materialView = new Material(
-    state.id,
-    state.unit,
-    state.shape,
-    state.shapeData as any
-  )
+  const ma = map.material.fromDto(state)
 
   if (ready) {
     return (
@@ -193,12 +198,9 @@ export function UpdateMaterial() {
         goBackUrl={MetalFlowSys.materials}
         nameComponent={
           <Box px={1}>
-            <MaterialName
-              shape={materialView.shapeId}
-              shapeData={materialView.shapeData}
-            />
+            <ResourceName {...ma.shapeData.getResourceNameProps()} />
             <P>
-              {t.Unit} {materialView.unit()}
+              {t.Unit} {ma.unit()}
             </P>
           </Box>
         }
@@ -221,7 +223,6 @@ export function UpdateMaterial() {
             >
               {t.AddWriteoff}
             </Btn>
-
             <Divider />
           </Stack>
         }
@@ -232,10 +233,6 @@ export function UpdateMaterial() {
     )
   } else return <CircularProgress />
 }
-
-import { Button } from '@mui/material'
-import { useDeleteMaterialMutation } from 'src/types/graphql-shema'
-import { notif } from '../../../utils/notification'
 
 export function DeleteMaterial(props: { id: number }) {
   const [mut, { loading, data, error }] = useDeleteMaterialMutation({
@@ -267,13 +264,6 @@ export function DeleteMaterial(props: { id: number }) {
     </Button>
   )
 }
-
-import { EnMaterialShape } from 'shared/enumerations'
-import { ShapeDependedTabs } from '../shared/shape-depended-tabs'
-import { CircleShapeForm } from './shape/circle'
-import { ListShapeForm } from './shape/list'
-import { PipeShapeForm } from './shape/pipe'
-import { SquareShapeForm } from './shape/square'
 
 const tabs = {
   Круг: <CircleShapeForm />,

@@ -183,6 +183,9 @@ importers:
       shared:
         specifier: workspace:*
         version: link:../shared
+      yaml:
+        specifier: 2.7.1
+        version: 2.7.1
     devDependencies:
       '@types/node':
         specifier: ^18.19.83

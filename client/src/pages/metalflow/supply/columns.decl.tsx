@@ -2,9 +2,10 @@ import { Column } from 'react-table'
 import { formatUnit } from 'shared'
 import { formatDateWithTime } from '../../../lib/date'
 import { GetSuppliesQuery } from '../../../types/graphql-shema'
-import { MaterialName } from '../shared/material-name'
+import { map } from '../domain-adapter'
+import { ResourceName } from '../shared/material-name'
 import { t } from '../text'
-import { DeleteSupply } from './supply.add'
+import { DeleteSupply } from './components'
 
 export type SupplyDto = GetSuppliesQuery['metal_pdo_supplies'][number]
 
@@ -23,13 +24,9 @@ export function getColumns(props: {
       id: 'name',
       accessor: data => {
         if (!data.material) return '-'
-
-        return (
-          <MaterialName
-            shape={data.material?.shape}
-            shapeData={data.material?.shape_data}
-          />
-        )
+        const ma = map.material.fromDto(data.material)
+        const resourcenameProps = ma.shapeData.getResourceNameProps()
+        return <ResourceName {...resourcenameProps} />
       }
     },
     {

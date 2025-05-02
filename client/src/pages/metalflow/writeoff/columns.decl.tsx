@@ -3,9 +3,10 @@ import { formatUnit, formatWriteoffReason } from 'shared'
 import { EnWriteoffType } from 'shared/enumerations'
 import { formatDateWithTime } from '../../../lib/date'
 import { GetWrietOffsQuery } from '../../../types/graphql-shema'
-import { MaterialName } from '../shared/material-name'
+import { map } from '../domain-adapter'
+import { ResourceName } from '../shared/material-name'
 import { t } from '../text'
-import { DeleteWrireOff } from './writeoff.add'
+import { DeleteWrireOff } from './components'
 
 export type SupplyDto = GetWrietOffsQuery['metal_pdo_writeoffs'][number]
 
@@ -22,12 +23,10 @@ export function getColumns(props: {
     {
       Header: t.Material,
       id: 'name',
-      accessor: data => (
-        <MaterialName
-          shape={data.material?.shape}
-          shapeData={data.material?.shape_data}
-        />
-      )
+      accessor: data => {
+        const ma = map.material.fromDto(data.material)
+        return <ResourceName {...ma.shapeData.getResourceNameProps()} />
+      }
     },
     {
       Header: t.Qty,

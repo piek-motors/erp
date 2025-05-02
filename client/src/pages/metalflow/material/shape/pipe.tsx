@@ -10,10 +10,7 @@ export function PipeShapeForm() {
   const state = useMaterialStore()
   const handleChange = (field: string) => (value: string) => {
     state.setShape(EnMaterialShape.Circle)
-    state.setShapeData({
-      ...state.shapeData,
-      [field]: value
-    })
+    state.updateShapeDataProperty(field, value)
   }
 
   const d = state.shapeData as any as PipeShapeData

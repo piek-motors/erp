@@ -1,11 +1,15 @@
 import { MetalFlowSys } from 'src/lib/routes'
 import { RouteConfig } from 'src/types/global'
-import { DetailAdd, DetailsList, DetailUpdate } from './detail/componets'
-import { AddMaterial, UpdateMaterial } from './material/list'
+import {
+  DetailAddForm,
+  DetailsList,
+  DetailUpdateForm
+} from './detail/components'
+import { AddMaterial, UpdateMaterial } from './material/components'
 import { MaterialsList } from './material/materials'
 import { SPA } from './spa'
-import { AddSuply, SuppliesList } from './supply/supply.add'
-import { AddWriteOff, WriteoffsList } from './writeoff/writeoff.add'
+import { AddSuply, SuppliesList } from './supply/components'
+import { AddWriteOff, WriteoffsList } from './writeoff/components'
 
 const routes = [
   {
@@ -37,11 +41,11 @@ const routes = [
     path: MetalFlowSys.details
   },
   {
-    element: <DetailAdd />,
+    element: <DetailAddForm />,
     path: MetalFlowSys.detail_add
   },
   {
-    element: <DetailUpdate />,
+    element: <DetailUpdateForm />,
     path: MetalFlowSys.detail_update
   },
   {

@@ -1,5 +1,5 @@
 import help from 'src/pages/help/main'
-import metalflow from 'src/pages/metalflow/main'
+import metalflow from 'src/pages/metalflow/routes'
 import Archive from 'src/pages/orders/archive'
 import Production from 'src/pages/orders/production'
 import RecentOrders from 'src/pages/orders/recently'

@@ -1,58 +1,43 @@
+import { MaterialShape, MaterialShapeDataConstructor } from 'shared'
 import { EnMaterialShape, EnUnit } from 'shared/enumerations'
-import { Metal_Pdo_Materials_Set_Input } from 'src/types/graphql-shema'
 import create from 'zustand'
 
-interface IMaterial {
+export interface IMaterialState {
   id: number
-  setId(id: number): void
-
   unit: EnUnit
-  setUnit(unit: EnUnit): void
-
   shape: EnMaterialShape
+  shapeData?: MaterialShape
+
+  setId(id: number): void
+  setUnit(unit: EnUnit): void
   setShape(shape: EnMaterialShape): void
-
-  shapeData: Record<string, any>
-  setShapeData(shapeData: Record<string, any>): void
-
-  unpack(s: Metal_Pdo_Materials_Set_Input): IMaterial
-  pack(): Metal_Pdo_Materials_Set_Input
+  setShapeData(shapeData: MaterialShape): void
+  updateShapeDataProperty(propName: string, value: any): void
 }
 
-export const useMaterialStore = create<IMaterial>(set => ({
+export const useMaterialStore = create<IMaterialState>((set, get) => ({
   id: 0,
+  unit: EnUnit.Kg,
+  shape: EnMaterialShape.Circle,
   setId(id: number) {
     set({ id })
   },
-
-  unit: EnUnit.Kg,
-  shape: EnMaterialShape.Circle,
-  shapeData: {},
-
   setUnit(unit: EnUnit) {
     set({ unit })
   },
   setShape(shape: EnMaterialShape) {
-    set({ shape })
+    const ShapeData = MaterialShapeDataConstructor[shape]
+    set({ shape, shapeData: new ShapeData() })
   },
-  setShapeData(shapeData: Record<string, any>) {
+  setShapeData(shapeData: MaterialShape) {
     set({ shapeData })
   },
-  unpack(s: Metal_Pdo_Materials_Set_Input) {
-    set({
-      id: s.id!,
-      unit: s.unit as EnUnit,
-      shape: s.shape as EnMaterialShape,
-      shapeData: s.shape_data
-    })
-    return this
-  },
-  pack() {
-    return {
-      id: this.id,
-      unit: this.unit,
-      shape: this.shape,
-      shape_data: this.shapeData
+  updateShapeDataProperty(propName: string, value: any) {
+    const currentShapeData = get().shapeData
+    if (!currentShapeData) {
+      throw new Error('Shape data not set')
     }
+
+    Object.assign(currentShapeData, { [propName]: value })
   }
 }))

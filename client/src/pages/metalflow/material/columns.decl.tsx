@@ -2,8 +2,9 @@ import { Column } from 'react-table'
 import { formatUnit } from 'shared'
 import { MetalFlowSys } from 'src/lib/routes'
 import { GetMaterialsQuery } from 'src/types/graphql-shema'
+import { map } from '../domain-adapter'
 import { EditIconButton } from '../shared'
-import { MaterialName } from '../shared/material-name'
+import { ResourceName } from '../shared/material-name'
 import { goTo } from '../spa'
 import { t } from '../text'
 import { StockAmount } from './materials'
@@ -18,9 +19,10 @@ export const columnList: Column<MaterialDto>[] = [
   {
     Header: t.Material,
     id: 'name',
-    accessor: data => (
-      <MaterialName shape={data.shape} shapeData={data.shape_data} />
-    )
+    accessor: data => {
+      const ma = map.material.fromDto(data)
+      return <ResourceName {...ma.shapeData.getResourceNameProps()} />
+    }
   },
   {
     Header: t.Remaining,
