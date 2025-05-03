@@ -1,9 +1,9 @@
 import moment from 'moment'
 import { useFilter } from 'src/hooks'
 import { useGetOrdersArchivedByIntervalQuery } from 'src/types/graphql-shema'
-import { useOrderListPageStore } from '../state'
+import { useOrderListPageStore } from './state'
 
-export default function useReport() {
+export function useReport() {
   const store: any = useOrderListPageStore()
 
   const startOfMonth = moment().startOf('month').format('YYYY-MM-DD HH:mm')

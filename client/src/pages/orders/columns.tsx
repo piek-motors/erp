@@ -1,8 +1,11 @@
 import moment from 'moment'
-import { Link } from 'react-router-dom'
+import { useMemo } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import { Column } from 'react-table'
 import { TOrderColumnData } from 'src/types/global'
 import { percentage } from 'src/utils/formatting'
+import { Table } from '../../components/table.impl'
+import { Pre } from '../../shortcuts'
 
 export const columnsList: Column<TOrderColumnData>[] = [
   {
@@ -25,7 +28,7 @@ export const columnsList: Column<TOrderColumnData>[] = [
           <>
             {data.OrderItems.map(item => (
               <div key={item.OrderItemID}>
-                <span>{item.Name}</span>
+                <Pre>{item.Name.trim()}</Pre>
               </div>
             ))}
           </>
@@ -37,7 +40,7 @@ export const columnsList: Column<TOrderColumnData>[] = [
     accessor: data =>
       data.OrderItems.map(item => (
         <div key={item.OrderItemID}>
-          <div>{item.Quantity}</div>
+          <Pre>{item.Quantity}</Pre>
         </div>
       ))
   },
@@ -52,15 +55,12 @@ export const columnsList: Column<TOrderColumnData>[] = [
     )
   },
   {
-    Header: 'Компания / город',
-    accessor: data => (
-      <div>
-        <div>
-          <b>{data.Entity}</b>
-        </div>
-        <>{data.City}</>
-      </div>
-    )
+    Header: 'Контрагент',
+    accessor: data => <>{data.Entity}</>
+  },
+  {
+    Header: 'Город',
+    accessor: data => <>{data.City}</>
   },
   {
     Header: 'Счет',
@@ -79,3 +79,20 @@ export const columnsList: Column<TOrderColumnData>[] = [
     accessor: data => <> {data.User?.FirstName ? data.User?.FirstName : ''} </>
   }
 ]
+
+export function OrdersTable(props: { data: TOrderColumnData[] }) {
+  const navigate = useNavigate()
+  const onDoubleRowClick = (row: TOrderColumnData) => {
+    navigate(`/orders/${row.OrderID}`)
+  }
+
+  const columns = useMemo(() => columnsList, [])
+
+  return (
+    <Table
+      columns={columns}
+      data={props.data}
+      onDoubleRowClick={onDoubleRowClick}
+    />
+  )
+}

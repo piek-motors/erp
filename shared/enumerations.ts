@@ -23,3 +23,8 @@ export enum EnWriteoffType {
   ThroughDetail = 0,
   DirectUnit = 1
 }
+
+export enum EnOrderStatus {
+  Registration = 1,
+  Production = 2
+}

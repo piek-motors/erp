@@ -218,3 +218,9 @@ export function SendMutation(props: {
     </Stack>
   )
 }
+
+export function Pre(props: { children: React.ReactNode }) {
+  return (
+    <pre style={{ whiteSpace: 'pre-wrap', margin: 0 }}>{props.children}</pre>
+  )
+}

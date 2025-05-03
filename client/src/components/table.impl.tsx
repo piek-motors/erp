@@ -1,6 +1,15 @@
 import { UilArrowDown, UilArrowUp } from '@iconscout/react-unicons'
-import { Table as MuiTable, Sheet, Stack, Tooltip, Typography } from '@mui/joy'
+import {
+  Box,
+  Table as MuiTable,
+  Sheet,
+  Stack,
+  Tooltip,
+  Typography
+} from '@mui/joy'
+import { useNavigate } from 'react-router-dom'
 import { TableOptions, useSortBy, useTable } from 'react-table'
+import { t } from '../pages/orders/text'
 
 type Props<T extends object> = TableOptions<T> & {
   onDoubleRowClick?: (row: T) => void
@@ -19,10 +28,16 @@ export function Table<T extends object>(props: Props<T>) {
       },
       useSortBy
     )
-
+  const navigate = useNavigate()
+  if (data.length === 0)
+    return (
+      <Box p={1}>
+        <NoData />
+      </Box>
+    )
   return (
-    <Sheet sx={{ p: 1, my: 1, borderRadius: 12 }} variant="soft">
-      <MuiTable {...getTableProps()} stickyHeader stickyFooter size="sm">
+    <Sheet>
+      <MuiTable {...getTableProps()} style={{ tableLayout: 'auto' }}>
         <thead>
           {headerGroups.map((headerGroup, i) => (
             <tr {...headerGroup.getHeaderGroupProps()}>
@@ -32,8 +47,7 @@ export function Table<T extends object>(props: Props<T>) {
                   <th
                     {...column.getHeaderProps({
                       ...(column as any).getSortByToggleProps(),
-                      minWidth: column.minWidth,
-                      width: column.width
+                      width: 'min-content'
                     })}
                   >
                     <Tooltip title="Отсортировать?" placement="top">
@@ -51,14 +65,17 @@ export function Table<T extends object>(props: Props<T>) {
             </tr>
           ))}
         </thead>
-        {data.length ? (
+        {data.length && (
           <tbody {...getTableBodyProps()}>
             {rows.map((row, i) => {
               prepareRow(row)
               return (
                 <tr
                   {...row.getRowProps()}
-                  onDoubleClick={() => onDoubleRowClick?.(row.original)}
+                  onDoubleClick={() => {
+                    if (props.onDoubleRowClick)
+                      props.onDoubleRowClick(row.original)
+                  }}
                 >
                   {row.cells.map((cell, i) => {
                     return (
@@ -69,13 +86,17 @@ export function Table<T extends object>(props: Props<T>) {
               )
             })}
           </tbody>
-        ) : (
-          <div style={{ padding: '10px' }}>Нет данных</div>
         )}
       </MuiTable>
     </Sheet>
   )
 }
+
+export const NoData = () => (
+  <Typography color="neutral" p={1} level="body-xs">
+    {t.NoData}
+  </Typography>
+)
 
 export function SortingState(props: {
   isSorted: boolean
