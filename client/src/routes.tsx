@@ -7,12 +7,14 @@ import Registration from 'src/pages/orders/registration'
 import Report from 'src/pages/orders/report'
 import { RouteConfig } from 'src/types/global'
 import Attendance from './pages/attendance/main'
+import MentionList from './pages/mentions/mentions.list'
 import order_detail from './pages/order-detail/main'
 import reclamations from './pages/reclamation/main'
 import settings from './pages/settings/main'
 
 export const protectedRoutes: RouteConfig[] = [
   ...Production,
+  ...MentionList,
   ...Registration,
   ...RecentOrders,
   ...Archive,

@@ -1,4 +1,4 @@
-import { FormControl, InputLabel, MenuItem, Select } from '@mui/material'
+import { FormControl, Option, Select } from '@mui/joy'
 import { EnUnit } from 'shared/enumerations'
 
 export function MySelect(props: {
@@ -11,20 +11,17 @@ export function MySelect(props: {
 }) {
   return (
     <FormControl>
-      <InputLabel>{props.label}</InputLabel>
       <Select
+        placeholder={props.label}
         disabled={props.disabled}
         value={props.value}
         defaultValue={props.defaultValue}
-        onChange={e => {
-          props.onChange(Number(e.target.value) as EnUnit)
+        onChange={(e, v) => {
+          props.onChange(Number(v) as EnUnit)
         }}
-        label={props.label}
       >
         {props.selectElements.map(unit => (
-          <MenuItem key={unit.name} value={unit.value}>
-            {unit.name}
-          </MenuItem>
+          <Option value={unit.value}>{unit.name}</Option>
         ))}
       </Select>
     </FormControl>

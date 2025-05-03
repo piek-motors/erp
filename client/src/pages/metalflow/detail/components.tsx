@@ -1,19 +1,18 @@
-import { Stack } from '@mui/material'
+import { Sheet, Stack, Typography } from '@mui/joy'
 import { useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Detail, Material } from 'shared/domain'
 import { EnUnit } from 'shared/enumerations'
 import { apolloClient } from 'src/api'
-import { PaperL1 } from 'src/components/paper'
 import { MetalFlowSys } from 'src/lib/routes'
-import { Input, P } from 'src/shortcuts'
+import { MyInput } from 'src/shortcuts'
 import * as gql from 'src/types/graphql-shema'
 import {
   useGetMaterialsQuery,
   useInsertDetailMutation
 } from 'src/types/graphql-shema'
 import { ListPageHeader, QtyInputWithUnit, SmallInputForm } from '../shared'
-import { MutationWithStatus, TakeLookHint } from '../shared/basic'
+import { SendMutation, TakeLookHint } from '../shared/basic'
 import { MaterialAutocompleteMulti } from '../shared/material-autocomplete'
 import { ResourceName } from '../shared/material-name'
 import { Table } from '../shared/table.impl'
@@ -81,7 +80,7 @@ export function DetailsList() {
         btnText={t.AddDetail}
         goto={MetalFlowSys.detail_add}
       />
-      <PaperL1>
+      <Sheet>
         <Table
           columns={columnList}
           data={data?.metal_pdo_details || []}
@@ -89,7 +88,7 @@ export function DetailsList() {
             navigate(goTo(MetalFlowSys.detail_update, row.id))
           }
         />
-      </PaperL1>
+      </Sheet>
     </>
   )
 }
@@ -149,7 +148,7 @@ export function DetailUpdateForm() {
     <SmallInputForm
       header={t.EditDetail}
       goBackUrl={MetalFlowSys.details}
-      last={<MutationWithStatus mutation={handleSave} />}
+      last={<SendMutation mutation={handleSave} />}
     >
       <Stack
         gap={1}
@@ -157,15 +156,15 @@ export function DetailUpdateForm() {
           display: 'flex'
         }}
       >
-        <P>ID {state.id}</P>
+        <Typography>ID {state.id}</Typography>
 
-        <Input
+        <MyInput
           label={t.DetailName}
           onChange={(event: any) => {
             state.setName(event.target.value)
           }}
           value={state.name}
-          autoComplete={'off'}
+          autoComplete="off"
         />
 
         <DetailMaterialPropInput />
@@ -208,7 +207,7 @@ export function DetailAddForm() {
   }
 
   const actionSection = (
-    <MutationWithStatus
+    <SendMutation
       customComponent={(err, res) => (
         <TakeLookHint
           text={t.RecentlyNewDetailAdded}
@@ -232,13 +231,13 @@ export function DetailAddForm() {
       goBackUrl={MetalFlowSys.details}
       last={actionSection}
     >
-      <Input
+      <MyInput
         label={t.DetailName}
         onChange={(event: any) => {
           state.setName(event.target.value)
         }}
         value={state.name}
-        autoComplete={'off'}
+        autoComplete="off"
       />
 
       <MaterialAutocompleteMulti

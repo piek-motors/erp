@@ -1,7 +1,7 @@
-import { Button, Container, ContainerProps, Stack } from '@mui/material'
+import { Button, Container, ContainerProps, Stack, Typography } from '@mui/joy'
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Btn, P } from '../../../shortcuts'
+import { Btn } from '../../../shortcuts'
 import { ErrorHint, SavedHint } from '../shared'
 import { t } from '../text'
 
@@ -27,17 +27,15 @@ export function TakeLookHint(props: { text: string; link: string }) {
 
   return (
     <Stack direction={'row'} alignItems={'center'} gap={2} pt={2}>
-      <P
-        variant="caption"
+      <Typography
         sx={{
           p: 0
         }}
       >
         {props.text}
-      </P>
+      </Typography>
       <Btn
         onClick={() => navigate(props.link)}
-        size="small"
         variant="outlined"
         color="success"
       >
@@ -47,7 +45,7 @@ export function TakeLookHint(props: { text: string; link: string }) {
   )
 }
 
-export function MutationWithStatus(props: {
+export function SendMutation(props: {
   mutation: () => Promise<any>
   customComponent?: (error?: Error, mutationResult?: any) => JSX.Element
 }) {
@@ -70,11 +68,7 @@ export function MutationWithStatus(props: {
     <Stack gap={1}>
       <ErrorHint show={error} msg={error?.message} />
       <SavedHint show={mutationResult} />
-      <Button
-        variant="contained"
-        onClick={async () => handleSubmit()}
-        disabled={loading}
-      >
+      <Button onClick={async () => handleSubmit()} disabled={loading}>
         {t.Save}
       </Button>
       {(mutationResult || error) &&

@@ -1,12 +1,11 @@
 import {
   Box,
   Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  TextField
-} from '@mui/material'
+  Modal,
+  ModalClose,
+  ModalDialog,
+  Typography
+} from '@mui/joy'
 import { useEffect, useState } from 'react'
 import { useOrderDetailStore } from 'src/pages/order-detail/state'
 import { TOrderItem } from 'src/types/global'
@@ -14,6 +13,7 @@ import {
   useInsertOrderItemMutation,
   useUpdateOrderItemByPkMutation
 } from 'src/types/graphql-shema'
+import { CancelButton, MultilineInput, MyInput, Row } from '../../../shortcuts'
 
 export interface IDialogEditOrderItemProps {
   refetch: () => void
@@ -79,7 +79,7 @@ export function DialogAddEditOrderItem({ refetch }: IDialogEditOrderItemProps) {
     })
   }
 
-  const handleInputChange: React.ChangeEventHandler<HTMLInputElement> = e => {
+  const handleInputChange = (e: React.ChangeEvent<any>) => {
     setState({
       ...state,
       [e.target.name]: e.target.value
@@ -88,63 +88,51 @@ export function DialogAddEditOrderItem({ refetch }: IDialogEditOrderItemProps) {
 
   const disableSaveButton = !Boolean(state.Name && state.Quantity)
   return (
-    <div>
-      <Dialog fullWidth={true} open={isOpen} onClose={handleClose}>
-        <DialogTitle>
+    <Modal open={isOpen} onClose={handleClose}>
+      <ModalDialog minWidth={600}>
+        <ModalClose />
+        <Typography level="h4" pb={2}>
           {editedOrderItem ? 'Изменить' : 'Добавить'} позицию
-        </DialogTitle>
-        <DialogContent>
-          <Box display="flex" flexDirection="column">
-            <TextField
-              label="Наименование"
-              value={state.Name}
-              variant="filled"
-              sx={{ mb: '8px' }}
-              name="Name"
-              onChange={handleInputChange}
-            />
-            <TextField
-              label="Полное наименование"
-              multiline
-              variant="filled"
-              sx={{ mb: '8px' }}
-              value={state.FullName}
-              name="FullName"
-              onChange={handleInputChange}
-            />
-            <TextField
-              label="Кол-во"
-              type="number"
-              variant="filled"
-              name="Quantity"
-              sx={{ mb: '8px' }}
-              value={state.Quantity}
-              onChange={handleInputChange}
-            />
-          </Box>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>Отмена</Button>
+        </Typography>
 
+        <Box display="flex" flexDirection="column">
+          <MyInput
+            fullWidth
+            label="Наименование"
+            value={state.Name}
+            sx={{ mb: '8px' }}
+            name="Name"
+            onChange={handleInputChange}
+          />
+          <MultilineInput
+            label="Полное наименование"
+            sx={{ mb: '8px' }}
+            value={state.FullName ?? ''}
+            name="FullName"
+            onChange={handleInputChange}
+          />
+          <MyInput
+            label="Введите кол-во"
+            type="number"
+            name="Quantity"
+            sx={{ mb: '8px' }}
+            value={state.Quantity}
+            onChange={handleInputChange}
+          />
+        </Box>
+        <Row gap={2}>
           {!state.OrderItemID ? (
-            <Button
-              variant="contained"
-              onClick={handlerInsert}
-              disabled={disableSaveButton}
-            >
+            <Button onClick={handlerInsert} disabled={disableSaveButton}>
               Добавить
             </Button>
           ) : (
-            <Button
-              variant="contained"
-              onClick={handleUpdate}
-              disabled={disableSaveButton}
-            >
-              Изменить
+            <Button onClick={handleUpdate} disabled={disableSaveButton}>
+              Сохранить
             </Button>
           )}
-        </DialogActions>
-      </Dialog>
-    </div>
+          <CancelButton onClick={handleClose} />
+        </Row>
+      </ModalDialog>
+    </Modal>
   )
 }

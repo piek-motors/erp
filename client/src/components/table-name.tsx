@@ -1,5 +1,5 @@
-import Typography from '@mui/material/Typography'
+import { Typography } from '@mui/joy'
 
 export function TableName({ name }: { name: string }) {
-  return <Typography variant="subtitle1">{name}</Typography>
+  return <Typography>{name}</Typography>
 }

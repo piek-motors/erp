@@ -1,10 +1,10 @@
+import { Sheet } from '@mui/joy'
 import moment from 'moment'
 import { useMemo } from 'react'
-import { NavTabs } from 'src/components/orders-navigation-bar'
-import { PaperL1 } from 'src/components/paper'
 import { TableName } from 'src/components/table-name'
 import { formatOnlyDate } from 'src/lib/date'
 import { AppRoutes } from 'src/lib/routes'
+import { NavTabs } from 'src/pages/orders/tabs'
 import { OrderStatus, RouteConfig } from 'src/types/global'
 import { useGetOrdersByStatusQuery } from 'src/types/graphql-shema'
 import { columnsList } from './columns'
@@ -35,13 +35,13 @@ function RecentOrders() {
   return (
     <>
       <NavTabs />
-      <PaperL1>
+      <Sheet>
         <TableName name="Сегодня" />
         <Table columns={columns} data={ordersByToday} />
 
         <TableName name="Вчера" />
         <Table columns={columns} data={ordersByYesterday} />
-      </PaperL1>
+      </Sheet>
     </>
   )
 }

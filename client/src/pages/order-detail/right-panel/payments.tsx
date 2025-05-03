@@ -1,20 +1,28 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
-import { Box, Button, Stack, TextField, Typography } from '@mui/material'
-import Popover from '@mui/material/Popover'
+import {
+  Box,
+  Button,
+  Dropdown,
+  Menu,
+  MenuButton,
+  Stack,
+  Typography
+} from '@mui/joy'
 import moment from 'moment'
 import * as React from 'react'
 import { useAppContext } from 'src/hooks'
 import { formatOnlyDate } from 'src/lib/date'
 import { TOrder, UserStatus } from 'src/types/global'
 import {
+  GetOrderPaymentsQuery,
   useDeletePaymentMutation,
   useGetOrderPaymentsQuery,
   useInsertPaymentMutation
 } from 'src/types/graphql-shema'
 import * as formatter from 'src/utils/formatting'
 import { OrderInfoCard } from '.'
-import { DateFormatCustom, MoneyFormatCustom } from './cutom-formatted-inputs'
+import { MyInput, Row } from '../../../shortcuts'
 
 type Order = Pick<TOrder, 'TotalAmount' | 'OrderID'>
 
@@ -26,7 +34,6 @@ export const NO_TOTAL_AMOUNT_MESSAGE = 'Не задана сумма заказ�
 
 export default function PaymnetHistory({ data }: IPaymnetHistoryProps) {
   const [deletePayment] = useDeletePaymentMutation()
-  // const  = useGetOrderPaymentsLazyQuery({ variables: { _eq: data.OrderID } })
   const { data: payments, refetch } = useGetOrderPaymentsQuery({
     variables: { _eq: data.OrderID }
   })
@@ -51,46 +58,14 @@ export default function PaymnetHistory({ data }: IPaymnetHistoryProps) {
   return (
     <OrderInfoCard heading="История оплаты">
       {data.TotalAmount ? (
-        <Stack direction="column" width="100%">
-          {payments?.erp_PaymentHistory.map(payment => (
-            <Box
-              width="100%"
-              display="flex"
-              flexDirection="row"
-              css={css({
-                '&:hover': {
-                  '.editPayment': {
-                    opacity: 1
-                  }
-                }
-              })}
-              key={payment.Date + payment.PaidAmount}
-            >
-              <Box width="25%">
-                {formatter.percentage(payment.PaidAmount, data.TotalAmount)}
-              </Box>
-              <div>{formatOnlyDate(payment.Date)}</div>
-              {isHaveFullRight && (
-                <Button
-                  variant="outlined"
-                  size="small"
-                  className="editPayment"
-                  color="error"
-                  css={css({
-                    opacity: 0,
-                    cursor: 'pointer',
-                    marginLeft: '20px'
-                  })}
-                  onClick={() => handleDelete(payment.ID)}
-                >
-                  Удалить
-                </Button>
-              )}
-            </Box>
-          ))}
-        </Stack>
+        <PrintPayment
+          data={payments?.erp_PaymentHistory || []}
+          isHaveFullRight
+          onDelete={ID => handleDelete(ID)}
+          totalAmount={data.TotalAmount}
+        />
       ) : (
-        <Typography variant="body1">{NO_TOTAL_AMOUNT_MESSAGE}</Typography>
+        <Typography>{NO_TOTAL_AMOUNT_MESSAGE}</Typography>
       )}
       {isHaveFullRight && (
         <AddNewPayment
@@ -100,6 +75,55 @@ export default function PaymnetHistory({ data }: IPaymnetHistoryProps) {
         />
       )}
     </OrderInfoCard>
+  )
+}
+
+function PrintPayment(props: {
+  data: GetOrderPaymentsQuery['erp_PaymentHistory']
+  isHaveFullRight?: boolean
+  totalAmount: number
+  onDelete?: (ID: number) => void
+}) {
+  const { totalAmount, isHaveFullRight } = props
+
+  return (
+    <Stack direction="column" width="100%">
+      {props.data.map(payment => (
+        <Box
+          width="100%"
+          display="flex"
+          flexDirection="row"
+          css={css({
+            '&:hover': {
+              '.editPayment': {
+                opacity: 1
+              }
+            }
+          })}
+          key={payment.Date + payment.PaidAmount}
+        >
+          <Box width="25%">
+            {formatter.percentage(payment.PaidAmount, totalAmount)}
+          </Box>
+          <div>{formatOnlyDate(payment.Date)}</div>
+          {isHaveFullRight && (
+            <Button
+              color="danger"
+              variant="outlined"
+              className="editPayment"
+              css={css({
+                opacity: 0,
+                cursor: 'pointer',
+                marginLeft: '20px'
+              })}
+              onClick={() => props.onDelete?.(payment.ID)}
+            >
+              Удалить
+            </Button>
+          )}
+        </Box>
+      ))}
+    </Stack>
   )
 }
 
@@ -156,13 +180,11 @@ function AddNewPayment(props: AddNewPaymentProps) {
   }
 
   return (
-    <>
-      <Box mt={1}>
-        <Button onClick={handleClick} variant="contained">
-          Добавить
-        </Button>
-      </Box>
-      <Popover
+    <Dropdown>
+      <MenuButton onClick={handleClick} variant="plain">
+        Добавить
+      </MenuButton>
+      <Menu
         id={id}
         open={open}
         anchorEl={anchorEl}
@@ -172,40 +194,28 @@ function AddNewPayment(props: AddNewPaymentProps) {
             handleSave()
           }
         }}
-        anchorOrigin={{
-          vertical: 'top',
-          horizontal: 'left'
-        }}
       >
-        <Stack margin={1}>
-          <TextField
+        <Stack gap={1} p={2}>
+          <MyInput
             label="Дата"
             placeholder="dd.mm.yy"
-            InputProps={{
-              onChange: handleDateChange,
-              defaultValue: moment(props.defaultValues?.date).format(
-                'DD.MM.YY'
-              ),
-              inputComponent: DateFormatCustom as any
-            }}
+            onChange={handleDateChange}
+            default={moment(props.defaultValues?.date).format('DD.MM.YY')}
           />
-          <Box display={'flex'} alignItems={'center'} gap={1}>
-            <TextField
+          <Row gap={1}>
+            <MyInput
               label="Уже оплачено"
+              onChange={handleAmountChange}
+              default={props.defaultValues?.amount?.toString() || ''}
               autoFocus
-              InputProps={{
-                defaultValue: props.defaultValues?.amount,
-                onChange: handleAmountChange,
-                inputComponent: MoneyFormatCustom as any
-              }}
             />
-            <Typography variant="body2" color="textSecondary">
+            <Typography>
               из {formatter.money(props.order.TotalAmount)}
             </Typography>
-          </Box>
+          </Row>
           <Button onClick={handleSave}>Сохранить</Button>
         </Stack>
-      </Popover>
-    </>
+      </Menu>
+    </Dropdown>
   )
 }

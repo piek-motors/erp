@@ -1,7 +1,6 @@
 import { UilConstructor } from '@iconscout/react-unicons'
-import { Typography } from '@mui/material'
+import { Sheet, Typography } from '@mui/joy'
 import { useMemo, useState } from 'react'
-import { PaperL1 } from 'src/components/paper'
 import { AppRoutes } from 'src/lib/routes'
 import { Employee, RouteConfig } from 'src/types/global'
 import { useGetEmployeeListQuery } from 'src/types/graphql-shema'
@@ -58,15 +57,13 @@ function Attendance() {
 
       <ReportConfigurator state={state} setState={setState} />
 
-      <PaperL1>
+      <Sheet>
         {!loading ? (
           <Table columns={columns} data={data} />
         ) : (
-          <Typography m="10px" variant="subtitle2">
-            загрузка..
-          </Typography>
+          <Typography m="10px">загрузка..</Typography>
         )}
-      </PaperL1>
+      </Sheet>
     </>
   )
 }

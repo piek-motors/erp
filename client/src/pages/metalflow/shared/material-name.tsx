@@ -1,5 +1,5 @@
-import { Box, Stack } from '@mui/material'
-import { Btn, P } from 'src/shortcuts'
+import { Box, Stack, Typography } from '@mui/joy'
+import { Btn } from 'src/shortcuts'
 
 type Flag = {
   color: number
@@ -22,9 +22,7 @@ export function ResourceName(props: {
   const raw = (
     <Stack direction="row" gap={1} alignItems="center">
       <pre>{resource.name}</pre>
-      <P variant="caption" sx={{ whiteSpace: 'nowrap' }}>
-        {resource.caption}
-      </P>
+      <Typography sx={{ whiteSpace: 'nowrap' }}>{resource.caption}</Typography>
       {resource.flags?.map(each => (
         <Flag flag={each} />
       ))}
@@ -33,7 +31,7 @@ export function ResourceName(props: {
 
   if (props.onClick) {
     return (
-      <Btn variant="text" onClick={props.onClick} sx={{ width: '100%' }}>
+      <Btn onClick={props.onClick} sx={{ width: '100%' }}>
         {raw}
       </Btn>
     )
@@ -51,7 +49,7 @@ function Flag(props: { flag: Flag }) {
         borderRadius: '4px'
       }}
     >
-      <P variant="caption">{props.flag.text}</P>
+      <Typography>{props.flag.text}</Typography>
     </Box>
   )
 }

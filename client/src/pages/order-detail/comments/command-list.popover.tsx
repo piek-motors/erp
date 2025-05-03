@@ -1,5 +1,5 @@
 import { UilListUl, UilUser } from '@iconscout/react-unicons'
-import { ListItemIcon, Menu, MenuItem } from '@mui/material'
+import { Menu, MenuItem } from '@mui/joy'
 import sass from './index.module.sass'
 
 interface IСommandsPopoverProps {
@@ -32,11 +32,11 @@ export default function СommandListPopover({
 
   return (
     <Menu
-      id="Comments__commandMenu"
-      aria-labelledby="Comments_InputForm"
       anchorEl={anchorEl}
       open={open}
       onClose={handleClose}
+      placement="bottom-start"
+      sx={{ p: 1 }}
     >
       <MenuItem
         onClick={() => {
@@ -44,15 +44,11 @@ export default function СommandListPopover({
           insertTodoinDOM()
         }}
       >
-        <ListItemIcon>
-          <UilListUl />
-        </ListItemIcon>
+        <UilListUl />
         Чеклист
       </MenuItem>
       <MenuItem onClick={mentionHandler}>
-        <ListItemIcon>
-          <UilUser />
-        </ListItemIcon>
+        <UilUser />
         Упомянуть
       </MenuItem>
     </Menu>

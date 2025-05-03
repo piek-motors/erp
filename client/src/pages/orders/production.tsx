@@ -1,8 +1,8 @@
+import { Sheet, Typography } from '@mui/joy'
 import { useMemo } from 'react'
-import { ManagerFilter, NavTabs, PaperL1, Search } from 'src/components'
+import { ManagerFilter, NavTabs, Search } from 'src/components'
 import { useFilter } from 'src/hooks'
 import { AppRoutes } from 'src/lib/routes'
-import { P } from 'src/shortcuts'
 import { RouteConfig } from 'src/types/global'
 import { useGetOrdersByStatusQuery } from 'src/types/graphql-shema'
 import { columnsList } from './columns'
@@ -36,7 +36,7 @@ function Production() {
       <NavTabs />
 
       {orders && (
-        <PaperL1>
+        <Sheet>
           <Search
             value={store.searchTerm}
             onChange={store.searchInputHandler}
@@ -49,8 +49,10 @@ function Production() {
           </Search>
 
           <Table columns={columns} data={orders} />
-          {!orders.length && <P m={2}>(ノ#-_-)ノ ничего не найдено</P>}
-        </PaperL1>
+          {!orders.length && (
+            <Typography m={2}>(ノ#-_-)ノ ничего не найдено</Typography>
+          )}
+        </Sheet>
       )}
     </>
   )

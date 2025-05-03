@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
-import { Typography } from '@mui/material'
+import { Typography } from '@mui/joy'
 import { Draggable, Droppable } from 'react-beautiful-dnd'
 import { TReclamationOrder } from 'src/types/global'
 import { ColocatedStateKey } from './reclamation'

@@ -1,20 +1,22 @@
-import { FormControl, InputLabel } from '@mui/material'
-import MenuItem from '@mui/material/MenuItem'
-import Select, { SelectChangeEvent } from '@mui/material/Select'
+import { FormControl, Option, Select } from '@mui/joy'
 import { OrderStatus } from 'src/types/global'
 
 interface IOrderTypeFilterProps {
   value: OrderStatus | ''
-  onChange: (e: SelectChangeEvent) => void
+  onChange: (e: any) => void
 }
 
 export function OrderTypeFilter({ value, onChange }: IOrderTypeFilterProps) {
   return (
     <FormControl>
-      <InputLabel>Тип</InputLabel>
-      <Select name="managerFilter" value={value as string} onChange={onChange}>
-        <MenuItem value={OrderStatus.ordArchived}>Заказы</MenuItem>
-        <MenuItem value={OrderStatus.reclArchived}>Рекламации</MenuItem>
+      <Select
+        name="managerFilter"
+        value={value as string}
+        onChange={onChange}
+        placeholder="Тип заказа"
+      >
+        <Option value={OrderStatus.ordArchived}>Заказы</Option>
+        <Option value={OrderStatus.reclArchived}>Рекламации</Option>
       </Select>
     </FormControl>
   )

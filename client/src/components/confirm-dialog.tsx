@@ -1,9 +1,4 @@
-import { Button } from '@mui/material'
-import Dialog from '@mui/material/Dialog'
-import DialogActions from '@mui/material/DialogActions'
-import DialogContent from '@mui/material/DialogContent'
-import DialogContentText from '@mui/material/DialogContentText'
-import DialogTitle from '@mui/material/DialogTitle'
+import { Box, Button, Modal, ModalDialog, Sheet, Typography } from '@mui/joy'
 import { ReactNode, useState } from 'react'
 // extrnalСomponent is the whichever component which will be go out
 // like as icon or textButton or something else
@@ -37,33 +32,36 @@ export function ConfirmDialog({
   return (
     <>
       <div onClick={handleClickOpen}> {children} </div>
-
-      <Dialog id={title} open={open} maxWidth="xs" onClose={handleClose}>
-        <DialogTitle> {title} </DialogTitle>
-        <DialogContent>
-          <DialogContentText p={1}>{body}</DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button
-            color="info"
-            key="dialog-close-btn"
-            onClick={() => handleClose()}
-          >
-            Отмена
-          </Button>
-          <Button
-            color={isDangerous ? 'secondary' : 'primary'}
-            variant="contained"
-            key="dialog-target-btn"
-            onClick={() => {
-              handleClose()
-              onCloseComplete()
-            }}
-          >
-            {confirmLabel}
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <Modal id={title} open={open} onClose={handleClose}>
+        <ModalDialog>
+          <Sheet>
+            {title && (
+              <Typography level="h4" pb={2}>
+                {title}
+              </Typography>
+            )}
+            {body && <Typography>{body}</Typography>}
+            <Box mt={2}>
+              <Button
+                onClick={() => handleClose()}
+                variant="plain"
+                color="neutral"
+              >
+                Закрыть
+              </Button>
+              <Button
+                color={isDangerous ? 'danger' : 'primary'}
+                onClick={() => {
+                  handleClose()
+                  onCloseComplete()
+                }}
+              >
+                {confirmLabel}
+              </Button>
+            </Box>
+          </Sheet>
+        </ModalDialog>
+      </Modal>
     </>
   )
 }

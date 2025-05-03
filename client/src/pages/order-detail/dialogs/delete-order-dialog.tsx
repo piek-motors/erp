@@ -10,7 +10,7 @@ export function DeleteOrderDialog({
   handler,
   children
 }: IDeleteOrderDialogProps) {
-  const title = 'Удалить заказ?'
+  const title = ''
   const body = 'Удаление заказа / рекламации необратимо.'
 
   return (

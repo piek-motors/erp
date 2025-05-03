@@ -1,11 +1,10 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import { UilTrash } from '@iconscout/react-unicons'
-import { Box, Button, IconButton, Stack } from '@mui/material'
+import { Box, Button, IconButton, Sheet, Stack } from '@mui/joy'
 import { useEffect, useState } from 'react'
 import { Material } from 'shared/domain'
 import { useInsertMaterialSupplyMutation } from 'src/types/graphql-shema'
-import { PaperL1 } from '../../../components/paper'
 import { MetalFlowSys } from '../../../lib/routes'
 import {
   useDeleteSupplyMutation,
@@ -36,7 +35,7 @@ export function SuppliesList() {
         btnText={t.SupplyAdd}
         goto={MetalFlowSys.supply_add}
       />
-      <PaperL1 sx={{ gap: 2 }}>
+      <Sheet sx={{ gap: 2 }}>
         <Box
           css={css`
             .delete-btn {
@@ -57,7 +56,7 @@ export function SuppliesList() {
             data={data?.metal_pdo_supplies || []}
           />
         </Box>
-      </PaperL1>
+      </Sheet>
     </>
   )
 }
@@ -105,7 +104,7 @@ export function AddSuply() {
       />
       <ErrorHint show={error} msg={error?.message} />
       <SavedHint show={data?.insert_metal_pdo_supplies_one} />
-      <Button variant="contained" onClick={save} disabled={btnDisabled}>
+      <Button onClick={save} disabled={btnDisabled}>
         {t.Save}
       </Button>
     </SmallInputForm>
@@ -129,8 +128,6 @@ export function DeleteSupply(props: { supplyId: number; refetch: () => void }) {
   return (
     <Stack direction="row-reverse" gap={1} className="delete-btn">
       <IconButton
-        size="small"
-        color="error"
         sx={{
           opacity: 0.8
         }}

@@ -1,4 +1,4 @@
-import { Box, Container, Stack, Typography } from '@mui/material'
+import { Box, Container, Stack, Typography } from '@mui/joy'
 import { Link } from 'react-router-dom'
 import { links } from 'src/components/sidebar'
 import { AppRoutes } from 'src/lib/routes'

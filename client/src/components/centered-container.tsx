@@ -1,4 +1,4 @@
-import { Container, ContainerProps } from '@mui/material'
+import { Container, ContainerProps } from '@mui/joy'
 import { SxProperty } from '../lib/constants'
 
 export function CenteredContainer(props: {

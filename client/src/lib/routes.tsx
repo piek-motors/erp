@@ -1,6 +1,7 @@
 // Define route paths using an enum for consistency
 export enum AppRoutes {
   help = '/help',
+  mentions = '/mentions',
   orders_production = '/orders/production',
   orders_registration = '/orders/registration',
   orders_recently = '/orders/recently',

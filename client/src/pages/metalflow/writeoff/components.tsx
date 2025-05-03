@@ -1,22 +1,20 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import { UilTrash } from '@iconscout/react-unicons'
-import { Autocomplete, Box, IconButton, Stack } from '@mui/material'
+import { Autocomplete, Box, IconButton, Sheet, Stack } from '@mui/joy'
 import { useEffect, useState } from 'react'
 import { formatWriteoffReason, UiWriteoffReason } from 'shared'
 import { Detail } from 'shared/domain/detail'
 import { WriteoffTroughDetail } from 'shared/domain/writeoff'
 import { EnWriteoffType } from 'shared/enumerations'
 import { MetalFlowSys } from 'src/lib/routes'
-import { Input } from 'src/shortcuts'
-import { PaperL1 } from '../../../components/paper'
 import {
   useDeleteWriteOffMutation,
   useGetWrietOffsQuery
 } from '../../../types/graphql-shema'
 import { notif } from '../../../utils/notification'
 import { ListPageHeader, SmallInputForm } from '../shared'
-import { MutationWithStatus } from '../shared/basic'
+import { SendMutation } from '../shared/basic'
 import { DetailSelect } from '../shared/detail-select'
 import { MyTabs } from '../shared/shape-depended-tabs'
 import { Table } from '../shared/table.impl'
@@ -51,9 +49,10 @@ export function AddWriteOff() {
         isOptionEqualToValue={(option, value) => option.value === value.value}
         getOptionLabel={option => option.label}
         onChange={(_, newValue) => setReason(Number(newValue?.value || 0))}
-        renderInput={params => <Input {...params} label={t.WriteOffReason} />}
+
+        // renderInput={params => <Input {...params} label={t.WriteOffReason} />}
       />
-      <MutationWithStatus
+      <SendMutation
         mutation={() =>
           handleSubmit(state).then(res => {
             state.reset()
@@ -82,8 +81,6 @@ export function DeleteWrireOff(props: {
   return (
     <Stack direction="row-reverse" gap={1} className="delete-btn">
       <IconButton
-        size="small"
-        color="error"
         sx={{
           opacity: 0.8
         }}
@@ -115,7 +112,7 @@ export function WriteoffThroughDetail() {
         }}
         value={detail}
       />
-      <Input
+      <MyInput
         label={t.Qty}
         type="number"
         value={typeData.qty || ''}
@@ -146,6 +143,7 @@ function TotalCost(props: { detail: Detail; qty: number }) {
   )
 }
 
+import { MyInput } from '../../../shortcuts'
 import { QtyInputWithUnit } from '../shared'
 import { MaterialSelect } from '../shared/material-select'
 
@@ -182,7 +180,7 @@ export function WriteoffsList() {
         btnText={t.WriteOffAdd}
         goto={MetalFlowSys.writeoff_add}
       />
-      <PaperL1 sx={{ gap: 2 }}>
+      <Sheet sx={{ gap: 2 }}>
         <Box
           css={css`
             .delete-btn {
@@ -203,7 +201,7 @@ export function WriteoffsList() {
             data={data?.metal_pdo_writeoffs || []}
           />
         </Box>
-      </PaperL1>
+      </Sheet>
     </>
   )
 }

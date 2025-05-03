@@ -1,7 +1,6 @@
-import { Box, Stack } from '@mui/material'
+import { Box, Stack } from '@mui/joy'
 import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
-import { MetalFlowSys } from '../../lib/routes'
 import { Nav } from './nav'
 import { getComponent } from './routes'
 import { WorkPage } from './shared/basic'
@@ -55,7 +54,7 @@ export function SPA() {
 }
 
 export function goTo(
-  to: MetalFlowSys,
+  to: string,
   withId?: number,
   params: Record<string, any> = {}
 ) {

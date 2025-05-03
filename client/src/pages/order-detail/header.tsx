@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
-import { Box, Typography } from '@mui/material'
+import { Box, Typography } from '@mui/joy'
 import { TOrder } from 'src/types/global'
 import {
   orderStatus,
@@ -44,7 +44,7 @@ const styles = css`
 `
 export default function OrderHeader({ order }: IOrderHeaderProps) {
   return (
-    <div css={styles}>
+    <Box css={styles} p={1}>
       <Typography
         className={`title ${orderStatusHighlighting(order)}`}
         sx={{ fontSize: '1.1rem' }}
@@ -58,6 +58,6 @@ export default function OrderHeader({ order }: IOrderHeaderProps) {
       <Box className="noprint">
         <OrderActions order={order} />
       </Box>
-    </div>
+    </Box>
   )
 }

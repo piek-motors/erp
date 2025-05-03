@@ -1,13 +1,8 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
+import { Sheet } from '@mui/joy'
 import { useMemo } from 'react'
-import {
-  ManagerFilter,
-  NavTabs,
-  PaperL1,
-  Search,
-  TableName
-} from 'src/components'
+import { ManagerFilter, NavTabs, Search, TableName } from 'src/components'
 import { RuMonths } from 'src/lib/constants'
 import { formatOnlyDate, getPreviousMonth } from 'src/lib/date'
 import { AppRoutes } from 'src/lib/routes'
@@ -36,7 +31,7 @@ function Report() {
   return (
     <>
       <NavTabs />
-      <PaperL1>
+      <Sheet>
         <Search
           value={store.searchTerm}
           onChange={store.searchInputHandler}
@@ -67,7 +62,7 @@ function Report() {
             />
           )}
         </div>
-      </PaperL1>
+      </Sheet>
     </>
   )
 }

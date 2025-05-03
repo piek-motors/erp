@@ -1,8 +1,7 @@
-import { Autocomplete, TextField } from '@mui/material'
+import { Autocomplete } from '@mui/joy'
 import { Material } from 'shared/domain'
 import { useGetMaterialsQuery } from '../../../types/graphql-shema'
 import { map } from '../domain-adapter'
-import { t } from '../text'
 
 export function MaterialAutocomplete(props: {
   data?: ReturnType<typeof useGetMaterialsQuery>['data']
@@ -19,7 +18,7 @@ export function MaterialAutocomplete(props: {
 
   return (
     <Autocomplete
-      disablePortal
+      // disablePortal
       onChange={(e: any, selected) => {
         if (selected) {
           onChange(selected.material)
@@ -38,7 +37,7 @@ export function MaterialAutocomplete(props: {
             }
           : null
       }
-      renderInput={params => <TextField {...params} label={t.Material} />}
+      // renderInput={params => <TextField {...params} label={t.Material} />}
     />
   )
 }
@@ -61,7 +60,6 @@ export function MaterialAutocompleteMulti(props: {
     <Autocomplete
       multiple
       disabled={props.disabledInput}
-      disablePortal
       onChange={(e: any, selected) => {
         if (selected) {
           onChange(selected.map(e => e.material))
@@ -76,7 +74,6 @@ export function MaterialAutocompleteMulti(props: {
       isOptionEqualToValue={(option, value) =>
         option.material.id === value.material.id
       }
-      renderInput={params => <TextField {...params} label={t.Material} />}
     />
   )
 }

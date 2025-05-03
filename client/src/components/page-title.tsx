@@ -1,8 +1,7 @@
 import { UilHome } from '@iconscout/react-unicons'
-import { Box, IconButton, Stack } from '@mui/material'
+import { Box, IconButton, Stack, Typography } from '@mui/joy'
 import { Link } from 'react-router-dom'
 import { SxProperty } from 'src/lib/constants'
-import { P } from 'src/shortcuts'
 
 export interface Props {
   icon?: JSX.Element
@@ -16,9 +15,7 @@ export function PageTitle(props: Props) {
       <GoHomeBtn />
       <Box display="flex" gap={1} sx={{ color: 'var(--accent)' }}>
         {props.icon}
-        <P color={'var(--accent)'} fontWeight={700}>
-          {props.title}
-        </P>
+        <Typography fontWeight={700}>{props.title}</Typography>
       </Box>
     </Stack>
   )
@@ -31,7 +28,6 @@ export function GoHomeBtn() {
   return (
     <Link to="/help">
       <IconButton
-        size="small"
         sx={{
           display: {
             xs: 'flex',

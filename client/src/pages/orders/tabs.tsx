@@ -1,12 +1,12 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
-import { Box } from '@mui/material'
+import { Box } from '@mui/joy'
 import { ReactNode } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { AppRoutes } from 'src/lib/routes'
-import { Btn } from '../shortcuts'
-import { OrderStatus } from '../types/global'
-import { useInsertOrderMutation } from '../types/graphql-shema'
+import { Btn } from '../../shortcuts'
+import { OrderStatus } from '../../types/global'
+import { useInsertOrderMutation } from '../../types/graphql-shema'
 export interface IOrdersNavigationBarProps {
   children?: ReactNode
 }
@@ -89,9 +89,7 @@ export function NavTabs(props: IOrdersNavigationBarProps) {
         sx={{ display: 'flex', gap: 20, alignItems: 'center' }}
       >
         {props.children}
-        <Btn onClick={insertOrderHandler} variant="contained">
-          Добавить заказ
-        </Btn>
+        <Btn onClick={insertOrderHandler}>Добавить заказ</Btn>
       </Box>
     </div>
   )

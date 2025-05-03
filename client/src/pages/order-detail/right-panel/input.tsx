@@ -1,19 +1,12 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
-import {
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  Stack,
-  TextField
-} from '@mui/material'
+import { FormControl, Option, Select } from '@mui/joy'
 import moment from 'moment'
 import React, { useEffect } from 'react'
-import { formatOnlyDate } from 'src/lib/date'
 import { TOrder, TUser } from 'src/types/global'
 import { useUpdateOrderInfoMutation } from 'src/types/graphql-shema'
-import { DateFormatCustom, MoneyFormatCustom } from './cutom-formatted-inputs'
+import { InputStack, MultilineInput, MyInput } from '../../../shortcuts'
+import { SendMutation } from '../../metalflow/shared/basic'
 
 enum FieldNames {
   InvoiceNumber = 'InvoiceNumber',
@@ -47,6 +40,10 @@ export default function EditableInfo({
   const addField = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => (fields[e.target.name as FieldNames] = e.target.value)
+
+  function setField(name: FieldNames, value: string) {
+    fields[name] = value
+  }
 
   const [updateOrderInfo] = useUpdateOrderInfoMutation()
 
@@ -83,89 +80,94 @@ export default function EditableInfo({
 
   return (
     <form css={styles}>
-      <Stack>
-        <TextField
+      <InputStack>
+        <MyInput
           label="План. отгрузка"
           name={FieldNames.ShippingDate}
-          placeholder="dd.mm.yy"
-          InputProps={{
-            onChange: e => {
-              e.target.value = moment(e.target.value, 'DD-MM-YY').format(
-                'YYYY-MM-DD'
-              )
-              addField(e)
-            },
-            defaultValue: formatOnlyDate(data.ShippingDate),
-            inputComponent: DateFormatCustom as any
+          default={moment(data.ShippingDate).format('DD.MM.YY')}
+          onChange={e => {
+            setField(
+              FieldNames.ShippingDate,
+              moment(e.target.value, 'DD.MM.YY').format('YYYY-MM-DD')
+            )
           }}
         />
 
-        <TextField
+        <MyInput
           label="Номер счета"
           type="number"
           name={FieldNames.InvoiceNumber}
-          defaultValue={data.InvoiceNumber}
+          default={data.InvoiceNumber || ''}
           onChange={addField}
         />
 
-        <TextField
+        <MyInput
           label="Номер заказа"
           name={FieldNames.OrderNumber}
-          defaultValue={data.OrderNumber}
+          default={data.OrderNumber}
           onChange={addField}
         />
 
         <FormControl>
-          <InputLabel>Менеджер</InputLabel>
           <Select
+            placeholder="Менеджер"
             name={FieldNames.ManagerID}
             defaultValue={data.User?.UserID}
-            onChange={e => {
-              fields.ManagerID = parseInt(e.target.value.toString()) || null
+            onChange={(_, newValue) => {
+              if (!newValue) return
+              fields.ManagerID = newValue || null
             }}
-            label="Менеджер"
           >
-            <MenuItem value="">Никто</MenuItem>
+            <Option value="">
+              <em>None</em>
+            </Option>
             {users.map(each => (
-              <MenuItem value={each.UserID} key={each.UserID}>
+              <Option value={each.UserID} key={each.UserID}>
                 {each.FirstName} {each.LastName}
-              </MenuItem>
+              </Option>
             ))}
           </Select>
         </FormControl>
 
-        <TextField
+        <MyInput
           label="Контрагент"
           name={FieldNames.Entity}
-          defaultValue={data.Entity}
+          default={data.Entity}
           onChange={addField}
         />
 
-        <TextField
+        <MyInput
           label="Город"
           name={FieldNames.City}
-          defaultValue={data.City}
+          default={data.City}
           onChange={addField}
         />
 
-        <TextField
+        <MyInput
+          type="number"
           label="Сумма заказа"
           name={FieldNames.TotalAmount}
-          InputProps={{
-            defaultValue: data.TotalAmount,
-            onChange: addField,
-            inputComponent: MoneyFormatCustom as any
-          }}
-        />
-
-        <TextField
-          label="Комментарий"
-          multiline
-          name={FieldNames.Comment}
-          defaultValue={data.Comment}
+          default={data.TotalAmount}
           onChange={addField}
         />
-      </Stack>
+
+        <MultilineInput
+          label="Комментарий"
+          name={FieldNames.Comment}
+          defaultValue={data.Comment || ''}
+          onChange={addField}
+        />
+      </InputStack>
+      <SendMutation
+        mutation={() =>
+          updateOrderInfo({
+            variables: {
+              OrderID: data.OrderID,
+              fields
+            }
+          })
+        }
+      />
     </form>
   )
 }

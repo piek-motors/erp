@@ -1,5 +1,4 @@
-import { Theme } from '@emotion/react'
-import { SxProps } from '@mui/material'
+import { SxProps } from '@mui/joy/styles/types'
 
 export const RuMonths = [
   'январь',
@@ -16,4 +15,4 @@ export const RuMonths = [
   'декабрь'
 ]
 
-export type SxProperty = SxProps<Theme>
+export type SxProperty = SxProps

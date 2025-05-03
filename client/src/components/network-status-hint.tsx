@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
-import { Box } from '@mui/material'
+import { Box } from '@mui/joy'
 import { useEffect, useState } from 'react'
 
 export function NetworkStatusMessage() {

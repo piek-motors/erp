@@ -1,8 +1,7 @@
-import { Autocomplete, TextField } from '@mui/material'
+import { Autocomplete } from '@mui/joy'
 import { Detail } from 'shared/domain'
 import { useGetDetailsQuery } from '../../../types/graphql-shema'
 import { map } from '../domain-adapter'
-import { t } from '../text'
 
 export function DetailSelect(props: {
   value?: Detail
@@ -17,7 +16,6 @@ export function DetailSelect(props: {
 
   return (
     <Autocomplete
-      disablePortal
       onChange={(_, selected) => {
         if (selected) {
           props.onChange(selected.data)
@@ -26,7 +24,6 @@ export function DetailSelect(props: {
       getOptionLabel={option => option.label}
       options={options}
       isOptionEqualToValue={(option, value) => option.data.id === value.data.id}
-      renderInput={params => <TextField {...params} label={t.DetailName} />}
     />
   )
 }

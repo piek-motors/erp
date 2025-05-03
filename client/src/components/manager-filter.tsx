@@ -1,11 +1,9 @@
-import { FormControl, InputLabel } from '@mui/material'
-import MenuItem from '@mui/material/MenuItem'
-import Select, { SelectChangeEvent } from '@mui/material/Select'
+import { FormControl, Option, Select } from '@mui/joy'
 import { useGetManagersQuery } from 'src/types/graphql-shema'
 
 interface IManagerFilterProps {
   value: any
-  onChange: (e: SelectChangeEvent<any>) => void
+  onChange: (userId: number) => void
 }
 
 export function ManagerFilter({ value, onChange }: IManagerFilterProps) {
@@ -13,15 +11,18 @@ export function ManagerFilter({ value, onChange }: IManagerFilterProps) {
 
   return (
     <FormControl>
-      <InputLabel>Менеджер</InputLabel>
-      <Select value={value} onChange={onChange}>
-        <MenuItem value={0}>Все</MenuItem>
+      <Select
+        value={value}
+        onChange={(e, v) => onChange(parseInt(v))}
+        placeholder="Менеджер"
+      >
+        <Option value={0}>Все</Option>
 
         {!loading &&
           data?.erp_Users.map(user => (
-            <MenuItem value={user.UserID} key={user.UserID}>
+            <Option value={user.UserID} key={user.UserID}>
               {`${user.FirstName} ${user.LastName}`}
-            </MenuItem>
+            </Option>
           ))}
       </Select>
     </FormControl>

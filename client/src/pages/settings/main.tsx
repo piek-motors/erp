@@ -1,21 +1,14 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
-import { UilPalette } from '@iconscout/react-unicons'
-import { Box, FormControl, InputLabel, MenuItem, Select, Typography } from '@mui/material'
-import Button from '@mui/material/Button'
+import { Box, Button, Typography } from '@mui/joy'
 import { ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAppContext } from 'src/hooks'
 import { AppRoutes } from 'src/lib/routes'
-import { AppColorTheme, RouteConfig } from 'src/types/global'
-import { SystemPreferTheme } from '../../utils/systemPreferTheme'
+import { RouteConfig } from 'src/types/global'
 
 function Settings() {
   const { store } = useAppContext()
-  if (!store.UItheme?.state || !store.UItheme?.dispatch)
-    throw Error('theme dispatch dont exist in store')
-
-  const { changeTheme } = SystemPreferTheme(store.UItheme.state, store.UItheme?.dispatch)
   const navigate = useNavigate()
 
   async function handleLogout() {
@@ -23,24 +16,15 @@ function Settings() {
     navigate('/login')
   }
 
-  const themeVariants: { title: string; value: AppColorTheme }[] = [
-    {
-      title: 'Светлая',
-      value: 'light'
-    },
-    {
-      title: 'Как на утройстве',
-      value: 'system'
-    },
-    {
-      title: 'Темная',
-      value: 'dark'
-    }
-  ]
-
-  const GridCard = ({ title, children }: { title: string; children: ReactNode }) => (
+  const GridCard = ({
+    title,
+    children
+  }: {
+    title: string
+    children: ReactNode
+  }) => (
     <Box className="gridCard">
-      <Typography variant="h6">{title}</Typography>
+      <Typography level="h4">{title}</Typography>
       {children}
     </Box>
   )
@@ -74,28 +58,9 @@ function Settings() {
         </div>
         <div> Уровень доступа: {(store.user as any).AccessLevelID}</div>
         <div> Email: {(store.user as any).Email}</div>
-        <Button variant="contained" onClick={handleLogout} sx={{ mt: '10px' }}>
+        <Button onClick={handleLogout} sx={{ mt: '10px' }}>
           Выйти
         </Button>
-      </GridCard>
-
-      <GridCard title="">
-        <div className="theme">
-          <UilPalette />
-          <FormControl fullWidth>
-            <InputLabel>Тема</InputLabel>
-            <Select
-              defaultValue={store.UItheme?.state}
-              onChange={e => changeTheme(e.target.value as AppColorTheme)}
-            >
-              {themeVariants.map(each => (
-                <MenuItem value={each.value} key={each.value}>
-                  {each.title}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </div>
       </GridCard>
 
       <GridCard title="Data Provider">

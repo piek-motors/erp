@@ -83,16 +83,7 @@ export interface MaterialSeachStore {
 export const useMaterialListStore = create<MaterialSeachStore>((set, get) => ({
   materials: [],
   index: new FlexSearch.Index({
-    tokenize: 'full',
-    context: {
-      depth: 30,
-      resolution: 0.4,
-      bidirectional: true
-    },
-    encoder(content) {
-      return content
-    },
-    fastupdate: true
+    tokenize: 'full'
   }),
   searchResult: [],
   setMaterials(materials: Material[]) {

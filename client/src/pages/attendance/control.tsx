@@ -1,8 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
-import Button from '@mui/material/Button'
+import { Button, Checkbox } from '@mui/joy'
 import { ReactNode } from 'react'
-import { Checkbox } from 'src/components/checkbox'
 import { monthAdd } from 'src/lib/date'
 import { useUpdateTimeDeductionMutation } from 'src/types/graphql-shema'
 import { State } from './main'
@@ -142,14 +141,12 @@ export default function ReportConfigurator({
           />
         </div>
 
-        <Button onClick={handleOnRetentionSave} variant="text" size="small">
-          Обновить
-        </Button>
+        <Button onClick={handleOnRetentionSave}>Обновить</Button>
       </div>
 
       <Checkbox
-        title="Показывать время прихода и ухода"
-        value={state.showFullInfo}
+        label="Показывать время прихода и ухода"
+        checked={state.showFullInfo}
         onClick={handleShowFullInfo}
       />
     </div>

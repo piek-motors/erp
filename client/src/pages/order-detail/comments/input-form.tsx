@@ -1,5 +1,5 @@
 import { UilMessage } from '@iconscout/react-unicons'
-import { Box, Button } from '@mui/material'
+import { Box, IconButton } from '@mui/joy'
 import React, { useState } from 'react'
 import { useGetAllUsersQuery } from 'src/types/graphql-shema'
 import СommandListPopover from './command-list.popover'
@@ -52,9 +52,6 @@ export function InputForm({ insertComment, inputRef }: InputFormProps) {
       />
 
       <Box
-        id="Comments_InputForm"
-        aria-controls="Comments__commandMenu"
-        aria-haspopup="true"
         contentEditable="true"
         ref={inputRef}
         sx={{ minHeight: 20, padding: '10px 5px' }}
@@ -64,9 +61,9 @@ export function InputForm({ insertComment, inputRef }: InputFormProps) {
         data-testid="inputForm"
       ></Box>
 
-      <Button variant="iconic" onClick={insertComment}>
+      <IconButton onClick={insertComment}>
         <UilMessage />
-      </Button>
+      </IconButton>
     </div>
   )
 }

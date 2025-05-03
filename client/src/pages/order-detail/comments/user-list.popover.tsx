@@ -1,4 +1,4 @@
-import { Menu, MenuItem } from '@mui/material'
+import { Menu, MenuItem } from '@mui/joy'
 import { TUser } from 'src/types/global'
 import placeCaretAtEnd from 'src/utils/placeCaretAtEnd'
 import sass from './index.module.sass'

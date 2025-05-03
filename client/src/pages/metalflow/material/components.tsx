@@ -1,12 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import {
-  Box,
-  Button,
-  CircularProgress,
-  Divider,
-  Paper,
-  Stack
-} from '@mui/material'
+import { Box, Button, CircularProgress, Divider, Sheet, Stack } from '@mui/joy'
 import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { UiUnit } from 'shared'
@@ -60,7 +53,7 @@ export function MaterialsList() {
         btnText={t.AddMaterial}
         goto={MetalFlowSys.material_add}
       />
-      <Paper variant="outlined">
+      <Sheet>
         <Search
           placeholder={t.Material}
           onChange={e => {
@@ -87,7 +80,7 @@ export function MaterialsList() {
             }}
           />
         )}
-      </Paper>
+      </Sheet>
     </Stack>
   )
 }
@@ -119,7 +112,7 @@ export function AddMaterial() {
       <ErrorHint show={error} msg={error?.message} />
       <SavedHint show={mutResult} />
       <LoadingHint show={loading} />
-      <Btn variant="contained" onClick={handleSave} disabled={loading}>
+      <Btn onClick={handleSave} disabled={loading}>
         {t.Save}
       </Btn>
       {mutResult && (
@@ -217,12 +210,7 @@ export function UpdateMaterial() {
             <SavedHint show={data?.update_metal_pdo_materials_by_pk} />
             <LoadingHint show={loading} />
             <Stack direction={'row'} gap={1}>
-              <Btn
-                variant="contained"
-                sx={{ flexGrow: 3 }}
-                onClick={handleSave}
-                disabled={loading}
-              >
+              <Btn sx={{ flexGrow: 3 }} onClick={handleSave} disabled={loading}>
                 {t.Save}
               </Btn>
             </Stack>
@@ -282,7 +270,7 @@ export function DeleteMaterial(props: { id: number }) {
   return (
     <Button
       variant="outlined"
-      color="error"
+      color="danger"
       sx={{ width: 'max-content' }}
       onClick={handle}
       disabled={loading}

@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
-import { Box } from '@mui/material'
+import { Box } from '@mui/joy'
 import { useState } from 'react'
 import { DragDropContext, OnDragEndResponder } from 'react-beautiful-dnd'
 import { TReclamationOrder } from 'src/types/global'

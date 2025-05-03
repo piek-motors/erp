@@ -1,14 +1,13 @@
+import { Sheet, Typography } from '@mui/joy'
 import moment from 'moment'
 import { useMemo } from 'react'
 import { ManagerFilter } from 'src/components'
 import { OrderTypeFilter } from 'src/components/order-type-filter'
-import { NavTabs } from 'src/components/orders-navigation-bar'
-import { PaperL1 } from 'src/components/paper'
 import { Search } from 'src/components/search-input'
 import { TableName } from 'src/components/table-name'
 import { useFilter } from 'src/hooks'
 import { AppRoutes } from 'src/lib/routes'
-import { P } from 'src/shortcuts'
+import { NavTabs } from 'src/pages/orders/tabs'
 import { RouteConfig } from 'src/types/global'
 import { useGetOrdersArchivedBySearchKeywordQuery } from 'src/types/graphql-shema'
 import { columnsList } from './columns'
@@ -58,7 +57,7 @@ function Archive() {
   return (
     <>
       <NavTabs />
-      <PaperL1>
+      <Sheet>
         <Search
           value={store.searchTerm}
           onChange={store.searchInputHandler}
@@ -76,8 +75,10 @@ function Archive() {
 
         <TableName name="Результат поиска по архиву" />
         {orders && <Table columns={columns} data={orders} showUnpaid />}
-        {!orders.length && <P m={2}>(ノ#-_-)ノ ничего не найдено</P>}
-      </PaperL1>
+        {!orders.length && (
+          <Typography m={2}>(ノ#-_-)ノ ничего не найдено</Typography>
+        )}
+      </Sheet>
     </>
   )
 }

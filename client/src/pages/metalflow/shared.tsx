@@ -1,16 +1,9 @@
 import { UilArrowLeft, UilPen } from '@iconscout/react-unicons'
 
-import {
-  Box,
-  IconButton,
-  Paper,
-  Stack,
-  Tooltip,
-  Typography
-} from '@mui/material'
+import { Box, IconButton, Sheet, Stack, Tooltip, Typography } from '@mui/joy'
 import { NavigateOptions, To, useNavigate } from 'react-router-dom'
 import { formatUnit } from 'shared'
-import { Btn, Input, P } from 'src/shortcuts'
+import { Btn, MyInput } from 'src/shortcuts'
 import { PageTitle } from '../../components'
 import { MetalFlowSys } from '../../lib/routes'
 import { goTo } from './spa'
@@ -56,7 +49,7 @@ export function SmallInputForm(props: FormProps) {
         <PageTitle title={props.header} icon={<></>} />
       </Stack>
       <Box>
-        <Paper variant={'outlined'} sx={{ p: 2 }}>
+        <Sheet sx={{ p: 2 }}>
           <Stack>
             {props.name}
             {props.beforemain}
@@ -67,7 +60,7 @@ export function SmallInputForm(props: FormProps) {
               {props.last}
             </Stack>
           )}
-        </Paper>
+        </Sheet>
       </Box>
     </Box>
   )
@@ -83,7 +76,7 @@ export const QtyInputWithUnit = (props: {
   const { unitId, value: qty, setValue: setQty } = props
   return (
     <Stack direction="row" alignItems="center" gap={1}>
-      <Input
+      <MyInput
         autoComplete="off"
         label={props.label}
         value={qty}
@@ -94,14 +87,14 @@ export const QtyInputWithUnit = (props: {
         type="number"
         fullWidth
       />
-      <P>{formatUnit(unitId)}</P>
+      <Typography>{formatUnit(unitId)}</Typography>
     </Stack>
   )
 }
 
 export function SavedHint(props: { show: any }) {
   if (props.show) {
-    return <P>{t.Saved}</P>
+    return <Typography color="success">{t.Saved}</Typography>
   }
   return <></>
 }
@@ -110,8 +103,8 @@ export function ErrorHint(props: { show: any; msg?: string; e?: Error }) {
   if (props.show) {
     return (
       <Box>
-        <Typography color={'red'}>{props.msg}</Typography>
-        <Typography color={'red'}>{JSON.stringify(props.e)}</Typography>
+        <Typography color="danger">{props.msg}</Typography>
+        <Typography color="danger">{JSON.stringify(props.e)}</Typography>
       </Box>
     )
   }
@@ -120,7 +113,7 @@ export function ErrorHint(props: { show: any; msg?: string; e?: Error }) {
 
 export function LoadingHint(props: { show: boolean }) {
   if (props.show) {
-    return <P>Loading...</P>
+    return <Typography>Loading...</Typography>
   }
   return <></>
 }
@@ -129,7 +122,8 @@ export function EditIconButton(props: { url: string; title: string }) {
   const navigate = useNavigate()
   return (
     <Tooltip title={props.title}>
-      <Btn
+      <IconButton
+        size="sm"
         sx={{
           opacity: 0.2,
           '&:hover': {
@@ -139,7 +133,7 @@ export function EditIconButton(props: { url: string; title: string }) {
         onClick={() => navigate(props.url)}
       >
         <UilPen />
-      </Btn>
+      </IconButton>
     </Tooltip>
   )
 }
@@ -159,11 +153,7 @@ export function ListPageHeader(props: {
       px={{ md: 0, xs: 1 }}
     >
       <PageTitle title={props.title} />
-      <Btn
-        sx={{ ml: 'auto' }}
-        variant="contained"
-        onClick={() => navigate(goTo(props.goto))}
-      >
+      <Btn sx={{ ml: 'auto' }} onClick={() => navigate(goTo(props.goto))}>
         {props.btnText}
       </Btn>
     </Stack>

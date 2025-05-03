@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
-import { Box, Typography } from '@mui/material'
+import { Box, Typography } from '@mui/joy'
 import { ReactNode } from 'react'
 import { formatOnlyDate } from 'src/lib/date'
 import { TOrder } from 'src/types/global'
@@ -28,7 +28,7 @@ export const OrderInfoCard = ({ heading, children }: IOrderInfoCardProps) => {
   `
   return (
     <Box css={styles}>
-      <Typography variant="subtitle2">{heading}</Typography>
+      <Typography>{heading}</Typography>
       <div className="body">{children}</div>
     </Box>
   )

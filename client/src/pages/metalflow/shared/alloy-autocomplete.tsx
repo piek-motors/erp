@@ -1,4 +1,4 @@
-import { Autocomplete, TextField, createFilterOptions } from '@mui/material'
+import { Autocomplete, createFilterOptions, FormLabel } from '@mui/joy'
 import { EnMaterialShape } from 'shared/enumerations'
 import { useGetCirclePossibleAlloysQuery } from '../../../types/graphql-shema'
 import { ErrorHint } from '../shared'
@@ -21,9 +21,9 @@ export function AlloyAutocomplete(props: {
   return (
     <>
       {error && <ErrorHint show={error} e={error} />}
+      <FormLabel>{t.Alloy}</FormLabel>
       <Autocomplete
         freeSolo
-        disablePortal
         loading={loading}
         onChange={(e, newValue) => {
           if (typeof newValue === 'string') {
@@ -64,7 +64,6 @@ export function AlloyAutocomplete(props: {
         }}
         options={options}
         value={alloy}
-        renderInput={params => <TextField {...params} label={t.Alloy} />}
       />
     </>
   )

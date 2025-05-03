@@ -1,4 +1,4 @@
-import { Box, Tab, Tabs } from '@mui/material'
+import { Tab, TabList, TabPanel, Tabs } from '@mui/joy'
 import { ReactNode, useState } from 'react'
 
 export function MyTabs(props: {
@@ -13,35 +13,17 @@ export function MyTabs(props: {
   }
 
   return (
-    <Box>
-      <Box>
-        <Tabs variant="fullWidth" value={tab} onChange={handleChange}>
-          {Object.keys(props.data).map((each, idx) => (
-            <Tab label={each} />
-          ))}
-        </Tabs>
-      </Box>
+    <Tabs value={tab}>
+      <TabList>
+        {Object.keys(props.data).map((each, idx) => (
+          <Tab key={each}> {each}</Tab>
+        ))}
+      </TabList>
       {Object.values(props.data).map((component, idx) => (
-        <CustomTabPanel value={tab} index={idx}>
+        <TabPanel key={idx} value={tab}>
           {component}
-        </CustomTabPanel>
+        </TabPanel>
       ))}
-    </Box>
-  )
-}
-
-interface TabPanelProps {
-  children?: React.ReactNode
-  index: number
-  value: number
-}
-
-function CustomTabPanel(props: TabPanelProps) {
-  const { children, value, index, ...other } = props
-
-  return (
-    <div hidden={value !== index} {...other}>
-      {value === index && <Box sx={{ p: 1 }}>{children}</Box>}
-    </div>
+    </Tabs>
   )
 }

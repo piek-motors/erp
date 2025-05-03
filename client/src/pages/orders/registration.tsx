@@ -1,9 +1,9 @@
+import { Sheet, Typography } from '@mui/joy'
 import { useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ManagerFilter, NavTabs, PaperL1, Search } from 'src/components'
+import { ManagerFilter, NavTabs, Search } from 'src/components'
 import { useFilter } from 'src/hooks'
 import { AppRoutes } from 'src/lib/routes'
-import { P } from 'src/shortcuts'
 import { OrderStatus, RouteConfig } from 'src/types/global'
 import {
   useGetOrdersByStatusQuery,
@@ -53,7 +53,7 @@ function Registration() {
   return (
     <>
       <NavTabs />
-      <PaperL1>
+      <Sheet>
         <Search
           value={store.searchTerm}
           onChange={store.searchInputHandler}
@@ -66,8 +66,10 @@ function Registration() {
         </Search>
 
         {data?.erp_Orders && <Table columns={columns} data={orders} />}
-        {!orders.length && <P m={2}>(ノ#-_-)ノ ничего не найдено</P>}
-      </PaperL1>
+        {!orders.length && (
+          <Typography m={2}>(ノ#-_-)ノ ничего не найдено</Typography>
+        )}
+      </Sheet>
     </>
   )
 }

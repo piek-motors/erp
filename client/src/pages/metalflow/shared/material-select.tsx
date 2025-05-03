@@ -1,8 +1,7 @@
-import { Box } from '@mui/material'
+import { Box, Typography } from '@mui/joy'
 import { useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { Material } from 'shared/domain'
-import { P } from 'src/shortcuts'
 import { useGetMaterialsQuery } from 'src/types/graphql-shema'
 import { map } from '../domain-adapter'
 import { useStockStore } from '../stock'
@@ -35,11 +34,11 @@ export function MaterialSelect(props: {
   if (materialid) {
     return (
       <Box>
-        <P>
-          Материал:
-          <ResourceName resource={props.material?.resourceName()} />
-        </P>
-        <P>Текущий остаток: {stockStore.getPrecise(material)}</P>
+        <Typography>Материал:</Typography>
+        <ResourceName resource={props.material?.resourceName()} />
+        <Typography>
+          Текущий остаток: {stockStore.getPrecise(material)}
+        </Typography>
       </Box>
     )
   }

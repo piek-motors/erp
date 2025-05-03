@@ -7,7 +7,7 @@ import {
   UilTruck,
   UilUnlock
 } from '@iconscout/react-unicons'
-import { Box, Button, Tooltip } from '@mui/material'
+import { Box, Button, Tooltip } from '@mui/joy'
 import { useNavigate } from 'react-router-dom'
 import { useAppContext } from 'src/hooks'
 import { useOrderDetailStore } from 'src/pages/order-detail/state'
@@ -19,6 +19,7 @@ import {
 } from 'src/types/graphql-shema'
 import { notif } from 'src/utils/notification'
 
+import { Row } from '../../../shortcuts'
 import { DeleteOrderDialog } from '../dialogs/delete-order-dialog'
 import { TransferOrderDialog } from '../dialogs/transfer-order.dialog'
 import StatusButtons from './order-status-indicator'
@@ -41,6 +42,8 @@ function actionButtonsRender(arrayOfBtns: ActionButton[]) {
     const btnComponent = (
       <Tooltip title={each.tip}>
         <Button
+          variant="plain"
+          color="neutral"
           key={each.tip}
           data-tip={each.tip}
           onClick={each.handler}
@@ -204,11 +207,11 @@ export default function OrderActions({ order }: { order: TOrder }) {
   ]
 
   return (
-    <div style={{ display: 'flex' }}>
-      <Box mr={'20px'}>
+    <Row>
+      <Box>
         <StatusButtons order={order} renderAlg={actionButtonsRender} />
       </Box>
       {actionButtonsRender(buttons)}
-    </div>
+    </Row>
   )
 }

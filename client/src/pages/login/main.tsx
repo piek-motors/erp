@@ -1,12 +1,13 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
-import { Button, TextField } from '@mui/material'
+import { Button } from '@mui/joy'
 import axios from 'axios'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAppContext } from 'src/hooks'
 import { AuthService } from 'src/services/auth.service'
 import { ServerErrorResponse } from 'src/types/global'
+import { MyInput } from '../../shortcuts'
 
 const LoginForm = () => {
   const [email, setEmail] = useState('')
@@ -59,15 +60,10 @@ const LoginForm = () => {
   return (
     <div css={loginCardStyles}>
       <h2>Piek ERP</h2>
-      <TextField
-        className="input"
-        label="Email"
-        onChange={e => setEmail(e.target.value.trim())}
-      />
-      <TextField
+      <MyInput label="Email" onChange={e => setEmail(e.target.value.trim())} />
+      <MyInput
         label="Password"
         type="password"
-        className="input"
         onChange={e => setPassword(e.target.value.trim())}
       />
       {error && <div className="error">{error}</div>}

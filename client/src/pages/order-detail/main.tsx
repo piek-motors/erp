@@ -1,7 +1,7 @@
+import { Sheet } from '@mui/joy'
 import { useCallback, useLayoutEffect, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { useLocation, useParams } from 'react-router-dom'
-import { PaperL1 } from 'src/components/paper'
 import { useAppContext } from 'src/hooks'
 import { AppRoutes } from 'src/lib/routes'
 import { useOrderDetailStore } from 'src/pages/order-detail/state'
@@ -13,9 +13,9 @@ import {
 import { FileService } from '../../services/file.service'
 import { CommentList } from './comments/comment.list'
 import { DialogAddEditOrderItem } from './dialogs/add-edit-order-item.dialog'
-import Docs from './docs/docs'
+import Docs from './docs'
 import OrderHeader from './header'
-import OrderItemList from './position/list'
+import OrderItemList from './position'
 import RightInfoPanel from './right-panel'
 import EditRightInfoPanel from './right-panel/input'
 import './sass/index.sass'
@@ -69,7 +69,7 @@ function OrderDetail() {
   if (!data?.erp_Orders || !store.user?.UserID) return null
 
   return (
-    <PaperL1>
+    <Sheet>
       <DialogAddEditOrderItem refetch={refetch} />
 
       {isFileOnDropzone(isDragActive)}
@@ -104,7 +104,7 @@ function OrderDetail() {
           </section>
         </>
       ) : null}
-    </PaperL1>
+    </Sheet>
   )
 }
 

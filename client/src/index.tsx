@@ -1,4 +1,5 @@
 import { ApolloProvider } from '@apollo/client'
+import '@fontsource/inter'
 import { createContext } from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
