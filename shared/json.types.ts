@@ -11,13 +11,17 @@ export interface ResourceNameProps {
   flags?: Flag[]
 }
 
-export abstract class MaterialShape {
+export abstract class MaterialShapeData {
   static shapeTitle: string
   abstract getIdentifier(): string
   abstract getResourceNameProps(): ResourceNameProps
+
+  update(key: string, value: any) {
+    return Object.assign(this, { [key]: value })
+  }
 }
 
-export class CircleShapeData extends MaterialShape {
+export class CircleShapeData extends MaterialShapeData {
   static shapeTitle = 'Круг'
   /** Diameter mm  */
   diameter!: number
@@ -48,7 +52,7 @@ export class CircleShapeData extends MaterialShape {
   }
 }
 
-export class ListShapeData extends MaterialShape {
+export class ListShapeData extends MaterialShapeData {
   static shapeTitle = 'Лист'
   g!: number
   getIdentifier(): string {
@@ -61,7 +65,7 @@ export class ListShapeData extends MaterialShape {
   }
 }
 
-export class PipeShapeData extends MaterialShape {
+export class PipeShapeData extends MaterialShapeData {
   static shapeTitle = 'Труба'
   /** Diameter in (mm). */
   diameter!: number
@@ -77,7 +81,7 @@ export class PipeShapeData extends MaterialShape {
   }
 }
 
-export class SquareShapeData extends MaterialShape {
+export class SquareShapeData extends MaterialShapeData {
   static shapeTitle = 'Квадрат'
   /** Length in mm */
   length!: number
@@ -99,5 +103,14 @@ export const MaterialShapeDataConstructor = {
   [EnMaterialShape.List]: ListShapeData,
   [EnMaterialShape.Pipe]: PipeShapeData,
   [EnMaterialShape.Square]: SquareShapeData
+}
+
+// Union of the values (constructors/types)
+type MaterialShapeDataUnion =
+  (typeof MaterialShapeDataConstructor)[keyof typeof MaterialShapeDataConstructor];
+
+export function getShapeDataConstructor(shapeId: number) {
+  // @ts-ignore
+  return MaterialShapeDataConstructor[shapeId] || null
 }
 

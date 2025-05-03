@@ -1,5 +1,5 @@
 import { Box, Stack } from '@mui/material'
-import { P } from 'src/shortcuts'
+import { Btn, P } from 'src/shortcuts'
 
 type Flag = {
   color: number
@@ -7,23 +7,39 @@ type Flag = {
 }
 
 export interface ResourceNameProps {
-  name: string
+  name?: string
   caption?: string
   flags?: Flag[]
 }
 
-export function ResourceName(props: ResourceNameProps) {
-  return (
+export function ResourceName(props: {
+  resource?: ResourceNameProps
+  onClick?: () => void
+}) {
+  const { resource } = props
+
+  if (!resource) return <> Null resource name </>
+  const raw = (
     <Stack direction="row" gap={1} alignItems="center">
-      <pre>{props.name}</pre>
+      <pre>{resource.name}</pre>
       <P variant="caption" sx={{ whiteSpace: 'nowrap' }}>
-        {props.caption}
+        {resource.caption}
       </P>
-      {props.flags?.map(each => (
+      {resource.flags?.map(each => (
         <Flag flag={each} />
       ))}
     </Stack>
   )
+
+  if (props.onClick) {
+    return (
+      <Btn variant="text" onClick={props.onClick} sx={{ width: '100%' }}>
+        {raw}
+      </Btn>
+    )
+  }
+
+  return raw
 }
 
 function Flag(props: { flag: Flag }) {

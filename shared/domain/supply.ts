@@ -1,4 +1,4 @@
-import { Material } from './material'
+import { Material } from './material';
 
 export class Supply {
   constructor(
@@ -7,5 +7,5 @@ export class Supply {
     readonly qty: number,
     readonly suppliedAt: Date,
     readonly supplierName: string
-  ) {}
+  ) { }
 }

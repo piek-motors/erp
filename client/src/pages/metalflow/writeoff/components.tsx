@@ -10,7 +10,6 @@ import { EnWriteoffType } from 'shared/enumerations'
 import { MetalFlowSys } from 'src/lib/routes'
 import { Input } from 'src/shortcuts'
 import { PaperL1 } from '../../../components/paper'
-import { P } from '../../../shortcuts'
 import {
   useDeleteWriteOffMutation,
   useGetWrietOffsQuery
@@ -138,11 +137,11 @@ function TotalCost(props: { detail: Detail; qty: number }) {
     <Stack p={1}>
       {t.InResultWillBeSubtracted}
 
-      {cost.map(each => (
+      {/* {cost.map(each => (
         <P key={each.meterial.getIdentifier()}>
           {each.cost} {each.meterial.unitId} - {each.meterial.getIdentifier()}
         </P>
-      ))}
+      ))} */}
     </Stack>
   )
 }

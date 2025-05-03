@@ -1,43 +1,59 @@
-import { MaterialShape, MaterialShapeDataConstructor } from 'shared'
-import { EnMaterialShape, EnUnit } from 'shared/enumerations'
-import create from 'zustand'
+import { plainToInstance } from 'class-transformer';
+import { CircleShapeData, getShapeDataConstructor, MaterialShapeData, MaterialShapeDataConstructor } from 'shared';
+import { Material } from 'shared/domain';
+import { EnMaterialShape, EnUnit } from 'shared/enumerations';
+import create from 'zustand';
 
 export interface IMaterialState {
-  id: number
-  unit: EnUnit
-  shape: EnMaterialShape
-  shapeData?: MaterialShape
+  id: number;
+  unit: EnUnit;
+  shape: EnMaterialShape;
+  shapeData?: MaterialShapeData;
 
-  setId(id: number): void
-  setUnit(unit: EnUnit): void
-  setShape(shape: EnMaterialShape): void
-  setShapeData(shapeData: MaterialShape): void
-  updateShapeDataProperty(propName: string, value: any): void
+
+  syncState(material: Material): void;
+  setId(id: number): void;
+  setUnit(unit: EnUnit): void;
+  setShape(shape: EnMaterialShape): void;
+  setShapeData(shapeData: MaterialShapeData): void;
 }
 
 export const useMaterialStore = create<IMaterialState>((set, get) => ({
   id: 0,
   unit: EnUnit.Kg,
   shape: EnMaterialShape.Circle,
+  shapeData: new CircleShapeData(),
   setId(id: number) {
-    set({ id })
+    set({ id });
   },
   setUnit(unit: EnUnit) {
-    set({ unit })
+    set({ unit });
   },
   setShape(shape: EnMaterialShape) {
-    const ShapeData = MaterialShapeDataConstructor[shape]
-    set({ shape, shapeData: new ShapeData() })
-  },
-  setShapeData(shapeData: MaterialShape) {
-    set({ shapeData })
-  },
-  updateShapeDataProperty(propName: string, value: any) {
-    const currentShapeData = get().shapeData
-    if (!currentShapeData) {
-      throw new Error('Shape data not set')
+    const constructor = getShapeDataConstructor(shape);
+    if (!constructor) {
+      throw new Error(`Constructor for shape ${shape} not found`);
     }
-
-    Object.assign(currentShapeData, { [propName]: value })
+    set({ shape, shapeData: new constructor() });
+  },
+  setShapeData(shapeData: MaterialShapeData) {
+    set({ shapeData });
+  },
+  syncState(material: Material) {
+    const ShapeData = MaterialShapeDataConstructor[material.shapeId];
+    if (!ShapeData) {
+      throw new Error(`Constructor for shape ${material.shapeId} not found`);
+    }
+    const constructor = getShapeDataConstructor(material.shapeId);
+    if (!constructor) {
+      throw new Error(`Constructor for shape ${material.shapeId} not found`);
+    }
+    const instance = plainToInstance(constructor as any, material.shapeData);
+    set({
+      id: material.id,
+      shape: material.shapeId,
+      shapeData: instance as any,
+      unit: material.unitId,
+    });
   }
-}))
+}));

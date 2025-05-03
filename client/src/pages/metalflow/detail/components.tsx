@@ -15,6 +15,7 @@ import {
 import { ListPageHeader, QtyInputWithUnit, SmallInputForm } from '../shared'
 import { MutationWithStatus, TakeLookHint } from '../shared/basic'
 import { MaterialAutocompleteMulti } from '../shared/material-autocomplete'
+import { ResourceName } from '../shared/material-name'
 import { Table } from '../shared/table.impl'
 import { goTo } from '../spa'
 import { t } from '../text'
@@ -59,10 +60,8 @@ export function DetailMaterialPropInput() {
   return (
     <Stack>
       {state.materials.map(m => (
-        <Stack sx={{ width: 'max-content' }}>
-          <P variant="body1" px={1} pt={1}>
-            {m.getIdentifier()}
-          </P>
+        <Stack sx={{ width: 'max-content' }} key={m.id}>
+          <ResourceName resource={m.resourceName()} />
           <MaterialWeightInput material={m} />
           <MatirialLengthInput material={m} />
         </Stack>

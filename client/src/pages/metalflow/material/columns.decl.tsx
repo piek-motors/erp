@@ -1,17 +1,13 @@
 import { Column } from 'react-table'
-import { formatUnit } from 'shared'
+import { Material } from 'shared/domain'
 import { MetalFlowSys } from 'src/lib/routes'
-import { GetMaterialsQuery } from 'src/types/graphql-shema'
-import { map } from '../domain-adapter'
 import { EditIconButton } from '../shared'
 import { ResourceName } from '../shared/material-name'
 import { goTo } from '../spa'
 import { t } from '../text'
-import { StockAmount } from './materials'
+import { StockAmount } from './components'
 
-export type MaterialDto = GetMaterialsQuery['metal_pdo_materials'][0]
-
-export const columnList: Column<MaterialDto>[] = [
+export const columnList: Column<Material>[] = [
   {
     Header: 'Id',
     accessor: 'id'
@@ -20,8 +16,7 @@ export const columnList: Column<MaterialDto>[] = [
     Header: t.Material,
     id: 'name',
     accessor: data => {
-      const ma = map.material.fromDto(data)
-      return <ResourceName {...ma.shapeData.getResourceNameProps()} />
+      return <ResourceName resource={Material.create(data).resourceName()} />
     }
   },
   {
@@ -30,7 +25,7 @@ export const columnList: Column<MaterialDto>[] = [
   },
   {
     Header: t.Unit,
-    accessor: data => formatUnit(data.unit)
+    accessor: data => data.unit()
   },
   {
     Header: 'Действие',

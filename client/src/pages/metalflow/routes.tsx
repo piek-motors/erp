@@ -5,8 +5,11 @@ import {
   DetailsList,
   DetailUpdateForm
 } from './detail/components'
-import { AddMaterial, UpdateMaterial } from './material/components'
-import { MaterialsList } from './material/materials'
+import {
+  AddMaterial,
+  MaterialsList,
+  UpdateMaterial
+} from './material/components'
 import { SPA } from './spa'
 import { AddSuply, SuppliesList } from './supply/components'
 import { AddWriteOff, WriteoffsList } from './writeoff/components'

@@ -5,6 +5,7 @@ html {
   --L0: rgb(235 235 235);
   --L1: rgb(245 245 245);
   --L2: rgb(250 250 250);
+  --L3: rgb(250 250 250);
 
   --highContrast: rgba(0, 0, 0, 0.87);
   --lowContrast: rgba(0, 0, 0, 0.6);
@@ -28,6 +29,7 @@ html.dark {
   --L0: rgba(25 25 25);
   --L1: rgba(35 35 35);
   --L2: rgba(45 45 45);
+  --L3: rgba(65 65 65);
 
   --highContrast: #d9e4f0;
   --lowContrast: #adadad;

@@ -15,27 +15,27 @@ declare module '@mui/material/Button' {
 const pallete = (preferTheme: string): PaletteOptions => ({
   ...(preferTheme === 'light'
     ? {
-        // palette values for light preferTheme
-        mode: 'light',
-        primary: {
-          main: '#4361e4',
-          light: '#E7E9FB'
-        },
-        secondary: {
-          main: '#e5534b'
-        }
+      // palette values for light preferTheme
+      mode: 'light',
+      primary: {
+        main: '#4361e4',
+        light: '#E7E9FB'
+      },
+      secondary: {
+        main: '#e5534b'
       }
+    }
     : {
-        // palette values for dark preferTheme
-        mode: 'dark',
-        primary: {
-          main: '#99affc',
-          light: '#43435c'
-        },
-        secondary: {
-          main: '#e5534b'
-        }
-      })
+      // palette values for dark preferTheme
+      mode: 'dark',
+      primary: {
+        main: '#99affc',
+        light: '#43435c'
+      },
+      secondary: {
+        main: '#e5534b'
+      }
+    })
 })
 
 export const customizedTheme = (preferTheme: string): ThemeOptions => ({
@@ -168,7 +168,14 @@ export const customizedTheme = (preferTheme: string): ThemeOptions => ({
     },
     MuiToggleButton: {
       defaultProps: {
-        disableRipple: true
+        disableRipple: true,
+      },
+      styleOverrides: {
+        root: {
+          margin: "3px 0",
+          textTransform: 'none',
+          borderRadius: 12
+        }
       }
     },
     MuiTextField: {
@@ -269,6 +276,21 @@ export const customizedTheme = (preferTheme: string): ThemeOptions => ({
         color: 'primary',
         size: 'small'
       }
-    }
+    },
+    MuiTab: {
+      styleOverrides: {
+        root: {
+          textTransform: 'none',
+        },
+      }
+    },
+    MuiToggleButtonGroup: {
+      styleOverrides: {
+        root: {
+          textTransform: 'none'
+        },
+      }
+    },
+
   }
 })

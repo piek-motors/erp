@@ -135,16 +135,19 @@ export function LoadingHint(props: { show: boolean }) {
 
 export function EditIconButton(props: { url: string; title: string }) {
   const navigate = useNavigate()
-
   return (
     <Tooltip title={props.title}>
       <Btn
+        sx={{
+          opacity: 0.2,
+          '&:hover': {
+            opacity: 1
+          }
+        }}
         variant="iconic"
-        size="small"
-        color="secondary"
         onClick={() => navigate(props.url)}
       >
-        <UilPen width={10} height={10} />
+        <UilPen />
       </Btn>
     </Tooltip>
   )

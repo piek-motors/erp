@@ -13,7 +13,7 @@ export function MaterialAutocomplete(props: {
 
   const options =
     data?.metal_pdo_materials.map(map.material.fromDto).map(material => ({
-      label: material.getIdentifier(),
+      label: material.getTextId(),
       material
     })) || []
 
@@ -33,7 +33,7 @@ export function MaterialAutocomplete(props: {
       value={
         value
           ? {
-              label: value.getIdentifier(),
+              label: value.getTextId(),
               material: value
             }
           : null
@@ -53,7 +53,7 @@ export function MaterialAutocompleteMulti(props: {
 
   const options =
     data?.metal_pdo_materials.map(map.material.fromDto).map(material => ({
-      label: material.getIdentifier(),
+      label: material.getTextId(),
       material
     })) || []
 
@@ -68,7 +68,7 @@ export function MaterialAutocompleteMulti(props: {
         }
       }}
       value={value?.map(m => ({
-        label: m.getIdentifier(),
+        label: m.getTextId(),
         material: m
       }))}
       options={options}
