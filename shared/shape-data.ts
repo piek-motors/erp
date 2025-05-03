@@ -38,16 +38,18 @@ export class CircleShapeData extends MaterialShapeData {
   /** Linear mass in kilograms per meter (kg/m). */
   linearMass!: number
   getIdentifier(): string {
-    return `${CircleShapeData.shapeTitle} D${this.diameter} ${this.alloy}`
+    return `${CircleShapeData.shapeTitle} ${this.diameter} ${this.alloy}`
   }
   getResourceNameProps(): ResourceNameProps {
     return {
       name: `${CircleShapeData.shapeTitle} D${this.diameter}`,
       caption: this.alloy,
-      flags: [{
-        color: 1,
-        text: this.calibrated ? "Калиброван" : ''
-      }]
+      flags: [
+        {
+          color: 1,
+          text: this.calibrated ? 'Калиброван' : ''
+        }
+      ]
     }
   }
 }
@@ -60,7 +62,7 @@ export class ListShapeData extends MaterialShapeData {
   }
   getResourceNameProps(): ResourceNameProps {
     return {
-      name: `${ListShapeData.shapeTitle} G ${this.g}`,
+      name: `${ListShapeData.shapeTitle} G ${this.g}`
     }
   }
 }
@@ -107,10 +109,9 @@ export const MaterialShapeDataConstructor = {
 
 // Union of the values (constructors/types)
 type MaterialShapeDataUnion =
-  (typeof MaterialShapeDataConstructor)[keyof typeof MaterialShapeDataConstructor];
+  (typeof MaterialShapeDataConstructor)[keyof typeof MaterialShapeDataConstructor]
 
 export function getShapeDataConstructor(shapeId: number) {
   // @ts-ignore
   return MaterialShapeDataConstructor[shapeId] || null
 }
-

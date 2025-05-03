@@ -4,7 +4,7 @@ import {
   CircleShapeData,
   ListShapeData,
   SquareShapeData
-} from 'shared/json.types'
+} from 'shared/shape-data'
 import { Input } from 'src/shortcuts'
 import { AlloyAutocomplete } from '../shared/alloy-autocomplete'
 import { t } from '../text'
@@ -110,7 +110,7 @@ export function CircleMaterialInput() {
       <Input
         label={t.Diameter}
         type="number"
-        value={circle.diameter || ''}
+        value={circle.diameter}
         onChange={e => {
           circle.diameter = Number(e.target.value)
           setShapeData(circle)
@@ -125,7 +125,7 @@ export function CircleMaterialInput() {
       />
       <Input
         label={t.LinearMass}
-        value={circle.linearMass || ''}
+        value={circle.linearMass}
         type="number"
         onChange={e => {
           circle.linearMass = Number(e.target.value)
@@ -134,7 +134,7 @@ export function CircleMaterialInput() {
       />
       <Input
         label={t.Density}
-        value={circle.density || ''}
+        value={circle.density}
         type="number"
         onChange={e => {
           circle.density = Number(e.target.value)

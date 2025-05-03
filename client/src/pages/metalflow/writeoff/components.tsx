@@ -18,7 +18,7 @@ import { notif } from '../../../utils/notification'
 import { ListPageHeader, SmallInputForm } from '../shared'
 import { MutationWithStatus } from '../shared/basic'
 import { DetailSelect } from '../shared/detail-select'
-import { ShapeDependedTabs } from '../shared/shape-depended-tabs'
+import { MyTabs } from '../shared/shape-depended-tabs'
 import { Table } from '../shared/table.impl'
 import { t } from '../text'
 import { getColumns } from './columns.decl'
@@ -31,7 +31,7 @@ export function AddWriteOff() {
   return (
     <SmallInputForm header={t.WriteOffAdd} goBackUrl={MetalFlowSys.materials}>
       {
-        <ShapeDependedTabs
+        <MyTabs
           data={{
             [t.WriteoffThroughDetail]: <WriteoffThroughDetail />,
             [t.WriteoffThroughMaterial]: <WriteOffThroughMaterial />

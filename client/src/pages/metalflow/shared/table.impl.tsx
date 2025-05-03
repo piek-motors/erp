@@ -10,6 +10,7 @@ import {
   Tooltip
 } from '@mui/material'
 import { TableOptions, useSortBy, useTable } from 'react-table'
+import { P } from '../../../shortcuts'
 
 type Props<T extends object> = TableOptions<T> & {
   onDoubleRowClick?: (row: T) => void
@@ -59,7 +60,7 @@ export function Table<T extends object>(props: Props<T>) {
                   >
                     <Tooltip title="Отсортировать?" placement="top">
                       <Stack direction={'row'} alignItems={'center'}>
-                        <div>{column.render('Header')}</div>
+                        <P variant="caption">{column.render('Header')}</P>
                         <SortingState
                           isSorted={col.isSorted}
                           isSortedDesc={col.isSortedDesc}

@@ -2,15 +2,14 @@ import { UilArrowLeft, UilPen } from '@iconscout/react-unicons'
 
 import {
   Box,
-  Divider,
   IconButton,
+  Paper,
   Stack,
   Tooltip,
   Typography
 } from '@mui/material'
 import { NavigateOptions, To, useNavigate } from 'react-router-dom'
 import { formatUnit } from 'shared'
-import { PaperL1 } from 'src/components/paper'
 import { Btn, Input, P } from 'src/shortcuts'
 import { PageTitle } from '../../components'
 import { MetalFlowSys } from '../../lib/routes'
@@ -45,9 +44,9 @@ interface FormProps {
   goBackUrl?: string
   goBackDelta?: number
   children: any
-  beforeFormComp?: any
-  lastSection?: JSX.Element
-  nameComponent?: JSX.Element
+  beforemain?: any
+  last?: JSX.Element
+  name?: JSX.Element
 }
 
 export function SmallInputForm(props: FormProps) {
@@ -56,27 +55,20 @@ export function SmallInputForm(props: FormProps) {
       <Stack direction="row" alignItems={'center'} gap={1} pb={2}>
         <PageTitle title={props.header} icon={<></>} />
       </Stack>
-      <PaperL1
-        sx={{
-          p: 2,
-          borderRadius: 3,
-          overflow: 'hidden'
-        }}
-      >
-        <PaperL1>
+      <Box>
+        <Paper variant={'outlined'} sx={{ p: 2 }}>
           <Stack>
-            {props.nameComponent}
-            {props.beforeFormComp}
+            {props.name}
+            {props.beforemain}
             {props.children}
           </Stack>
-          {props.lastSection && (
-            <Stack pt={3} gap={2}>
-              <Divider />
-              {props.lastSection}
+          {props.last && (
+            <Stack pt={2} gap={2}>
+              {props.last}
             </Stack>
           )}
-        </PaperL1>
-      </PaperL1>
+        </Paper>
+      </Box>
     </Box>
   )
 }
@@ -144,7 +136,6 @@ export function EditIconButton(props: { url: string; title: string }) {
             opacity: 1
           }
         }}
-        variant="iconic"
         onClick={() => navigate(props.url)}
       >
         <UilPen />

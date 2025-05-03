@@ -149,7 +149,7 @@ export function DetailUpdateForm() {
     <SmallInputForm
       header={t.EditDetail}
       goBackUrl={MetalFlowSys.details}
-      lastSection={<MutationWithStatus mutation={handleSave} />}
+      last={<MutationWithStatus mutation={handleSave} />}
     >
       <Stack
         gap={1}
@@ -230,7 +230,7 @@ export function DetailAddForm() {
     <SmallInputForm
       header={t.AddDetail}
       goBackUrl={MetalFlowSys.details}
-      lastSection={actionSection}
+      last={actionSection}
     >
       <Input
         label={t.DetailName}

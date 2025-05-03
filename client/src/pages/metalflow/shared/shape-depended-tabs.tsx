@@ -1,7 +1,7 @@
 import { Box, Tab, Tabs } from '@mui/material'
 import { ReactNode, useState } from 'react'
 
-export function ShapeDependedTabs(props: {
+export function MyTabs(props: {
   data: Record<string, ReactNode>
   handleChange: (shape: number) => void
 }) {
@@ -13,22 +13,9 @@ export function ShapeDependedTabs(props: {
   }
 
   return (
-    <Box
-      sx={{
-        width: '100%',
-        border: 'var(--border)',
-        overflow: 'hidden',
-        borderRadius: 3,
-        my: 1
-      }}
-    >
-      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <Tabs
-          variant="fullWidth"
-          value={tab}
-          onChange={handleChange}
-          sx={{ background: 'var(--L2)' }}
-        >
+    <Box>
+      <Box>
+        <Tabs variant="fullWidth" value={tab} onChange={handleChange}>
           {Object.keys(props.data).map((each, idx) => (
             <Tab label={each} />
           ))}

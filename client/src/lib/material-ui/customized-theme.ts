@@ -1,16 +1,5 @@
 import { PaletteOptions, ThemeOptions } from '@mui/material'
 
-declare module '@mui/material/styles/createTypography' {
-  interface TypographyOptions {
-    subtitle3: TypographyStyleOptions
-  }
-}
-
-declare module '@mui/material/Button' {
-  interface ButtonPropsVariantOverrides {
-    iconic: true
-  }
-}
 
 const pallete = (preferTheme: string): PaletteOptions => ({
   ...(preferTheme === 'light'
@@ -56,57 +45,11 @@ export const customizedTheme = (preferTheme: string): ThemeOptions => ({
       textTransform: 'uppercase',
       fontSize: '.8rem'
     },
-    subtitle3: {
-      // Полупрозрачный подзаголовок
-      fontSize: '.8rem',
-      color: 'var(--lowContrast) !important',
-      textTransform: 'uppercase'
-    }
   },
   components: {
-    MuiDialog: {
-      styleOverrides: {
-        paper: {
-          background: 'var(--LI) !important',
-          borderRadius: 'var(--br) !important',
-          border: 'var(--border)'
-        }
-      }
-    },
-    MuiDialogTitle: {
-      styleOverrides: {
-        root: {
-          background: 'var(--L2)',
-          borderBottom: 'var(--border)',
-          padding: '11px 1rem'
-        }
-      }
-    },
-    MuiDialogContent: {
-      styleOverrides: {
-        root: {
-          background: 'var(--L2)',
-          padding: '1rem 1rem .5rem !important'
-        }
-      }
-    },
-    MuiDialogActions: {
-      styleOverrides: {
-        root: {
-          background: 'var(--L2)',
-          borderTop: 'var(--border)',
-          padding: '15px 1rem !important'
-        }
-      }
-    },
-    MuiMenu: {
-      styleOverrides: {
-        paper: {
-          // border: 'var(--border)',
-          boxShadow: 'none !important'
-        }
-      }
-    },
+
+
+
     MuiMenuItem: {
       defaultProps: {
         disableRipple: true
@@ -133,7 +76,6 @@ export const customizedTheme = (preferTheme: string): ThemeOptions => ({
       variants: [
         {
           props: {
-            variant: 'iconic'
           },
           style: {
             minWidth: '10px',
@@ -190,7 +132,6 @@ export const customizedTheme = (preferTheme: string): ThemeOptions => ({
           borderRadius: 'var(--br) !important'
         },
         paper: {
-          background: 'var(--L2) !important',
           border: 'var(--border)',
           boxShadow: 'none !important'
         }

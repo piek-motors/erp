@@ -1,6 +1,6 @@
 import { EnMaterialShape, EnUnit } from '../enumerations'
 import { formatMaterialShape, formatUnit } from '../enums.ui'
-import { MaterialShapeData } from '../json.types'
+import { MaterialShapeData } from '../shape-data'
 
 type Flag = {
   color: number
@@ -22,7 +22,7 @@ export class Material {
     readonly unitId: EnUnit,
     readonly shapeId: EnMaterialShape,
     readonly shapeData: MaterialShapeData
-  ) { }
+  ) {}
 
   static create({ id, unitId, shapeId, shapeData }: Material) {
     return new Material(id, unitId, shapeId, shapeData)

@@ -1,14 +1,20 @@
 /** @jsxImportSource @emotion/react */
-import { Box, Button, CircularProgress, Divider, Stack } from '@mui/material'
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Divider,
+  Paper,
+  Stack
+} from '@mui/material'
 import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { UiUnit } from 'shared'
 import { EnMaterialShape } from 'shared/enumerations'
 import { Search } from 'src/components/search-input'
 import { MetalFlowSys } from 'src/lib/routes'
-import { Btn, P } from 'src/shortcuts'
+import { Btn } from 'src/shortcuts'
 import * as gql from 'src/types/graphql-shema'
-import { PaperL1 } from '../../../components/paper'
 import { notif } from '../../../utils/notification'
 import { map } from '../domain-adapter'
 import {
@@ -21,7 +27,7 @@ import {
 import { TakeLookHint } from '../shared/basic'
 import { MySelect } from '../shared/basic-select'
 import { ResourceName } from '../shared/material-name'
-import { ShapeDependedTabs } from '../shared/shape-depended-tabs'
+import { MyTabs } from '../shared/shape-depended-tabs'
 import { Table } from '../shared/table.impl'
 import { goTo } from '../spa'
 import { useStockStore } from '../stock'
@@ -33,13 +39,20 @@ import {
   PipeMaterialInput,
   SquareMaterialInput
 } from './shape-data'
-import { useMaterialStore } from './state'
+import { useMaterialListStore, useMaterialStore } from './state'
 
 export function MaterialsList() {
-  const { data, loading, error } = gql.useGetMaterialsQuery({})
+  const { data, loading, error } = gql.useGetMaterialsQuery()
   const navigate = useNavigate()
+  const state = useMaterialListStore()
 
-  const materials = data?.metal_pdo_materials?.map(map.material.fromDto)
+  useEffect(() => {
+    if (data) {
+      const mtrls = data.metal_pdo_materials.map(map.material.fromDto)
+      state.setMaterials(mtrls)
+    }
+  }, [data])
+
   return (
     <Stack>
       <ListPageHeader
@@ -47,20 +60,34 @@ export function MaterialsList() {
         btnText={t.AddMaterial}
         goto={MetalFlowSys.material_add}
       />
-      <PaperL1 sx={{ gap: 2 }}>
-        <Search placeholder={t.Material} onChange={() => {}} value="" />
+      <Paper variant="outlined">
+        <Search
+          placeholder={t.Material}
+          onChange={e => {
+            state.setFilterKeyword(e.target.value)
+          }}
+          value={state.filterKeyword}
+        />
         <LoadingHint show={loading} />
         <ErrorHint show={error} msg={error?.message} />
-        {materials && (
+        {state.materials && (
           <Table
             columns={columnList}
-            data={materials}
+            data={state.materials.filter(each => {
+              if (!state.filterKeyword) return true
+
+              if (state.searchResult) {
+                return state.searchResult.includes(each.id)
+              }
+
+              return true
+            })}
             onDoubleRowClick={row => {
               navigate(goTo(MetalFlowSys.material_update, row.id))
             }}
           />
         )}
-      </PaperL1>
+      </Paper>
     </Stack>
   )
 }
@@ -108,12 +135,15 @@ export function AddMaterial() {
     <SmallInputForm
       header={t.AddMaterial}
       goBackUrl={MetalFlowSys.materials}
-      lastSection={actionSection}
+      last={actionSection}
     >
-      <Box>
-        <P variant="caption">{t.MaterialFormHint}</P>
-        <MaterialShapeSelectTabs />
-      </Box>
+      <MyTabs
+        data={tabs}
+        handleChange={shape => {
+          state.setShape(shape)
+        }}
+      />
+
       <MySelect
         label={t.Unit}
         onChange={state.setUnit}
@@ -163,45 +193,41 @@ export function UpdateMaterial() {
     })
   }
 
-  const saveActionsBlock = (
-    <>
-      <ErrorHint show={error} msg={error?.message} />
-      <SavedHint show={data?.update_metal_pdo_materials_by_pk} />
-      <LoadingHint show={loading} />
-      <Stack direction={'row'} gap={1}>
-        <Btn
-          variant="contained"
-          sx={{ flexGrow: 3 }}
-          onClick={handleSave}
-          disabled={loading}
-        >
-          {t.Save}
-        </Btn>
-      </Stack>
-    </>
-  )
-
   if (ready) {
     return (
       <SmallInputForm
         header={t.EditMaterial}
         goBackUrl={MetalFlowSys.materials}
-        nameComponent={
+        name={
           map.material.convertable(state) ? (
             <Box px={1}>
               <ResourceName
                 resource={state.shapeData?.getResourceNameProps()}
               />
-              <P>
-                {t.Unit} {map.material.fromDto(state).unit()}
-              </P>
+              {t.Unit} {map.material.fromDto(state).unit()}
             </Box>
           ) : (
             <></>
           )
         }
-        beforeFormComp={<UpdateMaterialUpdateStockLinks id={id} />}
-        lastSection={saveActionsBlock}
+        beforemain={<UpdateMaterialUpdateStockLinks id={id} />}
+        last={
+          <>
+            <ErrorHint show={error} msg={error?.message} />
+            <SavedHint show={data?.update_metal_pdo_materials_by_pk} />
+            <LoadingHint show={loading} />
+            <Stack direction={'row'} gap={1}>
+              <Btn
+                variant="contained"
+                sx={{ flexGrow: 3 }}
+                onClick={handleSave}
+                disabled={loading}
+              >
+                {t.Save}
+              </Btn>
+            </Stack>
+          </>
+        }
       >
         <Box>{getInputFormByShapeValue(state.shape)}</Box>
       </SmallInputForm>
@@ -271,18 +297,6 @@ const tabs = {
   Квадрат: <SquareMaterialInput />,
   Лист: <ListMaterialInput />,
   Труба: <PipeMaterialInput />
-}
-
-export function MaterialShapeSelectTabs() {
-  const state = useMaterialStore()
-  return (
-    <ShapeDependedTabs
-      data={tabs}
-      handleChange={shape => {
-        state.setShape(shape)
-      }}
-    />
-  )
 }
 
 export function getInputFormByShapeValue(shape: EnMaterialShape) {

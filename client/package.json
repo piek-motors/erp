@@ -17,6 +17,7 @@
     "class-transformer": "^0.5.1",
     "env-cmd": "^10.1.0",
     "file-saver": "^2.0.5",
+    "flexsearch": "^0.8.158",
     "form-data": "^3.0.1",
     "graphql": "^16.6.0",
     "graphql-tag": "^2.12.6",
@@ -61,7 +62,6 @@
     ]
   },
   "devDependencies": {
-    "@types/react-dom": "^19.0.4",
     "@babel/core": "^7.19.6",
     "@graphql-codegen/cli": "^2.13.6",
     "@graphql-codegen/typescript": "^2.7.4",
@@ -74,6 +74,7 @@
     "@types/jest": "^29.5.14",
     "@types/react": "^18.2.20",
     "@types/react-beautiful-dnd": "^13.1.2",
+    "@types/react-dom": "^19.0.4",
     "@types/react-router-dom": "^5.3.3",
     "@types/react-table": "^7.7.12",
     "@types/react-test-renderer": "^18.0.0",

@@ -3,7 +3,7 @@ import { UilSearch } from '@iconscout/react-unicons'
 import React, { ReactNode } from 'react'
 
 interface ISearchInputWithFiltersProps {
-  value: string
+  value?: string
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
   placeholder: string
   children?: ReactNode

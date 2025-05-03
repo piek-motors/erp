@@ -42,7 +42,6 @@ function actionButtonsRender(arrayOfBtns: ActionButton[]) {
       <Tooltip title={each.tip}>
         <Button
           key={each.tip}
-          variant="iconic"
           data-tip={each.tip}
           onClick={each.handler}
           className={each.className}
