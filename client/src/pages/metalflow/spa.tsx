@@ -1,4 +1,4 @@
-import { Box, Container } from '@mui/joy'
+import { Box } from '@mui/joy'
 import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import { NavigationBlock } from './nav'
@@ -17,10 +17,10 @@ export function MetalFlowSubsystem() {
     <Box
       sx={{
         height: '100vh',
-        display: 'grid',
-        gridTemplateColumns: '1fr 8fr 1fr',
+        display: 'flex',
         alignItems: 'stretch',
         justifyContent: 'start',
+        gap: 2,
         flexDirection: {
           xs: 'column',
           sm: 'row'
@@ -29,9 +29,9 @@ export function MetalFlowSubsystem() {
     >
       <NavigationBlock />
       {path && (
-        <Container>
+        <Box sx={{ overflow: 'scroll' }}>
           {(path && getComponentByCurrentPath(path)) || <></>}
-        </Container>
+        </Box>
       )}
     </Box>
   )

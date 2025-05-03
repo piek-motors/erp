@@ -1,8 +1,15 @@
 /** @jsxImportSource @emotion/react */
-import { Box, Button, CircularProgress, Divider, Sheet } from '@mui/joy'
+import {
+  Box,
+  Button,
+  CircularProgress,
+  Divider,
+  Sheet,
+  Typography
+} from '@mui/joy'
 import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { UiMaterialShape, UiUnit } from 'shared'
+import { UiMaterialShape } from 'shared'
 import { EnMaterialShape } from 'shared/enumerations'
 import { Search } from 'src/components/search-input'
 import { MetalFlowSys } from 'src/lib/routes'
@@ -18,12 +25,12 @@ import {
 } from 'src/shortcuts'
 import * as gql from 'src/types/graphql-shema'
 import { PageTitle } from '../../../components'
+import { Table } from '../../../components/table.impl'
 import { emitNotification } from '../../../utils/notification'
 import { map } from '../domain-adapter'
 import { SmallInputForm } from '../shared'
-import { MySelect } from '../shared/basic-select'
+import { MaterialUnitSelect } from '../shared/basic'
 import { ResourceName } from '../shared/material-name'
-import { Table } from '../shared/table.impl'
 import { goTo } from '../spa'
 import { useStockStore } from '../stock'
 import { t } from '../text'
@@ -54,16 +61,16 @@ export function MaterialsList() {
         <AddButton navigateTo={goTo(MetalFlowSys.material_add)} />
       </PageTitle>
 
+      <Search
+        onChange={e => {
+          state.setFilterKeyword(e.target.value)
+        }}
+        value={state.filterKeyword}
+      />
+      <LoadingHint show={loading} />
+      <ErrorHint e={error} />
+
       <Sheet>
-        <Search
-          placeholder={t.Material}
-          onChange={e => {
-            state.setFilterKeyword(e.target.value)
-          }}
-          value={state.filterKeyword}
-        />
-        <LoadingHint show={loading} />
-        <ErrorHint e={error} />
         {state.materials && (
           <Table
             columns={columnList}
@@ -137,14 +144,7 @@ export function AddMaterial() {
         }}
       />
 
-      <MySelect
-        label={t.Unit}
-        onChange={state.setUnit}
-        value={state.unit}
-        selectElements={Object.entries(UiUnit).map(([key, value]) => {
-          return { name: value, value: key }
-        })}
-      />
+      <MaterialUnitSelect value={state.unit} onChange={state.setUnit} />
     </SmallInputForm>
   )
 }
@@ -193,10 +193,12 @@ export function UpdateMaterial() {
         name={
           map.material.convertable(state) ? (
             <>
-              <Box px={1}>
-                <ResourceName
-                  resource={state.shapeData?.getResourceNameProps()}
-                />
+              <Box>
+                <Typography level="h4">
+                  <ResourceName
+                    resource={state.shapeData?.getResourceNameProps()}
+                  />
+                </Typography>
                 {t.Unit} {map.material.fromDto(state).unit()}
               </Box>
               <UpdateMaterialUpdateStockLinks id={id} />
@@ -218,7 +220,7 @@ function UpdateMaterialUpdateStockLinks(props: { id: number }) {
   const { id } = props
 
   return (
-    <Row my={3}>
+    <Row mt={2}>
       <Divider />
       <Button
         variant="outlined"

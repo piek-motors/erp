@@ -2,7 +2,7 @@ import { UilArrowLeft, UilPen } from '@iconscout/react-unicons'
 
 import { Box, IconButton, Sheet, Stack, Tooltip, Typography } from '@mui/joy'
 import { NavigateOptions, To, useNavigate } from 'react-router-dom'
-import { formatUnit } from 'shared'
+import { uiUnit } from 'shared'
 import { MyInput } from 'src/shortcuts'
 import { PageTitle } from '../../components'
 
@@ -79,7 +79,7 @@ export const QtyInputWithUnit = (props: {
         type="number"
         fullWidth
       />
-      <Typography>{formatUnit(unitId)}</Typography>
+      <Typography>{uiUnit(unitId)}</Typography>
     </Stack>
   )
 }

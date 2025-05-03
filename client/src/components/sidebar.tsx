@@ -26,7 +26,7 @@ export const links = [
   {
     href: MetalFlowSys.root,
     icon: <UilCalculatorAlt />,
-    name: 'Планово диспетческий отдел'
+    name: 'Материаловедение'
   },
   {
     href: AppRoutes.mentions,

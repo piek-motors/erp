@@ -1,5 +1,5 @@
 import { Column } from 'react-table'
-import { formatUnit } from 'shared'
+import { uiUnit } from 'shared'
 import { formatDateWithTime } from '../../../lib/date'
 import { GetSuppliesQuery } from '../../../types/graphql-shema'
 import { map } from '../domain-adapter'
@@ -30,7 +30,7 @@ export function getColumns(props: {
     },
     {
       Header: 'Кол-во',
-      accessor: data => `${data.qty} ${formatUnit(data?.material?.unit as any)}`
+      accessor: data => `${data.qty} ${uiUnit(data?.material?.unit as any)}`
     },
     {
       Header: 'Дата поставки',

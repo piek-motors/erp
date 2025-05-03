@@ -35,7 +35,7 @@ export const UiUnit = {
   [EnUnit.Gram]: 'гр'
 }
 
-export function formatUnit(unit?: EnUnit) {
+export function uiUnit(unit?: EnUnit) {
   if (unit == null) return '-'
   return UiUnit[unit]
 }

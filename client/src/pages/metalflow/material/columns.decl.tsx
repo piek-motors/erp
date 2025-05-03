@@ -18,7 +18,7 @@ export const columnList: Column<Material>[] = [
     accessor: data => {
       return <ResourceName resource={Material.create(data).resourceName()} />
     },
-    width: '60%'
+    width: '95%'
   },
   {
     Header: t.Remaining,

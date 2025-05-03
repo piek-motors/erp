@@ -23,6 +23,7 @@ type MyInputProps = InputProps & {
   helperText?: string
   default?: string | null
   customInput?: React.ComponentType<any>
+  unit?: string
 }
 
 export function MyInput(props: MyInputProps) {
@@ -36,7 +37,10 @@ export function MyInput(props: MyInputProps) {
           name={props.name}
         />
       ) : (
-        <Input {...props} defaultValue={props.default || ''} />
+        <Row>
+          <Input {...props} defaultValue={props.default || ''} />
+          {props.unit && <Typography>{props.unit}</Typography>}
+        </Row>
       )}
       {props.helperText && <FormHelperText>{props.helperText}</FormHelperText>}
     </FormControl>

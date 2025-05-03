@@ -1,4 +1,4 @@
-import { formatUnit } from 'shared'
+import { uiUnit } from 'shared'
 import { Material, Supply, Writeoff } from 'shared/domain'
 import create from 'zustand'
 import { apolloClient } from '../../api'
@@ -75,13 +75,13 @@ export const useStockStore = create<IStock>(set => ({
   getRounded(material?: Material): string {
     if (!material) return '-'
     const qty = (this.stock.get(material.id) || 0).toFixed()
-    return `${qty} ${formatUnit(material.unitId)}`
+    return `${qty} ${uiUnit(material.unitId)}`
   },
 
   getPrecise(material?: Material): string {
     if (!material) return '-'
     const qty = (this.stock.get(material.id) || 0).toFixed(3)
-    return `${qty} ${formatUnit(material.unitId)}`
+    return `${qty} ${uiUnit(material.unitId)}`
   },
 
   getByIdRounded(materialId: number): string {

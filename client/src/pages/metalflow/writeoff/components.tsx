@@ -8,6 +8,7 @@ import { Detail } from 'shared/domain/detail'
 import { WriteoffTroughDetail } from 'shared/domain/writeoff'
 import { EnWriteoffType } from 'shared/enumerations'
 import { MetalFlowSys } from 'src/lib/routes'
+import { Table } from '../../../components/table.impl'
 import {
   useDeleteWriteOffMutation,
   useGetWrietOffsQuery
@@ -15,7 +16,6 @@ import {
 import { emitNotification } from '../../../utils/notification'
 import { SmallInputForm } from '../shared'
 import { DetailSelect } from '../shared/detail-select'
-import { Table } from '../shared/table.impl'
 import { t } from '../text'
 import { getColumns } from './columns.decl'
 import { useWriteOffStore } from './state'

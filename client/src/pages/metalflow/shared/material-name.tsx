@@ -21,7 +21,7 @@ export function ResourceName(props: {
   if (!resource) return <> Null resource name </>
   const raw = (
     <Stack direction="row" gap={1} alignItems="center">
-      <pre>{resource.name}</pre>
+      <Typography>{resource.name}</Typography>
       <Typography sx={{ whiteSpace: 'nowrap' }}>{resource.caption}</Typography>
       {resource.flags?.map(each => (
         <Flag flag={each} />

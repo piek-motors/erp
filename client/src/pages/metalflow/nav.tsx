@@ -7,13 +7,18 @@ import { t } from './text'
 export function NavigationBlock() {
   return (
     <Stack>
-      <PageTitle title={t.PdoModuleTitle} sx={{ pb: 1 }} />
-      <Stack gap={3}>{actions.map(each => RenderAction(each))}</Stack>
+      <PageTitle title={t.PdoModuleTitle} sx={{ pb: 3 }} />
+      <Stack gap={2}>
+        {actions.map(each => (
+          <RenderAction action={each} key={each.href} />
+        ))}
+      </Stack>
     </Stack>
   )
 }
 
-function RenderAction(action: Action) {
+function RenderAction(props: { action: Action }) {
+  const { action } = props
   return (
     <Stack
       direction="row"
@@ -23,14 +28,10 @@ function RenderAction(action: Action) {
     >
       <LinkableAction href={action.href} name={action.name} />
       {action.endBlock?.length && (
-        <Stack pl={2}>
+        <Stack>
           {action.endBlock?.map(e => (
-            <Box
-              sx={{
-                opacity: 0.6
-              }}
-            >
-              <LinkableActionIcon
+            <Box key={e.href}>
+              <LinkableIcon
                 href={e.href}
                 icon={e.icon && <e.icon width={16} height={16} />}
               />
@@ -50,18 +51,14 @@ function LinkableAction(props: {
 }) {
   return (
     <Link to={`?path=${props.href}`} key={props.href}>
-      <Button variant="plain" color="neutral">
+      <Button variant="plain" color="neutral" sx={{ whiteSpace: 'nowrap' }}>
         {props.name}
       </Button>
     </Link>
   )
 }
 
-function LinkableActionIcon(props: {
-  href: string
-  icon?: any
-  small?: boolean
-}) {
+function LinkableIcon(props: { href: string; icon?: any; small?: boolean }) {
   return (
     <Link to={`?path=${props.href}`} key={props.href}>
       <IconButton>{props.icon}</IconButton>

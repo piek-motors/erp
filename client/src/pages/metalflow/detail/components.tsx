@@ -12,10 +12,10 @@ import {
   useInsertDetailMutation
 } from 'src/types/graphql-shema'
 import { PageTitle } from '../../../components'
+import { Table } from '../../../components/table.impl'
 import { QtyInputWithUnit, SmallInputForm } from '../shared'
 import { MaterialAutocompleteMulti } from '../shared/material-autocomplete'
 import { ResourceName } from '../shared/material-name'
-import { Table } from '../shared/table.impl'
 import { goTo } from '../spa'
 import { t } from '../text'
 import { columnList } from './columns.decl'

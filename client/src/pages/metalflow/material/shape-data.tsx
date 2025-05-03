@@ -1,5 +1,5 @@
 import { Button, ToggleButtonGroup } from '@mui/joy'
-import { PipeShapeData } from 'shared'
+import { EnUnit, PipeShapeData, uiUnit } from 'shared'
 import {
   CircleShapeData,
   ListShapeData,
@@ -113,6 +113,7 @@ export function CircleMaterialInput() {
           circle.diameter = Number(e.target.value)
           setShapeData(circle)
         }}
+        unit={uiUnit(EnUnit.MilliMeter)}
       />
       <AlloyAutocomplete
         setAlloy={alloy => {
@@ -129,6 +130,7 @@ export function CircleMaterialInput() {
           circle.linearMass = Number(e.target.value)
           setShapeData(circle)
         }}
+        unit="кг/м"
       />
       <MyInput
         label={t.Density}
@@ -138,6 +140,7 @@ export function CircleMaterialInput() {
           circle.density = Number(e.target.value)
           setShapeData(circle)
         }}
+        unit="кг/м3"
       />
       <ToggleButtonGroup
         sx={{ pt: 1 }}

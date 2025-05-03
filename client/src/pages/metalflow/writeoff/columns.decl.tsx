@@ -1,5 +1,5 @@
 import { Column } from 'react-table'
-import { formatUnit, formatWriteoffReason } from 'shared'
+import { formatWriteoffReason, uiUnit } from 'shared'
 import { EnWriteoffType } from 'shared/enumerations'
 import { formatDateWithTime } from '../../../lib/date'
 import { GetWrietOffsQuery } from '../../../types/graphql-shema'
@@ -30,7 +30,7 @@ export function getColumns(props: {
     },
     {
       Header: t.Qty,
-      accessor: data => `${data.qty} ${formatUnit(data.material?.unit)}`
+      accessor: data => `${data.qty} ${uiUnit(data.material?.unit)}`
     },
     {
       Header: t.Date,

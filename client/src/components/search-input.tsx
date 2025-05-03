@@ -1,12 +1,12 @@
 import { UilSearch } from '@iconscout/react-unicons'
-import { Input } from '@mui/joy'
+import { Box, Input } from '@mui/joy'
 import React, { ReactNode } from 'react'
 import { Row } from '../shortcuts'
 
 interface ISearchInputWithFiltersProps {
   value?: string
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
-  placeholder: string
+  placeholder?: string
   children?: ReactNode
 }
 
@@ -17,11 +17,14 @@ export function Search({
   children
 }: ISearchInputWithFiltersProps) {
   return (
-    <Row gap={1}>
-      <UilSearch />
+    <Row gap={1} sx={{ position: 'sticky' }}>
+      <Box sx={{ opacity: 0.5 }}>
+        <UilSearch width={20} />
+      </Box>
       <Input
         type="text"
-        placeholder={placeholder}
+        variant="soft"
+        placeholder={placeholder || 'Найти'}
         autoFocus={value !== ''}
         onChange={onChange}
         value={value}

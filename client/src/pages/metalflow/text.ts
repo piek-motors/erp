@@ -1,8 +1,8 @@
 export const t = {
-  PdoModuleTitle: 'ПДО: Планирование материалов',
+  PdoModuleTitle: 'Материаловедение',
   Add: 'Добавить',
   Date: 'Дата',
-  Action: "Действие",
+  Action: 'Действие',
   AddDetail: 'Добавить деталь',
   AddMaterial: 'Добавить материал',
   AddSupply: 'Добавить поставку', // Align with "События поставок"
@@ -14,12 +14,12 @@ export const t = {
   Detail: 'Деталь',
   DetailName: 'Название детали',
   DetailsList: 'Список деталей',
-  Diameter: 'Диаметр, мм', // Consistent unit format
+  Diameter: 'Диаметр',
   EditDetail: 'Изменить деталь',
   EditMaterial: 'Изменить материал',
   InResultWillBeSubtracted: 'В результате будет вычтено', // Fixed key typo
   Length: 'Длина',
-  LinearMass: 'Линейная масса (кг/м)', // Standard term
+  LinearMass: 'Линейная масса',
   MadeOf: 'Изготовлено из', // Neutral gender
   Material: 'Материал',
   MaterialCost: 'Расход материала', // Clarify context

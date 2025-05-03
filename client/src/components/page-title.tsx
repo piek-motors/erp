@@ -11,7 +11,7 @@ export interface Props {
 
 export function PageTitle(props: Props) {
   return (
-    <Stack direction="row" gap={2} p={1}>
+    <Stack direction="row" gap={2} py={1}>
       <Tooltip title="Перейти на главную страницу">
         <Link to="/help">
           <IconButton variant="soft" color="primary">
@@ -20,7 +20,7 @@ export function PageTitle(props: Props) {
         </Link>
       </Tooltip>
 
-      <Row gap={3}>
+      <Row gap={2}>
         <Typography color="primary" fontWeight={600}>
           {props.title}
         </Typography>

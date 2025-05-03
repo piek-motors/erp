@@ -1,4 +1,3 @@
-export * from '../pages/orders/tabs'
 export * from './manager-filter'
 export * from './order-type-filter'
 export * from './page-title'
