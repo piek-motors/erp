@@ -10,6 +10,7 @@ import {
   useGetManagersQuery,
   useGetOrderByPkQuery
 } from 'src/types/graphql-shema'
+import { PageTitle } from '../../components'
 import { FileService } from '../../services/file.service'
 import { CommentList } from './comments/comment.list'
 import { DialogAddEditOrderItem } from './dialogs/add-edit-order-item.dialog'
@@ -69,42 +70,45 @@ function OrderDetail() {
   if (!data?.erp_Orders || !store.user?.UserID) return null
 
   return (
-    <Sheet>
-      <DialogAddEditOrderItem refetch={refetch} />
+    <>
+      <PageTitle title="Детали заказа" />
+      <Sheet>
+        <DialogAddEditOrderItem refetch={refetch} />
 
-      {isFileOnDropzone(isDragActive)}
-      {data.erp_Orders && users?.erp_Users ? (
-        <>
-          <section className="OrderLayout" {...getRootProps()} id="dropzone">
-            <div className="LeftSideContent">
-              <OrderHeader order={data.erp_Orders[0]} />
-              <OrderItemList
-                data={data.erp_Orders[0].OrderItems}
-                refetch={refetch}
-              />
-              <CommentList user={store.user} />
-              <Docs
-                data={data.erp_Orders[0].Docs}
-                onUpload={onUploadFiles}
-                refetch={refetch}
-              />
-            </div>
-
-            <div className="Info">
-              {editMode ? (
-                <EditRightInfoPanel
-                  data={data.erp_Orders[0]}
+        {isFileOnDropzone(isDragActive)}
+        {data.erp_Orders && users?.erp_Users ? (
+          <>
+            <section className="OrderLayout" {...getRootProps()} id="dropzone">
+              <div className="LeftSideContent">
+                <OrderHeader order={data.erp_Orders[0]} />
+                <OrderItemList
+                  data={data.erp_Orders[0].OrderItems}
                   refetch={refetch}
-                  users={users.erp_Users}
                 />
-              ) : (
-                <RightInfoPanel data={data.erp_Orders[0]} />
-              )}
-            </div>
-          </section>
-        </>
-      ) : null}
-    </Sheet>
+                <CommentList user={store.user} />
+                <Docs
+                  data={data.erp_Orders[0].Docs}
+                  onUpload={onUploadFiles}
+                  refetch={refetch}
+                />
+              </div>
+
+              <div className="Info">
+                {editMode ? (
+                  <EditRightInfoPanel
+                    data={data.erp_Orders[0]}
+                    refetch={refetch}
+                    users={users.erp_Users}
+                  />
+                ) : (
+                  <RightInfoPanel data={data.erp_Orders[0]} />
+                )}
+              </div>
+            </section>
+          </>
+        ) : null}
+      </Sheet>
+    </>
   )
 }
 

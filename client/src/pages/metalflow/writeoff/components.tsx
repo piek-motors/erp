@@ -12,11 +12,9 @@ import {
   useDeleteWriteOffMutation,
   useGetWrietOffsQuery
 } from '../../../types/graphql-shema'
-import { notif } from '../../../utils/notification'
-import { ListPageHeader, SmallInputForm } from '../shared'
-import { SendMutation } from '../shared/basic'
+import { emitNotification } from '../../../utils/notification'
+import { SmallInputForm } from '../shared'
 import { DetailSelect } from '../shared/detail-select'
-import { MyTabs } from '../shared/shape-depended-tabs'
 import { Table } from '../shared/table.impl'
 import { t } from '../text'
 import { getColumns } from './columns.decl'
@@ -27,14 +25,13 @@ export function AddWriteOff() {
   const state = useWriteOffStore()
   const { reason, setReason } = state
   return (
-    <SmallInputForm header={t.WriteOffAdd} goBackUrl={MetalFlowSys.materials}>
+    <SmallInputForm header={t.WriteOffAdd}>
       {
         <MyTabs
-          data={{
+          tabs={{
             [t.WriteoffThroughDetail]: <WriteoffThroughDetail />,
             [t.WriteoffThroughMaterial]: <WriteOffThroughMaterial />
           }}
-          handleChange={val => {}}
         />
       }
       <Autocomplete
@@ -49,11 +46,9 @@ export function AddWriteOff() {
         isOptionEqualToValue={(option, value) => option.value === value.value}
         getOptionLabel={option => option.label}
         onChange={(_, newValue) => setReason(Number(newValue?.value || 0))}
-
-        // renderInput={params => <Input {...params} label={t.WriteOffReason} />}
       />
       <SendMutation
-        mutation={() =>
+        onClick={() =>
           handleSubmit(state).then(res => {
             state.reset()
             return res
@@ -74,7 +69,7 @@ export function DeleteWrireOff(props: {
 
   useEffect(() => {
     if (data) {
-      notif('success', 'Событие поставки удалено')
+      emitNotification('success', 'Событие поставки удалено')
     }
   }, [data])
 
@@ -143,9 +138,11 @@ function TotalCost(props: { detail: Detail; qty: number }) {
   )
 }
 
-import { MyInput } from '../../../shortcuts'
+import { PageTitle } from '../../../components'
+import { AddButton, MyInput, MyTabs, SendMutation } from '../../../shortcuts'
 import { QtyInputWithUnit } from '../shared'
 import { MaterialSelect } from '../shared/material-select'
+import { goTo } from '../spa'
 
 export function WriteOffThroughMaterial() {
   const state = useWriteOffStore()
@@ -175,11 +172,10 @@ export function WriteoffsList() {
 
   return (
     <>
-      <ListPageHeader
-        title={t.WriteoffsList}
-        btnText={t.WriteOffAdd}
-        goto={MetalFlowSys.writeoff_add}
-      />
+      <PageTitle title={t.WriteoffsList}>
+        <AddButton navigateTo={goTo(MetalFlowSys.writeoff_add)} />
+      </PageTitle>
+
       <Sheet sx={{ gap: 2 }}>
         <Box
           css={css`

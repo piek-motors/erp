@@ -5,7 +5,6 @@ import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import { apolloClient } from './api/apollo-client'
 import App from './app'
-import './index.sass'
 import './lib/material-ui/theme.css'
 import { Store } from './store/store'
 

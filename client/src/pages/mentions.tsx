@@ -1,19 +1,26 @@
+import { Box, Container, Stack, Typography } from '@mui/joy'
+import { useContext, useState } from 'react'
+import { TNotification } from 'src/types/global'
+import { useGetNotificationsSubscription } from 'src/types/graphql-shema'
+import { Context } from '..'
+
 /** @jsxImportSource @emotion/react */
 import styled from '@emotion/styled'
 import { UilArrowRight } from '@iconscout/react-unicons'
-import { Box, Button, Sheet, Stack, Typography } from '@mui/joy'
+import { Button, Sheet } from '@mui/joy'
 import moment from 'moment'
 import { useNavigate } from 'react-router-dom'
 
 import { useUpdateViewedMutation } from 'src/types/graphql-shema'
-import { Row } from '../../shortcuts'
+import { PageTitle } from '../components'
+import { Row } from '../shortcuts'
 
 interface INotificationProps {
   data: any
   readed?: boolean
 }
 
-export function Mention({ data, readed }: INotificationProps) {
+function Mention({ data, readed }: INotificationProps) {
   const navigate = useNavigate()
   const [updateViewedMutration] = useUpdateViewedMutation()
 
@@ -72,5 +79,63 @@ export function Mention({ data, readed }: INotificationProps) {
         </Box>
       </Sheet>
     </Stack>
+  )
+}
+
+export function MentionList() {
+  const { store }: any = useContext(Context)
+  const [notifications, setNotifications] = useState<{
+    unviewed: TNotification[]
+    viewed: TNotification[]
+  }>({ unviewed: [], viewed: [] })
+  const [state, setState] = useState(false)
+
+  const { data, loading } = useGetNotificationsSubscription({
+    onData(options) {
+      if (!options.data.data) throw Error(options.data.error?.stack)
+
+      const data = options.data.data.erp_Notifications
+
+      setNotifications({
+        unviewed: data.filter(e => !e.Viewed),
+        viewed: data.filter(e => e.Viewed)
+      })
+    },
+    variables: {
+      _eq: store.user.UserID,
+      limit: 100
+    }
+  })
+
+  const toggleDrawer = (open: boolean) => {
+    setState(open)
+  }
+
+  function closeNotificationCenter() {
+    setState(false)
+  }
+
+  return (
+    <Container>
+      <PageTitle title="Упоминания" />
+      <Stack direction={'column'} gap={2}>
+        {/* unreaderd notifs */}
+        {notifications.unviewed.length ? (
+          <Box>
+            <Typography level="h2">Непросмотренные </Typography>
+            {!loading &&
+              notifications?.unviewed.map((e, index) => (
+                <Mention key={index} data={e} />
+              ))}
+          </Box>
+        ) : null}
+
+        {/* viewed notifs */}
+        {!loading &&
+          notifications?.viewed.map((e, index) => (
+            <Mention data={e} key={index} />
+          ))}
+      </Stack>
+    </Container>
   )
 }

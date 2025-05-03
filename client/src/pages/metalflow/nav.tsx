@@ -1,19 +1,14 @@
-import { UilCalculatorAlt } from '@iconscout/react-unicons'
 import { Box, Button, IconButton, Stack } from '@mui/joy'
 import { Link } from 'react-router-dom'
 import { PageTitle } from 'src/components'
 import { Action, actions } from './module.actions'
 import { t } from './text'
 
-export function Nav() {
+export function NavigationBlock() {
   return (
-    <Stack gap={2} p={2}>
-      <PageTitle
-        title={t.PdoModuleTitle}
-        sx={{ pb: 1 }}
-        icon={<UilCalculatorAlt />}
-      />
-      {actions.map(each => RenderAction(each))}
+    <Stack>
+      <PageTitle title={t.PdoModuleTitle} sx={{ pb: 1 }} />
+      <Stack gap={3}>{actions.map(each => RenderAction(each))}</Stack>
     </Stack>
   )
 }

@@ -1,42 +1,31 @@
-import { UilHome } from '@iconscout/react-unicons'
-import { Box, IconButton, Stack, Typography } from '@mui/joy'
+import { Box, IconButton, Stack, Tooltip, Typography } from '@mui/joy'
 import { Link } from 'react-router-dom'
 import { SxProperty } from 'src/lib/constants'
+import { Row } from '../shortcuts'
 
 export interface Props {
-  icon?: JSX.Element
   title: string
   sx?: SxProperty
+  children?: JSX.Element
 }
 
 export function PageTitle(props: Props) {
   return (
-    <Stack direction="row" sx={{ ...props.sx, gap: 1, alignItems: 'center' }}>
-      <GoHomeBtn />
-      <Box display="flex" gap={1} sx={{ color: 'var(--accent)' }}>
-        {props.icon}
-        <Typography fontWeight={700}>{props.title}</Typography>
-      </Box>
-    </Stack>
-  )
-}
+    <Stack direction="row" gap={2} p={1}>
+      <Tooltip title="Перейти на главную страницу">
+        <Link to="/help">
+          <IconButton variant="soft" color="primary">
+            <img src={'/favicon.ico'} width={20} height={20} />
+          </IconButton>
+        </Link>
+      </Tooltip>
 
-{
-  /* opne mobile navigation menu */
-}
-export function GoHomeBtn() {
-  return (
-    <Link to="/help">
-      <IconButton
-        sx={{
-          display: {
-            xs: 'flex',
-            sm: 'none'
-          }
-        }}
-      >
-        <UilHome />
-      </IconButton>
-    </Link>
+      <Row gap={3}>
+        <Typography color="primary" fontWeight={600}>
+          {props.title}
+        </Typography>
+        <Box sx={{ marginLeft: 'auto' }}>{props.children}</Box>
+      </Row>
+    </Stack>
   )
 }

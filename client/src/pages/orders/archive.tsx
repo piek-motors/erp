@@ -1,4 +1,4 @@
-import { Sheet, Typography } from '@mui/joy'
+import { Typography } from '@mui/joy'
 import moment from 'moment'
 import { useMemo } from 'react'
 import { ManagerFilter } from 'src/components'
@@ -6,16 +6,13 @@ import { OrderTypeFilter } from 'src/components/order-type-filter'
 import { Search } from 'src/components/search-input'
 import { TableName } from 'src/components/table-name'
 import { useFilter } from 'src/hooks'
-import { AppRoutes } from 'src/lib/routes'
-import { NavTabs } from 'src/pages/orders/tabs'
-import { RouteConfig } from 'src/types/global'
 import { useGetOrdersArchivedBySearchKeywordQuery } from 'src/types/graphql-shema'
 import { columnsList } from './columns'
 import { Table } from './shared/table'
 import { useOrderListPageStore } from './state'
 import { t } from './text'
 
-function Archive() {
+export function Archive() {
   const columns = useMemo(() => {
     const a = [...columnsList]
     a[3] = {
@@ -56,36 +53,26 @@ function Archive() {
 
   return (
     <>
-      <NavTabs />
-      <Sheet>
-        <Search
-          value={store.searchTerm}
-          onChange={store.searchInputHandler}
-          placeholder={t.InputPlaceholder}
-        >
-          <ManagerFilter
-            value={store.managerId}
-            onChange={store.managerFilterHandler}
-          />
-          <OrderTypeFilter
-            value={store.orderStatusId}
-            onChange={store.orderTypeFilterHandler}
-          />
-        </Search>
+      <Search
+        value={store.searchTerm}
+        onChange={store.searchInputHandler}
+        placeholder={t.InputPlaceholder}
+      >
+        <ManagerFilter
+          value={store.managerId}
+          onChange={store.managerFilterHandler}
+        />
+        <OrderTypeFilter
+          value={store.orderStatusId}
+          onChange={store.orderTypeFilterHandler}
+        />
+      </Search>
 
-        <TableName name="Результат поиска по архиву" />
-        {orders && <Table columns={columns} data={orders} showUnpaid />}
-        {!orders.length && (
-          <Typography m={2}>(ノ#-_-)ノ ничего не найдено</Typography>
-        )}
-      </Sheet>
+      <TableName name="Результат поиска по архиву" />
+      {orders && <Table columns={columns} data={orders} showUnpaid />}
+      {!orders.length && (
+        <Typography m={2}>(ノ#-_-)ノ ничего не найдено</Typography>
+      )}
     </>
   )
 }
-
-export default [
-  {
-    element: <Archive />,
-    path: AppRoutes.orders_archive
-  }
-] as RouteConfig[]

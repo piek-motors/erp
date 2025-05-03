@@ -1,11 +1,5 @@
 import { UilArrowDown, UilArrowUp } from '@iconscout/react-unicons'
-import {
-  Container,
-  Table as MuiTable,
-  Stack,
-  Tooltip,
-  Typography
-} from '@mui/joy'
+import { Table as MuiTable, Stack, Tooltip, Typography } from '@mui/joy'
 import { TableOptions, useSortBy, useTable } from 'react-table'
 
 type Props<T extends object> = TableOptions<T> & {
@@ -27,63 +21,53 @@ export function Table<T extends object>(props: Props<T>) {
     )
 
   return (
-    <Container
-      sx={{
-        flex: 1,
-        overflowY: 'auto'
-      }}
-    >
-      <MuiTable {...getTableProps()} stickyHeader>
-        <thead>
-          {headerGroups.map((headerGroup, i) => (
-            <tr {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map((column, i) => {
-                const col = column as any
-
-                return (
-                  <td
-                    {...column.getHeaderProps(
-                      (column as any).getSortByToggleProps()
-                    )}
-                  >
-                    <Tooltip title="Отсортировать?" placement="top">
-                      <Stack direction={'row'} alignItems={'center'}>
-                        <Typography>{column.render('Header')}</Typography>
-                        <SortingState
-                          isSorted={col.isSorted}
-                          isSortedDesc={col.isSortedDesc}
-                        />
-                      </Stack>
-                    </Tooltip>
-                  </td>
-                )
-              })}
-            </tr>
-          ))}
-        </thead>
-        {data.length ? (
-          <tbody {...getTableBodyProps()}>
-            {rows.map((row, i) => {
-              prepareRow(row)
+    <MuiTable {...getTableProps()}>
+      <thead>
+        {headerGroups.map((headerGroup, i) => (
+          <tr {...headerGroup.getHeaderGroupProps()}>
+            {headerGroup.headers.map((column, i) => {
+              const col = column as any
               return (
-                <tr
-                  {...row.getRowProps()}
-                  onDoubleClick={() => onDoubleRowClick?.(row.original)}
+                <td
+                  {...column.getHeaderProps(
+                    (column as any).getSortByToggleProps()
+                  )}
                 >
-                  {row.cells.map((cell, i) => {
-                    return (
-                      <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
-                    )
-                  })}
-                </tr>
+                  <Tooltip title="Отсортировать?" placement="top">
+                    <Stack direction={'row'} alignItems={'center'}>
+                      <Typography>{column.render('Header')}</Typography>
+                      <SortingState
+                        isSorted={col.isSorted}
+                        isSortedDesc={col.isSortedDesc}
+                      />
+                    </Stack>
+                  </Tooltip>
+                </td>
               )
             })}
-          </tbody>
-        ) : (
-          <div style={{ padding: '10px' }}>Нет данных</div>
-        )}
-      </MuiTable>
-    </Container>
+          </tr>
+        ))}
+      </thead>
+      {data.length ? (
+        <tbody {...getTableBodyProps()}>
+          {rows.map((row, i) => {
+            prepareRow(row)
+            return (
+              <tr
+                {...row.getRowProps()}
+                onDoubleClick={() => onDoubleRowClick?.(row.original)}
+              >
+                {row.cells.map((cell, i) => {
+                  return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+                })}
+              </tr>
+            )
+          })}
+        </tbody>
+      ) : (
+        <div style={{ padding: '10px' }}>Нет данных</div>
+      )}
+    </MuiTable>
   )
 }
 

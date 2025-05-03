@@ -1,16 +1,14 @@
 import { Sheet, Typography } from '@mui/joy'
 import { useMemo } from 'react'
-import { ManagerFilter, NavTabs, Search } from 'src/components'
+import { ManagerFilter, Search } from 'src/components'
 import { useFilter } from 'src/hooks'
-import { AppRoutes } from 'src/lib/routes'
-import { RouteConfig } from 'src/types/global'
 import { useGetOrdersByStatusQuery } from 'src/types/graphql-shema'
 import { columnsList } from './columns'
 import { Table } from './shared/table'
 import { useOrderListPageStore } from './state'
 import { t } from './text'
 
-function Production() {
+export function Production() {
   const store = useOrderListPageStore()
 
   const { data } = useGetOrdersByStatusQuery({
@@ -32,35 +30,24 @@ function Production() {
   })
 
   return (
-    <>
-      <NavTabs />
+    orders && (
+      <Sheet>
+        <Search
+          value={store.searchTerm}
+          onChange={store.searchInputHandler}
+          placeholder={t.InputPlaceholder}
+        >
+          <ManagerFilter
+            value={store.managerId}
+            onChange={store.managerFilterHandler}
+          />
+        </Search>
 
-      {orders && (
-        <Sheet>
-          <Search
-            value={store.searchTerm}
-            onChange={store.searchInputHandler}
-            placeholder={t.InputPlaceholder}
-          >
-            <ManagerFilter
-              value={store.managerId}
-              onChange={store.managerFilterHandler}
-            />
-          </Search>
-
-          <Table columns={columns} data={orders} />
-          {!orders.length && (
-            <Typography m={2}>(ノ#-_-)ノ ничего не найдено</Typography>
-          )}
-        </Sheet>
-      )}
-    </>
+        <Table columns={columns} data={orders} />
+        {!orders.length && (
+          <Typography m={2}>(ノ#-_-)ノ ничего не найдено</Typography>
+        )}
+      </Sheet>
+    )
   )
 }
-
-export default [
-  {
-    element: <Production />,
-    path: AppRoutes.orders_production
-  }
-] as RouteConfig[]

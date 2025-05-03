@@ -18,7 +18,6 @@ export function MaterialAutocomplete(props: {
 
   return (
     <Autocomplete
-      // disablePortal
       onChange={(e: any, selected) => {
         if (selected) {
           onChange(selected.material)
@@ -37,7 +36,6 @@ export function MaterialAutocomplete(props: {
             }
           : null
       }
-      // renderInput={params => <TextField {...params} label={t.Material} />}
     />
   )
 }

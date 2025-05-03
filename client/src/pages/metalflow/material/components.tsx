@@ -1,26 +1,28 @@
 /** @jsxImportSource @emotion/react */
-import { Box, Button, CircularProgress, Divider, Sheet, Stack } from '@mui/joy'
+import { Box, Button, CircularProgress, Divider, Sheet } from '@mui/joy'
 import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { UiUnit } from 'shared'
+import { UiMaterialShape, UiUnit } from 'shared'
 import { EnMaterialShape } from 'shared/enumerations'
 import { Search } from 'src/components/search-input'
 import { MetalFlowSys } from 'src/lib/routes'
-import { Btn } from 'src/shortcuts'
-import * as gql from 'src/types/graphql-shema'
-import { notif } from '../../../utils/notification'
-import { map } from '../domain-adapter'
 import {
+  AddButton,
   ErrorHint,
-  ListPageHeader,
+  InputStack,
   LoadingHint,
-  SavedHint,
-  SmallInputForm
-} from '../shared'
-import { TakeLookHint } from '../shared/basic'
+  MyTabs,
+  Row,
+  SendMutation,
+  TakeLookHint
+} from 'src/shortcuts'
+import * as gql from 'src/types/graphql-shema'
+import { PageTitle } from '../../../components'
+import { emitNotification } from '../../../utils/notification'
+import { map } from '../domain-adapter'
+import { SmallInputForm } from '../shared'
 import { MySelect } from '../shared/basic-select'
 import { ResourceName } from '../shared/material-name'
-import { MyTabs } from '../shared/shape-depended-tabs'
 import { Table } from '../shared/table.impl'
 import { goTo } from '../spa'
 import { useStockStore } from '../stock'
@@ -47,12 +49,11 @@ export function MaterialsList() {
   }, [data])
 
   return (
-    <Stack>
-      <ListPageHeader
-        title={t.MaterialsList}
-        btnText={t.AddMaterial}
-        goto={MetalFlowSys.material_add}
-      />
+    <>
+      <PageTitle title={t.MaterialsList}>
+        <AddButton navigateTo={goTo(MetalFlowSys.material_add)} />
+      </PageTitle>
+
       <Sheet>
         <Search
           placeholder={t.Material}
@@ -62,7 +63,7 @@ export function MaterialsList() {
           value={state.filterKeyword}
         />
         <LoadingHint show={loading} />
-        <ErrorHint show={error} msg={error?.message} />
+        <ErrorHint e={error} />
         {state.materials && (
           <Table
             columns={columnList}
@@ -81,7 +82,7 @@ export function MaterialsList() {
           />
         )}
       </Sheet>
-    </Stack>
+    </>
   )
 }
 
@@ -104,34 +105,33 @@ export function AddMaterial() {
         }
       }
     })
+    state.clear()
   }
 
   const mutResult = data?.insert_metal_pdo_materials_one?.id
-  const actionSection = (
-    <>
-      <ErrorHint show={error} msg={error?.message} />
-      <SavedHint show={mutResult} />
-      <LoadingHint show={loading} />
-      <Btn onClick={handleSave} disabled={loading}>
-        {t.Save}
-      </Btn>
-      {mutResult && (
-        <TakeLookHint
-          text={t.RecentlyNewMaterialAdded}
-          link={goTo(MetalFlowSys.material_update, mutResult)}
-        />
-      )}
-    </>
-  )
+
+  const uiTabs: Record<string, JSX.Element> = {}
+  for (const [key, val] of Object.entries(tabs)) {
+    uiTabs[UiMaterialShape[key]] = val
+  }
 
   return (
     <SmallInputForm
       header={t.AddMaterial}
-      goBackUrl={MetalFlowSys.materials}
-      last={actionSection}
+      last={
+        <>
+          <SendMutation onClick={async () => handleSave()} />
+          {mutResult && (
+            <TakeLookHint
+              text={t.RecentlyNewMaterialAdded}
+              link={goTo(MetalFlowSys.material_update, mutResult)}
+            />
+          )}
+        </>
+      }
     >
       <MyTabs
-        data={tabs}
+        tabs={uiTabs}
         handleChange={shape => {
           state.setShape(shape)
         }}
@@ -190,34 +190,24 @@ export function UpdateMaterial() {
     return (
       <SmallInputForm
         header={t.EditMaterial}
-        goBackUrl={MetalFlowSys.materials}
         name={
           map.material.convertable(state) ? (
-            <Box px={1}>
-              <ResourceName
-                resource={state.shapeData?.getResourceNameProps()}
-              />
-              {t.Unit} {map.material.fromDto(state).unit()}
-            </Box>
+            <>
+              <Box px={1}>
+                <ResourceName
+                  resource={state.shapeData?.getResourceNameProps()}
+                />
+                {t.Unit} {map.material.fromDto(state).unit()}
+              </Box>
+              <UpdateMaterialUpdateStockLinks id={id} />
+            </>
           ) : (
             <></>
           )
         }
-        beforemain={<UpdateMaterialUpdateStockLinks id={id} />}
-        last={
-          <>
-            <ErrorHint show={error} msg={error?.message} />
-            <SavedHint show={data?.update_metal_pdo_materials_by_pk} />
-            <LoadingHint show={loading} />
-            <Stack direction={'row'} gap={1}>
-              <Btn sx={{ flexGrow: 3 }} onClick={handleSave} disabled={loading}>
-                {t.Save}
-              </Btn>
-            </Stack>
-          </>
-        }
+        last={<SendMutation onClick={handleSave} />}
       >
-        <Box>{getInputFormByShapeValue(state.shape)}</Box>
+        <InputStack>{tabs[state.shape]}</InputStack>
       </SmallInputForm>
     )
   } else return <CircularProgress />
@@ -228,29 +218,33 @@ function UpdateMaterialUpdateStockLinks(props: { id: number }) {
   const { id } = props
 
   return (
-    <Stack direction={'column'} alignItems={'start'} py={2} gap={1}>
+    <Row my={3}>
       <Divider />
-      <Btn
+      <Button
+        variant="outlined"
+        color="warning"
         onClick={() =>
           navigate(goTo(MetalFlowSys.supply_add, id, { material_id: id }))
         }
       >
         {t.AddSupply}
-      </Btn>
-      <Btn
+      </Button>
+      <Button
+        variant="outlined"
+        color="warning"
         onClick={() =>
           navigate(goTo(MetalFlowSys.writeoff_add, id, { material_id: id }))
         }
       >
         {t.AddWriteoff}
-      </Btn>
+      </Button>
       <Divider />
-    </Stack>
+    </Row>
   )
 }
 
 export function DeleteMaterial(props: { id: number }) {
-  const [mut, { loading, data, error }] = gql.useDeleteMaterialMutation({
+  const [mut, { loading }] = gql.useDeleteMaterialMutation({
     variables: {
       id: props.id
     }
@@ -261,7 +255,7 @@ export function DeleteMaterial(props: { id: number }) {
     const res = await mut()
     if (res.data?.delete_metal_pdo_materials_by_pk?.id) {
       navigate(goTo(MetalFlowSys.materials))
-      notif('info', 'Материал успешно удален')
+      emitNotification('info', 'Материал успешно удален')
     } else {
       alert(res.errors)
     }
@@ -280,24 +274,9 @@ export function DeleteMaterial(props: { id: number }) {
   )
 }
 
-const tabs = {
-  Круг: <CircleMaterialInput />,
-  Квадрат: <SquareMaterialInput />,
-  Лист: <ListMaterialInput />,
-  Труба: <PipeMaterialInput />
-}
-
-export function getInputFormByShapeValue(shape: EnMaterialShape) {
-  switch (shape) {
-    case EnMaterialShape.Circle:
-      return <CircleMaterialInput />
-    case EnMaterialShape.Square:
-      return <SquareMaterialInput />
-    case EnMaterialShape.List:
-      return <ListMaterialInput />
-    case EnMaterialShape.Pipe:
-      return <PipeMaterialInput />
-    default:
-      throw new Error('Unknown shape')
-  }
+const tabs: Record<EnMaterialShape, JSX.Element> = {
+  [EnMaterialShape.Circle]: <CircleMaterialInput />,
+  [EnMaterialShape.Square]: <SquareMaterialInput />,
+  [EnMaterialShape.List]: <ListMaterialInput />,
+  [EnMaterialShape.Pipe]: <PipeMaterialInput />
 }

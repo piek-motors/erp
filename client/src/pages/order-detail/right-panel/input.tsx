@@ -5,8 +5,12 @@ import moment from 'moment'
 import React, { useEffect } from 'react'
 import { TOrder, TUser } from 'src/types/global'
 import { useUpdateOrderInfoMutation } from 'src/types/graphql-shema'
-import { InputStack, MultilineInput, MyInput } from '../../../shortcuts'
-import { SendMutation } from '../../metalflow/shared/basic'
+import {
+  InputStack,
+  MultilineInput,
+  MyInput,
+  SendMutation
+} from '../../../shortcuts'
 
 enum FieldNames {
   InvoiceNumber = 'InvoiceNumber',
@@ -159,7 +163,7 @@ export default function EditableInfo({
         />
       </InputStack>
       <SendMutation
-        mutation={() =>
+        onClick={() =>
           updateOrderInfo({
             variables: {
               OrderID: data.OrderID,

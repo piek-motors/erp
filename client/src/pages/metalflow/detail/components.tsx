@@ -5,14 +5,14 @@ import { Detail, Material } from 'shared/domain'
 import { EnUnit } from 'shared/enumerations'
 import { apolloClient } from 'src/api'
 import { MetalFlowSys } from 'src/lib/routes'
-import { MyInput } from 'src/shortcuts'
+import { AddButton, MyInput, SendMutation, TakeLookHint } from 'src/shortcuts'
 import * as gql from 'src/types/graphql-shema'
 import {
   useGetMaterialsQuery,
   useInsertDetailMutation
 } from 'src/types/graphql-shema'
-import { ListPageHeader, QtyInputWithUnit, SmallInputForm } from '../shared'
-import { SendMutation, TakeLookHint } from '../shared/basic'
+import { PageTitle } from '../../../components'
+import { QtyInputWithUnit, SmallInputForm } from '../shared'
 import { MaterialAutocompleteMulti } from '../shared/material-autocomplete'
 import { ResourceName } from '../shared/material-name'
 import { Table } from '../shared/table.impl'
@@ -75,11 +75,9 @@ export function DetailsList() {
 
   return (
     <>
-      <ListPageHeader
-        title={t.DetailsList}
-        btnText={t.AddDetail}
-        goto={MetalFlowSys.detail_add}
-      />
+      <PageTitle title={t.DetailsList}>
+        <AddButton navigateTo={goTo(MetalFlowSys.detail_add)} />
+      </PageTitle>
       <Sheet>
         <Table
           columns={columnList}
@@ -147,15 +145,9 @@ export function DetailUpdateForm() {
   return (
     <SmallInputForm
       header={t.EditDetail}
-      goBackUrl={MetalFlowSys.details}
-      last={<SendMutation mutation={handleSave} />}
+      last={<SendMutation onClick={handleSave} />}
     >
-      <Stack
-        gap={1}
-        sx={{
-          display: 'flex'
-        }}
-      >
+      <Stack gap={1}>
         <Typography>ID {state.id}</Typography>
 
         <MyInput
@@ -206,30 +198,27 @@ export function DetailAddForm() {
     }, 5000)
   }
 
-  const actionSection = (
-    <SendMutation
-      customComponent={(err, res) => (
-        <TakeLookHint
-          text={t.RecentlyNewDetailAdded}
-          link={goTo(MetalFlowSys.detail_update, res)}
-        />
-      )}
-      mutation={async () =>
-        handleSave().then(res => {
-          state.reset()
-          return res
-        })
-      }
-    />
-  )
-
   const { data: materials } = useGetMaterialsQuery()
 
   return (
     <SmallInputForm
       header={t.AddDetail}
-      goBackUrl={MetalFlowSys.details}
-      last={actionSection}
+      last={
+        <SendMutation
+          onClick={async () =>
+            handleSave().then(res => {
+              state.reset()
+              return res
+            })
+          }
+          additionals={(err, res) => (
+            <TakeLookHint
+              text={t.RecentlyNewDetailAdded}
+              link={goTo(MetalFlowSys.detail_update, res)}
+            />
+          )}
+        />
+      }
     >
       <MyInput
         label={t.DetailName}

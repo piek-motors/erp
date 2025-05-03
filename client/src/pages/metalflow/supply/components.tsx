@@ -1,25 +1,22 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import { UilTrash } from '@iconscout/react-unicons'
-import { Box, Button, IconButton, Sheet, Stack } from '@mui/joy'
+import { Box, IconButton, Sheet, Stack } from '@mui/joy'
 import { useEffect, useState } from 'react'
 import { Material } from 'shared/domain'
 import { useInsertMaterialSupplyMutation } from 'src/types/graphql-shema'
+import { PageTitle } from '../../../components'
 import { MetalFlowSys } from '../../../lib/routes'
+import { AddButton, SendMutation } from '../../../shortcuts'
 import {
   useDeleteSupplyMutation,
   useGetSuppliesQuery
 } from '../../../types/graphql-shema'
-import { notif } from '../../../utils/notification'
-import {
-  ErrorHint,
-  ListPageHeader,
-  QtyInputWithUnit,
-  SavedHint,
-  SmallInputForm
-} from '../shared'
+import { emitNotification } from '../../../utils/notification'
+import { QtyInputWithUnit, SmallInputForm } from '../shared'
 import { MaterialSelect } from '../shared/material-select'
 import { Table } from '../shared/table.impl'
+import { goTo } from '../spa'
 import { useStockStore } from '../stock'
 import { t } from '../text'
 import { getColumns } from './columns.decl'
@@ -30,11 +27,9 @@ export function SuppliesList() {
 
   return (
     <>
-      <ListPageHeader
-        title={t.SuppliesList}
-        btnText={t.SupplyAdd}
-        goto={MetalFlowSys.supply_add}
-      />
+      <PageTitle title={t.SuppliesList}>
+        <AddButton navigateTo={goTo(MetalFlowSys.supply_add)} />
+      </PageTitle>
       <Sheet sx={{ gap: 2 }}>
         <Box
           css={css`
@@ -86,10 +81,8 @@ export function AddSuply() {
     stockStore.load()
   }
 
-  const btnDisabled = !qty
-
   return (
-    <SmallInputForm header={t.SupplyAdd} goBackUrl={MetalFlowSys.materials}>
+    <SmallInputForm header={t.SupplyAdd}>
       <MaterialSelect
         setMaterial={setMaterial}
         material={material}
@@ -102,17 +95,13 @@ export function AddSuply() {
         setValue={setQty}
         label={t.Qty}
       />
-      <ErrorHint show={error} msg={error?.message} />
-      <SavedHint show={data?.insert_metal_pdo_supplies_one} />
-      <Button onClick={save} disabled={btnDisabled}>
-        {t.Save}
-      </Button>
+      <SendMutation onClick={save} />
     </SmallInputForm>
   )
 }
 
 export function DeleteSupply(props: { supplyId: number; refetch: () => void }) {
-  const [mut, { data, loading, error }] = useDeleteSupplyMutation({
+  const [mut, { data }] = useDeleteSupplyMutation({
     variables: {
       id: props.supplyId
     }
@@ -121,7 +110,7 @@ export function DeleteSupply(props: { supplyId: number; refetch: () => void }) {
   useEffect(() => {
     if (data) {
       console.log('delete success')
-      notif('success', 'Событие поствки удалено')
+      emitNotification('success', 'Событие поствки удалено')
     }
   }, [data])
 

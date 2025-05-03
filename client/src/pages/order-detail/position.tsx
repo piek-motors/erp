@@ -1,11 +1,11 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
-import { UilEllipsisV } from '@iconscout/react-unicons'
-import { Dropdown, Menu, MenuButton, MenuItem, Typography } from '@mui/joy'
+import { Typography } from '@mui/joy'
 import { ReactNode } from 'react'
 import { useOrderDetailStore } from 'src/pages/order-detail/state'
 import { TOrderItem } from 'src/types/global'
 import { useDeleteOrderItemByPkMutation } from 'src/types/graphql-shema'
+import { DeteleButton, EditButton, Row } from '../../shortcuts'
 
 export interface IPositionProps {
   sequence_number: number
@@ -75,19 +75,10 @@ export default function OrderItemList({ data, refetch }: IOrderItemListProps) {
       {data.map((position, index) => (
         <Position sequence_number={index + 1} orderItem={position} key={index}>
           {editMode && (
-            <Dropdown className="noprint">
-              <MenuButton>
-                <UilEllipsisV className="moreVertIcon" />
-              </MenuButton>
-              <Menu>
-                <MenuItem onClick={() => handleEditClick(position)}>
-                  Редактировать
-                </MenuItem>
-                <MenuItem onClick={() => handleDeleteClick(position)}>
-                  Удалить
-                </MenuItem>
-              </Menu>
-            </Dropdown>
+            <Row gap={1}>
+              <EditButton onClick={() => handleEditClick(position)} />
+              <DeteleButton onClick={() => handleDeleteClick(position)} />
+            </Row>
           )}
         </Position>
       ))}

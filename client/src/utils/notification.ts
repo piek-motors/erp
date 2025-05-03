@@ -1,7 +1,12 @@
 import { NOTIFICATION_TYPE, Store } from 'react-notifications-component'
 import 'react-notifications-component/dist/theme.css'
 
-export const notif = (type: NOTIFICATION_TYPE, title: string, message = '', duration = 2000) =>
+export const emitNotification = (
+  type: NOTIFICATION_TYPE,
+  title: string,
+  message = '',
+  duration = 2000
+) =>
   Store.addNotification({
     title,
     message,

@@ -1,7 +1,7 @@
 import { Autocomplete, createFilterOptions, FormLabel } from '@mui/joy'
 import { EnMaterialShape } from 'shared/enumerations'
+import { ErrorHint } from '../../../shortcuts'
 import { useGetCirclePossibleAlloysQuery } from '../../../types/graphql-shema'
-import { ErrorHint } from '../shared'
 import { t } from '../text'
 
 const filter = createFilterOptions<{ inputValue: string; title: string }>()
@@ -20,7 +20,7 @@ export function AlloyAutocomplete(props: {
 
   return (
     <>
-      {error && <ErrorHint show={error} e={error} />}
+      <ErrorHint e={error} />
       <FormLabel>{t.Alloy}</FormLabel>
       <Autocomplete
         freeSolo

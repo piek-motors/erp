@@ -1,16 +1,13 @@
-import { Sheet } from '@mui/joy'
 import moment from 'moment'
 import { useMemo } from 'react'
 import { TableName } from 'src/components/table-name'
 import { formatOnlyDate } from 'src/lib/date'
-import { AppRoutes } from 'src/lib/routes'
-import { NavTabs } from 'src/pages/orders/tabs'
-import { OrderStatus, RouteConfig } from 'src/types/global'
+import { OrderStatus } from 'src/types/global'
 import { useGetOrdersByStatusQuery } from 'src/types/graphql-shema'
 import { columnsList } from './columns'
 import { Table } from './shared/table'
 
-function RecentOrders() {
+export function RecentOrders() {
   const { data } = useGetOrdersByStatusQuery({
     variables: { orderStatus: OrderStatus.ordProduction },
     fetchPolicy: 'cache-and-network'
@@ -34,21 +31,11 @@ function RecentOrders() {
 
   return (
     <>
-      <NavTabs />
-      <Sheet>
-        <TableName name="Сегодня" />
-        <Table columns={columns} data={ordersByToday} />
+      <TableName name="Сегодня" />
+      <Table columns={columns} data={ordersByToday} />
 
-        <TableName name="Вчера" />
-        <Table columns={columns} data={ordersByYesterday} />
-      </Sheet>
+      <TableName name="Вчера" />
+      <Table columns={columns} data={ordersByYesterday} />
     </>
   )
 }
-
-export default [
-  {
-    element: <RecentOrders />,
-    path: AppRoutes.orders_recently
-  }
-] as RouteConfig[]

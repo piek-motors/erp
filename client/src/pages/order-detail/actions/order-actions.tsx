@@ -17,7 +17,7 @@ import {
   useMoveOrderToArchiveMutation,
   useMoveOrderToPriorityMutation
 } from 'src/types/graphql-shema'
-import { notif } from 'src/utils/notification'
+import { emitNotification } from 'src/utils/notification'
 
 import { Row } from '../../../shortcuts'
 import { DeleteOrderDialog } from '../dialogs/delete-order-dialog'
@@ -115,7 +115,7 @@ export default function OrderActions({ order }: { order: TOrder }) {
       }
     }).then(res => {
       if (res.errors) throw new Error(res.errors.toString())
-      notif('success', 'Заказ перенесен в архив')
+      emitNotification('success', 'Заказ перенесен в архив')
     })
   }
 
@@ -130,7 +130,7 @@ export default function OrderActions({ order }: { order: TOrder }) {
       }
     })
     if (res.errors) throw new Error(res.errors.toString())
-    notif('success', 'Заказ внесен в очередность выполнения')
+    emitNotification('success', 'Заказ внесен в очередность выполнения')
   }
 
   // для удаления заказа

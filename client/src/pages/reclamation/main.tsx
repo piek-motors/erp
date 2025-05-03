@@ -1,5 +1,3 @@
-import { UilWrench } from '@iconscout/react-unicons'
-import { Button } from '@mui/joy'
 import { useNavigate } from 'react-router-dom'
 import { AppRoutes } from 'src/lib/routes'
 import { OrderStatus, RouteConfig, TReclamationOrder } from 'src/types/global'
@@ -7,6 +5,8 @@ import {
   useGetReclamationOrdersQuery,
   useInsertOrderMutation
 } from 'src/types/graphql-shema'
+import { PageTitle } from '../../components'
+import { AddButton } from '../../shortcuts'
 import Reclamation from './reclamation'
 
 function ReclamationContainer() {
@@ -35,14 +35,12 @@ function ReclamationContainer() {
 
   return (
     <>
-      <div className="pageLayout__header">
-        <UilWrench className="pageLayout__icon" />
-        <div className="pageLayout__title">Рекламация</div>
-
-        <div className="pageLayout__actions">
-          <Button onClick={handleAddOrder}>Добавить рекламацию</Button>
-        </div>
-      </div>
+      <PageTitle title="Рекламация">
+        {/* <Button variant="soft" color="neutral" onClick={handleAddOrder}>
+          Добавить
+        </Button> */}
+        <AddButton onClick={handleAddOrder} />
+      </PageTitle>
 
       {!loading && (
         <Reclamation

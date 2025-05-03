@@ -3,8 +3,8 @@ import {
   UilBell,
   UilCalculatorAlt,
   UilConstructor,
+  UilListOl,
   UilSetting,
-  UilSortAmountDown,
   UilWrench
 } from '@iconscout/react-unicons'
 import { IconButton, Stack, Tooltip } from '@mui/joy'
@@ -13,8 +13,8 @@ import { AppRoutes, MetalFlowSys } from 'src/lib/routes'
 
 export const links = [
   {
-    href: AppRoutes.orders_production,
-    icon: <UilSortAmountDown />,
+    href: AppRoutes.orders,
+    icon: <UilListOl />,
     name: 'Очередность выполнения'
   },
   { href: AppRoutes.reclamation, icon: <UilWrench />, name: 'Рекламации' },
@@ -44,6 +44,8 @@ export function Sidebar() {
   return (
     <Stack
       sx={{
+        p: 1,
+        gap: 1,
         display: {
           xs: 'none',
           sm: 'flex'
@@ -52,13 +54,19 @@ export function Sidebar() {
     >
       {links.map(each => {
         return (
-          <NavLink key={each.href} to={each.href} style={{ color: 'inherit' }}>
-            <IconButton size="lg" variant="plain">
-              <Tooltip title={each.name} placement="right">
-                {each.icon}
-              </Tooltip>
-            </IconButton>
-          </NavLink>
+          <Tooltip title={each.name} placement="right">
+            <NavLink
+              key={each.href}
+              to={each.href}
+              style={{ color: 'inherit' }}
+            >
+              <IconButton size="lg" variant="plain">
+                <Tooltip title={each.name} placement="right">
+                  {each.icon}
+                </Tooltip>
+              </IconButton>
+            </NavLink>
+          </Tooltip>
         )
       })}
     </Stack>

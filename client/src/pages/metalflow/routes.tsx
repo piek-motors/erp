@@ -10,13 +10,13 @@ import {
   MaterialsList,
   UpdateMaterial
 } from './material/components'
-import { SPA } from './spa'
+import { MetalFlowSubsystem } from './spa'
 import { AddSuply, SuppliesList } from './supply/components'
 import { AddWriteOff, WriteoffsList } from './writeoff/components'
 
 const routes = [
   {
-    element: <SPA />,
+    element: <MetalFlowSubsystem />,
     path: MetalFlowSys.root
   },
   {
@@ -63,6 +63,6 @@ const routes = [
 
 export default routes
 
-export function getComponent(path: string) {
+export function getComponentByCurrentPath(path: string) {
   return routes.find(r => r.path === path)?.element
 }

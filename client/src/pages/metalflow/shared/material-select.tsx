@@ -5,6 +5,7 @@ import { Material } from 'shared/domain'
 import { useGetMaterialsQuery } from 'src/types/graphql-shema'
 import { map } from '../domain-adapter'
 import { useStockStore } from '../stock'
+import { t } from '../text'
 import { MaterialAutocomplete } from './material-autocomplete'
 import { ResourceName } from './material-name'
 
@@ -34,10 +35,10 @@ export function MaterialSelect(props: {
   if (materialid) {
     return (
       <Box>
-        <Typography>Материал:</Typography>
+        <Typography>{t.Material}:</Typography>
         <ResourceName resource={props.material?.resourceName()} />
         <Typography>
-          Текущий остаток: {stockStore.getPrecise(material)}
+          {t.Remaining}: {stockStore.getPrecise(material)}
         </Typography>
       </Box>
     )

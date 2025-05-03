@@ -1,24 +1,23 @@
-import help from 'src/pages/help/main'
+import help from 'src/pages/attendance/help'
 import metalflow from 'src/pages/metalflow/routes'
-import Archive from 'src/pages/orders/archive'
-import Production from 'src/pages/orders/production'
-import RecentOrders from 'src/pages/orders/recently'
-import Registration from 'src/pages/orders/registration'
-import Report from 'src/pages/orders/report'
 import { RouteConfig } from 'src/types/global'
+import { AppRoutes } from './lib/routes'
 import Attendance from './pages/attendance/main'
-import MentionList from './pages/mentions/mentions.list'
+import { MentionList } from './pages/mentions'
 import order_detail from './pages/order-detail/main'
+import { Orders } from './pages/orders/main'
 import reclamations from './pages/reclamation/main'
-import settings from './pages/settings/main'
+import settings from './pages/settings'
 
 export const protectedRoutes: RouteConfig[] = [
-  ...Production,
-  ...MentionList,
-  ...Registration,
-  ...RecentOrders,
-  ...Archive,
-  ...Report,
+  {
+    path: AppRoutes.orders,
+    element: <Orders />
+  },
+  {
+    element: <MentionList />,
+    path: AppRoutes.mentions
+  },
   ...Attendance,
   ...order_detail,
   ...reclamations,

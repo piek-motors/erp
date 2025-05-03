@@ -1,12 +1,13 @@
-import { UilConstructor } from '@iconscout/react-unicons'
 import { Sheet, Typography } from '@mui/joy'
 import { useMemo, useState } from 'react'
 import { AppRoutes } from 'src/lib/routes'
 import { Employee, RouteConfig } from 'src/types/global'
 import { useGetEmployeeListQuery } from 'src/types/graphql-shema'
+import { PageTitle } from '../../components'
 import { genColumns } from './columns'
 import ReportConfigurator from './control'
 import Table from './table'
+import { t } from './text'
 import { prepareEmployeeData, queryVariables } from './utils'
 
 type FullYear = number
@@ -50,11 +51,7 @@ function Attendance() {
 
   return (
     <>
-      <div className="pageLayout__header">
-        <UilConstructor className="pageLayout__icon" />
-        <div className="pageLayout__title"> Рабочее время </div>
-      </div>
-
+      <PageTitle title={t.pageTitle} />
       <ReportConfigurator state={state} setState={setState} />
 
       <Sheet>

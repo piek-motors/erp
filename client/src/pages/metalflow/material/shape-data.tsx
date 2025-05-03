@@ -1,11 +1,11 @@
-import { Button, Stack, ToggleButtonGroup } from '@mui/joy'
+import { Button, ToggleButtonGroup } from '@mui/joy'
 import { PipeShapeData } from 'shared'
 import {
   CircleShapeData,
   ListShapeData,
   SquareShapeData
 } from 'shared/shape-data'
-import { MyInput } from '../../../shortcuts'
+import { InputStack, MyInput } from '../../../shortcuts'
 import { AlloyAutocomplete } from '../shared/alloy-autocomplete'
 import { t } from '../text'
 import { useMaterialStore } from './state'
@@ -17,7 +17,7 @@ export function SquareMaterialInput() {
   ])
   const d = shapeData as SquareShapeData
   return (
-    <Stack>
+    <InputStack>
       <MyInput
         label={t.Width}
         value={d.length}
@@ -33,7 +33,7 @@ export function SquareMaterialInput() {
         }}
         alloy={d.alloy}
       />
-    </Stack>
+    </InputStack>
   )
 }
 
@@ -42,10 +42,9 @@ export function ListMaterialInput() {
     state.shapeData,
     state.setShapeData
   ])
-
   const d = shapeData as ListShapeData
   return (
-    <Stack>
+    <InputStack>
       <MyInput
         label={'G'}
         value={d.g}
@@ -54,7 +53,7 @@ export function ListMaterialInput() {
           setShapeData(d)
         }}
       />
-    </Stack>
+    </InputStack>
   )
 }
 
@@ -63,10 +62,9 @@ export function PipeMaterialInput() {
     state.shapeData,
     state.setShapeData
   ])
-
   const d = shapeData as PipeShapeData
   return (
-    <Stack>
+    <InputStack>
       <MyInput
         label={t.Diameter}
         type="number"
@@ -92,7 +90,7 @@ export function PipeMaterialInput() {
           setShapeData(d)
         }}
       />
-    </Stack>
+    </InputStack>
   )
 }
 
@@ -106,7 +104,7 @@ export function CircleMaterialInput() {
   const circle = shapeData as CircleShapeData
 
   return (
-    <Stack>
+    <InputStack>
       <MyInput
         label={t.Diameter}
         type="number"
@@ -142,16 +140,15 @@ export function CircleMaterialInput() {
         }}
       />
       <ToggleButtonGroup
-        // exclusive
+        sx={{ pt: 1 }}
         onChange={(e, v) => {
-          // circle.calibrated = v
-          // setShapeData(circle)
-          console.log(v)
+          circle.calibrated = v == 'true'
+          setShapeData(circle)
         }}
       >
-        <Button>{t.NotCalibrated}</Button>
-        <Button>{t.Calibrated}</Button>
+        <Button value={'false'}>{t.NotCalibrated}</Button>
+        <Button value={'true'}>{t.Calibrated}</Button>
       </ToggleButtonGroup>
-    </Stack>
+    </InputStack>
   )
 }

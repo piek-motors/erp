@@ -1,12 +1,11 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
-import { Box } from '@mui/joy'
 import { ReactNode } from 'react'
-import { NavLink, useNavigate } from 'react-router-dom'
-import { AppRoutes } from 'src/lib/routes'
-import { Btn } from '../../shortcuts'
+import { useNavigate } from 'react-router-dom'
+import { MyTabs } from '../../shortcuts'
 import { OrderStatus } from '../../types/global'
 import { useInsertOrderMutation } from '../../types/graphql-shema'
+import { Registration } from './registration'
 export interface IOrdersNavigationBarProps {
   children?: ReactNode
 }
@@ -51,46 +50,47 @@ export function NavTabs(props: IOrdersNavigationBarProps) {
       margin-left: auto;
     }
   `
-  return (
-    <div css={styles}>
-      <NavLink
-        to={AppRoutes.orders_registration}
-        className={({ isActive }) => (isActive ? 'active' : '')}
-      >
-        Предзаказы
-      </NavLink>
-      <NavLink
-        to={AppRoutes.orders_production}
-        className={({ isActive }) => (isActive ? 'active' : '')}
-      >
-        Очередность
-      </NavLink>
-      <NavLink
-        to={AppRoutes.orders_recently}
-        className={({ isActive }) => (isActive ? 'active' : '')}
-      >
-        Недавние
-      </NavLink>
-      <NavLink
-        to={AppRoutes.orders_archive}
-        className={({ isActive }) => (isActive ? 'active' : '')}
-      >
-        Архив
-      </NavLink>
-      <NavLink
-        to={AppRoutes.orders_report}
-        className={({ isActive }) => (isActive ? 'active' : '')}
-      >
-        Отчет
-      </NavLink>
+  // return (
+  //   <div css={styles}>
+  //     <NavLink
+  //       to={AppRoutes.orders_registration}
+  //       className={({ isActive }) => (isActive ? 'active' : '')}
+  //     >
+  //       Предзаказы
+  //     </NavLink>
+  //     <NavLink
+  //       to={AppRoutes.orders_production}
+  //       className={({ isActive }) => (isActive ? 'active' : '')}
+  //     >
+  //       Очередность
+  //     </NavLink>
+  //     <NavLink
+  //       to={AppRoutes.orders_recently}
+  //       className={({ isActive }) => (isActive ? 'active' : '')}
+  //     >
+  //       Недавние
+  //     </NavLink>
+  //     <NavLink
+  //       to={AppRoutes.orders_archive}
+  //       className={({ isActive }) => (isActive ? 'active' : '')}
+  //     >
+  //       Архив
+  //     </NavLink>
+  //     <NavLink
+  //       to={AppRoutes.orders_report}
+  //       className={({ isActive }) => (isActive ? 'active' : '')}
+  //     >
+  //       Отчет
+  //     </NavLink>
 
-      <Box
-        className="children"
-        sx={{ display: 'flex', gap: 20, alignItems: 'center' }}
-      >
-        {props.children}
-        <Btn onClick={insertOrderHandler}>Добавить заказ</Btn>
-      </Box>
-    </div>
-  )
+  //     <Box
+  //       className="children"
+  //       sx={{ display: 'flex', gap: 20, alignItems: 'center' }}
+  //     >
+  //       {props.children}
+  //       <Btn onClick={insertOrderHandler}>Добавить заказ</Btn>
+  //     </Box>
+  //   </div>
+  // )
+  return <MyTabs tabs={{ Предзаказы: <Registration /> }} />
 }

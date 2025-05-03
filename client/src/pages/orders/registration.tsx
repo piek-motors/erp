@@ -1,10 +1,9 @@
-import { Sheet, Typography } from '@mui/joy'
+import { Typography } from '@mui/joy'
 import { useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ManagerFilter, NavTabs, Search } from 'src/components'
+import { ManagerFilter, Search } from 'src/components'
 import { useFilter } from 'src/hooks'
-import { AppRoutes } from 'src/lib/routes'
-import { OrderStatus, RouteConfig } from 'src/types/global'
+import { OrderStatus } from 'src/types/global'
 import {
   useGetOrdersByStatusQuery,
   useInsertOrderMutation
@@ -14,7 +13,7 @@ import { Table } from './shared/table'
 import { useOrderListPageStore } from './state'
 import { t } from './text'
 
-function Registration() {
+export function Registration() {
   const store = useOrderListPageStore()
   const navigate = useNavigate()
 
@@ -52,31 +51,21 @@ function Registration() {
 
   return (
     <>
-      <NavTabs />
-      <Sheet>
-        <Search
-          value={store.searchTerm}
-          onChange={store.searchInputHandler}
-          placeholder={t.InputPlaceholder}
-        >
-          <ManagerFilter
-            value={store.managerId}
-            onChange={store.managerFilterHandler}
-          />
-        </Search>
+      <Search
+        value={store.searchTerm}
+        onChange={store.searchInputHandler}
+        placeholder={t.InputPlaceholder}
+      >
+        <ManagerFilter
+          value={store.managerId}
+          onChange={store.managerFilterHandler}
+        />
+      </Search>
 
-        {data?.erp_Orders && <Table columns={columns} data={orders} />}
-        {!orders.length && (
-          <Typography m={2}>(ノ#-_-)ノ ничего не найдено</Typography>
-        )}
-      </Sheet>
+      {data?.erp_Orders && <Table columns={columns} data={orders} />}
+      {!orders.length && (
+        <Typography m={2}>(ノ#-_-)ノ ничего не найдено</Typography>
+      )}
     </>
   )
 }
-
-export default [
-  {
-    element: <Registration />,
-    path: AppRoutes.orders_registration
-  }
-] as RouteConfig[]

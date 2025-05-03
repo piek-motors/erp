@@ -1,12 +1,11 @@
-import { Box, Stack } from '@mui/joy'
+import { Box, Container } from '@mui/joy'
 import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
-import { Nav } from './nav'
-import { getComponent } from './routes'
-import { WorkPage } from './shared/basic'
+import { NavigationBlock } from './nav'
+import { getComponentByCurrentPath } from './routes'
 import { useStockStore } from './stock'
 
-export function SPA() {
+export function MetalFlowSubsystem() {
   const path = new URLSearchParams(useLocation().search).get('path')
   const stockStore = useStockStore()
 
@@ -15,41 +14,26 @@ export function SPA() {
   }, [])
 
   return (
-    <Stack
-      direction={'row'}
-      gap={1}
+    <Box
       sx={{
         height: '100vh',
+        display: 'grid',
+        gridTemplateColumns: '1fr 8fr 1fr',
+        alignItems: 'stretch',
+        justifyContent: 'start',
         flexDirection: {
           xs: 'column',
           sm: 'row'
         }
       }}
     >
-      <Box
-        sx={{
-          display: {
-            xs: path ? 'none' : 'block',
-            sm: 'block'
-          }
-        }}
-      >
-        <Nav />
-      </Box>
+      <NavigationBlock />
       {path && (
-        <Box
-          sx={{
-            flexGrow: 1,
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'start',
-            minWidth: ''
-          }}
-        >
-          <WorkPage>{(path && getComponent(path)) || <></>}</WorkPage>
-        </Box>
+        <Container>
+          {(path && getComponentByCurrentPath(path)) || <></>}
+        </Container>
       )}
-    </Stack>
+    </Box>
   )
 }
 
