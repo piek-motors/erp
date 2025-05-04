@@ -13,7 +13,7 @@ import {
 } from '@mui/joy'
 import moment from 'moment'
 import React, { useRef, useState } from 'react'
-import { useOrderDetailStore } from 'src/pages/order-detail/state'
+import { useOrderDetailStore } from 'src/pages/order/state'
 import { TComment, TUser } from 'src/types/global'
 import {
   useCommentsSubscription,

@@ -17,7 +17,7 @@ import {
   useInsertOrderMutation
 } from 'src/types/graphql-shema'
 import { PageTitle } from '../../components'
-import { AddButton, MyTabs } from '../../shortcuts'
+import { AddResourceButton, MyTabs } from '../../shortcuts'
 import { columnsList, OrdersTable } from './columns'
 import { useOrderListPageStore } from './state'
 import { t } from './text'
@@ -227,7 +227,7 @@ export function Orders() {
   return (
     <>
       <PageTitle title={t.OrdersTitle}>
-        <AddButton onClick={() => insertOrderHandler()} />
+        <AddResourceButton onClick={() => insertOrderHandler()} />
       </PageTitle>
       <MyTabs
         tabs={{

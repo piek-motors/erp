@@ -2,12 +2,14 @@ import { UilPen, UilTrash } from '@iconscout/react-unicons'
 import {
   Box,
   Button,
+  ChipProps,
   FormControl,
   FormHelperText,
   FormLabel,
   IconButton,
   Input,
   InputProps,
+  Chip as MuiChip,
   Stack,
   StackProps,
   Tab,
@@ -36,11 +38,7 @@ export function MyInput(props: MyInputProps) {
     <FormControl>
       {props.label && <FormLabel sx={{ margin: 0 }}>{props.label}</FormLabel>}
       {props.customInput ? (
-        <props.customInput
-          onChange={props.onChange}
-          defaultValue={props.default || ''}
-          name={props.name}
-        />
+        <props.customInput onChange={props.onChange} name={props.name} />
       ) : (
         <Row>
           <Input {...props} defaultValue={props.default || ''} />
@@ -82,21 +80,21 @@ export function CancelButton(props: { onClick: () => void }) {
 
 export function DeleteResourceButton(props: { onClick: () => void }) {
   return (
-    <IconButton variant="plain" color="danger" onClick={props.onClick}>
-      <UilTrash width={20} height={20} opacity={0.6} />
+    <IconButton variant="solid" color="danger" onClick={props.onClick}>
+      <UilTrash width={ICON_WIDTH} opacity={ICON_OPACITY} fill="#fff" />
     </IconButton>
   )
 }
 
 export function UpdateResourceButton(props: { onClick: () => void }) {
   return (
-    <IconButton variant="plain" color="primary" onClick={props.onClick}>
-      <UilPen />
+    <IconButton variant="solid" color="primary" onClick={props.onClick}>
+      <UilPen width={ICON_WIDTH} opacity={ICON_OPACITY} fill="#fff" />
     </IconButton>
   )
 }
 
-export function AddButton(props: {
+export function AddResourceButton(props: {
   onClick?: () => void
   navigateTo?: string
 }) {
@@ -249,12 +247,26 @@ export const bgcolors = {
 
 export const text = {
   showMore: 'Показать еще',
+  delete: 'Удалить',
   loading: 'Загрузка...',
+  moveToPriority: 'Принять заказ в производство',
   uploadFile: 'Загрузить файл',
   orderDetails: 'Детали заказа',
   orderReadyForDispatch: 'Готов к отгрузке',
-  orderRequiresSpectialAttention: 'Требует внимания'
+  orderRequiresSpectialAttention: 'Требует внимания',
+  change: 'Изменить',
+  addPosition: 'Добавить позицию',
+  orderCompleted: 'Заказ был выполнен'
 }
 
 export const ICON_OPACITY = 0.7
 export const ICON_WIDTH = 22
+
+export function MyChip(props: { if: boolean; text: string } & ChipProps) {
+  if (!props.if) return null
+  return (
+    <MuiChip color="success" variant="outlined" size="sm" {...props}>
+      {props.text}
+    </MuiChip>
+  )
+}

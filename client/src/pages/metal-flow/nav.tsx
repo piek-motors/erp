@@ -6,8 +6,8 @@ import { t } from './text'
 
 export function NavigationBlock() {
   return (
-    <Stack>
-      <PageTitle title={t.PdoModuleTitle} sx={{ pb: 3 }} />
+    <Stack p={1}>
+      <PageTitle title={t.PdoModuleTitle} />
       <Stack gap={2}>
         {actions.map(each => (
           <RenderAction action={each} key={each.href} />
@@ -26,7 +26,7 @@ function RenderAction(props: { action: Action }) {
       justifyContent="space-between"
       sx={{ cursor: 'pointer' }}
     >
-      <LinkableAction href={action.href} name={action.name} />
+      <MenuButton href={action.href} name={action.name} />
       {action.endBlock?.length && (
         <Stack>
           {action.endBlock?.map(e => (
@@ -43,7 +43,7 @@ function RenderAction(props: { action: Action }) {
   )
 }
 
-function LinkableAction(props: {
+function MenuButton(props: {
   href: string
   name?: string
   icon?: any

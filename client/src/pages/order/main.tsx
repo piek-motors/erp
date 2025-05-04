@@ -1,11 +1,11 @@
-import { Box, Chip, Divider, Stack, Typography } from '@mui/joy'
+import { Box, Divider, Stack, Typography } from '@mui/joy'
 import Grid from '@mui/joy/Grid'
 import { useCallback, useLayoutEffect, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { useLocation, useParams } from 'react-router-dom'
 import { useAppContext } from 'src/hooks'
 import { AppRoutes } from 'src/lib/routes'
-import { useOrderDetailStore } from 'src/pages/order-detail/state'
+import { useOrderDetailStore } from 'src/pages/order/state'
 import { RouteConfig } from 'src/types/global'
 import {
   useGetManagersQuery,
@@ -14,7 +14,7 @@ import {
 import { PageTitle } from '../../components'
 import { InputFiles } from '../../components/input-files'
 import { FileService } from '../../services/file.service'
-import { bgcolors, Row, text } from '../../shortcuts'
+import { bgcolors, MyChip, Row, text } from '../../shortcuts'
 import { orderStatus } from '../../utils/orderColorIndication'
 import {
   CommentInputViewPort,
@@ -24,8 +24,8 @@ import { DialogAddEditOrderItem } from './dialogs/add-edit-order-item.dialog'
 import { Docs } from './docs'
 import { OrderActions } from './header'
 import { PositionsList } from './position'
-import { AboutOrder } from './right-panel'
-import { EditableInfo as EditRightInfoPanel } from './right-panel/input'
+import { AboutOrder } from './statement'
+import { EditableInfo as EditRightInfoPanel } from './statement/input'
 
 function OrderDetail() {
   const { store } = useAppContext()
@@ -95,25 +95,26 @@ function OrderDetail() {
             p={p}
             sx={{ background: bgcolors.lightgrey, height: '100%' }}
           >
-            <PageTitle title={text.orderDetails}>
+            <PageTitle title={text.orderDetails} spaceBetween>
               <OrderActions order={order} />
             </PageTitle>
 
             <Stack gap={p / 2}>
               <Row gap={1}>
-                {orderStatus(order) ? (
-                  <Chip color="primary">{orderStatus(order)}</Chip>
-                ) : null}
-                {order.AwaitingDispatch && (
-                  <Chip color="success" variant="outlined">
-                    {text.orderReadyForDispatch}
-                  </Chip>
-                )}
-                {order.NeedAttention === 'true' && (
-                  <Chip color="danger" variant="outlined">
-                    {text.orderRequiresSpectialAttention}
-                  </Chip>
-                )}
+                <MyChip
+                  if={!!orderStatus(order)}
+                  color="primary"
+                  text={orderStatus(order) || ''}
+                />
+                <MyChip
+                  if={order.AwaitingDispatch}
+                  text={text.orderReadyForDispatch}
+                />
+                <MyChip
+                  color="danger"
+                  if={order.NeedAttention === 'true'}
+                  text={text.orderRequiresSpectialAttention}
+                />
               </Row>
 
               <Typography level="h4">

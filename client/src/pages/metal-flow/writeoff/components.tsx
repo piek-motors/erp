@@ -139,7 +139,12 @@ function TotalCost(props: { detail: Detail; qty: number }) {
 }
 
 import { PageTitle } from '../../../components'
-import { AddButton, MyInput, MyTabs, SendMutation } from '../../../shortcuts'
+import {
+  AddResourceButton,
+  MyInput,
+  MyTabs,
+  SendMutation
+} from '../../../shortcuts'
 import { useNotifier } from '../../../store/notifier.store'
 import { QtyInputWithUnit } from '../shared'
 import { MaterialSelect } from '../shared/material-select'
@@ -174,7 +179,7 @@ export function WriteoffsList() {
   return (
     <>
       <PageTitle title={t.WriteoffsList}>
-        <AddButton navigateTo={goTo(MetalFlowSys.writeoff_add)} />
+        <AddResourceButton navigateTo={goTo(MetalFlowSys.writeoff_add)} />
       </PageTitle>
 
       <Sheet sx={{ gap: 2 }}>

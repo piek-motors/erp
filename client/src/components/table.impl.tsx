@@ -1,12 +1,5 @@
 import { UilArrowDown, UilArrowUp } from '@iconscout/react-unicons'
-import {
-  Box,
-  Table as MuiTable,
-  Sheet,
-  Stack,
-  Tooltip,
-  Typography
-} from '@mui/joy'
+import { Box, Table as MuiTable, Sheet, Stack, Typography } from '@mui/joy'
 import { useNavigate } from 'react-router-dom'
 import { TableOptions, useSortBy, useTable } from 'react-table'
 import { t } from 'src/pages/orders/text'
@@ -50,15 +43,13 @@ export function Table<T extends object>(props: Props<T>) {
                       width: 'min-content'
                     })}
                   >
-                    <Tooltip title="Отсортировать?" placement="top">
-                      <Stack direction={'row'} alignItems={'center'}>
-                        <Typography>{column.render('Header')}</Typography>
-                        <SortingState
-                          isSorted={col.isSorted}
-                          isSortedDesc={col.isSortedDesc}
-                        />
-                      </Stack>
-                    </Tooltip>
+                    <Stack direction={'row'} alignItems={'center'}>
+                      <Typography>{column.render('Header')}</Typography>
+                      <SortingState
+                        isSorted={col.isSorted}
+                        isSortedDesc={col.isSortedDesc}
+                      />
+                    </Stack>
                   </th>
                 )
               })}

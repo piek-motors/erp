@@ -3,7 +3,7 @@ import { UilFile, UilFileAlt, UilImage } from '@iconscout/react-unicons'
 import { Box, Stack, Typography } from '@mui/joy'
 import moment from 'moment'
 import { useEffect } from 'react'
-import { useOrderDetailStore } from 'src/pages/order-detail/state'
+import { useOrderDetailStore } from 'src/pages/order/state'
 import { TOrderDocument } from 'src/types/global'
 import { FileService } from '../../services/file.service'
 import { DeleteResourceButton, Row } from '../../shortcuts'
@@ -44,13 +44,13 @@ function File(props: {
           </Row>
 
           {!uploading ? (
-            <Typography level="body-sm" fontWeight={400}>
-              <Row>
+            <Row>
+              <Typography level="body-sm" fontWeight={400}>
                 {formatBytes(file.Size!)}
                 {', '}
                 {moment(file.UploadingDate).format('D MMMM')}
-              </Row>
-            </Typography>
+              </Typography>
+            </Row>
           ) : (
             <Typography level="body-sm">Файл выгружается...</Typography>
           )}

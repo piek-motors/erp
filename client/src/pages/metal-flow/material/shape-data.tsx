@@ -11,11 +11,8 @@ import { t } from '../text'
 import { useMaterialStore } from './state'
 
 export function SquareMaterialInput() {
-  const [shapeData, setShapeData] = useMaterialStore(state => [
-    state.shapeData,
-    state.setShapeData
-  ])
-  const d = shapeData as SquareShapeData
+  const store = useMaterialStore()
+  const d = store.shapeData as SquareShapeData
   return (
     <InputStack>
       <MyInput
@@ -23,13 +20,13 @@ export function SquareMaterialInput() {
         value={d.length}
         onChange={e => {
           d.length = Number(e.target.value)
-          setShapeData(d)
+          store.setShapeData(d)
         }}
       />
       <AlloyAutocomplete
         setAlloy={alloy => {
           d.alloy = alloy
-          setShapeData(d)
+          store.setShapeData(d)
         }}
         alloy={d.alloy}
       />
@@ -38,11 +35,8 @@ export function SquareMaterialInput() {
 }
 
 export function ListMaterialInput() {
-  const [shapeData, setShapeData] = useMaterialStore(state => [
-    state.shapeData,
-    state.setShapeData
-  ])
-  const d = shapeData as ListShapeData
+  const store = useMaterialStore()
+  const d = store.shapeData as ListShapeData
   return (
     <InputStack>
       <MyInput
@@ -50,7 +44,7 @@ export function ListMaterialInput() {
         value={d.g}
         onChange={e => {
           d.g = Number(e.target.value)
-          setShapeData(d)
+          store.setShapeData(d)
         }}
       />
     </InputStack>
@@ -58,11 +52,8 @@ export function ListMaterialInput() {
 }
 
 export function PipeMaterialInput() {
-  const [shapeData, setShapeData] = useMaterialStore(state => [
-    state.shapeData,
-    state.setShapeData
-  ])
-  const d = shapeData as PipeShapeData
+  const store = useMaterialStore()
+  const d = store.shapeData as PipeShapeData
   return (
     <InputStack>
       <MyInput
@@ -71,13 +62,13 @@ export function PipeMaterialInput() {
         value={d.diameter}
         onChange={e => {
           d.diameter = Number(e.target.value)
-          setShapeData(d)
+          store.setShapeData(d)
         }}
       />
       <AlloyAutocomplete
         setAlloy={alloy => {
           d.alloy = alloy
-          setShapeData(d)
+          store.setShapeData(d)
         }}
         alloy={d.alloy}
       />
@@ -87,7 +78,7 @@ export function PipeMaterialInput() {
         type="number"
         onChange={e => {
           d.thickness = Number(e.target.value)
-          setShapeData(d)
+          store.setShapeData(d)
         }}
       />
     </InputStack>
@@ -95,13 +86,9 @@ export function PipeMaterialInput() {
 }
 
 export function CircleMaterialInput() {
-  const [shapeData, setShapeData] = useMaterialStore(state => [
-    state.shapeData,
-    state.setShapeData
-  ])
-
-  if (!shapeData) return <>Shape data is not specified</>
-  const circle = shapeData as CircleShapeData
+  const store = useMaterialStore()
+  if (!store.shapeData) return <>Shape data is not specified</>
+  const circle = store.shapeData as CircleShapeData
 
   return (
     <InputStack>
@@ -111,14 +98,14 @@ export function CircleMaterialInput() {
         value={circle.diameter}
         onChange={e => {
           circle.diameter = Number(e.target.value)
-          setShapeData(circle)
+          store.setShapeData(circle)
         }}
         unit={uiUnit(EnUnit.MilliMeter)}
       />
       <AlloyAutocomplete
         setAlloy={alloy => {
           circle.alloy = alloy
-          setShapeData(circle)
+          store.setShapeData(circle)
         }}
         alloy={circle.alloy}
       />
@@ -128,7 +115,7 @@ export function CircleMaterialInput() {
         type="number"
         onChange={e => {
           circle.linearMass = Number(e.target.value)
-          setShapeData(circle)
+          store.setShapeData(circle)
         }}
         unit="кг/м"
       />
@@ -138,15 +125,16 @@ export function CircleMaterialInput() {
         type="number"
         onChange={e => {
           circle.density = Number(e.target.value)
-          setShapeData(circle)
+          store.setShapeData(circle)
         }}
         unit="кг/м3"
       />
       <ToggleButtonGroup
         sx={{ pt: 1 }}
+        value={circle.calibrated ? 'true' : 'false'}
         onChange={(e, v) => {
           circle.calibrated = v == 'true'
-          setShapeData(circle)
+          store.setShapeData(circle)
         }}
       >
         <Button value={'false'}>{t.NotCalibrated}</Button>

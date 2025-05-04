@@ -1,25 +1,53 @@
 import { Sheet, Stack, Typography } from '@mui/joy'
 import { useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
+import { Column } from 'react-table'
 import { Detail, Material } from 'shared/domain'
 import { EnUnit } from 'shared/enumerations'
 import { apolloClient } from 'src/api'
 import { MetalFlowSys } from 'src/lib/routes'
-import { AddButton, MyInput, SendMutation, TakeLookHint } from 'src/shortcuts'
+import {
+  AddResourceButton,
+  MyInput,
+  SendMutation,
+  TakeLookHint
+} from 'src/shortcuts'
 import * as gql from 'src/types/graphql-shema'
 import {
+  GetDetailsQuery,
   useGetMaterialsQuery,
   useInsertDetailMutation
 } from 'src/types/graphql-shema'
 import { PageTitle } from '../../../components'
 import { Table } from '../../../components/table.impl'
-import { QtyInputWithUnit, SmallInputForm } from '../shared'
+import { EditIconButton, QtyInputWithUnit, SmallInputForm } from '../shared'
 import { MaterialAutocompleteMulti } from '../shared/material-autocomplete'
 import { ResourceName } from '../shared/material-name'
 import { goTo } from '../spa'
 import { t } from '../text'
-import { columnList } from './columns.decl'
 import { useDetail } from './state'
+
+type DetailDto = GetDetailsQuery['metal_pdo_details'][0]
+const columnList: Column<DetailDto>[] = [
+  {
+    Header: 'Id',
+    accessor: 'id'
+  },
+  {
+    Header: t.DetailName,
+    id: 'name',
+    accessor: 'name'
+  },
+  {
+    Header: t.Action,
+    accessor: data => (
+      <EditIconButton
+        url={goTo(MetalFlowSys.detail_update, data.id)}
+        title={t.EditDetail}
+      />
+    )
+  }
+]
 
 export function MaterialWeightInput(props: { material: Material }) {
   const { material } = props
@@ -75,8 +103,8 @@ export function DetailsList() {
 
   return (
     <>
-      <PageTitle title={t.DetailsList}>
-        <AddButton navigateTo={goTo(MetalFlowSys.detail_add)} />
+      <PageTitle title={t.DetailsList} hideIcon>
+        <AddResourceButton navigateTo={goTo(MetalFlowSys.detail_add)} />
       </PageTitle>
       <Sheet>
         <Table

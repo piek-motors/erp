@@ -4,10 +4,14 @@ import { useState } from 'react'
 import {
   DragDropContext,
   Draggable,
+  DraggableLocation,
+  DraggingStyle,
   Droppable,
+  NotDraggingStyle,
   OnDragEndResponder
 } from 'react-beautiful-dnd'
 import { useNavigate } from 'react-router-dom'
+import { OrderStatus } from 'shared'
 import { AppRoutes } from 'src/lib/routes'
 import { RouteConfig, TReclamationOrder } from 'src/types/global'
 import {
@@ -16,23 +20,16 @@ import {
   useUpdateOrderStatusMutation
 } from 'src/types/graphql-shema'
 import { PageTitle } from '../components'
-import { AddButton, Pre } from '../shortcuts'
+import { AddResourceButton, Pre } from '../shortcuts'
 
-export interface IReclamationProps {
+interface IReclamationProps {
   inbox: TReclamationOrder[]
   decision: TReclamationOrder[]
   inproduction: TReclamationOrder[]
 }
 
-import {
-  DraggableLocation,
-  DraggingStyle,
-  NotDraggingStyle
-} from 'react-beautiful-dnd'
-import { OrderStatus } from 'shared'
-
 // a little function to help us with reordering the result
-export const reorder = (
+const reorder = (
   list: TReclamationOrder[],
   startIndex: number,
   endIndex: number
@@ -47,7 +44,7 @@ export const reorder = (
 /**
  * Moves an item from one list to another list.
  */
-export const move = (
+const move = (
   source: TReclamationOrder[],
   destination: TReclamationOrder[],
   droppableSource: DraggableLocation,
@@ -65,7 +62,7 @@ export const move = (
   }
 }
 
-export const getOrderStatusByDroppableId = (
+const getOrderStatusByDroppableId = (
   droppableId: ColocatedStateKey
 ): number => {
   switch (droppableId) {
@@ -80,13 +77,10 @@ export const getOrderStatusByDroppableId = (
   }
 }
 
-export const getItemStyle = (
+const getItemStyle = (
   isDragging: boolean,
   draggableStyle: DraggingStyle | NotDraggingStyle
 ) => ({
-  // change background colour if dragging
-  background: isDragging ? 'var(--accentLight)' : 'transparent',
-  // styles we need to apply on draggables
   ...draggableStyle
 })
 
@@ -217,11 +211,7 @@ function DroppableContainer({
         ignoreContainerClipping={false}
       >
         {(provided, snapshot) => (
-          <Box
-            style={getListStyle(snapshot.isDraggingOver)}
-            ref={provided.innerRef}
-            sx={{ height: '100%', width: '100%' }}
-          >
+          <Box ref={provided.innerRef} sx={{ height: '100%', width: '100%' }}>
             {data.map((item, index) => (
               <Draggable
                 key={item.OrderID.toString()}
@@ -272,7 +262,7 @@ function ReclamationContainer() {
   return (
     <>
       <PageTitle title="Рекламация">
-        <AddButton onClick={handleAddOrder} />
+        <AddResourceButton onClick={handleAddOrder} />
       </PageTitle>
 
       <Box p={1}>

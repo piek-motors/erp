@@ -24,7 +24,7 @@ export function ResourceName(props: {
       <Typography>{resource.name}</Typography>
       <Typography sx={{ whiteSpace: 'nowrap' }}>{resource.caption}</Typography>
       {resource.flags?.map(each => (
-        <Flag flag={each} />
+        <Flag flag={each} key={each.text} />
       ))}
     </Stack>
   )

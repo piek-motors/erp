@@ -1,4 +1,4 @@
-import { FormControl, Option, Select } from '@mui/joy'
+import { FormControl, FormLabel, Option, Select } from '@mui/joy'
 import { EnUnit } from 'shared/enumerations'
 
 export function MySelect(props: {
@@ -11,6 +11,7 @@ export function MySelect(props: {
 }) {
   return (
     <FormControl>
+      <FormLabel sx={{ margin: 0, padding: 0 }}>{props.label}</FormLabel>
       <Select
         placeholder={props.label}
         disabled={props.disabled}

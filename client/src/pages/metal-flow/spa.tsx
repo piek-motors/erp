@@ -29,7 +29,7 @@ export function MetalFlowSubsystem() {
     >
       <NavigationBlock />
       {path && (
-        <Box sx={{ overflow: 'scroll' }}>
+        <Box sx={{ overflow: 'scroll', flexGrow: 1 }}>
           {(path && getComponentByCurrentPath(path)) || <></>}
         </Box>
       )}

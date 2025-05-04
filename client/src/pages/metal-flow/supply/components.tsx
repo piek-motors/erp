@@ -8,7 +8,7 @@ import { useInsertMaterialSupplyMutation } from 'src/types/graphql-shema'
 import { PageTitle } from '../../../components'
 import { Table } from '../../../components/table.impl'
 import { MetalFlowSys } from '../../../lib/routes'
-import { AddButton, SendMutation } from '../../../shortcuts'
+import { AddResourceButton, SendMutation } from '../../../shortcuts'
 import { useNotifier } from '../../../store/notifier.store'
 import {
   useDeleteSupplyMutation,
@@ -28,7 +28,7 @@ export function SuppliesList() {
   return (
     <>
       <PageTitle title={t.SuppliesList}>
-        <AddButton navigateTo={goTo(MetalFlowSys.supply_add)} />
+        <AddResourceButton navigateTo={goTo(MetalFlowSys.supply_add)} />
       </PageTitle>
       <Sheet sx={{ gap: 2 }}>
         <Box

@@ -1,5 +1,4 @@
 /** @jsxImportSource @emotion/react */
-import { FormControl, Option, Select } from '@mui/joy'
 import moment from 'moment'
 import React, { useEffect } from 'react'
 import { TOrder, TUser } from 'src/types/global'
@@ -10,6 +9,7 @@ import {
   MyInput,
   SendMutation
 } from '../../../shortcuts'
+import { MySelect } from '../../metal-flow/shared/basic-select'
 
 enum FieldNames {
   InvoiceNumber = 'InvoiceNumber',
@@ -74,8 +74,9 @@ export function EditableInfo({ data, refetch, users }: IEditableInfoProps) {
       <InputStack>
         <MyInput
           label="План. отгрузка"
+          placeholder="ДД.ММ.ГГ"
           name={FieldNames.ShippingDate}
-          default={moment(data.ShippingDate).format('DD.MM.YY')}
+          default={moment(data.ShippingDate).format('DD.MM.YY') || ''}
           onChange={e => {
             setField(
               FieldNames.ShippingDate,
@@ -99,26 +100,19 @@ export function EditableInfo({ data, refetch, users }: IEditableInfoProps) {
           onChange={addField}
         />
 
-        <FormControl>
-          <Select
-            placeholder="Менеджер"
-            name={FieldNames.ManagerID}
-            defaultValue={data.User?.UserID}
-            onChange={(_, newValue) => {
-              if (!newValue) return
-              fields.ManagerID = newValue || null
-            }}
-          >
-            <Option value="">
-              <em>None</em>
-            </Option>
-            {users.map(each => (
-              <Option value={each.UserID} key={each.UserID}>
-                {each.FirstName} {each.LastName}
-              </Option>
-            ))}
-          </Select>
-        </FormControl>
+        <MySelect
+          label="Менеджер"
+          selectElements={users.map(each => ({
+            name: `${each.FirstName} ${each.LastName}`,
+            value: each.UserID
+          }))}
+          defaultValue={data.User?.UserID}
+          onChange={newValue => {
+            if (!newValue) return
+            fields.ManagerID = newValue || null
+          }}
+          disabled={data.User?.UserID === null}
+        />
 
         <MyInput
           label="Контрагент"

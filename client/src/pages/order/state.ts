@@ -4,7 +4,6 @@ import { create } from 'zustand'
 interface IOrderDetailState {
   editMode: boolean
   addOrderItemDialog: boolean
-
   editedOrderItem: TOrderItem | null
   orderId: number | null
   initialize(orderId: number, editMode: boolean): void

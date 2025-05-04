@@ -1,3 +1,5 @@
+import { UilArrow } from '@iconscout/react-unicons'
+import { IconButton, Stack, Typography } from '@mui/joy'
 import moment from 'moment'
 import { useMemo } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
@@ -5,14 +7,25 @@ import { Column } from 'react-table'
 import { TOrderColumnData } from 'src/types/global'
 import { percentage } from 'src/utils/formatting'
 import { Table } from '../../components/table.impl'
-import { Pre } from '../../shortcuts'
+import { ICON_OPACITY, ICON_WIDTH, MyChip, Pre, Row } from '../../shortcuts'
 
 export const columnsList: Column<TOrderColumnData>[] = [
   {
-    Header: '',
+    Header: 'ID',
     id: 'index',
     accessor: (_row, counter) => counter + 1
   },
+  {
+    Header: '(￣▽￣)',
+    accessor: data => (
+      <Link to={`/orders/${data.OrderID}`}>
+        <IconButton size="sm">
+          <UilArrow opacity={ICON_OPACITY} width={ICON_WIDTH} />
+        </IconButton>
+      </Link>
+    )
+  },
+
   {
     Header: 'Наим.',
     id: 'orderItems',
@@ -20,18 +33,27 @@ export const columnsList: Column<TOrderColumnData>[] = [
       if (data.OrderItems.length === 0)
         return (
           <Link to={`/orders/${data.OrderID}`}>
-            <div>Нет содержимого</div>
+            <Typography>Нет содержимого</Typography>
           </Link>
         )
       else
         return (
-          <>
+          <Row gap={1}>
             {data.OrderItems.map(item => (
               <div key={item.OrderItemID}>
                 <Pre>{item.Name.trim()}</Pre>
               </div>
             ))}
-          </>
+
+            <Stack direction="row" gap={1}>
+              <MyChip if={data.AwaitingDispatch} text={'Готов'} />
+              <MyChip
+                if={data.NeedAttention === 'true'}
+                color="danger"
+                text={'Внимание'}
+              />
+            </Stack>
+          </Row>
         )
     }
   },
@@ -51,6 +73,17 @@ export const columnsList: Column<TOrderColumnData>[] = [
     )
   },
   {
+    Header: 'Счет',
+    accessor: 'InvoiceNumber'
+  },
+  {
+    Header: 'Оплата',
+    accessor: data => {
+      const paidAmount = data.PaidAmount || data.PaymentHistories[0]?.PaidAmount
+      return percentage(paidAmount, data.TotalAmount)
+    }
+  },
+  {
     Header: 'Контрагент',
     accessor: data => <>{data.Entity}</>
   },
@@ -58,18 +91,7 @@ export const columnsList: Column<TOrderColumnData>[] = [
     Header: 'Город',
     accessor: data => <>{data.City}</>
   },
-  {
-    Header: 'Счет',
-    accessor: 'InvoiceNumber'
-  },
-  {
-    Header: 'Оплата',
-    accessor: data => {
-      // Transition from old to new data structure
-      const paidAmount = data.PaidAmount || data.PaymentHistories[0]?.PaidAmount
-      return percentage(paidAmount, data.TotalAmount)
-    }
-  },
+
   {
     Header: 'Менеджер',
     accessor: data => <> {data.User?.FirstName ? data.User?.FirstName : ''} </>

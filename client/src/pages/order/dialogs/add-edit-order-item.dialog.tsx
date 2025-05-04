@@ -7,7 +7,7 @@ import {
   Typography
 } from '@mui/joy'
 import { useEffect, useState } from 'react'
-import { useOrderDetailStore } from 'src/pages/order-detail/state'
+import { useOrderDetailStore } from 'src/pages/order/state'
 import { TOrderItem } from 'src/types/global'
 import {
   useInsertOrderItemMutation,

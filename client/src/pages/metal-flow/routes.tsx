@@ -1,15 +1,7 @@
 import { MetalFlowSys } from 'src/lib/routes'
 import { RouteConfig } from 'src/types/global'
-import {
-  DetailAddForm,
-  DetailsList,
-  DetailUpdateForm
-} from './detail/components'
-import {
-  AddMaterial,
-  MaterialsList,
-  UpdateMaterial
-} from './material/components'
+import { DetailAddForm, DetailsList, DetailUpdateForm } from './detail/detail'
+import { AddMaterial, MaterialsList, UpdateMaterial } from './material/material'
 import { MetalFlowSubsystem } from './spa'
 import { AddSuply, SuppliesList } from './supply/components'
 import { AddWriteOff, WriteoffsList } from './writeoff/components'

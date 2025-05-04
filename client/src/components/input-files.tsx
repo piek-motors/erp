@@ -16,7 +16,7 @@ const VisuallyHiddenInput = styled('input')`
 `
 
 export function InputFiles(
-  props: ButtonProps & { upload: (files: FileList) => void }
+  props: { upload: (files: FileList) => void } & ButtonProps
 ) {
   return (
     <Button

@@ -13,7 +13,7 @@ import {
 import { IconButton, Tooltip } from '@mui/joy'
 import { useNavigate } from 'react-router-dom'
 import { OrderStatus } from 'shared'
-import { useOrderDetailStore } from 'src/pages/order-detail/state'
+import { useOrderDetailStore } from 'src/pages/order/state'
 import { TOrder } from 'src/types/global'
 import {
   useDeleteOrderMutation,
@@ -22,7 +22,7 @@ import {
   useUpdateAwaitingDispatchMutation,
   useUpdateNeedAttentionMutation
 } from 'src/types/graphql-shema'
-import { ICON_OPACITY, ICON_WIDTH, Row } from '../../shortcuts'
+import { ICON_OPACITY, ICON_WIDTH, Row, text } from '../../shortcuts'
 import { useNotifier } from '../../store/notifier.store'
 import { DeleteOrderDialog } from './dialogs/delete-order-dialog'
 import { TransferOrderDialog } from './dialogs/transfer-order.dialog'
@@ -37,7 +37,7 @@ function SwitchOrderStatusBtn({ order, renderAlg }: IStatusButtonsProps) {
   const [mutationNeedAttention] = useUpdateNeedAttentionMutation()
   return renderAlg([
     {
-      tip: 'Требует внимания',
+      tip: text.orderRequiresSpectialAttention,
       handler: () =>
         mutationNeedAttention({
           variables: {
@@ -48,7 +48,7 @@ function SwitchOrderStatusBtn({ order, renderAlg }: IStatusButtonsProps) {
       icon: UilExclamationTriangle
     },
     {
-      tip: 'Готов к отгрузке',
+      tip: text.orderReadyForDispatch,
       handler: () =>
         mutationAwaitingDispatch({
           variables: {
@@ -145,7 +145,7 @@ export function OrderActions({ order }: { order: TOrder }) {
 
   const buttons: ActionButton[] = [
     {
-      tip: 'В очередность',
+      tip: text.moveToPriority,
       handler: transferOrderToPriority,
       icon: UilFileCheck,
       hidden: ![OrderStatus.ordRegistration].includes(order.OrderStatusID)
@@ -153,21 +153,21 @@ export function OrderActions({ order }: { order: TOrder }) {
     {
       dialog: TransferOrderDialog,
       dialogHandler: () => orderCompleted(3),
-      tip: 'Закрыть заказ',
+      tip: text.orderCompleted,
       icon: UilTruck,
       hidden: ![OrderStatus.ordProduction].includes(order.OrderStatusID)
     },
     {
       dialog: TransferOrderDialog,
       dialogHandler: () => orderCompleted(13),
-      tip: 'Закрыть рекламацию',
+      tip: text.orderCompleted,
       icon: UilTruck,
       hidden: ![OrderStatus.reclProduction].includes(order.OrderStatusID)
     },
     {
       dialog: DeleteOrderDialog,
       dialogHandler: mutationDeleteOrderHandler,
-      tip: 'Удалить заказ',
+      tip: text.delete,
       icon: UilTrashAlt,
       hidden: ![
         OrderStatus.ordRegistration,
@@ -178,7 +178,7 @@ export function OrderActions({ order }: { order: TOrder }) {
       ].includes(order.OrderStatusID)
     },
     {
-      tip: 'Добавить позицию',
+      tip: text.addPosition,
       handler: () => {
         setEditedOrderItem(null)
         setAddOrderItemDialog(true)
@@ -189,7 +189,7 @@ export function OrderActions({ order }: { order: TOrder }) {
       )
     },
     {
-      tip: 'Поменять что-то',
+      tip: text.change,
       handler: () => setEditMode(!editMode),
       icon: editMode ? UilUnlock : UilLock
     }

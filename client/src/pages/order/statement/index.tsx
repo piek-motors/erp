@@ -1,9 +1,9 @@
 /** @jsxImportSource @emotion/react */
 import { Box, Typography } from '@mui/joy'
-import { formatDateWithTime, formatOnlyDate } from 'src/lib/date'
+import { formatOnlyDate } from 'src/lib/date'
 import { TOrder } from 'src/types/global'
 
-export interface IAboutOrderProps {
+interface IAboutOrderProps {
   data: TOrder
 }
 
@@ -30,20 +30,16 @@ export function AboutOrder({ data }: IAboutOrderProps) {
       data: data.User && `${data.User.FirstName} ${data.User.LastName}`
     },
     {
-      heading: 'Создан',
+      heading: 'Записан в системе',
       data: formatOnlyDate(data.CreatingDate)
     },
     {
-      heading: 'В очередности',
+      heading: 'Взят в производство',
       data: formatOnlyDate(data.AcceptanceDate)
     },
     {
       heading: 'Факт. отгрузка',
       data: formatOnlyDate(data.ActualShippingDate)
-    },
-    {
-      heading: 'Проблемки с',
-      data: formatDateWithTime(data.NeedAttention?.split(',')[1]!)
     },
     {
       heading: 'Комментарий',

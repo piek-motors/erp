@@ -9,12 +9,14 @@ import {
 } from '@mui/joy'
 import { JSX, useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
+import { Column } from 'react-table'
 import { UiMaterialShape } from 'shared'
+import { Material } from 'shared/domain'
 import { EnMaterialShape } from 'shared/enumerations'
 import { Search } from 'src/components/search-input'
 import { MetalFlowSys } from 'src/lib/routes'
 import {
-  AddButton,
+  AddResourceButton,
   ErrorHint,
   InputStack,
   LoadingHint,
@@ -28,13 +30,12 @@ import { PageTitle } from '../../../components'
 import { Table } from '../../../components/table.impl'
 import { useNotifier } from '../../../store/notifier.store'
 import { map } from '../mappers'
-import { SmallInputForm } from '../shared'
+import { EditIconButton, SmallInputForm } from '../shared'
 import { MaterialUnitSelect } from '../shared/basic'
 import { ResourceName } from '../shared/material-name'
 import { goTo } from '../spa'
 import { useStockStore } from '../stock'
 import { t } from '../text'
-import { columnList } from './columns.decl'
 import {
   CircleMaterialInput,
   ListMaterialInput,
@@ -42,6 +43,43 @@ import {
   SquareMaterialInput
 } from './shape-data'
 import { useMaterialListStore, useMaterialStore } from './state'
+
+function StockAmount(props: { materialId: number }) {
+  const stockStore = useStockStore()
+  return stockStore.getByIdRounded(props.materialId)
+}
+
+const columnList: Column<Material>[] = [
+  {
+    Header: 'Id',
+    accessor: 'id'
+  },
+  {
+    Header: t.Material,
+    id: 'name',
+    accessor: data => {
+      return <ResourceName resource={Material.create(data).resourceName()} />
+    },
+    width: '95%'
+  },
+  {
+    Header: t.Remaining,
+    accessor: data => <StockAmount materialId={data.id} />
+  },
+  {
+    Header: t.Unit,
+    accessor: data => data.unit()
+  },
+  {
+    Header: 'Действие',
+    accessor: data => (
+      <EditIconButton
+        title={t.EditDetail}
+        url={goTo(MetalFlowSys.material_update, data.id)}
+      />
+    )
+  }
+]
 
 export function MaterialsList() {
   const { data, loading, error } = gql.useGetMaterialsQuery()
@@ -57,8 +95,8 @@ export function MaterialsList() {
 
   return (
     <>
-      <PageTitle title={t.MaterialsList}>
-        <AddButton navigateTo={goTo(MetalFlowSys.material_add)} />
+      <PageTitle title={t.MaterialsList} hideIcon>
+        <AddResourceButton navigateTo={goTo(MetalFlowSys.material_add)} />
       </PageTitle>
 
       <Search
@@ -91,11 +129,6 @@ export function MaterialsList() {
       </Sheet>
     </>
   )
-}
-
-export function StockAmount(props: { materialId: number }) {
-  const stockStore = useStockStore()
-  return stockStore.getByIdRounded(props.materialId)
 }
 
 export function AddMaterial() {
@@ -171,10 +204,10 @@ export function UpdateMaterial() {
     }
   }, [existing])
 
-  const [mut, { data, loading, error }] = gql.useUpdateMaterialMutation()
-
+  const [mut] = gql.useUpdateMaterialMutation()
+  const notifier = useNotifier()
   const handleSave = async () => {
-    await mut({
+    const res = await mut({
       variables: {
         id,
         _set: {
@@ -184,6 +217,14 @@ export function UpdateMaterial() {
         }
       }
     })
+    if (res.errors?.length) {
+      notifier.notify(
+        'err',
+        `Не сработало: ${JSON.stringify(res.errors, null, 2)}`
+      )
+    } else {
+      notifier.notify('info', 'Материал успешно обновлен')
+    }
   }
 
   if (ready) {
