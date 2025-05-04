@@ -1,7 +1,10 @@
-import { plainToInstance } from 'class-transformer';
-import { getShapeDataConstructor } from 'shared';
-import { Detail, Material } from 'shared/domain';
-import { GetDetailByPkQuery, GetMaterialByPkQuery } from 'src/types/graphql-shema';
+import { plainToInstance } from 'class-transformer'
+import { getShapeDataConstructor } from 'shared'
+import { Detail, Material } from 'shared/domain'
+import {
+  GetDetailByPkQuery,
+  GetMaterialByPkQuery
+} from 'src/types/graphql-shema'
 
 class MaterialMapper {
   fromDto(dto: GetMaterialByPkQuery['metal_pdo_materials_by_pk']): Material {
@@ -17,7 +20,10 @@ class MaterialMapper {
       throw new Error(`material mapper: unknown shape ${dto.shape}`)
     }
 
-    const instance = plainToInstance(shapeDataConstructor, dto.shape_data) as any
+    const instance = plainToInstance(
+      shapeDataConstructor,
+      dto.shape_data
+    ) as any
     return new Material(dto.id, dto.unit, dto.shape, instance)
   }
 
@@ -40,7 +46,11 @@ class DetailMapper {
     }
 
     return new Detail(
-      raw.id, raw.name, raw.detail_materials.map(material => this.materialMapper.fromDto(material.material))
+      raw.id,
+      raw.name,
+      raw.detail_materials.map(material =>
+        this.materialMapper.fromDto(material.material)
+      )
     )
   }
 }
@@ -49,4 +59,3 @@ export const map = {
   material: new MaterialMapper(),
   detail: new DetailMapper()
 }
-

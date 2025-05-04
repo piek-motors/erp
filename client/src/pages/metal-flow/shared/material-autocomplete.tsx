@@ -1,7 +1,7 @@
 import { Autocomplete } from '@mui/joy'
 import { Material } from 'shared/domain'
 import { useGetMaterialsQuery } from '../../../types/graphql-shema'
-import { map } from '../domain-adapter'
+import { map } from '../mappers'
 
 export function MaterialAutocomplete(props: {
   data?: ReturnType<typeof useGetMaterialsQuery>['data']
