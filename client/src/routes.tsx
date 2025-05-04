@@ -6,7 +6,7 @@ import Attendance from './pages/attendance/main'
 import { MentionList } from './pages/mentions'
 import order_detail from './pages/order-detail/main'
 import { Orders } from './pages/orders/main'
-import reclamations from './pages/reclamation/main'
+import reclamations from './pages/reclamation'
 import settings from './pages/settings'
 
 export const protectedRoutes: RouteConfig[] = [
