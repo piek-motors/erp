@@ -26,21 +26,8 @@ import { RuMonths } from 'src/lib/constants'
 import { getPreviousMonth } from 'src/lib/date'
 import { useReport } from './use-report'
 
-export function Registration() {
+function Registration() {
   const store = useOrderListPageStore()
-  const navigate = useNavigate()
-  const [insertOrderMutation] = useInsertOrderMutation({
-    variables: {
-      orderStatusID: OrderStatus.ordRegistration
-    }
-  })
-  function insertOrderHandler() {
-    insertOrderMutation().then(res => {
-      navigate(
-        `/orders/${res.data?.insert_erp_Orders?.returning[0].OrderID}?edit=true`
-      )
-    })
-  }
   const { data } = useGetOrdersByStatusQuery({
     variables: {
       orderStatus: EnOrderStatus.Registration
@@ -107,8 +94,7 @@ function Report() {
 
 function RecentOrders() {
   const { data } = useGetOrdersByStatusQuery({
-    variables: { orderStatus: OrderStatus.ordProduction },
-    fetchPolicy: 'cache-and-network'
+    variables: { orderStatus: OrderStatus.ordProduction }
   })
 
   const ordersByToday =
@@ -129,10 +115,10 @@ function RecentOrders() {
 
   return (
     <>
-      <TableName name="Сегодня" />
+      <TableName name={t.Today} />
       <OrdersTable data={ordersByToday} />
 
-      <TableName name="Вчера" />
+      <TableName name={t.Yesterday} />
       <OrdersTable data={ordersByYesterday} />
     </>
   )
@@ -142,7 +128,7 @@ function Archive() {
   const columns = useMemo(() => {
     const a = [...columnsList]
     a[3] = {
-      Header: 'Факт отгрузка',
+      Header: t.FactShipment,
       accessor: order => (
         <>
           {order.ActualShippingDate &&
@@ -229,14 +215,24 @@ function Production() {
 }
 
 export function Orders() {
-  function handleAddOrder() {
-    alert('add order')
+  const navigate = useNavigate()
+  const [insertOrderMutation] = useInsertOrderMutation({
+    variables: {
+      orderStatusID: OrderStatus.ordRegistration
+    }
+  })
+  function insertOrderHandler() {
+    insertOrderMutation().then(res => {
+      navigate(
+        `/orders/${res.data?.insert_erp_Orders?.returning[0].OrderID}?edit=true`
+      )
+    })
   }
 
   return (
     <>
-      <PageTitle title="Заказы | Очередность выполнения">
-        <AddButton onClick={handleAddOrder} />
+      <PageTitle title={t.Title}>
+        <AddButton onClick={() => insertOrderHandler()} />
       </PageTitle>
       <MyTabs
         tabs={{

@@ -47,11 +47,7 @@ export const columnsList: Column<TOrderColumnData>[] = [
   {
     Header: 'План. отгрузка',
     accessor: order => (
-      <>
-        {' '}
-        {order.ShippingDate &&
-          moment(order.ShippingDate).format('DD.MM.YY')}{' '}
-      </>
+      <>{order.ShippingDate && moment(order.ShippingDate).format('DD.MM.YY')}</>
     )
   },
   {

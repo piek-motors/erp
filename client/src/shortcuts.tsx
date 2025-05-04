@@ -10,11 +10,16 @@ import {
   InputProps,
   Stack,
   StackProps,
+  Tab,
+  TabList,
+  TabPanel,
+  Tabs,
   Textarea,
   TextareaProps,
   Typography
 } from '@mui/joy'
-import React from 'react'
+import React, { ReactNode } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 export const Btn = Button
 
@@ -51,6 +56,22 @@ export function Row(props: { children: React.ReactNode } & StackProps) {
   return <Stack direction="row" gap={1} alignItems="center" {...props} />
 }
 
+export function RowButColumsAtSm(
+  props: {
+    children: React.ReactNode
+  } & StackProps
+) {
+  return (
+    <Stack
+      direction="row"
+      gap={1}
+      alignItems="center"
+      sx={{ display: { xs: 'none', md: 'flex' } }}
+      {...props}
+    />
+  )
+}
+
 export function CancelButton(props: { onClick: () => void }) {
   return (
     <Btn variant="plain" color="neutral" onClick={props.onClick}>
@@ -59,15 +80,15 @@ export function CancelButton(props: { onClick: () => void }) {
   )
 }
 
-export function DeteleButton(props: { onClick: () => void }) {
+export function DeleteResourceButton(props: { onClick: () => void }) {
   return (
     <IconButton variant="plain" color="danger" onClick={props.onClick}>
-      <UilTrash />
+      <UilTrash width={20} height={20} opacity={0.6} />
     </IconButton>
   )
 }
 
-export function EditButton(props: { onClick: () => void }) {
+export function UpdateResourceButton(props: { onClick: () => void }) {
   return (
     <IconButton variant="plain" color="primary" onClick={props.onClick}>
       <UilPen />
@@ -120,10 +141,6 @@ export function MultilineInput(
     </FormControl>
   )
 }
-
-import { Tab, TabList, TabPanel, Tabs } from '@mui/joy'
-import { ReactNode } from 'react'
-import { useNavigate } from 'react-router-dom'
 
 export function MyTabs(props: {
   tabs: Record<string, ReactNode>
@@ -223,4 +240,15 @@ export function Pre(props: { children: React.ReactNode }) {
   return (
     <pre style={{ whiteSpace: 'pre-wrap', margin: 0 }}>{props.children}</pre>
   )
+}
+
+export const bgcolors = {
+  red: '#eda5a554',
+  blue: '#8cb8e753'
+}
+
+export const text = {
+  showMore: 'Показать еще',
+  loading: 'Загрузка...',
+  uploadFile: 'Загрузить файл'
 }

@@ -1,4 +1,8 @@
 export const t = {
+  Title: '"Заказы | Очередность выполнения"',
+  Today: 'Сегодня',
+  Yesterday: 'Вчера',
+  FactShipment: 'Факт отгрузка',
   PriorityMap: 'Очередность',
   PreOrders: 'Предзаказы',
   RecentplyPaidOrders: 'Недавно оплаченные',
@@ -6,5 +10,6 @@ export const t = {
   SearchInArchive: 'Поиск в архиве',
   InputPlaceholder: 'Счет, контрагент',
   ShipmentsInTheCurrentMonth: 'Отгрузка в этом месяце',
-  NoData: '(=｀ω´=) Нет никаких данных'
+  NoData: '(=｀ω´=) Нет никаких данных',
+  UploadTheFile: 'Загрузить файл'
 } as const

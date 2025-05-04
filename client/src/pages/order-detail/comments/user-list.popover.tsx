@@ -1,7 +1,6 @@
 import { Menu, MenuItem } from '@mui/joy'
 import { TUser } from 'src/types/global'
 import placeCaretAtEnd from 'src/utils/placeCaretAtEnd'
-import sass from './index.module.sass'
 
 interface IUserListPopoverProps {
   anchorEl: Element | null
@@ -32,7 +31,6 @@ export function UserListPopover({
     inputRef.current.innerText = inputRef.current?.innerText.slice(0, -1)
 
     elem.innerHTML = '@' + [user.FirstName, user.LastName].join(' ') + ', '
-    elem.classList.add(sass.mentionedUserHiglight)
     elem.dataset.mentionedUser = user.UserID.toString()
     elem.contentEditable = 'false'
     inputform?.appendChild(elem)
@@ -45,21 +43,15 @@ export function UserListPopover({
 
   return (
     <Menu
-      id="Comments__userListMenu"
-      aria-labelledby="Comments_InputForm"
+      autoFocus
       anchorEl={anchorEl}
       open={open}
       onClose={handleClose}
+      placement="bottom-start"
     >
       {users &&
         users.map(user => (
-          <MenuItem
-            sx={{
-              padding: '4px 10px'
-            }}
-            key={user.UserID}
-            onClick={() => handleClick(user.UserID)}
-          >
+          <MenuItem key={user.UserID} onClick={() => handleClick(user.UserID)}>
             {user.FirstName} {user.LastName}
           </MenuItem>
         ))}

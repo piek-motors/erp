@@ -21,7 +21,6 @@ import {
   useInsertPaymentMutation
 } from 'src/types/graphql-shema'
 import * as formatter from 'src/utils/formatting'
-import { OrderInfoCard } from '.'
 import { MyInput, Row } from '../../../shortcuts'
 
 type Order = Pick<TOrder, 'TotalAmount' | 'OrderID'>
@@ -56,7 +55,8 @@ export default function PaymnetHistory({ data }: IPaymnetHistoryProps) {
   ].includes(store?.user?.AccessLevelID)
 
   return (
-    <OrderInfoCard heading="История оплаты">
+    <Box>
+      <Typography>История оплаты</Typography>
       {data.TotalAmount ? (
         <PrintPayment
           data={payments?.erp_PaymentHistory || []}
@@ -74,7 +74,7 @@ export default function PaymnetHistory({ data }: IPaymnetHistoryProps) {
           defaultValues={{ date: new Date().toISOString() }}
         />
       )}
-    </OrderInfoCard>
+    </Box>
   )
 }
 

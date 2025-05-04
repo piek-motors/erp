@@ -1,5 +1,4 @@
 /** @jsxImportSource @emotion/react */
-import { css } from '@emotion/react'
 import { FormControl, Option, Select } from '@mui/joy'
 import moment from 'moment'
 import React, { useEffect } from 'react'
@@ -36,11 +35,7 @@ interface IEditableInfoProps {
 
 let fields: Partial<FieldsValuesMap> = {}
 
-export default function EditableInfo({
-  data,
-  refetch,
-  users
-}: IEditableInfoProps) {
+export function EditableInfo({ data, refetch, users }: IEditableInfoProps) {
   const addField = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => (fields[e.target.name as FieldNames] = e.target.value)
@@ -74,16 +69,8 @@ export default function EditableInfo({
     }
   }, [])
 
-  const styles = css`
-    border-left: var(--border);
-    height: 100%;
-    display: flex;
-    flex-flow: column;
-    padding: 0 0.5rem;
-  `
-
   return (
-    <form css={styles}>
+    <form>
       <InputStack>
         <MyInput
           label="План. отгрузка"

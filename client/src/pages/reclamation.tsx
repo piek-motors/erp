@@ -267,19 +267,24 @@ function ReclamationContainer() {
         <AddButton onClick={handleAddOrder} />
       </PageTitle>
 
-      {!loading && (
-        <Reclamation
-          inbox={filterByStatus(data?.erp_Orders || [], OrderStatus.reclInbox)}
-          decision={filterByStatus(
-            data?.erp_Orders || [],
-            OrderStatus.reclDecision
-          )}
-          inproduction={filterByStatus(
-            data?.erp_Orders || [],
-            OrderStatus.reclProduction
-          )}
-        />
-      )}
+      <Box p={1}>
+        {!loading && (
+          <Reclamation
+            inbox={filterByStatus(
+              data?.erp_Orders || [],
+              OrderStatus.reclInbox
+            )}
+            decision={filterByStatus(
+              data?.erp_Orders || [],
+              OrderStatus.reclDecision
+            )}
+            inproduction={filterByStatus(
+              data?.erp_Orders || [],
+              OrderStatus.reclProduction
+            )}
+          />
+        )}
+      </Box>
     </>
   )
 }

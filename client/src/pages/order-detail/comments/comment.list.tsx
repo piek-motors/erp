@@ -1,108 +1,342 @@
-import { useEffect, useRef } from 'react'
+import { UilListUl, UilMessage, UilUser } from '@iconscout/react-unicons'
+import {
+  Box,
+  Button,
+  Card,
+  IconButton,
+  Menu,
+  MenuItem,
+  Stack,
+  Textarea,
+  Tooltip,
+  Typography
+} from '@mui/joy'
+import moment from 'moment'
+import React, { useRef, useState } from 'react'
 import { useOrderDetailStore } from 'src/pages/order-detail/state'
-import { TUser } from 'src/types/global'
+import { TComment, TUser } from 'src/types/global'
 import {
   useCommentsSubscription,
+  useDeleteCommentMutation,
+  useGetAllUsersQuery,
   useInsertCommentMutation,
-  useInsertNotificationMutation
+  useInsertNotificationMutation,
+  useUpdateCommentMutation
 } from 'src/types/graphql-shema'
-import { Comment } from './comment'
-import sass from './index.module.sass'
-import { InputForm } from './input-form'
+import { apolloClient } from '../../../api'
+import { DeleteResourceButton, Row, text } from '../../../shortcuts'
+import {
+  InsertCommentDocument,
+  InsertCommentMutation,
+  InsertCommentMutationVariables
+} from '../../../types/graphql-shema'
+import { UserListPopover } from './user-list.popover'
+
+async function insertComment(comment: string, orderId: number, userId: number) {
+  const res = await apolloClient.mutate<
+    InsertCommentMutation,
+    InsertCommentMutationVariables
+  >({
+    mutation: InsertCommentDocument,
+    variables: {
+      OrderID: orderId,
+      Text: comment,
+      UserID: userId
+    }
+  })
+
+  // TODO: insert mentions
+  // insertOrderCommentMutation({
+  //   variables: {
+  //     OrderID: orderId,
+  //     UserID: user.UserID,
+  //     Text: text
+  //   }
+  // }).then(res => {
+  //   if (res.errors || !res.data?.insert_erp_Comments_one) {
+  //     throw Error(res.errors?.toString() ?? 'broken responce')
+  //   }
+  //   const { CommentID, OrderID } = res.data?.insert_erp_Comments_one
+
+  //   mentioned &&
+  //     mentioned.forEach(el => {
+  //       const mentionedUser = el.dataset.mentionedUser
+  //       if (!mentionedUser) throw Error()
+
+  //       insertNotificationMutation({
+  //         variables: {
+  //           CommentID,
+  //           OrderID,
+  //           MentionedUser: parseInt(mentionedUser)
+  //         }
+  //       })
+  //     })
+  // })
+  // if (inputRef.current) inputRef.current.innerText = ''
+}
+
+interface InputFormProps {
+  insertComment: (comment: string) => Promise<void>
+  inputRef: React.RefObject<HTMLInputElement>
+}
+
+function InputForm({ insertComment, inputRef }: InputFormProps) {
+  const { data: users } = useGetAllUsersQuery()
+  const [anchorEl, setAnchorEl] = useState<Element | null>(null)
+  const [anchorULP, setAnchorULP] = useState<Element | null>(null)
+
+  const [value, setData] = useState<string>('')
+
+  function handleChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
+    const innerText = e.target.value
+    if (innerText.at(-1) === '/') {
+      setAnchorEl(e.target as any)
+    }
+    if (innerText.at(-1) === '@') {
+      setAnchorULP(e.target as any)
+    }
+    setData(innerText)
+  }
+
+  const handleClose = () => setAnchorEl(null)
+  const handleCloseUserListPopover = () => setAnchorULP(null)
+  return (
+    <Row>
+      <СommandListPopover
+        setAnchorULP={setAnchorULP}
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        handleClose={handleClose}
+        inputRef={inputRef}
+      />
+      <UserListPopover
+        anchorEl={anchorULP}
+        open={Boolean(anchorULP)}
+        handleClose={handleCloseUserListPopover}
+        users={users?.erp_Users || []}
+        inputRef={inputRef}
+      />
+      <Stack flexGrow={1}>
+        <Textarea
+          size="lg"
+          variant="soft"
+          color="primary"
+          onChange={handleChange}
+          value={value}
+          placeholder="Комментарий к заказу"
+        />
+      </Stack>
+      <Box>
+        <InsertCommentButton
+          onClick={() => {
+            const temp = value
+            setData('')
+            insertComment(temp)
+          }}
+        />
+      </Box>
+    </Row>
+  )
+}
+
+function InsertCommentButton(props: { onClick: () => void }) {
+  return (
+    <Tooltip title="Прикрепить комментарий">
+      <IconButton onClick={props.onClick}>
+        <UilMessage />
+      </IconButton>
+    </Tooltip>
+  )
+}
+
+interface IСommandsPopoverProps {
+  anchorEl: Element | null
+  open: boolean
+  handleClose: () => void
+  inputRef: React.RefObject<HTMLInputElement>
+  setAnchorULP: React.Dispatch<React.SetStateAction<Element | null>>
+}
+
+export default function СommandListPopover({
+  anchorEl,
+  open,
+  handleClose,
+  setAnchorULP,
+  inputRef
+}: IСommandsPopoverProps) {
+  function insertTodoinDOM() {
+    const root = document.getElementById('Comments_InputForm')
+    const elem = document.createElement('div')
+    elem.setAttribute('data-testid', 'checkListUnit')
+    root?.appendChild(elem)
+  }
+
+  function mentionHandler() {
+    handleClose()
+    setAnchorULP(inputRef.current)
+  }
+
+  return (
+    <Menu
+      anchorEl={anchorEl}
+      open={open}
+      onClose={handleClose}
+      placement="bottom-start"
+      sx={{ p: 1 }}
+    >
+      <MenuItem
+        onClick={() => {
+          handleClose()
+          insertTodoinDOM()
+        }}
+      >
+        <UilListUl />
+        Чеклист
+      </MenuItem>
+      <MenuItem onClick={mentionHandler}>
+        <UilUser />
+        Упомянуть
+      </MenuItem>
+    </Menu>
+  )
+}
+
+interface ICommentProps {
+  data: TComment
+  userID: number
+  showDelete?: boolean
+}
+
+export function Comment({ data, userID, showDelete: editMode }: ICommentProps) {
+  const [deleteMutation] = useDeleteCommentMutation()
+  const [updateMutation] = useUpdateCommentMutation()
+  function updateComment(id: number, newText: string) {
+    updateMutation({
+      variables: {
+        CommentID: id,
+        Text: newText.trim()
+      }
+    })
+  }
+  function handleDelete() {
+    deleteMutation({ variables: { CommentID: data.CommentID } })
+  }
+  function sender() {
+    return `${data.User.FirstName} ${data.User.LastName}`
+  }
+  function actions() {
+    if (editMode && userID === data.User.UserID)
+      return <DeleteResourceButton onClick={handleDelete} />
+  }
+  function timestamp() {
+    const date = moment(data.Timestamp)
+    return date.format('MMM D') + ' at ' + date.format('hh:mm')
+  }
+  function getCommentContent() {
+    const isYourComment = userID === data.User.UserID
+    return isYourComment ? (
+      <div
+        contentEditable="true"
+        key={data.CommentID}
+        suppressContentEditableWarning={true}
+        onBlur={async e => {
+          await updateComment(data.CommentID, e.target.innerHTML)
+        }}
+        onMouseLeave={async e => {
+          await updateComment(data.CommentID, e.currentTarget.innerHTML)
+        }}
+        dangerouslySetInnerHTML={{ __html: data.Text }}
+      />
+    ) : (
+      <div dangerouslySetInnerHTML={{ __html: data.Text }} />
+    )
+  }
+
+  return (
+    <Card sx={{ my: 1, py: 1 }} variant="soft">
+      <Row sx={{ justifyContent: 'space-between' }}>
+        <Typography>
+          <b>{sender()} </b>
+        </Typography>
+        <Row>
+          <Typography level="body-xs"> {timestamp()} </Typography>
+          <div>{actions()}</div>
+        </Row>
+      </Row>
+      {getCommentContent()}
+    </Card>
+  )
+}
 
 interface ICommentsListProps {
   user: TUser
 }
 
-export function CommentList({ user }: ICommentsListProps) {
-  const { orderId } = useOrderDetailStore()
-
+export function CommentListViewPort({ user }: ICommentsListProps) {
+  const { orderId, editMode } = useOrderDetailStore()
   if (!orderId) throw Error('Null OrderId at the local store')
-
   const [insertOrderCommentMutation] = useInsertCommentMutation()
   const [insertNotificationMutation] = useInsertNotificationMutation()
-
   const inputRef = useRef<HTMLInputElement>(null)
 
   const { data, loading } = useCommentsSubscription({
     variables: { OrderID: orderId }
   })
+  const [visibleComments, setVisibleComments] = useState(5)
 
-  function insertComment(): void {
-    const text = inputRef.current?.innerHTML
-    if (!text) return
-    if (!orderId) throw Error('Null OrderId at the local store')
+  // Sort comments from oldest to newest
+  const sortedComments =
+    data?.erp_Comments.sort(
+      (a, b) =>
+        new Date(a.Timestamp).getTime() - new Date(b.Timestamp).getTime()
+    ) || []
 
-    const root = document.getElementById('Comments_InputForm')
-    const mentioned = root?.querySelectorAll<HTMLSpanElement>(
-      `.${sass.mentionedUserHiglight}`
-    )
+  // Always show the latest comments at the bottom
+  const commentsToShow = sortedComments.slice(-visibleComments)
 
-    insertOrderCommentMutation({
-      variables: {
-        OrderID: orderId,
-        UserID: user.UserID,
-        Text: text
-      }
-    }).then(res => {
-      if (res.errors || !res.data?.insert_erp_Comments_one) {
-        throw Error(res.errors?.toString() ?? 'broken responce')
-      }
-      const { CommentID, OrderID } = res.data?.insert_erp_Comments_one
-
-      mentioned &&
-        mentioned.forEach(el => {
-          const mentionedUser = el.dataset.mentionedUser
-          if (!mentionedUser) throw Error()
-
-          insertNotificationMutation({
-            variables: {
-              CommentID,
-              OrderID,
-              MentionedUser: parseInt(mentionedUser)
-            }
-          })
-        })
-    })
-    if (inputRef.current) inputRef.current.innerText = ''
+  const handleShowMore = () => {
+    setVisibleComments(prev => prev + 15)
   }
-
-  function switchTodo(this: HTMLDivElement, ev: MouseEvent) {
-    ;(ev.target as HTMLDivElement).classList.toggle(
-      sass.checklistUnit_complited
-    )
-  }
-
-  useEffect(() => {
-    const inCommentTodos = document.querySelectorAll<HTMLDivElement>(
-      `div.${sass.commentUnit} div.${sass.checklistUnit}`
-    )
-
-    inCommentTodos.forEach(
-      each => {
-        each.addEventListener('click', switchTodo, false)
-      },
-      { once: true }
-    )
-    return () => {
-      inCommentTodos.forEach(each => {
-        each.removeEventListener('click', switchTodo, false)
-      })
-    }
-  }, [data])
 
   return (
-    <div>
-      <InputForm insertComment={insertComment} inputRef={inputRef} />
+    <Box>
+      <Box sx={{ overflow: 'scroll', p: 1 }}>
+        {sortedComments.length > visibleComments && (
+          <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
+            <Button variant="soft" onClick={handleShowMore}>
+              {text.showMore}
+            </Button>
+          </Box>
+        )}
 
-      {!loading &&
-        data?.erp_Comments?.map(comment => (
-          <Comment
-            data={comment}
-            key={comment.CommentID}
-            userID={user.UserID}
-          />
-        ))}
-    </div>
+        {!loading &&
+          commentsToShow.map(comment => (
+            <Comment
+              showDelete={editMode}
+              data={comment}
+              key={comment.CommentID}
+              userID={user.UserID}
+            />
+          ))}
+      </Box>
+    </Box>
+  )
+}
+
+export function CommentInputViewPort({ user }: ICommentsListProps) {
+  const { orderId } = useOrderDetailStore()
+  if (!orderId) throw Error('Null OrderId at the local store')
+  const inputRef = useRef<HTMLInputElement>(null)
+  return (
+    <Box>
+      <Box sx={{ overflow: 'scroll', p: 1 }}>
+        <InputForm
+          insertComment={async comment => {
+            insertComment(comment, orderId, user.UserID)
+          }}
+          inputRef={inputRef}
+        />
+      </Box>
+    </Box>
   )
 }

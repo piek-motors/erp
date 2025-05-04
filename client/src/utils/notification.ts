@@ -5,7 +5,7 @@ export const emitNotification = (
   type: NOTIFICATION_TYPE,
   title: string,
   message = '',
-  duration = 2000
+  duration = 10000
 ) =>
   Store.addNotification({
     title,

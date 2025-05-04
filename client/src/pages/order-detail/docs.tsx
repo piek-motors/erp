@@ -1,160 +1,77 @@
 /** @jsxImportSource @emotion/react */
-import { css } from '@emotion/react'
-import { UilTimes } from '@iconscout/react-unicons'
-import { Box, Button, IconButton, Modal, Sheet, Typography } from '@mui/joy'
+import { UilFile, UilFileAlt, UilImage } from '@iconscout/react-unicons'
+import { Box, Stack, Typography } from '@mui/joy'
 import moment from 'moment'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useOrderDetailStore } from 'src/pages/order-detail/state'
 import { TOrderDocument } from 'src/types/global'
 import { FileService } from '../../services/file.service'
+import { DeleteResourceButton, Row } from '../../shortcuts'
+import { useNotifier } from '../../store/notifier.store'
 
-interface IConfirmDialogProps {
-  filename: string
-  open: boolean
-  handleClose(): void
-  onConfirm(): void
-}
-
-function ConfirmDialog({
-  filename,
-  open,
-  handleClose,
-  onConfirm
-}: IConfirmDialogProps) {
-  return (
-    <div>
-      <Modal open={open} onClose={handleClose}>
-        <Sheet>
-          <Typography>
-            Удалить <span>{filename}</span> ?
-          </Typography>
-          <Box>
-            <Button onClick={handleClose}>Отменить</Button>
-            <Button
-              color="danger"
-              onClick={() => {
-                handleClose()
-                onConfirm()
-              }}
-            >
-              Удалить
-            </Button>
-          </Box>
-        </Sheet>
-      </Modal>
-    </div>
-  )
-}
-
-interface IDocUnitProps {
+function DocUnit(props: {
   file: TOrderDocument
   handleOnDelete: (file: TOrderDocument) => void
   uploading?: boolean
   editState: boolean
-}
-
-function DocUnit({
-  file,
-  handleOnDelete,
-  uploading,
-  editState
-}: IDocUnitProps) {
-  const styles = css`
-    padding: 8px 10px;
-    display: flex;
-    a {
-      flex-grow: 1;
-      display: grid !important;
-      grid-template-columns: auto 1fr;
-      grid-template-areas: 'svg name' 'svg date';
-
-      &:hover {
-        svg,
-        .name {
-          color: var(--accent);
-        }
-      }
-
-      svg {
-        grid-area: svg;
-        color: var(--lowContrast);
-        padding-right: 8px;
-        stroke-width: 0.8;
-        stroke: var(--L0);
-      }
-
-      .name {
-        grid-area: name;
-      }
-
-      .date {
-        grid-area: date;
-        color: var(--lowContrast);
-        font-size: 0.9rem;
-      }
-      button {
-        padding: 0px 4px;
-      }
-    }
-  `
+  refetch: () => void
+}) {
+  const notifier = useNotifier()
+  const { file, uploading, editState } = props
+  const handleDeleteFile = async () => {
+    await FileService.deleteFile(props.file.Key!)
+    notifier.notify('info', `Файл ${props.file.FileName} удален`)
+    props.refetch()
+  }
 
   return (
-    <div css={styles}>
-      <a
-        href={`${process.env.REACT_APP_API_URL}/s3/${file.Key}`}
-        target="_blank"
-        rel="noreferrer"
-      >
-        {formatAssociatedIcon(file.FileName ?? '')}
-        <div className="name">{file.FileName}</div>
-
-        <div className="date" data-testid="filemeta">
-          {formatBytes(file.Size!)} |{' '}
-          {moment(file.UploadingDate).format('D MMMM')}
-        </div>
-      </a>
-
-      {editState && (
-        <IconButton
-          variant="plain"
-          color="danger"
-          onClick={() => handleOnDelete(file)}
+    <Row>
+      <Box gap={1}>
+        <a
+          href={`${process.env.REACT_APP_API_URL}/s3/${file.Key}`}
+          target="_blank"
+          rel="noreferrer"
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            textDecoration: 'none',
+            fontWeight: 'normal'
+          }}
         >
-          <UilTimes />
-        </IconButton>
-      )}
-    </div>
+          <Row>
+            {getformatAssociatedIcon(file.FileName ?? '')}
+            <Typography>{file.FileName}</Typography>
+          </Row>
+
+          {!uploading ? (
+            <Typography level="body-sm" fontWeight={400}>
+              <Row>
+                {formatBytes(file.Size!)}
+                {', '}
+                {moment(file.UploadingDate).format('D MMMM')}
+              </Row>
+            </Typography>
+          ) : (
+            <Typography level="body-sm">Файл выгружается...</Typography>
+          )}
+        </a>
+      </Box>
+
+      {editState && <DeleteResourceButton onClick={handleDeleteFile} />}
+    </Row>
   )
 }
 
-interface IDocsProps {
+export function DocList(props: {
   data: TOrderDocument[]
   refetch(): void
   onUpload: File[]
-}
+}) {
+  const { refetch, data, onUpload } = props
 
-export default function Docs({ refetch, data, onUpload }: IDocsProps) {
   const { editMode } = useOrderDetailStore()
-  const [open, setOpen] = useState(false)
-  const [fileOnDelete, setFileOnDelete] = useState<TOrderDocument>()
-
-  const handleClickOpenDialog = (file: TOrderDocument) => {
-    setFileOnDelete(file)
-    setOpen(true)
-  }
-
-  const handleCloseDialog = () => setOpen(false)
-
-  useEffect(() => {
-    setOpen(false)
-  }, [editMode])
-
-  const handleDeleteFile = async () => {
-    //close modal window
-    handleCloseDialog()
-
-    // also removed file metadata from database
-    await FileService.deleteFile(fileOnDelete?.Key!)
+  const handleClickOpenDialog = async (file: TOrderDocument) => {
+    await FileService.deleteFile(file.Key!)
     refetch()
   }
 
@@ -162,22 +79,21 @@ export default function Docs({ refetch, data, onUpload }: IDocsProps) {
     onUpload.map((file: File) => ({ ...file, FileName: file.name }))
   }, [onUpload])
 
-  const titleStyles = css`
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 10px;
-  `
-
+  if (!data.length)
+    return (
+      <Typography p={1} color="neutral">
+        Нет документов
+      </Typography>
+    )
   return (
-    <div className="Docs">
-      <div css={titleStyles}>
+    <div>
+      <Row gap={2}>
         <Typography>Документы [{data.length}]</Typography>
-      </div>
-
-      <div>
+      </Row>
+      <Stack gap={1} py={2}>
         {data.map(file => (
           <DocUnit
+            refetch={refetch}
             key={file.Key}
             file={file}
             editState={editMode}
@@ -188,6 +104,7 @@ export default function Docs({ refetch, data, onUpload }: IDocsProps) {
         {!!onUpload.length &&
           onUpload.map(file => (
             <DocUnit
+              refetch={refetch}
               file={{ ...file, FileName: file.name, Key: file.name, ID: 22 }}
               key={file.name}
               editState={editMode}
@@ -195,19 +112,10 @@ export default function Docs({ refetch, data, onUpload }: IDocsProps) {
               uploading
             />
           ))}
-      </div>
-
-      <ConfirmDialog
-        filename={fileOnDelete?.FileName ?? ''}
-        open={open}
-        handleClose={handleCloseDialog}
-        onConfirm={handleDeleteFile}
-      />
+      </Stack>
     </div>
   )
 }
-
-import { UilFile, UilFileAlt, UilImage } from '@iconscout/react-unicons'
 
 // converts file size from bytes to human-readable string
 export function formatBytes(bytes: number): string {
@@ -219,7 +127,7 @@ export function formatBytes(bytes: number): string {
   return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i]
 }
 
-export function formatAssociatedIcon(filename: string) {
+export function getformatAssociatedIcon(filename: string) {
   const fileExtension = filename.split('.')[filename.split('.').length - 1]
 
   if (['png', 'jpg', 'jpeg'].includes(fileExtension)) return <UilImage />
