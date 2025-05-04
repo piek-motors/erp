@@ -3,7 +3,7 @@ import { css } from '@emotion/react'
 import { UilTrash } from '@iconscout/react-unicons'
 import { Autocomplete, Box, IconButton, Sheet, Stack } from '@mui/joy'
 import { useEffect, useState } from 'react'
-import { formatWriteoffReason, UiWriteoffReason } from 'shared'
+import { uiWriteoffReason, UiWriteoffReason } from 'shared'
 import { Detail } from 'shared/domain/detail'
 import { WriteoffTroughDetail } from 'shared/domain/writeoff'
 import { EnWriteoffType } from 'shared/enumerations'
@@ -13,7 +13,6 @@ import {
   useDeleteWriteOffMutation,
   useGetWrietOffsQuery
 } from '../../../types/graphql-shema'
-import { emitNotification } from '../../../utils/notification'
 import { SmallInputForm } from '../shared'
 import { DetailSelect } from '../shared/detail-select'
 import { t } from '../text'
@@ -40,7 +39,7 @@ export function AddWriteOff() {
           value: k
         }))}
         value={{
-          label: formatWriteoffReason(reason),
+          label: uiWriteoffReason(reason),
           value: reason?.toString() || '0'
         }}
         isOptionEqualToValue={(option, value) => option.value === value.value}
@@ -63,13 +62,14 @@ export function DeleteWrireOff(props: {
   supplyId: number
   refetch: () => void
 }) {
+  const notifier = useNotifier()
   const [mut, { data }] = useDeleteWriteOffMutation({
     variables: { id: props.supplyId }
   })
 
   useEffect(() => {
     if (data) {
-      emitNotification('success', 'Событие поставки удалено')
+      notifier.notify('info', 'Событие поставки удалено')
     }
   }, [data])
 
@@ -140,6 +140,7 @@ function TotalCost(props: { detail: Detail; qty: number }) {
 
 import { PageTitle } from '../../../components'
 import { AddButton, MyInput, MyTabs, SendMutation } from '../../../shortcuts'
+import { useNotifier } from '../../../store/notifier.store'
 import { QtyInputWithUnit } from '../shared'
 import { MaterialSelect } from '../shared/material-select'
 import { goTo } from '../spa'

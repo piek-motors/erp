@@ -19,7 +19,7 @@ function Help() {
               onClick={() => navigate(each.href)}
             >
               <Row gap={2}>
-                {each.icon}
+                <each.icon width={24} height={24} />
                 <Typography>{each.name}</Typography>
               </Row>
             </IconButton>

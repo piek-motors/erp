@@ -1,3 +1,4 @@
+import { JSX } from 'react'
 import {
   CommentsSubscription,
   GetAllUsersQuery,
@@ -13,24 +14,6 @@ export type ServerErrorResponse = {
     message: string
     code: number
   }
-}
-
-export enum OrderStatus {
-  ordRegistration = 1,
-  ordProduction = 2,
-  ordArchived = 3,
-
-  reclInbox = 10,
-  reclDecision = 11,
-  reclProduction = 12,
-  reclArchived = 13
-}
-
-export enum UserStatus {
-  general = 1,
-  management = 2,
-  bookkeeping = 4,
-  manufacture = 3
 }
 
 export type PreparedEmployeeDto = {
@@ -73,19 +56,24 @@ export type PreparedEmployeeDto = {
 export type AppColorTheme = 'light' | 'dark' | 'system'
 export type AppColorMode = 'light' | 'dark'
 
-export type Employee = GetEmployeeListQuery['attendance_users_aggregate']['nodes'][number]
+export type Employee =
+  GetEmployeeListQuery['attendance_users_aggregate']['nodes'][number]
 
-export type TOrderItem = GetOrderByPkQuery['erp_Orders'][number]['OrderItems'][number]
+export type TOrderItem =
+  GetOrderByPkQuery['erp_Orders'][number]['OrderItems'][number]
 export type TReclamationOrder = GetReclamationOrdersQuery['erp_Orders'][number]
 
 export type TOrder = GetOrderByPkQuery['erp_Orders'][number]
 export type TOrderColumnData = OrderFragment
 
-export type TOrderDocument = GetOrderByPkQuery['erp_Orders'][number]['Docs'][number]
-export type TPaymentsHistory = GetOrderByPkQuery['erp_Orders'][number]['PaymentHistories'][number]
+export type TOrderDocument =
+  GetOrderByPkQuery['erp_Orders'][number]['Docs'][number]
+export type TPaymentsHistory =
+  GetOrderByPkQuery['erp_Orders'][number]['PaymentHistories'][number]
 export type TComment = CommentsSubscription['erp_Comments'][number]
 export type TUser = GetAllUsersQuery['erp_Users'][number]
-export type TNotification = GetNotificationsSubscription['erp_Notifications'][number]
+export type TNotification =
+  GetNotificationsSubscription['erp_Notifications'][number]
 
 export interface RouteConfig {
   path: string

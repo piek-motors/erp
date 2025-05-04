@@ -18,7 +18,7 @@ import {
   TextareaProps,
   Typography
 } from '@mui/joy'
-import React, { ReactNode } from 'react'
+import React, { JSX, ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 export const Btn = Button
@@ -243,12 +243,18 @@ export function Pre(props: { children: React.ReactNode }) {
 }
 
 export const bgcolors = {
-  red: '#eda5a554',
+  lightgrey: '#d5cccc53',
   blue: '#8cb8e753'
 }
 
 export const text = {
   showMore: 'Показать еще',
   loading: 'Загрузка...',
-  uploadFile: 'Загрузить файл'
+  uploadFile: 'Загрузить файл',
+  orderDetails: 'Детали заказа',
+  orderReadyForDispatch: 'Готов к отгрузке',
+  orderRequiresSpectialAttention: 'Требует внимания'
 }
+
+export const ICON_OPACITY = 0.7
+export const ICON_WIDTH = 22

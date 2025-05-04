@@ -46,7 +46,7 @@ export function PositionsList({ data, refetch, gap }: IOrderItemListProps) {
                 </Typography>
                 <Typography fontFamily={'monospace'} fontSize={'1.2rem'}>
                   {' '}
-                  {position.Quantity} шт.
+                  {position.Quantity} шт
                 </Typography>
               </Row>
               {editMode && (
@@ -59,7 +59,7 @@ export function PositionsList({ data, refetch, gap }: IOrderItemListProps) {
                   />
                 </Row>
               )}
-              <div> {position.FullName}</div>
+              <Typography>{position.FullName}</Typography>
             </div>
           }
         </Box>

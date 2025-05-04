@@ -9,7 +9,7 @@ import {
 } from 'react-beautiful-dnd'
 import { useNavigate } from 'react-router-dom'
 import { AppRoutes } from 'src/lib/routes'
-import { OrderStatus, RouteConfig, TReclamationOrder } from 'src/types/global'
+import { RouteConfig, TReclamationOrder } from 'src/types/global'
 import {
   useGetReclamationOrdersQuery,
   useInsertOrderMutation,
@@ -29,6 +29,7 @@ import {
   DraggingStyle,
   NotDraggingStyle
 } from 'react-beautiful-dnd'
+import { OrderStatus } from 'shared'
 
 // a little function to help us with reordering the result
 export const reorder = (
@@ -143,7 +144,7 @@ function Reclamation(props: IReclamationProps) {
           bottom: 0,
           display: 'grid !important',
           gridTemplateColumns: '1fr 1fr 1fr',
-          gap: 15
+          gap: 2
         }}
       >
         <DroppableContainer
@@ -205,14 +206,21 @@ function DroppableContainer({
   data
 }: IDroppableContainerProps) {
   return (
-    <div key={droppableId}>
+    <Box key={droppableId} sx={{ height: '100%', width: '100%' }}>
       <Typography>{columnName}</Typography>
-      <Droppable droppableId={droppableId}>
+      <Droppable
+        droppableId={droppableId.toString()}
+        isDropDisabled={false}
+        isCombineEnabled={false}
+        direction="vertical"
+        key={droppableId}
+        ignoreContainerClipping={false}
+      >
         {(provided, snapshot) => (
-          <div
+          <Box
             style={getListStyle(snapshot.isDraggingOver)}
             ref={provided.innerRef}
-            className="list"
+            sx={{ height: '100%', width: '100%' }}
           >
             {data.map((item, index) => (
               <Draggable
@@ -237,10 +245,10 @@ function DroppableContainer({
             ))}
 
             {provided.placeholder}
-          </div>
+          </Box>
         )}
       </Droppable>
-    </div>
+    </Box>
   )
 }
 

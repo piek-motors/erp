@@ -9,7 +9,7 @@ import {
 } from '@mui/joy'
 import { useNavigate } from 'react-router-dom'
 import { TableOptions, useSortBy, useTable } from 'react-table'
-import { t } from '../pages/orders/text'
+import { t } from 'src/pages/orders/text'
 
 type Props<T extends object> = TableOptions<T> & {
   onDoubleRowClick?: (row: T) => void

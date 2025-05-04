@@ -1,4 +1,5 @@
-import { OrderStatus, TOrder, TReclamationOrder } from 'src/types/global'
+import { OrderStatus } from 'shared'
+import { TOrder, TReclamationOrder } from 'src/types/global'
 
 export function orderStatus(order: TOrder) {
   // add a note to the title if this is a pre-order
@@ -13,6 +14,9 @@ export function orderStatus(order: TOrder) {
     ].includes(order.OrderStatusID)
   )
     return ' Рекламация'
+
+  if (order.OrderStatusID === OrderStatus.ordProduction)
+    return ' В производстве'
 }
 
 export function orderStatusHighlighting(order: TOrder | TReclamationOrder) {

@@ -11,9 +11,10 @@ import {
 } from '@mui/joy'
 import moment from 'moment'
 import * as React from 'react'
+import { Roles } from 'shared'
 import { useAppContext } from 'src/hooks'
 import { formatOnlyDate } from 'src/lib/date'
-import { TOrder, UserStatus } from 'src/types/global'
+import { TOrder } from 'src/types/global'
 import {
   GetOrderPaymentsQuery,
   useDeletePaymentMutation,
@@ -49,9 +50,9 @@ export default function PaymnetHistory({ data }: IPaymnetHistoryProps) {
   }
 
   const isHaveFullRight = [
-    UserStatus.general,
-    UserStatus.management,
-    UserStatus.bookkeeping
+    Roles.general,
+    Roles.management,
+    Roles.bookkeeping
   ].includes(store?.user?.AccessLevelID)
 
   return (

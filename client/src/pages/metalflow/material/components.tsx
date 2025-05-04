@@ -7,7 +7,7 @@ import {
   Sheet,
   Typography
 } from '@mui/joy'
-import { useEffect, useState } from 'react'
+import { JSX, useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { UiMaterialShape } from 'shared'
 import { EnMaterialShape } from 'shared/enumerations'
@@ -26,7 +26,7 @@ import {
 import * as gql from 'src/types/graphql-shema'
 import { PageTitle } from '../../../components'
 import { Table } from '../../../components/table.impl'
-import { emitNotification } from '../../../utils/notification'
+import { useNotifier } from '../../../store/notifier.store'
 import { map } from '../domain-adapter'
 import { SmallInputForm } from '../shared'
 import { MaterialUnitSelect } from '../shared/basic'
@@ -246,6 +246,7 @@ function UpdateMaterialUpdateStockLinks(props: { id: number }) {
 }
 
 export function DeleteMaterial(props: { id: number }) {
+  const notifier = useNotifier()
   const [mut, { loading }] = gql.useDeleteMaterialMutation({
     variables: {
       id: props.id
@@ -257,7 +258,7 @@ export function DeleteMaterial(props: { id: number }) {
     const res = await mut()
     if (res.data?.delete_metal_pdo_materials_by_pk?.id) {
       navigate(goTo(MetalFlowSys.materials))
-      emitNotification('info', 'Материал успешно удален')
+      notifier.notify('info', 'Материал успешно удален')
     } else {
       alert(res.errors)
     }

@@ -8,7 +8,7 @@ import {
 } from 'shared'
 import { Material } from 'shared/domain'
 import { EnMaterialShape, EnUnit } from 'shared/enumerations'
-import create from 'zustand'
+import { create } from 'zustand'
 
 export interface IMaterialState {
   id: number

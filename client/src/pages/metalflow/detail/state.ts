@@ -1,6 +1,6 @@
 import { Detail, Material } from 'shared/domain'
 import { GetDetailByPkQuery } from 'src/types/graphql-shema'
-import create from 'zustand'
+import { create } from 'zustand'
 import { map } from '../domain-adapter'
 
 interface IDetail {

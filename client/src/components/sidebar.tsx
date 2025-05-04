@@ -14,28 +14,28 @@ import { AppRoutes, MetalFlowSys } from 'src/lib/routes'
 export const links = [
   {
     href: AppRoutes.orders,
-    icon: <UilListOl />,
+    icon: UilListOl,
     name: 'Очередность выполнения'
   },
-  { href: AppRoutes.reclamation, icon: <UilWrench />, name: 'Рекламации' },
+  { href: AppRoutes.reclamation, icon: UilWrench, name: 'Рекламации' },
   {
     href: AppRoutes.attendance,
-    icon: <UilConstructor />,
+    icon: UilConstructor,
     name: 'Рабочее время'
   },
   {
     href: MetalFlowSys.root,
-    icon: <UilCalculatorAlt />,
+    icon: UilCalculatorAlt,
     name: 'Материаловедение'
   },
   {
     href: AppRoutes.mentions,
-    icon: <UilBell />,
+    icon: UilBell,
     name: 'Упоминания'
   },
   {
     href: AppRoutes.settings,
-    icon: <UilSetting />,
+    icon: UilSetting,
     name: 'Настройки'
   }
 ]
@@ -62,7 +62,7 @@ export function Sidebar() {
             >
               <IconButton size="lg" variant="plain">
                 <Tooltip title={each.name} placement="right">
-                  {each.icon}
+                  <each.icon width={20} height={20} />
                 </Tooltip>
               </IconButton>
             </NavLink>

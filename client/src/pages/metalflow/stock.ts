@@ -1,6 +1,6 @@
 import { uiUnit } from 'shared'
 import { Material, Supply, Writeoff } from 'shared/domain'
-import create from 'zustand'
+import { create } from 'zustand'
 import { apolloClient } from '../../api'
 import {
   GetSuppliesDocument,

@@ -9,7 +9,7 @@ import { FileService } from '../../services/file.service'
 import { DeleteResourceButton, Row } from '../../shortcuts'
 import { useNotifier } from '../../store/notifier.store'
 
-function DocUnit(props: {
+function File(props: {
   file: TOrderDocument
   handleOnDelete: (file: TOrderDocument) => void
   uploading?: boolean
@@ -62,29 +62,29 @@ function DocUnit(props: {
   )
 }
 
-export function DocList(props: {
+export function Docs(props: {
   data: TOrderDocument[]
   refetch(): void
   onUpload: File[]
 }) {
   const { refetch, data, onUpload } = props
-
   const { editMode } = useOrderDetailStore()
   const handleClickOpenDialog = async (file: TOrderDocument) => {
     await FileService.deleteFile(file.Key!)
     refetch()
   }
-
   useEffect(() => {
     onUpload.map((file: File) => ({ ...file, FileName: file.name }))
   }, [onUpload])
 
-  if (!data.length)
+  if (!data.length) {
     return (
       <Typography p={1} color="neutral">
         Нет документов
       </Typography>
     )
+  }
+
   return (
     <div>
       <Row gap={2}>
@@ -92,7 +92,7 @@ export function DocList(props: {
       </Row>
       <Stack gap={1} py={2}>
         {data.map(file => (
-          <DocUnit
+          <File
             refetch={refetch}
             key={file.Key}
             file={file}
@@ -103,9 +103,14 @@ export function DocList(props: {
 
         {!!onUpload.length &&
           onUpload.map(file => (
-            <DocUnit
+            <File
               refetch={refetch}
-              file={{ ...file, FileName: file.name, Key: file.name, ID: 22 }}
+              file={{
+                ...file,
+                FileName: file.name,
+                Key: file.name,
+                ID: crypto.getRandomValues(new Uint32Array(1))[0]
+              }}
               key={file.name}
               editState={editMode}
               handleOnDelete={handleClickOpenDialog}
@@ -128,9 +133,14 @@ export function formatBytes(bytes: number): string {
 }
 
 export function getformatAssociatedIcon(filename: string) {
+  const size = 24
   const fileExtension = filename.split('.')[filename.split('.').length - 1]
 
-  if (['png', 'jpg', 'jpeg'].includes(fileExtension)) return <UilImage />
-  if (['pdf', 'doc', 'docx'].includes(fileExtension)) return <UilFileAlt />
-  else return <UilFile />
+  if (['png', 'jpg', 'jpeg'].includes(fileExtension)) {
+    return <UilImage width={size} />
+  } else if (['pdf', 'doc', 'docx'].includes(fileExtension)) {
+    return <UilFileAlt width={size} />
+  } else {
+    return <UilFile width={size} />
+  }
 }

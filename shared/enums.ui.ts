@@ -2,7 +2,8 @@ import {
   EnMaterialShape,
   EnUnit,
   EnWriteoffReason,
-  EnWriteoffType
+  EnWriteoffType,
+  OrderStatus
 } from './enumerations'
 
 export const UiWriteoffReason = {
@@ -12,7 +13,7 @@ export const UiWriteoffReason = {
   [EnWriteoffReason.Other]: 'Другое'
 }
 
-export function formatWriteoffReason(reason?: EnWriteoffReason) {
+export function uiWriteoffReason(reason?: EnWriteoffReason) {
   if (reason == null) return '-'
   return UiWriteoffReason[reason]
 }
@@ -24,7 +25,7 @@ export const UiMaterialShape = {
   [EnMaterialShape.Square]: 'Квадрат'
 }
 
-export function formatMaterialShape(shape: EnMaterialShape) {
+export function uiMaterialShape(shape: EnMaterialShape) {
   return UiMaterialShape[shape]
 }
 
@@ -45,6 +46,20 @@ export const UiWriteoffType = {
   [EnWriteoffType.DirectUnit]: 'Прямо в единицу'
 }
 
-export function formatWriteoffType(type: EnWriteoffType) {
+export function uiWriteoffType(type: EnWriteoffType) {
   return UiWriteoffType[type]
+}
+
+export const UiOrderStatus = {
+  [OrderStatus.ordRegistration]: 'Предзаказ',
+  [OrderStatus.ordProduction]: 'В производстве',
+  [OrderStatus.ordArchived]: 'В архиве',
+  [OrderStatus.reclInbox]: 'Входящие',
+  [OrderStatus.reclDecision]: 'Принятие решения',
+  [OrderStatus.reclProduction]: 'В производстве',
+  [OrderStatus.reclArchived]: 'В архиве'
+}
+
+export function uiOrderStatus(status: OrderStatus) {
+  return UiOrderStatus[status]
 }

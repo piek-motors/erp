@@ -1,5 +1,5 @@
 import { Column } from 'react-table'
-import { formatWriteoffReason, uiUnit } from 'shared'
+import { uiUnit, uiWriteoffReason } from 'shared'
 import { EnWriteoffType } from 'shared/enumerations'
 import { formatDateWithTime } from '../../../lib/date'
 import { GetWrietOffsQuery } from '../../../types/graphql-shema'
@@ -38,7 +38,7 @@ export function getColumns(props: {
     },
     {
       Header: t.WriteOffReason,
-      accessor: data => formatWriteoffReason(data.reason)
+      accessor: data => uiWriteoffReason(data.reason)
     },
     {
       Header: 'ID детали',

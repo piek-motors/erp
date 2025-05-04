@@ -1,4 +1,4 @@
-import { Box, Divider, Stack, Typography } from '@mui/joy'
+import { Box, Chip, Divider, Stack, Typography } from '@mui/joy'
 import Grid from '@mui/joy/Grid'
 import { useCallback, useLayoutEffect, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
@@ -14,15 +14,14 @@ import {
 import { PageTitle } from '../../components'
 import { InputFiles } from '../../components/input-files'
 import { FileService } from '../../services/file.service'
-import { bgcolors } from '../../shortcuts'
-import { emitNotification } from '../../utils/notification'
+import { bgcolors, Row, text } from '../../shortcuts'
 import { orderStatus } from '../../utils/orderColorIndication'
 import {
   CommentInputViewPort,
   CommentListViewPort
 } from './comments/comment.list'
 import { DialogAddEditOrderItem } from './dialogs/add-edit-order-item.dialog'
-import { DocList } from './docs'
+import { Docs } from './docs'
 import { OrderActions } from './header'
 import { PositionsList } from './position'
 import { AboutOrder } from './right-panel'
@@ -46,7 +45,6 @@ function OrderDetail() {
   const handleFileOnDrop = useCallback(async (acceptedFiles: File[]) => {
     setOnUploadFiles(acceptedFiles)
     const res = await FileService.uploadFile(acceptedFiles, orderId)
-    emitNotification('success', 'Загрузка файлов завершена')
     if (res.status === 200) {
       refetch()
     } else {
@@ -79,25 +77,49 @@ function OrderDetail() {
       <Grid
         container
         direction={'row'}
-        sx={{ height: '100vh', overflow: 'clip' }}
+        sx={{
+          height: {
+            xs: 'auto',
+            md: '100vh'
+          },
+          overflow: 'clip'
+        }}
       >
         <DialogAddEditOrderItem refetch={refetch} />
-        <Grid xs={6} flexGrow={1}>
+        <Grid xs={12} md={6} flexGrow={1}>
           <Stack
             display={'flex'}
             flexGrow={1}
             flexShrink={0}
+            gap={4}
             p={p}
-            sx={{ background: bgcolors.red, height: '100%' }}
+            sx={{ background: bgcolors.lightgrey, height: '100%' }}
           >
-            <PageTitle title={`Детали заказа`} />
-            <Stack gap={p} p={p} width={'min-content'}>
+            <PageTitle title={text.orderDetails}>
+              <OrderActions order={order} />
+            </PageTitle>
+
+            <Stack gap={p / 2}>
+              <Row gap={1}>
+                {orderStatus(order) ? (
+                  <Chip color="primary">{orderStatus(order)}</Chip>
+                ) : null}
+                {order.AwaitingDispatch && (
+                  <Chip color="success" variant="outlined">
+                    {text.orderReadyForDispatch}
+                  </Chip>
+                )}
+                {order.NeedAttention === 'true' && (
+                  <Chip color="danger" variant="outlined">
+                    {text.orderRequiresSpectialAttention}
+                  </Chip>
+                )}
+              </Row>
+
               <Typography level="h4">
                 {order.Entity} __ {order.City}
-                {orderStatus(order) ? <span>{orderStatus(order)}</span> : null}
               </Typography>
 
-              <OrderActions order={order} />
               {editMode ? (
                 <EditRightInfoPanel
                   data={data.erp_Orders[0]}
@@ -105,7 +127,7 @@ function OrderDetail() {
                   users={users.erp_Users}
                 />
               ) : (
-                <Stack gap={p / 4}>
+                <Stack>
                   <AboutOrder data={data.erp_Orders[0]} />
                 </Stack>
               )}
@@ -113,7 +135,7 @@ function OrderDetail() {
 
             <Divider />
 
-            <Box p={p}>
+            <Box>
               <PositionsList
                 gap={p}
                 data={data.erp_Orders[0].OrderItems}
@@ -123,16 +145,22 @@ function OrderDetail() {
           </Stack>
         </Grid>
 
-        <Grid xs={6} direction={'column'} container>
+        <Grid xs={12} md={6} direction={'column'} container>
           <Grid
+            gap={p}
             p={p}
             sx={{
               background: bgcolors.blue,
-              overflowY: 'scroll',
-              height: '100vh'
+              overflowY: {
+                xs: 'scroll'
+              },
+              height: {
+                xs: 'auto',
+                md: '100vh'
+              }
             }}
           >
-            <DocList
+            <Docs
               data={data.erp_Orders[0].Docs}
               onUpload={onUploadFiles}
               refetch={refetch}
@@ -143,6 +171,7 @@ function OrderDetail() {
                 handleFileOnDrop([...files])
               }}
             />
+            <Divider sx={{ my: p }} />
             <CommentListViewPort user={store.user} />
             <CommentInputViewPort user={store.user} />
           </Grid>

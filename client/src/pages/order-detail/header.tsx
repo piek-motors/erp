@@ -10,11 +10,11 @@ import {
   UilTruck,
   UilUnlock
 } from '@iconscout/react-unicons'
-import { Button, Tooltip } from '@mui/joy'
+import { IconButton, Tooltip } from '@mui/joy'
 import { useNavigate } from 'react-router-dom'
-import { useAppContext } from 'src/hooks'
+import { OrderStatus } from 'shared'
 import { useOrderDetailStore } from 'src/pages/order-detail/state'
-import { OrderStatus, TOrder, UserStatus } from 'src/types/global'
+import { TOrder } from 'src/types/global'
 import {
   useDeleteOrderMutation,
   useMoveOrderToArchiveMutation,
@@ -22,8 +22,8 @@ import {
   useUpdateAwaitingDispatchMutation,
   useUpdateNeedAttentionMutation
 } from 'src/types/graphql-shema'
-import { emitNotification } from 'src/utils/notification'
-import { Row } from '../../shortcuts'
+import { ICON_OPACITY, ICON_WIDTH, Row } from '../../shortcuts'
+import { useNotifier } from '../../store/notifier.store'
 import { DeleteOrderDialog } from './dialogs/delete-order-dialog'
 import { TransferOrderDialog } from './dialogs/transfer-order.dialog'
 
@@ -32,129 +32,46 @@ interface IStatusButtonsProps {
   renderAlg: any
 }
 
-function StatusButtons({ order, renderAlg }: IStatusButtonsProps) {
+function SwitchOrderStatusBtn({ order, renderAlg }: IStatusButtonsProps) {
   const [mutationAwaitingDispatch] = useUpdateAwaitingDispatchMutation()
   const [mutationNeedAttention] = useUpdateNeedAttentionMutation()
-
-  // При статусе "требует внимания" происходит выделение заказа красным цветом в очередности.
-  // В левом меню в информации о заказе фиксируется  дата включения этого статуса.
-  // Желательно чтобы возможность снятия была только у определенных аккаунтов .
-  // Это необходимо когда при открытии заказа выясняется дефицит комплектующих или по заказу требуются срочные уточнения от заказчика какие-нибудь.
-  function needAttentionHandler() {
-    const curDate = new Date().toISOString()
-    var payload: any = []
-    if (!order.NeedAttention) payload = ['true', curDate, 'null']
-    else {
-      const nd = order.NeedAttention.split(',')
-      if (nd[0] === 'true') payload = ['false', nd[1], curDate]
-      if (nd[0] === 'false') payload = ['true', curDate, 'null']
-    }
-
-    mutationNeedAttention({
-      variables: {
-        OrderID: order.OrderID,
-        NeedAttention: payload.join(',')
-      }
-      // optimisticResponse: {
-      //     erp_Orders: {
-      //         __typename: 'erp_Orders',
-      //         OrderID: order.OrderID,
-      //         NeedAttention: payload.join(',')
-      //     }
-      //     }
-    })
-  }
-  // При статусе "ожидает отгрузки" происходит
-  //  выделение зеленым цветом в очередности, что означает, что заказ уже собран,
-  // и не отгружается по бумажным причинам
-  function awaitingDispatchHandler() {
-    mutationAwaitingDispatch({
-      variables: {
-        OrderID: order.OrderID,
-        AwaitingDispatch: !order.AwaitingDispatch
-      },
-      optimisticResponse: {
-        update_erp_Orders_by_pk: {
-          __typename: 'erp_Orders',
-          // OrderID: order.OrderID,
-          ...order,
-          AwaitingDispatch: !order.AwaitingDispatch
-        }
-      }
-    })
-  }
-
-  const needAttention = order.NeedAttention?.split(',')[0] === 'true'
-
-  const statusButtons: ActionButton[] = [
+  return renderAlg([
     {
       tip: 'Требует внимания',
-      handler: needAttentionHandler,
-      icon: UilExclamationTriangle,
-      className: needAttention ? 'active' : ' ',
-      userRight: true
+      handler: () =>
+        mutationNeedAttention({
+          variables: {
+            OrderID: order.OrderID,
+            NeedAttention: order.NeedAttention === 'true' ? 'false' : 'true'
+          }
+        }),
+      icon: UilExclamationTriangle
     },
     {
       tip: 'Готов к отгрузке',
-      handler: awaitingDispatchHandler,
+      handler: () =>
+        mutationAwaitingDispatch({
+          variables: {
+            OrderID: order.OrderID,
+            AwaitingDispatch: !order.AwaitingDispatch
+          },
+          optimisticResponse: {
+            update_erp_Orders_by_pk: {
+              __typename: 'erp_Orders',
+              ...order,
+              AwaitingDispatch: !order.AwaitingDispatch
+            }
+          }
+        }),
       icon: UilClockThree,
-      className: order.AwaitingDispatch ? 'active' : '',
-      userRight: true,
       hidden: ![OrderStatus.ordProduction, OrderStatus.reclProduction].includes(
         order.OrderStatusID
       )
     }
-  ]
-
-  return renderAlg(statusButtons)
-}
-
-export type ActionButton = {
-  tip: string
-  handler?: () => void
-  icon: Icon
-  className?: string
-  userRight: boolean
-  hidden?: boolean
-  dialog?: React.ElementType
-  dialogHandler?: () => void
-}
-
-function ActionButtonsRender(arrayOfBtns: ActionButton[]) {
-  const renderResult = arrayOfBtns.map(each => {
-    if (each.hidden) return <div key={each.tip}></div>
-
-    const btnComponent = (
-      <Tooltip title={each.tip}>
-        <Button
-          variant="soft"
-          color="neutral"
-          key={each.tip}
-          data-tip={each.tip}
-          onClick={each.handler}
-          className={each.className}
-          disabled={!each.userRight}
-        >
-          <each.icon />
-        </Button>
-      </Tooltip>
-    )
-
-    return each.dialog ? (
-      <each.dialog handler={each.dialogHandler} key={each.tip}>
-        {btnComponent}
-      </each.dialog>
-    ) : (
-      btnComponent
-    )
-  })
-
-  if (!renderResult.filter(each => each).length) return null
-  return <Row gap={1}>{renderResult.filter(each => each)}</Row>
+  ])
 }
 
 export function OrderActions({ order }: { order: TOrder }) {
-  const { store }: any = useAppContext()
   const {
     orderId,
     editMode,
@@ -163,19 +80,14 @@ export function OrderActions({ order }: { order: TOrder }) {
     setEditedOrderItem
   } = useOrderDetailStore()
 
-  const isHaveFullRight = [
-    UserStatus.general,
-    UserStatus.management,
-    UserStatus.bookkeeping
-  ].includes(store.user.AccessLevelID)
-
   const [mutationMoveOrderToArchive] = useMoveOrderToArchiveMutation()
   const [mutationMoveOrderToPriority] = useMoveOrderToPriorityMutation()
   const [mutationDeleteOrder] = useDeleteOrderMutation()
 
   const navigate = useNavigate()
+  const notifier = useNotifier()
 
-  const baseurl = () => {
+  const getResource = () => {
     if (
       [
         OrderStatus.reclDecision,
@@ -188,10 +100,8 @@ export function OrderActions({ order }: { order: TOrder }) {
     return '/'
   }
 
-  // Перекидывает заказ в архив (убирает из очередности)
-  async function transferOrderToArchive(OrderStatusID: number) {
+  async function orderCompleted(OrderStatusID: number) {
     if (!orderId) throw Error('orderId is null')
-
     mutationMoveOrderToArchive({
       variables: {
         OrderID: orderId,
@@ -200,7 +110,7 @@ export function OrderActions({ order }: { order: TOrder }) {
       }
     }).then(res => {
       if (res.errors) throw new Error(res.errors.toString())
-      emitNotification('success', 'Заказ перенесен в архив')
+      notifier.notify('info', 'Заказ перенесен в архив')
     })
   }
 
@@ -215,7 +125,7 @@ export function OrderActions({ order }: { order: TOrder }) {
       }
     })
     if (res.errors) throw new Error(res.errors.toString())
-    emitNotification('success', 'Заказ внесен в очередность выполнения')
+    notifier.notify('info', 'Заказ внесен в очередность выполнения')
   }
 
   // для удаления заказа
@@ -229,7 +139,7 @@ export function OrderActions({ order }: { order: TOrder }) {
     }).then(res => {
       if (res.errors) throw new Error(res.errors.toString())
 
-      navigate(baseurl())
+      navigate(getResource())
     })
   }
 
@@ -238,23 +148,20 @@ export function OrderActions({ order }: { order: TOrder }) {
       tip: 'В очередность',
       handler: transferOrderToPriority,
       icon: UilFileCheck,
-      userRight: isHaveFullRight,
       hidden: ![OrderStatus.ordRegistration].includes(order.OrderStatusID)
     },
     {
       dialog: TransferOrderDialog,
-      dialogHandler: () => transferOrderToArchive(3),
+      dialogHandler: () => orderCompleted(3),
       tip: 'Закрыть заказ',
       icon: UilTruck,
-      userRight: true,
       hidden: ![OrderStatus.ordProduction].includes(order.OrderStatusID)
     },
     {
       dialog: TransferOrderDialog,
-      dialogHandler: () => transferOrderToArchive(13),
+      dialogHandler: () => orderCompleted(13),
       tip: 'Закрыть рекламацию',
       icon: UilTruck,
-      userRight: true,
       hidden: ![OrderStatus.reclProduction].includes(order.OrderStatusID)
     },
     {
@@ -262,7 +169,6 @@ export function OrderActions({ order }: { order: TOrder }) {
       dialogHandler: mutationDeleteOrderHandler,
       tip: 'Удалить заказ',
       icon: UilTrashAlt,
-      userRight: isHaveFullRight,
       hidden: ![
         OrderStatus.ordRegistration,
         OrderStatus.ordProduction,
@@ -278,7 +184,6 @@ export function OrderActions({ order }: { order: TOrder }) {
         setAddOrderItemDialog(true)
       },
       icon: UilPlus,
-      userRight: isHaveFullRight,
       hidden: [OrderStatus.ordArchived, OrderStatus.reclArchived].includes(
         order.OrderStatusID
       )
@@ -286,17 +191,56 @@ export function OrderActions({ order }: { order: TOrder }) {
     {
       tip: 'Поменять что-то',
       handler: () => setEditMode(!editMode),
-      icon: editMode ? UilUnlock : UilLock,
-      userRight: isHaveFullRight
+      icon: editMode ? UilUnlock : UilLock
     }
   ]
 
   return (
     <Row>
       <Row>
-        <StatusButtons order={order} renderAlg={ActionButtonsRender} />
+        <SwitchOrderStatusBtn order={order} renderAlg={ActionButton} />
       </Row>
-      {ActionButtonsRender(buttons)}
+      {ActionButton(buttons)}
     </Row>
   )
+}
+
+export type ActionButton = {
+  tip: string
+  handler?: () => void
+  icon: Icon
+  hidden?: boolean
+  dialog?: React.ElementType
+  dialogHandler?: () => void
+}
+
+function ActionButton(arrayOfBtns: ActionButton[]) {
+  const renderResult = arrayOfBtns.map(each => {
+    if (each.hidden) return <></>
+
+    const btnComponent = (
+      <Tooltip title={each.tip}>
+        <IconButton
+          variant="soft"
+          color="neutral"
+          key={each.tip}
+          data-tip={each.tip}
+          onClick={each.handler}
+        >
+          <each.icon width={ICON_WIDTH} opacity={ICON_OPACITY} />
+        </IconButton>
+      </Tooltip>
+    )
+
+    return each.dialog ? (
+      <each.dialog handler={each.dialogHandler} key={each.tip}>
+        {btnComponent}
+      </each.dialog>
+    ) : (
+      btnComponent
+    )
+  })
+
+  if (!renderResult.filter(each => each).length) return null
+  return <Row gap={1}>{renderResult.filter(each => each)}</Row>
 }

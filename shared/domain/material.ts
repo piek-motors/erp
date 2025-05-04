@@ -1,5 +1,5 @@
 import { EnMaterialShape, EnUnit } from '../enumerations'
-import { formatMaterialShape, uiUnit } from '../enums.ui'
+import { uiMaterialShape, uiUnit } from '../enums.ui'
 import { MaterialShapeData } from '../shape-data'
 
 type Flag = {
@@ -41,6 +41,6 @@ export class Material {
   }
 
   shape() {
-    return formatMaterialShape(this.shapeId)
+    return uiMaterialShape(this.shapeId)
   }
 }

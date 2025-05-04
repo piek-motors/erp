@@ -120,7 +120,7 @@ function InputForm({ insertComment, inputRef }: InputFormProps) {
         <Textarea
           size="lg"
           variant="soft"
-          color="primary"
+          color="neutral"
           onChange={handleChange}
           value={value}
           placeholder="Комментарий к заказу"
@@ -300,7 +300,7 @@ export function CommentListViewPort({ user }: ICommentsListProps) {
 
   return (
     <Box>
-      <Box sx={{ overflow: 'scroll', p: 1 }}>
+      <Box sx={{ overflow: 'scroll' }}>
         {sortedComments.length > visibleComments && (
           <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
             <Button variant="soft" onClick={handleShowMore}>
@@ -326,10 +326,10 @@ export function CommentListViewPort({ user }: ICommentsListProps) {
 export function CommentInputViewPort({ user }: ICommentsListProps) {
   const { orderId } = useOrderDetailStore()
   if (!orderId) throw Error('Null OrderId at the local store')
-  const inputRef = useRef<HTMLInputElement>(null)
+  const inputRef = useRef<any>(null)
   return (
     <Box>
-      <Box sx={{ overflow: 'scroll', p: 1 }}>
+      <Box sx={{ overflow: 'scroll', py: 2 }}>
         <InputForm
           insertComment={async comment => {
             insertComment(comment, orderId, user.UserID)

@@ -1,6 +1,6 @@
 import { ChangeEvent } from 'react'
-import { OrderStatus } from 'src/types/global'
-import create from 'zustand'
+import { OrderStatus } from 'shared'
+import { create } from 'zustand'
 
 interface IOrderListPageStore {
   managerId: number

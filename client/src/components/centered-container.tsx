@@ -1,4 +1,5 @@
 import { Container, ContainerProps } from '@mui/joy'
+import { JSX } from 'react'
 import { SxProperty } from '../lib/constants'
 
 export function CenteredContainer(props: {

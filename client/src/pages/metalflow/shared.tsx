@@ -1,6 +1,7 @@
 import { UilArrowLeft, UilPen } from '@iconscout/react-unicons'
 
 import { Box, IconButton, Sheet, Stack, Tooltip, Typography } from '@mui/joy'
+import { JSX } from 'react'
 import { NavigateOptions, To, useNavigate } from 'react-router-dom'
 import { uiUnit } from 'shared'
 import { MyInput } from 'src/shortcuts'

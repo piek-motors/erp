@@ -1,5 +1,5 @@
 import { TOrderItem } from 'src/types/global'
-import create from 'zustand'
+import { create } from 'zustand'
 
 interface IOrderDetailState {
   editMode: boolean

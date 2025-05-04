@@ -2,18 +2,18 @@
 import { css } from '@emotion/react'
 import { UilTrash } from '@iconscout/react-unicons'
 import { Box, IconButton, Sheet, Stack } from '@mui/joy'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Material } from 'shared/domain'
 import { useInsertMaterialSupplyMutation } from 'src/types/graphql-shema'
 import { PageTitle } from '../../../components'
 import { Table } from '../../../components/table.impl'
 import { MetalFlowSys } from '../../../lib/routes'
 import { AddButton, SendMutation } from '../../../shortcuts'
+import { useNotifier } from '../../../store/notifier.store'
 import {
   useDeleteSupplyMutation,
   useGetSuppliesQuery
 } from '../../../types/graphql-shema'
-import { emitNotification } from '../../../utils/notification'
 import { QtyInputWithUnit, SmallInputForm } from '../shared'
 import { MaterialSelect } from '../shared/material-select'
 import { goTo } from '../spa'
@@ -101,18 +101,18 @@ export function AddSuply() {
 }
 
 export function DeleteSupply(props: { supplyId: number; refetch: () => void }) {
-  const [mut, { data }] = useDeleteSupplyMutation({
+  const notifier = useNotifier()
+  const [mut] = useDeleteSupplyMutation({
     variables: {
       id: props.supplyId
+    },
+    onCompleted() {
+      notifier.notify('info', 'Событие поствки удалено')
+    },
+    onError(e) {
+      notifier.notify('err', e.message)
     }
   })
-
-  useEffect(() => {
-    if (data) {
-      console.log('delete success')
-      emitNotification('success', 'Событие поствки удалено')
-    }
-  }, [data])
 
   return (
     <Stack direction="row-reverse" gap={1} className="delete-btn">

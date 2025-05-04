@@ -1,5 +1,5 @@
 export const t = {
-  Title: '"Заказы | Очередность выполнения"',
+  OrdersTitle: 'Очередность выполнения',
   Today: 'Сегодня',
   Yesterday: 'Вчера',
   FactShipment: 'Факт отгрузка',

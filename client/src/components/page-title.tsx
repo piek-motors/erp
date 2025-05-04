@@ -1,4 +1,5 @@
 import { Box, IconButton, Stack, Tooltip, Typography } from '@mui/joy'
+import React from 'react'
 import { Link } from 'react-router-dom'
 import { SxProperty } from 'src/lib/constants'
 import { Row } from '../shortcuts'
@@ -7,7 +8,7 @@ export interface Props {
   title: string
   subTitle?: string | null
   sx?: SxProperty
-  children?: JSX.Element
+  children?: React.ReactNode
 }
 
 export function PageTitle(props: Props) {
@@ -21,15 +22,16 @@ export function PageTitle(props: Props) {
         </Link>
       </Tooltip>
 
-      <Row gap={2}>
+      <Row gap={2} sx={props.sx}>
         <Typography color="primary" fontWeight={600}>
           {props.title}
         </Typography>
         {props.subTitle && (
           <Typography level="body-md">{props.subTitle}</Typography>
         )}
-        <Box sx={{ marginLeft: 'auto' }}>{props.children}</Box>
       </Row>
+
+      <Box>{props.children}</Box>
     </Stack>
   )
 }
