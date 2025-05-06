@@ -1,4 +1,5 @@
 /** @jsxImportSource @emotion/react */
+import React from 'react'
 import {
   Icon,
   UilClockThree,
@@ -27,48 +28,176 @@ import { useNotifier } from '../../store/notifier.store'
 import { DeleteOrderDialog } from './dialogs/delete-order-dialog'
 import { TransferOrderDialog } from './dialogs/transfer-order.dialog'
 
+// Types
+export type ActionButton = {
+  tip: string
+  handler?: () => void
+  icon: Icon
+  hidden?: boolean
+  dialog?: React.ElementType
+  dialogHandler?: () => void
+}
+
 interface IStatusButtonsProps {
   order: TOrder
-  renderAlg: any
+  renderAlg: (buttons: ActionButton[]) => React.ReactElement | null
+}
+
+// Custom hook for order mutations
+function useOrderMutations(orderId: number | null) {
+  const [mutationMoveOrderToArchive] = useMoveOrderToArchiveMutation()
+  const [mutationMoveOrderToPriority] = useMoveOrderToPriorityMutation()
+  const [mutationDeleteOrder] = useDeleteOrderMutation()
+  const [mutationAwaitingDispatch] = useUpdateAwaitingDispatchMutation()
+  const [mutationNeedAttention] = useUpdateNeedAttentionMutation()
+  const notifier = useNotifier()
+  const navigate = useNavigate()
+
+  const handleError = (error: Error) => {
+    notifier.notify('err', error.message)
+  }
+
+  const moveToArchive = async (OrderStatusID: number) => {
+    if (!orderId) throw Error('orderId is null')
+    try {
+      const res = await mutationMoveOrderToArchive({
+        variables: {
+          OrderID: orderId,
+          ActualShippingDate: new Date(),
+          OrderStatusID
+        }
+      })
+      if (res.errors) throw new Error(res.errors.toString())
+      notifier.notify('info', 'Заказ перенесен в архив')
+    } catch (error) {
+      handleError(error as Error)
+    }
+  }
+
+  const moveToPriority = async () => {
+    if (!orderId) throw Error('orderId is null')
+    try {
+      const res = await mutationMoveOrderToPriority({
+        variables: {
+          OrderID: orderId,
+          AcceptanceDate: new Date()
+        }
+      })
+      if (res.errors) throw new Error(res.errors.toString())
+      notifier.notify('info', 'Заказ внесен в очередность выполнения')
+    } catch (error) {
+      handleError(error as Error)
+    }
+  }
+
+  const deleteOrder = async (redirectPath: string) => {
+    if (!orderId) throw Error('orderId is null')
+    try {
+      const res = await mutationDeleteOrder({
+        variables: { OrderID: orderId }
+      })
+      if (res.errors) throw new Error(res.errors.toString())
+      navigate(redirectPath)
+    } catch (error) {
+      handleError(error as Error)
+    }
+  }
+
+  const updateAwaitingDispatch = async (order: TOrder) => {
+    try {
+      await mutationAwaitingDispatch({
+        variables: {
+          OrderID: order.OrderID,
+          AwaitingDispatch: !order.AwaitingDispatch
+        },
+        optimisticResponse: {
+          update_erp_Orders_by_pk: {
+            __typename: 'erp_Orders',
+            ...order,
+            AwaitingDispatch: !order.AwaitingDispatch
+          }
+        }
+      })
+    } catch (error) {
+      handleError(error as Error)
+    }
+  }
+
+  const updateNeedAttention = async (order: TOrder) => {
+    try {
+      await mutationNeedAttention({
+        variables: {
+          OrderID: order.OrderID,
+          NeedAttention: order.NeedAttention === 'true' ? 'false' : 'true'
+        }
+      })
+    } catch (error) {
+      handleError(error as Error)
+    }
+  }
+
+  return {
+    moveToArchive,
+    moveToPriority,
+    deleteOrder,
+    updateAwaitingDispatch,
+    updateNeedAttention
+  }
+}
+
+// Button rendering component
+const ActionButton = (buttons: ActionButton[]) => {
+  const renderResult = buttons
+    .filter(btn => !btn.hidden)
+    .map(btn => {
+      const btnComponent = (
+        <Tooltip title={btn.tip} key={btn.tip}>
+          <IconButton
+            variant="soft"
+            color="neutral"
+            data-tip={btn.tip}
+            onClick={btn.handler}
+          >
+            <btn.icon width={ICON_WIDTH} opacity={ICON_OPACITY} />
+          </IconButton>
+        </Tooltip>
+      )
+
+      return btn.dialog ? (
+        <btn.dialog handler={btn.dialogHandler} key={btn.tip}>
+          {btnComponent}
+        </btn.dialog>
+      ) : (
+        btnComponent
+      )
+    })
+
+  if (!renderResult.length) return null
+  return <Row gap={1}>{renderResult}</Row>
 }
 
 function SwitchOrderStatusBtn({ order, renderAlg }: IStatusButtonsProps) {
-  const [mutationAwaitingDispatch] = useUpdateAwaitingDispatchMutation()
-  const [mutationNeedAttention] = useUpdateNeedAttentionMutation()
-  return renderAlg([
+  const { updateAwaitingDispatch, updateNeedAttention } = useOrderMutations(
+    order.OrderID
+  )
+
+  const statusButtons: ActionButton[] = [
     {
       tip: text.orderRequiresSpectialAttention,
-      handler: () =>
-        mutationNeedAttention({
-          variables: {
-            OrderID: order.OrderID,
-            NeedAttention: order.NeedAttention === 'true' ? 'false' : 'true'
-          }
-        }),
+      handler: () => updateNeedAttention(order),
       icon: UilExclamationTriangle
     },
     {
       tip: text.orderReadyForDispatch,
-      handler: () =>
-        mutationAwaitingDispatch({
-          variables: {
-            OrderID: order.OrderID,
-            AwaitingDispatch: !order.AwaitingDispatch
-          },
-          optimisticResponse: {
-            update_erp_Orders_by_pk: {
-              __typename: 'erp_Orders',
-              ...order,
-              AwaitingDispatch: !order.AwaitingDispatch
-            }
-          }
-        }),
+      handler: () => updateAwaitingDispatch(order),
       icon: UilClockThree,
       hidden: ![OrderStatus.ordProduction, OrderStatus.reclProduction].includes(
         order.OrderStatusID
       )
     }
-  ])
+  ]
+
+  return renderAlg(statusButtons)
 }
 
 export function OrderActions({ order }: { order: TOrder }) {
@@ -80,12 +209,8 @@ export function OrderActions({ order }: { order: TOrder }) {
     setEditedOrderItem
   } = useOrderDetailStore()
 
-  const [mutationMoveOrderToArchive] = useMoveOrderToArchiveMutation()
-  const [mutationMoveOrderToPriority] = useMoveOrderToPriorityMutation()
-  const [mutationDeleteOrder] = useDeleteOrderMutation()
-
-  const navigate = useNavigate()
-  const notifier = useNotifier()
+  const { moveToArchive, moveToPriority, deleteOrder } =
+    useOrderMutations(orderId)
 
   const getResource = () => {
     if (
@@ -96,77 +221,33 @@ export function OrderActions({ order }: { order: TOrder }) {
       ].includes(order.OrderStatusID)
     )
       return '/reclamation'
-
     return '/'
-  }
-
-  async function orderCompleted(OrderStatusID: number) {
-    if (!orderId) throw Error('orderId is null')
-    mutationMoveOrderToArchive({
-      variables: {
-        OrderID: orderId,
-        ActualShippingDate: new Date(),
-        OrderStatusID
-      }
-    }).then(res => {
-      if (res.errors) throw new Error(res.errors.toString())
-      notifier.notify('info', 'Заказ перенесен в архив')
-    })
-  }
-
-  // Перекидывает предзаказ в очередность
-  async function transferOrderToPriority() {
-    if (!orderId) throw Error('orderId is null')
-
-    const res = await mutationMoveOrderToPriority({
-      variables: {
-        OrderID: orderId,
-        AcceptanceDate: new Date()
-      }
-    })
-    if (res.errors) throw new Error(res.errors.toString())
-    notifier.notify('info', 'Заказ внесен в очередность выполнения')
-  }
-
-  // для удаления заказа
-  function mutationDeleteOrderHandler() {
-    if (!orderId) throw Error('orderId is null')
-
-    mutationDeleteOrder({
-      variables: {
-        OrderID: orderId
-      }
-    }).then(res => {
-      if (res.errors) throw new Error(res.errors.toString())
-
-      navigate(getResource())
-    })
   }
 
   const buttons: ActionButton[] = [
     {
       tip: text.moveToPriority,
-      handler: transferOrderToPriority,
+      handler: moveToPriority,
       icon: UilFileCheck,
       hidden: ![OrderStatus.ordRegistration].includes(order.OrderStatusID)
     },
     {
       dialog: TransferOrderDialog,
-      dialogHandler: () => orderCompleted(3),
+      dialogHandler: () => moveToArchive(3),
       tip: text.orderCompleted,
       icon: UilTruck,
       hidden: ![OrderStatus.ordProduction].includes(order.OrderStatusID)
     },
     {
       dialog: TransferOrderDialog,
-      dialogHandler: () => orderCompleted(13),
+      dialogHandler: () => moveToArchive(13),
       tip: text.orderCompleted,
       icon: UilTruck,
       hidden: ![OrderStatus.reclProduction].includes(order.OrderStatusID)
     },
     {
       dialog: DeleteOrderDialog,
-      dialogHandler: mutationDeleteOrderHandler,
+      dialogHandler: () => deleteOrder(getResource()),
       tip: text.delete,
       icon: UilTrashAlt,
       hidden: ![
@@ -203,44 +284,4 @@ export function OrderActions({ order }: { order: TOrder }) {
       {ActionButton(buttons)}
     </Row>
   )
-}
-
-export type ActionButton = {
-  tip: string
-  handler?: () => void
-  icon: Icon
-  hidden?: boolean
-  dialog?: React.ElementType
-  dialogHandler?: () => void
-}
-
-function ActionButton(arrayOfBtns: ActionButton[]) {
-  const renderResult = arrayOfBtns.map(each => {
-    if (each.hidden) return <></>
-
-    const btnComponent = (
-      <Tooltip title={each.tip}>
-        <IconButton
-          variant="soft"
-          color="neutral"
-          key={each.tip}
-          data-tip={each.tip}
-          onClick={each.handler}
-        >
-          <each.icon width={ICON_WIDTH} opacity={ICON_OPACITY} />
-        </IconButton>
-      </Tooltip>
-    )
-
-    return each.dialog ? (
-      <each.dialog handler={each.dialogHandler} key={each.tip}>
-        {btnComponent}
-      </each.dialog>
-    ) : (
-      btnComponent
-    )
-  })
-
-  if (!renderResult.filter(each => each).length) return null
-  return <Row gap={1}>{renderResult.filter(each => each)}</Row>
 }

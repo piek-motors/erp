@@ -5,85 +5,87 @@ export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = { [_ in K]?: never };
+export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
 const defaultOptions = {} as const;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: string;
-  String: string;
-  Boolean: boolean;
-  Int: number;
-  Float: number;
-  date: any;
-  jsonb: any;
-  numeric: any;
-  timestamp: any;
-  timestamptz: any;
+  ID: { input: string; output: string; }
+  String: { input: string; output: string; }
+  Boolean: { input: boolean; output: boolean; }
+  Int: { input: number; output: number; }
+  Float: { input: number; output: number; }
+  date: { input: any; output: any; }
+  jsonb: { input: any; output: any; }
+  numeric: { input: any; output: any; }
+  timestamp: { input: any; output: any; }
+  timestamptz: { input: any; output: any; }
 };
 
 /** Boolean expression to compare columns of type "Boolean". All fields are combined with logical 'AND'. */
 export type Boolean_Comparison_Exp = {
-  _eq?: InputMaybe<Scalars['Boolean']>;
-  _gt?: InputMaybe<Scalars['Boolean']>;
-  _gte?: InputMaybe<Scalars['Boolean']>;
-  _in?: InputMaybe<Array<Scalars['Boolean']>>;
-  _is_null?: InputMaybe<Scalars['Boolean']>;
-  _lt?: InputMaybe<Scalars['Boolean']>;
-  _lte?: InputMaybe<Scalars['Boolean']>;
-  _neq?: InputMaybe<Scalars['Boolean']>;
-  _nin?: InputMaybe<Array<Scalars['Boolean']>>;
+  _eq?: InputMaybe<Scalars['Boolean']['input']>;
+  _gt?: InputMaybe<Scalars['Boolean']['input']>;
+  _gte?: InputMaybe<Scalars['Boolean']['input']>;
+  _in?: InputMaybe<Array<Scalars['Boolean']['input']>>;
+  _is_null?: InputMaybe<Scalars['Boolean']['input']>;
+  _lt?: InputMaybe<Scalars['Boolean']['input']>;
+  _lte?: InputMaybe<Scalars['Boolean']['input']>;
+  _neq?: InputMaybe<Scalars['Boolean']['input']>;
+  _nin?: InputMaybe<Array<Scalars['Boolean']['input']>>;
 };
 
 /** Boolean expression to compare columns of type "Int". All fields are combined with logical 'AND'. */
 export type Int_Comparison_Exp = {
-  _eq?: InputMaybe<Scalars['Int']>;
-  _gt?: InputMaybe<Scalars['Int']>;
-  _gte?: InputMaybe<Scalars['Int']>;
-  _in?: InputMaybe<Array<Scalars['Int']>>;
-  _is_null?: InputMaybe<Scalars['Boolean']>;
-  _lt?: InputMaybe<Scalars['Int']>;
-  _lte?: InputMaybe<Scalars['Int']>;
-  _neq?: InputMaybe<Scalars['Int']>;
-  _nin?: InputMaybe<Array<Scalars['Int']>>;
+  _eq?: InputMaybe<Scalars['Int']['input']>;
+  _gt?: InputMaybe<Scalars['Int']['input']>;
+  _gte?: InputMaybe<Scalars['Int']['input']>;
+  _in?: InputMaybe<Array<Scalars['Int']['input']>>;
+  _is_null?: InputMaybe<Scalars['Boolean']['input']>;
+  _lt?: InputMaybe<Scalars['Int']['input']>;
+  _lte?: InputMaybe<Scalars['Int']['input']>;
+  _neq?: InputMaybe<Scalars['Int']['input']>;
+  _nin?: InputMaybe<Array<Scalars['Int']['input']>>;
 };
 
 /** Boolean expression to compare columns of type "String". All fields are combined with logical 'AND'. */
 export type String_Comparison_Exp = {
-  _eq?: InputMaybe<Scalars['String']>;
-  _gt?: InputMaybe<Scalars['String']>;
-  _gte?: InputMaybe<Scalars['String']>;
+  _eq?: InputMaybe<Scalars['String']['input']>;
+  _gt?: InputMaybe<Scalars['String']['input']>;
+  _gte?: InputMaybe<Scalars['String']['input']>;
   /** does the column match the given case-insensitive pattern */
-  _ilike?: InputMaybe<Scalars['String']>;
-  _in?: InputMaybe<Array<Scalars['String']>>;
+  _ilike?: InputMaybe<Scalars['String']['input']>;
+  _in?: InputMaybe<Array<Scalars['String']['input']>>;
   /** does the column match the given POSIX regular expression, case insensitive */
-  _iregex?: InputMaybe<Scalars['String']>;
-  _is_null?: InputMaybe<Scalars['Boolean']>;
+  _iregex?: InputMaybe<Scalars['String']['input']>;
+  _is_null?: InputMaybe<Scalars['Boolean']['input']>;
   /** does the column match the given pattern */
-  _like?: InputMaybe<Scalars['String']>;
-  _lt?: InputMaybe<Scalars['String']>;
-  _lte?: InputMaybe<Scalars['String']>;
-  _neq?: InputMaybe<Scalars['String']>;
+  _like?: InputMaybe<Scalars['String']['input']>;
+  _lt?: InputMaybe<Scalars['String']['input']>;
+  _lte?: InputMaybe<Scalars['String']['input']>;
+  _neq?: InputMaybe<Scalars['String']['input']>;
   /** does the column NOT match the given case-insensitive pattern */
-  _nilike?: InputMaybe<Scalars['String']>;
-  _nin?: InputMaybe<Array<Scalars['String']>>;
+  _nilike?: InputMaybe<Scalars['String']['input']>;
+  _nin?: InputMaybe<Array<Scalars['String']['input']>>;
   /** does the column NOT match the given POSIX regular expression, case insensitive */
-  _niregex?: InputMaybe<Scalars['String']>;
+  _niregex?: InputMaybe<Scalars['String']['input']>;
   /** does the column NOT match the given pattern */
-  _nlike?: InputMaybe<Scalars['String']>;
+  _nlike?: InputMaybe<Scalars['String']['input']>;
   /** does the column NOT match the given POSIX regular expression, case sensitive */
-  _nregex?: InputMaybe<Scalars['String']>;
+  _nregex?: InputMaybe<Scalars['String']['input']>;
   /** does the column NOT match the given SQL regular expression */
-  _nsimilar?: InputMaybe<Scalars['String']>;
+  _nsimilar?: InputMaybe<Scalars['String']['input']>;
   /** does the column match the given POSIX regular expression, case sensitive */
-  _regex?: InputMaybe<Scalars['String']>;
+  _regex?: InputMaybe<Scalars['String']['input']>;
   /** does the column match the given SQL regular expression */
-  _similar?: InputMaybe<Scalars['String']>;
+  _similar?: InputMaybe<Scalars['String']['input']>;
 };
 
 /** columns and relationships of "attendance.config" */
 export type Attendance_Config = {
   __typename?: 'attendance_config';
-  ID: Scalars['Int'];
-  TimeDeduction: Scalars['numeric'];
+  ID: Scalars['Int']['output'];
+  TimeDeduction: Scalars['numeric']['output'];
 };
 
 /** aggregated selection of "attendance.config" */
@@ -97,7 +99,7 @@ export type Attendance_Config_Aggregate = {
 export type Attendance_Config_Aggregate_Fields = {
   __typename?: 'attendance_config_aggregate_fields';
   avg?: Maybe<Attendance_Config_Avg_Fields>;
-  count: Scalars['Int'];
+  count: Scalars['Int']['output'];
   max?: Maybe<Attendance_Config_Max_Fields>;
   min?: Maybe<Attendance_Config_Min_Fields>;
   stddev?: Maybe<Attendance_Config_Stddev_Fields>;
@@ -113,14 +115,14 @@ export type Attendance_Config_Aggregate_Fields = {
 /** aggregate fields of "attendance.config" */
 export type Attendance_Config_Aggregate_FieldsCountArgs = {
   columns?: InputMaybe<Array<Attendance_Config_Select_Column>>;
-  distinct?: InputMaybe<Scalars['Boolean']>;
+  distinct?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 /** aggregate avg on columns */
 export type Attendance_Config_Avg_Fields = {
   __typename?: 'attendance_config_avg_fields';
-  ID?: Maybe<Scalars['Float']>;
-  TimeDeduction?: Maybe<Scalars['Float']>;
+  ID?: Maybe<Scalars['Float']['output']>;
+  TimeDeduction?: Maybe<Scalars['Float']['output']>;
 };
 
 /** Boolean expression to filter rows from the table "attendance.config". All fields are combined with a logical 'AND'. */
@@ -140,35 +142,35 @@ export enum Attendance_Config_Constraint {
 
 /** input type for incrementing numeric columns in table "attendance.config" */
 export type Attendance_Config_Inc_Input = {
-  ID?: InputMaybe<Scalars['Int']>;
-  TimeDeduction?: InputMaybe<Scalars['numeric']>;
+  ID?: InputMaybe<Scalars['Int']['input']>;
+  TimeDeduction?: InputMaybe<Scalars['numeric']['input']>;
 };
 
 /** input type for inserting data into table "attendance.config" */
 export type Attendance_Config_Insert_Input = {
-  ID?: InputMaybe<Scalars['Int']>;
-  TimeDeduction?: InputMaybe<Scalars['numeric']>;
+  ID?: InputMaybe<Scalars['Int']['input']>;
+  TimeDeduction?: InputMaybe<Scalars['numeric']['input']>;
 };
 
 /** aggregate max on columns */
 export type Attendance_Config_Max_Fields = {
   __typename?: 'attendance_config_max_fields';
-  ID?: Maybe<Scalars['Int']>;
-  TimeDeduction?: Maybe<Scalars['numeric']>;
+  ID?: Maybe<Scalars['Int']['output']>;
+  TimeDeduction?: Maybe<Scalars['numeric']['output']>;
 };
 
 /** aggregate min on columns */
 export type Attendance_Config_Min_Fields = {
   __typename?: 'attendance_config_min_fields';
-  ID?: Maybe<Scalars['Int']>;
-  TimeDeduction?: Maybe<Scalars['numeric']>;
+  ID?: Maybe<Scalars['Int']['output']>;
+  TimeDeduction?: Maybe<Scalars['numeric']['output']>;
 };
 
 /** response of any mutation on the table "attendance.config" */
 export type Attendance_Config_Mutation_Response = {
   __typename?: 'attendance_config_mutation_response';
   /** number of rows affected by the mutation */
-  affected_rows: Scalars['Int'];
+  affected_rows: Scalars['Int']['output'];
   /** data from the rows affected by the mutation */
   returning: Array<Attendance_Config>;
 };
@@ -188,7 +190,7 @@ export type Attendance_Config_Order_By = {
 
 /** primary key columns input for table: attendance.config */
 export type Attendance_Config_Pk_Columns_Input = {
-  ID: Scalars['Int'];
+  ID: Scalars['Int']['input'];
 };
 
 /** select columns of table "attendance.config" */
@@ -201,29 +203,29 @@ export enum Attendance_Config_Select_Column {
 
 /** input type for updating data in table "attendance.config" */
 export type Attendance_Config_Set_Input = {
-  ID?: InputMaybe<Scalars['Int']>;
-  TimeDeduction?: InputMaybe<Scalars['numeric']>;
+  ID?: InputMaybe<Scalars['Int']['input']>;
+  TimeDeduction?: InputMaybe<Scalars['numeric']['input']>;
 };
 
 /** aggregate stddev on columns */
 export type Attendance_Config_Stddev_Fields = {
   __typename?: 'attendance_config_stddev_fields';
-  ID?: Maybe<Scalars['Float']>;
-  TimeDeduction?: Maybe<Scalars['Float']>;
+  ID?: Maybe<Scalars['Float']['output']>;
+  TimeDeduction?: Maybe<Scalars['Float']['output']>;
 };
 
 /** aggregate stddev_pop on columns */
 export type Attendance_Config_Stddev_Pop_Fields = {
   __typename?: 'attendance_config_stddev_pop_fields';
-  ID?: Maybe<Scalars['Float']>;
-  TimeDeduction?: Maybe<Scalars['Float']>;
+  ID?: Maybe<Scalars['Float']['output']>;
+  TimeDeduction?: Maybe<Scalars['Float']['output']>;
 };
 
 /** aggregate stddev_samp on columns */
 export type Attendance_Config_Stddev_Samp_Fields = {
   __typename?: 'attendance_config_stddev_samp_fields';
-  ID?: Maybe<Scalars['Float']>;
-  TimeDeduction?: Maybe<Scalars['Float']>;
+  ID?: Maybe<Scalars['Float']['output']>;
+  TimeDeduction?: Maybe<Scalars['Float']['output']>;
 };
 
 /** Streaming cursor of the table "attendance_config" */
@@ -236,15 +238,15 @@ export type Attendance_Config_Stream_Cursor_Input = {
 
 /** Initial value of the column from where the streaming should start */
 export type Attendance_Config_Stream_Cursor_Value_Input = {
-  ID?: InputMaybe<Scalars['Int']>;
-  TimeDeduction?: InputMaybe<Scalars['numeric']>;
+  ID?: InputMaybe<Scalars['Int']['input']>;
+  TimeDeduction?: InputMaybe<Scalars['numeric']['input']>;
 };
 
 /** aggregate sum on columns */
 export type Attendance_Config_Sum_Fields = {
   __typename?: 'attendance_config_sum_fields';
-  ID?: Maybe<Scalars['Int']>;
-  TimeDeduction?: Maybe<Scalars['numeric']>;
+  ID?: Maybe<Scalars['Int']['output']>;
+  TimeDeduction?: Maybe<Scalars['numeric']['output']>;
 };
 
 /** update columns of table "attendance.config" */
@@ -267,33 +269,33 @@ export type Attendance_Config_Updates = {
 /** aggregate var_pop on columns */
 export type Attendance_Config_Var_Pop_Fields = {
   __typename?: 'attendance_config_var_pop_fields';
-  ID?: Maybe<Scalars['Float']>;
-  TimeDeduction?: Maybe<Scalars['Float']>;
+  ID?: Maybe<Scalars['Float']['output']>;
+  TimeDeduction?: Maybe<Scalars['Float']['output']>;
 };
 
 /** aggregate var_samp on columns */
 export type Attendance_Config_Var_Samp_Fields = {
   __typename?: 'attendance_config_var_samp_fields';
-  ID?: Maybe<Scalars['Float']>;
-  TimeDeduction?: Maybe<Scalars['Float']>;
+  ID?: Maybe<Scalars['Float']['output']>;
+  TimeDeduction?: Maybe<Scalars['Float']['output']>;
 };
 
 /** aggregate variance on columns */
 export type Attendance_Config_Variance_Fields = {
   __typename?: 'attendance_config_variance_fields';
-  ID?: Maybe<Scalars['Float']>;
-  TimeDeduction?: Maybe<Scalars['Float']>;
+  ID?: Maybe<Scalars['Float']['output']>;
+  TimeDeduction?: Maybe<Scalars['Float']['output']>;
 };
 
 /** columns and relationships of "attendance.intervals" */
 export type Attendance_Intervals = {
   __typename?: 'attendance_intervals';
-  card: Scalars['String'];
-  database?: Maybe<Scalars['String']>;
-  ent?: Maybe<Scalars['timestamp']>;
-  ent_event_id: Scalars['Int'];
-  ext?: Maybe<Scalars['timestamp']>;
-  ext_event_id?: Maybe<Scalars['Int']>;
+  card: Scalars['String']['output'];
+  database?: Maybe<Scalars['String']['output']>;
+  ent?: Maybe<Scalars['timestamp']['output']>;
+  ent_event_id: Scalars['Int']['output'];
+  ext?: Maybe<Scalars['timestamp']['output']>;
+  ext_event_id?: Maybe<Scalars['Int']['output']>;
   /** An object relationship */
   user: Attendance_Users;
 };
@@ -311,7 +313,7 @@ export type Attendance_Intervals_Aggregate_Bool_Exp = {
 
 export type Attendance_Intervals_Aggregate_Bool_Exp_Count = {
   arguments?: InputMaybe<Array<Attendance_Intervals_Select_Column>>;
-  distinct?: InputMaybe<Scalars['Boolean']>;
+  distinct?: InputMaybe<Scalars['Boolean']['input']>;
   filter?: InputMaybe<Attendance_Intervals_Bool_Exp>;
   predicate: Int_Comparison_Exp;
 };
@@ -320,7 +322,7 @@ export type Attendance_Intervals_Aggregate_Bool_Exp_Count = {
 export type Attendance_Intervals_Aggregate_Fields = {
   __typename?: 'attendance_intervals_aggregate_fields';
   avg?: Maybe<Attendance_Intervals_Avg_Fields>;
-  count: Scalars['Int'];
+  count: Scalars['Int']['output'];
   max?: Maybe<Attendance_Intervals_Max_Fields>;
   min?: Maybe<Attendance_Intervals_Min_Fields>;
   stddev?: Maybe<Attendance_Intervals_Stddev_Fields>;
@@ -336,7 +338,7 @@ export type Attendance_Intervals_Aggregate_Fields = {
 /** aggregate fields of "attendance.intervals" */
 export type Attendance_Intervals_Aggregate_FieldsCountArgs = {
   columns?: InputMaybe<Array<Attendance_Intervals_Select_Column>>;
-  distinct?: InputMaybe<Scalars['Boolean']>;
+  distinct?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 /** order by aggregate values of table "attendance.intervals" */
@@ -364,8 +366,8 @@ export type Attendance_Intervals_Arr_Rel_Insert_Input = {
 /** aggregate avg on columns */
 export type Attendance_Intervals_Avg_Fields = {
   __typename?: 'attendance_intervals_avg_fields';
-  ent_event_id?: Maybe<Scalars['Float']>;
-  ext_event_id?: Maybe<Scalars['Float']>;
+  ent_event_id?: Maybe<Scalars['Float']['output']>;
+  ext_event_id?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by avg() on columns of table "attendance.intervals" */
@@ -398,30 +400,30 @@ export enum Attendance_Intervals_Constraint {
 
 /** input type for incrementing numeric columns in table "attendance.intervals" */
 export type Attendance_Intervals_Inc_Input = {
-  ent_event_id?: InputMaybe<Scalars['Int']>;
-  ext_event_id?: InputMaybe<Scalars['Int']>;
+  ent_event_id?: InputMaybe<Scalars['Int']['input']>;
+  ext_event_id?: InputMaybe<Scalars['Int']['input']>;
 };
 
 /** input type for inserting data into table "attendance.intervals" */
 export type Attendance_Intervals_Insert_Input = {
-  card?: InputMaybe<Scalars['String']>;
-  database?: InputMaybe<Scalars['String']>;
-  ent?: InputMaybe<Scalars['timestamp']>;
-  ent_event_id?: InputMaybe<Scalars['Int']>;
-  ext?: InputMaybe<Scalars['timestamp']>;
-  ext_event_id?: InputMaybe<Scalars['Int']>;
+  card?: InputMaybe<Scalars['String']['input']>;
+  database?: InputMaybe<Scalars['String']['input']>;
+  ent?: InputMaybe<Scalars['timestamp']['input']>;
+  ent_event_id?: InputMaybe<Scalars['Int']['input']>;
+  ext?: InputMaybe<Scalars['timestamp']['input']>;
+  ext_event_id?: InputMaybe<Scalars['Int']['input']>;
   user?: InputMaybe<Attendance_Users_Obj_Rel_Insert_Input>;
 };
 
 /** aggregate max on columns */
 export type Attendance_Intervals_Max_Fields = {
   __typename?: 'attendance_intervals_max_fields';
-  card?: Maybe<Scalars['String']>;
-  database?: Maybe<Scalars['String']>;
-  ent?: Maybe<Scalars['timestamp']>;
-  ent_event_id?: Maybe<Scalars['Int']>;
-  ext?: Maybe<Scalars['timestamp']>;
-  ext_event_id?: Maybe<Scalars['Int']>;
+  card?: Maybe<Scalars['String']['output']>;
+  database?: Maybe<Scalars['String']['output']>;
+  ent?: Maybe<Scalars['timestamp']['output']>;
+  ent_event_id?: Maybe<Scalars['Int']['output']>;
+  ext?: Maybe<Scalars['timestamp']['output']>;
+  ext_event_id?: Maybe<Scalars['Int']['output']>;
 };
 
 /** order by max() on columns of table "attendance.intervals" */
@@ -437,12 +439,12 @@ export type Attendance_Intervals_Max_Order_By = {
 /** aggregate min on columns */
 export type Attendance_Intervals_Min_Fields = {
   __typename?: 'attendance_intervals_min_fields';
-  card?: Maybe<Scalars['String']>;
-  database?: Maybe<Scalars['String']>;
-  ent?: Maybe<Scalars['timestamp']>;
-  ent_event_id?: Maybe<Scalars['Int']>;
-  ext?: Maybe<Scalars['timestamp']>;
-  ext_event_id?: Maybe<Scalars['Int']>;
+  card?: Maybe<Scalars['String']['output']>;
+  database?: Maybe<Scalars['String']['output']>;
+  ent?: Maybe<Scalars['timestamp']['output']>;
+  ent_event_id?: Maybe<Scalars['Int']['output']>;
+  ext?: Maybe<Scalars['timestamp']['output']>;
+  ext_event_id?: Maybe<Scalars['Int']['output']>;
 };
 
 /** order by min() on columns of table "attendance.intervals" */
@@ -459,7 +461,7 @@ export type Attendance_Intervals_Min_Order_By = {
 export type Attendance_Intervals_Mutation_Response = {
   __typename?: 'attendance_intervals_mutation_response';
   /** number of rows affected by the mutation */
-  affected_rows: Scalars['Int'];
+  affected_rows: Scalars['Int']['output'];
   /** data from the rows affected by the mutation */
   returning: Array<Attendance_Intervals>;
 };
@@ -484,8 +486,8 @@ export type Attendance_Intervals_Order_By = {
 
 /** primary key columns input for table: attendance.intervals */
 export type Attendance_Intervals_Pk_Columns_Input = {
-  card: Scalars['String'];
-  ent_event_id: Scalars['Int'];
+  card: Scalars['String']['input'];
+  ent_event_id: Scalars['Int']['input'];
 };
 
 /** select columns of table "attendance.intervals" */
@@ -506,19 +508,19 @@ export enum Attendance_Intervals_Select_Column {
 
 /** input type for updating data in table "attendance.intervals" */
 export type Attendance_Intervals_Set_Input = {
-  card?: InputMaybe<Scalars['String']>;
-  database?: InputMaybe<Scalars['String']>;
-  ent?: InputMaybe<Scalars['timestamp']>;
-  ent_event_id?: InputMaybe<Scalars['Int']>;
-  ext?: InputMaybe<Scalars['timestamp']>;
-  ext_event_id?: InputMaybe<Scalars['Int']>;
+  card?: InputMaybe<Scalars['String']['input']>;
+  database?: InputMaybe<Scalars['String']['input']>;
+  ent?: InputMaybe<Scalars['timestamp']['input']>;
+  ent_event_id?: InputMaybe<Scalars['Int']['input']>;
+  ext?: InputMaybe<Scalars['timestamp']['input']>;
+  ext_event_id?: InputMaybe<Scalars['Int']['input']>;
 };
 
 /** aggregate stddev on columns */
 export type Attendance_Intervals_Stddev_Fields = {
   __typename?: 'attendance_intervals_stddev_fields';
-  ent_event_id?: Maybe<Scalars['Float']>;
-  ext_event_id?: Maybe<Scalars['Float']>;
+  ent_event_id?: Maybe<Scalars['Float']['output']>;
+  ext_event_id?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by stddev() on columns of table "attendance.intervals" */
@@ -530,8 +532,8 @@ export type Attendance_Intervals_Stddev_Order_By = {
 /** aggregate stddev_pop on columns */
 export type Attendance_Intervals_Stddev_Pop_Fields = {
   __typename?: 'attendance_intervals_stddev_pop_fields';
-  ent_event_id?: Maybe<Scalars['Float']>;
-  ext_event_id?: Maybe<Scalars['Float']>;
+  ent_event_id?: Maybe<Scalars['Float']['output']>;
+  ext_event_id?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by stddev_pop() on columns of table "attendance.intervals" */
@@ -543,8 +545,8 @@ export type Attendance_Intervals_Stddev_Pop_Order_By = {
 /** aggregate stddev_samp on columns */
 export type Attendance_Intervals_Stddev_Samp_Fields = {
   __typename?: 'attendance_intervals_stddev_samp_fields';
-  ent_event_id?: Maybe<Scalars['Float']>;
-  ext_event_id?: Maybe<Scalars['Float']>;
+  ent_event_id?: Maybe<Scalars['Float']['output']>;
+  ext_event_id?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by stddev_samp() on columns of table "attendance.intervals" */
@@ -563,19 +565,19 @@ export type Attendance_Intervals_Stream_Cursor_Input = {
 
 /** Initial value of the column from where the streaming should start */
 export type Attendance_Intervals_Stream_Cursor_Value_Input = {
-  card?: InputMaybe<Scalars['String']>;
-  database?: InputMaybe<Scalars['String']>;
-  ent?: InputMaybe<Scalars['timestamp']>;
-  ent_event_id?: InputMaybe<Scalars['Int']>;
-  ext?: InputMaybe<Scalars['timestamp']>;
-  ext_event_id?: InputMaybe<Scalars['Int']>;
+  card?: InputMaybe<Scalars['String']['input']>;
+  database?: InputMaybe<Scalars['String']['input']>;
+  ent?: InputMaybe<Scalars['timestamp']['input']>;
+  ent_event_id?: InputMaybe<Scalars['Int']['input']>;
+  ext?: InputMaybe<Scalars['timestamp']['input']>;
+  ext_event_id?: InputMaybe<Scalars['Int']['input']>;
 };
 
 /** aggregate sum on columns */
 export type Attendance_Intervals_Sum_Fields = {
   __typename?: 'attendance_intervals_sum_fields';
-  ent_event_id?: Maybe<Scalars['Int']>;
-  ext_event_id?: Maybe<Scalars['Int']>;
+  ent_event_id?: Maybe<Scalars['Int']['output']>;
+  ext_event_id?: Maybe<Scalars['Int']['output']>;
 };
 
 /** order by sum() on columns of table "attendance.intervals" */
@@ -612,8 +614,8 @@ export type Attendance_Intervals_Updates = {
 /** aggregate var_pop on columns */
 export type Attendance_Intervals_Var_Pop_Fields = {
   __typename?: 'attendance_intervals_var_pop_fields';
-  ent_event_id?: Maybe<Scalars['Float']>;
-  ext_event_id?: Maybe<Scalars['Float']>;
+  ent_event_id?: Maybe<Scalars['Float']['output']>;
+  ext_event_id?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by var_pop() on columns of table "attendance.intervals" */
@@ -625,8 +627,8 @@ export type Attendance_Intervals_Var_Pop_Order_By = {
 /** aggregate var_samp on columns */
 export type Attendance_Intervals_Var_Samp_Fields = {
   __typename?: 'attendance_intervals_var_samp_fields';
-  ent_event_id?: Maybe<Scalars['Float']>;
-  ext_event_id?: Maybe<Scalars['Float']>;
+  ent_event_id?: Maybe<Scalars['Float']['output']>;
+  ext_event_id?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by var_samp() on columns of table "attendance.intervals" */
@@ -638,8 +640,8 @@ export type Attendance_Intervals_Var_Samp_Order_By = {
 /** aggregate variance on columns */
 export type Attendance_Intervals_Variance_Fields = {
   __typename?: 'attendance_intervals_variance_fields';
-  ent_event_id?: Maybe<Scalars['Float']>;
-  ext_event_id?: Maybe<Scalars['Float']>;
+  ent_event_id?: Maybe<Scalars['Float']['output']>;
+  ext_event_id?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by variance() on columns of table "attendance.intervals" */
@@ -651,23 +653,23 @@ export type Attendance_Intervals_Variance_Order_By = {
 /** columns and relationships of "attendance.users" */
 export type Attendance_Users = {
   __typename?: 'attendance_users';
-  card?: Maybe<Scalars['String']>;
-  created_at?: Maybe<Scalars['timestamp']>;
-  firstname?: Maybe<Scalars['String']>;
-  id: Scalars['Int'];
+  card?: Maybe<Scalars['String']['output']>;
+  created_at?: Maybe<Scalars['timestamp']['output']>;
+  firstname?: Maybe<Scalars['String']['output']>;
+  id: Scalars['Int']['output'];
   /** An array relationship */
   intervals: Array<Attendance_Intervals>;
   /** An aggregate relationship */
   intervals_aggregate: Attendance_Intervals_Aggregate;
-  lastname?: Maybe<Scalars['String']>;
+  lastname?: Maybe<Scalars['String']['output']>;
 };
 
 
 /** columns and relationships of "attendance.users" */
 export type Attendance_UsersIntervalsArgs = {
   distinct_on?: InputMaybe<Array<Attendance_Intervals_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Attendance_Intervals_Order_By>>;
   where?: InputMaybe<Attendance_Intervals_Bool_Exp>;
 };
@@ -676,8 +678,8 @@ export type Attendance_UsersIntervalsArgs = {
 /** columns and relationships of "attendance.users" */
 export type Attendance_UsersIntervals_AggregateArgs = {
   distinct_on?: InputMaybe<Array<Attendance_Intervals_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Attendance_Intervals_Order_By>>;
   where?: InputMaybe<Attendance_Intervals_Bool_Exp>;
 };
@@ -693,7 +695,7 @@ export type Attendance_Users_Aggregate = {
 export type Attendance_Users_Aggregate_Fields = {
   __typename?: 'attendance_users_aggregate_fields';
   avg?: Maybe<Attendance_Users_Avg_Fields>;
-  count: Scalars['Int'];
+  count: Scalars['Int']['output'];
   max?: Maybe<Attendance_Users_Max_Fields>;
   min?: Maybe<Attendance_Users_Min_Fields>;
   stddev?: Maybe<Attendance_Users_Stddev_Fields>;
@@ -709,13 +711,13 @@ export type Attendance_Users_Aggregate_Fields = {
 /** aggregate fields of "attendance.users" */
 export type Attendance_Users_Aggregate_FieldsCountArgs = {
   columns?: InputMaybe<Array<Attendance_Users_Select_Column>>;
-  distinct?: InputMaybe<Scalars['Boolean']>;
+  distinct?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 /** aggregate avg on columns */
 export type Attendance_Users_Avg_Fields = {
   __typename?: 'attendance_users_avg_fields';
-  id?: Maybe<Scalars['Float']>;
+  id?: Maybe<Scalars['Float']['output']>;
 };
 
 /** Boolean expression to filter rows from the table "attendance.users". All fields are combined with a logical 'AND'. */
@@ -744,44 +746,44 @@ export enum Attendance_Users_Constraint {
 
 /** input type for incrementing numeric columns in table "attendance.users" */
 export type Attendance_Users_Inc_Input = {
-  id?: InputMaybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']['input']>;
 };
 
 /** input type for inserting data into table "attendance.users" */
 export type Attendance_Users_Insert_Input = {
-  card?: InputMaybe<Scalars['String']>;
-  created_at?: InputMaybe<Scalars['timestamp']>;
-  firstname?: InputMaybe<Scalars['String']>;
-  id?: InputMaybe<Scalars['Int']>;
+  card?: InputMaybe<Scalars['String']['input']>;
+  created_at?: InputMaybe<Scalars['timestamp']['input']>;
+  firstname?: InputMaybe<Scalars['String']['input']>;
+  id?: InputMaybe<Scalars['Int']['input']>;
   intervals?: InputMaybe<Attendance_Intervals_Arr_Rel_Insert_Input>;
-  lastname?: InputMaybe<Scalars['String']>;
+  lastname?: InputMaybe<Scalars['String']['input']>;
 };
 
 /** aggregate max on columns */
 export type Attendance_Users_Max_Fields = {
   __typename?: 'attendance_users_max_fields';
-  card?: Maybe<Scalars['String']>;
-  created_at?: Maybe<Scalars['timestamp']>;
-  firstname?: Maybe<Scalars['String']>;
-  id?: Maybe<Scalars['Int']>;
-  lastname?: Maybe<Scalars['String']>;
+  card?: Maybe<Scalars['String']['output']>;
+  created_at?: Maybe<Scalars['timestamp']['output']>;
+  firstname?: Maybe<Scalars['String']['output']>;
+  id?: Maybe<Scalars['Int']['output']>;
+  lastname?: Maybe<Scalars['String']['output']>;
 };
 
 /** aggregate min on columns */
 export type Attendance_Users_Min_Fields = {
   __typename?: 'attendance_users_min_fields';
-  card?: Maybe<Scalars['String']>;
-  created_at?: Maybe<Scalars['timestamp']>;
-  firstname?: Maybe<Scalars['String']>;
-  id?: Maybe<Scalars['Int']>;
-  lastname?: Maybe<Scalars['String']>;
+  card?: Maybe<Scalars['String']['output']>;
+  created_at?: Maybe<Scalars['timestamp']['output']>;
+  firstname?: Maybe<Scalars['String']['output']>;
+  id?: Maybe<Scalars['Int']['output']>;
+  lastname?: Maybe<Scalars['String']['output']>;
 };
 
 /** response of any mutation on the table "attendance.users" */
 export type Attendance_Users_Mutation_Response = {
   __typename?: 'attendance_users_mutation_response';
   /** number of rows affected by the mutation */
-  affected_rows: Scalars['Int'];
+  affected_rows: Scalars['Int']['output'];
   /** data from the rows affected by the mutation */
   returning: Array<Attendance_Users>;
 };
@@ -812,7 +814,7 @@ export type Attendance_Users_Order_By = {
 
 /** primary key columns input for table: attendance.users */
 export type Attendance_Users_Pk_Columns_Input = {
-  id: Scalars['Int'];
+  id: Scalars['Int']['input'];
 };
 
 /** select columns of table "attendance.users" */
@@ -831,29 +833,29 @@ export enum Attendance_Users_Select_Column {
 
 /** input type for updating data in table "attendance.users" */
 export type Attendance_Users_Set_Input = {
-  card?: InputMaybe<Scalars['String']>;
-  created_at?: InputMaybe<Scalars['timestamp']>;
-  firstname?: InputMaybe<Scalars['String']>;
-  id?: InputMaybe<Scalars['Int']>;
-  lastname?: InputMaybe<Scalars['String']>;
+  card?: InputMaybe<Scalars['String']['input']>;
+  created_at?: InputMaybe<Scalars['timestamp']['input']>;
+  firstname?: InputMaybe<Scalars['String']['input']>;
+  id?: InputMaybe<Scalars['Int']['input']>;
+  lastname?: InputMaybe<Scalars['String']['input']>;
 };
 
 /** aggregate stddev on columns */
 export type Attendance_Users_Stddev_Fields = {
   __typename?: 'attendance_users_stddev_fields';
-  id?: Maybe<Scalars['Float']>;
+  id?: Maybe<Scalars['Float']['output']>;
 };
 
 /** aggregate stddev_pop on columns */
 export type Attendance_Users_Stddev_Pop_Fields = {
   __typename?: 'attendance_users_stddev_pop_fields';
-  id?: Maybe<Scalars['Float']>;
+  id?: Maybe<Scalars['Float']['output']>;
 };
 
 /** aggregate stddev_samp on columns */
 export type Attendance_Users_Stddev_Samp_Fields = {
   __typename?: 'attendance_users_stddev_samp_fields';
-  id?: Maybe<Scalars['Float']>;
+  id?: Maybe<Scalars['Float']['output']>;
 };
 
 /** Streaming cursor of the table "attendance_users" */
@@ -866,17 +868,17 @@ export type Attendance_Users_Stream_Cursor_Input = {
 
 /** Initial value of the column from where the streaming should start */
 export type Attendance_Users_Stream_Cursor_Value_Input = {
-  card?: InputMaybe<Scalars['String']>;
-  created_at?: InputMaybe<Scalars['timestamp']>;
-  firstname?: InputMaybe<Scalars['String']>;
-  id?: InputMaybe<Scalars['Int']>;
-  lastname?: InputMaybe<Scalars['String']>;
+  card?: InputMaybe<Scalars['String']['input']>;
+  created_at?: InputMaybe<Scalars['timestamp']['input']>;
+  firstname?: InputMaybe<Scalars['String']['input']>;
+  id?: InputMaybe<Scalars['Int']['input']>;
+  lastname?: InputMaybe<Scalars['String']['input']>;
 };
 
 /** aggregate sum on columns */
 export type Attendance_Users_Sum_Fields = {
   __typename?: 'attendance_users_sum_fields';
-  id?: Maybe<Scalars['Int']>;
+  id?: Maybe<Scalars['Int']['output']>;
 };
 
 /** update columns of table "attendance.users" */
@@ -905,19 +907,19 @@ export type Attendance_Users_Updates = {
 /** aggregate var_pop on columns */
 export type Attendance_Users_Var_Pop_Fields = {
   __typename?: 'attendance_users_var_pop_fields';
-  id?: Maybe<Scalars['Float']>;
+  id?: Maybe<Scalars['Float']['output']>;
 };
 
 /** aggregate var_samp on columns */
 export type Attendance_Users_Var_Samp_Fields = {
   __typename?: 'attendance_users_var_samp_fields';
-  id?: Maybe<Scalars['Float']>;
+  id?: Maybe<Scalars['Float']['output']>;
 };
 
 /** aggregate variance on columns */
 export type Attendance_Users_Variance_Fields = {
   __typename?: 'attendance_users_variance_fields';
-  id?: Maybe<Scalars['Float']>;
+  id?: Maybe<Scalars['Float']['output']>;
 };
 
 /** ordering argument of a cursor */
@@ -930,22 +932,22 @@ export enum Cursor_Ordering {
 
 /** Boolean expression to compare columns of type "date". All fields are combined with logical 'AND'. */
 export type Date_Comparison_Exp = {
-  _eq?: InputMaybe<Scalars['date']>;
-  _gt?: InputMaybe<Scalars['date']>;
-  _gte?: InputMaybe<Scalars['date']>;
-  _in?: InputMaybe<Array<Scalars['date']>>;
-  _is_null?: InputMaybe<Scalars['Boolean']>;
-  _lt?: InputMaybe<Scalars['date']>;
-  _lte?: InputMaybe<Scalars['date']>;
-  _neq?: InputMaybe<Scalars['date']>;
-  _nin?: InputMaybe<Array<Scalars['date']>>;
+  _eq?: InputMaybe<Scalars['date']['input']>;
+  _gt?: InputMaybe<Scalars['date']['input']>;
+  _gte?: InputMaybe<Scalars['date']['input']>;
+  _in?: InputMaybe<Array<Scalars['date']['input']>>;
+  _is_null?: InputMaybe<Scalars['Boolean']['input']>;
+  _lt?: InputMaybe<Scalars['date']['input']>;
+  _lte?: InputMaybe<Scalars['date']['input']>;
+  _neq?: InputMaybe<Scalars['date']['input']>;
+  _nin?: InputMaybe<Array<Scalars['date']['input']>>;
 };
 
 /** columns and relationships of "erp.AccessLevels" */
 export type Erp_AccessLevels = {
   __typename?: 'erp_AccessLevels';
-  AccessLevelID: Scalars['Int'];
-  Name: Scalars['String'];
+  AccessLevelID: Scalars['Int']['output'];
+  Name: Scalars['String']['output'];
   /** An array relationship */
   Users: Array<Erp_Users>;
   /** An aggregate relationship */
@@ -956,8 +958,8 @@ export type Erp_AccessLevels = {
 /** columns and relationships of "erp.AccessLevels" */
 export type Erp_AccessLevelsUsersArgs = {
   distinct_on?: InputMaybe<Array<Erp_Users_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Erp_Users_Order_By>>;
   where?: InputMaybe<Erp_Users_Bool_Exp>;
 };
@@ -966,8 +968,8 @@ export type Erp_AccessLevelsUsersArgs = {
 /** columns and relationships of "erp.AccessLevels" */
 export type Erp_AccessLevelsUsers_AggregateArgs = {
   distinct_on?: InputMaybe<Array<Erp_Users_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Erp_Users_Order_By>>;
   where?: InputMaybe<Erp_Users_Bool_Exp>;
 };
@@ -983,7 +985,7 @@ export type Erp_AccessLevels_Aggregate = {
 export type Erp_AccessLevels_Aggregate_Fields = {
   __typename?: 'erp_AccessLevels_aggregate_fields';
   avg?: Maybe<Erp_AccessLevels_Avg_Fields>;
-  count: Scalars['Int'];
+  count: Scalars['Int']['output'];
   max?: Maybe<Erp_AccessLevels_Max_Fields>;
   min?: Maybe<Erp_AccessLevels_Min_Fields>;
   stddev?: Maybe<Erp_AccessLevels_Stddev_Fields>;
@@ -999,13 +1001,13 @@ export type Erp_AccessLevels_Aggregate_Fields = {
 /** aggregate fields of "erp.AccessLevels" */
 export type Erp_AccessLevels_Aggregate_FieldsCountArgs = {
   columns?: InputMaybe<Array<Erp_AccessLevels_Select_Column>>;
-  distinct?: InputMaybe<Scalars['Boolean']>;
+  distinct?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 /** aggregate avg on columns */
 export type Erp_AccessLevels_Avg_Fields = {
   __typename?: 'erp_AccessLevels_avg_fields';
-  AccessLevelID?: Maybe<Scalars['Float']>;
+  AccessLevelID?: Maybe<Scalars['Float']['output']>;
 };
 
 /** Boolean expression to filter rows from the table "erp.AccessLevels". All fields are combined with a logical 'AND'. */
@@ -1027,35 +1029,35 @@ export enum Erp_AccessLevels_Constraint {
 
 /** input type for incrementing numeric columns in table "erp.AccessLevels" */
 export type Erp_AccessLevels_Inc_Input = {
-  AccessLevelID?: InputMaybe<Scalars['Int']>;
+  AccessLevelID?: InputMaybe<Scalars['Int']['input']>;
 };
 
 /** input type for inserting data into table "erp.AccessLevels" */
 export type Erp_AccessLevels_Insert_Input = {
-  AccessLevelID?: InputMaybe<Scalars['Int']>;
-  Name?: InputMaybe<Scalars['String']>;
+  AccessLevelID?: InputMaybe<Scalars['Int']['input']>;
+  Name?: InputMaybe<Scalars['String']['input']>;
   Users?: InputMaybe<Erp_Users_Arr_Rel_Insert_Input>;
 };
 
 /** aggregate max on columns */
 export type Erp_AccessLevels_Max_Fields = {
   __typename?: 'erp_AccessLevels_max_fields';
-  AccessLevelID?: Maybe<Scalars['Int']>;
-  Name?: Maybe<Scalars['String']>;
+  AccessLevelID?: Maybe<Scalars['Int']['output']>;
+  Name?: Maybe<Scalars['String']['output']>;
 };
 
 /** aggregate min on columns */
 export type Erp_AccessLevels_Min_Fields = {
   __typename?: 'erp_AccessLevels_min_fields';
-  AccessLevelID?: Maybe<Scalars['Int']>;
-  Name?: Maybe<Scalars['String']>;
+  AccessLevelID?: Maybe<Scalars['Int']['output']>;
+  Name?: Maybe<Scalars['String']['output']>;
 };
 
 /** response of any mutation on the table "erp.AccessLevels" */
 export type Erp_AccessLevels_Mutation_Response = {
   __typename?: 'erp_AccessLevels_mutation_response';
   /** number of rows affected by the mutation */
-  affected_rows: Scalars['Int'];
+  affected_rows: Scalars['Int']['output'];
   /** data from the rows affected by the mutation */
   returning: Array<Erp_AccessLevels>;
 };
@@ -1083,7 +1085,7 @@ export type Erp_AccessLevels_Order_By = {
 
 /** primary key columns input for table: erp.AccessLevels */
 export type Erp_AccessLevels_Pk_Columns_Input = {
-  AccessLevelID: Scalars['Int'];
+  AccessLevelID: Scalars['Int']['input'];
 };
 
 /** select columns of table "erp.AccessLevels" */
@@ -1096,26 +1098,26 @@ export enum Erp_AccessLevels_Select_Column {
 
 /** input type for updating data in table "erp.AccessLevels" */
 export type Erp_AccessLevels_Set_Input = {
-  AccessLevelID?: InputMaybe<Scalars['Int']>;
-  Name?: InputMaybe<Scalars['String']>;
+  AccessLevelID?: InputMaybe<Scalars['Int']['input']>;
+  Name?: InputMaybe<Scalars['String']['input']>;
 };
 
 /** aggregate stddev on columns */
 export type Erp_AccessLevels_Stddev_Fields = {
   __typename?: 'erp_AccessLevels_stddev_fields';
-  AccessLevelID?: Maybe<Scalars['Float']>;
+  AccessLevelID?: Maybe<Scalars['Float']['output']>;
 };
 
 /** aggregate stddev_pop on columns */
 export type Erp_AccessLevels_Stddev_Pop_Fields = {
   __typename?: 'erp_AccessLevels_stddev_pop_fields';
-  AccessLevelID?: Maybe<Scalars['Float']>;
+  AccessLevelID?: Maybe<Scalars['Float']['output']>;
 };
 
 /** aggregate stddev_samp on columns */
 export type Erp_AccessLevels_Stddev_Samp_Fields = {
   __typename?: 'erp_AccessLevels_stddev_samp_fields';
-  AccessLevelID?: Maybe<Scalars['Float']>;
+  AccessLevelID?: Maybe<Scalars['Float']['output']>;
 };
 
 /** Streaming cursor of the table "erp_AccessLevels" */
@@ -1128,14 +1130,14 @@ export type Erp_AccessLevels_Stream_Cursor_Input = {
 
 /** Initial value of the column from where the streaming should start */
 export type Erp_AccessLevels_Stream_Cursor_Value_Input = {
-  AccessLevelID?: InputMaybe<Scalars['Int']>;
-  Name?: InputMaybe<Scalars['String']>;
+  AccessLevelID?: InputMaybe<Scalars['Int']['input']>;
+  Name?: InputMaybe<Scalars['String']['input']>;
 };
 
 /** aggregate sum on columns */
 export type Erp_AccessLevels_Sum_Fields = {
   __typename?: 'erp_AccessLevels_sum_fields';
-  AccessLevelID?: Maybe<Scalars['Int']>;
+  AccessLevelID?: Maybe<Scalars['Int']['output']>;
 };
 
 /** update columns of table "erp.AccessLevels" */
@@ -1158,45 +1160,45 @@ export type Erp_AccessLevels_Updates = {
 /** aggregate var_pop on columns */
 export type Erp_AccessLevels_Var_Pop_Fields = {
   __typename?: 'erp_AccessLevels_var_pop_fields';
-  AccessLevelID?: Maybe<Scalars['Float']>;
+  AccessLevelID?: Maybe<Scalars['Float']['output']>;
 };
 
 /** aggregate var_samp on columns */
 export type Erp_AccessLevels_Var_Samp_Fields = {
   __typename?: 'erp_AccessLevels_var_samp_fields';
-  AccessLevelID?: Maybe<Scalars['Float']>;
+  AccessLevelID?: Maybe<Scalars['Float']['output']>;
 };
 
 /** aggregate variance on columns */
 export type Erp_AccessLevels_Variance_Fields = {
   __typename?: 'erp_AccessLevels_variance_fields';
-  AccessLevelID?: Maybe<Scalars['Float']>;
+  AccessLevelID?: Maybe<Scalars['Float']['output']>;
 };
 
 /** columns and relationships of "erp.Comments" */
 export type Erp_Comments = {
   __typename?: 'erp_Comments';
-  CommentID: Scalars['Int'];
+  CommentID: Scalars['Int']['output'];
   /** An array relationship */
   Notifications: Array<Erp_Notifications>;
   /** An aggregate relationship */
   Notifications_aggregate: Erp_Notifications_Aggregate;
   /** An object relationship */
   Order: Erp_Orders;
-  OrderID: Scalars['Int'];
-  Text: Scalars['String'];
-  Timestamp: Scalars['timestamptz'];
+  OrderID: Scalars['Int']['output'];
+  Text: Scalars['String']['output'];
+  Timestamp: Scalars['timestamptz']['output'];
   /** An object relationship */
   User: Erp_Users;
-  UserID: Scalars['Int'];
+  UserID: Scalars['Int']['output'];
 };
 
 
 /** columns and relationships of "erp.Comments" */
 export type Erp_CommentsNotificationsArgs = {
   distinct_on?: InputMaybe<Array<Erp_Notifications_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Erp_Notifications_Order_By>>;
   where?: InputMaybe<Erp_Notifications_Bool_Exp>;
 };
@@ -1205,8 +1207,8 @@ export type Erp_CommentsNotificationsArgs = {
 /** columns and relationships of "erp.Comments" */
 export type Erp_CommentsNotifications_AggregateArgs = {
   distinct_on?: InputMaybe<Array<Erp_Notifications_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Erp_Notifications_Order_By>>;
   where?: InputMaybe<Erp_Notifications_Bool_Exp>;
 };
@@ -1224,7 +1226,7 @@ export type Erp_Comments_Aggregate_Bool_Exp = {
 
 export type Erp_Comments_Aggregate_Bool_Exp_Count = {
   arguments?: InputMaybe<Array<Erp_Comments_Select_Column>>;
-  distinct?: InputMaybe<Scalars['Boolean']>;
+  distinct?: InputMaybe<Scalars['Boolean']['input']>;
   filter?: InputMaybe<Erp_Comments_Bool_Exp>;
   predicate: Int_Comparison_Exp;
 };
@@ -1233,7 +1235,7 @@ export type Erp_Comments_Aggregate_Bool_Exp_Count = {
 export type Erp_Comments_Aggregate_Fields = {
   __typename?: 'erp_Comments_aggregate_fields';
   avg?: Maybe<Erp_Comments_Avg_Fields>;
-  count: Scalars['Int'];
+  count: Scalars['Int']['output'];
   max?: Maybe<Erp_Comments_Max_Fields>;
   min?: Maybe<Erp_Comments_Min_Fields>;
   stddev?: Maybe<Erp_Comments_Stddev_Fields>;
@@ -1249,7 +1251,7 @@ export type Erp_Comments_Aggregate_Fields = {
 /** aggregate fields of "erp.Comments" */
 export type Erp_Comments_Aggregate_FieldsCountArgs = {
   columns?: InputMaybe<Array<Erp_Comments_Select_Column>>;
-  distinct?: InputMaybe<Scalars['Boolean']>;
+  distinct?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 /** order by aggregate values of table "erp.Comments" */
@@ -1277,9 +1279,9 @@ export type Erp_Comments_Arr_Rel_Insert_Input = {
 /** aggregate avg on columns */
 export type Erp_Comments_Avg_Fields = {
   __typename?: 'erp_Comments_avg_fields';
-  CommentID?: Maybe<Scalars['Float']>;
-  OrderID?: Maybe<Scalars['Float']>;
-  UserID?: Maybe<Scalars['Float']>;
+  CommentID?: Maybe<Scalars['Float']['output']>;
+  OrderID?: Maybe<Scalars['Float']['output']>;
+  UserID?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by avg() on columns of table "erp.Comments" */
@@ -1313,31 +1315,31 @@ export enum Erp_Comments_Constraint {
 
 /** input type for incrementing numeric columns in table "erp.Comments" */
 export type Erp_Comments_Inc_Input = {
-  CommentID?: InputMaybe<Scalars['Int']>;
-  OrderID?: InputMaybe<Scalars['Int']>;
-  UserID?: InputMaybe<Scalars['Int']>;
+  CommentID?: InputMaybe<Scalars['Int']['input']>;
+  OrderID?: InputMaybe<Scalars['Int']['input']>;
+  UserID?: InputMaybe<Scalars['Int']['input']>;
 };
 
 /** input type for inserting data into table "erp.Comments" */
 export type Erp_Comments_Insert_Input = {
-  CommentID?: InputMaybe<Scalars['Int']>;
+  CommentID?: InputMaybe<Scalars['Int']['input']>;
   Notifications?: InputMaybe<Erp_Notifications_Arr_Rel_Insert_Input>;
   Order?: InputMaybe<Erp_Orders_Obj_Rel_Insert_Input>;
-  OrderID?: InputMaybe<Scalars['Int']>;
-  Text?: InputMaybe<Scalars['String']>;
-  Timestamp?: InputMaybe<Scalars['timestamptz']>;
+  OrderID?: InputMaybe<Scalars['Int']['input']>;
+  Text?: InputMaybe<Scalars['String']['input']>;
+  Timestamp?: InputMaybe<Scalars['timestamptz']['input']>;
   User?: InputMaybe<Erp_Users_Obj_Rel_Insert_Input>;
-  UserID?: InputMaybe<Scalars['Int']>;
+  UserID?: InputMaybe<Scalars['Int']['input']>;
 };
 
 /** aggregate max on columns */
 export type Erp_Comments_Max_Fields = {
   __typename?: 'erp_Comments_max_fields';
-  CommentID?: Maybe<Scalars['Int']>;
-  OrderID?: Maybe<Scalars['Int']>;
-  Text?: Maybe<Scalars['String']>;
-  Timestamp?: Maybe<Scalars['timestamptz']>;
-  UserID?: Maybe<Scalars['Int']>;
+  CommentID?: Maybe<Scalars['Int']['output']>;
+  OrderID?: Maybe<Scalars['Int']['output']>;
+  Text?: Maybe<Scalars['String']['output']>;
+  Timestamp?: Maybe<Scalars['timestamptz']['output']>;
+  UserID?: Maybe<Scalars['Int']['output']>;
 };
 
 /** order by max() on columns of table "erp.Comments" */
@@ -1352,11 +1354,11 @@ export type Erp_Comments_Max_Order_By = {
 /** aggregate min on columns */
 export type Erp_Comments_Min_Fields = {
   __typename?: 'erp_Comments_min_fields';
-  CommentID?: Maybe<Scalars['Int']>;
-  OrderID?: Maybe<Scalars['Int']>;
-  Text?: Maybe<Scalars['String']>;
-  Timestamp?: Maybe<Scalars['timestamptz']>;
-  UserID?: Maybe<Scalars['Int']>;
+  CommentID?: Maybe<Scalars['Int']['output']>;
+  OrderID?: Maybe<Scalars['Int']['output']>;
+  Text?: Maybe<Scalars['String']['output']>;
+  Timestamp?: Maybe<Scalars['timestamptz']['output']>;
+  UserID?: Maybe<Scalars['Int']['output']>;
 };
 
 /** order by min() on columns of table "erp.Comments" */
@@ -1372,7 +1374,7 @@ export type Erp_Comments_Min_Order_By = {
 export type Erp_Comments_Mutation_Response = {
   __typename?: 'erp_Comments_mutation_response';
   /** number of rows affected by the mutation */
-  affected_rows: Scalars['Int'];
+  affected_rows: Scalars['Int']['output'];
   /** data from the rows affected by the mutation */
   returning: Array<Erp_Comments>;
 };
@@ -1405,7 +1407,7 @@ export type Erp_Comments_Order_By = {
 
 /** primary key columns input for table: erp.Comments */
 export type Erp_Comments_Pk_Columns_Input = {
-  CommentID: Scalars['Int'];
+  CommentID: Scalars['Int']['input'];
 };
 
 /** select columns of table "erp.Comments" */
@@ -1424,19 +1426,19 @@ export enum Erp_Comments_Select_Column {
 
 /** input type for updating data in table "erp.Comments" */
 export type Erp_Comments_Set_Input = {
-  CommentID?: InputMaybe<Scalars['Int']>;
-  OrderID?: InputMaybe<Scalars['Int']>;
-  Text?: InputMaybe<Scalars['String']>;
-  Timestamp?: InputMaybe<Scalars['timestamptz']>;
-  UserID?: InputMaybe<Scalars['Int']>;
+  CommentID?: InputMaybe<Scalars['Int']['input']>;
+  OrderID?: InputMaybe<Scalars['Int']['input']>;
+  Text?: InputMaybe<Scalars['String']['input']>;
+  Timestamp?: InputMaybe<Scalars['timestamptz']['input']>;
+  UserID?: InputMaybe<Scalars['Int']['input']>;
 };
 
 /** aggregate stddev on columns */
 export type Erp_Comments_Stddev_Fields = {
   __typename?: 'erp_Comments_stddev_fields';
-  CommentID?: Maybe<Scalars['Float']>;
-  OrderID?: Maybe<Scalars['Float']>;
-  UserID?: Maybe<Scalars['Float']>;
+  CommentID?: Maybe<Scalars['Float']['output']>;
+  OrderID?: Maybe<Scalars['Float']['output']>;
+  UserID?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by stddev() on columns of table "erp.Comments" */
@@ -1449,9 +1451,9 @@ export type Erp_Comments_Stddev_Order_By = {
 /** aggregate stddev_pop on columns */
 export type Erp_Comments_Stddev_Pop_Fields = {
   __typename?: 'erp_Comments_stddev_pop_fields';
-  CommentID?: Maybe<Scalars['Float']>;
-  OrderID?: Maybe<Scalars['Float']>;
-  UserID?: Maybe<Scalars['Float']>;
+  CommentID?: Maybe<Scalars['Float']['output']>;
+  OrderID?: Maybe<Scalars['Float']['output']>;
+  UserID?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by stddev_pop() on columns of table "erp.Comments" */
@@ -1464,9 +1466,9 @@ export type Erp_Comments_Stddev_Pop_Order_By = {
 /** aggregate stddev_samp on columns */
 export type Erp_Comments_Stddev_Samp_Fields = {
   __typename?: 'erp_Comments_stddev_samp_fields';
-  CommentID?: Maybe<Scalars['Float']>;
-  OrderID?: Maybe<Scalars['Float']>;
-  UserID?: Maybe<Scalars['Float']>;
+  CommentID?: Maybe<Scalars['Float']['output']>;
+  OrderID?: Maybe<Scalars['Float']['output']>;
+  UserID?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by stddev_samp() on columns of table "erp.Comments" */
@@ -1486,19 +1488,19 @@ export type Erp_Comments_Stream_Cursor_Input = {
 
 /** Initial value of the column from where the streaming should start */
 export type Erp_Comments_Stream_Cursor_Value_Input = {
-  CommentID?: InputMaybe<Scalars['Int']>;
-  OrderID?: InputMaybe<Scalars['Int']>;
-  Text?: InputMaybe<Scalars['String']>;
-  Timestamp?: InputMaybe<Scalars['timestamptz']>;
-  UserID?: InputMaybe<Scalars['Int']>;
+  CommentID?: InputMaybe<Scalars['Int']['input']>;
+  OrderID?: InputMaybe<Scalars['Int']['input']>;
+  Text?: InputMaybe<Scalars['String']['input']>;
+  Timestamp?: InputMaybe<Scalars['timestamptz']['input']>;
+  UserID?: InputMaybe<Scalars['Int']['input']>;
 };
 
 /** aggregate sum on columns */
 export type Erp_Comments_Sum_Fields = {
   __typename?: 'erp_Comments_sum_fields';
-  CommentID?: Maybe<Scalars['Int']>;
-  OrderID?: Maybe<Scalars['Int']>;
-  UserID?: Maybe<Scalars['Int']>;
+  CommentID?: Maybe<Scalars['Int']['output']>;
+  OrderID?: Maybe<Scalars['Int']['output']>;
+  UserID?: Maybe<Scalars['Int']['output']>;
 };
 
 /** order by sum() on columns of table "erp.Comments" */
@@ -1534,9 +1536,9 @@ export type Erp_Comments_Updates = {
 /** aggregate var_pop on columns */
 export type Erp_Comments_Var_Pop_Fields = {
   __typename?: 'erp_Comments_var_pop_fields';
-  CommentID?: Maybe<Scalars['Float']>;
-  OrderID?: Maybe<Scalars['Float']>;
-  UserID?: Maybe<Scalars['Float']>;
+  CommentID?: Maybe<Scalars['Float']['output']>;
+  OrderID?: Maybe<Scalars['Float']['output']>;
+  UserID?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by var_pop() on columns of table "erp.Comments" */
@@ -1549,9 +1551,9 @@ export type Erp_Comments_Var_Pop_Order_By = {
 /** aggregate var_samp on columns */
 export type Erp_Comments_Var_Samp_Fields = {
   __typename?: 'erp_Comments_var_samp_fields';
-  CommentID?: Maybe<Scalars['Float']>;
-  OrderID?: Maybe<Scalars['Float']>;
-  UserID?: Maybe<Scalars['Float']>;
+  CommentID?: Maybe<Scalars['Float']['output']>;
+  OrderID?: Maybe<Scalars['Float']['output']>;
+  UserID?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by var_samp() on columns of table "erp.Comments" */
@@ -1564,9 +1566,9 @@ export type Erp_Comments_Var_Samp_Order_By = {
 /** aggregate variance on columns */
 export type Erp_Comments_Variance_Fields = {
   __typename?: 'erp_Comments_variance_fields';
-  CommentID?: Maybe<Scalars['Float']>;
-  OrderID?: Maybe<Scalars['Float']>;
-  UserID?: Maybe<Scalars['Float']>;
+  CommentID?: Maybe<Scalars['Float']['output']>;
+  OrderID?: Maybe<Scalars['Float']['output']>;
+  UserID?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by variance() on columns of table "erp.Comments" */
@@ -1579,14 +1581,14 @@ export type Erp_Comments_Variance_Order_By = {
 /** columns and relationships of "erp.Docs" */
 export type Erp_Docs = {
   __typename?: 'erp_Docs';
-  FileName?: Maybe<Scalars['String']>;
-  ID: Scalars['Int'];
-  Key: Scalars['String'];
+  FileName?: Maybe<Scalars['String']['output']>;
+  ID: Scalars['Int']['output'];
+  Key: Scalars['String']['output'];
   /** An object relationship */
   Order: Erp_Orders;
-  OrderID: Scalars['Int'];
-  Size?: Maybe<Scalars['Int']>;
-  UploadingDate?: Maybe<Scalars['timestamp']>;
+  OrderID: Scalars['Int']['output'];
+  Size?: Maybe<Scalars['Int']['output']>;
+  UploadingDate?: Maybe<Scalars['timestamp']['output']>;
 };
 
 /** aggregated selection of "erp.Docs" */
@@ -1602,7 +1604,7 @@ export type Erp_Docs_Aggregate_Bool_Exp = {
 
 export type Erp_Docs_Aggregate_Bool_Exp_Count = {
   arguments?: InputMaybe<Array<Erp_Docs_Select_Column>>;
-  distinct?: InputMaybe<Scalars['Boolean']>;
+  distinct?: InputMaybe<Scalars['Boolean']['input']>;
   filter?: InputMaybe<Erp_Docs_Bool_Exp>;
   predicate: Int_Comparison_Exp;
 };
@@ -1611,7 +1613,7 @@ export type Erp_Docs_Aggregate_Bool_Exp_Count = {
 export type Erp_Docs_Aggregate_Fields = {
   __typename?: 'erp_Docs_aggregate_fields';
   avg?: Maybe<Erp_Docs_Avg_Fields>;
-  count: Scalars['Int'];
+  count: Scalars['Int']['output'];
   max?: Maybe<Erp_Docs_Max_Fields>;
   min?: Maybe<Erp_Docs_Min_Fields>;
   stddev?: Maybe<Erp_Docs_Stddev_Fields>;
@@ -1627,7 +1629,7 @@ export type Erp_Docs_Aggregate_Fields = {
 /** aggregate fields of "erp.Docs" */
 export type Erp_Docs_Aggregate_FieldsCountArgs = {
   columns?: InputMaybe<Array<Erp_Docs_Select_Column>>;
-  distinct?: InputMaybe<Scalars['Boolean']>;
+  distinct?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 /** order by aggregate values of table "erp.Docs" */
@@ -1655,9 +1657,9 @@ export type Erp_Docs_Arr_Rel_Insert_Input = {
 /** aggregate avg on columns */
 export type Erp_Docs_Avg_Fields = {
   __typename?: 'erp_Docs_avg_fields';
-  ID?: Maybe<Scalars['Float']>;
-  OrderID?: Maybe<Scalars['Float']>;
-  Size?: Maybe<Scalars['Float']>;
+  ID?: Maybe<Scalars['Float']['output']>;
+  OrderID?: Maybe<Scalars['Float']['output']>;
+  Size?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by avg() on columns of table "erp.Docs" */
@@ -1693,31 +1695,31 @@ export enum Erp_Docs_Constraint {
 
 /** input type for incrementing numeric columns in table "erp.Docs" */
 export type Erp_Docs_Inc_Input = {
-  ID?: InputMaybe<Scalars['Int']>;
-  OrderID?: InputMaybe<Scalars['Int']>;
-  Size?: InputMaybe<Scalars['Int']>;
+  ID?: InputMaybe<Scalars['Int']['input']>;
+  OrderID?: InputMaybe<Scalars['Int']['input']>;
+  Size?: InputMaybe<Scalars['Int']['input']>;
 };
 
 /** input type for inserting data into table "erp.Docs" */
 export type Erp_Docs_Insert_Input = {
-  FileName?: InputMaybe<Scalars['String']>;
-  ID?: InputMaybe<Scalars['Int']>;
-  Key?: InputMaybe<Scalars['String']>;
+  FileName?: InputMaybe<Scalars['String']['input']>;
+  ID?: InputMaybe<Scalars['Int']['input']>;
+  Key?: InputMaybe<Scalars['String']['input']>;
   Order?: InputMaybe<Erp_Orders_Obj_Rel_Insert_Input>;
-  OrderID?: InputMaybe<Scalars['Int']>;
-  Size?: InputMaybe<Scalars['Int']>;
-  UploadingDate?: InputMaybe<Scalars['timestamp']>;
+  OrderID?: InputMaybe<Scalars['Int']['input']>;
+  Size?: InputMaybe<Scalars['Int']['input']>;
+  UploadingDate?: InputMaybe<Scalars['timestamp']['input']>;
 };
 
 /** aggregate max on columns */
 export type Erp_Docs_Max_Fields = {
   __typename?: 'erp_Docs_max_fields';
-  FileName?: Maybe<Scalars['String']>;
-  ID?: Maybe<Scalars['Int']>;
-  Key?: Maybe<Scalars['String']>;
-  OrderID?: Maybe<Scalars['Int']>;
-  Size?: Maybe<Scalars['Int']>;
-  UploadingDate?: Maybe<Scalars['timestamp']>;
+  FileName?: Maybe<Scalars['String']['output']>;
+  ID?: Maybe<Scalars['Int']['output']>;
+  Key?: Maybe<Scalars['String']['output']>;
+  OrderID?: Maybe<Scalars['Int']['output']>;
+  Size?: Maybe<Scalars['Int']['output']>;
+  UploadingDate?: Maybe<Scalars['timestamp']['output']>;
 };
 
 /** order by max() on columns of table "erp.Docs" */
@@ -1733,12 +1735,12 @@ export type Erp_Docs_Max_Order_By = {
 /** aggregate min on columns */
 export type Erp_Docs_Min_Fields = {
   __typename?: 'erp_Docs_min_fields';
-  FileName?: Maybe<Scalars['String']>;
-  ID?: Maybe<Scalars['Int']>;
-  Key?: Maybe<Scalars['String']>;
-  OrderID?: Maybe<Scalars['Int']>;
-  Size?: Maybe<Scalars['Int']>;
-  UploadingDate?: Maybe<Scalars['timestamp']>;
+  FileName?: Maybe<Scalars['String']['output']>;
+  ID?: Maybe<Scalars['Int']['output']>;
+  Key?: Maybe<Scalars['String']['output']>;
+  OrderID?: Maybe<Scalars['Int']['output']>;
+  Size?: Maybe<Scalars['Int']['output']>;
+  UploadingDate?: Maybe<Scalars['timestamp']['output']>;
 };
 
 /** order by min() on columns of table "erp.Docs" */
@@ -1755,7 +1757,7 @@ export type Erp_Docs_Min_Order_By = {
 export type Erp_Docs_Mutation_Response = {
   __typename?: 'erp_Docs_mutation_response';
   /** number of rows affected by the mutation */
-  affected_rows: Scalars['Int'];
+  affected_rows: Scalars['Int']['output'];
   /** data from the rows affected by the mutation */
   returning: Array<Erp_Docs>;
 };
@@ -1780,7 +1782,7 @@ export type Erp_Docs_Order_By = {
 
 /** primary key columns input for table: erp.Docs */
 export type Erp_Docs_Pk_Columns_Input = {
-  ID: Scalars['Int'];
+  ID: Scalars['Int']['input'];
 };
 
 /** select columns of table "erp.Docs" */
@@ -1801,20 +1803,20 @@ export enum Erp_Docs_Select_Column {
 
 /** input type for updating data in table "erp.Docs" */
 export type Erp_Docs_Set_Input = {
-  FileName?: InputMaybe<Scalars['String']>;
-  ID?: InputMaybe<Scalars['Int']>;
-  Key?: InputMaybe<Scalars['String']>;
-  OrderID?: InputMaybe<Scalars['Int']>;
-  Size?: InputMaybe<Scalars['Int']>;
-  UploadingDate?: InputMaybe<Scalars['timestamp']>;
+  FileName?: InputMaybe<Scalars['String']['input']>;
+  ID?: InputMaybe<Scalars['Int']['input']>;
+  Key?: InputMaybe<Scalars['String']['input']>;
+  OrderID?: InputMaybe<Scalars['Int']['input']>;
+  Size?: InputMaybe<Scalars['Int']['input']>;
+  UploadingDate?: InputMaybe<Scalars['timestamp']['input']>;
 };
 
 /** aggregate stddev on columns */
 export type Erp_Docs_Stddev_Fields = {
   __typename?: 'erp_Docs_stddev_fields';
-  ID?: Maybe<Scalars['Float']>;
-  OrderID?: Maybe<Scalars['Float']>;
-  Size?: Maybe<Scalars['Float']>;
+  ID?: Maybe<Scalars['Float']['output']>;
+  OrderID?: Maybe<Scalars['Float']['output']>;
+  Size?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by stddev() on columns of table "erp.Docs" */
@@ -1827,9 +1829,9 @@ export type Erp_Docs_Stddev_Order_By = {
 /** aggregate stddev_pop on columns */
 export type Erp_Docs_Stddev_Pop_Fields = {
   __typename?: 'erp_Docs_stddev_pop_fields';
-  ID?: Maybe<Scalars['Float']>;
-  OrderID?: Maybe<Scalars['Float']>;
-  Size?: Maybe<Scalars['Float']>;
+  ID?: Maybe<Scalars['Float']['output']>;
+  OrderID?: Maybe<Scalars['Float']['output']>;
+  Size?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by stddev_pop() on columns of table "erp.Docs" */
@@ -1842,9 +1844,9 @@ export type Erp_Docs_Stddev_Pop_Order_By = {
 /** aggregate stddev_samp on columns */
 export type Erp_Docs_Stddev_Samp_Fields = {
   __typename?: 'erp_Docs_stddev_samp_fields';
-  ID?: Maybe<Scalars['Float']>;
-  OrderID?: Maybe<Scalars['Float']>;
-  Size?: Maybe<Scalars['Float']>;
+  ID?: Maybe<Scalars['Float']['output']>;
+  OrderID?: Maybe<Scalars['Float']['output']>;
+  Size?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by stddev_samp() on columns of table "erp.Docs" */
@@ -1864,20 +1866,20 @@ export type Erp_Docs_Stream_Cursor_Input = {
 
 /** Initial value of the column from where the streaming should start */
 export type Erp_Docs_Stream_Cursor_Value_Input = {
-  FileName?: InputMaybe<Scalars['String']>;
-  ID?: InputMaybe<Scalars['Int']>;
-  Key?: InputMaybe<Scalars['String']>;
-  OrderID?: InputMaybe<Scalars['Int']>;
-  Size?: InputMaybe<Scalars['Int']>;
-  UploadingDate?: InputMaybe<Scalars['timestamp']>;
+  FileName?: InputMaybe<Scalars['String']['input']>;
+  ID?: InputMaybe<Scalars['Int']['input']>;
+  Key?: InputMaybe<Scalars['String']['input']>;
+  OrderID?: InputMaybe<Scalars['Int']['input']>;
+  Size?: InputMaybe<Scalars['Int']['input']>;
+  UploadingDate?: InputMaybe<Scalars['timestamp']['input']>;
 };
 
 /** aggregate sum on columns */
 export type Erp_Docs_Sum_Fields = {
   __typename?: 'erp_Docs_sum_fields';
-  ID?: Maybe<Scalars['Int']>;
-  OrderID?: Maybe<Scalars['Int']>;
-  Size?: Maybe<Scalars['Int']>;
+  ID?: Maybe<Scalars['Int']['output']>;
+  OrderID?: Maybe<Scalars['Int']['output']>;
+  Size?: Maybe<Scalars['Int']['output']>;
 };
 
 /** order by sum() on columns of table "erp.Docs" */
@@ -1915,9 +1917,9 @@ export type Erp_Docs_Updates = {
 /** aggregate var_pop on columns */
 export type Erp_Docs_Var_Pop_Fields = {
   __typename?: 'erp_Docs_var_pop_fields';
-  ID?: Maybe<Scalars['Float']>;
-  OrderID?: Maybe<Scalars['Float']>;
-  Size?: Maybe<Scalars['Float']>;
+  ID?: Maybe<Scalars['Float']['output']>;
+  OrderID?: Maybe<Scalars['Float']['output']>;
+  Size?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by var_pop() on columns of table "erp.Docs" */
@@ -1930,9 +1932,9 @@ export type Erp_Docs_Var_Pop_Order_By = {
 /** aggregate var_samp on columns */
 export type Erp_Docs_Var_Samp_Fields = {
   __typename?: 'erp_Docs_var_samp_fields';
-  ID?: Maybe<Scalars['Float']>;
-  OrderID?: Maybe<Scalars['Float']>;
-  Size?: Maybe<Scalars['Float']>;
+  ID?: Maybe<Scalars['Float']['output']>;
+  OrderID?: Maybe<Scalars['Float']['output']>;
+  Size?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by var_samp() on columns of table "erp.Docs" */
@@ -1945,9 +1947,9 @@ export type Erp_Docs_Var_Samp_Order_By = {
 /** aggregate variance on columns */
 export type Erp_Docs_Variance_Fields = {
   __typename?: 'erp_Docs_variance_fields';
-  ID?: Maybe<Scalars['Float']>;
-  OrderID?: Maybe<Scalars['Float']>;
-  Size?: Maybe<Scalars['Float']>;
+  ID?: Maybe<Scalars['Float']['output']>;
+  OrderID?: Maybe<Scalars['Float']['output']>;
+  Size?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by variance() on columns of table "erp.Docs" */
@@ -1962,15 +1964,15 @@ export type Erp_Notifications = {
   __typename?: 'erp_Notifications';
   /** An object relationship */
   Comment: Erp_Comments;
-  CommentID: Scalars['Int'];
-  ID: Scalars['Int'];
-  MentionedUser?: Maybe<Scalars['Int']>;
+  CommentID: Scalars['Int']['output'];
+  ID: Scalars['Int']['output'];
+  MentionedUser?: Maybe<Scalars['Int']['output']>;
   /** An object relationship */
   Order?: Maybe<Erp_Orders>;
-  OrderID?: Maybe<Scalars['Int']>;
+  OrderID?: Maybe<Scalars['Int']['output']>;
   /** An object relationship */
   User?: Maybe<Erp_Users>;
-  Viewed: Scalars['Boolean'];
+  Viewed: Scalars['Boolean']['output'];
 };
 
 /** aggregated selection of "erp.Notifications" */
@@ -1988,21 +1990,21 @@ export type Erp_Notifications_Aggregate_Bool_Exp = {
 
 export type Erp_Notifications_Aggregate_Bool_Exp_Bool_And = {
   arguments: Erp_Notifications_Select_Column_Erp_Notifications_Aggregate_Bool_Exp_Bool_And_Arguments_Columns;
-  distinct?: InputMaybe<Scalars['Boolean']>;
+  distinct?: InputMaybe<Scalars['Boolean']['input']>;
   filter?: InputMaybe<Erp_Notifications_Bool_Exp>;
   predicate: Boolean_Comparison_Exp;
 };
 
 export type Erp_Notifications_Aggregate_Bool_Exp_Bool_Or = {
   arguments: Erp_Notifications_Select_Column_Erp_Notifications_Aggregate_Bool_Exp_Bool_Or_Arguments_Columns;
-  distinct?: InputMaybe<Scalars['Boolean']>;
+  distinct?: InputMaybe<Scalars['Boolean']['input']>;
   filter?: InputMaybe<Erp_Notifications_Bool_Exp>;
   predicate: Boolean_Comparison_Exp;
 };
 
 export type Erp_Notifications_Aggregate_Bool_Exp_Count = {
   arguments?: InputMaybe<Array<Erp_Notifications_Select_Column>>;
-  distinct?: InputMaybe<Scalars['Boolean']>;
+  distinct?: InputMaybe<Scalars['Boolean']['input']>;
   filter?: InputMaybe<Erp_Notifications_Bool_Exp>;
   predicate: Int_Comparison_Exp;
 };
@@ -2011,7 +2013,7 @@ export type Erp_Notifications_Aggregate_Bool_Exp_Count = {
 export type Erp_Notifications_Aggregate_Fields = {
   __typename?: 'erp_Notifications_aggregate_fields';
   avg?: Maybe<Erp_Notifications_Avg_Fields>;
-  count: Scalars['Int'];
+  count: Scalars['Int']['output'];
   max?: Maybe<Erp_Notifications_Max_Fields>;
   min?: Maybe<Erp_Notifications_Min_Fields>;
   stddev?: Maybe<Erp_Notifications_Stddev_Fields>;
@@ -2027,7 +2029,7 @@ export type Erp_Notifications_Aggregate_Fields = {
 /** aggregate fields of "erp.Notifications" */
 export type Erp_Notifications_Aggregate_FieldsCountArgs = {
   columns?: InputMaybe<Array<Erp_Notifications_Select_Column>>;
-  distinct?: InputMaybe<Scalars['Boolean']>;
+  distinct?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 /** order by aggregate values of table "erp.Notifications" */
@@ -2055,10 +2057,10 @@ export type Erp_Notifications_Arr_Rel_Insert_Input = {
 /** aggregate avg on columns */
 export type Erp_Notifications_Avg_Fields = {
   __typename?: 'erp_Notifications_avg_fields';
-  CommentID?: Maybe<Scalars['Float']>;
-  ID?: Maybe<Scalars['Float']>;
-  MentionedUser?: Maybe<Scalars['Float']>;
-  OrderID?: Maybe<Scalars['Float']>;
+  CommentID?: Maybe<Scalars['Float']['output']>;
+  ID?: Maybe<Scalars['Float']['output']>;
+  MentionedUser?: Maybe<Scalars['Float']['output']>;
+  OrderID?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by avg() on columns of table "erp.Notifications" */
@@ -2092,31 +2094,31 @@ export enum Erp_Notifications_Constraint {
 
 /** input type for incrementing numeric columns in table "erp.Notifications" */
 export type Erp_Notifications_Inc_Input = {
-  CommentID?: InputMaybe<Scalars['Int']>;
-  ID?: InputMaybe<Scalars['Int']>;
-  MentionedUser?: InputMaybe<Scalars['Int']>;
-  OrderID?: InputMaybe<Scalars['Int']>;
+  CommentID?: InputMaybe<Scalars['Int']['input']>;
+  ID?: InputMaybe<Scalars['Int']['input']>;
+  MentionedUser?: InputMaybe<Scalars['Int']['input']>;
+  OrderID?: InputMaybe<Scalars['Int']['input']>;
 };
 
 /** input type for inserting data into table "erp.Notifications" */
 export type Erp_Notifications_Insert_Input = {
   Comment?: InputMaybe<Erp_Comments_Obj_Rel_Insert_Input>;
-  CommentID?: InputMaybe<Scalars['Int']>;
-  ID?: InputMaybe<Scalars['Int']>;
-  MentionedUser?: InputMaybe<Scalars['Int']>;
+  CommentID?: InputMaybe<Scalars['Int']['input']>;
+  ID?: InputMaybe<Scalars['Int']['input']>;
+  MentionedUser?: InputMaybe<Scalars['Int']['input']>;
   Order?: InputMaybe<Erp_Orders_Obj_Rel_Insert_Input>;
-  OrderID?: InputMaybe<Scalars['Int']>;
+  OrderID?: InputMaybe<Scalars['Int']['input']>;
   User?: InputMaybe<Erp_Users_Obj_Rel_Insert_Input>;
-  Viewed?: InputMaybe<Scalars['Boolean']>;
+  Viewed?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 /** aggregate max on columns */
 export type Erp_Notifications_Max_Fields = {
   __typename?: 'erp_Notifications_max_fields';
-  CommentID?: Maybe<Scalars['Int']>;
-  ID?: Maybe<Scalars['Int']>;
-  MentionedUser?: Maybe<Scalars['Int']>;
-  OrderID?: Maybe<Scalars['Int']>;
+  CommentID?: Maybe<Scalars['Int']['output']>;
+  ID?: Maybe<Scalars['Int']['output']>;
+  MentionedUser?: Maybe<Scalars['Int']['output']>;
+  OrderID?: Maybe<Scalars['Int']['output']>;
 };
 
 /** order by max() on columns of table "erp.Notifications" */
@@ -2130,10 +2132,10 @@ export type Erp_Notifications_Max_Order_By = {
 /** aggregate min on columns */
 export type Erp_Notifications_Min_Fields = {
   __typename?: 'erp_Notifications_min_fields';
-  CommentID?: Maybe<Scalars['Int']>;
-  ID?: Maybe<Scalars['Int']>;
-  MentionedUser?: Maybe<Scalars['Int']>;
-  OrderID?: Maybe<Scalars['Int']>;
+  CommentID?: Maybe<Scalars['Int']['output']>;
+  ID?: Maybe<Scalars['Int']['output']>;
+  MentionedUser?: Maybe<Scalars['Int']['output']>;
+  OrderID?: Maybe<Scalars['Int']['output']>;
 };
 
 /** order by min() on columns of table "erp.Notifications" */
@@ -2148,7 +2150,7 @@ export type Erp_Notifications_Min_Order_By = {
 export type Erp_Notifications_Mutation_Response = {
   __typename?: 'erp_Notifications_mutation_response';
   /** number of rows affected by the mutation */
-  affected_rows: Scalars['Int'];
+  affected_rows: Scalars['Int']['output'];
   /** data from the rows affected by the mutation */
   returning: Array<Erp_Notifications>;
 };
@@ -2174,7 +2176,7 @@ export type Erp_Notifications_Order_By = {
 
 /** primary key columns input for table: erp.Notifications */
 export type Erp_Notifications_Pk_Columns_Input = {
-  ID: Scalars['Int'];
+  ID: Scalars['Int']['input'];
 };
 
 /** select columns of table "erp.Notifications" */
@@ -2205,20 +2207,20 @@ export enum Erp_Notifications_Select_Column_Erp_Notifications_Aggregate_Bool_Exp
 
 /** input type for updating data in table "erp.Notifications" */
 export type Erp_Notifications_Set_Input = {
-  CommentID?: InputMaybe<Scalars['Int']>;
-  ID?: InputMaybe<Scalars['Int']>;
-  MentionedUser?: InputMaybe<Scalars['Int']>;
-  OrderID?: InputMaybe<Scalars['Int']>;
-  Viewed?: InputMaybe<Scalars['Boolean']>;
+  CommentID?: InputMaybe<Scalars['Int']['input']>;
+  ID?: InputMaybe<Scalars['Int']['input']>;
+  MentionedUser?: InputMaybe<Scalars['Int']['input']>;
+  OrderID?: InputMaybe<Scalars['Int']['input']>;
+  Viewed?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 /** aggregate stddev on columns */
 export type Erp_Notifications_Stddev_Fields = {
   __typename?: 'erp_Notifications_stddev_fields';
-  CommentID?: Maybe<Scalars['Float']>;
-  ID?: Maybe<Scalars['Float']>;
-  MentionedUser?: Maybe<Scalars['Float']>;
-  OrderID?: Maybe<Scalars['Float']>;
+  CommentID?: Maybe<Scalars['Float']['output']>;
+  ID?: Maybe<Scalars['Float']['output']>;
+  MentionedUser?: Maybe<Scalars['Float']['output']>;
+  OrderID?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by stddev() on columns of table "erp.Notifications" */
@@ -2232,10 +2234,10 @@ export type Erp_Notifications_Stddev_Order_By = {
 /** aggregate stddev_pop on columns */
 export type Erp_Notifications_Stddev_Pop_Fields = {
   __typename?: 'erp_Notifications_stddev_pop_fields';
-  CommentID?: Maybe<Scalars['Float']>;
-  ID?: Maybe<Scalars['Float']>;
-  MentionedUser?: Maybe<Scalars['Float']>;
-  OrderID?: Maybe<Scalars['Float']>;
+  CommentID?: Maybe<Scalars['Float']['output']>;
+  ID?: Maybe<Scalars['Float']['output']>;
+  MentionedUser?: Maybe<Scalars['Float']['output']>;
+  OrderID?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by stddev_pop() on columns of table "erp.Notifications" */
@@ -2249,10 +2251,10 @@ export type Erp_Notifications_Stddev_Pop_Order_By = {
 /** aggregate stddev_samp on columns */
 export type Erp_Notifications_Stddev_Samp_Fields = {
   __typename?: 'erp_Notifications_stddev_samp_fields';
-  CommentID?: Maybe<Scalars['Float']>;
-  ID?: Maybe<Scalars['Float']>;
-  MentionedUser?: Maybe<Scalars['Float']>;
-  OrderID?: Maybe<Scalars['Float']>;
+  CommentID?: Maybe<Scalars['Float']['output']>;
+  ID?: Maybe<Scalars['Float']['output']>;
+  MentionedUser?: Maybe<Scalars['Float']['output']>;
+  OrderID?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by stddev_samp() on columns of table "erp.Notifications" */
@@ -2273,20 +2275,20 @@ export type Erp_Notifications_Stream_Cursor_Input = {
 
 /** Initial value of the column from where the streaming should start */
 export type Erp_Notifications_Stream_Cursor_Value_Input = {
-  CommentID?: InputMaybe<Scalars['Int']>;
-  ID?: InputMaybe<Scalars['Int']>;
-  MentionedUser?: InputMaybe<Scalars['Int']>;
-  OrderID?: InputMaybe<Scalars['Int']>;
-  Viewed?: InputMaybe<Scalars['Boolean']>;
+  CommentID?: InputMaybe<Scalars['Int']['input']>;
+  ID?: InputMaybe<Scalars['Int']['input']>;
+  MentionedUser?: InputMaybe<Scalars['Int']['input']>;
+  OrderID?: InputMaybe<Scalars['Int']['input']>;
+  Viewed?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 /** aggregate sum on columns */
 export type Erp_Notifications_Sum_Fields = {
   __typename?: 'erp_Notifications_sum_fields';
-  CommentID?: Maybe<Scalars['Int']>;
-  ID?: Maybe<Scalars['Int']>;
-  MentionedUser?: Maybe<Scalars['Int']>;
-  OrderID?: Maybe<Scalars['Int']>;
+  CommentID?: Maybe<Scalars['Int']['output']>;
+  ID?: Maybe<Scalars['Int']['output']>;
+  MentionedUser?: Maybe<Scalars['Int']['output']>;
+  OrderID?: Maybe<Scalars['Int']['output']>;
 };
 
 /** order by sum() on columns of table "erp.Notifications" */
@@ -2323,10 +2325,10 @@ export type Erp_Notifications_Updates = {
 /** aggregate var_pop on columns */
 export type Erp_Notifications_Var_Pop_Fields = {
   __typename?: 'erp_Notifications_var_pop_fields';
-  CommentID?: Maybe<Scalars['Float']>;
-  ID?: Maybe<Scalars['Float']>;
-  MentionedUser?: Maybe<Scalars['Float']>;
-  OrderID?: Maybe<Scalars['Float']>;
+  CommentID?: Maybe<Scalars['Float']['output']>;
+  ID?: Maybe<Scalars['Float']['output']>;
+  MentionedUser?: Maybe<Scalars['Float']['output']>;
+  OrderID?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by var_pop() on columns of table "erp.Notifications" */
@@ -2340,10 +2342,10 @@ export type Erp_Notifications_Var_Pop_Order_By = {
 /** aggregate var_samp on columns */
 export type Erp_Notifications_Var_Samp_Fields = {
   __typename?: 'erp_Notifications_var_samp_fields';
-  CommentID?: Maybe<Scalars['Float']>;
-  ID?: Maybe<Scalars['Float']>;
-  MentionedUser?: Maybe<Scalars['Float']>;
-  OrderID?: Maybe<Scalars['Float']>;
+  CommentID?: Maybe<Scalars['Float']['output']>;
+  ID?: Maybe<Scalars['Float']['output']>;
+  MentionedUser?: Maybe<Scalars['Float']['output']>;
+  OrderID?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by var_samp() on columns of table "erp.Notifications" */
@@ -2357,10 +2359,10 @@ export type Erp_Notifications_Var_Samp_Order_By = {
 /** aggregate variance on columns */
 export type Erp_Notifications_Variance_Fields = {
   __typename?: 'erp_Notifications_variance_fields';
-  CommentID?: Maybe<Scalars['Float']>;
-  ID?: Maybe<Scalars['Float']>;
-  MentionedUser?: Maybe<Scalars['Float']>;
-  OrderID?: Maybe<Scalars['Float']>;
+  CommentID?: Maybe<Scalars['Float']['output']>;
+  ID?: Maybe<Scalars['Float']['output']>;
+  MentionedUser?: Maybe<Scalars['Float']['output']>;
+  OrderID?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by variance() on columns of table "erp.Notifications" */
@@ -2374,16 +2376,16 @@ export type Erp_Notifications_Variance_Order_By = {
 /** columns and relationships of "erp.OrderItems" */
 export type Erp_OrderItems = {
   __typename?: 'erp_OrderItems';
-  Fitter?: Maybe<Scalars['String']>;
-  FullName?: Maybe<Scalars['String']>;
-  Name: Scalars['String'];
+  Fitter?: Maybe<Scalars['String']['output']>;
+  FullName?: Maybe<Scalars['String']['output']>;
+  Name: Scalars['String']['output'];
   /** An object relationship */
   Order: Erp_Orders;
-  OrderID: Scalars['Int'];
-  OrderItemID: Scalars['Int'];
-  Quantity: Scalars['Int'];
-  SerialEnds?: Maybe<Scalars['String']>;
-  SerialStarts?: Maybe<Scalars['String']>;
+  OrderID: Scalars['Int']['output'];
+  OrderItemID: Scalars['Int']['output'];
+  Quantity: Scalars['Int']['output'];
+  SerialEnds?: Maybe<Scalars['String']['output']>;
+  SerialStarts?: Maybe<Scalars['String']['output']>;
 };
 
 /** aggregated selection of "erp.OrderItems" */
@@ -2399,7 +2401,7 @@ export type Erp_OrderItems_Aggregate_Bool_Exp = {
 
 export type Erp_OrderItems_Aggregate_Bool_Exp_Count = {
   arguments?: InputMaybe<Array<Erp_OrderItems_Select_Column>>;
-  distinct?: InputMaybe<Scalars['Boolean']>;
+  distinct?: InputMaybe<Scalars['Boolean']['input']>;
   filter?: InputMaybe<Erp_OrderItems_Bool_Exp>;
   predicate: Int_Comparison_Exp;
 };
@@ -2408,7 +2410,7 @@ export type Erp_OrderItems_Aggregate_Bool_Exp_Count = {
 export type Erp_OrderItems_Aggregate_Fields = {
   __typename?: 'erp_OrderItems_aggregate_fields';
   avg?: Maybe<Erp_OrderItems_Avg_Fields>;
-  count: Scalars['Int'];
+  count: Scalars['Int']['output'];
   max?: Maybe<Erp_OrderItems_Max_Fields>;
   min?: Maybe<Erp_OrderItems_Min_Fields>;
   stddev?: Maybe<Erp_OrderItems_Stddev_Fields>;
@@ -2424,7 +2426,7 @@ export type Erp_OrderItems_Aggregate_Fields = {
 /** aggregate fields of "erp.OrderItems" */
 export type Erp_OrderItems_Aggregate_FieldsCountArgs = {
   columns?: InputMaybe<Array<Erp_OrderItems_Select_Column>>;
-  distinct?: InputMaybe<Scalars['Boolean']>;
+  distinct?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 /** order by aggregate values of table "erp.OrderItems" */
@@ -2452,9 +2454,9 @@ export type Erp_OrderItems_Arr_Rel_Insert_Input = {
 /** aggregate avg on columns */
 export type Erp_OrderItems_Avg_Fields = {
   __typename?: 'erp_OrderItems_avg_fields';
-  OrderID?: Maybe<Scalars['Float']>;
-  OrderItemID?: Maybe<Scalars['Float']>;
-  Quantity?: Maybe<Scalars['Float']>;
+  OrderID?: Maybe<Scalars['Float']['output']>;
+  OrderItemID?: Maybe<Scalars['Float']['output']>;
+  Quantity?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by avg() on columns of table "erp.OrderItems" */
@@ -2488,35 +2490,35 @@ export enum Erp_OrderItems_Constraint {
 
 /** input type for incrementing numeric columns in table "erp.OrderItems" */
 export type Erp_OrderItems_Inc_Input = {
-  OrderID?: InputMaybe<Scalars['Int']>;
-  OrderItemID?: InputMaybe<Scalars['Int']>;
-  Quantity?: InputMaybe<Scalars['Int']>;
+  OrderID?: InputMaybe<Scalars['Int']['input']>;
+  OrderItemID?: InputMaybe<Scalars['Int']['input']>;
+  Quantity?: InputMaybe<Scalars['Int']['input']>;
 };
 
 /** input type for inserting data into table "erp.OrderItems" */
 export type Erp_OrderItems_Insert_Input = {
-  Fitter?: InputMaybe<Scalars['String']>;
-  FullName?: InputMaybe<Scalars['String']>;
-  Name?: InputMaybe<Scalars['String']>;
+  Fitter?: InputMaybe<Scalars['String']['input']>;
+  FullName?: InputMaybe<Scalars['String']['input']>;
+  Name?: InputMaybe<Scalars['String']['input']>;
   Order?: InputMaybe<Erp_Orders_Obj_Rel_Insert_Input>;
-  OrderID?: InputMaybe<Scalars['Int']>;
-  OrderItemID?: InputMaybe<Scalars['Int']>;
-  Quantity?: InputMaybe<Scalars['Int']>;
-  SerialEnds?: InputMaybe<Scalars['String']>;
-  SerialStarts?: InputMaybe<Scalars['String']>;
+  OrderID?: InputMaybe<Scalars['Int']['input']>;
+  OrderItemID?: InputMaybe<Scalars['Int']['input']>;
+  Quantity?: InputMaybe<Scalars['Int']['input']>;
+  SerialEnds?: InputMaybe<Scalars['String']['input']>;
+  SerialStarts?: InputMaybe<Scalars['String']['input']>;
 };
 
 /** aggregate max on columns */
 export type Erp_OrderItems_Max_Fields = {
   __typename?: 'erp_OrderItems_max_fields';
-  Fitter?: Maybe<Scalars['String']>;
-  FullName?: Maybe<Scalars['String']>;
-  Name?: Maybe<Scalars['String']>;
-  OrderID?: Maybe<Scalars['Int']>;
-  OrderItemID?: Maybe<Scalars['Int']>;
-  Quantity?: Maybe<Scalars['Int']>;
-  SerialEnds?: Maybe<Scalars['String']>;
-  SerialStarts?: Maybe<Scalars['String']>;
+  Fitter?: Maybe<Scalars['String']['output']>;
+  FullName?: Maybe<Scalars['String']['output']>;
+  Name?: Maybe<Scalars['String']['output']>;
+  OrderID?: Maybe<Scalars['Int']['output']>;
+  OrderItemID?: Maybe<Scalars['Int']['output']>;
+  Quantity?: Maybe<Scalars['Int']['output']>;
+  SerialEnds?: Maybe<Scalars['String']['output']>;
+  SerialStarts?: Maybe<Scalars['String']['output']>;
 };
 
 /** order by max() on columns of table "erp.OrderItems" */
@@ -2534,14 +2536,14 @@ export type Erp_OrderItems_Max_Order_By = {
 /** aggregate min on columns */
 export type Erp_OrderItems_Min_Fields = {
   __typename?: 'erp_OrderItems_min_fields';
-  Fitter?: Maybe<Scalars['String']>;
-  FullName?: Maybe<Scalars['String']>;
-  Name?: Maybe<Scalars['String']>;
-  OrderID?: Maybe<Scalars['Int']>;
-  OrderItemID?: Maybe<Scalars['Int']>;
-  Quantity?: Maybe<Scalars['Int']>;
-  SerialEnds?: Maybe<Scalars['String']>;
-  SerialStarts?: Maybe<Scalars['String']>;
+  Fitter?: Maybe<Scalars['String']['output']>;
+  FullName?: Maybe<Scalars['String']['output']>;
+  Name?: Maybe<Scalars['String']['output']>;
+  OrderID?: Maybe<Scalars['Int']['output']>;
+  OrderItemID?: Maybe<Scalars['Int']['output']>;
+  Quantity?: Maybe<Scalars['Int']['output']>;
+  SerialEnds?: Maybe<Scalars['String']['output']>;
+  SerialStarts?: Maybe<Scalars['String']['output']>;
 };
 
 /** order by min() on columns of table "erp.OrderItems" */
@@ -2560,7 +2562,7 @@ export type Erp_OrderItems_Min_Order_By = {
 export type Erp_OrderItems_Mutation_Response = {
   __typename?: 'erp_OrderItems_mutation_response';
   /** number of rows affected by the mutation */
-  affected_rows: Scalars['Int'];
+  affected_rows: Scalars['Int']['output'];
   /** data from the rows affected by the mutation */
   returning: Array<Erp_OrderItems>;
 };
@@ -2587,7 +2589,7 @@ export type Erp_OrderItems_Order_By = {
 
 /** primary key columns input for table: erp.OrderItems */
 export type Erp_OrderItems_Pk_Columns_Input = {
-  OrderItemID: Scalars['Int'];
+  OrderItemID: Scalars['Int']['input'];
 };
 
 /** select columns of table "erp.OrderItems" */
@@ -2612,22 +2614,22 @@ export enum Erp_OrderItems_Select_Column {
 
 /** input type for updating data in table "erp.OrderItems" */
 export type Erp_OrderItems_Set_Input = {
-  Fitter?: InputMaybe<Scalars['String']>;
-  FullName?: InputMaybe<Scalars['String']>;
-  Name?: InputMaybe<Scalars['String']>;
-  OrderID?: InputMaybe<Scalars['Int']>;
-  OrderItemID?: InputMaybe<Scalars['Int']>;
-  Quantity?: InputMaybe<Scalars['Int']>;
-  SerialEnds?: InputMaybe<Scalars['String']>;
-  SerialStarts?: InputMaybe<Scalars['String']>;
+  Fitter?: InputMaybe<Scalars['String']['input']>;
+  FullName?: InputMaybe<Scalars['String']['input']>;
+  Name?: InputMaybe<Scalars['String']['input']>;
+  OrderID?: InputMaybe<Scalars['Int']['input']>;
+  OrderItemID?: InputMaybe<Scalars['Int']['input']>;
+  Quantity?: InputMaybe<Scalars['Int']['input']>;
+  SerialEnds?: InputMaybe<Scalars['String']['input']>;
+  SerialStarts?: InputMaybe<Scalars['String']['input']>;
 };
 
 /** aggregate stddev on columns */
 export type Erp_OrderItems_Stddev_Fields = {
   __typename?: 'erp_OrderItems_stddev_fields';
-  OrderID?: Maybe<Scalars['Float']>;
-  OrderItemID?: Maybe<Scalars['Float']>;
-  Quantity?: Maybe<Scalars['Float']>;
+  OrderID?: Maybe<Scalars['Float']['output']>;
+  OrderItemID?: Maybe<Scalars['Float']['output']>;
+  Quantity?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by stddev() on columns of table "erp.OrderItems" */
@@ -2640,9 +2642,9 @@ export type Erp_OrderItems_Stddev_Order_By = {
 /** aggregate stddev_pop on columns */
 export type Erp_OrderItems_Stddev_Pop_Fields = {
   __typename?: 'erp_OrderItems_stddev_pop_fields';
-  OrderID?: Maybe<Scalars['Float']>;
-  OrderItemID?: Maybe<Scalars['Float']>;
-  Quantity?: Maybe<Scalars['Float']>;
+  OrderID?: Maybe<Scalars['Float']['output']>;
+  OrderItemID?: Maybe<Scalars['Float']['output']>;
+  Quantity?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by stddev_pop() on columns of table "erp.OrderItems" */
@@ -2655,9 +2657,9 @@ export type Erp_OrderItems_Stddev_Pop_Order_By = {
 /** aggregate stddev_samp on columns */
 export type Erp_OrderItems_Stddev_Samp_Fields = {
   __typename?: 'erp_OrderItems_stddev_samp_fields';
-  OrderID?: Maybe<Scalars['Float']>;
-  OrderItemID?: Maybe<Scalars['Float']>;
-  Quantity?: Maybe<Scalars['Float']>;
+  OrderID?: Maybe<Scalars['Float']['output']>;
+  OrderItemID?: Maybe<Scalars['Float']['output']>;
+  Quantity?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by stddev_samp() on columns of table "erp.OrderItems" */
@@ -2677,22 +2679,22 @@ export type Erp_OrderItems_Stream_Cursor_Input = {
 
 /** Initial value of the column from where the streaming should start */
 export type Erp_OrderItems_Stream_Cursor_Value_Input = {
-  Fitter?: InputMaybe<Scalars['String']>;
-  FullName?: InputMaybe<Scalars['String']>;
-  Name?: InputMaybe<Scalars['String']>;
-  OrderID?: InputMaybe<Scalars['Int']>;
-  OrderItemID?: InputMaybe<Scalars['Int']>;
-  Quantity?: InputMaybe<Scalars['Int']>;
-  SerialEnds?: InputMaybe<Scalars['String']>;
-  SerialStarts?: InputMaybe<Scalars['String']>;
+  Fitter?: InputMaybe<Scalars['String']['input']>;
+  FullName?: InputMaybe<Scalars['String']['input']>;
+  Name?: InputMaybe<Scalars['String']['input']>;
+  OrderID?: InputMaybe<Scalars['Int']['input']>;
+  OrderItemID?: InputMaybe<Scalars['Int']['input']>;
+  Quantity?: InputMaybe<Scalars['Int']['input']>;
+  SerialEnds?: InputMaybe<Scalars['String']['input']>;
+  SerialStarts?: InputMaybe<Scalars['String']['input']>;
 };
 
 /** aggregate sum on columns */
 export type Erp_OrderItems_Sum_Fields = {
   __typename?: 'erp_OrderItems_sum_fields';
-  OrderID?: Maybe<Scalars['Int']>;
-  OrderItemID?: Maybe<Scalars['Int']>;
-  Quantity?: Maybe<Scalars['Int']>;
+  OrderID?: Maybe<Scalars['Int']['output']>;
+  OrderItemID?: Maybe<Scalars['Int']['output']>;
+  Quantity?: Maybe<Scalars['Int']['output']>;
 };
 
 /** order by sum() on columns of table "erp.OrderItems" */
@@ -2734,9 +2736,9 @@ export type Erp_OrderItems_Updates = {
 /** aggregate var_pop on columns */
 export type Erp_OrderItems_Var_Pop_Fields = {
   __typename?: 'erp_OrderItems_var_pop_fields';
-  OrderID?: Maybe<Scalars['Float']>;
-  OrderItemID?: Maybe<Scalars['Float']>;
-  Quantity?: Maybe<Scalars['Float']>;
+  OrderID?: Maybe<Scalars['Float']['output']>;
+  OrderItemID?: Maybe<Scalars['Float']['output']>;
+  Quantity?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by var_pop() on columns of table "erp.OrderItems" */
@@ -2749,9 +2751,9 @@ export type Erp_OrderItems_Var_Pop_Order_By = {
 /** aggregate var_samp on columns */
 export type Erp_OrderItems_Var_Samp_Fields = {
   __typename?: 'erp_OrderItems_var_samp_fields';
-  OrderID?: Maybe<Scalars['Float']>;
-  OrderItemID?: Maybe<Scalars['Float']>;
-  Quantity?: Maybe<Scalars['Float']>;
+  OrderID?: Maybe<Scalars['Float']['output']>;
+  OrderItemID?: Maybe<Scalars['Float']['output']>;
+  Quantity?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by var_samp() on columns of table "erp.OrderItems" */
@@ -2764,9 +2766,9 @@ export type Erp_OrderItems_Var_Samp_Order_By = {
 /** aggregate variance on columns */
 export type Erp_OrderItems_Variance_Fields = {
   __typename?: 'erp_OrderItems_variance_fields';
-  OrderID?: Maybe<Scalars['Float']>;
-  OrderItemID?: Maybe<Scalars['Float']>;
-  Quantity?: Maybe<Scalars['Float']>;
+  OrderID?: Maybe<Scalars['Float']['output']>;
+  OrderItemID?: Maybe<Scalars['Float']['output']>;
+  Quantity?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by variance() on columns of table "erp.OrderItems" */
@@ -2779,8 +2781,8 @@ export type Erp_OrderItems_Variance_Order_By = {
 /** columns and relationships of "erp.OrderStatus" */
 export type Erp_OrderStatus = {
   __typename?: 'erp_OrderStatus';
-  ID: Scalars['Int'];
-  Name: Scalars['String'];
+  ID: Scalars['Int']['output'];
+  Name: Scalars['String']['output'];
   /** An array relationship */
   Orders: Array<Erp_Orders>;
   /** An aggregate relationship */
@@ -2791,8 +2793,8 @@ export type Erp_OrderStatus = {
 /** columns and relationships of "erp.OrderStatus" */
 export type Erp_OrderStatusOrdersArgs = {
   distinct_on?: InputMaybe<Array<Erp_Orders_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Erp_Orders_Order_By>>;
   where?: InputMaybe<Erp_Orders_Bool_Exp>;
 };
@@ -2801,8 +2803,8 @@ export type Erp_OrderStatusOrdersArgs = {
 /** columns and relationships of "erp.OrderStatus" */
 export type Erp_OrderStatusOrders_AggregateArgs = {
   distinct_on?: InputMaybe<Array<Erp_Orders_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Erp_Orders_Order_By>>;
   where?: InputMaybe<Erp_Orders_Bool_Exp>;
 };
@@ -2818,7 +2820,7 @@ export type Erp_OrderStatus_Aggregate = {
 export type Erp_OrderStatus_Aggregate_Fields = {
   __typename?: 'erp_OrderStatus_aggregate_fields';
   avg?: Maybe<Erp_OrderStatus_Avg_Fields>;
-  count: Scalars['Int'];
+  count: Scalars['Int']['output'];
   max?: Maybe<Erp_OrderStatus_Max_Fields>;
   min?: Maybe<Erp_OrderStatus_Min_Fields>;
   stddev?: Maybe<Erp_OrderStatus_Stddev_Fields>;
@@ -2834,13 +2836,13 @@ export type Erp_OrderStatus_Aggregate_Fields = {
 /** aggregate fields of "erp.OrderStatus" */
 export type Erp_OrderStatus_Aggregate_FieldsCountArgs = {
   columns?: InputMaybe<Array<Erp_OrderStatus_Select_Column>>;
-  distinct?: InputMaybe<Scalars['Boolean']>;
+  distinct?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 /** aggregate avg on columns */
 export type Erp_OrderStatus_Avg_Fields = {
   __typename?: 'erp_OrderStatus_avg_fields';
-  ID?: Maybe<Scalars['Float']>;
+  ID?: Maybe<Scalars['Float']['output']>;
 };
 
 /** Boolean expression to filter rows from the table "erp.OrderStatus". All fields are combined with a logical 'AND'. */
@@ -2862,35 +2864,35 @@ export enum Erp_OrderStatus_Constraint {
 
 /** input type for incrementing numeric columns in table "erp.OrderStatus" */
 export type Erp_OrderStatus_Inc_Input = {
-  ID?: InputMaybe<Scalars['Int']>;
+  ID?: InputMaybe<Scalars['Int']['input']>;
 };
 
 /** input type for inserting data into table "erp.OrderStatus" */
 export type Erp_OrderStatus_Insert_Input = {
-  ID?: InputMaybe<Scalars['Int']>;
-  Name?: InputMaybe<Scalars['String']>;
+  ID?: InputMaybe<Scalars['Int']['input']>;
+  Name?: InputMaybe<Scalars['String']['input']>;
   Orders?: InputMaybe<Erp_Orders_Arr_Rel_Insert_Input>;
 };
 
 /** aggregate max on columns */
 export type Erp_OrderStatus_Max_Fields = {
   __typename?: 'erp_OrderStatus_max_fields';
-  ID?: Maybe<Scalars['Int']>;
-  Name?: Maybe<Scalars['String']>;
+  ID?: Maybe<Scalars['Int']['output']>;
+  Name?: Maybe<Scalars['String']['output']>;
 };
 
 /** aggregate min on columns */
 export type Erp_OrderStatus_Min_Fields = {
   __typename?: 'erp_OrderStatus_min_fields';
-  ID?: Maybe<Scalars['Int']>;
-  Name?: Maybe<Scalars['String']>;
+  ID?: Maybe<Scalars['Int']['output']>;
+  Name?: Maybe<Scalars['String']['output']>;
 };
 
 /** response of any mutation on the table "erp.OrderStatus" */
 export type Erp_OrderStatus_Mutation_Response = {
   __typename?: 'erp_OrderStatus_mutation_response';
   /** number of rows affected by the mutation */
-  affected_rows: Scalars['Int'];
+  affected_rows: Scalars['Int']['output'];
   /** data from the rows affected by the mutation */
   returning: Array<Erp_OrderStatus>;
 };
@@ -2918,7 +2920,7 @@ export type Erp_OrderStatus_Order_By = {
 
 /** primary key columns input for table: erp.OrderStatus */
 export type Erp_OrderStatus_Pk_Columns_Input = {
-  ID: Scalars['Int'];
+  ID: Scalars['Int']['input'];
 };
 
 /** select columns of table "erp.OrderStatus" */
@@ -2931,26 +2933,26 @@ export enum Erp_OrderStatus_Select_Column {
 
 /** input type for updating data in table "erp.OrderStatus" */
 export type Erp_OrderStatus_Set_Input = {
-  ID?: InputMaybe<Scalars['Int']>;
-  Name?: InputMaybe<Scalars['String']>;
+  ID?: InputMaybe<Scalars['Int']['input']>;
+  Name?: InputMaybe<Scalars['String']['input']>;
 };
 
 /** aggregate stddev on columns */
 export type Erp_OrderStatus_Stddev_Fields = {
   __typename?: 'erp_OrderStatus_stddev_fields';
-  ID?: Maybe<Scalars['Float']>;
+  ID?: Maybe<Scalars['Float']['output']>;
 };
 
 /** aggregate stddev_pop on columns */
 export type Erp_OrderStatus_Stddev_Pop_Fields = {
   __typename?: 'erp_OrderStatus_stddev_pop_fields';
-  ID?: Maybe<Scalars['Float']>;
+  ID?: Maybe<Scalars['Float']['output']>;
 };
 
 /** aggregate stddev_samp on columns */
 export type Erp_OrderStatus_Stddev_Samp_Fields = {
   __typename?: 'erp_OrderStatus_stddev_samp_fields';
-  ID?: Maybe<Scalars['Float']>;
+  ID?: Maybe<Scalars['Float']['output']>;
 };
 
 /** Streaming cursor of the table "erp_OrderStatus" */
@@ -2963,14 +2965,14 @@ export type Erp_OrderStatus_Stream_Cursor_Input = {
 
 /** Initial value of the column from where the streaming should start */
 export type Erp_OrderStatus_Stream_Cursor_Value_Input = {
-  ID?: InputMaybe<Scalars['Int']>;
-  Name?: InputMaybe<Scalars['String']>;
+  ID?: InputMaybe<Scalars['Int']['input']>;
+  Name?: InputMaybe<Scalars['String']['input']>;
 };
 
 /** aggregate sum on columns */
 export type Erp_OrderStatus_Sum_Fields = {
   __typename?: 'erp_OrderStatus_sum_fields';
-  ID?: Maybe<Scalars['Int']>;
+  ID?: Maybe<Scalars['Int']['output']>;
 };
 
 /** update columns of table "erp.OrderStatus" */
@@ -2993,64 +2995,64 @@ export type Erp_OrderStatus_Updates = {
 /** aggregate var_pop on columns */
 export type Erp_OrderStatus_Var_Pop_Fields = {
   __typename?: 'erp_OrderStatus_var_pop_fields';
-  ID?: Maybe<Scalars['Float']>;
+  ID?: Maybe<Scalars['Float']['output']>;
 };
 
 /** aggregate var_samp on columns */
 export type Erp_OrderStatus_Var_Samp_Fields = {
   __typename?: 'erp_OrderStatus_var_samp_fields';
-  ID?: Maybe<Scalars['Float']>;
+  ID?: Maybe<Scalars['Float']['output']>;
 };
 
 /** aggregate variance on columns */
 export type Erp_OrderStatus_Variance_Fields = {
   __typename?: 'erp_OrderStatus_variance_fields';
-  ID?: Maybe<Scalars['Float']>;
+  ID?: Maybe<Scalars['Float']['output']>;
 };
 
 /** columns and relationships of "erp.Orders" */
 export type Erp_Orders = {
   __typename?: 'erp_Orders';
-  AcceptanceDate?: Maybe<Scalars['timestamp']>;
-  ActualShippingDate?: Maybe<Scalars['timestamp']>;
-  AwaitingDispatch: Scalars['Boolean'];
-  CheckListTPLID?: Maybe<Scalars['Int']>;
-  City?: Maybe<Scalars['String']>;
-  Comment?: Maybe<Scalars['String']>;
+  AcceptanceDate?: Maybe<Scalars['timestamp']['output']>;
+  ActualShippingDate?: Maybe<Scalars['timestamp']['output']>;
+  AwaitingDispatch: Scalars['Boolean']['output'];
+  CheckListTPLID?: Maybe<Scalars['Int']['output']>;
+  City?: Maybe<Scalars['String']['output']>;
+  Comment?: Maybe<Scalars['String']['output']>;
   /** An array relationship */
   Comments: Array<Erp_Comments>;
   /** An aggregate relationship */
   Comments_aggregate: Erp_Comments_Aggregate;
-  CreatingDate: Scalars['timestamp'];
+  CreatingDate: Scalars['timestamp']['output'];
   /** An array relationship */
   Docs: Array<Erp_Docs>;
   /** An aggregate relationship */
   Docs_aggregate: Erp_Docs_Aggregate;
-  Entity?: Maybe<Scalars['String']>;
-  InvoiceNumber?: Maybe<Scalars['String']>;
-  IsReclamation?: Maybe<Scalars['Boolean']>;
-  ManagerID?: Maybe<Scalars['Int']>;
-  NeedAttention?: Maybe<Scalars['String']>;
+  Entity?: Maybe<Scalars['String']['output']>;
+  InvoiceNumber?: Maybe<Scalars['String']['output']>;
+  IsReclamation?: Maybe<Scalars['Boolean']['output']>;
+  ManagerID?: Maybe<Scalars['Int']['output']>;
+  NeedAttention?: Maybe<Scalars['String']['output']>;
   /** An array relationship */
   Notifications: Array<Erp_Notifications>;
   /** An aggregate relationship */
   Notifications_aggregate: Erp_Notifications_Aggregate;
-  OrderID: Scalars['Int'];
+  OrderID: Scalars['Int']['output'];
   /** An array relationship */
   OrderItems: Array<Erp_OrderItems>;
   /** An aggregate relationship */
   OrderItems_aggregate: Erp_OrderItems_Aggregate;
-  OrderNumber?: Maybe<Scalars['String']>;
+  OrderNumber?: Maybe<Scalars['String']['output']>;
   /** An object relationship */
   OrderStatus: Erp_OrderStatus;
-  OrderStatusID: Scalars['Int'];
-  PaidAmount?: Maybe<Scalars['numeric']>;
+  OrderStatusID: Scalars['Int']['output'];
+  PaidAmount?: Maybe<Scalars['numeric']['output']>;
   /** An array relationship */
   PaymentHistories: Array<Erp_PaymentHistory>;
   /** An aggregate relationship */
   PaymentHistories_aggregate: Erp_PaymentHistory_Aggregate;
-  ShippingDate?: Maybe<Scalars['date']>;
-  TotalAmount?: Maybe<Scalars['numeric']>;
+  ShippingDate?: Maybe<Scalars['date']['output']>;
+  TotalAmount?: Maybe<Scalars['numeric']['output']>;
   /** An object relationship */
   User?: Maybe<Erp_Users>;
 };
@@ -3059,8 +3061,8 @@ export type Erp_Orders = {
 /** columns and relationships of "erp.Orders" */
 export type Erp_OrdersCommentsArgs = {
   distinct_on?: InputMaybe<Array<Erp_Comments_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Erp_Comments_Order_By>>;
   where?: InputMaybe<Erp_Comments_Bool_Exp>;
 };
@@ -3069,8 +3071,8 @@ export type Erp_OrdersCommentsArgs = {
 /** columns and relationships of "erp.Orders" */
 export type Erp_OrdersComments_AggregateArgs = {
   distinct_on?: InputMaybe<Array<Erp_Comments_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Erp_Comments_Order_By>>;
   where?: InputMaybe<Erp_Comments_Bool_Exp>;
 };
@@ -3079,8 +3081,8 @@ export type Erp_OrdersComments_AggregateArgs = {
 /** columns and relationships of "erp.Orders" */
 export type Erp_OrdersDocsArgs = {
   distinct_on?: InputMaybe<Array<Erp_Docs_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Erp_Docs_Order_By>>;
   where?: InputMaybe<Erp_Docs_Bool_Exp>;
 };
@@ -3089,8 +3091,8 @@ export type Erp_OrdersDocsArgs = {
 /** columns and relationships of "erp.Orders" */
 export type Erp_OrdersDocs_AggregateArgs = {
   distinct_on?: InputMaybe<Array<Erp_Docs_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Erp_Docs_Order_By>>;
   where?: InputMaybe<Erp_Docs_Bool_Exp>;
 };
@@ -3099,8 +3101,8 @@ export type Erp_OrdersDocs_AggregateArgs = {
 /** columns and relationships of "erp.Orders" */
 export type Erp_OrdersNotificationsArgs = {
   distinct_on?: InputMaybe<Array<Erp_Notifications_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Erp_Notifications_Order_By>>;
   where?: InputMaybe<Erp_Notifications_Bool_Exp>;
 };
@@ -3109,8 +3111,8 @@ export type Erp_OrdersNotificationsArgs = {
 /** columns and relationships of "erp.Orders" */
 export type Erp_OrdersNotifications_AggregateArgs = {
   distinct_on?: InputMaybe<Array<Erp_Notifications_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Erp_Notifications_Order_By>>;
   where?: InputMaybe<Erp_Notifications_Bool_Exp>;
 };
@@ -3119,8 +3121,8 @@ export type Erp_OrdersNotifications_AggregateArgs = {
 /** columns and relationships of "erp.Orders" */
 export type Erp_OrdersOrderItemsArgs = {
   distinct_on?: InputMaybe<Array<Erp_OrderItems_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Erp_OrderItems_Order_By>>;
   where?: InputMaybe<Erp_OrderItems_Bool_Exp>;
 };
@@ -3129,8 +3131,8 @@ export type Erp_OrdersOrderItemsArgs = {
 /** columns and relationships of "erp.Orders" */
 export type Erp_OrdersOrderItems_AggregateArgs = {
   distinct_on?: InputMaybe<Array<Erp_OrderItems_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Erp_OrderItems_Order_By>>;
   where?: InputMaybe<Erp_OrderItems_Bool_Exp>;
 };
@@ -3139,8 +3141,8 @@ export type Erp_OrdersOrderItems_AggregateArgs = {
 /** columns and relationships of "erp.Orders" */
 export type Erp_OrdersPaymentHistoriesArgs = {
   distinct_on?: InputMaybe<Array<Erp_PaymentHistory_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Erp_PaymentHistory_Order_By>>;
   where?: InputMaybe<Erp_PaymentHistory_Bool_Exp>;
 };
@@ -3149,8 +3151,8 @@ export type Erp_OrdersPaymentHistoriesArgs = {
 /** columns and relationships of "erp.Orders" */
 export type Erp_OrdersPaymentHistories_AggregateArgs = {
   distinct_on?: InputMaybe<Array<Erp_PaymentHistory_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Erp_PaymentHistory_Order_By>>;
   where?: InputMaybe<Erp_PaymentHistory_Bool_Exp>;
 };
@@ -3170,21 +3172,21 @@ export type Erp_Orders_Aggregate_Bool_Exp = {
 
 export type Erp_Orders_Aggregate_Bool_Exp_Bool_And = {
   arguments: Erp_Orders_Select_Column_Erp_Orders_Aggregate_Bool_Exp_Bool_And_Arguments_Columns;
-  distinct?: InputMaybe<Scalars['Boolean']>;
+  distinct?: InputMaybe<Scalars['Boolean']['input']>;
   filter?: InputMaybe<Erp_Orders_Bool_Exp>;
   predicate: Boolean_Comparison_Exp;
 };
 
 export type Erp_Orders_Aggregate_Bool_Exp_Bool_Or = {
   arguments: Erp_Orders_Select_Column_Erp_Orders_Aggregate_Bool_Exp_Bool_Or_Arguments_Columns;
-  distinct?: InputMaybe<Scalars['Boolean']>;
+  distinct?: InputMaybe<Scalars['Boolean']['input']>;
   filter?: InputMaybe<Erp_Orders_Bool_Exp>;
   predicate: Boolean_Comparison_Exp;
 };
 
 export type Erp_Orders_Aggregate_Bool_Exp_Count = {
   arguments?: InputMaybe<Array<Erp_Orders_Select_Column>>;
-  distinct?: InputMaybe<Scalars['Boolean']>;
+  distinct?: InputMaybe<Scalars['Boolean']['input']>;
   filter?: InputMaybe<Erp_Orders_Bool_Exp>;
   predicate: Int_Comparison_Exp;
 };
@@ -3193,7 +3195,7 @@ export type Erp_Orders_Aggregate_Bool_Exp_Count = {
 export type Erp_Orders_Aggregate_Fields = {
   __typename?: 'erp_Orders_aggregate_fields';
   avg?: Maybe<Erp_Orders_Avg_Fields>;
-  count: Scalars['Int'];
+  count: Scalars['Int']['output'];
   max?: Maybe<Erp_Orders_Max_Fields>;
   min?: Maybe<Erp_Orders_Min_Fields>;
   stddev?: Maybe<Erp_Orders_Stddev_Fields>;
@@ -3209,7 +3211,7 @@ export type Erp_Orders_Aggregate_Fields = {
 /** aggregate fields of "erp.Orders" */
 export type Erp_Orders_Aggregate_FieldsCountArgs = {
   columns?: InputMaybe<Array<Erp_Orders_Select_Column>>;
-  distinct?: InputMaybe<Scalars['Boolean']>;
+  distinct?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 /** order by aggregate values of table "erp.Orders" */
@@ -3237,12 +3239,12 @@ export type Erp_Orders_Arr_Rel_Insert_Input = {
 /** aggregate avg on columns */
 export type Erp_Orders_Avg_Fields = {
   __typename?: 'erp_Orders_avg_fields';
-  CheckListTPLID?: Maybe<Scalars['Float']>;
-  ManagerID?: Maybe<Scalars['Float']>;
-  OrderID?: Maybe<Scalars['Float']>;
-  OrderStatusID?: Maybe<Scalars['Float']>;
-  PaidAmount?: Maybe<Scalars['Float']>;
-  TotalAmount?: Maybe<Scalars['Float']>;
+  CheckListTPLID?: Maybe<Scalars['Float']['output']>;
+  ManagerID?: Maybe<Scalars['Float']['output']>;
+  OrderID?: Maybe<Scalars['Float']['output']>;
+  OrderStatusID?: Maybe<Scalars['Float']['output']>;
+  PaidAmount?: Maybe<Scalars['Float']['output']>;
+  TotalAmount?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by avg() on columns of table "erp.Orders" */
@@ -3300,62 +3302,62 @@ export enum Erp_Orders_Constraint {
 
 /** input type for incrementing numeric columns in table "erp.Orders" */
 export type Erp_Orders_Inc_Input = {
-  CheckListTPLID?: InputMaybe<Scalars['Int']>;
-  ManagerID?: InputMaybe<Scalars['Int']>;
-  OrderID?: InputMaybe<Scalars['Int']>;
-  OrderStatusID?: InputMaybe<Scalars['Int']>;
-  PaidAmount?: InputMaybe<Scalars['numeric']>;
-  TotalAmount?: InputMaybe<Scalars['numeric']>;
+  CheckListTPLID?: InputMaybe<Scalars['Int']['input']>;
+  ManagerID?: InputMaybe<Scalars['Int']['input']>;
+  OrderID?: InputMaybe<Scalars['Int']['input']>;
+  OrderStatusID?: InputMaybe<Scalars['Int']['input']>;
+  PaidAmount?: InputMaybe<Scalars['numeric']['input']>;
+  TotalAmount?: InputMaybe<Scalars['numeric']['input']>;
 };
 
 /** input type for inserting data into table "erp.Orders" */
 export type Erp_Orders_Insert_Input = {
-  AcceptanceDate?: InputMaybe<Scalars['timestamp']>;
-  ActualShippingDate?: InputMaybe<Scalars['timestamp']>;
-  AwaitingDispatch?: InputMaybe<Scalars['Boolean']>;
-  CheckListTPLID?: InputMaybe<Scalars['Int']>;
-  City?: InputMaybe<Scalars['String']>;
-  Comment?: InputMaybe<Scalars['String']>;
+  AcceptanceDate?: InputMaybe<Scalars['timestamp']['input']>;
+  ActualShippingDate?: InputMaybe<Scalars['timestamp']['input']>;
+  AwaitingDispatch?: InputMaybe<Scalars['Boolean']['input']>;
+  CheckListTPLID?: InputMaybe<Scalars['Int']['input']>;
+  City?: InputMaybe<Scalars['String']['input']>;
+  Comment?: InputMaybe<Scalars['String']['input']>;
   Comments?: InputMaybe<Erp_Comments_Arr_Rel_Insert_Input>;
-  CreatingDate?: InputMaybe<Scalars['timestamp']>;
+  CreatingDate?: InputMaybe<Scalars['timestamp']['input']>;
   Docs?: InputMaybe<Erp_Docs_Arr_Rel_Insert_Input>;
-  Entity?: InputMaybe<Scalars['String']>;
-  InvoiceNumber?: InputMaybe<Scalars['String']>;
-  IsReclamation?: InputMaybe<Scalars['Boolean']>;
-  ManagerID?: InputMaybe<Scalars['Int']>;
-  NeedAttention?: InputMaybe<Scalars['String']>;
+  Entity?: InputMaybe<Scalars['String']['input']>;
+  InvoiceNumber?: InputMaybe<Scalars['String']['input']>;
+  IsReclamation?: InputMaybe<Scalars['Boolean']['input']>;
+  ManagerID?: InputMaybe<Scalars['Int']['input']>;
+  NeedAttention?: InputMaybe<Scalars['String']['input']>;
   Notifications?: InputMaybe<Erp_Notifications_Arr_Rel_Insert_Input>;
-  OrderID?: InputMaybe<Scalars['Int']>;
+  OrderID?: InputMaybe<Scalars['Int']['input']>;
   OrderItems?: InputMaybe<Erp_OrderItems_Arr_Rel_Insert_Input>;
-  OrderNumber?: InputMaybe<Scalars['String']>;
+  OrderNumber?: InputMaybe<Scalars['String']['input']>;
   OrderStatus?: InputMaybe<Erp_OrderStatus_Obj_Rel_Insert_Input>;
-  OrderStatusID?: InputMaybe<Scalars['Int']>;
-  PaidAmount?: InputMaybe<Scalars['numeric']>;
+  OrderStatusID?: InputMaybe<Scalars['Int']['input']>;
+  PaidAmount?: InputMaybe<Scalars['numeric']['input']>;
   PaymentHistories?: InputMaybe<Erp_PaymentHistory_Arr_Rel_Insert_Input>;
-  ShippingDate?: InputMaybe<Scalars['date']>;
-  TotalAmount?: InputMaybe<Scalars['numeric']>;
+  ShippingDate?: InputMaybe<Scalars['date']['input']>;
+  TotalAmount?: InputMaybe<Scalars['numeric']['input']>;
   User?: InputMaybe<Erp_Users_Obj_Rel_Insert_Input>;
 };
 
 /** aggregate max on columns */
 export type Erp_Orders_Max_Fields = {
   __typename?: 'erp_Orders_max_fields';
-  AcceptanceDate?: Maybe<Scalars['timestamp']>;
-  ActualShippingDate?: Maybe<Scalars['timestamp']>;
-  CheckListTPLID?: Maybe<Scalars['Int']>;
-  City?: Maybe<Scalars['String']>;
-  Comment?: Maybe<Scalars['String']>;
-  CreatingDate?: Maybe<Scalars['timestamp']>;
-  Entity?: Maybe<Scalars['String']>;
-  InvoiceNumber?: Maybe<Scalars['String']>;
-  ManagerID?: Maybe<Scalars['Int']>;
-  NeedAttention?: Maybe<Scalars['String']>;
-  OrderID?: Maybe<Scalars['Int']>;
-  OrderNumber?: Maybe<Scalars['String']>;
-  OrderStatusID?: Maybe<Scalars['Int']>;
-  PaidAmount?: Maybe<Scalars['numeric']>;
-  ShippingDate?: Maybe<Scalars['date']>;
-  TotalAmount?: Maybe<Scalars['numeric']>;
+  AcceptanceDate?: Maybe<Scalars['timestamp']['output']>;
+  ActualShippingDate?: Maybe<Scalars['timestamp']['output']>;
+  CheckListTPLID?: Maybe<Scalars['Int']['output']>;
+  City?: Maybe<Scalars['String']['output']>;
+  Comment?: Maybe<Scalars['String']['output']>;
+  CreatingDate?: Maybe<Scalars['timestamp']['output']>;
+  Entity?: Maybe<Scalars['String']['output']>;
+  InvoiceNumber?: Maybe<Scalars['String']['output']>;
+  ManagerID?: Maybe<Scalars['Int']['output']>;
+  NeedAttention?: Maybe<Scalars['String']['output']>;
+  OrderID?: Maybe<Scalars['Int']['output']>;
+  OrderNumber?: Maybe<Scalars['String']['output']>;
+  OrderStatusID?: Maybe<Scalars['Int']['output']>;
+  PaidAmount?: Maybe<Scalars['numeric']['output']>;
+  ShippingDate?: Maybe<Scalars['date']['output']>;
+  TotalAmount?: Maybe<Scalars['numeric']['output']>;
 };
 
 /** order by max() on columns of table "erp.Orders" */
@@ -3381,22 +3383,22 @@ export type Erp_Orders_Max_Order_By = {
 /** aggregate min on columns */
 export type Erp_Orders_Min_Fields = {
   __typename?: 'erp_Orders_min_fields';
-  AcceptanceDate?: Maybe<Scalars['timestamp']>;
-  ActualShippingDate?: Maybe<Scalars['timestamp']>;
-  CheckListTPLID?: Maybe<Scalars['Int']>;
-  City?: Maybe<Scalars['String']>;
-  Comment?: Maybe<Scalars['String']>;
-  CreatingDate?: Maybe<Scalars['timestamp']>;
-  Entity?: Maybe<Scalars['String']>;
-  InvoiceNumber?: Maybe<Scalars['String']>;
-  ManagerID?: Maybe<Scalars['Int']>;
-  NeedAttention?: Maybe<Scalars['String']>;
-  OrderID?: Maybe<Scalars['Int']>;
-  OrderNumber?: Maybe<Scalars['String']>;
-  OrderStatusID?: Maybe<Scalars['Int']>;
-  PaidAmount?: Maybe<Scalars['numeric']>;
-  ShippingDate?: Maybe<Scalars['date']>;
-  TotalAmount?: Maybe<Scalars['numeric']>;
+  AcceptanceDate?: Maybe<Scalars['timestamp']['output']>;
+  ActualShippingDate?: Maybe<Scalars['timestamp']['output']>;
+  CheckListTPLID?: Maybe<Scalars['Int']['output']>;
+  City?: Maybe<Scalars['String']['output']>;
+  Comment?: Maybe<Scalars['String']['output']>;
+  CreatingDate?: Maybe<Scalars['timestamp']['output']>;
+  Entity?: Maybe<Scalars['String']['output']>;
+  InvoiceNumber?: Maybe<Scalars['String']['output']>;
+  ManagerID?: Maybe<Scalars['Int']['output']>;
+  NeedAttention?: Maybe<Scalars['String']['output']>;
+  OrderID?: Maybe<Scalars['Int']['output']>;
+  OrderNumber?: Maybe<Scalars['String']['output']>;
+  OrderStatusID?: Maybe<Scalars['Int']['output']>;
+  PaidAmount?: Maybe<Scalars['numeric']['output']>;
+  ShippingDate?: Maybe<Scalars['date']['output']>;
+  TotalAmount?: Maybe<Scalars['numeric']['output']>;
 };
 
 /** order by min() on columns of table "erp.Orders" */
@@ -3423,7 +3425,7 @@ export type Erp_Orders_Min_Order_By = {
 export type Erp_Orders_Mutation_Response = {
   __typename?: 'erp_Orders_mutation_response';
   /** number of rows affected by the mutation */
-  affected_rows: Scalars['Int'];
+  affected_rows: Scalars['Int']['output'];
   /** data from the rows affected by the mutation */
   returning: Array<Erp_Orders>;
 };
@@ -3473,7 +3475,7 @@ export type Erp_Orders_Order_By = {
 
 /** primary key columns input for table: erp.Orders */
 export type Erp_Orders_Pk_Columns_Input = {
-  OrderID: Scalars['Int'];
+  OrderID: Scalars['Int']['input'];
 };
 
 /** select columns of table "erp.Orders" */
@@ -3534,35 +3536,35 @@ export enum Erp_Orders_Select_Column_Erp_Orders_Aggregate_Bool_Exp_Bool_Or_Argum
 
 /** input type for updating data in table "erp.Orders" */
 export type Erp_Orders_Set_Input = {
-  AcceptanceDate?: InputMaybe<Scalars['timestamp']>;
-  ActualShippingDate?: InputMaybe<Scalars['timestamp']>;
-  AwaitingDispatch?: InputMaybe<Scalars['Boolean']>;
-  CheckListTPLID?: InputMaybe<Scalars['Int']>;
-  City?: InputMaybe<Scalars['String']>;
-  Comment?: InputMaybe<Scalars['String']>;
-  CreatingDate?: InputMaybe<Scalars['timestamp']>;
-  Entity?: InputMaybe<Scalars['String']>;
-  InvoiceNumber?: InputMaybe<Scalars['String']>;
-  IsReclamation?: InputMaybe<Scalars['Boolean']>;
-  ManagerID?: InputMaybe<Scalars['Int']>;
-  NeedAttention?: InputMaybe<Scalars['String']>;
-  OrderID?: InputMaybe<Scalars['Int']>;
-  OrderNumber?: InputMaybe<Scalars['String']>;
-  OrderStatusID?: InputMaybe<Scalars['Int']>;
-  PaidAmount?: InputMaybe<Scalars['numeric']>;
-  ShippingDate?: InputMaybe<Scalars['date']>;
-  TotalAmount?: InputMaybe<Scalars['numeric']>;
+  AcceptanceDate?: InputMaybe<Scalars['timestamp']['input']>;
+  ActualShippingDate?: InputMaybe<Scalars['timestamp']['input']>;
+  AwaitingDispatch?: InputMaybe<Scalars['Boolean']['input']>;
+  CheckListTPLID?: InputMaybe<Scalars['Int']['input']>;
+  City?: InputMaybe<Scalars['String']['input']>;
+  Comment?: InputMaybe<Scalars['String']['input']>;
+  CreatingDate?: InputMaybe<Scalars['timestamp']['input']>;
+  Entity?: InputMaybe<Scalars['String']['input']>;
+  InvoiceNumber?: InputMaybe<Scalars['String']['input']>;
+  IsReclamation?: InputMaybe<Scalars['Boolean']['input']>;
+  ManagerID?: InputMaybe<Scalars['Int']['input']>;
+  NeedAttention?: InputMaybe<Scalars['String']['input']>;
+  OrderID?: InputMaybe<Scalars['Int']['input']>;
+  OrderNumber?: InputMaybe<Scalars['String']['input']>;
+  OrderStatusID?: InputMaybe<Scalars['Int']['input']>;
+  PaidAmount?: InputMaybe<Scalars['numeric']['input']>;
+  ShippingDate?: InputMaybe<Scalars['date']['input']>;
+  TotalAmount?: InputMaybe<Scalars['numeric']['input']>;
 };
 
 /** aggregate stddev on columns */
 export type Erp_Orders_Stddev_Fields = {
   __typename?: 'erp_Orders_stddev_fields';
-  CheckListTPLID?: Maybe<Scalars['Float']>;
-  ManagerID?: Maybe<Scalars['Float']>;
-  OrderID?: Maybe<Scalars['Float']>;
-  OrderStatusID?: Maybe<Scalars['Float']>;
-  PaidAmount?: Maybe<Scalars['Float']>;
-  TotalAmount?: Maybe<Scalars['Float']>;
+  CheckListTPLID?: Maybe<Scalars['Float']['output']>;
+  ManagerID?: Maybe<Scalars['Float']['output']>;
+  OrderID?: Maybe<Scalars['Float']['output']>;
+  OrderStatusID?: Maybe<Scalars['Float']['output']>;
+  PaidAmount?: Maybe<Scalars['Float']['output']>;
+  TotalAmount?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by stddev() on columns of table "erp.Orders" */
@@ -3578,12 +3580,12 @@ export type Erp_Orders_Stddev_Order_By = {
 /** aggregate stddev_pop on columns */
 export type Erp_Orders_Stddev_Pop_Fields = {
   __typename?: 'erp_Orders_stddev_pop_fields';
-  CheckListTPLID?: Maybe<Scalars['Float']>;
-  ManagerID?: Maybe<Scalars['Float']>;
-  OrderID?: Maybe<Scalars['Float']>;
-  OrderStatusID?: Maybe<Scalars['Float']>;
-  PaidAmount?: Maybe<Scalars['Float']>;
-  TotalAmount?: Maybe<Scalars['Float']>;
+  CheckListTPLID?: Maybe<Scalars['Float']['output']>;
+  ManagerID?: Maybe<Scalars['Float']['output']>;
+  OrderID?: Maybe<Scalars['Float']['output']>;
+  OrderStatusID?: Maybe<Scalars['Float']['output']>;
+  PaidAmount?: Maybe<Scalars['Float']['output']>;
+  TotalAmount?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by stddev_pop() on columns of table "erp.Orders" */
@@ -3599,12 +3601,12 @@ export type Erp_Orders_Stddev_Pop_Order_By = {
 /** aggregate stddev_samp on columns */
 export type Erp_Orders_Stddev_Samp_Fields = {
   __typename?: 'erp_Orders_stddev_samp_fields';
-  CheckListTPLID?: Maybe<Scalars['Float']>;
-  ManagerID?: Maybe<Scalars['Float']>;
-  OrderID?: Maybe<Scalars['Float']>;
-  OrderStatusID?: Maybe<Scalars['Float']>;
-  PaidAmount?: Maybe<Scalars['Float']>;
-  TotalAmount?: Maybe<Scalars['Float']>;
+  CheckListTPLID?: Maybe<Scalars['Float']['output']>;
+  ManagerID?: Maybe<Scalars['Float']['output']>;
+  OrderID?: Maybe<Scalars['Float']['output']>;
+  OrderStatusID?: Maybe<Scalars['Float']['output']>;
+  PaidAmount?: Maybe<Scalars['Float']['output']>;
+  TotalAmount?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by stddev_samp() on columns of table "erp.Orders" */
@@ -3627,35 +3629,35 @@ export type Erp_Orders_Stream_Cursor_Input = {
 
 /** Initial value of the column from where the streaming should start */
 export type Erp_Orders_Stream_Cursor_Value_Input = {
-  AcceptanceDate?: InputMaybe<Scalars['timestamp']>;
-  ActualShippingDate?: InputMaybe<Scalars['timestamp']>;
-  AwaitingDispatch?: InputMaybe<Scalars['Boolean']>;
-  CheckListTPLID?: InputMaybe<Scalars['Int']>;
-  City?: InputMaybe<Scalars['String']>;
-  Comment?: InputMaybe<Scalars['String']>;
-  CreatingDate?: InputMaybe<Scalars['timestamp']>;
-  Entity?: InputMaybe<Scalars['String']>;
-  InvoiceNumber?: InputMaybe<Scalars['String']>;
-  IsReclamation?: InputMaybe<Scalars['Boolean']>;
-  ManagerID?: InputMaybe<Scalars['Int']>;
-  NeedAttention?: InputMaybe<Scalars['String']>;
-  OrderID?: InputMaybe<Scalars['Int']>;
-  OrderNumber?: InputMaybe<Scalars['String']>;
-  OrderStatusID?: InputMaybe<Scalars['Int']>;
-  PaidAmount?: InputMaybe<Scalars['numeric']>;
-  ShippingDate?: InputMaybe<Scalars['date']>;
-  TotalAmount?: InputMaybe<Scalars['numeric']>;
+  AcceptanceDate?: InputMaybe<Scalars['timestamp']['input']>;
+  ActualShippingDate?: InputMaybe<Scalars['timestamp']['input']>;
+  AwaitingDispatch?: InputMaybe<Scalars['Boolean']['input']>;
+  CheckListTPLID?: InputMaybe<Scalars['Int']['input']>;
+  City?: InputMaybe<Scalars['String']['input']>;
+  Comment?: InputMaybe<Scalars['String']['input']>;
+  CreatingDate?: InputMaybe<Scalars['timestamp']['input']>;
+  Entity?: InputMaybe<Scalars['String']['input']>;
+  InvoiceNumber?: InputMaybe<Scalars['String']['input']>;
+  IsReclamation?: InputMaybe<Scalars['Boolean']['input']>;
+  ManagerID?: InputMaybe<Scalars['Int']['input']>;
+  NeedAttention?: InputMaybe<Scalars['String']['input']>;
+  OrderID?: InputMaybe<Scalars['Int']['input']>;
+  OrderNumber?: InputMaybe<Scalars['String']['input']>;
+  OrderStatusID?: InputMaybe<Scalars['Int']['input']>;
+  PaidAmount?: InputMaybe<Scalars['numeric']['input']>;
+  ShippingDate?: InputMaybe<Scalars['date']['input']>;
+  TotalAmount?: InputMaybe<Scalars['numeric']['input']>;
 };
 
 /** aggregate sum on columns */
 export type Erp_Orders_Sum_Fields = {
   __typename?: 'erp_Orders_sum_fields';
-  CheckListTPLID?: Maybe<Scalars['Int']>;
-  ManagerID?: Maybe<Scalars['Int']>;
-  OrderID?: Maybe<Scalars['Int']>;
-  OrderStatusID?: Maybe<Scalars['Int']>;
-  PaidAmount?: Maybe<Scalars['numeric']>;
-  TotalAmount?: Maybe<Scalars['numeric']>;
+  CheckListTPLID?: Maybe<Scalars['Int']['output']>;
+  ManagerID?: Maybe<Scalars['Int']['output']>;
+  OrderID?: Maybe<Scalars['Int']['output']>;
+  OrderStatusID?: Maybe<Scalars['Int']['output']>;
+  PaidAmount?: Maybe<Scalars['numeric']['output']>;
+  TotalAmount?: Maybe<Scalars['numeric']['output']>;
 };
 
 /** order by sum() on columns of table "erp.Orders" */
@@ -3720,12 +3722,12 @@ export type Erp_Orders_Updates = {
 /** aggregate var_pop on columns */
 export type Erp_Orders_Var_Pop_Fields = {
   __typename?: 'erp_Orders_var_pop_fields';
-  CheckListTPLID?: Maybe<Scalars['Float']>;
-  ManagerID?: Maybe<Scalars['Float']>;
-  OrderID?: Maybe<Scalars['Float']>;
-  OrderStatusID?: Maybe<Scalars['Float']>;
-  PaidAmount?: Maybe<Scalars['Float']>;
-  TotalAmount?: Maybe<Scalars['Float']>;
+  CheckListTPLID?: Maybe<Scalars['Float']['output']>;
+  ManagerID?: Maybe<Scalars['Float']['output']>;
+  OrderID?: Maybe<Scalars['Float']['output']>;
+  OrderStatusID?: Maybe<Scalars['Float']['output']>;
+  PaidAmount?: Maybe<Scalars['Float']['output']>;
+  TotalAmount?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by var_pop() on columns of table "erp.Orders" */
@@ -3741,12 +3743,12 @@ export type Erp_Orders_Var_Pop_Order_By = {
 /** aggregate var_samp on columns */
 export type Erp_Orders_Var_Samp_Fields = {
   __typename?: 'erp_Orders_var_samp_fields';
-  CheckListTPLID?: Maybe<Scalars['Float']>;
-  ManagerID?: Maybe<Scalars['Float']>;
-  OrderID?: Maybe<Scalars['Float']>;
-  OrderStatusID?: Maybe<Scalars['Float']>;
-  PaidAmount?: Maybe<Scalars['Float']>;
-  TotalAmount?: Maybe<Scalars['Float']>;
+  CheckListTPLID?: Maybe<Scalars['Float']['output']>;
+  ManagerID?: Maybe<Scalars['Float']['output']>;
+  OrderID?: Maybe<Scalars['Float']['output']>;
+  OrderStatusID?: Maybe<Scalars['Float']['output']>;
+  PaidAmount?: Maybe<Scalars['Float']['output']>;
+  TotalAmount?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by var_samp() on columns of table "erp.Orders" */
@@ -3762,12 +3764,12 @@ export type Erp_Orders_Var_Samp_Order_By = {
 /** aggregate variance on columns */
 export type Erp_Orders_Variance_Fields = {
   __typename?: 'erp_Orders_variance_fields';
-  CheckListTPLID?: Maybe<Scalars['Float']>;
-  ManagerID?: Maybe<Scalars['Float']>;
-  OrderID?: Maybe<Scalars['Float']>;
-  OrderStatusID?: Maybe<Scalars['Float']>;
-  PaidAmount?: Maybe<Scalars['Float']>;
-  TotalAmount?: Maybe<Scalars['Float']>;
+  CheckListTPLID?: Maybe<Scalars['Float']['output']>;
+  ManagerID?: Maybe<Scalars['Float']['output']>;
+  OrderID?: Maybe<Scalars['Float']['output']>;
+  OrderStatusID?: Maybe<Scalars['Float']['output']>;
+  PaidAmount?: Maybe<Scalars['Float']['output']>;
+  TotalAmount?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by variance() on columns of table "erp.Orders" */
@@ -3783,12 +3785,12 @@ export type Erp_Orders_Variance_Order_By = {
 /** columns and relationships of "erp.PaymentHistory" */
 export type Erp_PaymentHistory = {
   __typename?: 'erp_PaymentHistory';
-  Date: Scalars['timestamp'];
-  ID: Scalars['Int'];
+  Date: Scalars['timestamp']['output'];
+  ID: Scalars['Int']['output'];
   /** An object relationship */
   Order: Erp_Orders;
-  OrderID: Scalars['Int'];
-  PaidAmount: Scalars['numeric'];
+  OrderID: Scalars['Int']['output'];
+  PaidAmount: Scalars['numeric']['output'];
 };
 
 /** aggregated selection of "erp.PaymentHistory" */
@@ -3804,7 +3806,7 @@ export type Erp_PaymentHistory_Aggregate_Bool_Exp = {
 
 export type Erp_PaymentHistory_Aggregate_Bool_Exp_Count = {
   arguments?: InputMaybe<Array<Erp_PaymentHistory_Select_Column>>;
-  distinct?: InputMaybe<Scalars['Boolean']>;
+  distinct?: InputMaybe<Scalars['Boolean']['input']>;
   filter?: InputMaybe<Erp_PaymentHistory_Bool_Exp>;
   predicate: Int_Comparison_Exp;
 };
@@ -3813,7 +3815,7 @@ export type Erp_PaymentHistory_Aggregate_Bool_Exp_Count = {
 export type Erp_PaymentHistory_Aggregate_Fields = {
   __typename?: 'erp_PaymentHistory_aggregate_fields';
   avg?: Maybe<Erp_PaymentHistory_Avg_Fields>;
-  count: Scalars['Int'];
+  count: Scalars['Int']['output'];
   max?: Maybe<Erp_PaymentHistory_Max_Fields>;
   min?: Maybe<Erp_PaymentHistory_Min_Fields>;
   stddev?: Maybe<Erp_PaymentHistory_Stddev_Fields>;
@@ -3829,7 +3831,7 @@ export type Erp_PaymentHistory_Aggregate_Fields = {
 /** aggregate fields of "erp.PaymentHistory" */
 export type Erp_PaymentHistory_Aggregate_FieldsCountArgs = {
   columns?: InputMaybe<Array<Erp_PaymentHistory_Select_Column>>;
-  distinct?: InputMaybe<Scalars['Boolean']>;
+  distinct?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 /** order by aggregate values of table "erp.PaymentHistory" */
@@ -3857,9 +3859,9 @@ export type Erp_PaymentHistory_Arr_Rel_Insert_Input = {
 /** aggregate avg on columns */
 export type Erp_PaymentHistory_Avg_Fields = {
   __typename?: 'erp_PaymentHistory_avg_fields';
-  ID?: Maybe<Scalars['Float']>;
-  OrderID?: Maybe<Scalars['Float']>;
-  PaidAmount?: Maybe<Scalars['Float']>;
+  ID?: Maybe<Scalars['Float']['output']>;
+  OrderID?: Maybe<Scalars['Float']['output']>;
+  PaidAmount?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by avg() on columns of table "erp.PaymentHistory" */
@@ -3891,27 +3893,27 @@ export enum Erp_PaymentHistory_Constraint {
 
 /** input type for incrementing numeric columns in table "erp.PaymentHistory" */
 export type Erp_PaymentHistory_Inc_Input = {
-  ID?: InputMaybe<Scalars['Int']>;
-  OrderID?: InputMaybe<Scalars['Int']>;
-  PaidAmount?: InputMaybe<Scalars['numeric']>;
+  ID?: InputMaybe<Scalars['Int']['input']>;
+  OrderID?: InputMaybe<Scalars['Int']['input']>;
+  PaidAmount?: InputMaybe<Scalars['numeric']['input']>;
 };
 
 /** input type for inserting data into table "erp.PaymentHistory" */
 export type Erp_PaymentHistory_Insert_Input = {
-  Date?: InputMaybe<Scalars['timestamp']>;
-  ID?: InputMaybe<Scalars['Int']>;
+  Date?: InputMaybe<Scalars['timestamp']['input']>;
+  ID?: InputMaybe<Scalars['Int']['input']>;
   Order?: InputMaybe<Erp_Orders_Obj_Rel_Insert_Input>;
-  OrderID?: InputMaybe<Scalars['Int']>;
-  PaidAmount?: InputMaybe<Scalars['numeric']>;
+  OrderID?: InputMaybe<Scalars['Int']['input']>;
+  PaidAmount?: InputMaybe<Scalars['numeric']['input']>;
 };
 
 /** aggregate max on columns */
 export type Erp_PaymentHistory_Max_Fields = {
   __typename?: 'erp_PaymentHistory_max_fields';
-  Date?: Maybe<Scalars['timestamp']>;
-  ID?: Maybe<Scalars['Int']>;
-  OrderID?: Maybe<Scalars['Int']>;
-  PaidAmount?: Maybe<Scalars['numeric']>;
+  Date?: Maybe<Scalars['timestamp']['output']>;
+  ID?: Maybe<Scalars['Int']['output']>;
+  OrderID?: Maybe<Scalars['Int']['output']>;
+  PaidAmount?: Maybe<Scalars['numeric']['output']>;
 };
 
 /** order by max() on columns of table "erp.PaymentHistory" */
@@ -3925,10 +3927,10 @@ export type Erp_PaymentHistory_Max_Order_By = {
 /** aggregate min on columns */
 export type Erp_PaymentHistory_Min_Fields = {
   __typename?: 'erp_PaymentHistory_min_fields';
-  Date?: Maybe<Scalars['timestamp']>;
-  ID?: Maybe<Scalars['Int']>;
-  OrderID?: Maybe<Scalars['Int']>;
-  PaidAmount?: Maybe<Scalars['numeric']>;
+  Date?: Maybe<Scalars['timestamp']['output']>;
+  ID?: Maybe<Scalars['Int']['output']>;
+  OrderID?: Maybe<Scalars['Int']['output']>;
+  PaidAmount?: Maybe<Scalars['numeric']['output']>;
 };
 
 /** order by min() on columns of table "erp.PaymentHistory" */
@@ -3943,7 +3945,7 @@ export type Erp_PaymentHistory_Min_Order_By = {
 export type Erp_PaymentHistory_Mutation_Response = {
   __typename?: 'erp_PaymentHistory_mutation_response';
   /** number of rows affected by the mutation */
-  affected_rows: Scalars['Int'];
+  affected_rows: Scalars['Int']['output'];
   /** data from the rows affected by the mutation */
   returning: Array<Erp_PaymentHistory>;
 };
@@ -3966,7 +3968,7 @@ export type Erp_PaymentHistory_Order_By = {
 
 /** primary key columns input for table: erp.PaymentHistory */
 export type Erp_PaymentHistory_Pk_Columns_Input = {
-  ID: Scalars['Int'];
+  ID: Scalars['Int']['input'];
 };
 
 /** select columns of table "erp.PaymentHistory" */
@@ -3983,18 +3985,18 @@ export enum Erp_PaymentHistory_Select_Column {
 
 /** input type for updating data in table "erp.PaymentHistory" */
 export type Erp_PaymentHistory_Set_Input = {
-  Date?: InputMaybe<Scalars['timestamp']>;
-  ID?: InputMaybe<Scalars['Int']>;
-  OrderID?: InputMaybe<Scalars['Int']>;
-  PaidAmount?: InputMaybe<Scalars['numeric']>;
+  Date?: InputMaybe<Scalars['timestamp']['input']>;
+  ID?: InputMaybe<Scalars['Int']['input']>;
+  OrderID?: InputMaybe<Scalars['Int']['input']>;
+  PaidAmount?: InputMaybe<Scalars['numeric']['input']>;
 };
 
 /** aggregate stddev on columns */
 export type Erp_PaymentHistory_Stddev_Fields = {
   __typename?: 'erp_PaymentHistory_stddev_fields';
-  ID?: Maybe<Scalars['Float']>;
-  OrderID?: Maybe<Scalars['Float']>;
-  PaidAmount?: Maybe<Scalars['Float']>;
+  ID?: Maybe<Scalars['Float']['output']>;
+  OrderID?: Maybe<Scalars['Float']['output']>;
+  PaidAmount?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by stddev() on columns of table "erp.PaymentHistory" */
@@ -4007,9 +4009,9 @@ export type Erp_PaymentHistory_Stddev_Order_By = {
 /** aggregate stddev_pop on columns */
 export type Erp_PaymentHistory_Stddev_Pop_Fields = {
   __typename?: 'erp_PaymentHistory_stddev_pop_fields';
-  ID?: Maybe<Scalars['Float']>;
-  OrderID?: Maybe<Scalars['Float']>;
-  PaidAmount?: Maybe<Scalars['Float']>;
+  ID?: Maybe<Scalars['Float']['output']>;
+  OrderID?: Maybe<Scalars['Float']['output']>;
+  PaidAmount?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by stddev_pop() on columns of table "erp.PaymentHistory" */
@@ -4022,9 +4024,9 @@ export type Erp_PaymentHistory_Stddev_Pop_Order_By = {
 /** aggregate stddev_samp on columns */
 export type Erp_PaymentHistory_Stddev_Samp_Fields = {
   __typename?: 'erp_PaymentHistory_stddev_samp_fields';
-  ID?: Maybe<Scalars['Float']>;
-  OrderID?: Maybe<Scalars['Float']>;
-  PaidAmount?: Maybe<Scalars['Float']>;
+  ID?: Maybe<Scalars['Float']['output']>;
+  OrderID?: Maybe<Scalars['Float']['output']>;
+  PaidAmount?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by stddev_samp() on columns of table "erp.PaymentHistory" */
@@ -4044,18 +4046,18 @@ export type Erp_PaymentHistory_Stream_Cursor_Input = {
 
 /** Initial value of the column from where the streaming should start */
 export type Erp_PaymentHistory_Stream_Cursor_Value_Input = {
-  Date?: InputMaybe<Scalars['timestamp']>;
-  ID?: InputMaybe<Scalars['Int']>;
-  OrderID?: InputMaybe<Scalars['Int']>;
-  PaidAmount?: InputMaybe<Scalars['numeric']>;
+  Date?: InputMaybe<Scalars['timestamp']['input']>;
+  ID?: InputMaybe<Scalars['Int']['input']>;
+  OrderID?: InputMaybe<Scalars['Int']['input']>;
+  PaidAmount?: InputMaybe<Scalars['numeric']['input']>;
 };
 
 /** aggregate sum on columns */
 export type Erp_PaymentHistory_Sum_Fields = {
   __typename?: 'erp_PaymentHistory_sum_fields';
-  ID?: Maybe<Scalars['Int']>;
-  OrderID?: Maybe<Scalars['Int']>;
-  PaidAmount?: Maybe<Scalars['numeric']>;
+  ID?: Maybe<Scalars['Int']['output']>;
+  OrderID?: Maybe<Scalars['Int']['output']>;
+  PaidAmount?: Maybe<Scalars['numeric']['output']>;
 };
 
 /** order by sum() on columns of table "erp.PaymentHistory" */
@@ -4089,9 +4091,9 @@ export type Erp_PaymentHistory_Updates = {
 /** aggregate var_pop on columns */
 export type Erp_PaymentHistory_Var_Pop_Fields = {
   __typename?: 'erp_PaymentHistory_var_pop_fields';
-  ID?: Maybe<Scalars['Float']>;
-  OrderID?: Maybe<Scalars['Float']>;
-  PaidAmount?: Maybe<Scalars['Float']>;
+  ID?: Maybe<Scalars['Float']['output']>;
+  OrderID?: Maybe<Scalars['Float']['output']>;
+  PaidAmount?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by var_pop() on columns of table "erp.PaymentHistory" */
@@ -4104,9 +4106,9 @@ export type Erp_PaymentHistory_Var_Pop_Order_By = {
 /** aggregate var_samp on columns */
 export type Erp_PaymentHistory_Var_Samp_Fields = {
   __typename?: 'erp_PaymentHistory_var_samp_fields';
-  ID?: Maybe<Scalars['Float']>;
-  OrderID?: Maybe<Scalars['Float']>;
-  PaidAmount?: Maybe<Scalars['Float']>;
+  ID?: Maybe<Scalars['Float']['output']>;
+  OrderID?: Maybe<Scalars['Float']['output']>;
+  PaidAmount?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by var_samp() on columns of table "erp.PaymentHistory" */
@@ -4119,9 +4121,9 @@ export type Erp_PaymentHistory_Var_Samp_Order_By = {
 /** aggregate variance on columns */
 export type Erp_PaymentHistory_Variance_Fields = {
   __typename?: 'erp_PaymentHistory_variance_fields';
-  ID?: Maybe<Scalars['Float']>;
-  OrderID?: Maybe<Scalars['Float']>;
-  PaidAmount?: Maybe<Scalars['Float']>;
+  ID?: Maybe<Scalars['Float']['output']>;
+  OrderID?: Maybe<Scalars['Float']['output']>;
+  PaidAmount?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by variance() on columns of table "erp.PaymentHistory" */
@@ -4134,11 +4136,11 @@ export type Erp_PaymentHistory_Variance_Order_By = {
 /** columns and relationships of "erp.Tokens" */
 export type Erp_Tokens = {
   __typename?: 'erp_Tokens';
-  ID: Scalars['Int'];
-  RefreshToken: Scalars['String'];
+  ID: Scalars['Int']['output'];
+  RefreshToken: Scalars['String']['output'];
   /** An object relationship */
   User: Erp_Users;
-  UserID: Scalars['Int'];
+  UserID: Scalars['Int']['output'];
 };
 
 /** aggregated selection of "erp.Tokens" */
@@ -4154,7 +4156,7 @@ export type Erp_Tokens_Aggregate_Bool_Exp = {
 
 export type Erp_Tokens_Aggregate_Bool_Exp_Count = {
   arguments?: InputMaybe<Array<Erp_Tokens_Select_Column>>;
-  distinct?: InputMaybe<Scalars['Boolean']>;
+  distinct?: InputMaybe<Scalars['Boolean']['input']>;
   filter?: InputMaybe<Erp_Tokens_Bool_Exp>;
   predicate: Int_Comparison_Exp;
 };
@@ -4163,7 +4165,7 @@ export type Erp_Tokens_Aggregate_Bool_Exp_Count = {
 export type Erp_Tokens_Aggregate_Fields = {
   __typename?: 'erp_Tokens_aggregate_fields';
   avg?: Maybe<Erp_Tokens_Avg_Fields>;
-  count: Scalars['Int'];
+  count: Scalars['Int']['output'];
   max?: Maybe<Erp_Tokens_Max_Fields>;
   min?: Maybe<Erp_Tokens_Min_Fields>;
   stddev?: Maybe<Erp_Tokens_Stddev_Fields>;
@@ -4179,7 +4181,7 @@ export type Erp_Tokens_Aggregate_Fields = {
 /** aggregate fields of "erp.Tokens" */
 export type Erp_Tokens_Aggregate_FieldsCountArgs = {
   columns?: InputMaybe<Array<Erp_Tokens_Select_Column>>;
-  distinct?: InputMaybe<Scalars['Boolean']>;
+  distinct?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 /** order by aggregate values of table "erp.Tokens" */
@@ -4207,8 +4209,8 @@ export type Erp_Tokens_Arr_Rel_Insert_Input = {
 /** aggregate avg on columns */
 export type Erp_Tokens_Avg_Fields = {
   __typename?: 'erp_Tokens_avg_fields';
-  ID?: Maybe<Scalars['Float']>;
-  UserID?: Maybe<Scalars['Float']>;
+  ID?: Maybe<Scalars['Float']['output']>;
+  UserID?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by avg() on columns of table "erp.Tokens" */
@@ -4236,24 +4238,24 @@ export enum Erp_Tokens_Constraint {
 
 /** input type for incrementing numeric columns in table "erp.Tokens" */
 export type Erp_Tokens_Inc_Input = {
-  ID?: InputMaybe<Scalars['Int']>;
-  UserID?: InputMaybe<Scalars['Int']>;
+  ID?: InputMaybe<Scalars['Int']['input']>;
+  UserID?: InputMaybe<Scalars['Int']['input']>;
 };
 
 /** input type for inserting data into table "erp.Tokens" */
 export type Erp_Tokens_Insert_Input = {
-  ID?: InputMaybe<Scalars['Int']>;
-  RefreshToken?: InputMaybe<Scalars['String']>;
+  ID?: InputMaybe<Scalars['Int']['input']>;
+  RefreshToken?: InputMaybe<Scalars['String']['input']>;
   User?: InputMaybe<Erp_Users_Obj_Rel_Insert_Input>;
-  UserID?: InputMaybe<Scalars['Int']>;
+  UserID?: InputMaybe<Scalars['Int']['input']>;
 };
 
 /** aggregate max on columns */
 export type Erp_Tokens_Max_Fields = {
   __typename?: 'erp_Tokens_max_fields';
-  ID?: Maybe<Scalars['Int']>;
-  RefreshToken?: Maybe<Scalars['String']>;
-  UserID?: Maybe<Scalars['Int']>;
+  ID?: Maybe<Scalars['Int']['output']>;
+  RefreshToken?: Maybe<Scalars['String']['output']>;
+  UserID?: Maybe<Scalars['Int']['output']>;
 };
 
 /** order by max() on columns of table "erp.Tokens" */
@@ -4266,9 +4268,9 @@ export type Erp_Tokens_Max_Order_By = {
 /** aggregate min on columns */
 export type Erp_Tokens_Min_Fields = {
   __typename?: 'erp_Tokens_min_fields';
-  ID?: Maybe<Scalars['Int']>;
-  RefreshToken?: Maybe<Scalars['String']>;
-  UserID?: Maybe<Scalars['Int']>;
+  ID?: Maybe<Scalars['Int']['output']>;
+  RefreshToken?: Maybe<Scalars['String']['output']>;
+  UserID?: Maybe<Scalars['Int']['output']>;
 };
 
 /** order by min() on columns of table "erp.Tokens" */
@@ -4282,7 +4284,7 @@ export type Erp_Tokens_Min_Order_By = {
 export type Erp_Tokens_Mutation_Response = {
   __typename?: 'erp_Tokens_mutation_response';
   /** number of rows affected by the mutation */
-  affected_rows: Scalars['Int'];
+  affected_rows: Scalars['Int']['output'];
   /** data from the rows affected by the mutation */
   returning: Array<Erp_Tokens>;
 };
@@ -4304,7 +4306,7 @@ export type Erp_Tokens_Order_By = {
 
 /** primary key columns input for table: erp.Tokens */
 export type Erp_Tokens_Pk_Columns_Input = {
-  ID: Scalars['Int'];
+  ID: Scalars['Int']['input'];
 };
 
 /** select columns of table "erp.Tokens" */
@@ -4319,16 +4321,16 @@ export enum Erp_Tokens_Select_Column {
 
 /** input type for updating data in table "erp.Tokens" */
 export type Erp_Tokens_Set_Input = {
-  ID?: InputMaybe<Scalars['Int']>;
-  RefreshToken?: InputMaybe<Scalars['String']>;
-  UserID?: InputMaybe<Scalars['Int']>;
+  ID?: InputMaybe<Scalars['Int']['input']>;
+  RefreshToken?: InputMaybe<Scalars['String']['input']>;
+  UserID?: InputMaybe<Scalars['Int']['input']>;
 };
 
 /** aggregate stddev on columns */
 export type Erp_Tokens_Stddev_Fields = {
   __typename?: 'erp_Tokens_stddev_fields';
-  ID?: Maybe<Scalars['Float']>;
-  UserID?: Maybe<Scalars['Float']>;
+  ID?: Maybe<Scalars['Float']['output']>;
+  UserID?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by stddev() on columns of table "erp.Tokens" */
@@ -4340,8 +4342,8 @@ export type Erp_Tokens_Stddev_Order_By = {
 /** aggregate stddev_pop on columns */
 export type Erp_Tokens_Stddev_Pop_Fields = {
   __typename?: 'erp_Tokens_stddev_pop_fields';
-  ID?: Maybe<Scalars['Float']>;
-  UserID?: Maybe<Scalars['Float']>;
+  ID?: Maybe<Scalars['Float']['output']>;
+  UserID?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by stddev_pop() on columns of table "erp.Tokens" */
@@ -4353,8 +4355,8 @@ export type Erp_Tokens_Stddev_Pop_Order_By = {
 /** aggregate stddev_samp on columns */
 export type Erp_Tokens_Stddev_Samp_Fields = {
   __typename?: 'erp_Tokens_stddev_samp_fields';
-  ID?: Maybe<Scalars['Float']>;
-  UserID?: Maybe<Scalars['Float']>;
+  ID?: Maybe<Scalars['Float']['output']>;
+  UserID?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by stddev_samp() on columns of table "erp.Tokens" */
@@ -4373,16 +4375,16 @@ export type Erp_Tokens_Stream_Cursor_Input = {
 
 /** Initial value of the column from where the streaming should start */
 export type Erp_Tokens_Stream_Cursor_Value_Input = {
-  ID?: InputMaybe<Scalars['Int']>;
-  RefreshToken?: InputMaybe<Scalars['String']>;
-  UserID?: InputMaybe<Scalars['Int']>;
+  ID?: InputMaybe<Scalars['Int']['input']>;
+  RefreshToken?: InputMaybe<Scalars['String']['input']>;
+  UserID?: InputMaybe<Scalars['Int']['input']>;
 };
 
 /** aggregate sum on columns */
 export type Erp_Tokens_Sum_Fields = {
   __typename?: 'erp_Tokens_sum_fields';
-  ID?: Maybe<Scalars['Int']>;
-  UserID?: Maybe<Scalars['Int']>;
+  ID?: Maybe<Scalars['Int']['output']>;
+  UserID?: Maybe<Scalars['Int']['output']>;
 };
 
 /** order by sum() on columns of table "erp.Tokens" */
@@ -4413,8 +4415,8 @@ export type Erp_Tokens_Updates = {
 /** aggregate var_pop on columns */
 export type Erp_Tokens_Var_Pop_Fields = {
   __typename?: 'erp_Tokens_var_pop_fields';
-  ID?: Maybe<Scalars['Float']>;
-  UserID?: Maybe<Scalars['Float']>;
+  ID?: Maybe<Scalars['Float']['output']>;
+  UserID?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by var_pop() on columns of table "erp.Tokens" */
@@ -4426,8 +4428,8 @@ export type Erp_Tokens_Var_Pop_Order_By = {
 /** aggregate var_samp on columns */
 export type Erp_Tokens_Var_Samp_Fields = {
   __typename?: 'erp_Tokens_var_samp_fields';
-  ID?: Maybe<Scalars['Float']>;
-  UserID?: Maybe<Scalars['Float']>;
+  ID?: Maybe<Scalars['Float']['output']>;
+  UserID?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by var_samp() on columns of table "erp.Tokens" */
@@ -4439,8 +4441,8 @@ export type Erp_Tokens_Var_Samp_Order_By = {
 /** aggregate variance on columns */
 export type Erp_Tokens_Variance_Fields = {
   __typename?: 'erp_Tokens_variance_fields';
-  ID?: Maybe<Scalars['Float']>;
-  UserID?: Maybe<Scalars['Float']>;
+  ID?: Maybe<Scalars['Float']['output']>;
+  UserID?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by variance() on columns of table "erp.Tokens" */
@@ -4454,14 +4456,14 @@ export type Erp_Users = {
   __typename?: 'erp_Users';
   /** An object relationship */
   AccessLevel?: Maybe<Erp_AccessLevels>;
-  AccessLevelID?: Maybe<Scalars['Int']>;
+  AccessLevelID?: Maybe<Scalars['Int']['output']>;
   /** An array relationship */
   Comments: Array<Erp_Comments>;
   /** An aggregate relationship */
   Comments_aggregate: Erp_Comments_Aggregate;
-  Email?: Maybe<Scalars['String']>;
-  FirstName?: Maybe<Scalars['String']>;
-  LastName?: Maybe<Scalars['String']>;
+  Email?: Maybe<Scalars['String']['output']>;
+  FirstName?: Maybe<Scalars['String']['output']>;
+  LastName?: Maybe<Scalars['String']['output']>;
   /** An array relationship */
   Notifications: Array<Erp_Notifications>;
   /** An aggregate relationship */
@@ -4470,20 +4472,20 @@ export type Erp_Users = {
   Orders: Array<Erp_Orders>;
   /** An aggregate relationship */
   Orders_aggregate: Erp_Orders_Aggregate;
-  Password?: Maybe<Scalars['String']>;
+  Password?: Maybe<Scalars['String']['output']>;
   /** An array relationship */
   Tokens: Array<Erp_Tokens>;
   /** An aggregate relationship */
   Tokens_aggregate: Erp_Tokens_Aggregate;
-  UserID: Scalars['Int'];
+  UserID: Scalars['Int']['output'];
 };
 
 
 /** columns and relationships of "erp.Users" */
 export type Erp_UsersCommentsArgs = {
   distinct_on?: InputMaybe<Array<Erp_Comments_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Erp_Comments_Order_By>>;
   where?: InputMaybe<Erp_Comments_Bool_Exp>;
 };
@@ -4492,8 +4494,8 @@ export type Erp_UsersCommentsArgs = {
 /** columns and relationships of "erp.Users" */
 export type Erp_UsersComments_AggregateArgs = {
   distinct_on?: InputMaybe<Array<Erp_Comments_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Erp_Comments_Order_By>>;
   where?: InputMaybe<Erp_Comments_Bool_Exp>;
 };
@@ -4502,8 +4504,8 @@ export type Erp_UsersComments_AggregateArgs = {
 /** columns and relationships of "erp.Users" */
 export type Erp_UsersNotificationsArgs = {
   distinct_on?: InputMaybe<Array<Erp_Notifications_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Erp_Notifications_Order_By>>;
   where?: InputMaybe<Erp_Notifications_Bool_Exp>;
 };
@@ -4512,8 +4514,8 @@ export type Erp_UsersNotificationsArgs = {
 /** columns and relationships of "erp.Users" */
 export type Erp_UsersNotifications_AggregateArgs = {
   distinct_on?: InputMaybe<Array<Erp_Notifications_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Erp_Notifications_Order_By>>;
   where?: InputMaybe<Erp_Notifications_Bool_Exp>;
 };
@@ -4522,8 +4524,8 @@ export type Erp_UsersNotifications_AggregateArgs = {
 /** columns and relationships of "erp.Users" */
 export type Erp_UsersOrdersArgs = {
   distinct_on?: InputMaybe<Array<Erp_Orders_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Erp_Orders_Order_By>>;
   where?: InputMaybe<Erp_Orders_Bool_Exp>;
 };
@@ -4532,8 +4534,8 @@ export type Erp_UsersOrdersArgs = {
 /** columns and relationships of "erp.Users" */
 export type Erp_UsersOrders_AggregateArgs = {
   distinct_on?: InputMaybe<Array<Erp_Orders_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Erp_Orders_Order_By>>;
   where?: InputMaybe<Erp_Orders_Bool_Exp>;
 };
@@ -4542,8 +4544,8 @@ export type Erp_UsersOrders_AggregateArgs = {
 /** columns and relationships of "erp.Users" */
 export type Erp_UsersTokensArgs = {
   distinct_on?: InputMaybe<Array<Erp_Tokens_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Erp_Tokens_Order_By>>;
   where?: InputMaybe<Erp_Tokens_Bool_Exp>;
 };
@@ -4552,8 +4554,8 @@ export type Erp_UsersTokensArgs = {
 /** columns and relationships of "erp.Users" */
 export type Erp_UsersTokens_AggregateArgs = {
   distinct_on?: InputMaybe<Array<Erp_Tokens_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Erp_Tokens_Order_By>>;
   where?: InputMaybe<Erp_Tokens_Bool_Exp>;
 };
@@ -4571,7 +4573,7 @@ export type Erp_Users_Aggregate_Bool_Exp = {
 
 export type Erp_Users_Aggregate_Bool_Exp_Count = {
   arguments?: InputMaybe<Array<Erp_Users_Select_Column>>;
-  distinct?: InputMaybe<Scalars['Boolean']>;
+  distinct?: InputMaybe<Scalars['Boolean']['input']>;
   filter?: InputMaybe<Erp_Users_Bool_Exp>;
   predicate: Int_Comparison_Exp;
 };
@@ -4580,7 +4582,7 @@ export type Erp_Users_Aggregate_Bool_Exp_Count = {
 export type Erp_Users_Aggregate_Fields = {
   __typename?: 'erp_Users_aggregate_fields';
   avg?: Maybe<Erp_Users_Avg_Fields>;
-  count: Scalars['Int'];
+  count: Scalars['Int']['output'];
   max?: Maybe<Erp_Users_Max_Fields>;
   min?: Maybe<Erp_Users_Min_Fields>;
   stddev?: Maybe<Erp_Users_Stddev_Fields>;
@@ -4596,7 +4598,7 @@ export type Erp_Users_Aggregate_Fields = {
 /** aggregate fields of "erp.Users" */
 export type Erp_Users_Aggregate_FieldsCountArgs = {
   columns?: InputMaybe<Array<Erp_Users_Select_Column>>;
-  distinct?: InputMaybe<Scalars['Boolean']>;
+  distinct?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 /** order by aggregate values of table "erp.Users" */
@@ -4624,8 +4626,8 @@ export type Erp_Users_Arr_Rel_Insert_Input = {
 /** aggregate avg on columns */
 export type Erp_Users_Avg_Fields = {
   __typename?: 'erp_Users_avg_fields';
-  AccessLevelID?: Maybe<Scalars['Float']>;
-  UserID?: Maybe<Scalars['Float']>;
+  AccessLevelID?: Maybe<Scalars['Float']['output']>;
+  UserID?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by avg() on columns of table "erp.Users" */
@@ -4664,34 +4666,34 @@ export enum Erp_Users_Constraint {
 
 /** input type for incrementing numeric columns in table "erp.Users" */
 export type Erp_Users_Inc_Input = {
-  AccessLevelID?: InputMaybe<Scalars['Int']>;
-  UserID?: InputMaybe<Scalars['Int']>;
+  AccessLevelID?: InputMaybe<Scalars['Int']['input']>;
+  UserID?: InputMaybe<Scalars['Int']['input']>;
 };
 
 /** input type for inserting data into table "erp.Users" */
 export type Erp_Users_Insert_Input = {
   AccessLevel?: InputMaybe<Erp_AccessLevels_Obj_Rel_Insert_Input>;
-  AccessLevelID?: InputMaybe<Scalars['Int']>;
+  AccessLevelID?: InputMaybe<Scalars['Int']['input']>;
   Comments?: InputMaybe<Erp_Comments_Arr_Rel_Insert_Input>;
-  Email?: InputMaybe<Scalars['String']>;
-  FirstName?: InputMaybe<Scalars['String']>;
-  LastName?: InputMaybe<Scalars['String']>;
+  Email?: InputMaybe<Scalars['String']['input']>;
+  FirstName?: InputMaybe<Scalars['String']['input']>;
+  LastName?: InputMaybe<Scalars['String']['input']>;
   Notifications?: InputMaybe<Erp_Notifications_Arr_Rel_Insert_Input>;
   Orders?: InputMaybe<Erp_Orders_Arr_Rel_Insert_Input>;
-  Password?: InputMaybe<Scalars['String']>;
+  Password?: InputMaybe<Scalars['String']['input']>;
   Tokens?: InputMaybe<Erp_Tokens_Arr_Rel_Insert_Input>;
-  UserID?: InputMaybe<Scalars['Int']>;
+  UserID?: InputMaybe<Scalars['Int']['input']>;
 };
 
 /** aggregate max on columns */
 export type Erp_Users_Max_Fields = {
   __typename?: 'erp_Users_max_fields';
-  AccessLevelID?: Maybe<Scalars['Int']>;
-  Email?: Maybe<Scalars['String']>;
-  FirstName?: Maybe<Scalars['String']>;
-  LastName?: Maybe<Scalars['String']>;
-  Password?: Maybe<Scalars['String']>;
-  UserID?: Maybe<Scalars['Int']>;
+  AccessLevelID?: Maybe<Scalars['Int']['output']>;
+  Email?: Maybe<Scalars['String']['output']>;
+  FirstName?: Maybe<Scalars['String']['output']>;
+  LastName?: Maybe<Scalars['String']['output']>;
+  Password?: Maybe<Scalars['String']['output']>;
+  UserID?: Maybe<Scalars['Int']['output']>;
 };
 
 /** order by max() on columns of table "erp.Users" */
@@ -4707,12 +4709,12 @@ export type Erp_Users_Max_Order_By = {
 /** aggregate min on columns */
 export type Erp_Users_Min_Fields = {
   __typename?: 'erp_Users_min_fields';
-  AccessLevelID?: Maybe<Scalars['Int']>;
-  Email?: Maybe<Scalars['String']>;
-  FirstName?: Maybe<Scalars['String']>;
-  LastName?: Maybe<Scalars['String']>;
-  Password?: Maybe<Scalars['String']>;
-  UserID?: Maybe<Scalars['Int']>;
+  AccessLevelID?: Maybe<Scalars['Int']['output']>;
+  Email?: Maybe<Scalars['String']['output']>;
+  FirstName?: Maybe<Scalars['String']['output']>;
+  LastName?: Maybe<Scalars['String']['output']>;
+  Password?: Maybe<Scalars['String']['output']>;
+  UserID?: Maybe<Scalars['Int']['output']>;
 };
 
 /** order by min() on columns of table "erp.Users" */
@@ -4729,7 +4731,7 @@ export type Erp_Users_Min_Order_By = {
 export type Erp_Users_Mutation_Response = {
   __typename?: 'erp_Users_mutation_response';
   /** number of rows affected by the mutation */
-  affected_rows: Scalars['Int'];
+  affected_rows: Scalars['Int']['output'];
   /** data from the rows affected by the mutation */
   returning: Array<Erp_Users>;
 };
@@ -4765,7 +4767,7 @@ export type Erp_Users_Order_By = {
 
 /** primary key columns input for table: erp.Users */
 export type Erp_Users_Pk_Columns_Input = {
-  UserID: Scalars['Int'];
+  UserID: Scalars['Int']['input'];
 };
 
 /** select columns of table "erp.Users" */
@@ -4786,19 +4788,19 @@ export enum Erp_Users_Select_Column {
 
 /** input type for updating data in table "erp.Users" */
 export type Erp_Users_Set_Input = {
-  AccessLevelID?: InputMaybe<Scalars['Int']>;
-  Email?: InputMaybe<Scalars['String']>;
-  FirstName?: InputMaybe<Scalars['String']>;
-  LastName?: InputMaybe<Scalars['String']>;
-  Password?: InputMaybe<Scalars['String']>;
-  UserID?: InputMaybe<Scalars['Int']>;
+  AccessLevelID?: InputMaybe<Scalars['Int']['input']>;
+  Email?: InputMaybe<Scalars['String']['input']>;
+  FirstName?: InputMaybe<Scalars['String']['input']>;
+  LastName?: InputMaybe<Scalars['String']['input']>;
+  Password?: InputMaybe<Scalars['String']['input']>;
+  UserID?: InputMaybe<Scalars['Int']['input']>;
 };
 
 /** aggregate stddev on columns */
 export type Erp_Users_Stddev_Fields = {
   __typename?: 'erp_Users_stddev_fields';
-  AccessLevelID?: Maybe<Scalars['Float']>;
-  UserID?: Maybe<Scalars['Float']>;
+  AccessLevelID?: Maybe<Scalars['Float']['output']>;
+  UserID?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by stddev() on columns of table "erp.Users" */
@@ -4810,8 +4812,8 @@ export type Erp_Users_Stddev_Order_By = {
 /** aggregate stddev_pop on columns */
 export type Erp_Users_Stddev_Pop_Fields = {
   __typename?: 'erp_Users_stddev_pop_fields';
-  AccessLevelID?: Maybe<Scalars['Float']>;
-  UserID?: Maybe<Scalars['Float']>;
+  AccessLevelID?: Maybe<Scalars['Float']['output']>;
+  UserID?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by stddev_pop() on columns of table "erp.Users" */
@@ -4823,8 +4825,8 @@ export type Erp_Users_Stddev_Pop_Order_By = {
 /** aggregate stddev_samp on columns */
 export type Erp_Users_Stddev_Samp_Fields = {
   __typename?: 'erp_Users_stddev_samp_fields';
-  AccessLevelID?: Maybe<Scalars['Float']>;
-  UserID?: Maybe<Scalars['Float']>;
+  AccessLevelID?: Maybe<Scalars['Float']['output']>;
+  UserID?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by stddev_samp() on columns of table "erp.Users" */
@@ -4843,19 +4845,19 @@ export type Erp_Users_Stream_Cursor_Input = {
 
 /** Initial value of the column from where the streaming should start */
 export type Erp_Users_Stream_Cursor_Value_Input = {
-  AccessLevelID?: InputMaybe<Scalars['Int']>;
-  Email?: InputMaybe<Scalars['String']>;
-  FirstName?: InputMaybe<Scalars['String']>;
-  LastName?: InputMaybe<Scalars['String']>;
-  Password?: InputMaybe<Scalars['String']>;
-  UserID?: InputMaybe<Scalars['Int']>;
+  AccessLevelID?: InputMaybe<Scalars['Int']['input']>;
+  Email?: InputMaybe<Scalars['String']['input']>;
+  FirstName?: InputMaybe<Scalars['String']['input']>;
+  LastName?: InputMaybe<Scalars['String']['input']>;
+  Password?: InputMaybe<Scalars['String']['input']>;
+  UserID?: InputMaybe<Scalars['Int']['input']>;
 };
 
 /** aggregate sum on columns */
 export type Erp_Users_Sum_Fields = {
   __typename?: 'erp_Users_sum_fields';
-  AccessLevelID?: Maybe<Scalars['Int']>;
-  UserID?: Maybe<Scalars['Int']>;
+  AccessLevelID?: Maybe<Scalars['Int']['output']>;
+  UserID?: Maybe<Scalars['Int']['output']>;
 };
 
 /** order by sum() on columns of table "erp.Users" */
@@ -4892,8 +4894,8 @@ export type Erp_Users_Updates = {
 /** aggregate var_pop on columns */
 export type Erp_Users_Var_Pop_Fields = {
   __typename?: 'erp_Users_var_pop_fields';
-  AccessLevelID?: Maybe<Scalars['Float']>;
-  UserID?: Maybe<Scalars['Float']>;
+  AccessLevelID?: Maybe<Scalars['Float']['output']>;
+  UserID?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by var_pop() on columns of table "erp.Users" */
@@ -4905,8 +4907,8 @@ export type Erp_Users_Var_Pop_Order_By = {
 /** aggregate var_samp on columns */
 export type Erp_Users_Var_Samp_Fields = {
   __typename?: 'erp_Users_var_samp_fields';
-  AccessLevelID?: Maybe<Scalars['Float']>;
-  UserID?: Maybe<Scalars['Float']>;
+  AccessLevelID?: Maybe<Scalars['Float']['output']>;
+  UserID?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by var_samp() on columns of table "erp.Users" */
@@ -4918,8 +4920,8 @@ export type Erp_Users_Var_Samp_Order_By = {
 /** aggregate variance on columns */
 export type Erp_Users_Variance_Fields = {
   __typename?: 'erp_Users_variance_fields';
-  AccessLevelID?: Maybe<Scalars['Float']>;
-  UserID?: Maybe<Scalars['Float']>;
+  AccessLevelID?: Maybe<Scalars['Float']['output']>;
+  UserID?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by variance() on columns of table "erp.Users" */
@@ -4936,36 +4938,367 @@ export type Jsonb_Cast_Exp = {
 export type Jsonb_Comparison_Exp = {
   _cast?: InputMaybe<Jsonb_Cast_Exp>;
   /** is the column contained in the given json value */
-  _contained_in?: InputMaybe<Scalars['jsonb']>;
+  _contained_in?: InputMaybe<Scalars['jsonb']['input']>;
   /** does the column contain the given json value at the top level */
-  _contains?: InputMaybe<Scalars['jsonb']>;
-  _eq?: InputMaybe<Scalars['jsonb']>;
-  _gt?: InputMaybe<Scalars['jsonb']>;
-  _gte?: InputMaybe<Scalars['jsonb']>;
+  _contains?: InputMaybe<Scalars['jsonb']['input']>;
+  _eq?: InputMaybe<Scalars['jsonb']['input']>;
+  _gt?: InputMaybe<Scalars['jsonb']['input']>;
+  _gte?: InputMaybe<Scalars['jsonb']['input']>;
   /** does the string exist as a top-level key in the column */
-  _has_key?: InputMaybe<Scalars['String']>;
+  _has_key?: InputMaybe<Scalars['String']['input']>;
   /** do all of these strings exist as top-level keys in the column */
-  _has_keys_all?: InputMaybe<Array<Scalars['String']>>;
+  _has_keys_all?: InputMaybe<Array<Scalars['String']['input']>>;
   /** do any of these strings exist as top-level keys in the column */
-  _has_keys_any?: InputMaybe<Array<Scalars['String']>>;
-  _in?: InputMaybe<Array<Scalars['jsonb']>>;
-  _is_null?: InputMaybe<Scalars['Boolean']>;
-  _lt?: InputMaybe<Scalars['jsonb']>;
-  _lte?: InputMaybe<Scalars['jsonb']>;
-  _neq?: InputMaybe<Scalars['jsonb']>;
-  _nin?: InputMaybe<Array<Scalars['jsonb']>>;
+  _has_keys_any?: InputMaybe<Array<Scalars['String']['input']>>;
+  _in?: InputMaybe<Array<Scalars['jsonb']['input']>>;
+  _is_null?: InputMaybe<Scalars['Boolean']['input']>;
+  _lt?: InputMaybe<Scalars['jsonb']['input']>;
+  _lte?: InputMaybe<Scalars['jsonb']['input']>;
+  _neq?: InputMaybe<Scalars['jsonb']['input']>;
+  _nin?: InputMaybe<Array<Scalars['jsonb']['input']>>;
+};
+
+/** columns and relationships of "kysely_migration" */
+export type Kysely_Migration = {
+  __typename?: 'kysely_migration';
+  name: Scalars['String']['output'];
+  timestamp: Scalars['String']['output'];
+};
+
+/** aggregated selection of "kysely_migration" */
+export type Kysely_Migration_Aggregate = {
+  __typename?: 'kysely_migration_aggregate';
+  aggregate?: Maybe<Kysely_Migration_Aggregate_Fields>;
+  nodes: Array<Kysely_Migration>;
+};
+
+/** aggregate fields of "kysely_migration" */
+export type Kysely_Migration_Aggregate_Fields = {
+  __typename?: 'kysely_migration_aggregate_fields';
+  count: Scalars['Int']['output'];
+  max?: Maybe<Kysely_Migration_Max_Fields>;
+  min?: Maybe<Kysely_Migration_Min_Fields>;
+};
+
+
+/** aggregate fields of "kysely_migration" */
+export type Kysely_Migration_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Kysely_Migration_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+/** Boolean expression to filter rows from the table "kysely_migration". All fields are combined with a logical 'AND'. */
+export type Kysely_Migration_Bool_Exp = {
+  _and?: InputMaybe<Array<Kysely_Migration_Bool_Exp>>;
+  _not?: InputMaybe<Kysely_Migration_Bool_Exp>;
+  _or?: InputMaybe<Array<Kysely_Migration_Bool_Exp>>;
+  name?: InputMaybe<String_Comparison_Exp>;
+  timestamp?: InputMaybe<String_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "kysely_migration" */
+export enum Kysely_Migration_Constraint {
+  /** unique or primary key constraint on columns "name" */
+  KyselyMigrationPkey = 'kysely_migration_pkey'
+}
+
+/** input type for inserting data into table "kysely_migration" */
+export type Kysely_Migration_Insert_Input = {
+  name?: InputMaybe<Scalars['String']['input']>;
+  timestamp?: InputMaybe<Scalars['String']['input']>;
+};
+
+/** columns and relationships of "kysely_migration_lock" */
+export type Kysely_Migration_Lock = {
+  __typename?: 'kysely_migration_lock';
+  id: Scalars['String']['output'];
+  is_locked: Scalars['Int']['output'];
+};
+
+/** aggregated selection of "kysely_migration_lock" */
+export type Kysely_Migration_Lock_Aggregate = {
+  __typename?: 'kysely_migration_lock_aggregate';
+  aggregate?: Maybe<Kysely_Migration_Lock_Aggregate_Fields>;
+  nodes: Array<Kysely_Migration_Lock>;
+};
+
+/** aggregate fields of "kysely_migration_lock" */
+export type Kysely_Migration_Lock_Aggregate_Fields = {
+  __typename?: 'kysely_migration_lock_aggregate_fields';
+  avg?: Maybe<Kysely_Migration_Lock_Avg_Fields>;
+  count: Scalars['Int']['output'];
+  max?: Maybe<Kysely_Migration_Lock_Max_Fields>;
+  min?: Maybe<Kysely_Migration_Lock_Min_Fields>;
+  stddev?: Maybe<Kysely_Migration_Lock_Stddev_Fields>;
+  stddev_pop?: Maybe<Kysely_Migration_Lock_Stddev_Pop_Fields>;
+  stddev_samp?: Maybe<Kysely_Migration_Lock_Stddev_Samp_Fields>;
+  sum?: Maybe<Kysely_Migration_Lock_Sum_Fields>;
+  var_pop?: Maybe<Kysely_Migration_Lock_Var_Pop_Fields>;
+  var_samp?: Maybe<Kysely_Migration_Lock_Var_Samp_Fields>;
+  variance?: Maybe<Kysely_Migration_Lock_Variance_Fields>;
+};
+
+
+/** aggregate fields of "kysely_migration_lock" */
+export type Kysely_Migration_Lock_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Kysely_Migration_Lock_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+/** aggregate avg on columns */
+export type Kysely_Migration_Lock_Avg_Fields = {
+  __typename?: 'kysely_migration_lock_avg_fields';
+  is_locked?: Maybe<Scalars['Float']['output']>;
+};
+
+/** Boolean expression to filter rows from the table "kysely_migration_lock". All fields are combined with a logical 'AND'. */
+export type Kysely_Migration_Lock_Bool_Exp = {
+  _and?: InputMaybe<Array<Kysely_Migration_Lock_Bool_Exp>>;
+  _not?: InputMaybe<Kysely_Migration_Lock_Bool_Exp>;
+  _or?: InputMaybe<Array<Kysely_Migration_Lock_Bool_Exp>>;
+  id?: InputMaybe<String_Comparison_Exp>;
+  is_locked?: InputMaybe<Int_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "kysely_migration_lock" */
+export enum Kysely_Migration_Lock_Constraint {
+  /** unique or primary key constraint on columns "id" */
+  KyselyMigrationLockPkey = 'kysely_migration_lock_pkey'
+}
+
+/** input type for incrementing numeric columns in table "kysely_migration_lock" */
+export type Kysely_Migration_Lock_Inc_Input = {
+  is_locked?: InputMaybe<Scalars['Int']['input']>;
+};
+
+/** input type for inserting data into table "kysely_migration_lock" */
+export type Kysely_Migration_Lock_Insert_Input = {
+  id?: InputMaybe<Scalars['String']['input']>;
+  is_locked?: InputMaybe<Scalars['Int']['input']>;
+};
+
+/** aggregate max on columns */
+export type Kysely_Migration_Lock_Max_Fields = {
+  __typename?: 'kysely_migration_lock_max_fields';
+  id?: Maybe<Scalars['String']['output']>;
+  is_locked?: Maybe<Scalars['Int']['output']>;
+};
+
+/** aggregate min on columns */
+export type Kysely_Migration_Lock_Min_Fields = {
+  __typename?: 'kysely_migration_lock_min_fields';
+  id?: Maybe<Scalars['String']['output']>;
+  is_locked?: Maybe<Scalars['Int']['output']>;
+};
+
+/** response of any mutation on the table "kysely_migration_lock" */
+export type Kysely_Migration_Lock_Mutation_Response = {
+  __typename?: 'kysely_migration_lock_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int']['output'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Kysely_Migration_Lock>;
+};
+
+/** on_conflict condition type for table "kysely_migration_lock" */
+export type Kysely_Migration_Lock_On_Conflict = {
+  constraint: Kysely_Migration_Lock_Constraint;
+  update_columns?: Array<Kysely_Migration_Lock_Update_Column>;
+  where?: InputMaybe<Kysely_Migration_Lock_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "kysely_migration_lock". */
+export type Kysely_Migration_Lock_Order_By = {
+  id?: InputMaybe<Order_By>;
+  is_locked?: InputMaybe<Order_By>;
+};
+
+/** primary key columns input for table: kysely_migration_lock */
+export type Kysely_Migration_Lock_Pk_Columns_Input = {
+  id: Scalars['String']['input'];
+};
+
+/** select columns of table "kysely_migration_lock" */
+export enum Kysely_Migration_Lock_Select_Column {
+  /** column name */
+  Id = 'id',
+  /** column name */
+  IsLocked = 'is_locked'
+}
+
+/** input type for updating data in table "kysely_migration_lock" */
+export type Kysely_Migration_Lock_Set_Input = {
+  id?: InputMaybe<Scalars['String']['input']>;
+  is_locked?: InputMaybe<Scalars['Int']['input']>;
+};
+
+/** aggregate stddev on columns */
+export type Kysely_Migration_Lock_Stddev_Fields = {
+  __typename?: 'kysely_migration_lock_stddev_fields';
+  is_locked?: Maybe<Scalars['Float']['output']>;
+};
+
+/** aggregate stddev_pop on columns */
+export type Kysely_Migration_Lock_Stddev_Pop_Fields = {
+  __typename?: 'kysely_migration_lock_stddev_pop_fields';
+  is_locked?: Maybe<Scalars['Float']['output']>;
+};
+
+/** aggregate stddev_samp on columns */
+export type Kysely_Migration_Lock_Stddev_Samp_Fields = {
+  __typename?: 'kysely_migration_lock_stddev_samp_fields';
+  is_locked?: Maybe<Scalars['Float']['output']>;
+};
+
+/** Streaming cursor of the table "kysely_migration_lock" */
+export type Kysely_Migration_Lock_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Kysely_Migration_Lock_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Kysely_Migration_Lock_Stream_Cursor_Value_Input = {
+  id?: InputMaybe<Scalars['String']['input']>;
+  is_locked?: InputMaybe<Scalars['Int']['input']>;
+};
+
+/** aggregate sum on columns */
+export type Kysely_Migration_Lock_Sum_Fields = {
+  __typename?: 'kysely_migration_lock_sum_fields';
+  is_locked?: Maybe<Scalars['Int']['output']>;
+};
+
+/** update columns of table "kysely_migration_lock" */
+export enum Kysely_Migration_Lock_Update_Column {
+  /** column name */
+  Id = 'id',
+  /** column name */
+  IsLocked = 'is_locked'
+}
+
+export type Kysely_Migration_Lock_Updates = {
+  /** increments the numeric columns with given value of the filtered values */
+  _inc?: InputMaybe<Kysely_Migration_Lock_Inc_Input>;
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Kysely_Migration_Lock_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Kysely_Migration_Lock_Bool_Exp;
+};
+
+/** aggregate var_pop on columns */
+export type Kysely_Migration_Lock_Var_Pop_Fields = {
+  __typename?: 'kysely_migration_lock_var_pop_fields';
+  is_locked?: Maybe<Scalars['Float']['output']>;
+};
+
+/** aggregate var_samp on columns */
+export type Kysely_Migration_Lock_Var_Samp_Fields = {
+  __typename?: 'kysely_migration_lock_var_samp_fields';
+  is_locked?: Maybe<Scalars['Float']['output']>;
+};
+
+/** aggregate variance on columns */
+export type Kysely_Migration_Lock_Variance_Fields = {
+  __typename?: 'kysely_migration_lock_variance_fields';
+  is_locked?: Maybe<Scalars['Float']['output']>;
+};
+
+/** aggregate max on columns */
+export type Kysely_Migration_Max_Fields = {
+  __typename?: 'kysely_migration_max_fields';
+  name?: Maybe<Scalars['String']['output']>;
+  timestamp?: Maybe<Scalars['String']['output']>;
+};
+
+/** aggregate min on columns */
+export type Kysely_Migration_Min_Fields = {
+  __typename?: 'kysely_migration_min_fields';
+  name?: Maybe<Scalars['String']['output']>;
+  timestamp?: Maybe<Scalars['String']['output']>;
+};
+
+/** response of any mutation on the table "kysely_migration" */
+export type Kysely_Migration_Mutation_Response = {
+  __typename?: 'kysely_migration_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int']['output'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Kysely_Migration>;
+};
+
+/** on_conflict condition type for table "kysely_migration" */
+export type Kysely_Migration_On_Conflict = {
+  constraint: Kysely_Migration_Constraint;
+  update_columns?: Array<Kysely_Migration_Update_Column>;
+  where?: InputMaybe<Kysely_Migration_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "kysely_migration". */
+export type Kysely_Migration_Order_By = {
+  name?: InputMaybe<Order_By>;
+  timestamp?: InputMaybe<Order_By>;
+};
+
+/** primary key columns input for table: kysely_migration */
+export type Kysely_Migration_Pk_Columns_Input = {
+  name: Scalars['String']['input'];
+};
+
+/** select columns of table "kysely_migration" */
+export enum Kysely_Migration_Select_Column {
+  /** column name */
+  Name = 'name',
+  /** column name */
+  Timestamp = 'timestamp'
+}
+
+/** input type for updating data in table "kysely_migration" */
+export type Kysely_Migration_Set_Input = {
+  name?: InputMaybe<Scalars['String']['input']>;
+  timestamp?: InputMaybe<Scalars['String']['input']>;
+};
+
+/** Streaming cursor of the table "kysely_migration" */
+export type Kysely_Migration_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Kysely_Migration_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Kysely_Migration_Stream_Cursor_Value_Input = {
+  name?: InputMaybe<Scalars['String']['input']>;
+  timestamp?: InputMaybe<Scalars['String']['input']>;
+};
+
+/** update columns of table "kysely_migration" */
+export enum Kysely_Migration_Update_Column {
+  /** column name */
+  Name = 'name',
+  /** column name */
+  Timestamp = 'timestamp'
+}
+
+export type Kysely_Migration_Updates = {
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Kysely_Migration_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Kysely_Migration_Bool_Exp;
 };
 
 /** columns and relationships of "metal_pdo.detail_materials" */
 export type Metal_Pdo_Detail_Materials = {
   __typename?: 'metal_pdo_detail_materials';
-  cost?: Maybe<Scalars['numeric']>;
+  cost?: Maybe<Scalars['numeric']['output']>;
   /** An object relationship */
   detail: Metal_Pdo_Details;
-  detail_id: Scalars['Int'];
+  detail_id: Scalars['Int']['output'];
   /** An object relationship */
   material: Metal_Pdo_Materials;
-  material_id: Scalars['Int'];
+  material_id: Scalars['Int']['output'];
 };
 
 /** aggregated selection of "metal_pdo.detail_materials" */
@@ -4981,7 +5314,7 @@ export type Metal_Pdo_Detail_Materials_Aggregate_Bool_Exp = {
 
 export type Metal_Pdo_Detail_Materials_Aggregate_Bool_Exp_Count = {
   arguments?: InputMaybe<Array<Metal_Pdo_Detail_Materials_Select_Column>>;
-  distinct?: InputMaybe<Scalars['Boolean']>;
+  distinct?: InputMaybe<Scalars['Boolean']['input']>;
   filter?: InputMaybe<Metal_Pdo_Detail_Materials_Bool_Exp>;
   predicate: Int_Comparison_Exp;
 };
@@ -4990,7 +5323,7 @@ export type Metal_Pdo_Detail_Materials_Aggregate_Bool_Exp_Count = {
 export type Metal_Pdo_Detail_Materials_Aggregate_Fields = {
   __typename?: 'metal_pdo_detail_materials_aggregate_fields';
   avg?: Maybe<Metal_Pdo_Detail_Materials_Avg_Fields>;
-  count: Scalars['Int'];
+  count: Scalars['Int']['output'];
   max?: Maybe<Metal_Pdo_Detail_Materials_Max_Fields>;
   min?: Maybe<Metal_Pdo_Detail_Materials_Min_Fields>;
   stddev?: Maybe<Metal_Pdo_Detail_Materials_Stddev_Fields>;
@@ -5006,7 +5339,7 @@ export type Metal_Pdo_Detail_Materials_Aggregate_Fields = {
 /** aggregate fields of "metal_pdo.detail_materials" */
 export type Metal_Pdo_Detail_Materials_Aggregate_FieldsCountArgs = {
   columns?: InputMaybe<Array<Metal_Pdo_Detail_Materials_Select_Column>>;
-  distinct?: InputMaybe<Scalars['Boolean']>;
+  distinct?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 /** order by aggregate values of table "metal_pdo.detail_materials" */
@@ -5034,9 +5367,9 @@ export type Metal_Pdo_Detail_Materials_Arr_Rel_Insert_Input = {
 /** aggregate avg on columns */
 export type Metal_Pdo_Detail_Materials_Avg_Fields = {
   __typename?: 'metal_pdo_detail_materials_avg_fields';
-  cost?: Maybe<Scalars['Float']>;
-  detail_id?: Maybe<Scalars['Float']>;
-  material_id?: Maybe<Scalars['Float']>;
+  cost?: Maybe<Scalars['Float']['output']>;
+  detail_id?: Maybe<Scalars['Float']['output']>;
+  material_id?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by avg() on columns of table "metal_pdo.detail_materials" */
@@ -5066,26 +5399,26 @@ export enum Metal_Pdo_Detail_Materials_Constraint {
 
 /** input type for incrementing numeric columns in table "metal_pdo.detail_materials" */
 export type Metal_Pdo_Detail_Materials_Inc_Input = {
-  cost?: InputMaybe<Scalars['numeric']>;
-  detail_id?: InputMaybe<Scalars['Int']>;
-  material_id?: InputMaybe<Scalars['Int']>;
+  cost?: InputMaybe<Scalars['numeric']['input']>;
+  detail_id?: InputMaybe<Scalars['Int']['input']>;
+  material_id?: InputMaybe<Scalars['Int']['input']>;
 };
 
 /** input type for inserting data into table "metal_pdo.detail_materials" */
 export type Metal_Pdo_Detail_Materials_Insert_Input = {
-  cost?: InputMaybe<Scalars['numeric']>;
+  cost?: InputMaybe<Scalars['numeric']['input']>;
   detail?: InputMaybe<Metal_Pdo_Details_Obj_Rel_Insert_Input>;
-  detail_id?: InputMaybe<Scalars['Int']>;
+  detail_id?: InputMaybe<Scalars['Int']['input']>;
   material?: InputMaybe<Metal_Pdo_Materials_Obj_Rel_Insert_Input>;
-  material_id?: InputMaybe<Scalars['Int']>;
+  material_id?: InputMaybe<Scalars['Int']['input']>;
 };
 
 /** aggregate max on columns */
 export type Metal_Pdo_Detail_Materials_Max_Fields = {
   __typename?: 'metal_pdo_detail_materials_max_fields';
-  cost?: Maybe<Scalars['numeric']>;
-  detail_id?: Maybe<Scalars['Int']>;
-  material_id?: Maybe<Scalars['Int']>;
+  cost?: Maybe<Scalars['numeric']['output']>;
+  detail_id?: Maybe<Scalars['Int']['output']>;
+  material_id?: Maybe<Scalars['Int']['output']>;
 };
 
 /** order by max() on columns of table "metal_pdo.detail_materials" */
@@ -5098,9 +5431,9 @@ export type Metal_Pdo_Detail_Materials_Max_Order_By = {
 /** aggregate min on columns */
 export type Metal_Pdo_Detail_Materials_Min_Fields = {
   __typename?: 'metal_pdo_detail_materials_min_fields';
-  cost?: Maybe<Scalars['numeric']>;
-  detail_id?: Maybe<Scalars['Int']>;
-  material_id?: Maybe<Scalars['Int']>;
+  cost?: Maybe<Scalars['numeric']['output']>;
+  detail_id?: Maybe<Scalars['Int']['output']>;
+  material_id?: Maybe<Scalars['Int']['output']>;
 };
 
 /** order by min() on columns of table "metal_pdo.detail_materials" */
@@ -5114,7 +5447,7 @@ export type Metal_Pdo_Detail_Materials_Min_Order_By = {
 export type Metal_Pdo_Detail_Materials_Mutation_Response = {
   __typename?: 'metal_pdo_detail_materials_mutation_response';
   /** number of rows affected by the mutation */
-  affected_rows: Scalars['Int'];
+  affected_rows: Scalars['Int']['output'];
   /** data from the rows affected by the mutation */
   returning: Array<Metal_Pdo_Detail_Materials>;
 };
@@ -5137,8 +5470,8 @@ export type Metal_Pdo_Detail_Materials_Order_By = {
 
 /** primary key columns input for table: metal_pdo.detail_materials */
 export type Metal_Pdo_Detail_Materials_Pk_Columns_Input = {
-  detail_id: Scalars['Int'];
-  material_id: Scalars['Int'];
+  detail_id: Scalars['Int']['input'];
+  material_id: Scalars['Int']['input'];
 };
 
 /** select columns of table "metal_pdo.detail_materials" */
@@ -5153,17 +5486,17 @@ export enum Metal_Pdo_Detail_Materials_Select_Column {
 
 /** input type for updating data in table "metal_pdo.detail_materials" */
 export type Metal_Pdo_Detail_Materials_Set_Input = {
-  cost?: InputMaybe<Scalars['numeric']>;
-  detail_id?: InputMaybe<Scalars['Int']>;
-  material_id?: InputMaybe<Scalars['Int']>;
+  cost?: InputMaybe<Scalars['numeric']['input']>;
+  detail_id?: InputMaybe<Scalars['Int']['input']>;
+  material_id?: InputMaybe<Scalars['Int']['input']>;
 };
 
 /** aggregate stddev on columns */
 export type Metal_Pdo_Detail_Materials_Stddev_Fields = {
   __typename?: 'metal_pdo_detail_materials_stddev_fields';
-  cost?: Maybe<Scalars['Float']>;
-  detail_id?: Maybe<Scalars['Float']>;
-  material_id?: Maybe<Scalars['Float']>;
+  cost?: Maybe<Scalars['Float']['output']>;
+  detail_id?: Maybe<Scalars['Float']['output']>;
+  material_id?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by stddev() on columns of table "metal_pdo.detail_materials" */
@@ -5176,9 +5509,9 @@ export type Metal_Pdo_Detail_Materials_Stddev_Order_By = {
 /** aggregate stddev_pop on columns */
 export type Metal_Pdo_Detail_Materials_Stddev_Pop_Fields = {
   __typename?: 'metal_pdo_detail_materials_stddev_pop_fields';
-  cost?: Maybe<Scalars['Float']>;
-  detail_id?: Maybe<Scalars['Float']>;
-  material_id?: Maybe<Scalars['Float']>;
+  cost?: Maybe<Scalars['Float']['output']>;
+  detail_id?: Maybe<Scalars['Float']['output']>;
+  material_id?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by stddev_pop() on columns of table "metal_pdo.detail_materials" */
@@ -5191,9 +5524,9 @@ export type Metal_Pdo_Detail_Materials_Stddev_Pop_Order_By = {
 /** aggregate stddev_samp on columns */
 export type Metal_Pdo_Detail_Materials_Stddev_Samp_Fields = {
   __typename?: 'metal_pdo_detail_materials_stddev_samp_fields';
-  cost?: Maybe<Scalars['Float']>;
-  detail_id?: Maybe<Scalars['Float']>;
-  material_id?: Maybe<Scalars['Float']>;
+  cost?: Maybe<Scalars['Float']['output']>;
+  detail_id?: Maybe<Scalars['Float']['output']>;
+  material_id?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by stddev_samp() on columns of table "metal_pdo.detail_materials" */
@@ -5213,17 +5546,17 @@ export type Metal_Pdo_Detail_Materials_Stream_Cursor_Input = {
 
 /** Initial value of the column from where the streaming should start */
 export type Metal_Pdo_Detail_Materials_Stream_Cursor_Value_Input = {
-  cost?: InputMaybe<Scalars['numeric']>;
-  detail_id?: InputMaybe<Scalars['Int']>;
-  material_id?: InputMaybe<Scalars['Int']>;
+  cost?: InputMaybe<Scalars['numeric']['input']>;
+  detail_id?: InputMaybe<Scalars['Int']['input']>;
+  material_id?: InputMaybe<Scalars['Int']['input']>;
 };
 
 /** aggregate sum on columns */
 export type Metal_Pdo_Detail_Materials_Sum_Fields = {
   __typename?: 'metal_pdo_detail_materials_sum_fields';
-  cost?: Maybe<Scalars['numeric']>;
-  detail_id?: Maybe<Scalars['Int']>;
-  material_id?: Maybe<Scalars['Int']>;
+  cost?: Maybe<Scalars['numeric']['output']>;
+  detail_id?: Maybe<Scalars['Int']['output']>;
+  material_id?: Maybe<Scalars['Int']['output']>;
 };
 
 /** order by sum() on columns of table "metal_pdo.detail_materials" */
@@ -5255,9 +5588,9 @@ export type Metal_Pdo_Detail_Materials_Updates = {
 /** aggregate var_pop on columns */
 export type Metal_Pdo_Detail_Materials_Var_Pop_Fields = {
   __typename?: 'metal_pdo_detail_materials_var_pop_fields';
-  cost?: Maybe<Scalars['Float']>;
-  detail_id?: Maybe<Scalars['Float']>;
-  material_id?: Maybe<Scalars['Float']>;
+  cost?: Maybe<Scalars['Float']['output']>;
+  detail_id?: Maybe<Scalars['Float']['output']>;
+  material_id?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by var_pop() on columns of table "metal_pdo.detail_materials" */
@@ -5270,9 +5603,9 @@ export type Metal_Pdo_Detail_Materials_Var_Pop_Order_By = {
 /** aggregate var_samp on columns */
 export type Metal_Pdo_Detail_Materials_Var_Samp_Fields = {
   __typename?: 'metal_pdo_detail_materials_var_samp_fields';
-  cost?: Maybe<Scalars['Float']>;
-  detail_id?: Maybe<Scalars['Float']>;
-  material_id?: Maybe<Scalars['Float']>;
+  cost?: Maybe<Scalars['Float']['output']>;
+  detail_id?: Maybe<Scalars['Float']['output']>;
+  material_id?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by var_samp() on columns of table "metal_pdo.detail_materials" */
@@ -5285,9 +5618,9 @@ export type Metal_Pdo_Detail_Materials_Var_Samp_Order_By = {
 /** aggregate variance on columns */
 export type Metal_Pdo_Detail_Materials_Variance_Fields = {
   __typename?: 'metal_pdo_detail_materials_variance_fields';
-  cost?: Maybe<Scalars['Float']>;
-  detail_id?: Maybe<Scalars['Float']>;
-  material_id?: Maybe<Scalars['Float']>;
+  cost?: Maybe<Scalars['Float']['output']>;
+  detail_id?: Maybe<Scalars['Float']['output']>;
+  material_id?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by variance() on columns of table "metal_pdo.detail_materials" */
@@ -5304,16 +5637,16 @@ export type Metal_Pdo_Details = {
   detail_materials: Array<Metal_Pdo_Detail_Materials>;
   /** An aggregate relationship */
   detail_materials_aggregate: Metal_Pdo_Detail_Materials_Aggregate;
-  id: Scalars['Int'];
-  name: Scalars['String'];
+  id: Scalars['Int']['output'];
+  name: Scalars['String']['output'];
 };
 
 
 /** columns and relationships of "metal_pdo.details" */
 export type Metal_Pdo_DetailsDetail_MaterialsArgs = {
   distinct_on?: InputMaybe<Array<Metal_Pdo_Detail_Materials_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Metal_Pdo_Detail_Materials_Order_By>>;
   where?: InputMaybe<Metal_Pdo_Detail_Materials_Bool_Exp>;
 };
@@ -5322,8 +5655,8 @@ export type Metal_Pdo_DetailsDetail_MaterialsArgs = {
 /** columns and relationships of "metal_pdo.details" */
 export type Metal_Pdo_DetailsDetail_Materials_AggregateArgs = {
   distinct_on?: InputMaybe<Array<Metal_Pdo_Detail_Materials_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Metal_Pdo_Detail_Materials_Order_By>>;
   where?: InputMaybe<Metal_Pdo_Detail_Materials_Bool_Exp>;
 };
@@ -5339,7 +5672,7 @@ export type Metal_Pdo_Details_Aggregate = {
 export type Metal_Pdo_Details_Aggregate_Fields = {
   __typename?: 'metal_pdo_details_aggregate_fields';
   avg?: Maybe<Metal_Pdo_Details_Avg_Fields>;
-  count: Scalars['Int'];
+  count: Scalars['Int']['output'];
   max?: Maybe<Metal_Pdo_Details_Max_Fields>;
   min?: Maybe<Metal_Pdo_Details_Min_Fields>;
   stddev?: Maybe<Metal_Pdo_Details_Stddev_Fields>;
@@ -5355,13 +5688,13 @@ export type Metal_Pdo_Details_Aggregate_Fields = {
 /** aggregate fields of "metal_pdo.details" */
 export type Metal_Pdo_Details_Aggregate_FieldsCountArgs = {
   columns?: InputMaybe<Array<Metal_Pdo_Details_Select_Column>>;
-  distinct?: InputMaybe<Scalars['Boolean']>;
+  distinct?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 /** aggregate avg on columns */
 export type Metal_Pdo_Details_Avg_Fields = {
   __typename?: 'metal_pdo_details_avg_fields';
-  id?: Maybe<Scalars['Float']>;
+  id?: Maybe<Scalars['Float']['output']>;
 };
 
 /** Boolean expression to filter rows from the table "metal_pdo.details". All fields are combined with a logical 'AND'. */
@@ -5385,35 +5718,35 @@ export enum Metal_Pdo_Details_Constraint {
 
 /** input type for incrementing numeric columns in table "metal_pdo.details" */
 export type Metal_Pdo_Details_Inc_Input = {
-  id?: InputMaybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']['input']>;
 };
 
 /** input type for inserting data into table "metal_pdo.details" */
 export type Metal_Pdo_Details_Insert_Input = {
   detail_materials?: InputMaybe<Metal_Pdo_Detail_Materials_Arr_Rel_Insert_Input>;
-  id?: InputMaybe<Scalars['Int']>;
-  name?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['Int']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
 };
 
 /** aggregate max on columns */
 export type Metal_Pdo_Details_Max_Fields = {
   __typename?: 'metal_pdo_details_max_fields';
-  id?: Maybe<Scalars['Int']>;
-  name?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['Int']['output']>;
+  name?: Maybe<Scalars['String']['output']>;
 };
 
 /** aggregate min on columns */
 export type Metal_Pdo_Details_Min_Fields = {
   __typename?: 'metal_pdo_details_min_fields';
-  id?: Maybe<Scalars['Int']>;
-  name?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['Int']['output']>;
+  name?: Maybe<Scalars['String']['output']>;
 };
 
 /** response of any mutation on the table "metal_pdo.details" */
 export type Metal_Pdo_Details_Mutation_Response = {
   __typename?: 'metal_pdo_details_mutation_response';
   /** number of rows affected by the mutation */
-  affected_rows: Scalars['Int'];
+  affected_rows: Scalars['Int']['output'];
   /** data from the rows affected by the mutation */
   returning: Array<Metal_Pdo_Details>;
 };
@@ -5441,7 +5774,7 @@ export type Metal_Pdo_Details_Order_By = {
 
 /** primary key columns input for table: metal_pdo.details */
 export type Metal_Pdo_Details_Pk_Columns_Input = {
-  id: Scalars['Int'];
+  id: Scalars['Int']['input'];
 };
 
 /** select columns of table "metal_pdo.details" */
@@ -5454,26 +5787,26 @@ export enum Metal_Pdo_Details_Select_Column {
 
 /** input type for updating data in table "metal_pdo.details" */
 export type Metal_Pdo_Details_Set_Input = {
-  id?: InputMaybe<Scalars['Int']>;
-  name?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['Int']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
 };
 
 /** aggregate stddev on columns */
 export type Metal_Pdo_Details_Stddev_Fields = {
   __typename?: 'metal_pdo_details_stddev_fields';
-  id?: Maybe<Scalars['Float']>;
+  id?: Maybe<Scalars['Float']['output']>;
 };
 
 /** aggregate stddev_pop on columns */
 export type Metal_Pdo_Details_Stddev_Pop_Fields = {
   __typename?: 'metal_pdo_details_stddev_pop_fields';
-  id?: Maybe<Scalars['Float']>;
+  id?: Maybe<Scalars['Float']['output']>;
 };
 
 /** aggregate stddev_samp on columns */
 export type Metal_Pdo_Details_Stddev_Samp_Fields = {
   __typename?: 'metal_pdo_details_stddev_samp_fields';
-  id?: Maybe<Scalars['Float']>;
+  id?: Maybe<Scalars['Float']['output']>;
 };
 
 /** Streaming cursor of the table "metal_pdo_details" */
@@ -5486,14 +5819,14 @@ export type Metal_Pdo_Details_Stream_Cursor_Input = {
 
 /** Initial value of the column from where the streaming should start */
 export type Metal_Pdo_Details_Stream_Cursor_Value_Input = {
-  id?: InputMaybe<Scalars['Int']>;
-  name?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['Int']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
 };
 
 /** aggregate sum on columns */
 export type Metal_Pdo_Details_Sum_Fields = {
   __typename?: 'metal_pdo_details_sum_fields';
-  id?: Maybe<Scalars['Int']>;
+  id?: Maybe<Scalars['Int']['output']>;
 };
 
 /** update columns of table "metal_pdo.details" */
@@ -5516,19 +5849,19 @@ export type Metal_Pdo_Details_Updates = {
 /** aggregate var_pop on columns */
 export type Metal_Pdo_Details_Var_Pop_Fields = {
   __typename?: 'metal_pdo_details_var_pop_fields';
-  id?: Maybe<Scalars['Float']>;
+  id?: Maybe<Scalars['Float']['output']>;
 };
 
 /** aggregate var_samp on columns */
 export type Metal_Pdo_Details_Var_Samp_Fields = {
   __typename?: 'metal_pdo_details_var_samp_fields';
-  id?: Maybe<Scalars['Float']>;
+  id?: Maybe<Scalars['Float']['output']>;
 };
 
 /** aggregate variance on columns */
 export type Metal_Pdo_Details_Variance_Fields = {
   __typename?: 'metal_pdo_details_variance_fields';
-  id?: Maybe<Scalars['Float']>;
+  id?: Maybe<Scalars['Float']['output']>;
 };
 
 /** columns and relationships of "metal_pdo.materials" */
@@ -5538,15 +5871,15 @@ export type Metal_Pdo_Materials = {
   detail_materials: Array<Metal_Pdo_Detail_Materials>;
   /** An aggregate relationship */
   detail_materials_aggregate: Metal_Pdo_Detail_Materials_Aggregate;
-  id: Scalars['Int'];
-  name?: Maybe<Scalars['String']>;
-  shape: Scalars['Int'];
-  shape_data?: Maybe<Scalars['jsonb']>;
+  id: Scalars['Int']['output'];
+  name?: Maybe<Scalars['String']['output']>;
+  shape: Scalars['Int']['output'];
+  shape_data?: Maybe<Scalars['jsonb']['output']>;
   /** An array relationship */
   supplies: Array<Metal_Pdo_Supplies>;
   /** An aggregate relationship */
   supplies_aggregate: Metal_Pdo_Supplies_Aggregate;
-  unit: Scalars['Int'];
+  unit: Scalars['Int']['output'];
   /** An array relationship */
   writeoffs: Array<Metal_Pdo_Writeoffs>;
   /** An aggregate relationship */
@@ -5557,8 +5890,8 @@ export type Metal_Pdo_Materials = {
 /** columns and relationships of "metal_pdo.materials" */
 export type Metal_Pdo_MaterialsDetail_MaterialsArgs = {
   distinct_on?: InputMaybe<Array<Metal_Pdo_Detail_Materials_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Metal_Pdo_Detail_Materials_Order_By>>;
   where?: InputMaybe<Metal_Pdo_Detail_Materials_Bool_Exp>;
 };
@@ -5567,8 +5900,8 @@ export type Metal_Pdo_MaterialsDetail_MaterialsArgs = {
 /** columns and relationships of "metal_pdo.materials" */
 export type Metal_Pdo_MaterialsDetail_Materials_AggregateArgs = {
   distinct_on?: InputMaybe<Array<Metal_Pdo_Detail_Materials_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Metal_Pdo_Detail_Materials_Order_By>>;
   where?: InputMaybe<Metal_Pdo_Detail_Materials_Bool_Exp>;
 };
@@ -5576,15 +5909,15 @@ export type Metal_Pdo_MaterialsDetail_Materials_AggregateArgs = {
 
 /** columns and relationships of "metal_pdo.materials" */
 export type Metal_Pdo_MaterialsShape_DataArgs = {
-  path?: InputMaybe<Scalars['String']>;
+  path?: InputMaybe<Scalars['String']['input']>;
 };
 
 
 /** columns and relationships of "metal_pdo.materials" */
 export type Metal_Pdo_MaterialsSuppliesArgs = {
   distinct_on?: InputMaybe<Array<Metal_Pdo_Supplies_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Metal_Pdo_Supplies_Order_By>>;
   where?: InputMaybe<Metal_Pdo_Supplies_Bool_Exp>;
 };
@@ -5593,8 +5926,8 @@ export type Metal_Pdo_MaterialsSuppliesArgs = {
 /** columns and relationships of "metal_pdo.materials" */
 export type Metal_Pdo_MaterialsSupplies_AggregateArgs = {
   distinct_on?: InputMaybe<Array<Metal_Pdo_Supplies_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Metal_Pdo_Supplies_Order_By>>;
   where?: InputMaybe<Metal_Pdo_Supplies_Bool_Exp>;
 };
@@ -5603,8 +5936,8 @@ export type Metal_Pdo_MaterialsSupplies_AggregateArgs = {
 /** columns and relationships of "metal_pdo.materials" */
 export type Metal_Pdo_MaterialsWriteoffsArgs = {
   distinct_on?: InputMaybe<Array<Metal_Pdo_Writeoffs_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Metal_Pdo_Writeoffs_Order_By>>;
   where?: InputMaybe<Metal_Pdo_Writeoffs_Bool_Exp>;
 };
@@ -5613,8 +5946,8 @@ export type Metal_Pdo_MaterialsWriteoffsArgs = {
 /** columns and relationships of "metal_pdo.materials" */
 export type Metal_Pdo_MaterialsWriteoffs_AggregateArgs = {
   distinct_on?: InputMaybe<Array<Metal_Pdo_Writeoffs_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Metal_Pdo_Writeoffs_Order_By>>;
   where?: InputMaybe<Metal_Pdo_Writeoffs_Bool_Exp>;
 };
@@ -5630,7 +5963,7 @@ export type Metal_Pdo_Materials_Aggregate = {
 export type Metal_Pdo_Materials_Aggregate_Fields = {
   __typename?: 'metal_pdo_materials_aggregate_fields';
   avg?: Maybe<Metal_Pdo_Materials_Avg_Fields>;
-  count: Scalars['Int'];
+  count: Scalars['Int']['output'];
   max?: Maybe<Metal_Pdo_Materials_Max_Fields>;
   min?: Maybe<Metal_Pdo_Materials_Min_Fields>;
   stddev?: Maybe<Metal_Pdo_Materials_Stddev_Fields>;
@@ -5646,20 +5979,20 @@ export type Metal_Pdo_Materials_Aggregate_Fields = {
 /** aggregate fields of "metal_pdo.materials" */
 export type Metal_Pdo_Materials_Aggregate_FieldsCountArgs = {
   columns?: InputMaybe<Array<Metal_Pdo_Materials_Select_Column>>;
-  distinct?: InputMaybe<Scalars['Boolean']>;
+  distinct?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 /** append existing jsonb value of filtered columns with new jsonb value */
 export type Metal_Pdo_Materials_Append_Input = {
-  shape_data?: InputMaybe<Scalars['jsonb']>;
+  shape_data?: InputMaybe<Scalars['jsonb']['input']>;
 };
 
 /** aggregate avg on columns */
 export type Metal_Pdo_Materials_Avg_Fields = {
   __typename?: 'metal_pdo_materials_avg_fields';
-  id?: Maybe<Scalars['Float']>;
-  shape?: Maybe<Scalars['Float']>;
-  unit?: Maybe<Scalars['Float']>;
+  id?: Maybe<Scalars['Float']['output']>;
+  shape?: Maybe<Scalars['Float']['output']>;
+  unit?: Maybe<Scalars['Float']['output']>;
 };
 
 /** Boolean expression to filter rows from the table "metal_pdo.materials". All fields are combined with a logical 'AND'. */
@@ -5688,61 +6021,61 @@ export enum Metal_Pdo_Materials_Constraint {
 
 /** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
 export type Metal_Pdo_Materials_Delete_At_Path_Input = {
-  shape_data?: InputMaybe<Array<Scalars['String']>>;
+  shape_data?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 /** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
 export type Metal_Pdo_Materials_Delete_Elem_Input = {
-  shape_data?: InputMaybe<Scalars['Int']>;
+  shape_data?: InputMaybe<Scalars['Int']['input']>;
 };
 
 /** delete key/value pair or string element. key/value pairs are matched based on their key value */
 export type Metal_Pdo_Materials_Delete_Key_Input = {
-  shape_data?: InputMaybe<Scalars['String']>;
+  shape_data?: InputMaybe<Scalars['String']['input']>;
 };
 
 /** input type for incrementing numeric columns in table "metal_pdo.materials" */
 export type Metal_Pdo_Materials_Inc_Input = {
-  id?: InputMaybe<Scalars['Int']>;
-  shape?: InputMaybe<Scalars['Int']>;
-  unit?: InputMaybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']['input']>;
+  shape?: InputMaybe<Scalars['Int']['input']>;
+  unit?: InputMaybe<Scalars['Int']['input']>;
 };
 
 /** input type for inserting data into table "metal_pdo.materials" */
 export type Metal_Pdo_Materials_Insert_Input = {
   detail_materials?: InputMaybe<Metal_Pdo_Detail_Materials_Arr_Rel_Insert_Input>;
-  id?: InputMaybe<Scalars['Int']>;
-  name?: InputMaybe<Scalars['String']>;
-  shape?: InputMaybe<Scalars['Int']>;
-  shape_data?: InputMaybe<Scalars['jsonb']>;
+  id?: InputMaybe<Scalars['Int']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  shape?: InputMaybe<Scalars['Int']['input']>;
+  shape_data?: InputMaybe<Scalars['jsonb']['input']>;
   supplies?: InputMaybe<Metal_Pdo_Supplies_Arr_Rel_Insert_Input>;
-  unit?: InputMaybe<Scalars['Int']>;
+  unit?: InputMaybe<Scalars['Int']['input']>;
   writeoffs?: InputMaybe<Metal_Pdo_Writeoffs_Arr_Rel_Insert_Input>;
 };
 
 /** aggregate max on columns */
 export type Metal_Pdo_Materials_Max_Fields = {
   __typename?: 'metal_pdo_materials_max_fields';
-  id?: Maybe<Scalars['Int']>;
-  name?: Maybe<Scalars['String']>;
-  shape?: Maybe<Scalars['Int']>;
-  unit?: Maybe<Scalars['Int']>;
+  id?: Maybe<Scalars['Int']['output']>;
+  name?: Maybe<Scalars['String']['output']>;
+  shape?: Maybe<Scalars['Int']['output']>;
+  unit?: Maybe<Scalars['Int']['output']>;
 };
 
 /** aggregate min on columns */
 export type Metal_Pdo_Materials_Min_Fields = {
   __typename?: 'metal_pdo_materials_min_fields';
-  id?: Maybe<Scalars['Int']>;
-  name?: Maybe<Scalars['String']>;
-  shape?: Maybe<Scalars['Int']>;
-  unit?: Maybe<Scalars['Int']>;
+  id?: Maybe<Scalars['Int']['output']>;
+  name?: Maybe<Scalars['String']['output']>;
+  shape?: Maybe<Scalars['Int']['output']>;
+  unit?: Maybe<Scalars['Int']['output']>;
 };
 
 /** response of any mutation on the table "metal_pdo.materials" */
 export type Metal_Pdo_Materials_Mutation_Response = {
   __typename?: 'metal_pdo_materials_mutation_response';
   /** number of rows affected by the mutation */
-  affected_rows: Scalars['Int'];
+  affected_rows: Scalars['Int']['output'];
   /** data from the rows affected by the mutation */
   returning: Array<Metal_Pdo_Materials>;
 };
@@ -5775,12 +6108,12 @@ export type Metal_Pdo_Materials_Order_By = {
 
 /** primary key columns input for table: metal_pdo.materials */
 export type Metal_Pdo_Materials_Pk_Columns_Input = {
-  id: Scalars['Int'];
+  id: Scalars['Int']['input'];
 };
 
 /** prepend existing jsonb value of filtered columns with new jsonb value */
 export type Metal_Pdo_Materials_Prepend_Input = {
-  shape_data?: InputMaybe<Scalars['jsonb']>;
+  shape_data?: InputMaybe<Scalars['jsonb']['input']>;
 };
 
 /** select columns of table "metal_pdo.materials" */
@@ -5799,35 +6132,35 @@ export enum Metal_Pdo_Materials_Select_Column {
 
 /** input type for updating data in table "metal_pdo.materials" */
 export type Metal_Pdo_Materials_Set_Input = {
-  id?: InputMaybe<Scalars['Int']>;
-  name?: InputMaybe<Scalars['String']>;
-  shape?: InputMaybe<Scalars['Int']>;
-  shape_data?: InputMaybe<Scalars['jsonb']>;
-  unit?: InputMaybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  shape?: InputMaybe<Scalars['Int']['input']>;
+  shape_data?: InputMaybe<Scalars['jsonb']['input']>;
+  unit?: InputMaybe<Scalars['Int']['input']>;
 };
 
 /** aggregate stddev on columns */
 export type Metal_Pdo_Materials_Stddev_Fields = {
   __typename?: 'metal_pdo_materials_stddev_fields';
-  id?: Maybe<Scalars['Float']>;
-  shape?: Maybe<Scalars['Float']>;
-  unit?: Maybe<Scalars['Float']>;
+  id?: Maybe<Scalars['Float']['output']>;
+  shape?: Maybe<Scalars['Float']['output']>;
+  unit?: Maybe<Scalars['Float']['output']>;
 };
 
 /** aggregate stddev_pop on columns */
 export type Metal_Pdo_Materials_Stddev_Pop_Fields = {
   __typename?: 'metal_pdo_materials_stddev_pop_fields';
-  id?: Maybe<Scalars['Float']>;
-  shape?: Maybe<Scalars['Float']>;
-  unit?: Maybe<Scalars['Float']>;
+  id?: Maybe<Scalars['Float']['output']>;
+  shape?: Maybe<Scalars['Float']['output']>;
+  unit?: Maybe<Scalars['Float']['output']>;
 };
 
 /** aggregate stddev_samp on columns */
 export type Metal_Pdo_Materials_Stddev_Samp_Fields = {
   __typename?: 'metal_pdo_materials_stddev_samp_fields';
-  id?: Maybe<Scalars['Float']>;
-  shape?: Maybe<Scalars['Float']>;
-  unit?: Maybe<Scalars['Float']>;
+  id?: Maybe<Scalars['Float']['output']>;
+  shape?: Maybe<Scalars['Float']['output']>;
+  unit?: Maybe<Scalars['Float']['output']>;
 };
 
 /** Streaming cursor of the table "metal_pdo_materials" */
@@ -5840,19 +6173,19 @@ export type Metal_Pdo_Materials_Stream_Cursor_Input = {
 
 /** Initial value of the column from where the streaming should start */
 export type Metal_Pdo_Materials_Stream_Cursor_Value_Input = {
-  id?: InputMaybe<Scalars['Int']>;
-  name?: InputMaybe<Scalars['String']>;
-  shape?: InputMaybe<Scalars['Int']>;
-  shape_data?: InputMaybe<Scalars['jsonb']>;
-  unit?: InputMaybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']['input']>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  shape?: InputMaybe<Scalars['Int']['input']>;
+  shape_data?: InputMaybe<Scalars['jsonb']['input']>;
+  unit?: InputMaybe<Scalars['Int']['input']>;
 };
 
 /** aggregate sum on columns */
 export type Metal_Pdo_Materials_Sum_Fields = {
   __typename?: 'metal_pdo_materials_sum_fields';
-  id?: Maybe<Scalars['Int']>;
-  shape?: Maybe<Scalars['Int']>;
-  unit?: Maybe<Scalars['Int']>;
+  id?: Maybe<Scalars['Int']['output']>;
+  shape?: Maybe<Scalars['Int']['output']>;
+  unit?: Maybe<Scalars['Int']['output']>;
 };
 
 /** update columns of table "metal_pdo.materials" */
@@ -5891,37 +6224,37 @@ export type Metal_Pdo_Materials_Updates = {
 /** aggregate var_pop on columns */
 export type Metal_Pdo_Materials_Var_Pop_Fields = {
   __typename?: 'metal_pdo_materials_var_pop_fields';
-  id?: Maybe<Scalars['Float']>;
-  shape?: Maybe<Scalars['Float']>;
-  unit?: Maybe<Scalars['Float']>;
+  id?: Maybe<Scalars['Float']['output']>;
+  shape?: Maybe<Scalars['Float']['output']>;
+  unit?: Maybe<Scalars['Float']['output']>;
 };
 
 /** aggregate var_samp on columns */
 export type Metal_Pdo_Materials_Var_Samp_Fields = {
   __typename?: 'metal_pdo_materials_var_samp_fields';
-  id?: Maybe<Scalars['Float']>;
-  shape?: Maybe<Scalars['Float']>;
-  unit?: Maybe<Scalars['Float']>;
+  id?: Maybe<Scalars['Float']['output']>;
+  shape?: Maybe<Scalars['Float']['output']>;
+  unit?: Maybe<Scalars['Float']['output']>;
 };
 
 /** aggregate variance on columns */
 export type Metal_Pdo_Materials_Variance_Fields = {
   __typename?: 'metal_pdo_materials_variance_fields';
-  id?: Maybe<Scalars['Float']>;
-  shape?: Maybe<Scalars['Float']>;
-  unit?: Maybe<Scalars['Float']>;
+  id?: Maybe<Scalars['Float']['output']>;
+  shape?: Maybe<Scalars['Float']['output']>;
+  unit?: Maybe<Scalars['Float']['output']>;
 };
 
 /** columns and relationships of "metal_pdo.supplies" */
 export type Metal_Pdo_Supplies = {
   __typename?: 'metal_pdo_supplies';
-  id: Scalars['Int'];
+  id: Scalars['Int']['output'];
   /** An object relationship */
   material?: Maybe<Metal_Pdo_Materials>;
-  material_id?: Maybe<Scalars['Int']>;
-  qty: Scalars['numeric'];
-  supplied_at: Scalars['timestamp'];
-  supplier_name: Scalars['String'];
+  material_id?: Maybe<Scalars['Int']['output']>;
+  qty: Scalars['numeric']['output'];
+  supplied_at: Scalars['timestamp']['output'];
+  supplier_name: Scalars['String']['output'];
 };
 
 /** aggregated selection of "metal_pdo.supplies" */
@@ -5937,7 +6270,7 @@ export type Metal_Pdo_Supplies_Aggregate_Bool_Exp = {
 
 export type Metal_Pdo_Supplies_Aggregate_Bool_Exp_Count = {
   arguments?: InputMaybe<Array<Metal_Pdo_Supplies_Select_Column>>;
-  distinct?: InputMaybe<Scalars['Boolean']>;
+  distinct?: InputMaybe<Scalars['Boolean']['input']>;
   filter?: InputMaybe<Metal_Pdo_Supplies_Bool_Exp>;
   predicate: Int_Comparison_Exp;
 };
@@ -5946,7 +6279,7 @@ export type Metal_Pdo_Supplies_Aggregate_Bool_Exp_Count = {
 export type Metal_Pdo_Supplies_Aggregate_Fields = {
   __typename?: 'metal_pdo_supplies_aggregate_fields';
   avg?: Maybe<Metal_Pdo_Supplies_Avg_Fields>;
-  count: Scalars['Int'];
+  count: Scalars['Int']['output'];
   max?: Maybe<Metal_Pdo_Supplies_Max_Fields>;
   min?: Maybe<Metal_Pdo_Supplies_Min_Fields>;
   stddev?: Maybe<Metal_Pdo_Supplies_Stddev_Fields>;
@@ -5962,7 +6295,7 @@ export type Metal_Pdo_Supplies_Aggregate_Fields = {
 /** aggregate fields of "metal_pdo.supplies" */
 export type Metal_Pdo_Supplies_Aggregate_FieldsCountArgs = {
   columns?: InputMaybe<Array<Metal_Pdo_Supplies_Select_Column>>;
-  distinct?: InputMaybe<Scalars['Boolean']>;
+  distinct?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 /** order by aggregate values of table "metal_pdo.supplies" */
@@ -5990,9 +6323,9 @@ export type Metal_Pdo_Supplies_Arr_Rel_Insert_Input = {
 /** aggregate avg on columns */
 export type Metal_Pdo_Supplies_Avg_Fields = {
   __typename?: 'metal_pdo_supplies_avg_fields';
-  id?: Maybe<Scalars['Float']>;
-  material_id?: Maybe<Scalars['Float']>;
-  qty?: Maybe<Scalars['Float']>;
+  id?: Maybe<Scalars['Float']['output']>;
+  material_id?: Maybe<Scalars['Float']['output']>;
+  qty?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by avg() on columns of table "metal_pdo.supplies" */
@@ -6023,29 +6356,29 @@ export enum Metal_Pdo_Supplies_Constraint {
 
 /** input type for incrementing numeric columns in table "metal_pdo.supplies" */
 export type Metal_Pdo_Supplies_Inc_Input = {
-  id?: InputMaybe<Scalars['Int']>;
-  material_id?: InputMaybe<Scalars['Int']>;
-  qty?: InputMaybe<Scalars['numeric']>;
+  id?: InputMaybe<Scalars['Int']['input']>;
+  material_id?: InputMaybe<Scalars['Int']['input']>;
+  qty?: InputMaybe<Scalars['numeric']['input']>;
 };
 
 /** input type for inserting data into table "metal_pdo.supplies" */
 export type Metal_Pdo_Supplies_Insert_Input = {
-  id?: InputMaybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']['input']>;
   material?: InputMaybe<Metal_Pdo_Materials_Obj_Rel_Insert_Input>;
-  material_id?: InputMaybe<Scalars['Int']>;
-  qty?: InputMaybe<Scalars['numeric']>;
-  supplied_at?: InputMaybe<Scalars['timestamp']>;
-  supplier_name?: InputMaybe<Scalars['String']>;
+  material_id?: InputMaybe<Scalars['Int']['input']>;
+  qty?: InputMaybe<Scalars['numeric']['input']>;
+  supplied_at?: InputMaybe<Scalars['timestamp']['input']>;
+  supplier_name?: InputMaybe<Scalars['String']['input']>;
 };
 
 /** aggregate max on columns */
 export type Metal_Pdo_Supplies_Max_Fields = {
   __typename?: 'metal_pdo_supplies_max_fields';
-  id?: Maybe<Scalars['Int']>;
-  material_id?: Maybe<Scalars['Int']>;
-  qty?: Maybe<Scalars['numeric']>;
-  supplied_at?: Maybe<Scalars['timestamp']>;
-  supplier_name?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['Int']['output']>;
+  material_id?: Maybe<Scalars['Int']['output']>;
+  qty?: Maybe<Scalars['numeric']['output']>;
+  supplied_at?: Maybe<Scalars['timestamp']['output']>;
+  supplier_name?: Maybe<Scalars['String']['output']>;
 };
 
 /** order by max() on columns of table "metal_pdo.supplies" */
@@ -6060,11 +6393,11 @@ export type Metal_Pdo_Supplies_Max_Order_By = {
 /** aggregate min on columns */
 export type Metal_Pdo_Supplies_Min_Fields = {
   __typename?: 'metal_pdo_supplies_min_fields';
-  id?: Maybe<Scalars['Int']>;
-  material_id?: Maybe<Scalars['Int']>;
-  qty?: Maybe<Scalars['numeric']>;
-  supplied_at?: Maybe<Scalars['timestamp']>;
-  supplier_name?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['Int']['output']>;
+  material_id?: Maybe<Scalars['Int']['output']>;
+  qty?: Maybe<Scalars['numeric']['output']>;
+  supplied_at?: Maybe<Scalars['timestamp']['output']>;
+  supplier_name?: Maybe<Scalars['String']['output']>;
 };
 
 /** order by min() on columns of table "metal_pdo.supplies" */
@@ -6080,7 +6413,7 @@ export type Metal_Pdo_Supplies_Min_Order_By = {
 export type Metal_Pdo_Supplies_Mutation_Response = {
   __typename?: 'metal_pdo_supplies_mutation_response';
   /** number of rows affected by the mutation */
-  affected_rows: Scalars['Int'];
+  affected_rows: Scalars['Int']['output'];
   /** data from the rows affected by the mutation */
   returning: Array<Metal_Pdo_Supplies>;
 };
@@ -6104,7 +6437,7 @@ export type Metal_Pdo_Supplies_Order_By = {
 
 /** primary key columns input for table: metal_pdo.supplies */
 export type Metal_Pdo_Supplies_Pk_Columns_Input = {
-  id: Scalars['Int'];
+  id: Scalars['Int']['input'];
 };
 
 /** select columns of table "metal_pdo.supplies" */
@@ -6123,19 +6456,19 @@ export enum Metal_Pdo_Supplies_Select_Column {
 
 /** input type for updating data in table "metal_pdo.supplies" */
 export type Metal_Pdo_Supplies_Set_Input = {
-  id?: InputMaybe<Scalars['Int']>;
-  material_id?: InputMaybe<Scalars['Int']>;
-  qty?: InputMaybe<Scalars['numeric']>;
-  supplied_at?: InputMaybe<Scalars['timestamp']>;
-  supplier_name?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['Int']['input']>;
+  material_id?: InputMaybe<Scalars['Int']['input']>;
+  qty?: InputMaybe<Scalars['numeric']['input']>;
+  supplied_at?: InputMaybe<Scalars['timestamp']['input']>;
+  supplier_name?: InputMaybe<Scalars['String']['input']>;
 };
 
 /** aggregate stddev on columns */
 export type Metal_Pdo_Supplies_Stddev_Fields = {
   __typename?: 'metal_pdo_supplies_stddev_fields';
-  id?: Maybe<Scalars['Float']>;
-  material_id?: Maybe<Scalars['Float']>;
-  qty?: Maybe<Scalars['Float']>;
+  id?: Maybe<Scalars['Float']['output']>;
+  material_id?: Maybe<Scalars['Float']['output']>;
+  qty?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by stddev() on columns of table "metal_pdo.supplies" */
@@ -6148,9 +6481,9 @@ export type Metal_Pdo_Supplies_Stddev_Order_By = {
 /** aggregate stddev_pop on columns */
 export type Metal_Pdo_Supplies_Stddev_Pop_Fields = {
   __typename?: 'metal_pdo_supplies_stddev_pop_fields';
-  id?: Maybe<Scalars['Float']>;
-  material_id?: Maybe<Scalars['Float']>;
-  qty?: Maybe<Scalars['Float']>;
+  id?: Maybe<Scalars['Float']['output']>;
+  material_id?: Maybe<Scalars['Float']['output']>;
+  qty?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by stddev_pop() on columns of table "metal_pdo.supplies" */
@@ -6163,9 +6496,9 @@ export type Metal_Pdo_Supplies_Stddev_Pop_Order_By = {
 /** aggregate stddev_samp on columns */
 export type Metal_Pdo_Supplies_Stddev_Samp_Fields = {
   __typename?: 'metal_pdo_supplies_stddev_samp_fields';
-  id?: Maybe<Scalars['Float']>;
-  material_id?: Maybe<Scalars['Float']>;
-  qty?: Maybe<Scalars['Float']>;
+  id?: Maybe<Scalars['Float']['output']>;
+  material_id?: Maybe<Scalars['Float']['output']>;
+  qty?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by stddev_samp() on columns of table "metal_pdo.supplies" */
@@ -6185,19 +6518,19 @@ export type Metal_Pdo_Supplies_Stream_Cursor_Input = {
 
 /** Initial value of the column from where the streaming should start */
 export type Metal_Pdo_Supplies_Stream_Cursor_Value_Input = {
-  id?: InputMaybe<Scalars['Int']>;
-  material_id?: InputMaybe<Scalars['Int']>;
-  qty?: InputMaybe<Scalars['numeric']>;
-  supplied_at?: InputMaybe<Scalars['timestamp']>;
-  supplier_name?: InputMaybe<Scalars['String']>;
+  id?: InputMaybe<Scalars['Int']['input']>;
+  material_id?: InputMaybe<Scalars['Int']['input']>;
+  qty?: InputMaybe<Scalars['numeric']['input']>;
+  supplied_at?: InputMaybe<Scalars['timestamp']['input']>;
+  supplier_name?: InputMaybe<Scalars['String']['input']>;
 };
 
 /** aggregate sum on columns */
 export type Metal_Pdo_Supplies_Sum_Fields = {
   __typename?: 'metal_pdo_supplies_sum_fields';
-  id?: Maybe<Scalars['Int']>;
-  material_id?: Maybe<Scalars['Int']>;
-  qty?: Maybe<Scalars['numeric']>;
+  id?: Maybe<Scalars['Int']['output']>;
+  material_id?: Maybe<Scalars['Int']['output']>;
+  qty?: Maybe<Scalars['numeric']['output']>;
 };
 
 /** order by sum() on columns of table "metal_pdo.supplies" */
@@ -6233,9 +6566,9 @@ export type Metal_Pdo_Supplies_Updates = {
 /** aggregate var_pop on columns */
 export type Metal_Pdo_Supplies_Var_Pop_Fields = {
   __typename?: 'metal_pdo_supplies_var_pop_fields';
-  id?: Maybe<Scalars['Float']>;
-  material_id?: Maybe<Scalars['Float']>;
-  qty?: Maybe<Scalars['Float']>;
+  id?: Maybe<Scalars['Float']['output']>;
+  material_id?: Maybe<Scalars['Float']['output']>;
+  qty?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by var_pop() on columns of table "metal_pdo.supplies" */
@@ -6248,9 +6581,9 @@ export type Metal_Pdo_Supplies_Var_Pop_Order_By = {
 /** aggregate var_samp on columns */
 export type Metal_Pdo_Supplies_Var_Samp_Fields = {
   __typename?: 'metal_pdo_supplies_var_samp_fields';
-  id?: Maybe<Scalars['Float']>;
-  material_id?: Maybe<Scalars['Float']>;
-  qty?: Maybe<Scalars['Float']>;
+  id?: Maybe<Scalars['Float']['output']>;
+  material_id?: Maybe<Scalars['Float']['output']>;
+  qty?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by var_samp() on columns of table "metal_pdo.supplies" */
@@ -6263,9 +6596,9 @@ export type Metal_Pdo_Supplies_Var_Samp_Order_By = {
 /** aggregate variance on columns */
 export type Metal_Pdo_Supplies_Variance_Fields = {
   __typename?: 'metal_pdo_supplies_variance_fields';
-  id?: Maybe<Scalars['Float']>;
-  material_id?: Maybe<Scalars['Float']>;
-  qty?: Maybe<Scalars['Float']>;
+  id?: Maybe<Scalars['Float']['output']>;
+  material_id?: Maybe<Scalars['Float']['output']>;
+  qty?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by variance() on columns of table "metal_pdo.supplies" */
@@ -6278,21 +6611,21 @@ export type Metal_Pdo_Supplies_Variance_Order_By = {
 /** columns and relationships of "metal_pdo.writeoffs" */
 export type Metal_Pdo_Writeoffs = {
   __typename?: 'metal_pdo_writeoffs';
-  date: Scalars['timestamptz'];
-  id: Scalars['Int'];
+  date: Scalars['timestamptz']['output'];
+  id: Scalars['Int']['output'];
   /** An object relationship */
   material: Metal_Pdo_Materials;
-  material_id: Scalars['Int'];
-  qty: Scalars['numeric'];
-  reason: Scalars['Int'];
-  type: Scalars['Int'];
-  type_data: Scalars['jsonb'];
+  material_id: Scalars['Int']['output'];
+  qty: Scalars['numeric']['output'];
+  reason: Scalars['Int']['output'];
+  type: Scalars['Int']['output'];
+  type_data: Scalars['jsonb']['output'];
 };
 
 
 /** columns and relationships of "metal_pdo.writeoffs" */
 export type Metal_Pdo_WriteoffsType_DataArgs = {
-  path?: InputMaybe<Scalars['String']>;
+  path?: InputMaybe<Scalars['String']['input']>;
 };
 
 /** aggregated selection of "metal_pdo.writeoffs" */
@@ -6308,7 +6641,7 @@ export type Metal_Pdo_Writeoffs_Aggregate_Bool_Exp = {
 
 export type Metal_Pdo_Writeoffs_Aggregate_Bool_Exp_Count = {
   arguments?: InputMaybe<Array<Metal_Pdo_Writeoffs_Select_Column>>;
-  distinct?: InputMaybe<Scalars['Boolean']>;
+  distinct?: InputMaybe<Scalars['Boolean']['input']>;
   filter?: InputMaybe<Metal_Pdo_Writeoffs_Bool_Exp>;
   predicate: Int_Comparison_Exp;
 };
@@ -6317,7 +6650,7 @@ export type Metal_Pdo_Writeoffs_Aggregate_Bool_Exp_Count = {
 export type Metal_Pdo_Writeoffs_Aggregate_Fields = {
   __typename?: 'metal_pdo_writeoffs_aggregate_fields';
   avg?: Maybe<Metal_Pdo_Writeoffs_Avg_Fields>;
-  count: Scalars['Int'];
+  count: Scalars['Int']['output'];
   max?: Maybe<Metal_Pdo_Writeoffs_Max_Fields>;
   min?: Maybe<Metal_Pdo_Writeoffs_Min_Fields>;
   stddev?: Maybe<Metal_Pdo_Writeoffs_Stddev_Fields>;
@@ -6333,7 +6666,7 @@ export type Metal_Pdo_Writeoffs_Aggregate_Fields = {
 /** aggregate fields of "metal_pdo.writeoffs" */
 export type Metal_Pdo_Writeoffs_Aggregate_FieldsCountArgs = {
   columns?: InputMaybe<Array<Metal_Pdo_Writeoffs_Select_Column>>;
-  distinct?: InputMaybe<Scalars['Boolean']>;
+  distinct?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 /** order by aggregate values of table "metal_pdo.writeoffs" */
@@ -6353,7 +6686,7 @@ export type Metal_Pdo_Writeoffs_Aggregate_Order_By = {
 
 /** append existing jsonb value of filtered columns with new jsonb value */
 export type Metal_Pdo_Writeoffs_Append_Input = {
-  type_data?: InputMaybe<Scalars['jsonb']>;
+  type_data?: InputMaybe<Scalars['jsonb']['input']>;
 };
 
 /** input type for inserting array relation for remote table "metal_pdo.writeoffs" */
@@ -6366,11 +6699,11 @@ export type Metal_Pdo_Writeoffs_Arr_Rel_Insert_Input = {
 /** aggregate avg on columns */
 export type Metal_Pdo_Writeoffs_Avg_Fields = {
   __typename?: 'metal_pdo_writeoffs_avg_fields';
-  id?: Maybe<Scalars['Float']>;
-  material_id?: Maybe<Scalars['Float']>;
-  qty?: Maybe<Scalars['Float']>;
-  reason?: Maybe<Scalars['Float']>;
-  type?: Maybe<Scalars['Float']>;
+  id?: Maybe<Scalars['Float']['output']>;
+  material_id?: Maybe<Scalars['Float']['output']>;
+  qty?: Maybe<Scalars['Float']['output']>;
+  reason?: Maybe<Scalars['Float']['output']>;
+  type?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by avg() on columns of table "metal_pdo.writeoffs" */
@@ -6405,49 +6738,49 @@ export enum Metal_Pdo_Writeoffs_Constraint {
 
 /** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
 export type Metal_Pdo_Writeoffs_Delete_At_Path_Input = {
-  type_data?: InputMaybe<Array<Scalars['String']>>;
+  type_data?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 /** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
 export type Metal_Pdo_Writeoffs_Delete_Elem_Input = {
-  type_data?: InputMaybe<Scalars['Int']>;
+  type_data?: InputMaybe<Scalars['Int']['input']>;
 };
 
 /** delete key/value pair or string element. key/value pairs are matched based on their key value */
 export type Metal_Pdo_Writeoffs_Delete_Key_Input = {
-  type_data?: InputMaybe<Scalars['String']>;
+  type_data?: InputMaybe<Scalars['String']['input']>;
 };
 
 /** input type for incrementing numeric columns in table "metal_pdo.writeoffs" */
 export type Metal_Pdo_Writeoffs_Inc_Input = {
-  id?: InputMaybe<Scalars['Int']>;
-  material_id?: InputMaybe<Scalars['Int']>;
-  qty?: InputMaybe<Scalars['numeric']>;
-  reason?: InputMaybe<Scalars['Int']>;
-  type?: InputMaybe<Scalars['Int']>;
+  id?: InputMaybe<Scalars['Int']['input']>;
+  material_id?: InputMaybe<Scalars['Int']['input']>;
+  qty?: InputMaybe<Scalars['numeric']['input']>;
+  reason?: InputMaybe<Scalars['Int']['input']>;
+  type?: InputMaybe<Scalars['Int']['input']>;
 };
 
 /** input type for inserting data into table "metal_pdo.writeoffs" */
 export type Metal_Pdo_Writeoffs_Insert_Input = {
-  date?: InputMaybe<Scalars['timestamptz']>;
-  id?: InputMaybe<Scalars['Int']>;
+  date?: InputMaybe<Scalars['timestamptz']['input']>;
+  id?: InputMaybe<Scalars['Int']['input']>;
   material?: InputMaybe<Metal_Pdo_Materials_Obj_Rel_Insert_Input>;
-  material_id?: InputMaybe<Scalars['Int']>;
-  qty?: InputMaybe<Scalars['numeric']>;
-  reason?: InputMaybe<Scalars['Int']>;
-  type?: InputMaybe<Scalars['Int']>;
-  type_data?: InputMaybe<Scalars['jsonb']>;
+  material_id?: InputMaybe<Scalars['Int']['input']>;
+  qty?: InputMaybe<Scalars['numeric']['input']>;
+  reason?: InputMaybe<Scalars['Int']['input']>;
+  type?: InputMaybe<Scalars['Int']['input']>;
+  type_data?: InputMaybe<Scalars['jsonb']['input']>;
 };
 
 /** aggregate max on columns */
 export type Metal_Pdo_Writeoffs_Max_Fields = {
   __typename?: 'metal_pdo_writeoffs_max_fields';
-  date?: Maybe<Scalars['timestamptz']>;
-  id?: Maybe<Scalars['Int']>;
-  material_id?: Maybe<Scalars['Int']>;
-  qty?: Maybe<Scalars['numeric']>;
-  reason?: Maybe<Scalars['Int']>;
-  type?: Maybe<Scalars['Int']>;
+  date?: Maybe<Scalars['timestamptz']['output']>;
+  id?: Maybe<Scalars['Int']['output']>;
+  material_id?: Maybe<Scalars['Int']['output']>;
+  qty?: Maybe<Scalars['numeric']['output']>;
+  reason?: Maybe<Scalars['Int']['output']>;
+  type?: Maybe<Scalars['Int']['output']>;
 };
 
 /** order by max() on columns of table "metal_pdo.writeoffs" */
@@ -6463,12 +6796,12 @@ export type Metal_Pdo_Writeoffs_Max_Order_By = {
 /** aggregate min on columns */
 export type Metal_Pdo_Writeoffs_Min_Fields = {
   __typename?: 'metal_pdo_writeoffs_min_fields';
-  date?: Maybe<Scalars['timestamptz']>;
-  id?: Maybe<Scalars['Int']>;
-  material_id?: Maybe<Scalars['Int']>;
-  qty?: Maybe<Scalars['numeric']>;
-  reason?: Maybe<Scalars['Int']>;
-  type?: Maybe<Scalars['Int']>;
+  date?: Maybe<Scalars['timestamptz']['output']>;
+  id?: Maybe<Scalars['Int']['output']>;
+  material_id?: Maybe<Scalars['Int']['output']>;
+  qty?: Maybe<Scalars['numeric']['output']>;
+  reason?: Maybe<Scalars['Int']['output']>;
+  type?: Maybe<Scalars['Int']['output']>;
 };
 
 /** order by min() on columns of table "metal_pdo.writeoffs" */
@@ -6485,7 +6818,7 @@ export type Metal_Pdo_Writeoffs_Min_Order_By = {
 export type Metal_Pdo_Writeoffs_Mutation_Response = {
   __typename?: 'metal_pdo_writeoffs_mutation_response';
   /** number of rows affected by the mutation */
-  affected_rows: Scalars['Int'];
+  affected_rows: Scalars['Int']['output'];
   /** data from the rows affected by the mutation */
   returning: Array<Metal_Pdo_Writeoffs>;
 };
@@ -6511,12 +6844,12 @@ export type Metal_Pdo_Writeoffs_Order_By = {
 
 /** primary key columns input for table: metal_pdo.writeoffs */
 export type Metal_Pdo_Writeoffs_Pk_Columns_Input = {
-  id: Scalars['Int'];
+  id: Scalars['Int']['input'];
 };
 
 /** prepend existing jsonb value of filtered columns with new jsonb value */
 export type Metal_Pdo_Writeoffs_Prepend_Input = {
-  type_data?: InputMaybe<Scalars['jsonb']>;
+  type_data?: InputMaybe<Scalars['jsonb']['input']>;
 };
 
 /** select columns of table "metal_pdo.writeoffs" */
@@ -6539,23 +6872,23 @@ export enum Metal_Pdo_Writeoffs_Select_Column {
 
 /** input type for updating data in table "metal_pdo.writeoffs" */
 export type Metal_Pdo_Writeoffs_Set_Input = {
-  date?: InputMaybe<Scalars['timestamptz']>;
-  id?: InputMaybe<Scalars['Int']>;
-  material_id?: InputMaybe<Scalars['Int']>;
-  qty?: InputMaybe<Scalars['numeric']>;
-  reason?: InputMaybe<Scalars['Int']>;
-  type?: InputMaybe<Scalars['Int']>;
-  type_data?: InputMaybe<Scalars['jsonb']>;
+  date?: InputMaybe<Scalars['timestamptz']['input']>;
+  id?: InputMaybe<Scalars['Int']['input']>;
+  material_id?: InputMaybe<Scalars['Int']['input']>;
+  qty?: InputMaybe<Scalars['numeric']['input']>;
+  reason?: InputMaybe<Scalars['Int']['input']>;
+  type?: InputMaybe<Scalars['Int']['input']>;
+  type_data?: InputMaybe<Scalars['jsonb']['input']>;
 };
 
 /** aggregate stddev on columns */
 export type Metal_Pdo_Writeoffs_Stddev_Fields = {
   __typename?: 'metal_pdo_writeoffs_stddev_fields';
-  id?: Maybe<Scalars['Float']>;
-  material_id?: Maybe<Scalars['Float']>;
-  qty?: Maybe<Scalars['Float']>;
-  reason?: Maybe<Scalars['Float']>;
-  type?: Maybe<Scalars['Float']>;
+  id?: Maybe<Scalars['Float']['output']>;
+  material_id?: Maybe<Scalars['Float']['output']>;
+  qty?: Maybe<Scalars['Float']['output']>;
+  reason?: Maybe<Scalars['Float']['output']>;
+  type?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by stddev() on columns of table "metal_pdo.writeoffs" */
@@ -6570,11 +6903,11 @@ export type Metal_Pdo_Writeoffs_Stddev_Order_By = {
 /** aggregate stddev_pop on columns */
 export type Metal_Pdo_Writeoffs_Stddev_Pop_Fields = {
   __typename?: 'metal_pdo_writeoffs_stddev_pop_fields';
-  id?: Maybe<Scalars['Float']>;
-  material_id?: Maybe<Scalars['Float']>;
-  qty?: Maybe<Scalars['Float']>;
-  reason?: Maybe<Scalars['Float']>;
-  type?: Maybe<Scalars['Float']>;
+  id?: Maybe<Scalars['Float']['output']>;
+  material_id?: Maybe<Scalars['Float']['output']>;
+  qty?: Maybe<Scalars['Float']['output']>;
+  reason?: Maybe<Scalars['Float']['output']>;
+  type?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by stddev_pop() on columns of table "metal_pdo.writeoffs" */
@@ -6589,11 +6922,11 @@ export type Metal_Pdo_Writeoffs_Stddev_Pop_Order_By = {
 /** aggregate stddev_samp on columns */
 export type Metal_Pdo_Writeoffs_Stddev_Samp_Fields = {
   __typename?: 'metal_pdo_writeoffs_stddev_samp_fields';
-  id?: Maybe<Scalars['Float']>;
-  material_id?: Maybe<Scalars['Float']>;
-  qty?: Maybe<Scalars['Float']>;
-  reason?: Maybe<Scalars['Float']>;
-  type?: Maybe<Scalars['Float']>;
+  id?: Maybe<Scalars['Float']['output']>;
+  material_id?: Maybe<Scalars['Float']['output']>;
+  qty?: Maybe<Scalars['Float']['output']>;
+  reason?: Maybe<Scalars['Float']['output']>;
+  type?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by stddev_samp() on columns of table "metal_pdo.writeoffs" */
@@ -6615,23 +6948,23 @@ export type Metal_Pdo_Writeoffs_Stream_Cursor_Input = {
 
 /** Initial value of the column from where the streaming should start */
 export type Metal_Pdo_Writeoffs_Stream_Cursor_Value_Input = {
-  date?: InputMaybe<Scalars['timestamptz']>;
-  id?: InputMaybe<Scalars['Int']>;
-  material_id?: InputMaybe<Scalars['Int']>;
-  qty?: InputMaybe<Scalars['numeric']>;
-  reason?: InputMaybe<Scalars['Int']>;
-  type?: InputMaybe<Scalars['Int']>;
-  type_data?: InputMaybe<Scalars['jsonb']>;
+  date?: InputMaybe<Scalars['timestamptz']['input']>;
+  id?: InputMaybe<Scalars['Int']['input']>;
+  material_id?: InputMaybe<Scalars['Int']['input']>;
+  qty?: InputMaybe<Scalars['numeric']['input']>;
+  reason?: InputMaybe<Scalars['Int']['input']>;
+  type?: InputMaybe<Scalars['Int']['input']>;
+  type_data?: InputMaybe<Scalars['jsonb']['input']>;
 };
 
 /** aggregate sum on columns */
 export type Metal_Pdo_Writeoffs_Sum_Fields = {
   __typename?: 'metal_pdo_writeoffs_sum_fields';
-  id?: Maybe<Scalars['Int']>;
-  material_id?: Maybe<Scalars['Int']>;
-  qty?: Maybe<Scalars['numeric']>;
-  reason?: Maybe<Scalars['Int']>;
-  type?: Maybe<Scalars['Int']>;
+  id?: Maybe<Scalars['Int']['output']>;
+  material_id?: Maybe<Scalars['Int']['output']>;
+  qty?: Maybe<Scalars['numeric']['output']>;
+  reason?: Maybe<Scalars['Int']['output']>;
+  type?: Maybe<Scalars['Int']['output']>;
 };
 
 /** order by sum() on columns of table "metal_pdo.writeoffs" */
@@ -6683,11 +7016,11 @@ export type Metal_Pdo_Writeoffs_Updates = {
 /** aggregate var_pop on columns */
 export type Metal_Pdo_Writeoffs_Var_Pop_Fields = {
   __typename?: 'metal_pdo_writeoffs_var_pop_fields';
-  id?: Maybe<Scalars['Float']>;
-  material_id?: Maybe<Scalars['Float']>;
-  qty?: Maybe<Scalars['Float']>;
-  reason?: Maybe<Scalars['Float']>;
-  type?: Maybe<Scalars['Float']>;
+  id?: Maybe<Scalars['Float']['output']>;
+  material_id?: Maybe<Scalars['Float']['output']>;
+  qty?: Maybe<Scalars['Float']['output']>;
+  reason?: Maybe<Scalars['Float']['output']>;
+  type?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by var_pop() on columns of table "metal_pdo.writeoffs" */
@@ -6702,11 +7035,11 @@ export type Metal_Pdo_Writeoffs_Var_Pop_Order_By = {
 /** aggregate var_samp on columns */
 export type Metal_Pdo_Writeoffs_Var_Samp_Fields = {
   __typename?: 'metal_pdo_writeoffs_var_samp_fields';
-  id?: Maybe<Scalars['Float']>;
-  material_id?: Maybe<Scalars['Float']>;
-  qty?: Maybe<Scalars['Float']>;
-  reason?: Maybe<Scalars['Float']>;
-  type?: Maybe<Scalars['Float']>;
+  id?: Maybe<Scalars['Float']['output']>;
+  material_id?: Maybe<Scalars['Float']['output']>;
+  qty?: Maybe<Scalars['Float']['output']>;
+  reason?: Maybe<Scalars['Float']['output']>;
+  type?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by var_samp() on columns of table "metal_pdo.writeoffs" */
@@ -6721,11 +7054,11 @@ export type Metal_Pdo_Writeoffs_Var_Samp_Order_By = {
 /** aggregate variance on columns */
 export type Metal_Pdo_Writeoffs_Variance_Fields = {
   __typename?: 'metal_pdo_writeoffs_variance_fields';
-  id?: Maybe<Scalars['Float']>;
-  material_id?: Maybe<Scalars['Float']>;
-  qty?: Maybe<Scalars['Float']>;
-  reason?: Maybe<Scalars['Float']>;
-  type?: Maybe<Scalars['Float']>;
+  id?: Maybe<Scalars['Float']['output']>;
+  material_id?: Maybe<Scalars['Float']['output']>;
+  qty?: Maybe<Scalars['Float']['output']>;
+  reason?: Maybe<Scalars['Float']['output']>;
+  type?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by variance() on columns of table "metal_pdo.writeoffs" */
@@ -6792,6 +7125,14 @@ export type Mutation_Root = {
   delete_erp_Users?: Maybe<Erp_Users_Mutation_Response>;
   /** delete single row from the table: "erp.Users" */
   delete_erp_Users_by_pk?: Maybe<Erp_Users>;
+  /** delete data from the table: "kysely_migration" */
+  delete_kysely_migration?: Maybe<Kysely_Migration_Mutation_Response>;
+  /** delete single row from the table: "kysely_migration" */
+  delete_kysely_migration_by_pk?: Maybe<Kysely_Migration>;
+  /** delete data from the table: "kysely_migration_lock" */
+  delete_kysely_migration_lock?: Maybe<Kysely_Migration_Lock_Mutation_Response>;
+  /** delete single row from the table: "kysely_migration_lock" */
+  delete_kysely_migration_lock_by_pk?: Maybe<Kysely_Migration_Lock>;
   /** delete data from the table: "metal_pdo.detail_materials" */
   delete_metal_pdo_detail_materials?: Maybe<Metal_Pdo_Detail_Materials_Mutation_Response>;
   /** delete single row from the table: "metal_pdo.detail_materials" */
@@ -6864,6 +7205,14 @@ export type Mutation_Root = {
   insert_erp_Users?: Maybe<Erp_Users_Mutation_Response>;
   /** insert a single row into the table: "erp.Users" */
   insert_erp_Users_one?: Maybe<Erp_Users>;
+  /** insert data into the table: "kysely_migration" */
+  insert_kysely_migration?: Maybe<Kysely_Migration_Mutation_Response>;
+  /** insert data into the table: "kysely_migration_lock" */
+  insert_kysely_migration_lock?: Maybe<Kysely_Migration_Lock_Mutation_Response>;
+  /** insert a single row into the table: "kysely_migration_lock" */
+  insert_kysely_migration_lock_one?: Maybe<Kysely_Migration_Lock>;
+  /** insert a single row into the table: "kysely_migration" */
+  insert_kysely_migration_one?: Maybe<Kysely_Migration>;
   /** insert data into the table: "metal_pdo.detail_materials" */
   insert_metal_pdo_detail_materials?: Maybe<Metal_Pdo_Detail_Materials_Mutation_Response>;
   /** insert a single row into the table: "metal_pdo.detail_materials" */
@@ -6962,6 +7311,18 @@ export type Mutation_Root = {
   update_erp_Users_by_pk?: Maybe<Erp_Users>;
   /** update multiples rows of table: "erp.Users" */
   update_erp_Users_many?: Maybe<Array<Maybe<Erp_Users_Mutation_Response>>>;
+  /** update data of the table: "kysely_migration" */
+  update_kysely_migration?: Maybe<Kysely_Migration_Mutation_Response>;
+  /** update single row of the table: "kysely_migration" */
+  update_kysely_migration_by_pk?: Maybe<Kysely_Migration>;
+  /** update data of the table: "kysely_migration_lock" */
+  update_kysely_migration_lock?: Maybe<Kysely_Migration_Lock_Mutation_Response>;
+  /** update single row of the table: "kysely_migration_lock" */
+  update_kysely_migration_lock_by_pk?: Maybe<Kysely_Migration_Lock>;
+  /** update multiples rows of table: "kysely_migration_lock" */
+  update_kysely_migration_lock_many?: Maybe<Array<Maybe<Kysely_Migration_Lock_Mutation_Response>>>;
+  /** update multiples rows of table: "kysely_migration" */
+  update_kysely_migration_many?: Maybe<Array<Maybe<Kysely_Migration_Mutation_Response>>>;
   /** update data of the table: "metal_pdo.detail_materials" */
   update_metal_pdo_detail_materials?: Maybe<Metal_Pdo_Detail_Materials_Mutation_Response>;
   /** update single row of the table: "metal_pdo.detail_materials" */
@@ -7003,7 +7364,7 @@ export type Mutation_RootDelete_Attendance_ConfigArgs = {
 
 /** mutation root */
 export type Mutation_RootDelete_Attendance_Config_By_PkArgs = {
-  ID: Scalars['Int'];
+  ID: Scalars['Int']['input'];
 };
 
 
@@ -7015,8 +7376,8 @@ export type Mutation_RootDelete_Attendance_IntervalsArgs = {
 
 /** mutation root */
 export type Mutation_RootDelete_Attendance_Intervals_By_PkArgs = {
-  card: Scalars['String'];
-  ent_event_id: Scalars['Int'];
+  card: Scalars['String']['input'];
+  ent_event_id: Scalars['Int']['input'];
 };
 
 
@@ -7028,7 +7389,7 @@ export type Mutation_RootDelete_Attendance_UsersArgs = {
 
 /** mutation root */
 export type Mutation_RootDelete_Attendance_Users_By_PkArgs = {
-  id: Scalars['Int'];
+  id: Scalars['Int']['input'];
 };
 
 
@@ -7040,7 +7401,7 @@ export type Mutation_RootDelete_Erp_AccessLevelsArgs = {
 
 /** mutation root */
 export type Mutation_RootDelete_Erp_AccessLevels_By_PkArgs = {
-  AccessLevelID: Scalars['Int'];
+  AccessLevelID: Scalars['Int']['input'];
 };
 
 
@@ -7052,7 +7413,7 @@ export type Mutation_RootDelete_Erp_CommentsArgs = {
 
 /** mutation root */
 export type Mutation_RootDelete_Erp_Comments_By_PkArgs = {
-  CommentID: Scalars['Int'];
+  CommentID: Scalars['Int']['input'];
 };
 
 
@@ -7064,7 +7425,7 @@ export type Mutation_RootDelete_Erp_DocsArgs = {
 
 /** mutation root */
 export type Mutation_RootDelete_Erp_Docs_By_PkArgs = {
-  ID: Scalars['Int'];
+  ID: Scalars['Int']['input'];
 };
 
 
@@ -7076,7 +7437,7 @@ export type Mutation_RootDelete_Erp_NotificationsArgs = {
 
 /** mutation root */
 export type Mutation_RootDelete_Erp_Notifications_By_PkArgs = {
-  ID: Scalars['Int'];
+  ID: Scalars['Int']['input'];
 };
 
 
@@ -7088,7 +7449,7 @@ export type Mutation_RootDelete_Erp_OrderItemsArgs = {
 
 /** mutation root */
 export type Mutation_RootDelete_Erp_OrderItems_By_PkArgs = {
-  OrderItemID: Scalars['Int'];
+  OrderItemID: Scalars['Int']['input'];
 };
 
 
@@ -7100,7 +7461,7 @@ export type Mutation_RootDelete_Erp_OrderStatusArgs = {
 
 /** mutation root */
 export type Mutation_RootDelete_Erp_OrderStatus_By_PkArgs = {
-  ID: Scalars['Int'];
+  ID: Scalars['Int']['input'];
 };
 
 
@@ -7112,7 +7473,7 @@ export type Mutation_RootDelete_Erp_OrdersArgs = {
 
 /** mutation root */
 export type Mutation_RootDelete_Erp_Orders_By_PkArgs = {
-  OrderID: Scalars['Int'];
+  OrderID: Scalars['Int']['input'];
 };
 
 
@@ -7124,7 +7485,7 @@ export type Mutation_RootDelete_Erp_PaymentHistoryArgs = {
 
 /** mutation root */
 export type Mutation_RootDelete_Erp_PaymentHistory_By_PkArgs = {
-  ID: Scalars['Int'];
+  ID: Scalars['Int']['input'];
 };
 
 
@@ -7136,7 +7497,7 @@ export type Mutation_RootDelete_Erp_TokensArgs = {
 
 /** mutation root */
 export type Mutation_RootDelete_Erp_Tokens_By_PkArgs = {
-  ID: Scalars['Int'];
+  ID: Scalars['Int']['input'];
 };
 
 
@@ -7148,7 +7509,31 @@ export type Mutation_RootDelete_Erp_UsersArgs = {
 
 /** mutation root */
 export type Mutation_RootDelete_Erp_Users_By_PkArgs = {
-  UserID: Scalars['Int'];
+  UserID: Scalars['Int']['input'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Kysely_MigrationArgs = {
+  where: Kysely_Migration_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Kysely_Migration_By_PkArgs = {
+  name: Scalars['String']['input'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Kysely_Migration_LockArgs = {
+  where: Kysely_Migration_Lock_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Kysely_Migration_Lock_By_PkArgs = {
+  id: Scalars['String']['input'];
 };
 
 
@@ -7160,8 +7545,8 @@ export type Mutation_RootDelete_Metal_Pdo_Detail_MaterialsArgs = {
 
 /** mutation root */
 export type Mutation_RootDelete_Metal_Pdo_Detail_Materials_By_PkArgs = {
-  detail_id: Scalars['Int'];
-  material_id: Scalars['Int'];
+  detail_id: Scalars['Int']['input'];
+  material_id: Scalars['Int']['input'];
 };
 
 
@@ -7173,7 +7558,7 @@ export type Mutation_RootDelete_Metal_Pdo_DetailsArgs = {
 
 /** mutation root */
 export type Mutation_RootDelete_Metal_Pdo_Details_By_PkArgs = {
-  id: Scalars['Int'];
+  id: Scalars['Int']['input'];
 };
 
 
@@ -7185,7 +7570,7 @@ export type Mutation_RootDelete_Metal_Pdo_MaterialsArgs = {
 
 /** mutation root */
 export type Mutation_RootDelete_Metal_Pdo_Materials_By_PkArgs = {
-  id: Scalars['Int'];
+  id: Scalars['Int']['input'];
 };
 
 
@@ -7197,7 +7582,7 @@ export type Mutation_RootDelete_Metal_Pdo_SuppliesArgs = {
 
 /** mutation root */
 export type Mutation_RootDelete_Metal_Pdo_Supplies_By_PkArgs = {
-  id: Scalars['Int'];
+  id: Scalars['Int']['input'];
 };
 
 
@@ -7209,7 +7594,7 @@ export type Mutation_RootDelete_Metal_Pdo_WriteoffsArgs = {
 
 /** mutation root */
 export type Mutation_RootDelete_Metal_Pdo_Writeoffs_By_PkArgs = {
-  id: Scalars['Int'];
+  id: Scalars['Int']['input'];
 };
 
 
@@ -7392,6 +7777,34 @@ export type Mutation_RootInsert_Erp_UsersArgs = {
 export type Mutation_RootInsert_Erp_Users_OneArgs = {
   object: Erp_Users_Insert_Input;
   on_conflict?: InputMaybe<Erp_Users_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Kysely_MigrationArgs = {
+  objects: Array<Kysely_Migration_Insert_Input>;
+  on_conflict?: InputMaybe<Kysely_Migration_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Kysely_Migration_LockArgs = {
+  objects: Array<Kysely_Migration_Lock_Insert_Input>;
+  on_conflict?: InputMaybe<Kysely_Migration_Lock_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Kysely_Migration_Lock_OneArgs = {
+  object: Kysely_Migration_Lock_Insert_Input;
+  on_conflict?: InputMaybe<Kysely_Migration_Lock_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Kysely_Migration_OneArgs = {
+  object: Kysely_Migration_Insert_Input;
+  on_conflict?: InputMaybe<Kysely_Migration_On_Conflict>;
 };
 
 
@@ -7752,6 +8165,48 @@ export type Mutation_RootUpdate_Erp_Users_ManyArgs = {
 
 
 /** mutation root */
+export type Mutation_RootUpdate_Kysely_MigrationArgs = {
+  _set?: InputMaybe<Kysely_Migration_Set_Input>;
+  where: Kysely_Migration_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Kysely_Migration_By_PkArgs = {
+  _set?: InputMaybe<Kysely_Migration_Set_Input>;
+  pk_columns: Kysely_Migration_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Kysely_Migration_LockArgs = {
+  _inc?: InputMaybe<Kysely_Migration_Lock_Inc_Input>;
+  _set?: InputMaybe<Kysely_Migration_Lock_Set_Input>;
+  where: Kysely_Migration_Lock_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Kysely_Migration_Lock_By_PkArgs = {
+  _inc?: InputMaybe<Kysely_Migration_Lock_Inc_Input>;
+  _set?: InputMaybe<Kysely_Migration_Lock_Set_Input>;
+  pk_columns: Kysely_Migration_Lock_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Kysely_Migration_Lock_ManyArgs = {
+  updates: Array<Kysely_Migration_Lock_Updates>;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Kysely_Migration_ManyArgs = {
+  updates: Array<Kysely_Migration_Updates>;
+};
+
+
+/** mutation root */
 export type Mutation_RootUpdate_Metal_Pdo_Detail_MaterialsArgs = {
   _inc?: InputMaybe<Metal_Pdo_Detail_Materials_Inc_Input>;
   _set?: InputMaybe<Metal_Pdo_Detail_Materials_Set_Input>;
@@ -7882,15 +8337,15 @@ export type Mutation_RootUpdate_Metal_Pdo_Writeoffs_ManyArgs = {
 
 /** Boolean expression to compare columns of type "numeric". All fields are combined with logical 'AND'. */
 export type Numeric_Comparison_Exp = {
-  _eq?: InputMaybe<Scalars['numeric']>;
-  _gt?: InputMaybe<Scalars['numeric']>;
-  _gte?: InputMaybe<Scalars['numeric']>;
-  _in?: InputMaybe<Array<Scalars['numeric']>>;
-  _is_null?: InputMaybe<Scalars['Boolean']>;
-  _lt?: InputMaybe<Scalars['numeric']>;
-  _lte?: InputMaybe<Scalars['numeric']>;
-  _neq?: InputMaybe<Scalars['numeric']>;
-  _nin?: InputMaybe<Array<Scalars['numeric']>>;
+  _eq?: InputMaybe<Scalars['numeric']['input']>;
+  _gt?: InputMaybe<Scalars['numeric']['input']>;
+  _gte?: InputMaybe<Scalars['numeric']['input']>;
+  _in?: InputMaybe<Array<Scalars['numeric']['input']>>;
+  _is_null?: InputMaybe<Scalars['Boolean']['input']>;
+  _lt?: InputMaybe<Scalars['numeric']['input']>;
+  _lte?: InputMaybe<Scalars['numeric']['input']>;
+  _neq?: InputMaybe<Scalars['numeric']['input']>;
+  _nin?: InputMaybe<Array<Scalars['numeric']['input']>>;
 };
 
 /** column ordering options */
@@ -7989,6 +8444,18 @@ export type Query_Root = {
   erp_Users_aggregate: Erp_Users_Aggregate;
   /** fetch data from the table: "erp.Users" using primary key columns */
   erp_Users_by_pk?: Maybe<Erp_Users>;
+  /** fetch data from the table: "kysely_migration" */
+  kysely_migration: Array<Kysely_Migration>;
+  /** fetch aggregated fields from the table: "kysely_migration" */
+  kysely_migration_aggregate: Kysely_Migration_Aggregate;
+  /** fetch data from the table: "kysely_migration" using primary key columns */
+  kysely_migration_by_pk?: Maybe<Kysely_Migration>;
+  /** fetch data from the table: "kysely_migration_lock" */
+  kysely_migration_lock: Array<Kysely_Migration_Lock>;
+  /** fetch aggregated fields from the table: "kysely_migration_lock" */
+  kysely_migration_lock_aggregate: Kysely_Migration_Lock_Aggregate;
+  /** fetch data from the table: "kysely_migration_lock" using primary key columns */
+  kysely_migration_lock_by_pk?: Maybe<Kysely_Migration_Lock>;
   /** fetch data from the table: "metal_pdo.detail_materials" */
   metal_pdo_detail_materials: Array<Metal_Pdo_Detail_Materials>;
   /** fetch aggregated fields from the table: "metal_pdo.detail_materials" */
@@ -8024,8 +8491,8 @@ export type Query_Root = {
 
 export type Query_RootAttendance_ConfigArgs = {
   distinct_on?: InputMaybe<Array<Attendance_Config_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Attendance_Config_Order_By>>;
   where?: InputMaybe<Attendance_Config_Bool_Exp>;
 };
@@ -8033,22 +8500,22 @@ export type Query_RootAttendance_ConfigArgs = {
 
 export type Query_RootAttendance_Config_AggregateArgs = {
   distinct_on?: InputMaybe<Array<Attendance_Config_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Attendance_Config_Order_By>>;
   where?: InputMaybe<Attendance_Config_Bool_Exp>;
 };
 
 
 export type Query_RootAttendance_Config_By_PkArgs = {
-  ID: Scalars['Int'];
+  ID: Scalars['Int']['input'];
 };
 
 
 export type Query_RootAttendance_IntervalsArgs = {
   distinct_on?: InputMaybe<Array<Attendance_Intervals_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Attendance_Intervals_Order_By>>;
   where?: InputMaybe<Attendance_Intervals_Bool_Exp>;
 };
@@ -8056,23 +8523,23 @@ export type Query_RootAttendance_IntervalsArgs = {
 
 export type Query_RootAttendance_Intervals_AggregateArgs = {
   distinct_on?: InputMaybe<Array<Attendance_Intervals_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Attendance_Intervals_Order_By>>;
   where?: InputMaybe<Attendance_Intervals_Bool_Exp>;
 };
 
 
 export type Query_RootAttendance_Intervals_By_PkArgs = {
-  card: Scalars['String'];
-  ent_event_id: Scalars['Int'];
+  card: Scalars['String']['input'];
+  ent_event_id: Scalars['Int']['input'];
 };
 
 
 export type Query_RootAttendance_UsersArgs = {
   distinct_on?: InputMaybe<Array<Attendance_Users_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Attendance_Users_Order_By>>;
   where?: InputMaybe<Attendance_Users_Bool_Exp>;
 };
@@ -8080,22 +8547,22 @@ export type Query_RootAttendance_UsersArgs = {
 
 export type Query_RootAttendance_Users_AggregateArgs = {
   distinct_on?: InputMaybe<Array<Attendance_Users_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Attendance_Users_Order_By>>;
   where?: InputMaybe<Attendance_Users_Bool_Exp>;
 };
 
 
 export type Query_RootAttendance_Users_By_PkArgs = {
-  id: Scalars['Int'];
+  id: Scalars['Int']['input'];
 };
 
 
 export type Query_RootErp_AccessLevelsArgs = {
   distinct_on?: InputMaybe<Array<Erp_AccessLevels_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Erp_AccessLevels_Order_By>>;
   where?: InputMaybe<Erp_AccessLevels_Bool_Exp>;
 };
@@ -8103,22 +8570,22 @@ export type Query_RootErp_AccessLevelsArgs = {
 
 export type Query_RootErp_AccessLevels_AggregateArgs = {
   distinct_on?: InputMaybe<Array<Erp_AccessLevels_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Erp_AccessLevels_Order_By>>;
   where?: InputMaybe<Erp_AccessLevels_Bool_Exp>;
 };
 
 
 export type Query_RootErp_AccessLevels_By_PkArgs = {
-  AccessLevelID: Scalars['Int'];
+  AccessLevelID: Scalars['Int']['input'];
 };
 
 
 export type Query_RootErp_CommentsArgs = {
   distinct_on?: InputMaybe<Array<Erp_Comments_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Erp_Comments_Order_By>>;
   where?: InputMaybe<Erp_Comments_Bool_Exp>;
 };
@@ -8126,22 +8593,22 @@ export type Query_RootErp_CommentsArgs = {
 
 export type Query_RootErp_Comments_AggregateArgs = {
   distinct_on?: InputMaybe<Array<Erp_Comments_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Erp_Comments_Order_By>>;
   where?: InputMaybe<Erp_Comments_Bool_Exp>;
 };
 
 
 export type Query_RootErp_Comments_By_PkArgs = {
-  CommentID: Scalars['Int'];
+  CommentID: Scalars['Int']['input'];
 };
 
 
 export type Query_RootErp_DocsArgs = {
   distinct_on?: InputMaybe<Array<Erp_Docs_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Erp_Docs_Order_By>>;
   where?: InputMaybe<Erp_Docs_Bool_Exp>;
 };
@@ -8149,22 +8616,22 @@ export type Query_RootErp_DocsArgs = {
 
 export type Query_RootErp_Docs_AggregateArgs = {
   distinct_on?: InputMaybe<Array<Erp_Docs_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Erp_Docs_Order_By>>;
   where?: InputMaybe<Erp_Docs_Bool_Exp>;
 };
 
 
 export type Query_RootErp_Docs_By_PkArgs = {
-  ID: Scalars['Int'];
+  ID: Scalars['Int']['input'];
 };
 
 
 export type Query_RootErp_NotificationsArgs = {
   distinct_on?: InputMaybe<Array<Erp_Notifications_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Erp_Notifications_Order_By>>;
   where?: InputMaybe<Erp_Notifications_Bool_Exp>;
 };
@@ -8172,22 +8639,22 @@ export type Query_RootErp_NotificationsArgs = {
 
 export type Query_RootErp_Notifications_AggregateArgs = {
   distinct_on?: InputMaybe<Array<Erp_Notifications_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Erp_Notifications_Order_By>>;
   where?: InputMaybe<Erp_Notifications_Bool_Exp>;
 };
 
 
 export type Query_RootErp_Notifications_By_PkArgs = {
-  ID: Scalars['Int'];
+  ID: Scalars['Int']['input'];
 };
 
 
 export type Query_RootErp_OrderItemsArgs = {
   distinct_on?: InputMaybe<Array<Erp_OrderItems_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Erp_OrderItems_Order_By>>;
   where?: InputMaybe<Erp_OrderItems_Bool_Exp>;
 };
@@ -8195,22 +8662,22 @@ export type Query_RootErp_OrderItemsArgs = {
 
 export type Query_RootErp_OrderItems_AggregateArgs = {
   distinct_on?: InputMaybe<Array<Erp_OrderItems_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Erp_OrderItems_Order_By>>;
   where?: InputMaybe<Erp_OrderItems_Bool_Exp>;
 };
 
 
 export type Query_RootErp_OrderItems_By_PkArgs = {
-  OrderItemID: Scalars['Int'];
+  OrderItemID: Scalars['Int']['input'];
 };
 
 
 export type Query_RootErp_OrderStatusArgs = {
   distinct_on?: InputMaybe<Array<Erp_OrderStatus_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Erp_OrderStatus_Order_By>>;
   where?: InputMaybe<Erp_OrderStatus_Bool_Exp>;
 };
@@ -8218,22 +8685,22 @@ export type Query_RootErp_OrderStatusArgs = {
 
 export type Query_RootErp_OrderStatus_AggregateArgs = {
   distinct_on?: InputMaybe<Array<Erp_OrderStatus_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Erp_OrderStatus_Order_By>>;
   where?: InputMaybe<Erp_OrderStatus_Bool_Exp>;
 };
 
 
 export type Query_RootErp_OrderStatus_By_PkArgs = {
-  ID: Scalars['Int'];
+  ID: Scalars['Int']['input'];
 };
 
 
 export type Query_RootErp_OrdersArgs = {
   distinct_on?: InputMaybe<Array<Erp_Orders_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Erp_Orders_Order_By>>;
   where?: InputMaybe<Erp_Orders_Bool_Exp>;
 };
@@ -8241,22 +8708,22 @@ export type Query_RootErp_OrdersArgs = {
 
 export type Query_RootErp_Orders_AggregateArgs = {
   distinct_on?: InputMaybe<Array<Erp_Orders_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Erp_Orders_Order_By>>;
   where?: InputMaybe<Erp_Orders_Bool_Exp>;
 };
 
 
 export type Query_RootErp_Orders_By_PkArgs = {
-  OrderID: Scalars['Int'];
+  OrderID: Scalars['Int']['input'];
 };
 
 
 export type Query_RootErp_PaymentHistoryArgs = {
   distinct_on?: InputMaybe<Array<Erp_PaymentHistory_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Erp_PaymentHistory_Order_By>>;
   where?: InputMaybe<Erp_PaymentHistory_Bool_Exp>;
 };
@@ -8264,22 +8731,22 @@ export type Query_RootErp_PaymentHistoryArgs = {
 
 export type Query_RootErp_PaymentHistory_AggregateArgs = {
   distinct_on?: InputMaybe<Array<Erp_PaymentHistory_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Erp_PaymentHistory_Order_By>>;
   where?: InputMaybe<Erp_PaymentHistory_Bool_Exp>;
 };
 
 
 export type Query_RootErp_PaymentHistory_By_PkArgs = {
-  ID: Scalars['Int'];
+  ID: Scalars['Int']['input'];
 };
 
 
 export type Query_RootErp_TokensArgs = {
   distinct_on?: InputMaybe<Array<Erp_Tokens_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Erp_Tokens_Order_By>>;
   where?: InputMaybe<Erp_Tokens_Bool_Exp>;
 };
@@ -8287,22 +8754,22 @@ export type Query_RootErp_TokensArgs = {
 
 export type Query_RootErp_Tokens_AggregateArgs = {
   distinct_on?: InputMaybe<Array<Erp_Tokens_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Erp_Tokens_Order_By>>;
   where?: InputMaybe<Erp_Tokens_Bool_Exp>;
 };
 
 
 export type Query_RootErp_Tokens_By_PkArgs = {
-  ID: Scalars['Int'];
+  ID: Scalars['Int']['input'];
 };
 
 
 export type Query_RootErp_UsersArgs = {
   distinct_on?: InputMaybe<Array<Erp_Users_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Erp_Users_Order_By>>;
   where?: InputMaybe<Erp_Users_Bool_Exp>;
 };
@@ -8310,22 +8777,68 @@ export type Query_RootErp_UsersArgs = {
 
 export type Query_RootErp_Users_AggregateArgs = {
   distinct_on?: InputMaybe<Array<Erp_Users_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Erp_Users_Order_By>>;
   where?: InputMaybe<Erp_Users_Bool_Exp>;
 };
 
 
 export type Query_RootErp_Users_By_PkArgs = {
-  UserID: Scalars['Int'];
+  UserID: Scalars['Int']['input'];
+};
+
+
+export type Query_RootKysely_MigrationArgs = {
+  distinct_on?: InputMaybe<Array<Kysely_Migration_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Kysely_Migration_Order_By>>;
+  where?: InputMaybe<Kysely_Migration_Bool_Exp>;
+};
+
+
+export type Query_RootKysely_Migration_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Kysely_Migration_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Kysely_Migration_Order_By>>;
+  where?: InputMaybe<Kysely_Migration_Bool_Exp>;
+};
+
+
+export type Query_RootKysely_Migration_By_PkArgs = {
+  name: Scalars['String']['input'];
+};
+
+
+export type Query_RootKysely_Migration_LockArgs = {
+  distinct_on?: InputMaybe<Array<Kysely_Migration_Lock_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Kysely_Migration_Lock_Order_By>>;
+  where?: InputMaybe<Kysely_Migration_Lock_Bool_Exp>;
+};
+
+
+export type Query_RootKysely_Migration_Lock_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Kysely_Migration_Lock_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Kysely_Migration_Lock_Order_By>>;
+  where?: InputMaybe<Kysely_Migration_Lock_Bool_Exp>;
+};
+
+
+export type Query_RootKysely_Migration_Lock_By_PkArgs = {
+  id: Scalars['String']['input'];
 };
 
 
 export type Query_RootMetal_Pdo_Detail_MaterialsArgs = {
   distinct_on?: InputMaybe<Array<Metal_Pdo_Detail_Materials_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Metal_Pdo_Detail_Materials_Order_By>>;
   where?: InputMaybe<Metal_Pdo_Detail_Materials_Bool_Exp>;
 };
@@ -8333,23 +8846,23 @@ export type Query_RootMetal_Pdo_Detail_MaterialsArgs = {
 
 export type Query_RootMetal_Pdo_Detail_Materials_AggregateArgs = {
   distinct_on?: InputMaybe<Array<Metal_Pdo_Detail_Materials_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Metal_Pdo_Detail_Materials_Order_By>>;
   where?: InputMaybe<Metal_Pdo_Detail_Materials_Bool_Exp>;
 };
 
 
 export type Query_RootMetal_Pdo_Detail_Materials_By_PkArgs = {
-  detail_id: Scalars['Int'];
-  material_id: Scalars['Int'];
+  detail_id: Scalars['Int']['input'];
+  material_id: Scalars['Int']['input'];
 };
 
 
 export type Query_RootMetal_Pdo_DetailsArgs = {
   distinct_on?: InputMaybe<Array<Metal_Pdo_Details_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Metal_Pdo_Details_Order_By>>;
   where?: InputMaybe<Metal_Pdo_Details_Bool_Exp>;
 };
@@ -8357,22 +8870,22 @@ export type Query_RootMetal_Pdo_DetailsArgs = {
 
 export type Query_RootMetal_Pdo_Details_AggregateArgs = {
   distinct_on?: InputMaybe<Array<Metal_Pdo_Details_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Metal_Pdo_Details_Order_By>>;
   where?: InputMaybe<Metal_Pdo_Details_Bool_Exp>;
 };
 
 
 export type Query_RootMetal_Pdo_Details_By_PkArgs = {
-  id: Scalars['Int'];
+  id: Scalars['Int']['input'];
 };
 
 
 export type Query_RootMetal_Pdo_MaterialsArgs = {
   distinct_on?: InputMaybe<Array<Metal_Pdo_Materials_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Metal_Pdo_Materials_Order_By>>;
   where?: InputMaybe<Metal_Pdo_Materials_Bool_Exp>;
 };
@@ -8380,22 +8893,22 @@ export type Query_RootMetal_Pdo_MaterialsArgs = {
 
 export type Query_RootMetal_Pdo_Materials_AggregateArgs = {
   distinct_on?: InputMaybe<Array<Metal_Pdo_Materials_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Metal_Pdo_Materials_Order_By>>;
   where?: InputMaybe<Metal_Pdo_Materials_Bool_Exp>;
 };
 
 
 export type Query_RootMetal_Pdo_Materials_By_PkArgs = {
-  id: Scalars['Int'];
+  id: Scalars['Int']['input'];
 };
 
 
 export type Query_RootMetal_Pdo_SuppliesArgs = {
   distinct_on?: InputMaybe<Array<Metal_Pdo_Supplies_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Metal_Pdo_Supplies_Order_By>>;
   where?: InputMaybe<Metal_Pdo_Supplies_Bool_Exp>;
 };
@@ -8403,22 +8916,22 @@ export type Query_RootMetal_Pdo_SuppliesArgs = {
 
 export type Query_RootMetal_Pdo_Supplies_AggregateArgs = {
   distinct_on?: InputMaybe<Array<Metal_Pdo_Supplies_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Metal_Pdo_Supplies_Order_By>>;
   where?: InputMaybe<Metal_Pdo_Supplies_Bool_Exp>;
 };
 
 
 export type Query_RootMetal_Pdo_Supplies_By_PkArgs = {
-  id: Scalars['Int'];
+  id: Scalars['Int']['input'];
 };
 
 
 export type Query_RootMetal_Pdo_WriteoffsArgs = {
   distinct_on?: InputMaybe<Array<Metal_Pdo_Writeoffs_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Metal_Pdo_Writeoffs_Order_By>>;
   where?: InputMaybe<Metal_Pdo_Writeoffs_Bool_Exp>;
 };
@@ -8426,15 +8939,15 @@ export type Query_RootMetal_Pdo_WriteoffsArgs = {
 
 export type Query_RootMetal_Pdo_Writeoffs_AggregateArgs = {
   distinct_on?: InputMaybe<Array<Metal_Pdo_Writeoffs_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Metal_Pdo_Writeoffs_Order_By>>;
   where?: InputMaybe<Metal_Pdo_Writeoffs_Bool_Exp>;
 };
 
 
 export type Query_RootMetal_Pdo_Writeoffs_By_PkArgs = {
-  id: Scalars['Int'];
+  id: Scalars['Int']['input'];
 };
 
 export type Subscription_Root = {
@@ -8543,6 +9056,22 @@ export type Subscription_Root = {
   erp_Users_by_pk?: Maybe<Erp_Users>;
   /** fetch data from the table in a streaming manner: "erp.Users" */
   erp_Users_stream: Array<Erp_Users>;
+  /** fetch data from the table: "kysely_migration" */
+  kysely_migration: Array<Kysely_Migration>;
+  /** fetch aggregated fields from the table: "kysely_migration" */
+  kysely_migration_aggregate: Kysely_Migration_Aggregate;
+  /** fetch data from the table: "kysely_migration" using primary key columns */
+  kysely_migration_by_pk?: Maybe<Kysely_Migration>;
+  /** fetch data from the table: "kysely_migration_lock" */
+  kysely_migration_lock: Array<Kysely_Migration_Lock>;
+  /** fetch aggregated fields from the table: "kysely_migration_lock" */
+  kysely_migration_lock_aggregate: Kysely_Migration_Lock_Aggregate;
+  /** fetch data from the table: "kysely_migration_lock" using primary key columns */
+  kysely_migration_lock_by_pk?: Maybe<Kysely_Migration_Lock>;
+  /** fetch data from the table in a streaming manner: "kysely_migration_lock" */
+  kysely_migration_lock_stream: Array<Kysely_Migration_Lock>;
+  /** fetch data from the table in a streaming manner: "kysely_migration" */
+  kysely_migration_stream: Array<Kysely_Migration>;
   /** fetch data from the table: "metal_pdo.detail_materials" */
   metal_pdo_detail_materials: Array<Metal_Pdo_Detail_Materials>;
   /** fetch aggregated fields from the table: "metal_pdo.detail_materials" */
@@ -8588,8 +9117,8 @@ export type Subscription_Root = {
 
 export type Subscription_RootAttendance_ConfigArgs = {
   distinct_on?: InputMaybe<Array<Attendance_Config_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Attendance_Config_Order_By>>;
   where?: InputMaybe<Attendance_Config_Bool_Exp>;
 };
@@ -8597,20 +9126,20 @@ export type Subscription_RootAttendance_ConfigArgs = {
 
 export type Subscription_RootAttendance_Config_AggregateArgs = {
   distinct_on?: InputMaybe<Array<Attendance_Config_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Attendance_Config_Order_By>>;
   where?: InputMaybe<Attendance_Config_Bool_Exp>;
 };
 
 
 export type Subscription_RootAttendance_Config_By_PkArgs = {
-  ID: Scalars['Int'];
+  ID: Scalars['Int']['input'];
 };
 
 
 export type Subscription_RootAttendance_Config_StreamArgs = {
-  batch_size: Scalars['Int'];
+  batch_size: Scalars['Int']['input'];
   cursor: Array<InputMaybe<Attendance_Config_Stream_Cursor_Input>>;
   where?: InputMaybe<Attendance_Config_Bool_Exp>;
 };
@@ -8618,8 +9147,8 @@ export type Subscription_RootAttendance_Config_StreamArgs = {
 
 export type Subscription_RootAttendance_IntervalsArgs = {
   distinct_on?: InputMaybe<Array<Attendance_Intervals_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Attendance_Intervals_Order_By>>;
   where?: InputMaybe<Attendance_Intervals_Bool_Exp>;
 };
@@ -8627,21 +9156,21 @@ export type Subscription_RootAttendance_IntervalsArgs = {
 
 export type Subscription_RootAttendance_Intervals_AggregateArgs = {
   distinct_on?: InputMaybe<Array<Attendance_Intervals_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Attendance_Intervals_Order_By>>;
   where?: InputMaybe<Attendance_Intervals_Bool_Exp>;
 };
 
 
 export type Subscription_RootAttendance_Intervals_By_PkArgs = {
-  card: Scalars['String'];
-  ent_event_id: Scalars['Int'];
+  card: Scalars['String']['input'];
+  ent_event_id: Scalars['Int']['input'];
 };
 
 
 export type Subscription_RootAttendance_Intervals_StreamArgs = {
-  batch_size: Scalars['Int'];
+  batch_size: Scalars['Int']['input'];
   cursor: Array<InputMaybe<Attendance_Intervals_Stream_Cursor_Input>>;
   where?: InputMaybe<Attendance_Intervals_Bool_Exp>;
 };
@@ -8649,8 +9178,8 @@ export type Subscription_RootAttendance_Intervals_StreamArgs = {
 
 export type Subscription_RootAttendance_UsersArgs = {
   distinct_on?: InputMaybe<Array<Attendance_Users_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Attendance_Users_Order_By>>;
   where?: InputMaybe<Attendance_Users_Bool_Exp>;
 };
@@ -8658,20 +9187,20 @@ export type Subscription_RootAttendance_UsersArgs = {
 
 export type Subscription_RootAttendance_Users_AggregateArgs = {
   distinct_on?: InputMaybe<Array<Attendance_Users_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Attendance_Users_Order_By>>;
   where?: InputMaybe<Attendance_Users_Bool_Exp>;
 };
 
 
 export type Subscription_RootAttendance_Users_By_PkArgs = {
-  id: Scalars['Int'];
+  id: Scalars['Int']['input'];
 };
 
 
 export type Subscription_RootAttendance_Users_StreamArgs = {
-  batch_size: Scalars['Int'];
+  batch_size: Scalars['Int']['input'];
   cursor: Array<InputMaybe<Attendance_Users_Stream_Cursor_Input>>;
   where?: InputMaybe<Attendance_Users_Bool_Exp>;
 };
@@ -8679,8 +9208,8 @@ export type Subscription_RootAttendance_Users_StreamArgs = {
 
 export type Subscription_RootErp_AccessLevelsArgs = {
   distinct_on?: InputMaybe<Array<Erp_AccessLevels_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Erp_AccessLevels_Order_By>>;
   where?: InputMaybe<Erp_AccessLevels_Bool_Exp>;
 };
@@ -8688,20 +9217,20 @@ export type Subscription_RootErp_AccessLevelsArgs = {
 
 export type Subscription_RootErp_AccessLevels_AggregateArgs = {
   distinct_on?: InputMaybe<Array<Erp_AccessLevels_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Erp_AccessLevels_Order_By>>;
   where?: InputMaybe<Erp_AccessLevels_Bool_Exp>;
 };
 
 
 export type Subscription_RootErp_AccessLevels_By_PkArgs = {
-  AccessLevelID: Scalars['Int'];
+  AccessLevelID: Scalars['Int']['input'];
 };
 
 
 export type Subscription_RootErp_AccessLevels_StreamArgs = {
-  batch_size: Scalars['Int'];
+  batch_size: Scalars['Int']['input'];
   cursor: Array<InputMaybe<Erp_AccessLevels_Stream_Cursor_Input>>;
   where?: InputMaybe<Erp_AccessLevels_Bool_Exp>;
 };
@@ -8709,8 +9238,8 @@ export type Subscription_RootErp_AccessLevels_StreamArgs = {
 
 export type Subscription_RootErp_CommentsArgs = {
   distinct_on?: InputMaybe<Array<Erp_Comments_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Erp_Comments_Order_By>>;
   where?: InputMaybe<Erp_Comments_Bool_Exp>;
 };
@@ -8718,20 +9247,20 @@ export type Subscription_RootErp_CommentsArgs = {
 
 export type Subscription_RootErp_Comments_AggregateArgs = {
   distinct_on?: InputMaybe<Array<Erp_Comments_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Erp_Comments_Order_By>>;
   where?: InputMaybe<Erp_Comments_Bool_Exp>;
 };
 
 
 export type Subscription_RootErp_Comments_By_PkArgs = {
-  CommentID: Scalars['Int'];
+  CommentID: Scalars['Int']['input'];
 };
 
 
 export type Subscription_RootErp_Comments_StreamArgs = {
-  batch_size: Scalars['Int'];
+  batch_size: Scalars['Int']['input'];
   cursor: Array<InputMaybe<Erp_Comments_Stream_Cursor_Input>>;
   where?: InputMaybe<Erp_Comments_Bool_Exp>;
 };
@@ -8739,8 +9268,8 @@ export type Subscription_RootErp_Comments_StreamArgs = {
 
 export type Subscription_RootErp_DocsArgs = {
   distinct_on?: InputMaybe<Array<Erp_Docs_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Erp_Docs_Order_By>>;
   where?: InputMaybe<Erp_Docs_Bool_Exp>;
 };
@@ -8748,20 +9277,20 @@ export type Subscription_RootErp_DocsArgs = {
 
 export type Subscription_RootErp_Docs_AggregateArgs = {
   distinct_on?: InputMaybe<Array<Erp_Docs_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Erp_Docs_Order_By>>;
   where?: InputMaybe<Erp_Docs_Bool_Exp>;
 };
 
 
 export type Subscription_RootErp_Docs_By_PkArgs = {
-  ID: Scalars['Int'];
+  ID: Scalars['Int']['input'];
 };
 
 
 export type Subscription_RootErp_Docs_StreamArgs = {
-  batch_size: Scalars['Int'];
+  batch_size: Scalars['Int']['input'];
   cursor: Array<InputMaybe<Erp_Docs_Stream_Cursor_Input>>;
   where?: InputMaybe<Erp_Docs_Bool_Exp>;
 };
@@ -8769,8 +9298,8 @@ export type Subscription_RootErp_Docs_StreamArgs = {
 
 export type Subscription_RootErp_NotificationsArgs = {
   distinct_on?: InputMaybe<Array<Erp_Notifications_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Erp_Notifications_Order_By>>;
   where?: InputMaybe<Erp_Notifications_Bool_Exp>;
 };
@@ -8778,20 +9307,20 @@ export type Subscription_RootErp_NotificationsArgs = {
 
 export type Subscription_RootErp_Notifications_AggregateArgs = {
   distinct_on?: InputMaybe<Array<Erp_Notifications_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Erp_Notifications_Order_By>>;
   where?: InputMaybe<Erp_Notifications_Bool_Exp>;
 };
 
 
 export type Subscription_RootErp_Notifications_By_PkArgs = {
-  ID: Scalars['Int'];
+  ID: Scalars['Int']['input'];
 };
 
 
 export type Subscription_RootErp_Notifications_StreamArgs = {
-  batch_size: Scalars['Int'];
+  batch_size: Scalars['Int']['input'];
   cursor: Array<InputMaybe<Erp_Notifications_Stream_Cursor_Input>>;
   where?: InputMaybe<Erp_Notifications_Bool_Exp>;
 };
@@ -8799,8 +9328,8 @@ export type Subscription_RootErp_Notifications_StreamArgs = {
 
 export type Subscription_RootErp_OrderItemsArgs = {
   distinct_on?: InputMaybe<Array<Erp_OrderItems_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Erp_OrderItems_Order_By>>;
   where?: InputMaybe<Erp_OrderItems_Bool_Exp>;
 };
@@ -8808,20 +9337,20 @@ export type Subscription_RootErp_OrderItemsArgs = {
 
 export type Subscription_RootErp_OrderItems_AggregateArgs = {
   distinct_on?: InputMaybe<Array<Erp_OrderItems_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Erp_OrderItems_Order_By>>;
   where?: InputMaybe<Erp_OrderItems_Bool_Exp>;
 };
 
 
 export type Subscription_RootErp_OrderItems_By_PkArgs = {
-  OrderItemID: Scalars['Int'];
+  OrderItemID: Scalars['Int']['input'];
 };
 
 
 export type Subscription_RootErp_OrderItems_StreamArgs = {
-  batch_size: Scalars['Int'];
+  batch_size: Scalars['Int']['input'];
   cursor: Array<InputMaybe<Erp_OrderItems_Stream_Cursor_Input>>;
   where?: InputMaybe<Erp_OrderItems_Bool_Exp>;
 };
@@ -8829,8 +9358,8 @@ export type Subscription_RootErp_OrderItems_StreamArgs = {
 
 export type Subscription_RootErp_OrderStatusArgs = {
   distinct_on?: InputMaybe<Array<Erp_OrderStatus_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Erp_OrderStatus_Order_By>>;
   where?: InputMaybe<Erp_OrderStatus_Bool_Exp>;
 };
@@ -8838,20 +9367,20 @@ export type Subscription_RootErp_OrderStatusArgs = {
 
 export type Subscription_RootErp_OrderStatus_AggregateArgs = {
   distinct_on?: InputMaybe<Array<Erp_OrderStatus_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Erp_OrderStatus_Order_By>>;
   where?: InputMaybe<Erp_OrderStatus_Bool_Exp>;
 };
 
 
 export type Subscription_RootErp_OrderStatus_By_PkArgs = {
-  ID: Scalars['Int'];
+  ID: Scalars['Int']['input'];
 };
 
 
 export type Subscription_RootErp_OrderStatus_StreamArgs = {
-  batch_size: Scalars['Int'];
+  batch_size: Scalars['Int']['input'];
   cursor: Array<InputMaybe<Erp_OrderStatus_Stream_Cursor_Input>>;
   where?: InputMaybe<Erp_OrderStatus_Bool_Exp>;
 };
@@ -8859,8 +9388,8 @@ export type Subscription_RootErp_OrderStatus_StreamArgs = {
 
 export type Subscription_RootErp_OrdersArgs = {
   distinct_on?: InputMaybe<Array<Erp_Orders_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Erp_Orders_Order_By>>;
   where?: InputMaybe<Erp_Orders_Bool_Exp>;
 };
@@ -8868,20 +9397,20 @@ export type Subscription_RootErp_OrdersArgs = {
 
 export type Subscription_RootErp_Orders_AggregateArgs = {
   distinct_on?: InputMaybe<Array<Erp_Orders_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Erp_Orders_Order_By>>;
   where?: InputMaybe<Erp_Orders_Bool_Exp>;
 };
 
 
 export type Subscription_RootErp_Orders_By_PkArgs = {
-  OrderID: Scalars['Int'];
+  OrderID: Scalars['Int']['input'];
 };
 
 
 export type Subscription_RootErp_Orders_StreamArgs = {
-  batch_size: Scalars['Int'];
+  batch_size: Scalars['Int']['input'];
   cursor: Array<InputMaybe<Erp_Orders_Stream_Cursor_Input>>;
   where?: InputMaybe<Erp_Orders_Bool_Exp>;
 };
@@ -8889,8 +9418,8 @@ export type Subscription_RootErp_Orders_StreamArgs = {
 
 export type Subscription_RootErp_PaymentHistoryArgs = {
   distinct_on?: InputMaybe<Array<Erp_PaymentHistory_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Erp_PaymentHistory_Order_By>>;
   where?: InputMaybe<Erp_PaymentHistory_Bool_Exp>;
 };
@@ -8898,20 +9427,20 @@ export type Subscription_RootErp_PaymentHistoryArgs = {
 
 export type Subscription_RootErp_PaymentHistory_AggregateArgs = {
   distinct_on?: InputMaybe<Array<Erp_PaymentHistory_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Erp_PaymentHistory_Order_By>>;
   where?: InputMaybe<Erp_PaymentHistory_Bool_Exp>;
 };
 
 
 export type Subscription_RootErp_PaymentHistory_By_PkArgs = {
-  ID: Scalars['Int'];
+  ID: Scalars['Int']['input'];
 };
 
 
 export type Subscription_RootErp_PaymentHistory_StreamArgs = {
-  batch_size: Scalars['Int'];
+  batch_size: Scalars['Int']['input'];
   cursor: Array<InputMaybe<Erp_PaymentHistory_Stream_Cursor_Input>>;
   where?: InputMaybe<Erp_PaymentHistory_Bool_Exp>;
 };
@@ -8919,8 +9448,8 @@ export type Subscription_RootErp_PaymentHistory_StreamArgs = {
 
 export type Subscription_RootErp_TokensArgs = {
   distinct_on?: InputMaybe<Array<Erp_Tokens_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Erp_Tokens_Order_By>>;
   where?: InputMaybe<Erp_Tokens_Bool_Exp>;
 };
@@ -8928,20 +9457,20 @@ export type Subscription_RootErp_TokensArgs = {
 
 export type Subscription_RootErp_Tokens_AggregateArgs = {
   distinct_on?: InputMaybe<Array<Erp_Tokens_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Erp_Tokens_Order_By>>;
   where?: InputMaybe<Erp_Tokens_Bool_Exp>;
 };
 
 
 export type Subscription_RootErp_Tokens_By_PkArgs = {
-  ID: Scalars['Int'];
+  ID: Scalars['Int']['input'];
 };
 
 
 export type Subscription_RootErp_Tokens_StreamArgs = {
-  batch_size: Scalars['Int'];
+  batch_size: Scalars['Int']['input'];
   cursor: Array<InputMaybe<Erp_Tokens_Stream_Cursor_Input>>;
   where?: InputMaybe<Erp_Tokens_Bool_Exp>;
 };
@@ -8949,8 +9478,8 @@ export type Subscription_RootErp_Tokens_StreamArgs = {
 
 export type Subscription_RootErp_UsersArgs = {
   distinct_on?: InputMaybe<Array<Erp_Users_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Erp_Users_Order_By>>;
   where?: InputMaybe<Erp_Users_Bool_Exp>;
 };
@@ -8958,29 +9487,89 @@ export type Subscription_RootErp_UsersArgs = {
 
 export type Subscription_RootErp_Users_AggregateArgs = {
   distinct_on?: InputMaybe<Array<Erp_Users_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Erp_Users_Order_By>>;
   where?: InputMaybe<Erp_Users_Bool_Exp>;
 };
 
 
 export type Subscription_RootErp_Users_By_PkArgs = {
-  UserID: Scalars['Int'];
+  UserID: Scalars['Int']['input'];
 };
 
 
 export type Subscription_RootErp_Users_StreamArgs = {
-  batch_size: Scalars['Int'];
+  batch_size: Scalars['Int']['input'];
   cursor: Array<InputMaybe<Erp_Users_Stream_Cursor_Input>>;
   where?: InputMaybe<Erp_Users_Bool_Exp>;
 };
 
 
+export type Subscription_RootKysely_MigrationArgs = {
+  distinct_on?: InputMaybe<Array<Kysely_Migration_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Kysely_Migration_Order_By>>;
+  where?: InputMaybe<Kysely_Migration_Bool_Exp>;
+};
+
+
+export type Subscription_RootKysely_Migration_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Kysely_Migration_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Kysely_Migration_Order_By>>;
+  where?: InputMaybe<Kysely_Migration_Bool_Exp>;
+};
+
+
+export type Subscription_RootKysely_Migration_By_PkArgs = {
+  name: Scalars['String']['input'];
+};
+
+
+export type Subscription_RootKysely_Migration_LockArgs = {
+  distinct_on?: InputMaybe<Array<Kysely_Migration_Lock_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Kysely_Migration_Lock_Order_By>>;
+  where?: InputMaybe<Kysely_Migration_Lock_Bool_Exp>;
+};
+
+
+export type Subscription_RootKysely_Migration_Lock_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Kysely_Migration_Lock_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Kysely_Migration_Lock_Order_By>>;
+  where?: InputMaybe<Kysely_Migration_Lock_Bool_Exp>;
+};
+
+
+export type Subscription_RootKysely_Migration_Lock_By_PkArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type Subscription_RootKysely_Migration_Lock_StreamArgs = {
+  batch_size: Scalars['Int']['input'];
+  cursor: Array<InputMaybe<Kysely_Migration_Lock_Stream_Cursor_Input>>;
+  where?: InputMaybe<Kysely_Migration_Lock_Bool_Exp>;
+};
+
+
+export type Subscription_RootKysely_Migration_StreamArgs = {
+  batch_size: Scalars['Int']['input'];
+  cursor: Array<InputMaybe<Kysely_Migration_Stream_Cursor_Input>>;
+  where?: InputMaybe<Kysely_Migration_Bool_Exp>;
+};
+
+
 export type Subscription_RootMetal_Pdo_Detail_MaterialsArgs = {
   distinct_on?: InputMaybe<Array<Metal_Pdo_Detail_Materials_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Metal_Pdo_Detail_Materials_Order_By>>;
   where?: InputMaybe<Metal_Pdo_Detail_Materials_Bool_Exp>;
 };
@@ -8988,21 +9577,21 @@ export type Subscription_RootMetal_Pdo_Detail_MaterialsArgs = {
 
 export type Subscription_RootMetal_Pdo_Detail_Materials_AggregateArgs = {
   distinct_on?: InputMaybe<Array<Metal_Pdo_Detail_Materials_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Metal_Pdo_Detail_Materials_Order_By>>;
   where?: InputMaybe<Metal_Pdo_Detail_Materials_Bool_Exp>;
 };
 
 
 export type Subscription_RootMetal_Pdo_Detail_Materials_By_PkArgs = {
-  detail_id: Scalars['Int'];
-  material_id: Scalars['Int'];
+  detail_id: Scalars['Int']['input'];
+  material_id: Scalars['Int']['input'];
 };
 
 
 export type Subscription_RootMetal_Pdo_Detail_Materials_StreamArgs = {
-  batch_size: Scalars['Int'];
+  batch_size: Scalars['Int']['input'];
   cursor: Array<InputMaybe<Metal_Pdo_Detail_Materials_Stream_Cursor_Input>>;
   where?: InputMaybe<Metal_Pdo_Detail_Materials_Bool_Exp>;
 };
@@ -9010,8 +9599,8 @@ export type Subscription_RootMetal_Pdo_Detail_Materials_StreamArgs = {
 
 export type Subscription_RootMetal_Pdo_DetailsArgs = {
   distinct_on?: InputMaybe<Array<Metal_Pdo_Details_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Metal_Pdo_Details_Order_By>>;
   where?: InputMaybe<Metal_Pdo_Details_Bool_Exp>;
 };
@@ -9019,20 +9608,20 @@ export type Subscription_RootMetal_Pdo_DetailsArgs = {
 
 export type Subscription_RootMetal_Pdo_Details_AggregateArgs = {
   distinct_on?: InputMaybe<Array<Metal_Pdo_Details_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Metal_Pdo_Details_Order_By>>;
   where?: InputMaybe<Metal_Pdo_Details_Bool_Exp>;
 };
 
 
 export type Subscription_RootMetal_Pdo_Details_By_PkArgs = {
-  id: Scalars['Int'];
+  id: Scalars['Int']['input'];
 };
 
 
 export type Subscription_RootMetal_Pdo_Details_StreamArgs = {
-  batch_size: Scalars['Int'];
+  batch_size: Scalars['Int']['input'];
   cursor: Array<InputMaybe<Metal_Pdo_Details_Stream_Cursor_Input>>;
   where?: InputMaybe<Metal_Pdo_Details_Bool_Exp>;
 };
@@ -9040,8 +9629,8 @@ export type Subscription_RootMetal_Pdo_Details_StreamArgs = {
 
 export type Subscription_RootMetal_Pdo_MaterialsArgs = {
   distinct_on?: InputMaybe<Array<Metal_Pdo_Materials_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Metal_Pdo_Materials_Order_By>>;
   where?: InputMaybe<Metal_Pdo_Materials_Bool_Exp>;
 };
@@ -9049,20 +9638,20 @@ export type Subscription_RootMetal_Pdo_MaterialsArgs = {
 
 export type Subscription_RootMetal_Pdo_Materials_AggregateArgs = {
   distinct_on?: InputMaybe<Array<Metal_Pdo_Materials_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Metal_Pdo_Materials_Order_By>>;
   where?: InputMaybe<Metal_Pdo_Materials_Bool_Exp>;
 };
 
 
 export type Subscription_RootMetal_Pdo_Materials_By_PkArgs = {
-  id: Scalars['Int'];
+  id: Scalars['Int']['input'];
 };
 
 
 export type Subscription_RootMetal_Pdo_Materials_StreamArgs = {
-  batch_size: Scalars['Int'];
+  batch_size: Scalars['Int']['input'];
   cursor: Array<InputMaybe<Metal_Pdo_Materials_Stream_Cursor_Input>>;
   where?: InputMaybe<Metal_Pdo_Materials_Bool_Exp>;
 };
@@ -9070,8 +9659,8 @@ export type Subscription_RootMetal_Pdo_Materials_StreamArgs = {
 
 export type Subscription_RootMetal_Pdo_SuppliesArgs = {
   distinct_on?: InputMaybe<Array<Metal_Pdo_Supplies_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Metal_Pdo_Supplies_Order_By>>;
   where?: InputMaybe<Metal_Pdo_Supplies_Bool_Exp>;
 };
@@ -9079,20 +9668,20 @@ export type Subscription_RootMetal_Pdo_SuppliesArgs = {
 
 export type Subscription_RootMetal_Pdo_Supplies_AggregateArgs = {
   distinct_on?: InputMaybe<Array<Metal_Pdo_Supplies_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Metal_Pdo_Supplies_Order_By>>;
   where?: InputMaybe<Metal_Pdo_Supplies_Bool_Exp>;
 };
 
 
 export type Subscription_RootMetal_Pdo_Supplies_By_PkArgs = {
-  id: Scalars['Int'];
+  id: Scalars['Int']['input'];
 };
 
 
 export type Subscription_RootMetal_Pdo_Supplies_StreamArgs = {
-  batch_size: Scalars['Int'];
+  batch_size: Scalars['Int']['input'];
   cursor: Array<InputMaybe<Metal_Pdo_Supplies_Stream_Cursor_Input>>;
   where?: InputMaybe<Metal_Pdo_Supplies_Bool_Exp>;
 };
@@ -9100,8 +9689,8 @@ export type Subscription_RootMetal_Pdo_Supplies_StreamArgs = {
 
 export type Subscription_RootMetal_Pdo_WriteoffsArgs = {
   distinct_on?: InputMaybe<Array<Metal_Pdo_Writeoffs_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Metal_Pdo_Writeoffs_Order_By>>;
   where?: InputMaybe<Metal_Pdo_Writeoffs_Bool_Exp>;
 };
@@ -9109,108 +9698,108 @@ export type Subscription_RootMetal_Pdo_WriteoffsArgs = {
 
 export type Subscription_RootMetal_Pdo_Writeoffs_AggregateArgs = {
   distinct_on?: InputMaybe<Array<Metal_Pdo_Writeoffs_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']>;
-  offset?: InputMaybe<Scalars['Int']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
   order_by?: InputMaybe<Array<Metal_Pdo_Writeoffs_Order_By>>;
   where?: InputMaybe<Metal_Pdo_Writeoffs_Bool_Exp>;
 };
 
 
 export type Subscription_RootMetal_Pdo_Writeoffs_By_PkArgs = {
-  id: Scalars['Int'];
+  id: Scalars['Int']['input'];
 };
 
 
 export type Subscription_RootMetal_Pdo_Writeoffs_StreamArgs = {
-  batch_size: Scalars['Int'];
+  batch_size: Scalars['Int']['input'];
   cursor: Array<InputMaybe<Metal_Pdo_Writeoffs_Stream_Cursor_Input>>;
   where?: InputMaybe<Metal_Pdo_Writeoffs_Bool_Exp>;
 };
 
 /** Boolean expression to compare columns of type "timestamp". All fields are combined with logical 'AND'. */
 export type Timestamp_Comparison_Exp = {
-  _eq?: InputMaybe<Scalars['timestamp']>;
-  _gt?: InputMaybe<Scalars['timestamp']>;
-  _gte?: InputMaybe<Scalars['timestamp']>;
-  _in?: InputMaybe<Array<Scalars['timestamp']>>;
-  _is_null?: InputMaybe<Scalars['Boolean']>;
-  _lt?: InputMaybe<Scalars['timestamp']>;
-  _lte?: InputMaybe<Scalars['timestamp']>;
-  _neq?: InputMaybe<Scalars['timestamp']>;
-  _nin?: InputMaybe<Array<Scalars['timestamp']>>;
+  _eq?: InputMaybe<Scalars['timestamp']['input']>;
+  _gt?: InputMaybe<Scalars['timestamp']['input']>;
+  _gte?: InputMaybe<Scalars['timestamp']['input']>;
+  _in?: InputMaybe<Array<Scalars['timestamp']['input']>>;
+  _is_null?: InputMaybe<Scalars['Boolean']['input']>;
+  _lt?: InputMaybe<Scalars['timestamp']['input']>;
+  _lte?: InputMaybe<Scalars['timestamp']['input']>;
+  _neq?: InputMaybe<Scalars['timestamp']['input']>;
+  _nin?: InputMaybe<Array<Scalars['timestamp']['input']>>;
 };
 
 /** Boolean expression to compare columns of type "timestamptz". All fields are combined with logical 'AND'. */
 export type Timestamptz_Comparison_Exp = {
-  _eq?: InputMaybe<Scalars['timestamptz']>;
-  _gt?: InputMaybe<Scalars['timestamptz']>;
-  _gte?: InputMaybe<Scalars['timestamptz']>;
-  _in?: InputMaybe<Array<Scalars['timestamptz']>>;
-  _is_null?: InputMaybe<Scalars['Boolean']>;
-  _lt?: InputMaybe<Scalars['timestamptz']>;
-  _lte?: InputMaybe<Scalars['timestamptz']>;
-  _neq?: InputMaybe<Scalars['timestamptz']>;
-  _nin?: InputMaybe<Array<Scalars['timestamptz']>>;
+  _eq?: InputMaybe<Scalars['timestamptz']['input']>;
+  _gt?: InputMaybe<Scalars['timestamptz']['input']>;
+  _gte?: InputMaybe<Scalars['timestamptz']['input']>;
+  _in?: InputMaybe<Array<Scalars['timestamptz']['input']>>;
+  _is_null?: InputMaybe<Scalars['Boolean']['input']>;
+  _lt?: InputMaybe<Scalars['timestamptz']['input']>;
+  _lte?: InputMaybe<Scalars['timestamptz']['input']>;
+  _neq?: InputMaybe<Scalars['timestamptz']['input']>;
+  _nin?: InputMaybe<Array<Scalars['timestamptz']['input']>>;
 };
 
 export type GetEmployeeListQueryVariables = Exact<{
-  gte: Scalars['timestamp'];
-  lte: Scalars['timestamp'];
+  gte: Scalars['timestamp']['input'];
+  lte: Scalars['timestamp']['input'];
 }>;
 
 
 export type GetEmployeeListQuery = { __typename?: 'query_root', attendance_users_aggregate: { __typename?: 'attendance_users_aggregate', nodes: Array<{ __typename?: 'attendance_users', id: number, card?: string | null, firstname?: string | null, lastname?: string | null, intervals: Array<{ __typename?: 'attendance_intervals', ent?: any | null, ext?: any | null, card: string }> }> }, attendance_config: Array<{ __typename?: 'attendance_config', TimeDeduction: any }> };
 
 export type UpdateTimeDeductionMutationVariables = Exact<{
-  TimeDeduction: Scalars['numeric'];
-  ID: Scalars['Int'];
+  TimeDeduction: Scalars['numeric']['input'];
+  ID: Scalars['Int']['input'];
 }>;
 
 
 export type UpdateTimeDeductionMutation = { __typename?: 'mutation_root', update_attendance_config_by_pk?: { __typename?: 'attendance_config', TimeDeduction: any, ID: number } | null };
 
 export type CommentsSubscriptionVariables = Exact<{
-  OrderID: Scalars['Int'];
+  OrderID: Scalars['Int']['input'];
 }>;
 
 
 export type CommentsSubscription = { __typename?: 'subscription_root', erp_Comments: Array<{ __typename?: 'erp_Comments', CommentID: number, Text: string, Timestamp: any, User: { __typename?: 'erp_Users', UserID: number, FirstName?: string | null, LastName?: string | null } }> };
 
 export type InsertCommentMutationVariables = Exact<{
-  OrderID: Scalars['Int'];
-  Text: Scalars['String'];
-  UserID: Scalars['Int'];
+  OrderID: Scalars['Int']['input'];
+  Text: Scalars['String']['input'];
+  UserID: Scalars['Int']['input'];
 }>;
 
 
 export type InsertCommentMutation = { __typename?: 'mutation_root', insert_erp_Comments_one?: { __typename?: 'erp_Comments', CommentID: number, OrderID: number, Text: string, Timestamp: any, UserID: number } | null };
 
 export type DeleteCommentMutationVariables = Exact<{
-  CommentID: Scalars['Int'];
+  CommentID: Scalars['Int']['input'];
 }>;
 
 
 export type DeleteCommentMutation = { __typename?: 'mutation_root', delete_erp_Comments_by_pk?: { __typename?: 'erp_Comments', CommentID: number } | null };
 
 export type UpdateCommentMutationVariables = Exact<{
-  CommentID: Scalars['Int'];
-  Text: Scalars['String'];
+  CommentID: Scalars['Int']['input'];
+  Text: Scalars['String']['input'];
 }>;
 
 
 export type UpdateCommentMutation = { __typename?: 'mutation_root', update_erp_Comments_by_pk?: { __typename?: 'erp_Comments', OrderID: number, Text: string, Timestamp: any, UserID: number, CommentID: number } | null };
 
 export type GetNotificationsSubscriptionVariables = Exact<{
-  _eq: Scalars['Int'];
-  limit?: InputMaybe<Scalars['Int']>;
+  _eq: Scalars['Int']['input'];
+  limit?: InputMaybe<Scalars['Int']['input']>;
 }>;
 
 
 export type GetNotificationsSubscription = { __typename?: 'subscription_root', erp_Notifications: Array<{ __typename?: 'erp_Notifications', ID: number, Viewed: boolean, Comment: { __typename?: 'erp_Comments', CommentID: number, Text: string, Timestamp: any, User: { __typename?: 'erp_Users', UserID: number, FirstName?: string | null, LastName?: string | null } }, Order?: { __typename?: 'erp_Orders', OrderID: number, City?: string | null, Entity?: string | null } | null }> };
 
 export type UpdateViewedMutationVariables = Exact<{
-  ID: Scalars['Int'];
-  Viewed: Scalars['Boolean'];
+  ID: Scalars['Int']['input'];
+  Viewed: Scalars['Boolean']['input'];
 }>;
 
 
@@ -9222,16 +9811,16 @@ export type GetAllUsersQueryVariables = Exact<{ [key: string]: never; }>;
 export type GetAllUsersQuery = { __typename?: 'query_root', erp_Users: Array<{ __typename?: 'erp_Users', FirstName?: string | null, LastName?: string | null, UserID: number, AccessLevelID?: number | null }> };
 
 export type GetOrderPaymentsQueryVariables = Exact<{
-  _eq: Scalars['Int'];
+  _eq: Scalars['Int']['input'];
 }>;
 
 
 export type GetOrderPaymentsQuery = { __typename?: 'query_root', erp_PaymentHistory: Array<{ __typename?: 'erp_PaymentHistory', Date: any, ID: number, PaidAmount: any }> };
 
 export type InsertNotificationMutationVariables = Exact<{
-  CommentID: Scalars['Int'];
-  MentionedUser: Scalars['Int'];
-  OrderID: Scalars['Int'];
+  CommentID: Scalars['Int']['input'];
+  MentionedUser: Scalars['Int']['input'];
+  OrderID: Scalars['Int']['input'];
 }>;
 
 
@@ -9245,90 +9834,90 @@ export type InsertDocumentsArrayMutationVariables = Exact<{
 export type InsertDocumentsArrayMutation = { __typename?: 'mutation_root', insert_erp_Docs?: { __typename?: 'erp_Docs_mutation_response', returning: Array<{ __typename?: 'erp_Docs', ID: number }> } | null };
 
 export type InsertPaymentMutationVariables = Exact<{
-  PaidAmount: Scalars['numeric'];
-  Date: Scalars['timestamp'];
-  OrderID: Scalars['Int'];
+  PaidAmount: Scalars['numeric']['input'];
+  Date: Scalars['timestamp']['input'];
+  OrderID: Scalars['Int']['input'];
 }>;
 
 
 export type InsertPaymentMutation = { __typename?: 'mutation_root', insert_erp_PaymentHistory_one?: { __typename?: 'erp_PaymentHistory', ID: number, OrderID: number } | null };
 
 export type DeletePaymentMutationVariables = Exact<{
-  ID: Scalars['Int'];
+  ID: Scalars['Int']['input'];
 }>;
 
 
 export type DeletePaymentMutation = { __typename?: 'mutation_root', delete_erp_PaymentHistory_by_pk?: { __typename?: 'erp_PaymentHistory', ID: number } | null };
 
 export type DeleteOrderMutationVariables = Exact<{
-  OrderID: Scalars['Int'];
+  OrderID: Scalars['Int']['input'];
 }>;
 
 
 export type DeleteOrderMutation = { __typename?: 'mutation_root', delete_erp_Orders_by_pk?: { __typename?: 'erp_Orders', OrderID: number } | null };
 
 export type InsertOrderItemMutationVariables = Exact<{
-  name: Scalars['String'];
-  orderID: Scalars['Int'];
-  quantity: Scalars['Int'];
-  fullName: Scalars['String'];
+  name: Scalars['String']['input'];
+  orderID: Scalars['Int']['input'];
+  quantity: Scalars['Int']['input'];
+  fullName: Scalars['String']['input'];
 }>;
 
 
 export type InsertOrderItemMutation = { __typename?: 'mutation_root', insert_erp_OrderItems_one?: { __typename?: 'erp_OrderItems', OrderItemID: number, OrderID: number } | null };
 
 export type DeleteOrderItemByPkMutationVariables = Exact<{
-  id: Scalars['Int'];
+  id: Scalars['Int']['input'];
 }>;
 
 
 export type DeleteOrderItemByPkMutation = { __typename?: 'mutation_root', delete_erp_OrderItems_by_pk?: { __typename?: 'erp_OrderItems', OrderItemID: number } | null };
 
 export type UpdateOrderItemByPkMutationVariables = Exact<{
-  id: Scalars['Int'];
-  FullName: Scalars['String'];
-  Name: Scalars['String'];
-  Quantity: Scalars['Int'];
+  id: Scalars['Int']['input'];
+  FullName: Scalars['String']['input'];
+  Name: Scalars['String']['input'];
+  Quantity: Scalars['Int']['input'];
 }>;
 
 
 export type UpdateOrderItemByPkMutation = { __typename?: 'mutation_root', update_erp_OrderItems_by_pk?: { __typename?: 'erp_OrderItems', Name: string, FullName?: string | null, OrderItemID: number, Quantity: number } | null };
 
 export type MoveOrderToPriorityMutationVariables = Exact<{
-  OrderID: Scalars['Int'];
-  AcceptanceDate: Scalars['timestamp'];
+  OrderID: Scalars['Int']['input'];
+  AcceptanceDate: Scalars['timestamp']['input'];
 }>;
 
 
 export type MoveOrderToPriorityMutation = { __typename?: 'mutation_root', update_erp_Orders_by_pk?: { __typename?: 'erp_Orders', OrderID: number, OrderStatusID: number } | null };
 
 export type MoveOrderToArchiveMutationVariables = Exact<{
-  OrderID: Scalars['Int'];
-  ActualShippingDate: Scalars['timestamp'];
-  OrderStatusID: Scalars['Int'];
+  OrderID: Scalars['Int']['input'];
+  ActualShippingDate: Scalars['timestamp']['input'];
+  OrderStatusID: Scalars['Int']['input'];
 }>;
 
 
 export type MoveOrderToArchiveMutation = { __typename?: 'mutation_root', update_erp_Orders_by_pk?: { __typename?: 'erp_Orders', OrderID: number, OrderStatusID: number } | null };
 
 export type UpdateNeedAttentionMutationVariables = Exact<{
-  OrderID: Scalars['Int'];
-  NeedAttention: Scalars['String'];
+  OrderID: Scalars['Int']['input'];
+  NeedAttention: Scalars['String']['input'];
 }>;
 
 
 export type UpdateNeedAttentionMutation = { __typename?: 'mutation_root', update_erp_Orders_by_pk?: { __typename?: 'erp_Orders', OrderID: number, NeedAttention?: string | null } | null };
 
 export type UpdateAwaitingDispatchMutationVariables = Exact<{
-  OrderID: Scalars['Int'];
-  AwaitingDispatch: Scalars['Boolean'];
+  OrderID: Scalars['Int']['input'];
+  AwaitingDispatch: Scalars['Boolean']['input'];
 }>;
 
 
 export type UpdateAwaitingDispatchMutation = { __typename?: 'mutation_root', update_erp_Orders_by_pk?: { __typename?: 'erp_Orders', OrderID: number, AwaitingDispatch: boolean } | null };
 
 export type UpdateOrderInfoMutationVariables = Exact<{
-  OrderID: Scalars['Int'];
+  OrderID: Scalars['Int']['input'];
   fields?: InputMaybe<Erp_Orders_Set_Input>;
 }>;
 
@@ -9337,23 +9926,23 @@ export type UpdateOrderInfoMutation = { __typename?: 'mutation_root', update_erp
 
 export type GetOrdersByStatusQueryVariables = Exact<{
   ShippingDate?: InputMaybe<Order_By>;
-  orderStatus: Scalars['Int'];
+  orderStatus: Scalars['Int']['input'];
 }>;
 
 
 export type GetOrdersByStatusQuery = { __typename?: 'query_root', erp_Orders: Array<{ __typename?: 'erp_Orders', OrderID: number, Entity?: string | null, InvoiceNumber?: string | null, City?: string | null, ShippingDate?: any | null, ActualShippingDate?: any | null, AcceptanceDate?: any | null, PaidAmount?: any | null, TotalAmount?: any | null, AwaitingDispatch: boolean, NeedAttention?: string | null, CreatingDate: any, ManagerID?: number | null, OrderStatusID: number, OrderStatus: { __typename?: 'erp_OrderStatus', Name: string, ID: number }, OrderItems: Array<{ __typename?: 'erp_OrderItems', Quantity: number, OrderItemID: number, Name: string, OrderID: number }>, User?: { __typename?: 'erp_Users', FirstName?: string | null, LastName?: string | null } | null, PaymentHistories: Array<{ __typename?: 'erp_PaymentHistory', ID: number, PaidAmount: any, Date: any }> }> };
 
 export type GetOrdersArchivedBySearchKeywordQueryVariables = Exact<{
-  keyword: Scalars['String'];
-  OrderStatus: Scalars['Int'];
+  keyword: Scalars['String']['input'];
+  OrderStatus: Scalars['Int']['input'];
 }>;
 
 
 export type GetOrdersArchivedBySearchKeywordQuery = { __typename?: 'query_root', erp_Orders: Array<{ __typename?: 'erp_Orders', OrderID: number, Entity?: string | null, InvoiceNumber?: string | null, City?: string | null, ShippingDate?: any | null, ActualShippingDate?: any | null, AcceptanceDate?: any | null, PaidAmount?: any | null, TotalAmount?: any | null, AwaitingDispatch: boolean, NeedAttention?: string | null, CreatingDate: any, ManagerID?: number | null, OrderStatusID: number, OrderStatus: { __typename?: 'erp_OrderStatus', Name: string, ID: number }, OrderItems: Array<{ __typename?: 'erp_OrderItems', Quantity: number, OrderItemID: number, Name: string, OrderID: number }>, User?: { __typename?: 'erp_Users', FirstName?: string | null, LastName?: string | null } | null, PaymentHistories: Array<{ __typename?: 'erp_PaymentHistory', ID: number, PaidAmount: any, Date: any }> }> };
 
 export type GetOrdersArchivedByIntervalQueryVariables = Exact<{
-  _lte: Scalars['timestamp'];
-  _gte: Scalars['timestamp'];
+  _lte: Scalars['timestamp']['input'];
+  _gte: Scalars['timestamp']['input'];
 }>;
 
 
@@ -9365,14 +9954,14 @@ export type GetManagersQueryVariables = Exact<{ [key: string]: never; }>;
 export type GetManagersQuery = { __typename?: 'query_root', erp_Users: Array<{ __typename?: 'erp_Users', FirstName?: string | null, LastName?: string | null, UserID: number, AccessLevelID?: number | null }> };
 
 export type GetOrderByPkQueryVariables = Exact<{
-  OrderID: Scalars['Int'];
+  OrderID: Scalars['Int']['input'];
 }>;
 
 
 export type GetOrderByPkQuery = { __typename?: 'query_root', erp_Orders: Array<{ __typename?: 'erp_Orders', NeedAttention?: string | null, AwaitingDispatch: boolean, OrderStatusID: number, ActualShippingDate?: any | null, AcceptanceDate?: any | null, ShippingDate?: any | null, CreatingDate: any, OrderID: number, ManagerID?: number | null, City?: string | null, Comment?: string | null, Entity?: string | null, InvoiceNumber?: string | null, OrderNumber?: string | null, PaidAmount?: any | null, TotalAmount?: any | null, User?: { __typename?: 'erp_Users', FirstName?: string | null, LastName?: string | null, UserID: number } | null, OrderItems: Array<{ __typename?: 'erp_OrderItems', Name: string, FullName?: string | null, OrderItemID: number, Quantity: number }>, Docs: Array<{ __typename?: 'erp_Docs', ID: number, Key: string, FileName?: string | null, Size?: number | null, UploadingDate?: any | null }>, PaymentHistories: Array<{ __typename?: 'erp_PaymentHistory', ID: number, PaidAmount: any, Date: any }> }> };
 
 export type InsertOrderMutationVariables = Exact<{
-  orderStatusID: Scalars['Int'];
+  orderStatusID: Scalars['Int']['input'];
 }>;
 
 
@@ -9386,8 +9975,8 @@ export type GetReclamationOrdersQueryVariables = Exact<{ [key: string]: never; }
 export type GetReclamationOrdersQuery = { __typename?: 'query_root', erp_Orders: Array<{ __typename?: 'erp_Orders', AwaitingDispatch: boolean, NeedAttention?: string | null, OrderID: number, Entity?: string | null, City?: string | null, OrderStatusID: number, OrderItems: Array<{ __typename?: 'erp_OrderItems', OrderItemID: number, Name: string }> }> };
 
 export type UpdateOrderStatusMutationVariables = Exact<{
-  OrderID: Scalars['Int'];
-  OrderStatusID: Scalars['Int'];
+  OrderID: Scalars['Int']['input'];
+  OrderStatusID: Scalars['Int']['input'];
 }>;
 
 
@@ -9399,7 +9988,7 @@ export type GetDetailsQueryVariables = Exact<{ [key: string]: never; }>;
 export type GetDetailsQuery = { __typename?: 'query_root', metal_pdo_details: Array<{ __typename?: 'metal_pdo_details', id: number, name: string, detail_materials: Array<{ __typename?: 'metal_pdo_detail_materials', cost?: any | null, material: { __typename?: 'metal_pdo_materials', id: number, unit: number, shape: number, shape_data?: any | null } }> }> };
 
 export type GetDetailByPkQueryVariables = Exact<{
-  id: Scalars['Int'];
+  id: Scalars['Int']['input'];
 }>;
 
 
@@ -9414,37 +10003,37 @@ export type InsertDetailMutation = { __typename?: 'mutation_root', insert_metal_
 
 export type UpdateDetailMutationVariables = Exact<{
   _set: Metal_Pdo_Details_Set_Input;
-  id: Scalars['Int'];
+  id: Scalars['Int']['input'];
 }>;
 
 
 export type UpdateDetailMutation = { __typename?: 'mutation_root', update_metal_pdo_details_by_pk?: { __typename?: 'metal_pdo_details', id: number } | null };
 
 export type UpdateDetailMaterialCostMutationVariables = Exact<{
-  detail_id: Scalars['Int'];
-  material_id: Scalars['Int'];
-  cost: Scalars['numeric'];
+  detail_id: Scalars['Int']['input'];
+  material_id: Scalars['Int']['input'];
+  cost: Scalars['numeric']['input'];
 }>;
 
 
 export type UpdateDetailMaterialCostMutation = { __typename?: 'mutation_root', update_metal_pdo_detail_materials_by_pk?: { __typename?: 'metal_pdo_detail_materials', cost?: any | null } | null };
 
 export type DeleteDetailMutationVariables = Exact<{
-  id: Scalars['Int'];
+  id: Scalars['Int']['input'];
 }>;
 
 
 export type DeleteDetailMutation = { __typename?: 'mutation_root', delete_metal_pdo_details_by_pk?: { __typename?: 'metal_pdo_details', id: number } | null };
 
 export type GetDetailMaterialsQueryVariables = Exact<{
-  _eq: Scalars['Int'];
+  _eq: Scalars['Int']['input'];
 }>;
 
 
-export type GetDetailMaterialsQuery = { __typename?: 'query_root', metal_pdo_detail_materials: Array<{ __typename?: 'metal_pdo_detail_materials', material: { __typename?: 'metal_pdo_materials', id: number, shape: number, shape_data?: any | null } }> };
+export type GetDetailMaterialsQuery = { __typename?: 'query_root', metal_pdo_detail_materials: Array<{ __typename?: 'metal_pdo_detail_materials', material: { __typename?: 'metal_pdo_materials', id: number, unit: number, shape: number, shape_data?: any | null } }> };
 
 export type GetDetailsMadeFromThatMaterialQueryVariables = Exact<{
-  _eq: Scalars['Int'];
+  _eq: Scalars['Int']['input'];
 }>;
 
 
@@ -9465,14 +10054,14 @@ export type GetMaterialsQueryVariables = Exact<{ [key: string]: never; }>;
 export type GetMaterialsQuery = { __typename?: 'query_root', metal_pdo_materials: Array<{ __typename?: 'metal_pdo_materials', id: number, unit: number, shape: number, shape_data?: any | null }> };
 
 export type GetMaterialByPkQueryVariables = Exact<{
-  id: Scalars['Int'];
+  id: Scalars['Int']['input'];
 }>;
 
 
 export type GetMaterialByPkQuery = { __typename?: 'query_root', metal_pdo_materials_by_pk?: { __typename?: 'metal_pdo_materials', id: number, unit: number, shape: number, shape_data?: any | null } | null };
 
 export type GetCirclePossibleAlloysQueryVariables = Exact<{
-  _eq: Scalars['Int'];
+  _eq: Scalars['Int']['input'];
 }>;
 
 
@@ -9486,7 +10075,7 @@ export type InsertMaterialMutationVariables = Exact<{
 export type InsertMaterialMutation = { __typename?: 'mutation_root', insert_metal_pdo_materials_one?: { __typename?: 'metal_pdo_materials', id: number } | null };
 
 export type UpdateMaterialMutationVariables = Exact<{
-  id: Scalars['Int'];
+  id: Scalars['Int']['input'];
   _set: Metal_Pdo_Materials_Set_Input;
 }>;
 
@@ -9494,7 +10083,7 @@ export type UpdateMaterialMutationVariables = Exact<{
 export type UpdateMaterialMutation = { __typename?: 'mutation_root', update_metal_pdo_materials_by_pk?: { __typename?: 'metal_pdo_materials', id: number } | null };
 
 export type DeleteMaterialMutationVariables = Exact<{
-  id: Scalars['Int'];
+  id: Scalars['Int']['input'];
 }>;
 
 
@@ -9513,7 +10102,7 @@ export type GetSuppliesQueryVariables = Exact<{ [key: string]: never; }>;
 export type GetSuppliesQuery = { __typename?: 'query_root', metal_pdo_supplies: Array<{ __typename?: 'metal_pdo_supplies', id: number, material_id?: number | null, qty: any, supplied_at: any, supplier_name: string, material?: { __typename?: 'metal_pdo_materials', id: number, unit: number, shape: number, shape_data?: any | null } | null }> };
 
 export type DeleteSupplyMutationVariables = Exact<{
-  id: Scalars['Int'];
+  id: Scalars['Int']['input'];
 }>;
 
 
@@ -9532,7 +10121,7 @@ export type GetWrietOffsQueryVariables = Exact<{ [key: string]: never; }>;
 export type GetWrietOffsQuery = { __typename?: 'query_root', metal_pdo_writeoffs: Array<{ __typename?: 'metal_pdo_writeoffs', id: number, date: any, qty: any, type: number, type_data: any, reason: number, material: { __typename?: 'metal_pdo_materials', id: number, unit: number, shape: number, shape_data?: any | null } }> };
 
 export type DeleteWriteOffMutationVariables = Exact<{
-  id: Scalars['Int'];
+  id: Scalars['Int']['input'];
 }>;
 
 
@@ -9621,7 +10210,7 @@ export const GetEmployeeListDocument = gql`
  *   },
  * });
  */
-export function useGetEmployeeListQuery(baseOptions: Apollo.QueryHookOptions<GetEmployeeListQuery, GetEmployeeListQueryVariables>) {
+export function useGetEmployeeListQuery(baseOptions: Apollo.QueryHookOptions<GetEmployeeListQuery, GetEmployeeListQueryVariables> & ({ variables: GetEmployeeListQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<GetEmployeeListQuery, GetEmployeeListQueryVariables>(GetEmployeeListDocument, options);
       }
@@ -9629,8 +10218,13 @@ export function useGetEmployeeListLazyQuery(baseOptions?: Apollo.LazyQueryHookOp
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<GetEmployeeListQuery, GetEmployeeListQueryVariables>(GetEmployeeListDocument, options);
         }
+export function useGetEmployeeListSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetEmployeeListQuery, GetEmployeeListQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetEmployeeListQuery, GetEmployeeListQueryVariables>(GetEmployeeListDocument, options);
+        }
 export type GetEmployeeListQueryHookResult = ReturnType<typeof useGetEmployeeListQuery>;
 export type GetEmployeeListLazyQueryHookResult = ReturnType<typeof useGetEmployeeListLazyQuery>;
+export type GetEmployeeListSuspenseQueryHookResult = ReturnType<typeof useGetEmployeeListSuspenseQuery>;
 export type GetEmployeeListQueryResult = Apollo.QueryResult<GetEmployeeListQuery, GetEmployeeListQueryVariables>;
 export const UpdateTimeDeductionDocument = gql`
     mutation UpdateTimeDeduction($TimeDeduction: numeric!, $ID: Int!) {
@@ -9701,7 +10295,7 @@ export const CommentsDocument = gql`
  *   },
  * });
  */
-export function useCommentsSubscription(baseOptions: Apollo.SubscriptionHookOptions<CommentsSubscription, CommentsSubscriptionVariables>) {
+export function useCommentsSubscription(baseOptions: Apollo.SubscriptionHookOptions<CommentsSubscription, CommentsSubscriptionVariables> & ({ variables: CommentsSubscriptionVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useSubscription<CommentsSubscription, CommentsSubscriptionVariables>(CommentsDocument, options);
       }
@@ -9867,7 +10461,7 @@ export const GetNotificationsDocument = gql`
  *   },
  * });
  */
-export function useGetNotificationsSubscription(baseOptions: Apollo.SubscriptionHookOptions<GetNotificationsSubscription, GetNotificationsSubscriptionVariables>) {
+export function useGetNotificationsSubscription(baseOptions: Apollo.SubscriptionHookOptions<GetNotificationsSubscription, GetNotificationsSubscriptionVariables> & ({ variables: GetNotificationsSubscriptionVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useSubscription<GetNotificationsSubscription, GetNotificationsSubscriptionVariables>(GetNotificationsDocument, options);
       }
@@ -9942,8 +10536,13 @@ export function useGetAllUsersLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<GetAllUsersQuery, GetAllUsersQueryVariables>(GetAllUsersDocument, options);
         }
+export function useGetAllUsersSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetAllUsersQuery, GetAllUsersQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetAllUsersQuery, GetAllUsersQueryVariables>(GetAllUsersDocument, options);
+        }
 export type GetAllUsersQueryHookResult = ReturnType<typeof useGetAllUsersQuery>;
 export type GetAllUsersLazyQueryHookResult = ReturnType<typeof useGetAllUsersLazyQuery>;
+export type GetAllUsersSuspenseQueryHookResult = ReturnType<typeof useGetAllUsersSuspenseQuery>;
 export type GetAllUsersQueryResult = Apollo.QueryResult<GetAllUsersQuery, GetAllUsersQueryVariables>;
 export const GetOrderPaymentsDocument = gql`
     query GetOrderPayments($_eq: Int!) {
@@ -9971,7 +10570,7 @@ export const GetOrderPaymentsDocument = gql`
  *   },
  * });
  */
-export function useGetOrderPaymentsQuery(baseOptions: Apollo.QueryHookOptions<GetOrderPaymentsQuery, GetOrderPaymentsQueryVariables>) {
+export function useGetOrderPaymentsQuery(baseOptions: Apollo.QueryHookOptions<GetOrderPaymentsQuery, GetOrderPaymentsQueryVariables> & ({ variables: GetOrderPaymentsQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<GetOrderPaymentsQuery, GetOrderPaymentsQueryVariables>(GetOrderPaymentsDocument, options);
       }
@@ -9979,8 +10578,13 @@ export function useGetOrderPaymentsLazyQuery(baseOptions?: Apollo.LazyQueryHookO
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<GetOrderPaymentsQuery, GetOrderPaymentsQueryVariables>(GetOrderPaymentsDocument, options);
         }
+export function useGetOrderPaymentsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetOrderPaymentsQuery, GetOrderPaymentsQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetOrderPaymentsQuery, GetOrderPaymentsQueryVariables>(GetOrderPaymentsDocument, options);
+        }
 export type GetOrderPaymentsQueryHookResult = ReturnType<typeof useGetOrderPaymentsQuery>;
 export type GetOrderPaymentsLazyQueryHookResult = ReturnType<typeof useGetOrderPaymentsLazyQuery>;
+export type GetOrderPaymentsSuspenseQueryHookResult = ReturnType<typeof useGetOrderPaymentsSuspenseQuery>;
 export type GetOrderPaymentsQueryResult = Apollo.QueryResult<GetOrderPaymentsQuery, GetOrderPaymentsQueryVariables>;
 export const InsertNotificationDocument = gql`
     mutation InsertNotification($CommentID: Int!, $MentionedUser: Int!, $OrderID: Int!) {
@@ -10493,7 +11097,7 @@ export const GetOrdersByStatusDocument = gql`
  *   },
  * });
  */
-export function useGetOrdersByStatusQuery(baseOptions: Apollo.QueryHookOptions<GetOrdersByStatusQuery, GetOrdersByStatusQueryVariables>) {
+export function useGetOrdersByStatusQuery(baseOptions: Apollo.QueryHookOptions<GetOrdersByStatusQuery, GetOrdersByStatusQueryVariables> & ({ variables: GetOrdersByStatusQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<GetOrdersByStatusQuery, GetOrdersByStatusQueryVariables>(GetOrdersByStatusDocument, options);
       }
@@ -10501,8 +11105,13 @@ export function useGetOrdersByStatusLazyQuery(baseOptions?: Apollo.LazyQueryHook
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<GetOrdersByStatusQuery, GetOrdersByStatusQueryVariables>(GetOrdersByStatusDocument, options);
         }
+export function useGetOrdersByStatusSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetOrdersByStatusQuery, GetOrdersByStatusQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetOrdersByStatusQuery, GetOrdersByStatusQueryVariables>(GetOrdersByStatusDocument, options);
+        }
 export type GetOrdersByStatusQueryHookResult = ReturnType<typeof useGetOrdersByStatusQuery>;
 export type GetOrdersByStatusLazyQueryHookResult = ReturnType<typeof useGetOrdersByStatusLazyQuery>;
+export type GetOrdersByStatusSuspenseQueryHookResult = ReturnType<typeof useGetOrdersByStatusSuspenseQuery>;
 export type GetOrdersByStatusQueryResult = Apollo.QueryResult<GetOrdersByStatusQuery, GetOrdersByStatusQueryVariables>;
 export const GetOrdersArchivedBySearchKeywordDocument = gql`
     query getOrdersArchivedBySearchKeyword($keyword: String!, $OrderStatus: Int!) {
@@ -10532,7 +11141,7 @@ export const GetOrdersArchivedBySearchKeywordDocument = gql`
  *   },
  * });
  */
-export function useGetOrdersArchivedBySearchKeywordQuery(baseOptions: Apollo.QueryHookOptions<GetOrdersArchivedBySearchKeywordQuery, GetOrdersArchivedBySearchKeywordQueryVariables>) {
+export function useGetOrdersArchivedBySearchKeywordQuery(baseOptions: Apollo.QueryHookOptions<GetOrdersArchivedBySearchKeywordQuery, GetOrdersArchivedBySearchKeywordQueryVariables> & ({ variables: GetOrdersArchivedBySearchKeywordQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<GetOrdersArchivedBySearchKeywordQuery, GetOrdersArchivedBySearchKeywordQueryVariables>(GetOrdersArchivedBySearchKeywordDocument, options);
       }
@@ -10540,8 +11149,13 @@ export function useGetOrdersArchivedBySearchKeywordLazyQuery(baseOptions?: Apoll
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<GetOrdersArchivedBySearchKeywordQuery, GetOrdersArchivedBySearchKeywordQueryVariables>(GetOrdersArchivedBySearchKeywordDocument, options);
         }
+export function useGetOrdersArchivedBySearchKeywordSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetOrdersArchivedBySearchKeywordQuery, GetOrdersArchivedBySearchKeywordQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetOrdersArchivedBySearchKeywordQuery, GetOrdersArchivedBySearchKeywordQueryVariables>(GetOrdersArchivedBySearchKeywordDocument, options);
+        }
 export type GetOrdersArchivedBySearchKeywordQueryHookResult = ReturnType<typeof useGetOrdersArchivedBySearchKeywordQuery>;
 export type GetOrdersArchivedBySearchKeywordLazyQueryHookResult = ReturnType<typeof useGetOrdersArchivedBySearchKeywordLazyQuery>;
+export type GetOrdersArchivedBySearchKeywordSuspenseQueryHookResult = ReturnType<typeof useGetOrdersArchivedBySearchKeywordSuspenseQuery>;
 export type GetOrdersArchivedBySearchKeywordQueryResult = Apollo.QueryResult<GetOrdersArchivedBySearchKeywordQuery, GetOrdersArchivedBySearchKeywordQueryVariables>;
 export const GetOrdersArchivedByIntervalDocument = gql`
     query GetOrdersArchivedByInterval($_lte: timestamp!, $_gte: timestamp!) {
@@ -10571,7 +11185,7 @@ export const GetOrdersArchivedByIntervalDocument = gql`
  *   },
  * });
  */
-export function useGetOrdersArchivedByIntervalQuery(baseOptions: Apollo.QueryHookOptions<GetOrdersArchivedByIntervalQuery, GetOrdersArchivedByIntervalQueryVariables>) {
+export function useGetOrdersArchivedByIntervalQuery(baseOptions: Apollo.QueryHookOptions<GetOrdersArchivedByIntervalQuery, GetOrdersArchivedByIntervalQueryVariables> & ({ variables: GetOrdersArchivedByIntervalQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<GetOrdersArchivedByIntervalQuery, GetOrdersArchivedByIntervalQueryVariables>(GetOrdersArchivedByIntervalDocument, options);
       }
@@ -10579,8 +11193,13 @@ export function useGetOrdersArchivedByIntervalLazyQuery(baseOptions?: Apollo.Laz
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<GetOrdersArchivedByIntervalQuery, GetOrdersArchivedByIntervalQueryVariables>(GetOrdersArchivedByIntervalDocument, options);
         }
+export function useGetOrdersArchivedByIntervalSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetOrdersArchivedByIntervalQuery, GetOrdersArchivedByIntervalQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetOrdersArchivedByIntervalQuery, GetOrdersArchivedByIntervalQueryVariables>(GetOrdersArchivedByIntervalDocument, options);
+        }
 export type GetOrdersArchivedByIntervalQueryHookResult = ReturnType<typeof useGetOrdersArchivedByIntervalQuery>;
 export type GetOrdersArchivedByIntervalLazyQueryHookResult = ReturnType<typeof useGetOrdersArchivedByIntervalLazyQuery>;
+export type GetOrdersArchivedByIntervalSuspenseQueryHookResult = ReturnType<typeof useGetOrdersArchivedByIntervalSuspenseQuery>;
 export type GetOrdersArchivedByIntervalQueryResult = Apollo.QueryResult<GetOrdersArchivedByIntervalQuery, GetOrdersArchivedByIntervalQueryVariables>;
 export const GetManagersDocument = gql`
     query GetManagers {
@@ -10616,8 +11235,13 @@ export function useGetManagersLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<GetManagersQuery, GetManagersQueryVariables>(GetManagersDocument, options);
         }
+export function useGetManagersSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetManagersQuery, GetManagersQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetManagersQuery, GetManagersQueryVariables>(GetManagersDocument, options);
+        }
 export type GetManagersQueryHookResult = ReturnType<typeof useGetManagersQuery>;
 export type GetManagersLazyQueryHookResult = ReturnType<typeof useGetManagersLazyQuery>;
+export type GetManagersSuspenseQueryHookResult = ReturnType<typeof useGetManagersSuspenseQuery>;
 export type GetManagersQueryResult = Apollo.QueryResult<GetManagersQuery, GetManagersQueryVariables>;
 export const GetOrderByPkDocument = gql`
     query GetOrderByPK($OrderID: Int!) {
@@ -10681,7 +11305,7 @@ export const GetOrderByPkDocument = gql`
  *   },
  * });
  */
-export function useGetOrderByPkQuery(baseOptions: Apollo.QueryHookOptions<GetOrderByPkQuery, GetOrderByPkQueryVariables>) {
+export function useGetOrderByPkQuery(baseOptions: Apollo.QueryHookOptions<GetOrderByPkQuery, GetOrderByPkQueryVariables> & ({ variables: GetOrderByPkQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<GetOrderByPkQuery, GetOrderByPkQueryVariables>(GetOrderByPkDocument, options);
       }
@@ -10689,8 +11313,13 @@ export function useGetOrderByPkLazyQuery(baseOptions?: Apollo.LazyQueryHookOptio
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<GetOrderByPkQuery, GetOrderByPkQueryVariables>(GetOrderByPkDocument, options);
         }
+export function useGetOrderByPkSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetOrderByPkQuery, GetOrderByPkQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetOrderByPkQuery, GetOrderByPkQueryVariables>(GetOrderByPkDocument, options);
+        }
 export type GetOrderByPkQueryHookResult = ReturnType<typeof useGetOrderByPkQuery>;
 export type GetOrderByPkLazyQueryHookResult = ReturnType<typeof useGetOrderByPkLazyQuery>;
+export type GetOrderByPkSuspenseQueryHookResult = ReturnType<typeof useGetOrderByPkSuspenseQuery>;
 export type GetOrderByPkQueryResult = Apollo.QueryResult<GetOrderByPkQuery, GetOrderByPkQueryVariables>;
 export const InsertOrderDocument = gql`
     mutation InsertOrder($orderStatusID: Int!) {
@@ -10767,8 +11396,13 @@ export function useGetReclamationOrdersLazyQuery(baseOptions?: Apollo.LazyQueryH
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<GetReclamationOrdersQuery, GetReclamationOrdersQueryVariables>(GetReclamationOrdersDocument, options);
         }
+export function useGetReclamationOrdersSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetReclamationOrdersQuery, GetReclamationOrdersQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetReclamationOrdersQuery, GetReclamationOrdersQueryVariables>(GetReclamationOrdersDocument, options);
+        }
 export type GetReclamationOrdersQueryHookResult = ReturnType<typeof useGetReclamationOrdersQuery>;
 export type GetReclamationOrdersLazyQueryHookResult = ReturnType<typeof useGetReclamationOrdersLazyQuery>;
+export type GetReclamationOrdersSuspenseQueryHookResult = ReturnType<typeof useGetReclamationOrdersSuspenseQuery>;
 export type GetReclamationOrdersQueryResult = Apollo.QueryResult<GetReclamationOrdersQuery, GetReclamationOrdersQueryVariables>;
 export const UpdateOrderStatusDocument = gql`
     mutation UpdateOrderStatus($OrderID: Int!, $OrderStatusID: Int!) {
@@ -10816,15 +11450,12 @@ export const GetDetailsDocument = gql`
     detail_materials {
       cost
       material {
-        id
-        unit
-        shape
-        shape_data
+        ...MaterialFragment
       }
     }
   }
 }
-    `;
+    ${MaterialFragmentFragmentDoc}`;
 
 /**
  * __useGetDetailsQuery__
@@ -10849,8 +11480,13 @@ export function useGetDetailsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<GetDetailsQuery, GetDetailsQueryVariables>(GetDetailsDocument, options);
         }
+export function useGetDetailsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetDetailsQuery, GetDetailsQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetDetailsQuery, GetDetailsQueryVariables>(GetDetailsDocument, options);
+        }
 export type GetDetailsQueryHookResult = ReturnType<typeof useGetDetailsQuery>;
 export type GetDetailsLazyQueryHookResult = ReturnType<typeof useGetDetailsLazyQuery>;
+export type GetDetailsSuspenseQueryHookResult = ReturnType<typeof useGetDetailsSuspenseQuery>;
 export type GetDetailsQueryResult = Apollo.QueryResult<GetDetailsQuery, GetDetailsQueryVariables>;
 export const GetDetailByPkDocument = gql`
     query GetDetailByPk($id: Int!) {
@@ -10860,15 +11496,12 @@ export const GetDetailByPkDocument = gql`
     detail_materials {
       cost
       material {
-        id
-        unit
-        shape
-        shape_data
+        ...MaterialFragment
       }
     }
   }
 }
-    `;
+    ${MaterialFragmentFragmentDoc}`;
 
 /**
  * __useGetDetailByPkQuery__
@@ -10886,7 +11519,7 @@ export const GetDetailByPkDocument = gql`
  *   },
  * });
  */
-export function useGetDetailByPkQuery(baseOptions: Apollo.QueryHookOptions<GetDetailByPkQuery, GetDetailByPkQueryVariables>) {
+export function useGetDetailByPkQuery(baseOptions: Apollo.QueryHookOptions<GetDetailByPkQuery, GetDetailByPkQueryVariables> & ({ variables: GetDetailByPkQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<GetDetailByPkQuery, GetDetailByPkQueryVariables>(GetDetailByPkDocument, options);
       }
@@ -10894,8 +11527,13 @@ export function useGetDetailByPkLazyQuery(baseOptions?: Apollo.LazyQueryHookOpti
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<GetDetailByPkQuery, GetDetailByPkQueryVariables>(GetDetailByPkDocument, options);
         }
+export function useGetDetailByPkSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetDetailByPkQuery, GetDetailByPkQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetDetailByPkQuery, GetDetailByPkQueryVariables>(GetDetailByPkDocument, options);
+        }
 export type GetDetailByPkQueryHookResult = ReturnType<typeof useGetDetailByPkQuery>;
 export type GetDetailByPkLazyQueryHookResult = ReturnType<typeof useGetDetailByPkLazyQuery>;
+export type GetDetailByPkSuspenseQueryHookResult = ReturnType<typeof useGetDetailByPkSuspenseQuery>;
 export type GetDetailByPkQueryResult = Apollo.QueryResult<GetDetailByPkQuery, GetDetailByPkQueryVariables>;
 export const InsertDetailDocument = gql`
     mutation InsertDetail($object: metal_pdo_details_insert_input!) {
@@ -11040,13 +11678,11 @@ export const GetDetailMaterialsDocument = gql`
     query GetDetailMaterials($_eq: Int!) {
   metal_pdo_detail_materials(where: {material_id: {_eq: $_eq}}) {
     material {
-      id
-      shape
-      shape_data
+      ...MaterialFragment
     }
   }
 }
-    `;
+    ${MaterialFragmentFragmentDoc}`;
 
 /**
  * __useGetDetailMaterialsQuery__
@@ -11064,7 +11700,7 @@ export const GetDetailMaterialsDocument = gql`
  *   },
  * });
  */
-export function useGetDetailMaterialsQuery(baseOptions: Apollo.QueryHookOptions<GetDetailMaterialsQuery, GetDetailMaterialsQueryVariables>) {
+export function useGetDetailMaterialsQuery(baseOptions: Apollo.QueryHookOptions<GetDetailMaterialsQuery, GetDetailMaterialsQueryVariables> & ({ variables: GetDetailMaterialsQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<GetDetailMaterialsQuery, GetDetailMaterialsQueryVariables>(GetDetailMaterialsDocument, options);
       }
@@ -11072,8 +11708,13 @@ export function useGetDetailMaterialsLazyQuery(baseOptions?: Apollo.LazyQueryHoo
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<GetDetailMaterialsQuery, GetDetailMaterialsQueryVariables>(GetDetailMaterialsDocument, options);
         }
+export function useGetDetailMaterialsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetDetailMaterialsQuery, GetDetailMaterialsQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetDetailMaterialsQuery, GetDetailMaterialsQueryVariables>(GetDetailMaterialsDocument, options);
+        }
 export type GetDetailMaterialsQueryHookResult = ReturnType<typeof useGetDetailMaterialsQuery>;
 export type GetDetailMaterialsLazyQueryHookResult = ReturnType<typeof useGetDetailMaterialsLazyQuery>;
+export type GetDetailMaterialsSuspenseQueryHookResult = ReturnType<typeof useGetDetailMaterialsSuspenseQuery>;
 export type GetDetailMaterialsQueryResult = Apollo.QueryResult<GetDetailMaterialsQuery, GetDetailMaterialsQueryVariables>;
 export const GetDetailsMadeFromThatMaterialDocument = gql`
     query GetDetailsMadeFromThatMaterial($_eq: Int!) {
@@ -11102,7 +11743,7 @@ export const GetDetailsMadeFromThatMaterialDocument = gql`
  *   },
  * });
  */
-export function useGetDetailsMadeFromThatMaterialQuery(baseOptions: Apollo.QueryHookOptions<GetDetailsMadeFromThatMaterialQuery, GetDetailsMadeFromThatMaterialQueryVariables>) {
+export function useGetDetailsMadeFromThatMaterialQuery(baseOptions: Apollo.QueryHookOptions<GetDetailsMadeFromThatMaterialQuery, GetDetailsMadeFromThatMaterialQueryVariables> & ({ variables: GetDetailsMadeFromThatMaterialQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<GetDetailsMadeFromThatMaterialQuery, GetDetailsMadeFromThatMaterialQueryVariables>(GetDetailsMadeFromThatMaterialDocument, options);
       }
@@ -11110,8 +11751,13 @@ export function useGetDetailsMadeFromThatMaterialLazyQuery(baseOptions?: Apollo.
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<GetDetailsMadeFromThatMaterialQuery, GetDetailsMadeFromThatMaterialQueryVariables>(GetDetailsMadeFromThatMaterialDocument, options);
         }
+export function useGetDetailsMadeFromThatMaterialSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetDetailsMadeFromThatMaterialQuery, GetDetailsMadeFromThatMaterialQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetDetailsMadeFromThatMaterialQuery, GetDetailsMadeFromThatMaterialQueryVariables>(GetDetailsMadeFromThatMaterialDocument, options);
+        }
 export type GetDetailsMadeFromThatMaterialQueryHookResult = ReturnType<typeof useGetDetailsMadeFromThatMaterialQuery>;
 export type GetDetailsMadeFromThatMaterialLazyQueryHookResult = ReturnType<typeof useGetDetailsMadeFromThatMaterialLazyQuery>;
+export type GetDetailsMadeFromThatMaterialSuspenseQueryHookResult = ReturnType<typeof useGetDetailsMadeFromThatMaterialSuspenseQuery>;
 export type GetDetailsMadeFromThatMaterialQueryResult = Apollo.QueryResult<GetDetailsMadeFromThatMaterialQuery, GetDetailsMadeFromThatMaterialQueryVariables>;
 export const InsertDetailMaterialsDocument = gql`
     mutation InsertDetailMaterials($objects: [metal_pdo_detail_materials_insert_input!]!) {
@@ -11184,8 +11830,13 @@ export function useGetMaterialsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptio
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<GetMaterialsQuery, GetMaterialsQueryVariables>(GetMaterialsDocument, options);
         }
+export function useGetMaterialsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetMaterialsQuery, GetMaterialsQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetMaterialsQuery, GetMaterialsQueryVariables>(GetMaterialsDocument, options);
+        }
 export type GetMaterialsQueryHookResult = ReturnType<typeof useGetMaterialsQuery>;
 export type GetMaterialsLazyQueryHookResult = ReturnType<typeof useGetMaterialsLazyQuery>;
+export type GetMaterialsSuspenseQueryHookResult = ReturnType<typeof useGetMaterialsSuspenseQuery>;
 export type GetMaterialsQueryResult = Apollo.QueryResult<GetMaterialsQuery, GetMaterialsQueryVariables>;
 export const GetMaterialByPkDocument = gql`
     query GetMaterialByPk($id: Int!) {
@@ -11211,7 +11862,7 @@ export const GetMaterialByPkDocument = gql`
  *   },
  * });
  */
-export function useGetMaterialByPkQuery(baseOptions: Apollo.QueryHookOptions<GetMaterialByPkQuery, GetMaterialByPkQueryVariables>) {
+export function useGetMaterialByPkQuery(baseOptions: Apollo.QueryHookOptions<GetMaterialByPkQuery, GetMaterialByPkQueryVariables> & ({ variables: GetMaterialByPkQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<GetMaterialByPkQuery, GetMaterialByPkQueryVariables>(GetMaterialByPkDocument, options);
       }
@@ -11219,8 +11870,13 @@ export function useGetMaterialByPkLazyQuery(baseOptions?: Apollo.LazyQueryHookOp
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<GetMaterialByPkQuery, GetMaterialByPkQueryVariables>(GetMaterialByPkDocument, options);
         }
+export function useGetMaterialByPkSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetMaterialByPkQuery, GetMaterialByPkQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetMaterialByPkQuery, GetMaterialByPkQueryVariables>(GetMaterialByPkDocument, options);
+        }
 export type GetMaterialByPkQueryHookResult = ReturnType<typeof useGetMaterialByPkQuery>;
 export type GetMaterialByPkLazyQueryHookResult = ReturnType<typeof useGetMaterialByPkLazyQuery>;
+export type GetMaterialByPkSuspenseQueryHookResult = ReturnType<typeof useGetMaterialByPkSuspenseQuery>;
 export type GetMaterialByPkQueryResult = Apollo.QueryResult<GetMaterialByPkQuery, GetMaterialByPkQueryVariables>;
 export const GetCirclePossibleAlloysDocument = gql`
     query GetCirclePossibleAlloys($_eq: Int!) {
@@ -11246,7 +11902,7 @@ export const GetCirclePossibleAlloysDocument = gql`
  *   },
  * });
  */
-export function useGetCirclePossibleAlloysQuery(baseOptions: Apollo.QueryHookOptions<GetCirclePossibleAlloysQuery, GetCirclePossibleAlloysQueryVariables>) {
+export function useGetCirclePossibleAlloysQuery(baseOptions: Apollo.QueryHookOptions<GetCirclePossibleAlloysQuery, GetCirclePossibleAlloysQueryVariables> & ({ variables: GetCirclePossibleAlloysQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<GetCirclePossibleAlloysQuery, GetCirclePossibleAlloysQueryVariables>(GetCirclePossibleAlloysDocument, options);
       }
@@ -11254,8 +11910,13 @@ export function useGetCirclePossibleAlloysLazyQuery(baseOptions?: Apollo.LazyQue
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<GetCirclePossibleAlloysQuery, GetCirclePossibleAlloysQueryVariables>(GetCirclePossibleAlloysDocument, options);
         }
+export function useGetCirclePossibleAlloysSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetCirclePossibleAlloysQuery, GetCirclePossibleAlloysQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetCirclePossibleAlloysQuery, GetCirclePossibleAlloysQueryVariables>(GetCirclePossibleAlloysDocument, options);
+        }
 export type GetCirclePossibleAlloysQueryHookResult = ReturnType<typeof useGetCirclePossibleAlloysQuery>;
 export type GetCirclePossibleAlloysLazyQueryHookResult = ReturnType<typeof useGetCirclePossibleAlloysLazyQuery>;
+export type GetCirclePossibleAlloysSuspenseQueryHookResult = ReturnType<typeof useGetCirclePossibleAlloysSuspenseQuery>;
 export type GetCirclePossibleAlloysQueryResult = Apollo.QueryResult<GetCirclePossibleAlloysQuery, GetCirclePossibleAlloysQueryVariables>;
 export const InsertMaterialDocument = gql`
     mutation InsertMaterial($object: metal_pdo_materials_insert_input!) {
@@ -11428,8 +12089,13 @@ export function useGetSuppliesLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<GetSuppliesQuery, GetSuppliesQueryVariables>(GetSuppliesDocument, options);
         }
+export function useGetSuppliesSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetSuppliesQuery, GetSuppliesQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetSuppliesQuery, GetSuppliesQueryVariables>(GetSuppliesDocument, options);
+        }
 export type GetSuppliesQueryHookResult = ReturnType<typeof useGetSuppliesQuery>;
 export type GetSuppliesLazyQueryHookResult = ReturnType<typeof useGetSuppliesLazyQuery>;
+export type GetSuppliesSuspenseQueryHookResult = ReturnType<typeof useGetSuppliesSuspenseQuery>;
 export type GetSuppliesQueryResult = Apollo.QueryResult<GetSuppliesQuery, GetSuppliesQueryVariables>;
 export const DeleteSupplyDocument = gql`
     mutation DeleteSupply($id: Int!) {
@@ -11536,8 +12202,13 @@ export function useGetWrietOffsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptio
           const options = {...defaultOptions, ...baseOptions}
           return Apollo.useLazyQuery<GetWrietOffsQuery, GetWrietOffsQueryVariables>(GetWrietOffsDocument, options);
         }
+export function useGetWrietOffsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetWrietOffsQuery, GetWrietOffsQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetWrietOffsQuery, GetWrietOffsQueryVariables>(GetWrietOffsDocument, options);
+        }
 export type GetWrietOffsQueryHookResult = ReturnType<typeof useGetWrietOffsQuery>;
 export type GetWrietOffsLazyQueryHookResult = ReturnType<typeof useGetWrietOffsLazyQuery>;
+export type GetWrietOffsSuspenseQueryHookResult = ReturnType<typeof useGetWrietOffsSuspenseQuery>;
 export type GetWrietOffsQueryResult = Apollo.QueryResult<GetWrietOffsQuery, GetWrietOffsQueryVariables>;
 export const DeleteWriteOffDocument = gql`
     mutation DeleteWriteOff($id: Int!) {

@@ -5,10 +5,7 @@ query GetDetails {
     detail_materials {
       cost
       material {
-        id
-        unit
-        shape
-        shape_data
+        ...MaterialFragment
       }
     }
   }
@@ -21,10 +18,7 @@ query GetDetailByPk($id: Int!) {
     detail_materials {
       cost
       material {
-        id
-        unit
-        shape
-        shape_data
+        ...MaterialFragment
       }
     }
   }
@@ -65,9 +59,7 @@ mutation DeleteDetail($id: Int!) {
 query GetDetailMaterials($_eq: Int!) {
   metal_pdo_detail_materials(where: { material_id: { _eq: $_eq } }) {
     material {
-      id
-      shape
-      shape_data
+      ...MaterialFragment
     }
   }
 }
