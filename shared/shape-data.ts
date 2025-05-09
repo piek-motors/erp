@@ -38,7 +38,7 @@ export class CircleShapeData extends MaterialShapeData {
   /** Linear mass in kilograms per meter (kg/m). */
   linearMass!: number
   getIdentifier(): string {
-    return `${CircleShapeData.shapeTitle} ${this.diameter} ${this.alloy}`
+    return `${CircleShapeData.shapeTitle} D${this.diameter} ${this.alloy}`
   }
   getResourceNameProps(): ResourceNameProps {
     return {

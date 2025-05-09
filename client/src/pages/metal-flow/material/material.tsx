@@ -101,7 +101,7 @@ export function MaterialsList() {
 
       <Search
         onChange={e => {
-          state.setFilterKeyword(e.target.value)
+          state.search(e.target.value)
         }}
         value={state.filterKeyword}
       />

@@ -1,5 +1,4 @@
 import { plainToInstance } from 'class-transformer'
-import FlexSearch, { Index } from 'flexsearch'
 import {
   CircleShapeData,
   getShapeDataConstructor,
@@ -72,9 +71,8 @@ export const useMaterialStore = create<IMaterialState>((set, get) => ({
 }))
 
 export interface MaterialSeachStore {
-  index: Index
   filterKeyword?: string
-  setFilterKeyword(keyword: string): void
+  search(keyword: string): void
   materials: Material[]
   searchResult: number[]
   setMaterials(materials: Material[]): void
@@ -82,28 +80,23 @@ export interface MaterialSeachStore {
 
 export const useMaterialListStore = create<MaterialSeachStore>((set, get) => ({
   materials: [],
-  index: new FlexSearch.Index({
-    tokenize: 'full'
-  }),
   searchResult: [],
   setMaterials(materials: Material[]) {
-    const index = get().index
-    index.clear()
-    materials.forEach(each => {
-      index.add(each.id, each.getTextId())
-    })
     set({ materials })
   },
-  async setFilterKeyword(keyword: string) {
-    const index = get().index
-
-    const result = await index.search(keyword)
-
+  async search(keyword: string) {
     const res: number[] = []
-    for (const each in result) {
-      res.push(Number(each))
+    const materuals = get().materials
+    for (const each of materuals) {
+      if (
+        each
+          .getTextId()
+          .toLocaleLowerCase()
+          .includes(keyword.toLocaleLowerCase())
+      ) {
+        res.push(each.id)
+      }
     }
-    console.log(res)
     set({ filterKeyword: keyword, searchResult: res })
   },
   clear() {
