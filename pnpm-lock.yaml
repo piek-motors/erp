@@ -6,6 +6,12 @@ settings:
 
 importers:
 
+  .:
+    dependencies:
+      '@types/node':
+        specifier: ^18.19.83
+        version: 18.19.86
+
   client:
     dependencies:
       '@apollo/client':
