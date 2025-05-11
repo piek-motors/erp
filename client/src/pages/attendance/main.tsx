@@ -1,4 +1,4 @@
-import { Sheet } from '@mui/joy'
+import { Box, Sheet } from '@mui/joy'
 import { useMemo, useState } from 'react'
 import { AppRoutes } from 'src/lib/routes'
 import { Employee, RouteConfig } from 'src/types/global'
@@ -7,7 +7,7 @@ import { PageTitle } from '../../components'
 import { LoadingHint } from '../../shortcuts'
 import { genColumns } from './columns'
 import ReportConfigurator from './control'
-import Table from './table'
+import { Table } from './table'
 import { t } from './text'
 import { prepareEmployeeData, queryVariables } from './utils'
 
@@ -50,15 +50,44 @@ function Attendance() {
   const columns = useMemo(() => genColumns(state), [state])
   const data = state.employess.map(each => prepareEmployeeData(each, state))
 
+  // exlcude columns if no one of the uses is working in that day
+  const dayIntervalCountsMap = new Map<number, number>()
+  for (const each of state.employess) {
+    for (const interval of each.intervals) {
+      if (!interval.ent) continue
+
+      const day = new Date(interval.ent).getDate()
+      const count = dayIntervalCountsMap.get(day) ?? 0
+      dayIntervalCountsMap.set(day, count + 1)
+    }
+  }
+
+  // const filtredColumns = columns.filter(each => )
+
   return (
-    <>
+    <Box p={1} mb={5}>
       <PageTitle title={t.pageTitle} />
-      <ReportConfigurator state={state} setState={setState} />
+      <Box p={2} width={'min-content'} borderRadius={20}>
+        <ReportConfigurator state={state} setState={setState} />
+      </Box>
       <Sheet>
         <LoadingHint show={loading} />
-        <Table columns={columns} data={data} />
+        <Table
+          columns={columns.filter(each => {
+            const day = Number(each.Header)
+            if (Number.isNaN(day)) return true
+
+            if (!Number.isNaN(day)) {
+              if (dayIntervalCountsMap.get(day)) {
+                return true
+              }
+            }
+            return false
+          })}
+          data={data}
+        />
       </Sheet>
-    </>
+    </Box>
   )
 }
 

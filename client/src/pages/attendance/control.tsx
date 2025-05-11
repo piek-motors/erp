@@ -65,7 +65,7 @@ export default function ReportConfigurator({
   }
 
   return (
-    <Stack p={2} gap={1}>
+    <Stack gap={1}>
       <Row gap={1}>
         {Array.from({ length: 9 }, (v: unknown, k: number) => k).map<ReactNode>(
           i => {
