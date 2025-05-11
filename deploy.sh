@@ -1,4 +1,15 @@
 #!/bin/bash
+# Build client locally
+echo "Building client app..."
+cd ./client || exit 1
+npm run build:release || { echo "Client build failed"; exit 1; }
+cd ..
+# Commit build artifacts and push to repo
+echo "Committing and pushing build artifacts..."
+git add client/build || true
+git commit -m "chore: build client before deploy" || true
+git push
+
 # Choose your target host (you can pass 'namegs' or 'piek' as argument)
 TARGET="piek"
 # Remote directory to deploy
@@ -11,7 +22,7 @@ ssh "$TARGET" <<EOF
   cd "$REMOTE_DIR"
   echo "Pulling latest code..."
   git pull
-  pnpm i
+  pnpm i --frozen-lockfile
 
   cd ~/erp/shared
   npm run build

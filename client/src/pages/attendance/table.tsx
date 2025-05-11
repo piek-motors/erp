@@ -29,7 +29,7 @@ export default function Table({ columns, data, className }: ITableProps) {
           {headerGroups.map((headerGroup, i) => (
             <tr
               {...headerGroup.getHeaderGroupProps()}
-              style={{ textAlign: 'left' }}
+              style={{ textAlign: 'left', fontWeight: 'normal' }}
             >
               {headerGroup.headers.map((column, i) => (
                 <th {...column.getHeaderProps()}>{column.render('Header')}</th>
