@@ -1,8 +1,6 @@
 import { UilArrowDown, UilArrowUp } from '@iconscout/react-unicons'
-import { Box, Table as MuiTable, Sheet, Stack, Typography } from '@mui/joy'
-import { useNavigate } from 'react-router-dom'
+import { Table as MuiTable, Sheet, Stack, Typography } from '@mui/joy'
 import { TableOptions, useSortBy, useTable } from 'react-table'
-import { t } from 'src/pages/orders/text'
 
 type Props<T extends object> = TableOptions<T> & {
   onDoubleRowClick?: (row: T) => void
@@ -12,7 +10,7 @@ type Props<T extends object> = TableOptions<T> & {
  * @param props
  */
 export function Table<T extends object>(props: Props<T>) {
-  const { columns, data, onDoubleRowClick } = props
+  const { columns, data } = props
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable(
       {
@@ -21,13 +19,7 @@ export function Table<T extends object>(props: Props<T>) {
       },
       useSortBy
     )
-  const navigate = useNavigate()
-  if (data.length === 0)
-    return (
-      <Box p={1}>
-        <NoData />
-      </Box>
-    )
+  if (data.length === 0) return
   return (
     <Sheet>
       <MuiTable {...getTableProps()} style={{ tableLayout: 'auto' }}>
@@ -83,11 +75,6 @@ export function Table<T extends object>(props: Props<T>) {
   )
 }
 
-export const NoData = () => (
-  <Typography color="neutral" p={1} level="body-xs">
-    {t.NoData}
-  </Typography>
-)
 
 export function SortingState(props: {
   isSorted: boolean

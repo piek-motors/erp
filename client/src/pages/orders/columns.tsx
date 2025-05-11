@@ -1,5 +1,4 @@
-import { UilArrow } from '@iconscout/react-unicons'
-import { IconButton, Stack, Typography } from '@mui/joy'
+import { Stack, Typography } from '@mui/joy'
 import moment from 'moment'
 import { useMemo } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
@@ -7,7 +6,7 @@ import { Column } from 'react-table'
 import { TOrderColumnData } from 'src/types/global'
 import { percentage } from 'src/utils/formatting'
 import { Table } from '../../components/table.impl'
-import { ICON_OPACITY, ICON_WIDTH, MyChip, Pre, Row } from '../../shortcuts'
+import { MyChip, Pre, Row } from '../../shortcuts'
 
 export const columnsList: Column<TOrderColumnData>[] = [
   {
@@ -15,17 +14,6 @@ export const columnsList: Column<TOrderColumnData>[] = [
     id: 'index',
     accessor: (_row, counter) => counter + 1
   },
-  {
-    Header: '(￣▽￣)',
-    accessor: data => (
-      <Link to={`/orders/${data.OrderID}`}>
-        <IconButton size="sm">
-          <UilArrow opacity={ICON_OPACITY} width={ICON_WIDTH} />
-        </IconButton>
-      </Link>
-    )
-  },
-
   {
     Header: 'Наим.',
     id: 'orderItems',
@@ -39,11 +27,13 @@ export const columnsList: Column<TOrderColumnData>[] = [
       else
         return (
           <Row gap={1}>
-            {data.OrderItems.map(item => (
-              <div key={item.OrderItemID}>
-                <Pre>{item.Name.trim()}</Pre>
-              </div>
-            ))}
+            <Stack gap={1}>
+              {data.OrderItems.map(item => (
+                <div key={item.OrderItemID}>
+                  <Pre>{item.Name.trim()}</Pre>
+                </div>
+              ))}
+            </Stack>
 
             <Stack direction="row" gap={1}>
               <MyChip if={data.AwaitingDispatch} text={'Готов'} />
@@ -59,12 +49,13 @@ export const columnsList: Column<TOrderColumnData>[] = [
   },
   {
     Header: 'Кол-во',
-    accessor: data =>
-      data.OrderItems.map(item => (
-        <div key={item.OrderItemID}>
+    accessor: data => (
+      <Stack gap={1}>
+        {data.OrderItems.map(item => (
           <Pre>{item.Quantity}</Pre>
-        </div>
-      ))
+        ))}
+      </Stack>
+    )
   },
   {
     Header: 'План. отгрузка',

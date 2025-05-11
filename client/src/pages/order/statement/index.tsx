@@ -34,7 +34,7 @@ export function AboutOrder({ data }: IAboutOrderProps) {
       data: formatOnlyDate(data.CreatingDate)
     },
     {
-      heading: 'Взят в производство',
+      heading: 'Добавлен в очередность',
       data: formatOnlyDate(data.AcceptanceDate)
     },
     {

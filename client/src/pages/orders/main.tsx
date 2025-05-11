@@ -1,5 +1,4 @@
 /** @jsxImportSource @emotion/react */
-import { css } from '@emotion/react'
 import { Sheet } from '@mui/joy'
 import moment from 'moment'
 import { useMemo } from 'react'
@@ -140,11 +139,7 @@ function Report() {
         <OrdersTable data={data.ordersCurrentMonth} />
       )}
 
-      <div
-        css={css`
-          margin-top: 30px;
-        `}
-      >
+      <div>
         <TableName name={`Отгрузка за ${RuMonths[getPreviousMonth()]}`} />
         {Array.isArray(data.ordersAccountingMonth) && (
           <OrdersTable data={data.ordersAccountingMonth} />

@@ -13,7 +13,7 @@ import { useNavigate } from 'react-router-dom'
 
 import { useUpdateViewedMutation } from 'src/types/graphql-shema'
 import { PageTitle } from '../components'
-import { Row } from '../shortcuts'
+import { ICON_OPACITY, ICON_WIDTH, Row } from '../shortcuts'
 
 interface INotificationProps {
   data: any
@@ -65,10 +65,15 @@ function Mention({ data, readed }: INotificationProps) {
             <Box>
               <Button
                 onClick={toOrderDetailPageHandler}
-                variant="plain"
+                variant="soft"
                 color="neutral"
               >
-                К заказу <UilArrowRight />
+                <Row>
+                  <Typography sx={{ whiteSpace: 'nowrap' }}>
+                    К заказу
+                  </Typography>
+                  <UilArrowRight width={ICON_WIDTH} opacity={ICON_OPACITY} />
+                </Row>
               </Button>
             </Box>
           </Row>

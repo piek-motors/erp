@@ -1,9 +1,10 @@
-import { Sheet, Typography } from '@mui/joy'
+import { Sheet } from '@mui/joy'
 import { useMemo, useState } from 'react'
 import { AppRoutes } from 'src/lib/routes'
 import { Employee, RouteConfig } from 'src/types/global'
 import { useGetEmployeeListQuery } from 'src/types/graphql-shema'
 import { PageTitle } from '../../components'
+import { LoadingHint } from '../../shortcuts'
 import { genColumns } from './columns'
 import ReportConfigurator from './control'
 import Table from './table'
@@ -53,13 +54,9 @@ function Attendance() {
     <>
       <PageTitle title={t.pageTitle} />
       <ReportConfigurator state={state} setState={setState} />
-
       <Sheet>
-        {!loading ? (
-          <Table columns={columns} data={data} />
-        ) : (
-          <Typography m="10px">загрузка..</Typography>
-        )}
+        <LoadingHint show={loading} />
+        <Table columns={columns} data={data} />
       </Sheet>
     </>
   )

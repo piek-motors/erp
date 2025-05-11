@@ -1,3 +1,4 @@
+import { Typography } from '@mui/joy'
 import { CellProps, Column } from 'react-table'
 import { sec2hours } from 'src/lib/date'
 import { PreparedEmployeeDto } from 'src/types/global'
@@ -18,12 +19,10 @@ export const genColumns = (state: State) => {
       Header: 'Итого',
       Cell: (props: CellProps<PreparedEmployeeDto>) => (
         <>
-          <div className="monthlyWithRetention">
-            {sec2hours(props.row.original.monthlyWithRetention)}
-          </div>
-          <div className="monthlyWithRetentionResolved">
+          <div>{sec2hours(props.row.original.monthlyWithRetention)}</div>
+          <Typography fontWeight={700}>
             {sec2hours(props.row.original.monthlyWithRetentionResolved)}
-          </div>
+          </Typography>
         </>
       )
     },

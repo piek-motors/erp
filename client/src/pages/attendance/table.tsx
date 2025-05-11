@@ -1,8 +1,8 @@
 /** @jsxImportSource @emotion/react */
-import { css } from '@emotion/react'
-
+import { Box } from '@mui/joy'
 import { useTable } from 'react-table'
 import { PreparedEmployeeDto } from 'src/types/global'
+
 interface ITableProps {
   readonly columns: any[]
   readonly data: PreparedEmployeeDto[]
@@ -16,64 +16,50 @@ export default function Table({ columns, data, className }: ITableProps) {
       data
     })
 
-  const styles = css`
-    padding: 1em;
-    border-collapse: collapse;
-    width: 100%;
-
-    thead th {
-      position: sticky;
-      top: -3px;
-      z-index: 10;
-      background: var(--L1);
-      padding: 13px 0;
-      font-weight: normal;
-    }
-
-    tbody tr:hover {
-      background: var(--L2);
-    }
-    tbody td {
-      border: var(--border) !important;
-      padding: 2px 5px;
-      min-width: 30px;
-    }
-    .monthlyWithRetention {
-      font-weight: 600;
-    }
-    .monthlyWithRetentionResolved,
-    .resolved {
-      color: var(--accent);
-      font-weight: 700;
-    }
-  `
   return (
-    <table css={styles} {...getTableProps()}>
-      <thead>
-        {headerGroups.map((headerGroup, i) => (
-          <tr {...headerGroup.getHeaderGroupProps()}>
-            {headerGroup.headers.map((column, i) => (
-              <th {...column.getHeaderProps()}>{column.render('Header')}</th>
-            ))}
-          </tr>
-        ))}
-      </thead>
-      {data.length ? (
+    <Box p={1}>
+      <table
+        {...getTableProps()}
+        style={{
+          width: '100%',
+          borderCollapse: 'collapse'
+        }}
+      >
+        <thead>
+          {headerGroups.map((headerGroup, i) => (
+            <tr
+              {...headerGroup.getHeaderGroupProps()}
+              style={{ textAlign: 'left' }}
+            >
+              {headerGroup.headers.map((column, i) => (
+                <th {...column.getHeaderProps()}>{column.render('Header')}</th>
+              ))}
+            </tr>
+          ))}
+        </thead>
         <tbody {...getTableBodyProps()}>
           {rows.map((row, i) => {
             prepareRow(row)
             return (
               <tr {...row.getRowProps()}>
                 {row.cells.map((cell, i) => {
-                  return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+                  return (
+                    <td
+                      {...cell.getCellProps()}
+                      style={{
+                        border: '1px solid #8b8787',
+                        borderRadius: '5px'
+                      }}
+                    >
+                      {cell.render('Cell')}
+                    </td>
+                  )
                 })}
               </tr>
             )
           })}
         </tbody>
-      ) : (
-        <div style={{ padding: '10px' }}>Нет данных</div>
-      )}
-    </table>
+      </table>
+    </Box>
   )
 }

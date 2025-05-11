@@ -93,11 +93,20 @@ function OrderDetail() {
             flexShrink={0}
             gap={4}
             p={p}
-            sx={{ background: bgcolors.lightgrey, height: '100%' }}
+            sx={{
+              background: bgcolors.lightgrey,
+              overflowY: 'scroll',
+              height: {
+                xs: 'auto',
+                md: '100vh'
+              }
+            }}
           >
-            <PageTitle title={text.orderDetails} spaceBetween>
-              <OrderActions order={order} />
-            </PageTitle>
+            <Box className="no-print">
+              <PageTitle title={text.orderDetails} spaceBetween>
+                <OrderActions order={order} />
+              </PageTitle>
+            </Box>
 
             <Stack gap={p / 2}>
               <Row gap={1}>

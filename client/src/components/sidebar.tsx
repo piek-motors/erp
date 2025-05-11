@@ -19,14 +19,14 @@ export const links = [
   },
   { href: AppRoutes.reclamation, icon: UilWrench, name: 'Рекламации' },
   {
-    href: AppRoutes.attendance,
-    icon: UilConstructor,
-    name: 'Рабочее время'
-  },
-  {
     href: MetalFlowSys.root,
     icon: UilCalculatorAlt,
     name: 'Материаловедение'
+  },
+  {
+    href: AppRoutes.attendance,
+    icon: UilConstructor,
+    name: 'Рабочее время'
   },
   {
     href: AppRoutes.mentions,
