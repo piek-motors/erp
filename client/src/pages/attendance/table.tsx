@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { Box } from '@mui/joy'
+import { Table as MuiTable, Sheet } from '@mui/joy'
 import { useTable } from 'react-table'
 import { PreparedEmployeeDto } from 'src/types/global'
 
@@ -17,10 +17,12 @@ export default function Table({ columns, data, className }: ITableProps) {
     })
 
   return (
-    <Box p={1}>
-      <table
+    <Sheet sx={{ padding: 2 }}>
+      <MuiTable
         {...getTableProps()}
+        stickyHeader
         style={{
+          tableLayout: 'auto',
           width: '100%',
           borderCollapse: 'collapse'
         }}
@@ -29,7 +31,7 @@ export default function Table({ columns, data, className }: ITableProps) {
           {headerGroups.map((headerGroup, i) => (
             <tr
               {...headerGroup.getHeaderGroupProps()}
-              style={{ textAlign: 'left', fontWeight: 'normal' }}
+              style={{ textAlign: 'left' }}
             >
               {headerGroup.headers.map((column, i) => (
                 <th {...column.getHeaderProps()}>{column.render('Header')}</th>
@@ -48,7 +50,8 @@ export default function Table({ columns, data, className }: ITableProps) {
                       {...cell.getCellProps()}
                       style={{
                         border: '1px solid #8b8787',
-                        borderRadius: '5px'
+                        borderRadius: '5px',
+                        padding: '0px 4px'
                       }}
                     >
                       {cell.render('Cell')}
@@ -59,7 +62,7 @@ export default function Table({ columns, data, className }: ITableProps) {
             )
           })}
         </tbody>
-      </table>
-    </Box>
+      </MuiTable>
+    </Sheet>
   )
 }
