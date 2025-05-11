@@ -97,8 +97,6 @@
     "skipLibCheck": true /* Skip type checking all .d.ts files. */
   },
   "exclude": [
-    "generated/schema-typedefs.ts",
-    "./generated/**/*",
     "./dist/**/*",
     "node_modules"
   ],

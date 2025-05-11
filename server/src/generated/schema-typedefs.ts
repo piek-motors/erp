@@ -1,5 +1,6 @@
+// @
 import type { DocumentNode } from 'graphql'
-import gql from 'graphql-tag'
+import { gql } from 'graphql-tag'
 export type Maybe<T> = T | null
 export type InputMaybe<T> = Maybe<T>
 export type Exact<T extends { [key: string]: unknown }> = {
@@ -18,7 +19,6 @@ export type Scalars = {
   Boolean: boolean
   Int: number
   Float: number
-  bigint: any
   date: any
   jsonb: any
   numeric: any
@@ -919,19 +919,6 @@ export type Attendance_Users_Var_Samp_Fields = {
 export type Attendance_Users_Variance_Fields = {
   __typename?: 'attendance_users_variance_fields'
   id?: Maybe<Scalars['Float']>
-}
-
-/** Boolean expression to compare columns of type "bigint". All fields are combined with logical 'AND'. */
-export type Bigint_Comparison_Exp = {
-  _eq?: InputMaybe<Scalars['bigint']>
-  _gt?: InputMaybe<Scalars['bigint']>
-  _gte?: InputMaybe<Scalars['bigint']>
-  _in?: InputMaybe<Array<Scalars['bigint']>>
-  _is_null?: InputMaybe<Scalars['Boolean']>
-  _lt?: InputMaybe<Scalars['bigint']>
-  _lte?: InputMaybe<Scalars['bigint']>
-  _neq?: InputMaybe<Scalars['bigint']>
-  _nin?: InputMaybe<Array<Scalars['bigint']>>
 }
 
 /** ordering argument of a cursor */
@@ -4936,6 +4923,335 @@ export type Jsonb_Comparison_Exp = {
   _nin?: InputMaybe<Array<Scalars['jsonb']>>
 }
 
+/** columns and relationships of "kysely_migration" */
+export type Kysely_Migration = {
+  __typename?: 'kysely_migration'
+  name: Scalars['String']
+  timestamp: Scalars['String']
+}
+
+/** aggregated selection of "kysely_migration" */
+export type Kysely_Migration_Aggregate = {
+  __typename?: 'kysely_migration_aggregate'
+  aggregate?: Maybe<Kysely_Migration_Aggregate_Fields>
+  nodes: Array<Kysely_Migration>
+}
+
+/** aggregate fields of "kysely_migration" */
+export type Kysely_Migration_Aggregate_Fields = {
+  __typename?: 'kysely_migration_aggregate_fields'
+  count: Scalars['Int']
+  max?: Maybe<Kysely_Migration_Max_Fields>
+  min?: Maybe<Kysely_Migration_Min_Fields>
+}
+
+/** aggregate fields of "kysely_migration" */
+export type Kysely_Migration_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Kysely_Migration_Select_Column>>
+  distinct?: InputMaybe<Scalars['Boolean']>
+}
+
+/** Boolean expression to filter rows from the table "kysely_migration". All fields are combined with a logical 'AND'. */
+export type Kysely_Migration_Bool_Exp = {
+  _and?: InputMaybe<Array<Kysely_Migration_Bool_Exp>>
+  _not?: InputMaybe<Kysely_Migration_Bool_Exp>
+  _or?: InputMaybe<Array<Kysely_Migration_Bool_Exp>>
+  name?: InputMaybe<String_Comparison_Exp>
+  timestamp?: InputMaybe<String_Comparison_Exp>
+}
+
+/** unique or primary key constraints on table "kysely_migration" */
+export enum Kysely_Migration_Constraint {
+  /** unique or primary key constraint on columns "name" */
+  KyselyMigrationPkey = 'kysely_migration_pkey'
+}
+
+/** input type for inserting data into table "kysely_migration" */
+export type Kysely_Migration_Insert_Input = {
+  name?: InputMaybe<Scalars['String']>
+  timestamp?: InputMaybe<Scalars['String']>
+}
+
+/** columns and relationships of "kysely_migration_lock" */
+export type Kysely_Migration_Lock = {
+  __typename?: 'kysely_migration_lock'
+  id: Scalars['String']
+  is_locked: Scalars['Int']
+}
+
+/** aggregated selection of "kysely_migration_lock" */
+export type Kysely_Migration_Lock_Aggregate = {
+  __typename?: 'kysely_migration_lock_aggregate'
+  aggregate?: Maybe<Kysely_Migration_Lock_Aggregate_Fields>
+  nodes: Array<Kysely_Migration_Lock>
+}
+
+/** aggregate fields of "kysely_migration_lock" */
+export type Kysely_Migration_Lock_Aggregate_Fields = {
+  __typename?: 'kysely_migration_lock_aggregate_fields'
+  avg?: Maybe<Kysely_Migration_Lock_Avg_Fields>
+  count: Scalars['Int']
+  max?: Maybe<Kysely_Migration_Lock_Max_Fields>
+  min?: Maybe<Kysely_Migration_Lock_Min_Fields>
+  stddev?: Maybe<Kysely_Migration_Lock_Stddev_Fields>
+  stddev_pop?: Maybe<Kysely_Migration_Lock_Stddev_Pop_Fields>
+  stddev_samp?: Maybe<Kysely_Migration_Lock_Stddev_Samp_Fields>
+  sum?: Maybe<Kysely_Migration_Lock_Sum_Fields>
+  var_pop?: Maybe<Kysely_Migration_Lock_Var_Pop_Fields>
+  var_samp?: Maybe<Kysely_Migration_Lock_Var_Samp_Fields>
+  variance?: Maybe<Kysely_Migration_Lock_Variance_Fields>
+}
+
+/** aggregate fields of "kysely_migration_lock" */
+export type Kysely_Migration_Lock_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Kysely_Migration_Lock_Select_Column>>
+  distinct?: InputMaybe<Scalars['Boolean']>
+}
+
+/** aggregate avg on columns */
+export type Kysely_Migration_Lock_Avg_Fields = {
+  __typename?: 'kysely_migration_lock_avg_fields'
+  is_locked?: Maybe<Scalars['Float']>
+}
+
+/** Boolean expression to filter rows from the table "kysely_migration_lock". All fields are combined with a logical 'AND'. */
+export type Kysely_Migration_Lock_Bool_Exp = {
+  _and?: InputMaybe<Array<Kysely_Migration_Lock_Bool_Exp>>
+  _not?: InputMaybe<Kysely_Migration_Lock_Bool_Exp>
+  _or?: InputMaybe<Array<Kysely_Migration_Lock_Bool_Exp>>
+  id?: InputMaybe<String_Comparison_Exp>
+  is_locked?: InputMaybe<Int_Comparison_Exp>
+}
+
+/** unique or primary key constraints on table "kysely_migration_lock" */
+export enum Kysely_Migration_Lock_Constraint {
+  /** unique or primary key constraint on columns "id" */
+  KyselyMigrationLockPkey = 'kysely_migration_lock_pkey'
+}
+
+/** input type for incrementing numeric columns in table "kysely_migration_lock" */
+export type Kysely_Migration_Lock_Inc_Input = {
+  is_locked?: InputMaybe<Scalars['Int']>
+}
+
+/** input type for inserting data into table "kysely_migration_lock" */
+export type Kysely_Migration_Lock_Insert_Input = {
+  id?: InputMaybe<Scalars['String']>
+  is_locked?: InputMaybe<Scalars['Int']>
+}
+
+/** aggregate max on columns */
+export type Kysely_Migration_Lock_Max_Fields = {
+  __typename?: 'kysely_migration_lock_max_fields'
+  id?: Maybe<Scalars['String']>
+  is_locked?: Maybe<Scalars['Int']>
+}
+
+/** aggregate min on columns */
+export type Kysely_Migration_Lock_Min_Fields = {
+  __typename?: 'kysely_migration_lock_min_fields'
+  id?: Maybe<Scalars['String']>
+  is_locked?: Maybe<Scalars['Int']>
+}
+
+/** response of any mutation on the table "kysely_migration_lock" */
+export type Kysely_Migration_Lock_Mutation_Response = {
+  __typename?: 'kysely_migration_lock_mutation_response'
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int']
+  /** data from the rows affected by the mutation */
+  returning: Array<Kysely_Migration_Lock>
+}
+
+/** on_conflict condition type for table "kysely_migration_lock" */
+export type Kysely_Migration_Lock_On_Conflict = {
+  constraint: Kysely_Migration_Lock_Constraint
+  update_columns?: Array<Kysely_Migration_Lock_Update_Column>
+  where?: InputMaybe<Kysely_Migration_Lock_Bool_Exp>
+}
+
+/** Ordering options when selecting data from "kysely_migration_lock". */
+export type Kysely_Migration_Lock_Order_By = {
+  id?: InputMaybe<Order_By>
+  is_locked?: InputMaybe<Order_By>
+}
+
+/** primary key columns input for table: kysely_migration_lock */
+export type Kysely_Migration_Lock_Pk_Columns_Input = {
+  id: Scalars['String']
+}
+
+/** select columns of table "kysely_migration_lock" */
+export enum Kysely_Migration_Lock_Select_Column {
+  /** column name */
+  Id = 'id',
+  /** column name */
+  IsLocked = 'is_locked'
+}
+
+/** input type for updating data in table "kysely_migration_lock" */
+export type Kysely_Migration_Lock_Set_Input = {
+  id?: InputMaybe<Scalars['String']>
+  is_locked?: InputMaybe<Scalars['Int']>
+}
+
+/** aggregate stddev on columns */
+export type Kysely_Migration_Lock_Stddev_Fields = {
+  __typename?: 'kysely_migration_lock_stddev_fields'
+  is_locked?: Maybe<Scalars['Float']>
+}
+
+/** aggregate stddev_pop on columns */
+export type Kysely_Migration_Lock_Stddev_Pop_Fields = {
+  __typename?: 'kysely_migration_lock_stddev_pop_fields'
+  is_locked?: Maybe<Scalars['Float']>
+}
+
+/** aggregate stddev_samp on columns */
+export type Kysely_Migration_Lock_Stddev_Samp_Fields = {
+  __typename?: 'kysely_migration_lock_stddev_samp_fields'
+  is_locked?: Maybe<Scalars['Float']>
+}
+
+/** Streaming cursor of the table "kysely_migration_lock" */
+export type Kysely_Migration_Lock_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Kysely_Migration_Lock_Stream_Cursor_Value_Input
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>
+}
+
+/** Initial value of the column from where the streaming should start */
+export type Kysely_Migration_Lock_Stream_Cursor_Value_Input = {
+  id?: InputMaybe<Scalars['String']>
+  is_locked?: InputMaybe<Scalars['Int']>
+}
+
+/** aggregate sum on columns */
+export type Kysely_Migration_Lock_Sum_Fields = {
+  __typename?: 'kysely_migration_lock_sum_fields'
+  is_locked?: Maybe<Scalars['Int']>
+}
+
+/** update columns of table "kysely_migration_lock" */
+export enum Kysely_Migration_Lock_Update_Column {
+  /** column name */
+  Id = 'id',
+  /** column name */
+  IsLocked = 'is_locked'
+}
+
+export type Kysely_Migration_Lock_Updates = {
+  /** increments the numeric columns with given value of the filtered values */
+  _inc?: InputMaybe<Kysely_Migration_Lock_Inc_Input>
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Kysely_Migration_Lock_Set_Input>
+  /** filter the rows which have to be updated */
+  where: Kysely_Migration_Lock_Bool_Exp
+}
+
+/** aggregate var_pop on columns */
+export type Kysely_Migration_Lock_Var_Pop_Fields = {
+  __typename?: 'kysely_migration_lock_var_pop_fields'
+  is_locked?: Maybe<Scalars['Float']>
+}
+
+/** aggregate var_samp on columns */
+export type Kysely_Migration_Lock_Var_Samp_Fields = {
+  __typename?: 'kysely_migration_lock_var_samp_fields'
+  is_locked?: Maybe<Scalars['Float']>
+}
+
+/** aggregate variance on columns */
+export type Kysely_Migration_Lock_Variance_Fields = {
+  __typename?: 'kysely_migration_lock_variance_fields'
+  is_locked?: Maybe<Scalars['Float']>
+}
+
+/** aggregate max on columns */
+export type Kysely_Migration_Max_Fields = {
+  __typename?: 'kysely_migration_max_fields'
+  name?: Maybe<Scalars['String']>
+  timestamp?: Maybe<Scalars['String']>
+}
+
+/** aggregate min on columns */
+export type Kysely_Migration_Min_Fields = {
+  __typename?: 'kysely_migration_min_fields'
+  name?: Maybe<Scalars['String']>
+  timestamp?: Maybe<Scalars['String']>
+}
+
+/** response of any mutation on the table "kysely_migration" */
+export type Kysely_Migration_Mutation_Response = {
+  __typename?: 'kysely_migration_mutation_response'
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int']
+  /** data from the rows affected by the mutation */
+  returning: Array<Kysely_Migration>
+}
+
+/** on_conflict condition type for table "kysely_migration" */
+export type Kysely_Migration_On_Conflict = {
+  constraint: Kysely_Migration_Constraint
+  update_columns?: Array<Kysely_Migration_Update_Column>
+  where?: InputMaybe<Kysely_Migration_Bool_Exp>
+}
+
+/** Ordering options when selecting data from "kysely_migration". */
+export type Kysely_Migration_Order_By = {
+  name?: InputMaybe<Order_By>
+  timestamp?: InputMaybe<Order_By>
+}
+
+/** primary key columns input for table: kysely_migration */
+export type Kysely_Migration_Pk_Columns_Input = {
+  name: Scalars['String']
+}
+
+/** select columns of table "kysely_migration" */
+export enum Kysely_Migration_Select_Column {
+  /** column name */
+  Name = 'name',
+  /** column name */
+  Timestamp = 'timestamp'
+}
+
+/** input type for updating data in table "kysely_migration" */
+export type Kysely_Migration_Set_Input = {
+  name?: InputMaybe<Scalars['String']>
+  timestamp?: InputMaybe<Scalars['String']>
+}
+
+/** Streaming cursor of the table "kysely_migration" */
+export type Kysely_Migration_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Kysely_Migration_Stream_Cursor_Value_Input
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>
+}
+
+/** Initial value of the column from where the streaming should start */
+export type Kysely_Migration_Stream_Cursor_Value_Input = {
+  name?: InputMaybe<Scalars['String']>
+  timestamp?: InputMaybe<Scalars['String']>
+}
+
+/** update columns of table "kysely_migration" */
+export enum Kysely_Migration_Update_Column {
+  /** column name */
+  Name = 'name',
+  /** column name */
+  Timestamp = 'timestamp'
+}
+
+export type Kysely_Migration_Updates = {
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Kysely_Migration_Set_Input>
+  /** filter the rows which have to be updated */
+  where: Kysely_Migration_Bool_Exp
+}
+
 /** columns and relationships of "metal_pdo.detail_materials" */
 export type Metal_Pdo_Detail_Materials = {
   __typename?: 'metal_pdo_detail_materials'
@@ -5353,6 +5669,8 @@ export type Metal_Pdo_Details_Bool_Exp = {
 
 /** unique or primary key constraints on table "metal_pdo.details" */
 export enum Metal_Pdo_Details_Constraint {
+  /** unique or primary key constraint on columns "name" */
+  DetailNameUniqueIdx = 'detail_name_unique_idx',
   /** unique or primary key constraint on columns "id" */
   DetailsPkey = 'details_pkey'
 }
@@ -5514,13 +5832,13 @@ export type Metal_Pdo_Materials = {
   detail_materials_aggregate: Metal_Pdo_Detail_Materials_Aggregate
   id: Scalars['Int']
   name?: Maybe<Scalars['String']>
-  shape: Scalars['bigint']
+  shape: Scalars['Int']
   shape_data?: Maybe<Scalars['jsonb']>
   /** An array relationship */
   supplies: Array<Metal_Pdo_Supplies>
   /** An aggregate relationship */
   supplies_aggregate: Metal_Pdo_Supplies_Aggregate
-  unit: Scalars['bigint']
+  unit: Scalars['Int']
   /** An array relationship */
   writeoffs: Array<Metal_Pdo_Writeoffs>
   /** An aggregate relationship */
@@ -5637,11 +5955,11 @@ export type Metal_Pdo_Materials_Bool_Exp = {
   detail_materials_aggregate?: InputMaybe<Metal_Pdo_Detail_Materials_Aggregate_Bool_Exp>
   id?: InputMaybe<Int_Comparison_Exp>
   name?: InputMaybe<String_Comparison_Exp>
-  shape?: InputMaybe<Bigint_Comparison_Exp>
+  shape?: InputMaybe<Int_Comparison_Exp>
   shape_data?: InputMaybe<Jsonb_Comparison_Exp>
   supplies?: InputMaybe<Metal_Pdo_Supplies_Bool_Exp>
   supplies_aggregate?: InputMaybe<Metal_Pdo_Supplies_Aggregate_Bool_Exp>
-  unit?: InputMaybe<Bigint_Comparison_Exp>
+  unit?: InputMaybe<Int_Comparison_Exp>
   writeoffs?: InputMaybe<Metal_Pdo_Writeoffs_Bool_Exp>
   writeoffs_aggregate?: InputMaybe<Metal_Pdo_Writeoffs_Aggregate_Bool_Exp>
 }
@@ -5670,8 +5988,8 @@ export type Metal_Pdo_Materials_Delete_Key_Input = {
 /** input type for incrementing numeric columns in table "metal_pdo.materials" */
 export type Metal_Pdo_Materials_Inc_Input = {
   id?: InputMaybe<Scalars['Int']>
-  shape?: InputMaybe<Scalars['bigint']>
-  unit?: InputMaybe<Scalars['bigint']>
+  shape?: InputMaybe<Scalars['Int']>
+  unit?: InputMaybe<Scalars['Int']>
 }
 
 /** input type for inserting data into table "metal_pdo.materials" */
@@ -5679,10 +5997,10 @@ export type Metal_Pdo_Materials_Insert_Input = {
   detail_materials?: InputMaybe<Metal_Pdo_Detail_Materials_Arr_Rel_Insert_Input>
   id?: InputMaybe<Scalars['Int']>
   name?: InputMaybe<Scalars['String']>
-  shape?: InputMaybe<Scalars['bigint']>
+  shape?: InputMaybe<Scalars['Int']>
   shape_data?: InputMaybe<Scalars['jsonb']>
   supplies?: InputMaybe<Metal_Pdo_Supplies_Arr_Rel_Insert_Input>
-  unit?: InputMaybe<Scalars['bigint']>
+  unit?: InputMaybe<Scalars['Int']>
   writeoffs?: InputMaybe<Metal_Pdo_Writeoffs_Arr_Rel_Insert_Input>
 }
 
@@ -5691,8 +6009,8 @@ export type Metal_Pdo_Materials_Max_Fields = {
   __typename?: 'metal_pdo_materials_max_fields'
   id?: Maybe<Scalars['Int']>
   name?: Maybe<Scalars['String']>
-  shape?: Maybe<Scalars['bigint']>
-  unit?: Maybe<Scalars['bigint']>
+  shape?: Maybe<Scalars['Int']>
+  unit?: Maybe<Scalars['Int']>
 }
 
 /** aggregate min on columns */
@@ -5700,8 +6018,8 @@ export type Metal_Pdo_Materials_Min_Fields = {
   __typename?: 'metal_pdo_materials_min_fields'
   id?: Maybe<Scalars['Int']>
   name?: Maybe<Scalars['String']>
-  shape?: Maybe<Scalars['bigint']>
-  unit?: Maybe<Scalars['bigint']>
+  shape?: Maybe<Scalars['Int']>
+  unit?: Maybe<Scalars['Int']>
 }
 
 /** response of any mutation on the table "metal_pdo.materials" */
@@ -5767,9 +6085,9 @@ export enum Metal_Pdo_Materials_Select_Column {
 export type Metal_Pdo_Materials_Set_Input = {
   id?: InputMaybe<Scalars['Int']>
   name?: InputMaybe<Scalars['String']>
-  shape?: InputMaybe<Scalars['bigint']>
+  shape?: InputMaybe<Scalars['Int']>
   shape_data?: InputMaybe<Scalars['jsonb']>
-  unit?: InputMaybe<Scalars['bigint']>
+  unit?: InputMaybe<Scalars['Int']>
 }
 
 /** aggregate stddev on columns */
@@ -5808,17 +6126,17 @@ export type Metal_Pdo_Materials_Stream_Cursor_Input = {
 export type Metal_Pdo_Materials_Stream_Cursor_Value_Input = {
   id?: InputMaybe<Scalars['Int']>
   name?: InputMaybe<Scalars['String']>
-  shape?: InputMaybe<Scalars['bigint']>
+  shape?: InputMaybe<Scalars['Int']>
   shape_data?: InputMaybe<Scalars['jsonb']>
-  unit?: InputMaybe<Scalars['bigint']>
+  unit?: InputMaybe<Scalars['Int']>
 }
 
 /** aggregate sum on columns */
 export type Metal_Pdo_Materials_Sum_Fields = {
   __typename?: 'metal_pdo_materials_sum_fields'
   id?: Maybe<Scalars['Int']>
-  shape?: Maybe<Scalars['bigint']>
-  unit?: Maybe<Scalars['bigint']>
+  shape?: Maybe<Scalars['Int']>
+  unit?: Maybe<Scalars['Int']>
 }
 
 /** update columns of table "metal_pdo.materials" */
@@ -6755,6 +7073,14 @@ export type Mutation_Root = {
   delete_erp_Users?: Maybe<Erp_Users_Mutation_Response>
   /** delete single row from the table: "erp.Users" */
   delete_erp_Users_by_pk?: Maybe<Erp_Users>
+  /** delete data from the table: "kysely_migration" */
+  delete_kysely_migration?: Maybe<Kysely_Migration_Mutation_Response>
+  /** delete single row from the table: "kysely_migration" */
+  delete_kysely_migration_by_pk?: Maybe<Kysely_Migration>
+  /** delete data from the table: "kysely_migration_lock" */
+  delete_kysely_migration_lock?: Maybe<Kysely_Migration_Lock_Mutation_Response>
+  /** delete single row from the table: "kysely_migration_lock" */
+  delete_kysely_migration_lock_by_pk?: Maybe<Kysely_Migration_Lock>
   /** delete data from the table: "metal_pdo.detail_materials" */
   delete_metal_pdo_detail_materials?: Maybe<Metal_Pdo_Detail_Materials_Mutation_Response>
   /** delete single row from the table: "metal_pdo.detail_materials" */
@@ -6827,6 +7153,14 @@ export type Mutation_Root = {
   insert_erp_Users?: Maybe<Erp_Users_Mutation_Response>
   /** insert a single row into the table: "erp.Users" */
   insert_erp_Users_one?: Maybe<Erp_Users>
+  /** insert data into the table: "kysely_migration" */
+  insert_kysely_migration?: Maybe<Kysely_Migration_Mutation_Response>
+  /** insert data into the table: "kysely_migration_lock" */
+  insert_kysely_migration_lock?: Maybe<Kysely_Migration_Lock_Mutation_Response>
+  /** insert a single row into the table: "kysely_migration_lock" */
+  insert_kysely_migration_lock_one?: Maybe<Kysely_Migration_Lock>
+  /** insert a single row into the table: "kysely_migration" */
+  insert_kysely_migration_one?: Maybe<Kysely_Migration>
   /** insert data into the table: "metal_pdo.detail_materials" */
   insert_metal_pdo_detail_materials?: Maybe<Metal_Pdo_Detail_Materials_Mutation_Response>
   /** insert a single row into the table: "metal_pdo.detail_materials" */
@@ -6941,6 +7275,22 @@ export type Mutation_Root = {
   update_erp_Users_by_pk?: Maybe<Erp_Users>
   /** update multiples rows of table: "erp.Users" */
   update_erp_Users_many?: Maybe<Array<Maybe<Erp_Users_Mutation_Response>>>
+  /** update data of the table: "kysely_migration" */
+  update_kysely_migration?: Maybe<Kysely_Migration_Mutation_Response>
+  /** update single row of the table: "kysely_migration" */
+  update_kysely_migration_by_pk?: Maybe<Kysely_Migration>
+  /** update data of the table: "kysely_migration_lock" */
+  update_kysely_migration_lock?: Maybe<Kysely_Migration_Lock_Mutation_Response>
+  /** update single row of the table: "kysely_migration_lock" */
+  update_kysely_migration_lock_by_pk?: Maybe<Kysely_Migration_Lock>
+  /** update multiples rows of table: "kysely_migration_lock" */
+  update_kysely_migration_lock_many?: Maybe<
+    Array<Maybe<Kysely_Migration_Lock_Mutation_Response>>
+  >
+  /** update multiples rows of table: "kysely_migration" */
+  update_kysely_migration_many?: Maybe<
+    Array<Maybe<Kysely_Migration_Mutation_Response>>
+  >
   /** update data of the table: "metal_pdo.detail_materials" */
   update_metal_pdo_detail_materials?: Maybe<Metal_Pdo_Detail_Materials_Mutation_Response>
   /** update single row of the table: "metal_pdo.detail_materials" */
@@ -7112,6 +7462,26 @@ export type Mutation_RootDelete_Erp_UsersArgs = {
 /** mutation root */
 export type Mutation_RootDelete_Erp_Users_By_PkArgs = {
   UserID: Scalars['Int']
+}
+
+/** mutation root */
+export type Mutation_RootDelete_Kysely_MigrationArgs = {
+  where: Kysely_Migration_Bool_Exp
+}
+
+/** mutation root */
+export type Mutation_RootDelete_Kysely_Migration_By_PkArgs = {
+  name: Scalars['String']
+}
+
+/** mutation root */
+export type Mutation_RootDelete_Kysely_Migration_LockArgs = {
+  where: Kysely_Migration_Lock_Bool_Exp
+}
+
+/** mutation root */
+export type Mutation_RootDelete_Kysely_Migration_Lock_By_PkArgs = {
+  id: Scalars['String']
 }
 
 /** mutation root */
@@ -7319,6 +7689,30 @@ export type Mutation_RootInsert_Erp_UsersArgs = {
 export type Mutation_RootInsert_Erp_Users_OneArgs = {
   object: Erp_Users_Insert_Input
   on_conflict?: InputMaybe<Erp_Users_On_Conflict>
+}
+
+/** mutation root */
+export type Mutation_RootInsert_Kysely_MigrationArgs = {
+  objects: Array<Kysely_Migration_Insert_Input>
+  on_conflict?: InputMaybe<Kysely_Migration_On_Conflict>
+}
+
+/** mutation root */
+export type Mutation_RootInsert_Kysely_Migration_LockArgs = {
+  objects: Array<Kysely_Migration_Lock_Insert_Input>
+  on_conflict?: InputMaybe<Kysely_Migration_Lock_On_Conflict>
+}
+
+/** mutation root */
+export type Mutation_RootInsert_Kysely_Migration_Lock_OneArgs = {
+  object: Kysely_Migration_Lock_Insert_Input
+  on_conflict?: InputMaybe<Kysely_Migration_Lock_On_Conflict>
+}
+
+/** mutation root */
+export type Mutation_RootInsert_Kysely_Migration_OneArgs = {
+  object: Kysely_Migration_Insert_Input
+  on_conflict?: InputMaybe<Kysely_Migration_On_Conflict>
 }
 
 /** mutation root */
@@ -7629,6 +8023,42 @@ export type Mutation_RootUpdate_Erp_Users_ManyArgs = {
 }
 
 /** mutation root */
+export type Mutation_RootUpdate_Kysely_MigrationArgs = {
+  _set?: InputMaybe<Kysely_Migration_Set_Input>
+  where: Kysely_Migration_Bool_Exp
+}
+
+/** mutation root */
+export type Mutation_RootUpdate_Kysely_Migration_By_PkArgs = {
+  _set?: InputMaybe<Kysely_Migration_Set_Input>
+  pk_columns: Kysely_Migration_Pk_Columns_Input
+}
+
+/** mutation root */
+export type Mutation_RootUpdate_Kysely_Migration_LockArgs = {
+  _inc?: InputMaybe<Kysely_Migration_Lock_Inc_Input>
+  _set?: InputMaybe<Kysely_Migration_Lock_Set_Input>
+  where: Kysely_Migration_Lock_Bool_Exp
+}
+
+/** mutation root */
+export type Mutation_RootUpdate_Kysely_Migration_Lock_By_PkArgs = {
+  _inc?: InputMaybe<Kysely_Migration_Lock_Inc_Input>
+  _set?: InputMaybe<Kysely_Migration_Lock_Set_Input>
+  pk_columns: Kysely_Migration_Lock_Pk_Columns_Input
+}
+
+/** mutation root */
+export type Mutation_RootUpdate_Kysely_Migration_Lock_ManyArgs = {
+  updates: Array<Kysely_Migration_Lock_Updates>
+}
+
+/** mutation root */
+export type Mutation_RootUpdate_Kysely_Migration_ManyArgs = {
+  updates: Array<Kysely_Migration_Updates>
+}
+
+/** mutation root */
 export type Mutation_RootUpdate_Metal_Pdo_Detail_MaterialsArgs = {
   _inc?: InputMaybe<Metal_Pdo_Detail_Materials_Inc_Input>
   _set?: InputMaybe<Metal_Pdo_Detail_Materials_Set_Input>
@@ -7852,6 +8282,18 @@ export type Query_Root = {
   erp_Users_aggregate: Erp_Users_Aggregate
   /** fetch data from the table: "erp.Users" using primary key columns */
   erp_Users_by_pk?: Maybe<Erp_Users>
+  /** fetch data from the table: "kysely_migration" */
+  kysely_migration: Array<Kysely_Migration>
+  /** fetch aggregated fields from the table: "kysely_migration" */
+  kysely_migration_aggregate: Kysely_Migration_Aggregate
+  /** fetch data from the table: "kysely_migration" using primary key columns */
+  kysely_migration_by_pk?: Maybe<Kysely_Migration>
+  /** fetch data from the table: "kysely_migration_lock" */
+  kysely_migration_lock: Array<Kysely_Migration_Lock>
+  /** fetch aggregated fields from the table: "kysely_migration_lock" */
+  kysely_migration_lock_aggregate: Kysely_Migration_Lock_Aggregate
+  /** fetch data from the table: "kysely_migration_lock" using primary key columns */
+  kysely_migration_lock_by_pk?: Maybe<Kysely_Migration_Lock>
   /** fetch data from the table: "metal_pdo.detail_materials" */
   metal_pdo_detail_materials: Array<Metal_Pdo_Detail_Materials>
   /** fetch aggregated fields from the table: "metal_pdo.detail_materials" */
@@ -8145,6 +8587,46 @@ export type Query_RootErp_Users_By_PkArgs = {
   UserID: Scalars['Int']
 }
 
+export type Query_RootKysely_MigrationArgs = {
+  distinct_on?: InputMaybe<Array<Kysely_Migration_Select_Column>>
+  limit?: InputMaybe<Scalars['Int']>
+  offset?: InputMaybe<Scalars['Int']>
+  order_by?: InputMaybe<Array<Kysely_Migration_Order_By>>
+  where?: InputMaybe<Kysely_Migration_Bool_Exp>
+}
+
+export type Query_RootKysely_Migration_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Kysely_Migration_Select_Column>>
+  limit?: InputMaybe<Scalars['Int']>
+  offset?: InputMaybe<Scalars['Int']>
+  order_by?: InputMaybe<Array<Kysely_Migration_Order_By>>
+  where?: InputMaybe<Kysely_Migration_Bool_Exp>
+}
+
+export type Query_RootKysely_Migration_By_PkArgs = {
+  name: Scalars['String']
+}
+
+export type Query_RootKysely_Migration_LockArgs = {
+  distinct_on?: InputMaybe<Array<Kysely_Migration_Lock_Select_Column>>
+  limit?: InputMaybe<Scalars['Int']>
+  offset?: InputMaybe<Scalars['Int']>
+  order_by?: InputMaybe<Array<Kysely_Migration_Lock_Order_By>>
+  where?: InputMaybe<Kysely_Migration_Lock_Bool_Exp>
+}
+
+export type Query_RootKysely_Migration_Lock_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Kysely_Migration_Lock_Select_Column>>
+  limit?: InputMaybe<Scalars['Int']>
+  offset?: InputMaybe<Scalars['Int']>
+  order_by?: InputMaybe<Array<Kysely_Migration_Lock_Order_By>>
+  where?: InputMaybe<Kysely_Migration_Lock_Bool_Exp>
+}
+
+export type Query_RootKysely_Migration_Lock_By_PkArgs = {
+  id: Scalars['String']
+}
+
 export type Query_RootMetal_Pdo_Detail_MaterialsArgs = {
   distinct_on?: InputMaybe<Array<Metal_Pdo_Detail_Materials_Select_Column>>
   limit?: InputMaybe<Scalars['Int']>
@@ -8352,6 +8834,22 @@ export type Subscription_Root = {
   erp_Users_by_pk?: Maybe<Erp_Users>
   /** fetch data from the table in a streaming manner: "erp.Users" */
   erp_Users_stream: Array<Erp_Users>
+  /** fetch data from the table: "kysely_migration" */
+  kysely_migration: Array<Kysely_Migration>
+  /** fetch aggregated fields from the table: "kysely_migration" */
+  kysely_migration_aggregate: Kysely_Migration_Aggregate
+  /** fetch data from the table: "kysely_migration" using primary key columns */
+  kysely_migration_by_pk?: Maybe<Kysely_Migration>
+  /** fetch data from the table: "kysely_migration_lock" */
+  kysely_migration_lock: Array<Kysely_Migration_Lock>
+  /** fetch aggregated fields from the table: "kysely_migration_lock" */
+  kysely_migration_lock_aggregate: Kysely_Migration_Lock_Aggregate
+  /** fetch data from the table: "kysely_migration_lock" using primary key columns */
+  kysely_migration_lock_by_pk?: Maybe<Kysely_Migration_Lock>
+  /** fetch data from the table in a streaming manner: "kysely_migration_lock" */
+  kysely_migration_lock_stream: Array<Kysely_Migration_Lock>
+  /** fetch data from the table in a streaming manner: "kysely_migration" */
+  kysely_migration_stream: Array<Kysely_Migration>
   /** fetch data from the table: "metal_pdo.detail_materials" */
   metal_pdo_detail_materials: Array<Metal_Pdo_Detail_Materials>
   /** fetch aggregated fields from the table: "metal_pdo.detail_materials" */
@@ -8731,6 +9229,58 @@ export type Subscription_RootErp_Users_StreamArgs = {
   batch_size: Scalars['Int']
   cursor: Array<InputMaybe<Erp_Users_Stream_Cursor_Input>>
   where?: InputMaybe<Erp_Users_Bool_Exp>
+}
+
+export type Subscription_RootKysely_MigrationArgs = {
+  distinct_on?: InputMaybe<Array<Kysely_Migration_Select_Column>>
+  limit?: InputMaybe<Scalars['Int']>
+  offset?: InputMaybe<Scalars['Int']>
+  order_by?: InputMaybe<Array<Kysely_Migration_Order_By>>
+  where?: InputMaybe<Kysely_Migration_Bool_Exp>
+}
+
+export type Subscription_RootKysely_Migration_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Kysely_Migration_Select_Column>>
+  limit?: InputMaybe<Scalars['Int']>
+  offset?: InputMaybe<Scalars['Int']>
+  order_by?: InputMaybe<Array<Kysely_Migration_Order_By>>
+  where?: InputMaybe<Kysely_Migration_Bool_Exp>
+}
+
+export type Subscription_RootKysely_Migration_By_PkArgs = {
+  name: Scalars['String']
+}
+
+export type Subscription_RootKysely_Migration_LockArgs = {
+  distinct_on?: InputMaybe<Array<Kysely_Migration_Lock_Select_Column>>
+  limit?: InputMaybe<Scalars['Int']>
+  offset?: InputMaybe<Scalars['Int']>
+  order_by?: InputMaybe<Array<Kysely_Migration_Lock_Order_By>>
+  where?: InputMaybe<Kysely_Migration_Lock_Bool_Exp>
+}
+
+export type Subscription_RootKysely_Migration_Lock_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Kysely_Migration_Lock_Select_Column>>
+  limit?: InputMaybe<Scalars['Int']>
+  offset?: InputMaybe<Scalars['Int']>
+  order_by?: InputMaybe<Array<Kysely_Migration_Lock_Order_By>>
+  where?: InputMaybe<Kysely_Migration_Lock_Bool_Exp>
+}
+
+export type Subscription_RootKysely_Migration_Lock_By_PkArgs = {
+  id: Scalars['String']
+}
+
+export type Subscription_RootKysely_Migration_Lock_StreamArgs = {
+  batch_size: Scalars['Int']
+  cursor: Array<InputMaybe<Kysely_Migration_Lock_Stream_Cursor_Input>>
+  where?: InputMaybe<Kysely_Migration_Lock_Bool_Exp>
+}
+
+export type Subscription_RootKysely_Migration_StreamArgs = {
+  batch_size: Scalars['Int']
+  cursor: Array<InputMaybe<Kysely_Migration_Stream_Cursor_Input>>
+  where?: InputMaybe<Kysely_Migration_Bool_Exp>
 }
 
 export type Subscription_RootMetal_Pdo_Detail_MaterialsArgs = {
