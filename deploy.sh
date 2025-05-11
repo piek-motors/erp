@@ -12,7 +12,19 @@ ssh "$TARGET" <<EOF
   echo "Pulling latest code..."
   git pull
   pnpm i
-  npm --prefix server run build
-  echo "Restarting PM2 process..."
-  npx pm2 restart "$PM2_PROCESS_NAME"
+
+  cd ~/erp/shared
+  npm run build
+
+  cd ~/erp/server
+  npm run build
+
+  if npx pm2 describe "$PM2_PROCESS_NAME" > /dev/null; then
+    echo "Process exists. Restarting..."
+    npx pm2 restart "$PM2_PROCESS_NAME"
+  else
+    echo "Process not found. Starting..."
+    npx pm2 start ./dist/src/main.js --name "$PM2_PROCESS_NAME"
+  fi
+
 EOF
