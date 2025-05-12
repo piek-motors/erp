@@ -3,7 +3,7 @@ query GetDetails {
     id
     name
     detail_materials {
-      cost
+      data
       material {
         ...MaterialFragment
       }
@@ -16,7 +16,7 @@ query GetDetailByPk($id: Int!) {
     id
     name
     detail_materials {
-      cost
+      data
       material {
         ...MaterialFragment
       }
@@ -37,16 +37,16 @@ mutation UpdateDetail($_set: metal_pdo_details_set_input!, $id: Int!) {
   }
 }
 
-mutation UpdateDetailMaterialCost(
+mutation UpdateDetailMaterialRelationData(
   $detail_id: Int!
   $material_id: Int!
-  $cost: numeric!
+  $data: jsonb!
 ) {
   update_metal_pdo_detail_materials_by_pk(
     pk_columns: { detail_id: $detail_id, material_id: $material_id }
-    _set: { cost: $cost }
+    _set: { data: $data }
   ) {
-    cost
+    data
   }
 }
 

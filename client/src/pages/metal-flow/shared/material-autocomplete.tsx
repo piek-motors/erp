@@ -1,4 +1,4 @@
-import { Autocomplete } from '@mui/joy'
+import { Autocomplete, FormControl, FormLabel } from '@mui/joy'
 import { Material } from 'shared/domain'
 import { useGetMaterialsQuery } from '../../../types/graphql-shema'
 import { map } from '../mappers'
@@ -47,7 +47,6 @@ export function MaterialAutocompleteMulti(props: {
   disabledInput?: boolean
 }) {
   const { data, value, onChange } = props
-
   const options =
     data?.metal_pdo_materials.map(map.material.fromDto).map(material => ({
       label: material.getTextId(),
@@ -55,23 +54,26 @@ export function MaterialAutocompleteMulti(props: {
     })) || []
 
   return (
-    <Autocomplete
-      multiple
-      disabled={props.disabledInput}
-      onChange={(e: any, selected) => {
-        if (selected) {
-          onChange(selected.map(e => e.material))
+    <FormControl>
+      <FormLabel sx={{ m: 0 }}>Выберите материалы</FormLabel>
+      <Autocomplete
+        multiple
+        disabled={props.disabledInput}
+        onChange={(e: any, selected) => {
+          if (selected) {
+            onChange(selected.map(e => e.material))
+          }
+        }}
+        value={value?.map(m => ({
+          label: m.getTextId(),
+          material: m
+        }))}
+        options={options}
+        getOptionLabel={option => option.label}
+        isOptionEqualToValue={(option, value) =>
+          option.material.id === value.material.id
         }
-      }}
-      value={value?.map(m => ({
-        label: m.getTextId(),
-        material: m
-      }))}
-      options={options}
-      getOptionLabel={option => option.label}
-      isOptionEqualToValue={(option, value) =>
-        option.material.id === value.material.id
-      }
-    />
+      />
+    </FormControl>
   )
 }

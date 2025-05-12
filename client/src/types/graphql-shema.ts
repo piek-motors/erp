@@ -5292,13 +5292,19 @@ export type Kysely_Migration_Updates = {
 /** columns and relationships of "metal_pdo.detail_materials" */
 export type Metal_Pdo_Detail_Materials = {
   __typename?: 'metal_pdo_detail_materials';
-  cost?: Maybe<Scalars['numeric']['output']>;
+  data?: Maybe<Scalars['jsonb']['output']>;
   /** An object relationship */
   detail: Metal_Pdo_Details;
   detail_id: Scalars['Int']['output'];
   /** An object relationship */
   material: Metal_Pdo_Materials;
   material_id: Scalars['Int']['output'];
+};
+
+
+/** columns and relationships of "metal_pdo.detail_materials" */
+export type Metal_Pdo_Detail_MaterialsDataArgs = {
+  path?: InputMaybe<Scalars['String']['input']>;
 };
 
 /** aggregated selection of "metal_pdo.detail_materials" */
@@ -5357,6 +5363,11 @@ export type Metal_Pdo_Detail_Materials_Aggregate_Order_By = {
   variance?: InputMaybe<Metal_Pdo_Detail_Materials_Variance_Order_By>;
 };
 
+/** append existing jsonb value of filtered columns with new jsonb value */
+export type Metal_Pdo_Detail_Materials_Append_Input = {
+  data?: InputMaybe<Scalars['jsonb']['input']>;
+};
+
 /** input type for inserting array relation for remote table "metal_pdo.detail_materials" */
 export type Metal_Pdo_Detail_Materials_Arr_Rel_Insert_Input = {
   data: Array<Metal_Pdo_Detail_Materials_Insert_Input>;
@@ -5367,14 +5378,12 @@ export type Metal_Pdo_Detail_Materials_Arr_Rel_Insert_Input = {
 /** aggregate avg on columns */
 export type Metal_Pdo_Detail_Materials_Avg_Fields = {
   __typename?: 'metal_pdo_detail_materials_avg_fields';
-  cost?: Maybe<Scalars['Float']['output']>;
   detail_id?: Maybe<Scalars['Float']['output']>;
   material_id?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by avg() on columns of table "metal_pdo.detail_materials" */
 export type Metal_Pdo_Detail_Materials_Avg_Order_By = {
-  cost?: InputMaybe<Order_By>;
   detail_id?: InputMaybe<Order_By>;
   material_id?: InputMaybe<Order_By>;
 };
@@ -5384,7 +5393,7 @@ export type Metal_Pdo_Detail_Materials_Bool_Exp = {
   _and?: InputMaybe<Array<Metal_Pdo_Detail_Materials_Bool_Exp>>;
   _not?: InputMaybe<Metal_Pdo_Detail_Materials_Bool_Exp>;
   _or?: InputMaybe<Array<Metal_Pdo_Detail_Materials_Bool_Exp>>;
-  cost?: InputMaybe<Numeric_Comparison_Exp>;
+  data?: InputMaybe<Jsonb_Comparison_Exp>;
   detail?: InputMaybe<Metal_Pdo_Details_Bool_Exp>;
   detail_id?: InputMaybe<Int_Comparison_Exp>;
   material?: InputMaybe<Metal_Pdo_Materials_Bool_Exp>;
@@ -5397,16 +5406,30 @@ export enum Metal_Pdo_Detail_Materials_Constraint {
   DetailMaterialsPKey = 'detail_materials_p_key'
 }
 
+/** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
+export type Metal_Pdo_Detail_Materials_Delete_At_Path_Input = {
+  data?: InputMaybe<Array<Scalars['String']['input']>>;
+};
+
+/** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
+export type Metal_Pdo_Detail_Materials_Delete_Elem_Input = {
+  data?: InputMaybe<Scalars['Int']['input']>;
+};
+
+/** delete key/value pair or string element. key/value pairs are matched based on their key value */
+export type Metal_Pdo_Detail_Materials_Delete_Key_Input = {
+  data?: InputMaybe<Scalars['String']['input']>;
+};
+
 /** input type for incrementing numeric columns in table "metal_pdo.detail_materials" */
 export type Metal_Pdo_Detail_Materials_Inc_Input = {
-  cost?: InputMaybe<Scalars['numeric']['input']>;
   detail_id?: InputMaybe<Scalars['Int']['input']>;
   material_id?: InputMaybe<Scalars['Int']['input']>;
 };
 
 /** input type for inserting data into table "metal_pdo.detail_materials" */
 export type Metal_Pdo_Detail_Materials_Insert_Input = {
-  cost?: InputMaybe<Scalars['numeric']['input']>;
+  data?: InputMaybe<Scalars['jsonb']['input']>;
   detail?: InputMaybe<Metal_Pdo_Details_Obj_Rel_Insert_Input>;
   detail_id?: InputMaybe<Scalars['Int']['input']>;
   material?: InputMaybe<Metal_Pdo_Materials_Obj_Rel_Insert_Input>;
@@ -5416,14 +5439,12 @@ export type Metal_Pdo_Detail_Materials_Insert_Input = {
 /** aggregate max on columns */
 export type Metal_Pdo_Detail_Materials_Max_Fields = {
   __typename?: 'metal_pdo_detail_materials_max_fields';
-  cost?: Maybe<Scalars['numeric']['output']>;
   detail_id?: Maybe<Scalars['Int']['output']>;
   material_id?: Maybe<Scalars['Int']['output']>;
 };
 
 /** order by max() on columns of table "metal_pdo.detail_materials" */
 export type Metal_Pdo_Detail_Materials_Max_Order_By = {
-  cost?: InputMaybe<Order_By>;
   detail_id?: InputMaybe<Order_By>;
   material_id?: InputMaybe<Order_By>;
 };
@@ -5431,14 +5452,12 @@ export type Metal_Pdo_Detail_Materials_Max_Order_By = {
 /** aggregate min on columns */
 export type Metal_Pdo_Detail_Materials_Min_Fields = {
   __typename?: 'metal_pdo_detail_materials_min_fields';
-  cost?: Maybe<Scalars['numeric']['output']>;
   detail_id?: Maybe<Scalars['Int']['output']>;
   material_id?: Maybe<Scalars['Int']['output']>;
 };
 
 /** order by min() on columns of table "metal_pdo.detail_materials" */
 export type Metal_Pdo_Detail_Materials_Min_Order_By = {
-  cost?: InputMaybe<Order_By>;
   detail_id?: InputMaybe<Order_By>;
   material_id?: InputMaybe<Order_By>;
 };
@@ -5461,7 +5480,7 @@ export type Metal_Pdo_Detail_Materials_On_Conflict = {
 
 /** Ordering options when selecting data from "metal_pdo.detail_materials". */
 export type Metal_Pdo_Detail_Materials_Order_By = {
-  cost?: InputMaybe<Order_By>;
+  data?: InputMaybe<Order_By>;
   detail?: InputMaybe<Metal_Pdo_Details_Order_By>;
   detail_id?: InputMaybe<Order_By>;
   material?: InputMaybe<Metal_Pdo_Materials_Order_By>;
@@ -5474,10 +5493,15 @@ export type Metal_Pdo_Detail_Materials_Pk_Columns_Input = {
   material_id: Scalars['Int']['input'];
 };
 
+/** prepend existing jsonb value of filtered columns with new jsonb value */
+export type Metal_Pdo_Detail_Materials_Prepend_Input = {
+  data?: InputMaybe<Scalars['jsonb']['input']>;
+};
+
 /** select columns of table "metal_pdo.detail_materials" */
 export enum Metal_Pdo_Detail_Materials_Select_Column {
   /** column name */
-  Cost = 'cost',
+  Data = 'data',
   /** column name */
   DetailId = 'detail_id',
   /** column name */
@@ -5486,7 +5510,7 @@ export enum Metal_Pdo_Detail_Materials_Select_Column {
 
 /** input type for updating data in table "metal_pdo.detail_materials" */
 export type Metal_Pdo_Detail_Materials_Set_Input = {
-  cost?: InputMaybe<Scalars['numeric']['input']>;
+  data?: InputMaybe<Scalars['jsonb']['input']>;
   detail_id?: InputMaybe<Scalars['Int']['input']>;
   material_id?: InputMaybe<Scalars['Int']['input']>;
 };
@@ -5494,14 +5518,12 @@ export type Metal_Pdo_Detail_Materials_Set_Input = {
 /** aggregate stddev on columns */
 export type Metal_Pdo_Detail_Materials_Stddev_Fields = {
   __typename?: 'metal_pdo_detail_materials_stddev_fields';
-  cost?: Maybe<Scalars['Float']['output']>;
   detail_id?: Maybe<Scalars['Float']['output']>;
   material_id?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by stddev() on columns of table "metal_pdo.detail_materials" */
 export type Metal_Pdo_Detail_Materials_Stddev_Order_By = {
-  cost?: InputMaybe<Order_By>;
   detail_id?: InputMaybe<Order_By>;
   material_id?: InputMaybe<Order_By>;
 };
@@ -5509,14 +5531,12 @@ export type Metal_Pdo_Detail_Materials_Stddev_Order_By = {
 /** aggregate stddev_pop on columns */
 export type Metal_Pdo_Detail_Materials_Stddev_Pop_Fields = {
   __typename?: 'metal_pdo_detail_materials_stddev_pop_fields';
-  cost?: Maybe<Scalars['Float']['output']>;
   detail_id?: Maybe<Scalars['Float']['output']>;
   material_id?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by stddev_pop() on columns of table "metal_pdo.detail_materials" */
 export type Metal_Pdo_Detail_Materials_Stddev_Pop_Order_By = {
-  cost?: InputMaybe<Order_By>;
   detail_id?: InputMaybe<Order_By>;
   material_id?: InputMaybe<Order_By>;
 };
@@ -5524,14 +5544,12 @@ export type Metal_Pdo_Detail_Materials_Stddev_Pop_Order_By = {
 /** aggregate stddev_samp on columns */
 export type Metal_Pdo_Detail_Materials_Stddev_Samp_Fields = {
   __typename?: 'metal_pdo_detail_materials_stddev_samp_fields';
-  cost?: Maybe<Scalars['Float']['output']>;
   detail_id?: Maybe<Scalars['Float']['output']>;
   material_id?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by stddev_samp() on columns of table "metal_pdo.detail_materials" */
 export type Metal_Pdo_Detail_Materials_Stddev_Samp_Order_By = {
-  cost?: InputMaybe<Order_By>;
   detail_id?: InputMaybe<Order_By>;
   material_id?: InputMaybe<Order_By>;
 };
@@ -5546,7 +5564,7 @@ export type Metal_Pdo_Detail_Materials_Stream_Cursor_Input = {
 
 /** Initial value of the column from where the streaming should start */
 export type Metal_Pdo_Detail_Materials_Stream_Cursor_Value_Input = {
-  cost?: InputMaybe<Scalars['numeric']['input']>;
+  data?: InputMaybe<Scalars['jsonb']['input']>;
   detail_id?: InputMaybe<Scalars['Int']['input']>;
   material_id?: InputMaybe<Scalars['Int']['input']>;
 };
@@ -5554,14 +5572,12 @@ export type Metal_Pdo_Detail_Materials_Stream_Cursor_Value_Input = {
 /** aggregate sum on columns */
 export type Metal_Pdo_Detail_Materials_Sum_Fields = {
   __typename?: 'metal_pdo_detail_materials_sum_fields';
-  cost?: Maybe<Scalars['numeric']['output']>;
   detail_id?: Maybe<Scalars['Int']['output']>;
   material_id?: Maybe<Scalars['Int']['output']>;
 };
 
 /** order by sum() on columns of table "metal_pdo.detail_materials" */
 export type Metal_Pdo_Detail_Materials_Sum_Order_By = {
-  cost?: InputMaybe<Order_By>;
   detail_id?: InputMaybe<Order_By>;
   material_id?: InputMaybe<Order_By>;
 };
@@ -5569,7 +5585,7 @@ export type Metal_Pdo_Detail_Materials_Sum_Order_By = {
 /** update columns of table "metal_pdo.detail_materials" */
 export enum Metal_Pdo_Detail_Materials_Update_Column {
   /** column name */
-  Cost = 'cost',
+  Data = 'data',
   /** column name */
   DetailId = 'detail_id',
   /** column name */
@@ -5577,8 +5593,18 @@ export enum Metal_Pdo_Detail_Materials_Update_Column {
 }
 
 export type Metal_Pdo_Detail_Materials_Updates = {
+  /** append existing jsonb value of filtered columns with new jsonb value */
+  _append?: InputMaybe<Metal_Pdo_Detail_Materials_Append_Input>;
+  /** delete the field or element with specified path (for JSON arrays, negative integers count from the end) */
+  _delete_at_path?: InputMaybe<Metal_Pdo_Detail_Materials_Delete_At_Path_Input>;
+  /** delete the array element with specified index (negative integers count from the end). throws an error if top level container is not an array */
+  _delete_elem?: InputMaybe<Metal_Pdo_Detail_Materials_Delete_Elem_Input>;
+  /** delete key/value pair or string element. key/value pairs are matched based on their key value */
+  _delete_key?: InputMaybe<Metal_Pdo_Detail_Materials_Delete_Key_Input>;
   /** increments the numeric columns with given value of the filtered values */
   _inc?: InputMaybe<Metal_Pdo_Detail_Materials_Inc_Input>;
+  /** prepend existing jsonb value of filtered columns with new jsonb value */
+  _prepend?: InputMaybe<Metal_Pdo_Detail_Materials_Prepend_Input>;
   /** sets the columns of the filtered rows to the given values */
   _set?: InputMaybe<Metal_Pdo_Detail_Materials_Set_Input>;
   /** filter the rows which have to be updated */
@@ -5588,14 +5614,12 @@ export type Metal_Pdo_Detail_Materials_Updates = {
 /** aggregate var_pop on columns */
 export type Metal_Pdo_Detail_Materials_Var_Pop_Fields = {
   __typename?: 'metal_pdo_detail_materials_var_pop_fields';
-  cost?: Maybe<Scalars['Float']['output']>;
   detail_id?: Maybe<Scalars['Float']['output']>;
   material_id?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by var_pop() on columns of table "metal_pdo.detail_materials" */
 export type Metal_Pdo_Detail_Materials_Var_Pop_Order_By = {
-  cost?: InputMaybe<Order_By>;
   detail_id?: InputMaybe<Order_By>;
   material_id?: InputMaybe<Order_By>;
 };
@@ -5603,14 +5627,12 @@ export type Metal_Pdo_Detail_Materials_Var_Pop_Order_By = {
 /** aggregate var_samp on columns */
 export type Metal_Pdo_Detail_Materials_Var_Samp_Fields = {
   __typename?: 'metal_pdo_detail_materials_var_samp_fields';
-  cost?: Maybe<Scalars['Float']['output']>;
   detail_id?: Maybe<Scalars['Float']['output']>;
   material_id?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by var_samp() on columns of table "metal_pdo.detail_materials" */
 export type Metal_Pdo_Detail_Materials_Var_Samp_Order_By = {
-  cost?: InputMaybe<Order_By>;
   detail_id?: InputMaybe<Order_By>;
   material_id?: InputMaybe<Order_By>;
 };
@@ -5618,14 +5640,12 @@ export type Metal_Pdo_Detail_Materials_Var_Samp_Order_By = {
 /** aggregate variance on columns */
 export type Metal_Pdo_Detail_Materials_Variance_Fields = {
   __typename?: 'metal_pdo_detail_materials_variance_fields';
-  cost?: Maybe<Scalars['Float']['output']>;
   detail_id?: Maybe<Scalars['Float']['output']>;
   material_id?: Maybe<Scalars['Float']['output']>;
 };
 
 /** order by variance() on columns of table "metal_pdo.detail_materials" */
 export type Metal_Pdo_Detail_Materials_Variance_Order_By = {
-  cost?: InputMaybe<Order_By>;
   detail_id?: InputMaybe<Order_By>;
   material_id?: InputMaybe<Order_By>;
 };
@@ -5872,7 +5892,6 @@ export type Metal_Pdo_Materials = {
   /** An aggregate relationship */
   detail_materials_aggregate: Metal_Pdo_Detail_Materials_Aggregate;
   id: Scalars['Int']['output'];
-  name?: Maybe<Scalars['String']['output']>;
   shape: Scalars['Int']['output'];
   shape_data?: Maybe<Scalars['jsonb']['output']>;
   /** An array relationship */
@@ -6003,7 +6022,6 @@ export type Metal_Pdo_Materials_Bool_Exp = {
   detail_materials?: InputMaybe<Metal_Pdo_Detail_Materials_Bool_Exp>;
   detail_materials_aggregate?: InputMaybe<Metal_Pdo_Detail_Materials_Aggregate_Bool_Exp>;
   id?: InputMaybe<Int_Comparison_Exp>;
-  name?: InputMaybe<String_Comparison_Exp>;
   shape?: InputMaybe<Int_Comparison_Exp>;
   shape_data?: InputMaybe<Jsonb_Comparison_Exp>;
   supplies?: InputMaybe<Metal_Pdo_Supplies_Bool_Exp>;
@@ -6045,7 +6063,6 @@ export type Metal_Pdo_Materials_Inc_Input = {
 export type Metal_Pdo_Materials_Insert_Input = {
   detail_materials?: InputMaybe<Metal_Pdo_Detail_Materials_Arr_Rel_Insert_Input>;
   id?: InputMaybe<Scalars['Int']['input']>;
-  name?: InputMaybe<Scalars['String']['input']>;
   shape?: InputMaybe<Scalars['Int']['input']>;
   shape_data?: InputMaybe<Scalars['jsonb']['input']>;
   supplies?: InputMaybe<Metal_Pdo_Supplies_Arr_Rel_Insert_Input>;
@@ -6057,7 +6074,6 @@ export type Metal_Pdo_Materials_Insert_Input = {
 export type Metal_Pdo_Materials_Max_Fields = {
   __typename?: 'metal_pdo_materials_max_fields';
   id?: Maybe<Scalars['Int']['output']>;
-  name?: Maybe<Scalars['String']['output']>;
   shape?: Maybe<Scalars['Int']['output']>;
   unit?: Maybe<Scalars['Int']['output']>;
 };
@@ -6066,7 +6082,6 @@ export type Metal_Pdo_Materials_Max_Fields = {
 export type Metal_Pdo_Materials_Min_Fields = {
   __typename?: 'metal_pdo_materials_min_fields';
   id?: Maybe<Scalars['Int']['output']>;
-  name?: Maybe<Scalars['String']['output']>;
   shape?: Maybe<Scalars['Int']['output']>;
   unit?: Maybe<Scalars['Int']['output']>;
 };
@@ -6098,7 +6113,6 @@ export type Metal_Pdo_Materials_On_Conflict = {
 export type Metal_Pdo_Materials_Order_By = {
   detail_materials_aggregate?: InputMaybe<Metal_Pdo_Detail_Materials_Aggregate_Order_By>;
   id?: InputMaybe<Order_By>;
-  name?: InputMaybe<Order_By>;
   shape?: InputMaybe<Order_By>;
   shape_data?: InputMaybe<Order_By>;
   supplies_aggregate?: InputMaybe<Metal_Pdo_Supplies_Aggregate_Order_By>;
@@ -6121,8 +6135,6 @@ export enum Metal_Pdo_Materials_Select_Column {
   /** column name */
   Id = 'id',
   /** column name */
-  Name = 'name',
-  /** column name */
   Shape = 'shape',
   /** column name */
   ShapeData = 'shape_data',
@@ -6133,7 +6145,6 @@ export enum Metal_Pdo_Materials_Select_Column {
 /** input type for updating data in table "metal_pdo.materials" */
 export type Metal_Pdo_Materials_Set_Input = {
   id?: InputMaybe<Scalars['Int']['input']>;
-  name?: InputMaybe<Scalars['String']['input']>;
   shape?: InputMaybe<Scalars['Int']['input']>;
   shape_data?: InputMaybe<Scalars['jsonb']['input']>;
   unit?: InputMaybe<Scalars['Int']['input']>;
@@ -6174,7 +6185,6 @@ export type Metal_Pdo_Materials_Stream_Cursor_Input = {
 /** Initial value of the column from where the streaming should start */
 export type Metal_Pdo_Materials_Stream_Cursor_Value_Input = {
   id?: InputMaybe<Scalars['Int']['input']>;
-  name?: InputMaybe<Scalars['String']['input']>;
   shape?: InputMaybe<Scalars['Int']['input']>;
   shape_data?: InputMaybe<Scalars['jsonb']['input']>;
   unit?: InputMaybe<Scalars['Int']['input']>;
@@ -6192,8 +6202,6 @@ export type Metal_Pdo_Materials_Sum_Fields = {
 export enum Metal_Pdo_Materials_Update_Column {
   /** column name */
   Id = 'id',
-  /** column name */
-  Name = 'name',
   /** column name */
   Shape = 'shape',
   /** column name */
@@ -8208,7 +8216,12 @@ export type Mutation_RootUpdate_Kysely_Migration_ManyArgs = {
 
 /** mutation root */
 export type Mutation_RootUpdate_Metal_Pdo_Detail_MaterialsArgs = {
+  _append?: InputMaybe<Metal_Pdo_Detail_Materials_Append_Input>;
+  _delete_at_path?: InputMaybe<Metal_Pdo_Detail_Materials_Delete_At_Path_Input>;
+  _delete_elem?: InputMaybe<Metal_Pdo_Detail_Materials_Delete_Elem_Input>;
+  _delete_key?: InputMaybe<Metal_Pdo_Detail_Materials_Delete_Key_Input>;
   _inc?: InputMaybe<Metal_Pdo_Detail_Materials_Inc_Input>;
+  _prepend?: InputMaybe<Metal_Pdo_Detail_Materials_Prepend_Input>;
   _set?: InputMaybe<Metal_Pdo_Detail_Materials_Set_Input>;
   where: Metal_Pdo_Detail_Materials_Bool_Exp;
 };
@@ -8216,7 +8229,12 @@ export type Mutation_RootUpdate_Metal_Pdo_Detail_MaterialsArgs = {
 
 /** mutation root */
 export type Mutation_RootUpdate_Metal_Pdo_Detail_Materials_By_PkArgs = {
+  _append?: InputMaybe<Metal_Pdo_Detail_Materials_Append_Input>;
+  _delete_at_path?: InputMaybe<Metal_Pdo_Detail_Materials_Delete_At_Path_Input>;
+  _delete_elem?: InputMaybe<Metal_Pdo_Detail_Materials_Delete_Elem_Input>;
+  _delete_key?: InputMaybe<Metal_Pdo_Detail_Materials_Delete_Key_Input>;
   _inc?: InputMaybe<Metal_Pdo_Detail_Materials_Inc_Input>;
+  _prepend?: InputMaybe<Metal_Pdo_Detail_Materials_Prepend_Input>;
   _set?: InputMaybe<Metal_Pdo_Detail_Materials_Set_Input>;
   pk_columns: Metal_Pdo_Detail_Materials_Pk_Columns_Input;
 };
@@ -9985,14 +10003,14 @@ export type UpdateOrderStatusMutation = { __typename?: 'mutation_root', update_e
 export type GetDetailsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetDetailsQuery = { __typename?: 'query_root', metal_pdo_details: Array<{ __typename?: 'metal_pdo_details', id: number, name: string, detail_materials: Array<{ __typename?: 'metal_pdo_detail_materials', cost?: any | null, material: { __typename?: 'metal_pdo_materials', id: number, unit: number, shape: number, shape_data?: any | null } }> }> };
+export type GetDetailsQuery = { __typename?: 'query_root', metal_pdo_details: Array<{ __typename?: 'metal_pdo_details', id: number, name: string, detail_materials: Array<{ __typename?: 'metal_pdo_detail_materials', data?: any | null, material: { __typename?: 'metal_pdo_materials', id: number, unit: number, shape: number, shape_data?: any | null } }> }> };
 
 export type GetDetailByPkQueryVariables = Exact<{
   id: Scalars['Int']['input'];
 }>;
 
 
-export type GetDetailByPkQuery = { __typename?: 'query_root', metal_pdo_details_by_pk?: { __typename?: 'metal_pdo_details', id: number, name: string, detail_materials: Array<{ __typename?: 'metal_pdo_detail_materials', cost?: any | null, material: { __typename?: 'metal_pdo_materials', id: number, unit: number, shape: number, shape_data?: any | null } }> } | null };
+export type GetDetailByPkQuery = { __typename?: 'query_root', metal_pdo_details_by_pk?: { __typename?: 'metal_pdo_details', id: number, name: string, detail_materials: Array<{ __typename?: 'metal_pdo_detail_materials', data?: any | null, material: { __typename?: 'metal_pdo_materials', id: number, unit: number, shape: number, shape_data?: any | null } }> } | null };
 
 export type InsertDetailMutationVariables = Exact<{
   object: Metal_Pdo_Details_Insert_Input;
@@ -10009,14 +10027,14 @@ export type UpdateDetailMutationVariables = Exact<{
 
 export type UpdateDetailMutation = { __typename?: 'mutation_root', update_metal_pdo_details_by_pk?: { __typename?: 'metal_pdo_details', id: number } | null };
 
-export type UpdateDetailMaterialCostMutationVariables = Exact<{
+export type UpdateDetailMaterialRelationDataMutationVariables = Exact<{
   detail_id: Scalars['Int']['input'];
   material_id: Scalars['Int']['input'];
-  cost: Scalars['numeric']['input'];
+  data: Scalars['jsonb']['input'];
 }>;
 
 
-export type UpdateDetailMaterialCostMutation = { __typename?: 'mutation_root', update_metal_pdo_detail_materials_by_pk?: { __typename?: 'metal_pdo_detail_materials', cost?: any | null } | null };
+export type UpdateDetailMaterialRelationDataMutation = { __typename?: 'mutation_root', update_metal_pdo_detail_materials_by_pk?: { __typename?: 'metal_pdo_detail_materials', data?: any | null } | null };
 
 export type DeleteDetailMutationVariables = Exact<{
   id: Scalars['Int']['input'];
@@ -11448,7 +11466,7 @@ export const GetDetailsDocument = gql`
     id
     name
     detail_materials {
-      cost
+      data
       material {
         ...MaterialFragment
       }
@@ -11494,7 +11512,7 @@ export const GetDetailByPkDocument = gql`
     id
     name
     detail_materials {
-      cost
+      data
       material {
         ...MaterialFragment
       }
@@ -11603,44 +11621,44 @@ export function useUpdateDetailMutation(baseOptions?: Apollo.MutationHookOptions
 export type UpdateDetailMutationHookResult = ReturnType<typeof useUpdateDetailMutation>;
 export type UpdateDetailMutationResult = Apollo.MutationResult<UpdateDetailMutation>;
 export type UpdateDetailMutationOptions = Apollo.BaseMutationOptions<UpdateDetailMutation, UpdateDetailMutationVariables>;
-export const UpdateDetailMaterialCostDocument = gql`
-    mutation UpdateDetailMaterialCost($detail_id: Int!, $material_id: Int!, $cost: numeric!) {
+export const UpdateDetailMaterialRelationDataDocument = gql`
+    mutation UpdateDetailMaterialRelationData($detail_id: Int!, $material_id: Int!, $data: jsonb!) {
   update_metal_pdo_detail_materials_by_pk(
     pk_columns: {detail_id: $detail_id, material_id: $material_id}
-    _set: {cost: $cost}
+    _set: {data: $data}
   ) {
-    cost
+    data
   }
 }
     `;
-export type UpdateDetailMaterialCostMutationFn = Apollo.MutationFunction<UpdateDetailMaterialCostMutation, UpdateDetailMaterialCostMutationVariables>;
+export type UpdateDetailMaterialRelationDataMutationFn = Apollo.MutationFunction<UpdateDetailMaterialRelationDataMutation, UpdateDetailMaterialRelationDataMutationVariables>;
 
 /**
- * __useUpdateDetailMaterialCostMutation__
+ * __useUpdateDetailMaterialRelationDataMutation__
  *
- * To run a mutation, you first call `useUpdateDetailMaterialCostMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateDetailMaterialCostMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useUpdateDetailMaterialRelationDataMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateDetailMaterialRelationDataMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [updateDetailMaterialCostMutation, { data, loading, error }] = useUpdateDetailMaterialCostMutation({
+ * const [updateDetailMaterialRelationDataMutation, { data, loading, error }] = useUpdateDetailMaterialRelationDataMutation({
  *   variables: {
  *      detail_id: // value for 'detail_id'
  *      material_id: // value for 'material_id'
- *      cost: // value for 'cost'
+ *      data: // value for 'data'
  *   },
  * });
  */
-export function useUpdateDetailMaterialCostMutation(baseOptions?: Apollo.MutationHookOptions<UpdateDetailMaterialCostMutation, UpdateDetailMaterialCostMutationVariables>) {
+export function useUpdateDetailMaterialRelationDataMutation(baseOptions?: Apollo.MutationHookOptions<UpdateDetailMaterialRelationDataMutation, UpdateDetailMaterialRelationDataMutationVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UpdateDetailMaterialCostMutation, UpdateDetailMaterialCostMutationVariables>(UpdateDetailMaterialCostDocument, options);
+        return Apollo.useMutation<UpdateDetailMaterialRelationDataMutation, UpdateDetailMaterialRelationDataMutationVariables>(UpdateDetailMaterialRelationDataDocument, options);
       }
-export type UpdateDetailMaterialCostMutationHookResult = ReturnType<typeof useUpdateDetailMaterialCostMutation>;
-export type UpdateDetailMaterialCostMutationResult = Apollo.MutationResult<UpdateDetailMaterialCostMutation>;
-export type UpdateDetailMaterialCostMutationOptions = Apollo.BaseMutationOptions<UpdateDetailMaterialCostMutation, UpdateDetailMaterialCostMutationVariables>;
+export type UpdateDetailMaterialRelationDataMutationHookResult = ReturnType<typeof useUpdateDetailMaterialRelationDataMutation>;
+export type UpdateDetailMaterialRelationDataMutationResult = Apollo.MutationResult<UpdateDetailMaterialRelationDataMutation>;
+export type UpdateDetailMaterialRelationDataMutationOptions = Apollo.BaseMutationOptions<UpdateDetailMaterialRelationDataMutation, UpdateDetailMaterialRelationDataMutationVariables>;
 export const DeleteDetailDocument = gql`
     mutation DeleteDetail($id: Int!) {
   delete_metal_pdo_details_by_pk(id: $id) {

@@ -1,48 +1,40 @@
 import { Detail, Material } from 'shared/domain'
-import { GetDetailByPkQuery } from 'src/types/graphql-shema'
 import { create } from 'zustand'
-import { map } from '../mappers'
 
-interface IDetail {
-  id: number
+export interface IDetail {
+  detailID: number
   name: string
-  detailLength?: number
-  weight?: number
-  setLength(length: number): void
-  setWeight(weight: number): void
+  setName(name: string): void
+  materials: Map<
+    Material,
+    | {
+        length: string
+        weight: string
+      }
+    | undefined
+  >
+  setMaterials(materials: Material[]): void
+  addMaterial(material: Material): void
+  updMaterialRelationData(materialId: number, data: object): void
+  unpack(s: Detail): void
 
-  materials: Material[] // Detail Made from materials
-  materialCosts: Record<number, string>
-  addMaterialCost(materialId: number, cost: string): void
-
+  // history
   recentlyAdded?: Detail
   recentlyUpdated?: Detail
   setRecentlyAdded(detail: Detail): void
   setRecentlyUpdated(detail: Detail): void
 
-  setMaterials(materials: Material[]): void
-  addMaterial(material: Material): void
-  setName(name: string): void
-  updMaterialById(materialId: number, material: Material): void
-  unpack(s: GetDetailByPkQuery['metal_pdo_details_by_pk']): void
   reset(): void
 }
 
-export const useDetail = create<IDetail>(set => ({
-  id: 0,
+export const useDetail = create<IDetail>((set, get) => ({
+  detailID: 0,
   name: '',
-  materials: [],
-  materialCosts: {},
-  setLength(length: number) {
-    set({ detailLength: length })
-  },
-  setWeight(weight: number) {
-    set({ weight })
-  },
+  materials: new Map(),
   addMaterialCost(materialId: number, cost: string) {
     set({
-      materialCosts: {
-        ...this.materialCosts,
+      materials: {
+        ...this.materials,
         [materialId]: cost
       }
     })
@@ -57,41 +49,45 @@ export const useDetail = create<IDetail>(set => ({
     set({ name })
   },
   setMaterials(materials: Material[]) {
-    set({ materials })
-  },
-  addMaterial(material: Material) {
-    set({ materials: [...this.materials, material] })
-  },
-  updMaterialById(materialId: number, material: Material) {
     set({
-      materials: this.materials.map(m => {
-        if (m.id == materialId) {
-          return material
-        }
-        return m
-      })
+      materials: new Map(materials.map(m => [m, undefined]))
     })
   },
-  unpack(s: GetDetailByPkQuery['metal_pdo_details_by_pk']) {
+  addMaterial(material: Material) {
     set({
-      name: s?.name,
-      id: s?.id,
-      materials: s?.detail_materials.map(e => map.material.fromDto(e.material)),
-      materialCosts: s?.detail_materials.reduce(
-        (acc, e) => ({
-          ...acc,
-          [e.material.id]: e.cost
-        }),
-        {}
-      )
+      materials: new Map([...this.materials, [material, undefined]])
+    })
+  },
+  updMaterialRelationData(materialId: number, data: any) {
+    const newMaterials = new Map(this.materials)
+    for (const key of newMaterials.keys()) {
+      if (key.id === materialId) {
+        const newData = { ...newMaterials.get(key), ...data }
+        newMaterials.set(key, newData)
+        break
+      }
+    }
+    set({ materials: newMaterials })
+  },
+  unpack(s: Detail) {
+    const map = new Map<Material, { weight: string; length: string }>()
+    for (const [material, relationData] of s.materials.entries()) {
+      map.set(material, {
+        weight: relationData?.weight?.toString() || '',
+        length: relationData?.length?.toString() || ''
+      })
+    }
+    set({
+      detailID: s.id,
+      name: s.name,
+      materials: map
     })
   },
   reset() {
     set({
-      id: 0,
+      detailID: 0,
       name: '',
-      materials: [],
-      materialCosts: {},
+      materials: new Map(),
       recentlyAdded: undefined,
       recentlyUpdated: undefined
     })

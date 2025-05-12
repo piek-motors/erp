@@ -124,7 +124,7 @@ export function WriteoffThroughDetail() {
 }
 
 function TotalCost(props: { detail: Detail; qty: number }) {
-  const cost = props.detail.calcCost(Number(props.qty) || 0)
+  // const cost = props.detail.calcCost(Number(props.qty) || 0)
   return (
     <Stack p={1}>
       {t.InResultWillBeSubtracted}

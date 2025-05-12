@@ -14,9 +14,6 @@ export interface DisplayResourceNameProps {
 }
 
 export class Material {
-  length?: number
-  weight?: number
-
   constructor(
     readonly id: number,
     readonly unitId: EnUnit,

@@ -2,9 +2,8 @@ import { Sheet, Stack, Typography } from '@mui/joy'
 import { useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Column } from 'react-table'
-import { Detail, Material } from 'shared/domain'
+import { Material } from 'shared/domain'
 import { EnUnit } from 'shared/enumerations'
-import { apolloClient } from 'src/api'
 import { MetalFlowSys } from 'src/lib/routes'
 import {
   AddResourceButton,
@@ -14,18 +13,16 @@ import {
   TakeLookHint
 } from 'src/shortcuts'
 import * as gql from 'src/types/graphql-shema'
-import {
-  GetDetailsQuery,
-  useGetMaterialsQuery,
-  useInsertDetailMutation
-} from 'src/types/graphql-shema'
+import { GetDetailsQuery, useGetMaterialsQuery } from 'src/types/graphql-shema'
 import { PageTitle } from '../../../components'
 import { Table } from '../../../components/table.impl'
+import { map } from '../mappers'
 import { QtyInputWithUnit, SmallInputForm } from '../shared'
 import { MaterialAutocompleteMulti } from '../shared/material-autocomplete'
 import { ResourceName } from '../shared/material-name'
 import { goTo } from '../spa'
 import { t } from '../text'
+import { handleInsertDetail, handleUpdateDetail } from './mutations'
 import { useDetail } from './state'
 
 type DetailDto = GetDetailsQuery['metal_pdo_details'][0]
@@ -41,56 +38,50 @@ const columnList: Column<DetailDto>[] = [
   }
 ]
 
-export function MaterialWeightInput(props: { material: Material }) {
-  const { material } = props
-  const state = useDetail()
-
-  return (
-    <QtyInputWithUnit
-      unitId={EnUnit.Gram}
-      setValue={v => {
-        material.weight = Number(v)
-        state.updMaterialById(material.id, material)
-      }}
-      value={material.weight?.toString() || ''}
-      label="Вес заготовки (гр)"
-    />
-  )
-}
-
-export function MatirialLengthInput(props: { material: Material }) {
+function MaterialWeightInput(props: { material: Material }) {
   const { material } = props
   const state = useDetail()
   return (
-    <QtyInputWithUnit
-      unitId={EnUnit.MilliMeter}
-      setValue={v => {
-        material.length = Number(v)
-        state.updMaterialById(material.id, material)
-      }}
-      value={material.length?.toString() || ''}
-      label="Длина заготовки (мм)"
-    />
+    <>
+      <QtyInputWithUnit
+        label="Вес заготовки"
+        unitId={EnUnit.Gram}
+        setValue={v => {
+          state.updMaterialRelationData(material.id, { weight: v })
+        }}
+        value={state.materials.get(material)?.weight?.toString() || ''}
+      />
+      <QtyInputWithUnit
+        label="Длина заготовки"
+        unitId={EnUnit.MilliMeter}
+        setValue={v => {
+          state.updMaterialRelationData(props.material.id, { length: v })
+        }}
+        value={state.materials.get(props.material)?.length?.toString() || ''}
+      />
+    </>
   )
 }
 
-export function DetailMaterialPropInput() {
+function DetailMaterialRelationForm() {
   const state = useDetail()
   return (
     <Sheet>
       <Stack my={1} gap={2}>
-        {state.materials.map(m => (
-          <Stack sx={{ width: 'max-content' }} key={m.id}>
-            <Row sx={{ fontWeight: 'bold' }}>
-              <Typography>Материал</Typography>
-              <ResourceName resource={m.resourceName()} />
-            </Row>
-            <Stack p={1}>
-              <MaterialWeightInput material={m} />
-              <MatirialLengthInput material={m} />
+        {state.materials
+          .entries()
+          .map(([k, v]) => k)
+          .map(m => (
+            <Stack sx={{ width: 'max-content' }} key={m.id}>
+              <Row sx={{ fontWeight: 'bold' }}>
+                <Typography>Материал</Typography>
+                <ResourceName resource={m.resourceName()} />
+              </Row>
+              <Stack p={1}>
+                <MaterialWeightInput material={m} />
+              </Stack>
             </Stack>
-          </Stack>
-        ))}
+          ))}
       </Stack>
     </Sheet>
   )
@@ -99,7 +90,6 @@ export function DetailMaterialPropInput() {
 export function DetailsList() {
   const navigate = useNavigate()
   const { data } = gql.useGetDetailsQuery({ fetchPolicy: 'network-only' })
-
   return (
     <>
       <PageTitle title={t.DetailsList} hideIcon>
@@ -120,10 +110,7 @@ export function DetailsList() {
 
 export function DetailUpdateForm() {
   const id = Number(new URLSearchParams(useLocation().search).get('id'))
-  if (!id) {
-    return <>No id</>
-  }
-
+  if (!id) return <>No id</>
   const state = useDetail()
   const { data, refetch } = gql.useGetDetailByPkQuery({
     variables: {
@@ -131,108 +118,48 @@ export function DetailUpdateForm() {
     },
     fetchPolicy: 'network-only'
   })
-  const [mutate] = gql.useUpdateDetailMutation()
-
+  const detail = map.detail.fromDto(data?.metal_pdo_details_by_pk)
   useEffect(() => {
-    if (data) {
-      state.unpack(data.metal_pdo_details_by_pk)
+    if (detail) {
+      state.unpack(detail)
     }
   }, [data])
 
-  const handleSave = async () => {
-    await mutate({
-      variables: {
-        id: state.id,
-        _set: {
-          name: state.name
-        }
-      }
-    })
-    for (const m of state.materials) {
-      const cost = state.materialCosts[m.id]
-      await apolloClient.mutate<
-        gql.UpdateDetailMaterialCostMutation,
-        gql.UpdateDetailMaterialCostMutationVariables
-      >({
-        mutation: gql.UpdateDetailMaterialCostDocument,
-        variables: {
-          cost: Number(cost),
-          detail_id: state.id,
-          material_id: m.id
-        }
-      })
-    }
-
-    state.setRecentlyUpdated(new Detail(state.id, state.name, state.materials))
-    setTimeout(() => refetch(), 1000)
-  }
-
   return (
-    <>
-      <PageTitle title={t.EditDetail} hideIcon />
-      <Sheet>
-        <Stack gap={1}>
-          <Typography>ID {state.id}</Typography>
-
-          <MyInput
-            label={t.DetailName}
-            onChange={(event: any) => {
-              state.setName(event.target.value)
-            }}
-            value={state.name}
-            autoComplete="off"
-          />
-
-          <DetailMaterialPropInput />
-        </Stack>
-        <SendMutation onClick={handleSave} />
-      </Sheet>
-    </>
+    <SmallInputForm
+      header={t.EditDetail}
+      last={
+        <SendMutation
+          onClick={() => handleUpdateDetail(state).then(() => refetch())}
+        />
+      }
+    >
+      <Stack gap={1}>
+        <Typography>ID {state.detailID}</Typography>
+        <MyInput
+          label={t.DetailName}
+          onChange={(event: any) => {
+            state.setName(event.target.value)
+          }}
+          value={state.name}
+          autoComplete="off"
+        />
+        <DetailMaterialRelationForm />
+      </Stack>
+    </SmallInputForm>
   )
 }
 
 export function DetailAddForm() {
-  const [mut, { data, reset }] = useInsertDetailMutation()
-
   const state = useDetail()
-  const handleSave = async () => {
-    const res = await mut({
-      variables: {
-        object: {
-          name: state.name,
-          detail_materials: {
-            data: state.materials.map(each => ({
-              material_id: each.id,
-              cost: state.materialCosts[each.id]
-            }))
-          }
-        }
-      }
-    })
-    state.setRecentlyAdded(new Detail(state.id, state.name, state.materials))
-    if (res.errors?.length) {
-      throw Error(res.errors.join('\n'))
-    }
-    return res.data?.insert_metal_pdo_details_one?.id
-  }
-
-  const mutResult = data?.insert_metal_pdo_details_one?.id
-
-  if (mutResult) {
-    setTimeout(() => {
-      reset()
-    }, 5000)
-  }
-
   const { data: materials } = useGetMaterialsQuery()
-
   return (
     <SmallInputForm
       header={t.AddDetail}
       last={
         <SendMutation
           onClick={async () =>
-            handleSave().then(res => {
+            handleInsertDetail(state).then(res => {
               state.reset()
               return res
             })
@@ -254,14 +181,12 @@ export function DetailAddForm() {
         value={state.name}
         autoComplete="off"
       />
-
       <MaterialAutocompleteMulti
         data={materials}
-        value={state.materials}
+        value={Array.from(state.materials.keys())}
         onChange={m => state.setMaterials(m)}
       />
-
-      <DetailMaterialPropInput />
+      <DetailMaterialRelationForm />
     </SmallInputForm>
   )
 }

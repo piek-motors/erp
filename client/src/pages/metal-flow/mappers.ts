@@ -40,18 +40,22 @@ class MaterialMapper {
 class DetailMapper {
   private materialMapper = new MaterialMapper()
 
-  fromDto(raw: GetDetailByPkQuery['metal_pdo_details_by_pk']): Detail {
-    if (!raw) {
-      throw new Error('detail mapper: empty dto passed')
+  fromDto(raw: GetDetailByPkQuery['metal_pdo_details_by_pk']): Detail | null {
+    if (!raw) return null
+    const detailMaterials = new Map<
+      Material,
+      { weight: number; length: number }
+    >()
+
+    for (const each of raw.detail_materials) {
+      const material = this.materialMapper.fromDto(each.material)
+      detailMaterials.set(material, {
+        weight: each.data.weight,
+        length: each.data.length
+      })
     }
 
-    return new Detail(
-      raw.id,
-      raw.name,
-      raw.detail_materials.map(material =>
-        this.materialMapper.fromDto(material.material)
-      )
-    )
+    return new Detail(raw.id, raw.name, detailMaterials)
   }
 }
 

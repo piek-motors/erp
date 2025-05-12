@@ -30,6 +30,8 @@ ssh "$TARGET" <<EOF
   cd ~/erp/server
   npm run build
 
+  npm run migrate
+
   if npx pm2 describe "$PM2_PROCESS_NAME" > /dev/null; then
     echo "Process exists. Restarting..."
     npx pm2 restart "$PM2_PROCESS_NAME"

@@ -1,4 +1,4 @@
-import { Detail, Material, WriteoffTroughDetail } from 'shared/domain'
+import { WriteoffTroughDetail } from 'shared/domain'
 import { EnWriteoffType } from 'shared/enumerations'
 import {
   GetDetailByPkDocument,
@@ -30,30 +30,30 @@ export const handleSubmit = async (state: IWriteOff) => {
     const d = detail.data.metal_pdo_details_by_pk
     if (!d) throw Error('Detail not found')
 
-    const materialCostInBaseUnit = new Detail(
-      d.id,
-      d.name,
-      d.detail_materials.map(m => {
-        return new Material(
-          m.material.id,
-          m.material.unit,
-          m.material.shape,
-          m.material.shape_data
-        )
-      }),
-      d.detail_materials.map(m => m.cost)
-    ).calcCost(typeData.qty)
+    // const materialCostInBaseUnit = new Detail(
+    //   d.id,
+    //   d.name,
+    //   d.detail_materials.map(m => {
+    //     return new Material(
+    //       m.material.id,
+    //       m.material.unit,
+    //       m.material.shape,
+    //       m.material.shape_data
+    //     )
+    //   }),
+    //   d.detail_materials
+    // ).calcCost(typeData.qty)
 
-    return await insert(
-      materialCostInBaseUnit.map(m => ({
-        material_id: m.meterial.id,
-        qty: m.cost,
-        date: new Date(),
-        reason,
-        type: state.type,
-        type_data: state.typeData
-      }))
-    )
+    // return await insert(
+    //   materialCostInBaseUnit.map(m => ({
+    //     material_id: m.meterial.id,
+    //     qty: m.cost,
+    //     date: new Date(),
+    //     reason,
+    //     type: state.type,
+    //     type_data: state.typeData
+    //   }))
+    // )
   } else if (state.type == EnWriteoffType.DirectUnit) {
     if (!state.material) throw Error('Material not selected')
 

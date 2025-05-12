@@ -68,7 +68,7 @@ export const QtyInputWithUnit = (props: {
 }) => {
   const { unitId, value: qty, setValue: setQty } = props
   return (
-    <Stack direction="row" alignItems="center" gap={1}>
+    <Stack direction="row" alignItems="end" gap={1}>
       <MyInput
         autoComplete="off"
         label={props.label}
@@ -80,7 +80,7 @@ export const QtyInputWithUnit = (props: {
         type="number"
         fullWidth
       />
-      <Typography>{uiUnit(unitId)}</Typography>
+      <Typography pb={1}>{uiUnit(unitId)}</Typography>
     </Stack>
   )
 }

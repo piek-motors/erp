@@ -17,13 +17,15 @@ export function DetailSelect(props: {
   return (
     <Autocomplete
       onChange={(_, selected) => {
-        if (selected) {
+        if (selected?.data) {
           props.onChange(selected.data)
         }
       }}
       getOptionLabel={option => option.label}
       options={options}
-      isOptionEqualToValue={(option, value) => option.data.id === value.data.id}
+      isOptionEqualToValue={(option, value) =>
+        option.data?.id === value.data?.id
+      }
     />
   )
 }
