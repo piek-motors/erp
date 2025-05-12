@@ -9,6 +9,7 @@ import { MetalFlowSys } from 'src/lib/routes'
 import {
   AddResourceButton,
   MyInput,
+  Row,
   SendMutation,
   TakeLookHint
 } from 'src/shortcuts'
@@ -20,7 +21,7 @@ import {
 } from 'src/types/graphql-shema'
 import { PageTitle } from '../../../components'
 import { Table } from '../../../components/table.impl'
-import { EditIconButton, QtyInputWithUnit, SmallInputForm } from '../shared'
+import { QtyInputWithUnit, SmallInputForm } from '../shared'
 import { MaterialAutocompleteMulti } from '../shared/material-autocomplete'
 import { ResourceName } from '../shared/material-name'
 import { goTo } from '../spa'
@@ -37,15 +38,6 @@ const columnList: Column<DetailDto>[] = [
     Header: t.DetailName,
     id: 'name',
     accessor: 'name'
-  },
-  {
-    Header: t.Action,
-    accessor: data => (
-      <EditIconButton
-        url={goTo(MetalFlowSys.detail_update, data.id)}
-        title={t.EditDetail}
-      />
-    )
   }
 ]
 
@@ -85,15 +77,22 @@ export function MatirialLengthInput(props: { material: Material }) {
 export function DetailMaterialPropInput() {
   const state = useDetail()
   return (
-    <Stack>
-      {state.materials.map(m => (
-        <Stack sx={{ width: 'max-content' }} key={m.id}>
-          <ResourceName resource={m.resourceName()} />
-          <MaterialWeightInput material={m} />
-          <MatirialLengthInput material={m} />
-        </Stack>
-      ))}
-    </Stack>
+    <Sheet>
+      <Stack my={1} gap={2}>
+        {state.materials.map(m => (
+          <Stack sx={{ width: 'max-content' }} key={m.id}>
+            <Row sx={{ fontWeight: 'bold' }}>
+              <Typography>Материал</Typography>
+              <ResourceName resource={m.resourceName()} />
+            </Row>
+            <Stack p={1}>
+              <MaterialWeightInput material={m} />
+              <MatirialLengthInput material={m} />
+            </Stack>
+          </Stack>
+        ))}
+      </Stack>
+    </Sheet>
   )
 }
 
@@ -149,10 +148,8 @@ export function DetailUpdateForm() {
         }
       }
     })
-
     for (const m of state.materials) {
       const cost = state.materialCosts[m.id]
-
       await apolloClient.mutate<
         gql.UpdateDetailMaterialCostMutation,
         gql.UpdateDetailMaterialCostMutationVariables
@@ -171,25 +168,26 @@ export function DetailUpdateForm() {
   }
 
   return (
-    <SmallInputForm
-      header={t.EditDetail}
-      last={<SendMutation onClick={handleSave} />}
-    >
-      <Stack gap={1}>
-        <Typography>ID {state.id}</Typography>
+    <>
+      <PageTitle title={t.EditDetail} hideIcon />
+      <Sheet>
+        <Stack gap={1}>
+          <Typography>ID {state.id}</Typography>
 
-        <MyInput
-          label={t.DetailName}
-          onChange={(event: any) => {
-            state.setName(event.target.value)
-          }}
-          value={state.name}
-          autoComplete="off"
-        />
+          <MyInput
+            label={t.DetailName}
+            onChange={(event: any) => {
+              state.setName(event.target.value)
+            }}
+            value={state.name}
+            autoComplete="off"
+          />
 
-        <DetailMaterialPropInput />
-      </Stack>
-    </SmallInputForm>
+          <DetailMaterialPropInput />
+        </Stack>
+        <SendMutation onClick={handleSave} />
+      </Sheet>
+    </>
   )
 }
 

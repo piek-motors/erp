@@ -30,7 +30,7 @@ import { PageTitle } from '../../../components'
 import { Table } from '../../../components/table.impl'
 import { useNotifier } from '../../../store/notifier.store'
 import { map } from '../mappers'
-import { EditIconButton, SmallInputForm } from '../shared'
+import { SmallInputForm } from '../shared'
 import { MaterialUnitSelect } from '../shared/basic'
 import { ResourceName } from '../shared/material-name'
 import { goTo } from '../spa'
@@ -69,15 +69,6 @@ const columnList: Column<Material>[] = [
   {
     Header: t.Unit,
     accessor: data => data.unit()
-  },
-  {
-    Header: 'Действие',
-    accessor: data => (
-      <EditIconButton
-        title={t.EditDetail}
-        url={goTo(MetalFlowSys.material_update, data.id)}
-      />
-    )
   }
 ]
 

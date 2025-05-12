@@ -1,6 +1,6 @@
-import { UilArrowLeft, UilPen } from '@iconscout/react-unicons'
+import { UilArrowLeft } from '@iconscout/react-unicons'
 
-import { Box, IconButton, Sheet, Stack, Tooltip, Typography } from '@mui/joy'
+import { Box, IconButton, Sheet, Stack, Typography } from '@mui/joy'
 import { JSX } from 'react'
 import { NavigateOptions, To, useNavigate } from 'react-router-dom'
 import { uiUnit } from 'shared'
@@ -82,25 +82,5 @@ export const QtyInputWithUnit = (props: {
       />
       <Typography>{uiUnit(unitId)}</Typography>
     </Stack>
-  )
-}
-
-export function EditIconButton(props: { url: string; title: string }) {
-  const navigate = useNavigate()
-  return (
-    <Tooltip title={props.title}>
-      <IconButton
-        size="sm"
-        sx={{
-          opacity: 0.2,
-          '&:hover': {
-            opacity: 1
-          }
-        }}
-        onClick={() => navigate(props.url)}
-      >
-        <UilPen />
-      </IconButton>
-    </Tooltip>
   )
 }

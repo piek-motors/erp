@@ -53,7 +53,7 @@ export namespace DB {
   export interface DetailMaterialsTable {
     material_id: number
     detail_id: number
-    cost: number
+    data: JSONColumnType<any, any, any>
   }
 
   export interface SuppliesTable {
