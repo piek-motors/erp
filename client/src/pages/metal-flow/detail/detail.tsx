@@ -41,6 +41,7 @@ const columnList: Column<DetailDto>[] = [
 function MaterialWeightInput(props: { material: Material }) {
   const { material } = props
   const state = useDetail()
+  const relationData = state.materials.get(material)
   return (
     <>
       <QtyInputWithUnit
@@ -49,7 +50,7 @@ function MaterialWeightInput(props: { material: Material }) {
         setValue={v => {
           state.updMaterialRelationData(material.id, { weight: v })
         }}
-        value={state.materials.get(material)?.weight?.toString() || ''}
+        value={relationData ? relationData.weight?.toString() : ''}
       />
       <QtyInputWithUnit
         label="Длина заготовки"

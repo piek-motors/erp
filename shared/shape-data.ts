@@ -38,6 +38,10 @@ export class CircleShapeData extends MaterialShapeData {
   /** Linear mass in kilograms per meter (kg/m). */
   linearMass!: number
   getIdentifier(): string {
+    if (Number.isNaN(this.diameter)) {
+      throw new Error('diameter is NaN')
+    }
+
     return `${CircleShapeData.shapeTitle} D${this.diameter} ${this.alloy}`
   }
   getResourceNameProps(): ResourceNameProps {
@@ -76,6 +80,9 @@ export class PipeShapeData extends MaterialShapeData {
   /** Thickness (mm). */
   thickness!: number
   getIdentifier(): string {
+    if (Number.isNaN(this.diameter)) {
+      throw new Error('diameter is not specified')
+    }
     return `${PipeShapeData.shapeTitle} D${this.diameter} ${this.alloy}`
   }
   getResourceNameProps(): ResourceNameProps {

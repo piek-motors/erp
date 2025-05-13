@@ -1,4 +1,5 @@
 import type {
+  Generated,
   GeneratedAlways,
   Insertable,
   JSONColumnType,
@@ -19,7 +20,7 @@ export namespace DB {
   export interface Schema {
     ['erp.Users']: UserTable
     ['metal_pdo.materials']: MaterialTable
-    ['material_pdo.details']: DetailTable
+    ['metal_pdo.details']: DetailTable
     ['metal_pdo.detail_materials']: DetailMaterialsTable
     ['metal_pdo.supplies']: SuppliesTable
     ['metal_pdo.writeoffs']: WriteoffsTable
@@ -38,7 +39,7 @@ export namespace DB {
   export type UpdateableUser = Updateable<UserTable>
 
   export interface MaterialTable {
-    id: GeneratedAlways<number>
+    id: Generated<number>
     name: string
     unit: EnUnit
     shape: EnMaterialShape
@@ -46,7 +47,7 @@ export namespace DB {
   }
 
   export interface DetailTable {
-    id: GeneratedAlways<number>
+    id: Generated<number>
     name: string
   }
 

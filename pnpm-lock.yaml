@@ -175,12 +175,18 @@ importers:
       aws-sdk:
         specifier: ^2.944.0
         version: 2.1692.0
+      class-transformer:
+        specifier: ^0.5.1
+        version: 0.5.1
       cookie-parser:
         specifier: ~1.4.4
         version: 1.4.7
       cors:
         specifier: ^2.8.5
         version: 2.8.5
+      csv:
+        specifier: ^6.3.11
+        version: 6.3.11
       dotenv:
         specifier: ^10.0.0
         version: 10.0.0
@@ -226,6 +232,9 @@ importers:
       shared:
         specifier: workspace:*
         version: link:../shared
+      yaml:
+        specifier: ^2.7.1
+        version: 2.7.1
     devDependencies:
       '@graphql-codegen/cli':
         specifier: ^2.13.8

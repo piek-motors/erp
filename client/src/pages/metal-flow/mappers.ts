@@ -49,10 +49,12 @@ class DetailMapper {
 
     for (const each of raw.detail_materials) {
       const material = this.materialMapper.fromDto(each.material)
-      detailMaterials.set(material, {
-        weight: each.data.weight,
-        length: each.data.length
-      })
+      const relationData = {
+        // TODO: Add typesafety
+        weight: each?.data?.weight,
+        length: each?.data?.length
+      }
+      detailMaterials.set(material, relationData)
     }
 
     return new Detail(raw.id, raw.name, detailMaterials)
