@@ -66,7 +66,7 @@ export class ListShapeData extends MaterialShapeData {
   }
   getResourceNameProps(): ResourceNameProps {
     return {
-      name: `${ListShapeData.shapeTitle} G ${this.g}`
+      name: `${ListShapeData.shapeTitle} G${this.g}`
     }
   }
 }

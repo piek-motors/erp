@@ -34,6 +34,9 @@ export class Repo {
     dbMaterials: Material[]
   ): Promise<{ associated: number; failed: number }> {
     const filteredDetails = details.filter(detail => detail.name)
+    if (!filteredDetails.length) {
+      return { associated: 0, failed: 0 }
+    }
 
     // Save details
     await db
@@ -59,7 +62,7 @@ export class Repo {
 
         const relationData = detail.materials.get(relatedMaterial)
         if (relationData == null) {
-          log('material not in db', detail.name)
+          log('material not in db', material.getTextId())
           failed++
           return null
         }

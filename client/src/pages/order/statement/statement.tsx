@@ -50,13 +50,15 @@ export function AboutOrder({ data }: IAboutOrderProps) {
     <>
       {columns.map(el => {
         if (!el.data || el.data === 'Invalid date') return null
-        return <OrderProp key={el.heading} title={el.heading} value={el.data} />
+        return (
+          <OrderProperty key={el.heading} title={el.heading} value={el.data} />
+        )
       })}
     </>
   )
 }
 
-function OrderProp(props: { title: string; value: any }) {
+function OrderProperty(props: { title: string; value: any }) {
   return (
     <Box
       style={{

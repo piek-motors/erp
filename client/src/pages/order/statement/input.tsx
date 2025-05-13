@@ -35,7 +35,7 @@ interface IEditableInfoProps {
 
 let fields: Partial<FieldsValuesMap> = {}
 
-export function EditableInfo({ data, refetch, users }: IEditableInfoProps) {
+export function StatementInput({ data, refetch, users }: IEditableInfoProps) {
   const addField = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => (fields[e.target.name as FieldNames] = e.target.value)

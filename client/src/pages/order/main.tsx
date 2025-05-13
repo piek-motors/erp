@@ -24,8 +24,8 @@ import { DialogAddEditOrderItem } from './dialogs/add-edit-order-item.dialog'
 import { Docs } from './docs'
 import { OrderActions } from './header'
 import { PositionsList } from './position'
-import { AboutOrder } from './statement'
-import { EditableInfo as EditRightInfoPanel } from './statement/input'
+import { StatementInput as EditRightInfoPanel } from './statement/input'
+import { AboutOrder } from './statement/statement'
 
 function OrderDetail() {
   const { store } = useAppContext()
