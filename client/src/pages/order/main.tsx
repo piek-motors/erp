@@ -68,7 +68,7 @@ function OrderDetail() {
   })
   if (!data?.erp_Orders || !store.user?.UserID) return null
   const order = data.erp_Orders[0]
-  const p = 5
+  const p = 4
 
   if (!data?.erp_Orders || !users?.erp_Users) return <>No data</>
 
@@ -108,28 +108,36 @@ function OrderDetail() {
               </PageTitle>
             </Box>
 
-            <Stack gap={p / 2}>
-              <Row gap={1}>
-                <MyChip
-                  if={!!orderStatus(order)}
-                  color="primary"
-                  text={orderStatus(order) || ''}
-                />
-                <MyChip
-                  if={order.AwaitingDispatch}
-                  text={text.orderReadyForDispatch}
-                />
-                <MyChip
-                  color="danger"
-                  if={order.NeedAttention === 'true'}
-                  text={text.orderRequiresSpectialAttention}
-                />
-              </Row>
-
+            <Row gap={1}>
               <Typography level="h4">
                 {order.Entity} __ {order.City}
               </Typography>
+              <MyChip
+                if={!!orderStatus(order)}
+                color="primary"
+                text={orderStatus(order) || ''}
+              />
+              <MyChip
+                if={order.AwaitingDispatch}
+                text={text.orderReadyForDispatch}
+              />
+              <MyChip
+                color="danger"
+                if={order.NeedAttention === 'true'}
+                text={text.orderRequiresSpectialAttention}
+              />
+            </Row>
 
+            <Box>
+              <PositionsList
+                gap={p}
+                data={data.erp_Orders[0].OrderItems}
+                refetch={refetch}
+              />
+            </Box>
+            <Divider />
+
+            <Box>
               {editMode ? (
                 <EditRightInfoPanel
                   data={data.erp_Orders[0]}
@@ -141,16 +149,6 @@ function OrderDetail() {
                   <AboutOrder data={data.erp_Orders[0]} />
                 </Stack>
               )}
-            </Stack>
-
-            <Divider />
-
-            <Box>
-              <PositionsList
-                gap={p}
-                data={data.erp_Orders[0].OrderItems}
-                refetch={refetch}
-              />
             </Box>
           </Stack>
         </Grid>
@@ -181,9 +179,11 @@ function OrderDetail() {
                 handleFileOnDrop([...files])
               }}
             />
-            <Divider sx={{ my: p }} />
-            <CommentListViewPort user={store.user} />
-            <CommentInputViewPort user={store.user} />
+            <Box className="no-print">
+              <Divider sx={{ my: p }} />
+              <CommentListViewPort user={store.user} />
+              <CommentInputViewPort user={store.user} />
+            </Box>
           </Grid>
         </Grid>
       </Grid>
