@@ -3,7 +3,8 @@ import { RetryLink } from '@apollo/client/link/retry'
 import { WebSocketLink } from '@apollo/client/link/ws'
 import { getInMemoryToken } from '..'
 
-const ws_protocol = process.env.REACT_APP_NODE_ENV === 'development' ? 'ws://' : 'wss://'
+const ws_protocol =
+  process.env.REACT_APP_NODE_ENV === 'development' ? 'ws://' : 'wss://'
 
 export const wsRetryLink = new RetryLink({
   delay: {
@@ -17,22 +18,27 @@ export const wsRetryLink = new RetryLink({
   }
 })
 
-export const wsErrorLink = onError(({ graphQLErrors, networkError, operation, forward }) => {
-  if (networkError) {
-    console.log('[Network error]: ', networkError)
-  }
+export const wsErrorLink = onError(
+  ({ graphQLErrors, networkError, operation, forward }) => {
+    if (networkError) {
+      console.log('[Network error]: ', networkError)
+    }
 
-  if (graphQLErrors)
-    graphQLErrors.forEach(({ message, locations, path }) =>
-      console.log(`[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`)
-    )
-})
+    if (graphQLErrors)
+      graphQLErrors.forEach(({ message, locations, path }) =>
+        console.log(
+          `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
+        )
+      )
+  }
+)
 
 export const webSocketLink = new WebSocketLink({
   uri: ws_protocol + process.env.REACT_APP_HASURA_ENDPOINT,
   options: {
     reconnect: true,
     lazy: true,
+    inactivityTimeout: 30_000,
     connectionParams: () => ({
       headers: {
         authorization: `Bearer ${getInMemoryToken()}`
