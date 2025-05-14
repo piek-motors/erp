@@ -1,4 +1,3 @@
-//@ts-nocheck
 import { plainToInstance } from 'class-transformer'
 import { log } from 'node:console'
 import { getShapeDataConstructor } from 'shared'
@@ -6,6 +5,27 @@ import { Detail, Material } from 'shared/domain'
 import { db } from '../db/conn.ts'
 
 export class Repo {
+  async insertMaterials(materials: Material[]) {
+    const lastId = await db
+      .selectFrom('metal_pdo.materials')
+      .select('id')
+      .orderBy('id', 'desc')
+      .limit(1)
+      .executeTakeFirstOrThrow()
+
+    await db
+      .insertInto('metal_pdo.materials')
+      .values(
+        materials.map((m, idx) => ({
+          id: lastId.id + idx + 1,
+          unit: m.unitId,
+          shape: m.shapeId,
+          shape_data: m.shapeData
+        }))
+      )
+      .execute()
+  }
+
   async getAllMaterials(): Promise<Material[]> {
     const dbMaterials = await db
       .selectFrom('metal_pdo.materials')
@@ -22,7 +42,7 @@ export class Repo {
     })
   }
 
-  async dropDetails() {
+  async dropDetailsTable() {
     await db.deleteFrom('metal_pdo.detail_materials').execute()
     await db.deleteFrom('metal_pdo.details').execute()
     log('details dropped')
@@ -30,15 +50,10 @@ export class Repo {
 
   async saveDetailsAndRelations(
     material: Material,
-    details: Detail[],
-    dbMaterials: Material[]
-  ): Promise<{ associated: number; failed: number }> {
+    details: Detail[]
+  ): Promise<void> {
     const filteredDetails = details.filter(detail => detail.name)
-    if (!filteredDetails.length) {
-      return { associated: 0, failed: 0 }
-    }
-
-    // Save details
+    if (!filteredDetails.length) return
     await db
       .insertInto('metal_pdo.details')
       .values(
@@ -50,31 +65,21 @@ export class Repo {
       .onConflict(e => e.doNothing())
       .execute()
 
-    // Save relations
-    let associated = 0
-    let failed = 0
-
     const relations = details
       .map(detail => {
-        const relatedMaterial = dbMaterials.find(
-          m => m.getTextId() === material.getTextId()
-        )
-
-        const relationData = detail.materials.get(relatedMaterial)
-        if (relationData == null) {
-          log('material not in db', material.getTextId())
-          failed++
+        if (detail.materials?.size === 0) {
           return null
         }
-
-        associated++
-
+        const relation = detail.materials[0]
+        if (relation == null) {
+          return null
+        }
         return {
           detail_id: detail.id,
-          material_id: relatedMaterial.id,
+          material_id: material.id,
           data: {
-            width: relationData.weight,
-            length: relationData.length
+            width: relation?.weight,
+            length: relation?.length
           }
         }
       })
@@ -86,7 +91,5 @@ export class Repo {
         .values(relations)
         .execute()
     }
-
-    return { associated, failed }
   }
 }

@@ -62,7 +62,7 @@ export class ListShapeData extends MaterialShapeData {
   static shapeTitle = 'Лист'
   g!: number
   getIdentifier(): string {
-    return `${ListShapeData.shapeTitle} G ${this.g}`
+    return `${ListShapeData.shapeTitle} G${this.g}`
   }
   getResourceNameProps(): ResourceNameProps {
     return {
@@ -97,6 +97,10 @@ export class SquareShapeData extends MaterialShapeData {
   /** Alloy type or material grade. */
   alloy!: string
   getIdentifier(): string {
+    if (!this.length) {
+      throw new Error('length is not specified')
+    }
+
     return `${SquareShapeData.shapeTitle} ${this.length}x${this.alloy}`
   }
   getResourceNameProps(): ResourceNameProps {

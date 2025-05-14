@@ -31,9 +31,12 @@ export class MaterialParser {
 
   parseSquare(name: string) {
     const [_, size, alloy, alloySecond] = name.split(' ')
-    const sideSize = Number(size.split('x')[1])
+    const sideSize = Number(size.split(/[хx]/)[1])
     const square = new SquareShapeData()
     square.length = sideSize
+    if (Number.isNaN(square.length) || square.length === 0) {
+      throw new Error(`sideSize is NaN, name: ${name}`)
+    }
     if (alloy) {
       square.alloy = `${alloy}${alloySecond || ''}`
     }

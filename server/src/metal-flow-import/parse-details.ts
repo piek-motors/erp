@@ -1,8 +1,8 @@
 import { parse } from 'csv'
+import { log } from 'node:console'
 import fs from 'node:fs'
 import path from 'node:path'
 import { Detail, Material } from 'shared/domain'
-import { log } from 'node:console'
 import {
   filterMaterialsOnlyWithDetails,
   processCsvLine
@@ -14,25 +14,28 @@ const CSV_PATH = path.resolve('src/metal-flow-import', './data/details.csv')
 async function processCsvData(
   csvData: any[]
 ): Promise<Map<Material, Array<Detail>>> {
-  let materialDetails = new Map<Material, Array<Detail>>()
-  let currentMaterial: Material | undefined
   let detailId = 0
+  let material: Material | undefined
+  let detailMaterials = new Map<Material, Array<Detail>>()
 
   for (const line of csvData) {
-    const result = processCsvLine(
-      line,
-      materialDetails,
-      currentMaterial,
-      detailId
-    )
-    materialDetails = result.materialDetails
-    currentMaterial = result.currentMaterial
+    const result = processCsvLine(line, detailMaterials, material, detailId)
+    detailMaterials = result.materialDetails
+    material = result.currentMaterial
     detailId = result.detailId
   }
 
-  return filterMaterialsOnlyWithDetails(materialDetails)
+  return filterMaterialsOnlyWithDetails(detailMaterials)
 }
 
+function findMaterialsToInsert(
+  materialDetails: Map<Material, Array<Detail>>,
+  dbMaterials: Material[]
+) {
+  return Array.from(materialDetails.keys()).filter(
+    material => !dbMaterials.some(dbMaterial => dbMaterial.id === material.id)
+  )
+}
 async function main() {
   try {
     const csv = fs.readFileSync(CSV_PATH)
@@ -45,16 +48,22 @@ async function main() {
       const repo = new Repo()
       const materialDetails = await processCsvData(csvData)
       const dbMaterials = await repo.getAllMaterials()
+      const materialsToInsert = findMaterialsToInsert(
+        materialDetails,
+        dbMaterials
+      )
+      if (materialsToInsert.length > 0) {
+        await repo.insertMaterials(materialsToInsert)
+        log(
+          `Inserted ${materialsToInsert.length} new materials into the database.`
+        )
+      } else {
+        log('No new materials to insert into the database.')
+      }
 
       for (const [material, details] of materialDetails.entries()) {
-        const { associated, failed } = await repo.saveDetailsAndRelations(
-          material,
-          details,
-          dbMaterials
-        )
-
-        log(`associated: ${associated}`)
-        log(`failed: ${failed}`)
+        await repo.saveDetailsAndRelations(material, details)
+        log(`${material.getTextId()}`)
       }
     })
   } catch (error) {

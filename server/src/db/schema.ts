@@ -40,7 +40,6 @@ export namespace DB {
 
   export interface MaterialTable {
     id: Generated<number>
-    name: string
     unit: EnUnit
     shape: EnMaterialShape
     shape_data: JSONColumnType<any, any, any>
