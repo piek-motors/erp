@@ -28,21 +28,54 @@ async function processCsvData(
   return filterMaterialsOnlyWithDetails(detailMaterials)
 }
 
+function getMaterialTextId(material: Material): string {
+  try {
+    return material.getTextId()
+  } catch (error) {
+    throw new Error(
+      `Failed to get text ID for material ${material.id}: ${error}`
+    )
+  }
+}
+
 function findMaterialsToInsert(
   materialDetails: Map<Material, Array<Detail>>,
   dbMaterials: Material[]
-) {
-  return Array.from(materialDetails.keys()).filter(
-    material => !dbMaterials.some(dbMaterial => dbMaterial.id === material.id)
-  )
+): Material[] {
+  const materialTextIds = new Set(dbMaterials.map(getMaterialTextId))
+
+  return Array.from(materialDetails.keys()).filter(material => {
+    const materialTextId = getMaterialTextId(material)
+    return !materialTextIds.has(materialTextId)
+  })
 }
+
+async function processMaterialDetails(
+  materialDetails: Map<Material, Array<Detail>>,
+  dbMaterials: Material[],
+  repo: Repo
+): Promise<void> {
+  for (const [material, details] of materialDetails.entries()) {
+    const materialTextId = getMaterialTextId(material)
+    const dbMaterial = dbMaterials.find(
+      m => getMaterialTextId(m) === materialTextId
+    )
+
+    if (!dbMaterial) {
+      throw new Error(`Material not found in database: ${materialTextId}`)
+    }
+
+    await repo.saveDetailsAndRelations(dbMaterial, details)
+    log(`Processed material: ${materialTextId}`)
+  }
+}
+
 async function main() {
   try {
     const csv = fs.readFileSync(CSV_PATH)
     parse(csv, { delimiter: ',' }, async (err, csvData) => {
       if (err) {
-        console.error('Error parsing CSV:', err)
-        return
+        throw new Error(`Error parsing CSV: ${err}`)
       }
 
       const repo = new Repo()
@@ -61,13 +94,12 @@ async function main() {
         log('No new materials to insert into the database.')
       }
 
-      for (const [material, details] of materialDetails.entries()) {
-        await repo.saveDetailsAndRelations(material, details)
-        log(`${material.getTextId()}`)
-      }
+      // Process existing materials and their details
+      await processMaterialDetails(materialDetails, dbMaterials, repo)
     })
   } catch (error) {
     console.error('Error processing file:', error)
+    process.exit(1)
   }
 }
 

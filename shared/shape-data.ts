@@ -62,6 +62,10 @@ export class ListShapeData extends MaterialShapeData {
   static shapeTitle = 'Лист'
   g!: number
   getIdentifier(): string {
+    if (Number.isNaN(this.g) || this.g == null) {
+      throw new Error('g is not specified')
+    }
+
     return `${ListShapeData.shapeTitle} G${this.g}`
   }
   getResourceNameProps(): ResourceNameProps {

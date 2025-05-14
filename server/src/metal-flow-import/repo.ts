@@ -67,19 +67,28 @@ export class Repo {
 
     const relations = details
       .map(detail => {
-        if (detail.materials?.size === 0) {
-          return null
+        if (!material.id) {
+          throw new Error(`material id not set`)
         }
-        const relation = detail.materials[0]
-        if (relation == null) {
-          return null
+
+        if (detail.materials?.size === 0) {
+          throw new Error(
+            `material mapper: no materials for detail ${detail.id}`
+          )
+        }
+        const relationData = detail.materials[0]
+        if (relationData == null) {
+          // throw new Error(
+          //   `no detail material relation data for detail ${detail.name}`
+          // )
+          return
         }
         return {
           detail_id: detail.id,
           material_id: material.id,
           data: {
-            width: relation?.weight,
-            length: relation?.length
+            width: relationData?.weight,
+            length: relationData?.length
           }
         }
       })

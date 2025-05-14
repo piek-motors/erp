@@ -47,6 +47,14 @@ export function processCsvLine(
       const material = MaterialParser.parse(name)
       if (material) {
         materialDetails.set(material, [])
+
+        // check if material is valid
+        try {
+          material.getTextId()
+        } catch (e) {
+          console.error(`\n\nfailed to parse material ${name}\n\n`, material)
+          throw new Error(`failed to parse material ${name}`)
+        }
         return { materialDetails, currentMaterial: material, detailId }
       }
     }
