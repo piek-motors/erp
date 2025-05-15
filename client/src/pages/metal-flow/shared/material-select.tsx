@@ -36,7 +36,7 @@ export function MaterialSelect(props: {
     return (
       <Box>
         <Typography>{t.Material}:</Typography>
-        <ResourceName resource={props.material?.getResourceNameProps()} />
+        <ResourceName resource={props.material?.getLabelProps()} />
         <Typography>
           {t.Remaining}: {stockStore.getPrecise(material)}
         </Typography>

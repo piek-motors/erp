@@ -1,4 +1,5 @@
 import { Button, ToggleButtonGroup } from '@mui/joy'
+import { plainToInstance } from 'class-transformer'
 import {
   EnUnit,
   ListShapeData,
@@ -7,134 +8,160 @@ import {
   SquareBarShapeData,
   uiUnit
 } from 'domain-model'
+import { Observer } from 'mobx-react-lite'
 import { InputStack, MyInput } from '../../../shortcuts'
 import { AlloyAutocomplete } from '../shared/alloy-autocomplete'
-import { useMaterialStore } from '../stores'
+import { materialStore } from '../store'
 import { t } from '../text'
 
-export function SquareMaterialInput() {
-  const store = useMaterialStore()
-  const d = store.shapeData as SquareBarShapeData
+type ShapeDataComponent<T> = React.ComponentType<{ shapeData: T }>
+
+function withShapeData<T>(Component: ShapeDataComponent<T>) {
+  return function WrappedComponent() {
+    return (
+      <Observer>
+        {() => {
+          const store = materialStore
+          return <Component shapeData={store.shapeData as T} />
+        }}
+      </Observer>
+    )
+  }
+}
+
+function SquareMaterialInputBase({
+  shapeData
+}: {
+  shapeData: SquareBarShapeData
+}) {
   return (
     <InputStack>
       <MyInput
         label={t.Width}
-        value={d.length}
+        value={shapeData.width}
         onChange={e => {
-          d.length = Number(e.target.value)
-          store.setShapeData(d)
+          const newData = { ...shapeData, width: Number(e.target.value) }
+          materialStore.setShapeData(
+            plainToInstance(SquareBarShapeData, newData)
+          )
         }}
       />
       <AlloyAutocomplete
         setAlloy={alloy => {
-          d.alloy = alloy
-          store.setShapeData(d)
+          const newData = { ...shapeData, alloy }
+          materialStore.setShapeData(
+            plainToInstance(SquareBarShapeData, newData)
+          )
         }}
-        alloy={d.alloy}
+        alloy={shapeData.alloy}
       />
     </InputStack>
   )
 }
 
-export function ListMaterialInput() {
-  const store = useMaterialStore()
-  const d = store.shapeData as ListShapeData
+function ListMaterialInputBase({ shapeData }: { shapeData: ListShapeData }) {
   return (
     <InputStack>
       <MyInput
         label={t.Thickness}
-        value={d.thickness}
+        value={shapeData.thickness}
         onChange={e => {
-          d.thickness = Number(e.target.value)
-          store.setShapeData(d)
+          const newData = { ...shapeData, thickness: Number(e.target.value) }
+          materialStore.setShapeData(plainToInstance(ListShapeData, newData))
         }}
       />
     </InputStack>
   )
 }
 
-export function PipeMaterialInput() {
-  const store = useMaterialStore()
-  const d = store.shapeData as PipeShapeData
+function PipeMaterialInputBase({ shapeData }: { shapeData: PipeShapeData }) {
   return (
     <InputStack>
       <MyInput
         label={t.Diameter}
         type="number"
-        value={d.diameter}
+        value={shapeData.diameter}
         onChange={e => {
-          d.diameter = Number(e.target.value)
-          store.setShapeData(d)
+          const newData = { ...shapeData, diameter: Number(e.target.value) }
+          materialStore.setShapeData(plainToInstance(PipeShapeData, newData))
         }}
       />
       <AlloyAutocomplete
         setAlloy={alloy => {
-          d.alloy = alloy
-          store.setShapeData(d)
+          const newData = { ...shapeData, alloy }
+          materialStore.setShapeData(plainToInstance(PipeShapeData, newData))
         }}
-        alloy={d.alloy}
+        alloy={shapeData.alloy}
       />
       <MyInput
         label={t.Thickness}
-        value={d.thickness}
+        value={shapeData.thickness}
         type="number"
         onChange={e => {
-          d.thickness = Number(e.target.value)
-          store.setShapeData(d)
+          const newData = { ...shapeData, thickness: Number(e.target.value) }
+          materialStore.setShapeData(plainToInstance(PipeShapeData, newData))
         }}
       />
     </InputStack>
   )
 }
 
-export function RoundBarInput() {
-  const store = useMaterialStore()
-  const circle = store.shapeData as RoundBarShapeData
+function RoundBarInputBase({ shapeData }: { shapeData: RoundBarShapeData }) {
   return (
     <InputStack>
       <MyInput
         label={t.Diameter}
         type="number"
-        value={circle.diameter}
+        value={shapeData.diameter}
         onChange={e => {
-          circle.diameter = Number(e.target.value)
-          store.setShapeData(circle)
+          const newData = { ...shapeData, diameter: Number(e.target.value) }
+          materialStore.setShapeData(
+            plainToInstance(RoundBarShapeData, newData)
+          )
         }}
         unit={uiUnit(EnUnit.MilliMeter)}
       />
       <AlloyAutocomplete
         setAlloy={alloy => {
-          circle.alloy = alloy
-          store.setShapeData(circle)
+          const newData = { ...shapeData, alloy }
+          materialStore.setShapeData(
+            plainToInstance(RoundBarShapeData, newData)
+          )
         }}
-        alloy={circle.alloy}
+        alloy={shapeData.alloy}
       />
       <MyInput
         label={t.LinearMass}
-        value={circle.linearMass}
+        value={shapeData.linearMass}
         type="number"
         onChange={e => {
-          circle.linearMass = Number(e.target.value)
-          store.setShapeData(circle)
+          const newData = { ...shapeData, linearMass: Number(e.target.value) }
+          materialStore.setShapeData(
+            plainToInstance(RoundBarShapeData, newData)
+          )
         }}
         unit="кг/м"
       />
       <MyInput
         label={t.Density}
-        value={circle.density}
+        value={shapeData.density}
         type="number"
         onChange={e => {
-          circle.density = Number(e.target.value)
-          store.setShapeData(circle)
+          const newData = { ...shapeData, density: Number(e.target.value) }
+          materialStore.setShapeData(
+            plainToInstance(RoundBarShapeData, newData)
+          )
         }}
         unit="кг/м3"
       />
       <ToggleButtonGroup
         sx={{ pt: 1 }}
-        value={circle.calibrated ? 'true' : 'false'}
+        value={shapeData.calibrated ? 'true' : 'false'}
         onChange={(e, v) => {
-          circle.calibrated = v == 'true'
-          store.setShapeData(circle)
+          const newData = { ...shapeData, calibrated: v === 'true' }
+          materialStore.setShapeData(
+            plainToInstance(RoundBarShapeData, newData)
+          )
         }}
       >
         <Button value={'false'}>{t.NotCalibrated}</Button>
@@ -143,3 +170,8 @@ export function RoundBarInput() {
     </InputStack>
   )
 }
+
+export const SquareMaterialInput = withShapeData(SquareMaterialInputBase)
+export const ListMaterialInput = withShapeData(ListMaterialInputBase)
+export const PipeMaterialInput = withShapeData(PipeMaterialInputBase)
+export const RoundBarInput = withShapeData(RoundBarInputBase)

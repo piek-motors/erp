@@ -37,6 +37,12 @@ export class MaterialListStore {
     this.filterKeyword = ''
   }
 
+  get(id: number) {
+    const m = this.materials.find(m => m.id === id)
+    if (!m) throw Error('Material not found')
+    return m
+  }
+
   async fetchAll() {
     try {
       this.loading = true

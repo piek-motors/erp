@@ -32,13 +32,14 @@ export abstract class Material<
 > {
   @IsNumber()
   readonly id: number
+  readonly label: string
 
   abstract readonly unit: EnUnit
-
   abstract readonly shape: EnMaterialShape
 
-  constructor(id: number) {
+  constructor(id: number, label: string = '') {
     this.id = id
+    this.label = label
   }
 
   get unitUI() {
@@ -47,8 +48,8 @@ export abstract class Material<
   get shapeUI() {
     return uiMaterialShape(this.shape)
   }
-  abstract getIdentifier(): string
-  abstract getResourceNameProps(): ResourceNameProps
+  abstract deriveLabel(): string
+  abstract getLabelProps(): ResourceNameProps
 
   abstract load(id: number | null, shapeData: ShapeData): this
   abstract shapeData(): ShapeData
@@ -99,14 +100,14 @@ export class RoundBar extends Material<RoundBarShapeData> {
   @Min(0)
   linearMass!: number
 
-  getIdentifier(): string {
+  deriveLabel(): string {
     if (Number.isNaN(this.diameter)) {
       throw new Error('diameter is NaN')
     }
 
     return `${this.shapeUI} D${this.diameter} ${this.alloy}`
   }
-  getResourceNameProps(): ResourceNameProps {
+  getLabelProps(): ResourceNameProps {
     return {
       name: `${this.shapeUI} D${this.diameter}`,
       caption: this.alloy,
@@ -122,7 +123,7 @@ export class RoundBar extends Material<RoundBarShapeData> {
     return plainToInstance(RoundBar, {
       id,
       alloy: shapeData.alloy,
-      calibrated: shapeData.calibrated,
+      calibrated: shapeData.calibrated || false,
       diameter: shapeData.diameter,
       density: shapeData.density || 0,
       linearMass: shapeData.linearMass || 0
@@ -131,7 +132,7 @@ export class RoundBar extends Material<RoundBarShapeData> {
   shapeData(): RoundBarShapeData {
     return {
       alloy: this.alloy,
-      calibrated: this.calibrated,
+      calibrated: this.calibrated || false,
       density: this.density,
       diameter: this.diameter
     }
@@ -166,7 +167,7 @@ export class List extends Material<ListShapeData> {
   @IsOptional()
   width?: number
 
-  getIdentifier(): string {
+  deriveLabel(): string {
     if (Number.isNaN(this.thickness) || this.thickness == null) {
       throw new Error('g is not specified')
     }
@@ -174,7 +175,7 @@ export class List extends Material<ListShapeData> {
       this.width ? `x${this.width}` : ''
     }`
   }
-  getResourceNameProps(): ResourceNameProps {
+  getLabelProps(): ResourceNameProps {
     return {
       name: `${this.shapeUI} G${this.thickness}${
         this.width ? `x${this.width}` : ''
@@ -224,15 +225,15 @@ export class Pipe extends Material<PipeShapeData> {
   @Min(0)
   thickness!: number
 
-  getIdentifier(): string {
+  deriveLabel(): string {
     if (Number.isNaN(this.diameter)) {
       throw new Error('diameter is not specified')
     }
     return `${this.shapeUI} D${this.diameter} ${this.alloy}`
   }
-  getResourceNameProps(): ResourceNameProps {
+  getLabelProps(): ResourceNameProps {
     return {
-      name: this.getIdentifier(),
+      name: this.deriveLabel(),
       caption: this.alloy
     }
   }
@@ -275,14 +276,14 @@ export class SquareBar extends Material<SquareBarShapeData> {
   @IsString()
   alloy!: string
 
-  getIdentifier(): string {
+  deriveLabel(): string {
     if (!this.length) {
       throw new Error('length is not specified')
     }
 
     return `${this.name} ${this.length}x${this.alloy}`
   }
-  getResourceNameProps(): ResourceNameProps {
+  getLabelProps(): ResourceNameProps {
     return {
       name: this.name,
       caption: this.alloy

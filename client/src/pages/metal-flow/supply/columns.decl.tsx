@@ -24,7 +24,7 @@ export function getColumns(props: {
       accessor: data => {
         if (!data.material) return '-'
         const ma = map.material.fromDto(data.material)
-        return <ResourceName resource={ma.getResourceNameProps()} />
+        return <ResourceName resource={ma.getLabelProps()} />
       }
     },
     {

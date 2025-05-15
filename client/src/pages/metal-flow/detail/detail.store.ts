@@ -63,6 +63,10 @@ export class DetailStore {
     }
   }
 
+  setMaterialRelationData(materialId: number, data: MaterialRelationData) {
+    this.materials.set(materialId, data)
+  }
+
   updateMaterialRelationData(materialId: number, data: MaterialRelationData) {
     const newMaterials = new Map(this.materials)
     newMaterials.set(materialId, {
@@ -70,6 +74,23 @@ export class DetailStore {
       weight: data.weight || ''
     })
     this.materials = newMaterials
+  }
+
+  async load(id: number) {
+    const res = await apolloClient.query<
+      gql.GetDetailByPkQuery,
+      gql.GetDetailByPkQueryVariables
+    >({
+      query: gql.GetDetailByPkDocument,
+      variables: { id }
+    })
+
+    const d = res.data?.metal_pdo_details_by_pk
+    this.id = d?.id
+    this.name = d?.name || ''
+    this.materials = new Map(
+      d?.detail_materials.map(m => [m.material.id, m.data])
+    )
   }
 
   async insert() {
@@ -129,5 +150,64 @@ export class DetailStore {
       }
     }
     this.materials = map
+  }
+
+  async handleUpdateDetail(detail: Detail) {
+    await apolloClient.mutate<
+      gql.UpdateDetailMutation,
+      gql.UpdateDetailMutationVariables
+    >({
+      mutation: gql.UpdateDetailDocument,
+      variables: {
+        id: detail.id,
+        _set: {
+          name: detail.name
+        }
+      }
+    })
+
+    for (const [material, relationData] of detail.materials.entries()) {
+      if (!material.id) throw Error('Material id is null')
+
+      await apolloClient.mutate<
+        gql.UpdateDetailMaterialRelationDataMutation,
+        gql.UpdateDetailMaterialRelationDataMutationVariables
+      >({
+        mutation: gql.UpdateDetailMaterialRelationDataDocument,
+        variables: {
+          data: relationData,
+          detail_id: detail.id,
+          material_id: material.id
+        }
+      })
+    }
+  }
+
+  async handleInsertDetail(state: Detail) {
+    const payload: gql.Metal_Pdo_Detail_Materials_Insert_Input[] = []
+    for (const [material, relationData] of state.materials.entries()) {
+      payload.push({
+        material_id: material.id,
+        data: relationData
+      })
+    }
+    const res = await apolloClient.mutate<
+      gql.InsertDetailMutation,
+      gql.InsertDetailMutationVariables
+    >({
+      mutation: gql.InsertDetailDocument,
+      variables: {
+        object: {
+          name: state.name,
+          detail_materials: {
+            data: payload
+          }
+        }
+      }
+    })
+    if (res.errors?.length) {
+      throw Error(res.errors.join('\n'))
+    }
+    return res.data?.insert_metal_pdo_details_one?.id
   }
 }

@@ -19,15 +19,13 @@ import {
   SendMutation,
   TakeLookHint
 } from 'shortcuts'
-import { useNotifier } from 'store/notifier.store'
-import * as gql from 'types/graphql-shema'
 import { map } from '../mappers'
 import { SmallInputForm } from '../shared'
 import { MaterialUnitSelect } from '../shared/basic'
 import { ResourceName } from '../shared/material-name'
 import { goTo } from '../spa'
 import { useStockStore } from '../stock'
-import { materialListStore, materialStore } from '../stores'
+import { materialListStore, materialStore } from '../store'
 import { t } from '../text'
 import {
   ListMaterialInput,
@@ -35,6 +33,13 @@ import {
   RoundBarInput,
   SquareMaterialInput
 } from './shape-data'
+
+const tabs: Record<EnMaterialShape, JSX.Element> = {
+  [EnMaterialShape.RoundBar]: <RoundBarInput />,
+  [EnMaterialShape.SquareBar]: <SquareMaterialInput />,
+  [EnMaterialShape.List]: <ListMaterialInput />,
+  [EnMaterialShape.Pipe]: <PipeMaterialInput />
+}
 
 function StockAmount(props: { materialId: number | null }) {
   const stockStore = useStockStore()
@@ -51,7 +56,7 @@ const columnList: Column<Material>[] = [
     Header: t.Material,
     id: 'name',
     accessor: m => {
-      return <ResourceName resource={m.getResourceNameProps()} />
+      return <ResourceName resource={m.getLabelProps()} />
     },
     width: '95%'
   },
@@ -94,7 +99,6 @@ export function ListMaterials() {
                 data={materialListStore.materials.filter(each => {
                   if (!each.id) return false
                   if (!materialListStore.filterKeyword) return true
-
                   if (materialListStore.searchResult) {
                     return materialListStore.searchResult.includes(each.id)
                   }
@@ -119,32 +123,37 @@ export function AddMaterial() {
   for (const [key, val] of Object.entries(tabs)) {
     uiTabs[UiMaterialShape[key]] = val
   }
-
+  useEffect(() => {
+    materialStore.clear()
+  }, [])
   return (
-    <SmallInputForm
-      header={t.AddMaterial}
-      last={
-        <>
-          <SendMutation onClick={materialStore.insert} />
-          {materialStore.insertedMaterialId && (
-            <TakeLookHint
-              text={t.RecentlyNewMaterialAdded}
-              link={goTo(
-                MetalFlowSys.material_update,
-                materialStore.insertedMaterialId
+    <Observer
+      render={() => (
+        <SmallInputForm
+          header={t.AddMaterial}
+          last={
+            <>
+              <SendMutation onClick={() => materialStore.insert()} />
+              {materialStore.insertedMaterialId && (
+                <TakeLookHint
+                  text={t.RecentlyNewMaterialAdded}
+                  link={goTo(
+                    MetalFlowSys.material_update,
+                    materialStore.insertedMaterialId
+                  )}
+                />
               )}
-            />
-          )}
-        </>
-      }
-    >
-      <MyTabs tabs={uiTabs} handleChange={materialStore.setShape} />
-
-      <MaterialUnitSelect
-        value={materialStore.unit}
-        onChange={materialStore.setUnit}
-      />
-    </SmallInputForm>
+            </>
+          }
+        >
+          <MyTabs tabs={uiTabs} handleChange={materialStore.setShape} />
+          <MaterialUnitSelect
+            value={materialStore.unit}
+            onChange={v => materialStore.setUnit(v)}
+          />
+        </SmallInputForm>
+      )}
+    />
   )
 }
 
@@ -157,29 +166,6 @@ export function UpdateMaterial() {
     materialStore.load(id)
   }, [])
 
-  const [mut] = gql.useUpdateMaterialMutation()
-  const notifier = useNotifier()
-  const handleSave = async () => {
-    const res = await mut({
-      variables: {
-        id,
-        _set: {
-          id,
-          shape: materialStore.shape,
-          shape_data: materialStore.shapeData
-        }
-      }
-    })
-    if (res.errors?.length) {
-      notifier.notify(
-        'err',
-        `Не сработало: ${JSON.stringify(res.errors, null, 2)}`
-      )
-    } else {
-      notifier.notify('info', 'Материал успешно обновлен')
-    }
-  }
-
   return (
     <Observer
       render={() => (
@@ -191,7 +177,7 @@ export function UpdateMaterial() {
                 <Box>
                   <Typography level="h4">
                     <ResourceName
-                      resource={materialStore.material?.getResourceNameProps()}
+                      resource={materialStore.material?.getLabelProps()}
                     />
                   </Typography>
                   {t.Unit} {materialStore.unit}
@@ -202,7 +188,7 @@ export function UpdateMaterial() {
               <></>
             )
           }
-          last={<SendMutation onClick={handleSave} />}
+          last={<SendMutation onClick={() => materialStore.update()} />}
         >
           <InputStack>{tabs[materialStore.shape]}</InputStack>
         </SmallInputForm>
@@ -239,11 +225,4 @@ function UpdateMaterialUpdateStockLinks(props: { id: number }) {
       <Divider />
     </Row>
   )
-}
-
-const tabs: Record<EnMaterialShape, JSX.Element> = {
-  [EnMaterialShape.RoundBar]: <RoundBarInput />,
-  [EnMaterialShape.SquareBar]: <SquareMaterialInput />,
-  [EnMaterialShape.List]: <ListMaterialInput />,
-  [EnMaterialShape.Pipe]: <PipeMaterialInput />
 }

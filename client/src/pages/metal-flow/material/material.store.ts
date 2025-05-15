@@ -3,6 +3,7 @@ import {
   EnMaterialShape,
   EnUnit,
   GenericShapeData,
+  getMaterialConstructor,
   getShapeDataConstructor,
   Material,
   RoundBar,
@@ -34,35 +35,26 @@ export class MaterialStore {
   }
 
   insertedMaterialId?: number
-  async insert() {
-    this.loading = true
-    this.error = null
-    try {
-      const res = await apolloClient.mutate<
-        gql.InsertMaterialMutation,
-        gql.InsertMaterialMutationVariables
-      >({
-        mutation: gql.InsertMaterialDocument,
-        variables: {
-          object: {
-            unit: this.unit,
-            shape: this.shape,
-            shape_data: this.shapeData
-          }
-        }
-      })
-      this.clear()
-      const id = res.data?.insert_metal_pdo_materials_one?.id
-      if (id) {
-        this.insertedMaterialId = id
-      }
-      return id
-    } catch (e) {
-      this.error = e as Error
-      throw e
-    } finally {
-      this.loading = false
-    }
+
+  setShape(shape: EnMaterialShape) {
+    this.shape = shape
+    const Shape = getShapeDataConstructor(shape)
+    this.shapeData = new Shape(0)
+  }
+
+  setUnit(unit: EnUnit) {
+    this.unit = unit
+  }
+
+  syncState(material: Material) {
+    this.id = material.id || undefined
+    this.unit = material.unit
+    this.setShape(material.shape)
+    this.shapeData = material.shapeData()
+  }
+
+  setShapeData(shapeData: GenericShapeData) {
+    this.shapeData = shapeData
   }
 
   async load(id: number) {
@@ -90,24 +82,61 @@ export class MaterialStore {
     }
   }
 
-  setShape(shape: EnMaterialShape) {
-    this.shape = shape
-    const Shape = getShapeDataConstructor(shape)
-    this.shapeData = new Shape()
+  async insert() {
+    this.loading = true
+    this.error = null
+    try {
+      const MaterialConstructor = getMaterialConstructor(this.shape)
+      const m = new MaterialConstructor(0).load(null, this.shapeData as any)
+      const res = await apolloClient.mutate<
+        gql.InsertMaterialMutation,
+        gql.InsertMaterialMutationVariables
+      >({
+        mutation: gql.InsertMaterialDocument,
+        variables: {
+          object: {
+            unit: this.unit,
+            shape: this.shape,
+            label: m.deriveLabel(),
+            shape_data: this.shapeData
+          }
+        }
+      })
+      const id = res.data?.insert_metal_pdo_materials_one?.id
+      if (id) {
+        this.insertedMaterialId = id
+        this.clear()
+      }
+      return id
+    } catch (e) {
+      this.error = e as Error
+      throw e
+    } finally {
+      this.loading = false
+    }
   }
 
-  setUnit(unit: EnUnit) {
-    this.unit = unit
-  }
+  async update() {
+    if (!this.id) throw new Error('Material id is not set')
 
-  syncState(material: Material) {
-    this.id = material.id || undefined
-    this.unit = material.unit
-    this.setShape(material.shape)
-    this.shapeData = material.shapeData()
-  }
-
-  setShapeData(shapeData: GenericShapeData) {
-    this.shapeData = shapeData
+    this.loading = true
+    this.error = null
+    try {
+      const res = await apolloClient.mutate<
+        gql.UpdateMaterialMutation,
+        gql.UpdateMaterialMutationVariables
+      >({
+        mutation: gql.UpdateMaterialDocument,
+        variables: {
+          id: this.id,
+          _set: { shape: this.shape, shape_data: this.shapeData }
+        }
+      })
+    } catch (e) {
+      this.error = e as Error
+      throw e
+    } finally {
+      this.loading = false
+    }
   }
 }

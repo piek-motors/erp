@@ -1,6 +1,6 @@
-import { ClassConstructor } from 'class-transformer'
 import { IsBoolean, IsNumber, IsOptional, IsString } from 'class-validator'
 import { EnMaterialShape } from './enums'
+import { ClassConstructor } from 'class-transformer'
 
 class Common {
   @IsString()

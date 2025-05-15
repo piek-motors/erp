@@ -5892,6 +5892,7 @@ export type Metal_Pdo_Materials = {
   /** An aggregate relationship */
   detail_materials_aggregate: Metal_Pdo_Detail_Materials_Aggregate;
   id: Scalars['Int']['output'];
+  label: Scalars['String']['output'];
   shape: Scalars['Int']['output'];
   shape_data?: Maybe<Scalars['jsonb']['output']>;
   /** An array relationship */
@@ -6022,6 +6023,7 @@ export type Metal_Pdo_Materials_Bool_Exp = {
   detail_materials?: InputMaybe<Metal_Pdo_Detail_Materials_Bool_Exp>;
   detail_materials_aggregate?: InputMaybe<Metal_Pdo_Detail_Materials_Aggregate_Bool_Exp>;
   id?: InputMaybe<Int_Comparison_Exp>;
+  label?: InputMaybe<String_Comparison_Exp>;
   shape?: InputMaybe<Int_Comparison_Exp>;
   shape_data?: InputMaybe<Jsonb_Comparison_Exp>;
   supplies?: InputMaybe<Metal_Pdo_Supplies_Bool_Exp>;
@@ -6033,6 +6035,8 @@ export type Metal_Pdo_Materials_Bool_Exp = {
 
 /** unique or primary key constraints on table "metal_pdo.materials" */
 export enum Metal_Pdo_Materials_Constraint {
+  /** unique or primary key constraint on columns "label" */
+  MaterialsLabelKey = 'materials_label_key',
   /** unique or primary key constraint on columns "id" */
   MaterialsPkey = 'materials_pkey'
 }
@@ -6063,6 +6067,7 @@ export type Metal_Pdo_Materials_Inc_Input = {
 export type Metal_Pdo_Materials_Insert_Input = {
   detail_materials?: InputMaybe<Metal_Pdo_Detail_Materials_Arr_Rel_Insert_Input>;
   id?: InputMaybe<Scalars['Int']['input']>;
+  label?: InputMaybe<Scalars['String']['input']>;
   shape?: InputMaybe<Scalars['Int']['input']>;
   shape_data?: InputMaybe<Scalars['jsonb']['input']>;
   supplies?: InputMaybe<Metal_Pdo_Supplies_Arr_Rel_Insert_Input>;
@@ -6074,6 +6079,7 @@ export type Metal_Pdo_Materials_Insert_Input = {
 export type Metal_Pdo_Materials_Max_Fields = {
   __typename?: 'metal_pdo_materials_max_fields';
   id?: Maybe<Scalars['Int']['output']>;
+  label?: Maybe<Scalars['String']['output']>;
   shape?: Maybe<Scalars['Int']['output']>;
   unit?: Maybe<Scalars['Int']['output']>;
 };
@@ -6082,6 +6088,7 @@ export type Metal_Pdo_Materials_Max_Fields = {
 export type Metal_Pdo_Materials_Min_Fields = {
   __typename?: 'metal_pdo_materials_min_fields';
   id?: Maybe<Scalars['Int']['output']>;
+  label?: Maybe<Scalars['String']['output']>;
   shape?: Maybe<Scalars['Int']['output']>;
   unit?: Maybe<Scalars['Int']['output']>;
 };
@@ -6113,6 +6120,7 @@ export type Metal_Pdo_Materials_On_Conflict = {
 export type Metal_Pdo_Materials_Order_By = {
   detail_materials_aggregate?: InputMaybe<Metal_Pdo_Detail_Materials_Aggregate_Order_By>;
   id?: InputMaybe<Order_By>;
+  label?: InputMaybe<Order_By>;
   shape?: InputMaybe<Order_By>;
   shape_data?: InputMaybe<Order_By>;
   supplies_aggregate?: InputMaybe<Metal_Pdo_Supplies_Aggregate_Order_By>;
@@ -6135,6 +6143,8 @@ export enum Metal_Pdo_Materials_Select_Column {
   /** column name */
   Id = 'id',
   /** column name */
+  Label = 'label',
+  /** column name */
   Shape = 'shape',
   /** column name */
   ShapeData = 'shape_data',
@@ -6145,6 +6155,7 @@ export enum Metal_Pdo_Materials_Select_Column {
 /** input type for updating data in table "metal_pdo.materials" */
 export type Metal_Pdo_Materials_Set_Input = {
   id?: InputMaybe<Scalars['Int']['input']>;
+  label?: InputMaybe<Scalars['String']['input']>;
   shape?: InputMaybe<Scalars['Int']['input']>;
   shape_data?: InputMaybe<Scalars['jsonb']['input']>;
   unit?: InputMaybe<Scalars['Int']['input']>;
@@ -6185,6 +6196,7 @@ export type Metal_Pdo_Materials_Stream_Cursor_Input = {
 /** Initial value of the column from where the streaming should start */
 export type Metal_Pdo_Materials_Stream_Cursor_Value_Input = {
   id?: InputMaybe<Scalars['Int']['input']>;
+  label?: InputMaybe<Scalars['String']['input']>;
   shape?: InputMaybe<Scalars['Int']['input']>;
   shape_data?: InputMaybe<Scalars['jsonb']['input']>;
   unit?: InputMaybe<Scalars['Int']['input']>;
@@ -6202,6 +6214,8 @@ export type Metal_Pdo_Materials_Sum_Fields = {
 export enum Metal_Pdo_Materials_Update_Column {
   /** column name */
   Id = 'id',
+  /** column name */
+  Label = 'label',
   /** column name */
   Shape = 'shape',
   /** column name */
@@ -10003,14 +10017,14 @@ export type UpdateOrderStatusMutation = { __typename?: 'mutation_root', update_e
 export type GetDetailsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetDetailsQuery = { __typename?: 'query_root', metal_pdo_details: Array<{ __typename?: 'metal_pdo_details', id: number, name: string, detail_materials: Array<{ __typename?: 'metal_pdo_detail_materials', data?: any | null, material: { __typename?: 'metal_pdo_materials', id: number, unit: number, shape: number, shape_data?: any | null } }> }> };
+export type GetDetailsQuery = { __typename?: 'query_root', metal_pdo_details: Array<{ __typename?: 'metal_pdo_details', id: number, name: string, detail_materials: Array<{ __typename?: 'metal_pdo_detail_materials', data?: any | null, material: { __typename?: 'metal_pdo_materials', id: number, unit: number, shape: number, shape_data?: any | null, label: string } }> }> };
 
 export type GetDetailByPkQueryVariables = Exact<{
   id: Scalars['Int']['input'];
 }>;
 
 
-export type GetDetailByPkQuery = { __typename?: 'query_root', metal_pdo_details_by_pk?: { __typename?: 'metal_pdo_details', id: number, name: string, detail_materials: Array<{ __typename?: 'metal_pdo_detail_materials', data?: any | null, material: { __typename?: 'metal_pdo_materials', id: number, unit: number, shape: number, shape_data?: any | null } }> } | null };
+export type GetDetailByPkQuery = { __typename?: 'query_root', metal_pdo_details_by_pk?: { __typename?: 'metal_pdo_details', id: number, name: string, detail_materials: Array<{ __typename?: 'metal_pdo_detail_materials', data?: any | null, material: { __typename?: 'metal_pdo_materials', id: number, unit: number, shape: number, shape_data?: any | null, label: string } }> } | null };
 
 export type InsertDetailMutationVariables = Exact<{
   object: Metal_Pdo_Details_Insert_Input;
@@ -10048,7 +10062,7 @@ export type GetDetailMaterialsQueryVariables = Exact<{
 }>;
 
 
-export type GetDetailMaterialsQuery = { __typename?: 'query_root', metal_pdo_detail_materials: Array<{ __typename?: 'metal_pdo_detail_materials', material: { __typename?: 'metal_pdo_materials', id: number, unit: number, shape: number, shape_data?: any | null } }> };
+export type GetDetailMaterialsQuery = { __typename?: 'query_root', metal_pdo_detail_materials: Array<{ __typename?: 'metal_pdo_detail_materials', material: { __typename?: 'metal_pdo_materials', id: number, unit: number, shape: number, shape_data?: any | null, label: string } }> };
 
 export type GetDetailsMadeFromThatMaterialQueryVariables = Exact<{
   _eq: Scalars['Int']['input'];
@@ -10064,26 +10078,24 @@ export type InsertDetailMaterialsMutationVariables = Exact<{
 
 export type InsertDetailMaterialsMutation = { __typename?: 'mutation_root', insert_metal_pdo_detail_materials?: { __typename?: 'metal_pdo_detail_materials_mutation_response', affected_rows: number, returning: Array<{ __typename?: 'metal_pdo_detail_materials', detail_id: number, material_id: number }> } | null };
 
-export type MaterialFragmentFragment = { __typename?: 'metal_pdo_materials', id: number, unit: number, shape: number, shape_data?: any | null };
+export type MaterialFragmentFragment = { __typename?: 'metal_pdo_materials', id: number, unit: number, shape: number, shape_data?: any | null, label: string };
 
 export type GetMaterialsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetMaterialsQuery = { __typename?: 'query_root', metal_pdo_materials: Array<{ __typename?: 'metal_pdo_materials', id: number, unit: number, shape: number, shape_data?: any | null }> };
+export type GetMaterialsQuery = { __typename?: 'query_root', metal_pdo_materials: Array<{ __typename?: 'metal_pdo_materials', id: number, unit: number, shape: number, shape_data?: any | null, label: string }> };
 
 export type GetMaterialByPkQueryVariables = Exact<{
   id: Scalars['Int']['input'];
 }>;
 
 
-export type GetMaterialByPkQuery = { __typename?: 'query_root', metal_pdo_materials_by_pk?: { __typename?: 'metal_pdo_materials', id: number, unit: number, shape: number, shape_data?: any | null } | null };
+export type GetMaterialByPkQuery = { __typename?: 'query_root', metal_pdo_materials_by_pk?: { __typename?: 'metal_pdo_materials', id: number, unit: number, shape: number, shape_data?: any | null, label: string } | null };
 
-export type GetCirclePossibleAlloysQueryVariables = Exact<{
-  _eq: Scalars['Int']['input'];
-}>;
+export type GetPossibleAlloysQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetCirclePossibleAlloysQuery = { __typename?: 'query_root', metal_pdo_materials: Array<{ __typename?: 'metal_pdo_materials', shape_data?: any | null }> };
+export type GetPossibleAlloysQuery = { __typename?: 'query_root', metal_pdo_materials: Array<{ __typename?: 'metal_pdo_materials', shape_data?: any | null }> };
 
 export type InsertMaterialMutationVariables = Exact<{
   object: Metal_Pdo_Materials_Insert_Input;
@@ -10117,7 +10129,7 @@ export type InsertMaterialSupplyMutation = { __typename?: 'mutation_root', inser
 export type GetSuppliesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetSuppliesQuery = { __typename?: 'query_root', metal_pdo_supplies: Array<{ __typename?: 'metal_pdo_supplies', id: number, material_id?: number | null, qty: any, supplied_at: any, supplier_name: string, material?: { __typename?: 'metal_pdo_materials', id: number, unit: number, shape: number, shape_data?: any | null } | null }> };
+export type GetSuppliesQuery = { __typename?: 'query_root', metal_pdo_supplies: Array<{ __typename?: 'metal_pdo_supplies', id: number, material_id?: number | null, qty: any, supplied_at: any, supplier_name: string, material?: { __typename?: 'metal_pdo_materials', id: number, unit: number, shape: number, shape_data?: any | null, label: string } | null }> };
 
 export type DeleteSupplyMutationVariables = Exact<{
   id: Scalars['Int']['input'];
@@ -10136,7 +10148,7 @@ export type InsertMaterialWriteoffMutation = { __typename?: 'mutation_root', ins
 export type GetWrietOffsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetWrietOffsQuery = { __typename?: 'query_root', metal_pdo_writeoffs: Array<{ __typename?: 'metal_pdo_writeoffs', id: number, date: any, qty: any, type: number, type_data: any, reason: number, material: { __typename?: 'metal_pdo_materials', id: number, unit: number, shape: number, shape_data?: any | null } }> };
+export type GetWrietOffsQuery = { __typename?: 'query_root', metal_pdo_writeoffs: Array<{ __typename?: 'metal_pdo_writeoffs', id: number, date: any, qty: any, type: number, type_data: any, reason: number, material: { __typename?: 'metal_pdo_materials', id: number, unit: number, shape: number, shape_data?: any | null, label: string } }> };
 
 export type DeleteWriteOffMutationVariables = Exact<{
   id: Scalars['Int']['input'];
@@ -10188,6 +10200,7 @@ export const MaterialFragmentFragmentDoc = gql`
   unit
   shape
   shape_data
+  label
 }
     `;
 export const GetEmployeeListDocument = gql`
@@ -11896,46 +11909,45 @@ export type GetMaterialByPkQueryHookResult = ReturnType<typeof useGetMaterialByP
 export type GetMaterialByPkLazyQueryHookResult = ReturnType<typeof useGetMaterialByPkLazyQuery>;
 export type GetMaterialByPkSuspenseQueryHookResult = ReturnType<typeof useGetMaterialByPkSuspenseQuery>;
 export type GetMaterialByPkQueryResult = Apollo.QueryResult<GetMaterialByPkQuery, GetMaterialByPkQueryVariables>;
-export const GetCirclePossibleAlloysDocument = gql`
-    query GetCirclePossibleAlloys($_eq: Int!) {
-  metal_pdo_materials(where: {shape: {_eq: $_eq}}) {
+export const GetPossibleAlloysDocument = gql`
+    query GetPossibleAlloys {
+  metal_pdo_materials {
     shape_data(path: "alloy")
   }
 }
     `;
 
 /**
- * __useGetCirclePossibleAlloysQuery__
+ * __useGetPossibleAlloysQuery__
  *
- * To run a query within a React component, call `useGetCirclePossibleAlloysQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetCirclePossibleAlloysQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetPossibleAlloysQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPossibleAlloysQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetCirclePossibleAlloysQuery({
+ * const { data, loading, error } = useGetPossibleAlloysQuery({
  *   variables: {
- *      _eq: // value for '_eq'
  *   },
  * });
  */
-export function useGetCirclePossibleAlloysQuery(baseOptions: Apollo.QueryHookOptions<GetCirclePossibleAlloysQuery, GetCirclePossibleAlloysQueryVariables> & ({ variables: GetCirclePossibleAlloysQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+export function useGetPossibleAlloysQuery(baseOptions?: Apollo.QueryHookOptions<GetPossibleAlloysQuery, GetPossibleAlloysQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetCirclePossibleAlloysQuery, GetCirclePossibleAlloysQueryVariables>(GetCirclePossibleAlloysDocument, options);
+        return Apollo.useQuery<GetPossibleAlloysQuery, GetPossibleAlloysQueryVariables>(GetPossibleAlloysDocument, options);
       }
-export function useGetCirclePossibleAlloysLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetCirclePossibleAlloysQuery, GetCirclePossibleAlloysQueryVariables>) {
+export function useGetPossibleAlloysLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetPossibleAlloysQuery, GetPossibleAlloysQueryVariables>) {
           const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetCirclePossibleAlloysQuery, GetCirclePossibleAlloysQueryVariables>(GetCirclePossibleAlloysDocument, options);
+          return Apollo.useLazyQuery<GetPossibleAlloysQuery, GetPossibleAlloysQueryVariables>(GetPossibleAlloysDocument, options);
         }
-export function useGetCirclePossibleAlloysSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetCirclePossibleAlloysQuery, GetCirclePossibleAlloysQueryVariables>) {
+export function useGetPossibleAlloysSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetPossibleAlloysQuery, GetPossibleAlloysQueryVariables>) {
           const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<GetCirclePossibleAlloysQuery, GetCirclePossibleAlloysQueryVariables>(GetCirclePossibleAlloysDocument, options);
+          return Apollo.useSuspenseQuery<GetPossibleAlloysQuery, GetPossibleAlloysQueryVariables>(GetPossibleAlloysDocument, options);
         }
-export type GetCirclePossibleAlloysQueryHookResult = ReturnType<typeof useGetCirclePossibleAlloysQuery>;
-export type GetCirclePossibleAlloysLazyQueryHookResult = ReturnType<typeof useGetCirclePossibleAlloysLazyQuery>;
-export type GetCirclePossibleAlloysSuspenseQueryHookResult = ReturnType<typeof useGetCirclePossibleAlloysSuspenseQuery>;
-export type GetCirclePossibleAlloysQueryResult = Apollo.QueryResult<GetCirclePossibleAlloysQuery, GetCirclePossibleAlloysQueryVariables>;
+export type GetPossibleAlloysQueryHookResult = ReturnType<typeof useGetPossibleAlloysQuery>;
+export type GetPossibleAlloysLazyQueryHookResult = ReturnType<typeof useGetPossibleAlloysLazyQuery>;
+export type GetPossibleAlloysSuspenseQueryHookResult = ReturnType<typeof useGetPossibleAlloysSuspenseQuery>;
+export type GetPossibleAlloysQueryResult = Apollo.QueryResult<GetPossibleAlloysQuery, GetPossibleAlloysQueryVariables>;
 export const InsertMaterialDocument = gql`
     mutation InsertMaterial($object: metal_pdo_materials_insert_input!) {
   insert_metal_pdo_materials_one(object: $object) {

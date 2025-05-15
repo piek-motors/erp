@@ -3,6 +3,7 @@ fragment MaterialFragment on metal_pdo_materials {
   unit
   shape
   shape_data
+  label
 }
 
 query GetMaterials {
@@ -17,8 +18,8 @@ query GetMaterialByPk($id: Int!) {
   }
 }
 
-query GetCirclePossibleAlloys($_eq: Int!) {
-  metal_pdo_materials(where: { shape: { _eq: $_eq } }) {
+query GetPossibleAlloys {
+  metal_pdo_materials {
     shape_data(path: "alloy")
   }
 }

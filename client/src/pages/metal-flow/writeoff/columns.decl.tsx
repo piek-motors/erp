@@ -23,7 +23,7 @@ export function getColumns(props: {
       id: 'name',
       accessor: data => {
         const ma = map.material.fromDto(data.material)
-        return <ResourceName resource={ma.getResourceNameProps()} />
+        return <ResourceName resource={ma.getLabelProps()} />
       }
     },
     {

@@ -28,21 +28,19 @@ export function MaterialUnitSelect(props: {
   onChange: (e: EnUnit) => void
 }) {
   return (
-    <Box>
-      <ToggleButtonGroup
-        value={props.value.toString()}
-        onChange={(e, v) => {
-          props.onChange(parseInt(v as any))
-        }}
-      >
-        {Object.entries(UiUnit).map(([key, value]) => {
-          return (
-            <Button value={key} key={key}>
-              {value}
-            </Button>
-          )
-        })}
-      </ToggleButtonGroup>
-    </Box>
+    <ToggleButtonGroup
+      value={props.value.toString()}
+      onChange={(e, v) => {
+        props.onChange(parseInt(v as any))
+      }}
+    >
+      {Object.entries(UiUnit).map(([key, value]) => {
+        return (
+          <Button value={key} key={key}>
+            {value}
+          </Button>
+        )
+      })}
+    </ToggleButtonGroup>
   )
 }

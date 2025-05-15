@@ -39,7 +39,7 @@ interface FormProps {
 
 export function SmallInputForm(props: FormProps) {
   return (
-    <Box maxWidth="sm">
+    <Box maxWidth="sm" p={2}>
       <PageTitle title={props.header} hideIcon />
       <Sheet sx={{ p: 2 }}>
         <Stack>

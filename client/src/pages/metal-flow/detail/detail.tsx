@@ -3,6 +3,7 @@ import { PageTitle } from 'components'
 import { Table } from 'components/table.impl'
 import { Detail, EnUnit, Material } from 'domain-model'
 import { MetalFlowSys } from 'lib/routes'
+import { Observer } from 'mobx-react-lite'
 import { useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Column } from 'react-table'
@@ -20,10 +21,8 @@ import { QtyInputWithUnit, SmallInputForm } from '../shared'
 import { MaterialAutocompleteMulti } from '../shared/material-autocomplete'
 import { ResourceName } from '../shared/material-name'
 import { goTo } from '../spa'
+import { detailStore, materialListStore } from '../store'
 import { t } from '../text'
-import { handleInsertDetail, handleUpdateDetail } from './mutations'
-import { useDetail } from './state'
-import { Observer } from 'mobx-react-lite'
 
 const columnList: Column<Detail>[] = [
   {
@@ -38,50 +37,61 @@ const columnList: Column<Detail>[] = [
 ]
 
 function MaterialWeightInput(props: { material: Material }) {
-  const { material } = props
-  const state = useDetail()
-  const relationData = state.materials.get(material)
+  const id = props.material.id
+  const relationData = detailStore.materials.get(id)
   return (
     <>
       <QtyInputWithUnit
         label="Вес заготовки"
         unitId={EnUnit.Gram}
         setValue={v => {
-          state.updMaterialRelationData(material.id, { weight: v })
+          const relationData = detailStore.materials.get(id)
+          if (!relationData) throw Error('Relation data not found')
+          detailStore.setMaterialRelationData(id, {
+            weight: v,
+            length: relationData.length
+          })
         }}
-        value={relationData ? relationData.weight?.toString() : ''}
+        value={relationData ? relationData.weight : ''}
       />
       <QtyInputWithUnit
         label="Длина заготовки"
         unitId={EnUnit.MilliMeter}
         setValue={v => {
-          state.updMaterialRelationData(props.material.id, { length: v })
+          const relationData = detailStore.materials.get(id)
+          if (!relationData) throw Error('Relation data not found')
+          detailStore.setMaterialRelationData(id, {
+            weight: relationData.weight,
+            length: v
+          })
         }}
-        value={state.materials.get(props.material)?.length?.toString() || ''}
+        value={relationData ? relationData.length : ''}
       />
     </>
   )
 }
 
 function DetailMaterialRelationForm() {
-  const state = useDetail()
   return (
     <Sheet>
       <Stack my={1} gap={2}>
-        {state.materials
+        {detailStore.materials
           .entries()
           .map(([k, v]) => k)
-          .map(m => (
-            <Stack sx={{ width: 'max-content' }} key={m.id}>
-              <Row sx={{ fontWeight: 'bold' }}>
-                <Typography>Материал</Typography>
-                <ResourceName resource={m.getResourceNameProps()} />
-              </Row>
-              <Stack p={1}>
-                <MaterialWeightInput material={m} />
+          .map(id => {
+            const material = materialListStore.get(id)
+            return (
+              <Stack sx={{ width: 'max-content' }} key={id}>
+                <Row sx={{ fontWeight: 'bold' }}>
+                  <Typography>Материал</Typography>
+                  <ResourceName resource={material?.getLabelProps()} />
+                </Row>
+                <Stack p={1}>
+                  <MaterialWeightInput material={material} />
+                </Stack>
               </Stack>
-            </Stack>
-          ))}
+            )
+          })}
       </Stack>
     </Sheet>
   )
@@ -121,39 +131,26 @@ export function ListDetails() {
 export function UpdateDetail() {
   const id = Number(new URLSearchParams(useLocation().search).get('id'))
   if (!id) return <>No id</>
-  const state = useDetail()
-  const { data, refetch } = gql.useGetDetailByPkQuery({
-    variables: {
-      id
-    },
-    fetchPolicy: 'network-only'
-  })
-  const detail = map.detail.fromDto(data?.metal_pdo_details_by_pk)
+
   useEffect(() => {
-    if (detail) {
-      state.unpack(detail)
-    }
-  }, [data])
+    detailStore.load(id)
+  }, [])
 
   return (
     <Observer
       render={() => (
         <SmallInputForm
           header={t.EditDetail}
-          last={
-            <SendMutation
-              onClick={() => handleUpdateDetail(state).then(() => refetch())}
-            />
-          }
+          last={<SendMutation onClick={detailStore.update} />}
         >
           <Stack gap={1}>
-            <Typography>ID {state.detailID}</Typography>
+            <Typography>ID {detailStore.id}</Typography>
             <MyInput
               label={t.DetailName}
               onChange={(event: any) => {
-                state.setName(event.target.value)
+                detailStore.setName(event.target.value)
               }}
-              value={state.name}
+              value={detailStore.name}
               autoComplete="off"
             />
             <DetailMaterialRelationForm />
@@ -165,7 +162,6 @@ export function UpdateDetail() {
 }
 
 export function AddDetail() {
-  const state = useDetail()
   const { data: materials } = useGetMaterialsQuery()
   return (
     <Observer
@@ -174,12 +170,7 @@ export function AddDetail() {
           header={t.AddDetail}
           last={
             <SendMutation
-              onClick={async () =>
-                handleInsertDetail(state).then(res => {
-                  state.reset()
-                  return res
-                })
-              }
+              onClick={detailStore.insert}
               additionals={(err, res) => (
                 <TakeLookHint
                   text={t.RecentlyNewDetailAdded}
@@ -192,15 +183,18 @@ export function AddDetail() {
           <MyInput
             label={t.DetailName}
             onChange={(event: any) => {
-              state.setName(event.target.value)
+              // state.setName(event.target.value)
+              detailStore.setName(event.target.value)
             }}
-            value={state.name}
+            value={detailStore.name}
             autoComplete="off"
           />
           <MaterialAutocompleteMulti
             data={materials}
-            value={Array.from(state.materials.keys())}
-            onChange={m => state.setMaterials(m)}
+            value={Array.from(materialListStore.materials)}
+            onChange={m => {
+              detailStore.setMaterials(m)
+            }}
           />
           <DetailMaterialRelationForm />
         </SmallInputForm>
