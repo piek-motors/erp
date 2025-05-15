@@ -9,8 +9,6 @@ export const up = async (db: KDB) => {
     .execute()
 
   await db.schema.alterTable(tables.pdo.materials).dropColumn('shape').execute()
-  await db.schema.alterTable(tables.pdo.materials).dropColumn('name').execute()
-
   await db.schema
     .alterTable(tables.pdo.materials)
     .addColumn('shape', 'integer', b => b.notNull())
@@ -19,9 +17,4 @@ export const up = async (db: KDB) => {
 
 export const down = async (db: KDB) => {
   await db.schema.alterTable(tables.pdo.materials).dropColumn('label').execute()
-
-  await db.schema
-    .alterTable(tables.pdo.materials)
-    .addColumn('name', 'text', b => b.notNull())
-    .execute()
 }
