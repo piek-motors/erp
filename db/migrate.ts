@@ -1,16 +1,28 @@
-import { promises as fs } from 'fs'
+import { config } from 'dotenv'
+import { promises as fs } from 'node:fs'
 import {
   FileMigrationProvider,
   Migrator,
   type MigrationResultSet
 } from 'kysely'
 import * as path from 'path'
-import { db } from './db/conn.ts'
+import { Command } from 'commander'
+import { connect } from './connect'
 
-const args = process.argv.slice(2)
+const program = new Command()
+  .option('-r, --revert', 'Revert migrations')
+  .parse()
 
-const downgrade = args[0] === 'down'
-const __dirname = new URL('.', import.meta.url).pathname
+const { revert } = program.opts()
+
+config()
+const connectionString = process.env.PG_CONN_STR
+if (!connectionString) {
+  throw new Error('Database connection string is required')
+}
+
+const downgrade = revert === 'true' || revert === true
+const db = connect(connectionString)
 
 async function migrateToLatest() {
   const migrator = new Migrator({
@@ -18,7 +30,7 @@ async function migrateToLatest() {
     provider: new FileMigrationProvider({
       fs,
       path,
-      migrationFolder: path.join(__dirname, '../src/db/migrations')
+      migrationFolder: path.join(__dirname, './migrations')
     })
   })
 
@@ -42,14 +54,10 @@ async function migrateToLatest() {
       console.error(`failed to execute migration "${it.migrationName}"`)
     }
   })
-
-  if (error) {
-    console.error('failed to migrate')
-    console.error(error)
-    process.exit(1)
-  }
-
   await db.destroy()
+  if (error) {
+    console.error('failed to migrate', error)
+  }
 }
 
 migrateToLatest().catch(err => console.error(err))

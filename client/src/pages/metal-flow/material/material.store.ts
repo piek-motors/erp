@@ -73,7 +73,7 @@ export class MaterialStore {
   }
 
   syncState(material: Material) {
-    this.id = material.id
+    this.id = material.id || undefined
     this.unit = material.unit
     this.setShape(material.shape)
     this.shapeData = material.shapeData()

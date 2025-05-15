@@ -1,6 +1,6 @@
 import { sql } from 'kysely'
-import { tables } from '../const.ts'
-import type { KDB } from '../schema.ts'
+import { tables } from '../const'
+import type { KDB } from '../schema'
 
 export const up = async (db: KDB) => {
   // alter table supplies drop column matrertial_id and add column material_id integer references metal_pdo.materials(id) on delete cascade;

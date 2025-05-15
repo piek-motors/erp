@@ -10,7 +10,7 @@ import {
   SquareBarShapeData,
   type Material
 } from 'domain-model'
-import type { DB } from '../../db/schema.ts'
+import type { DB } from '../../../db/schema.js'
 
 export interface IMaterialFactory {
   createFromShapeData(shapeData: object): Material

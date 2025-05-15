@@ -1,3 +1,9 @@
+import {
+  EnMaterialShape,
+  EnUnit,
+  EnWriteoffReason,
+  EnWriteoffType
+} from 'domain-model'
 import type {
   Generated,
   GeneratedAlways,
@@ -6,13 +12,6 @@ import type {
   Selectable as KyselySelectable,
   Updateable as KyselyUpdateable
 } from 'kysely'
-
-import {
-  EnMaterialShape,
-  EnUnit,
-  EnWriteoffReason,
-  EnWriteoffType
-} from 'domain-model'
 
 export type KDB = Kysely<DB.Schema>
 export type Selectable<T> = KyselySelectable<T>

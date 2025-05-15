@@ -12,8 +12,8 @@ import {
   SquareBar,
   SquareBarShapeData
 } from 'domain-model'
-import type { DB } from '../../db/schema.ts'
-import { extractShapeData } from './guards.ts'
+import type { DB } from '../../../db/schema.js'
+import { extractShapeData } from './guards.js'
 
 export class MaterialMapper {
   toPersistence(material: Material): DB.MaterialTable {

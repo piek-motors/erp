@@ -1,6 +1,6 @@
 import { sql } from 'kysely'
-import { enums, schema, tables } from '../const.ts'
-import { type KDB } from '../schema.ts'
+import { enums, schema, tables } from '../const'
+import { type KDB } from '../schema'
 
 export const up = async (db: KDB) => {
   // Create schema

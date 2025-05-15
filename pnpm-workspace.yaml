@@ -1,5 +1,6 @@
 packages:
+  - db
   - domain-model
   - server
   - client
-  - metal-flow-import
+  - metalflow-import

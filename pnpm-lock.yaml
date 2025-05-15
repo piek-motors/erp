@@ -151,6 +151,37 @@ importers:
         specifier: ^5.8.3
         version: 5.8.3
 
+  db:
+    dependencies:
+      commander:
+        specifier: ^13.1.0
+        version: 13.1.0
+      domain-model:
+        specifier: workspace:*
+        version: link:../domain-model
+      dotenv:
+        specifier: ^10.0.0
+        version: 10.0.0
+      kysely:
+        specifier: ^0.27.6
+        version: 0.27.6
+      pg:
+        specifier: ^8.14.1
+        version: 8.16.0
+    devDependencies:
+      '@types/node':
+        specifier: ^18.19.83
+        version: 18.19.86
+      '@types/pg':
+        specifier: ^8.11.11
+        version: 8.15.1
+      ts-node:
+        specifier: ^10.9.2
+        version: 10.9.2(@types/node@18.19.86)(typescript@5.8.3)
+      typescript:
+        specifier: ^5.8.2
+        version: 5.8.3
+
   domain-model:
     dependencies:
       class-transformer:
@@ -166,6 +197,30 @@ importers:
       typescript:
         specifier: ^5.8.2
         version: 5.8.3
+
+  metalflow-import:
+    dependencies:
+      csv:
+        specifier: ^6.3.11
+        version: 6.3.11
+      db:
+        specifier: workspace:*
+        version: link:../db
+      domain-model:
+        specifier: workspace:*
+        version: link:../domain-model
+      kysely:
+        specifier: ^0.27.6
+        version: 0.27.6
+      pg:
+        specifier: ^8.14.1
+        version: 8.16.0
+      typescript:
+        specifier: ^5.8.3
+        version: 5.8.3
+      yaml:
+        specifier: ^2.7.1
+        version: 2.7.1
 
   server:
     dependencies:
@@ -187,6 +242,9 @@ importers:
       csv:
         specifier: ^6.3.11
         version: 6.3.11
+      db:
+        specifier: workspace:*
+        version: link:../db
       domain-model:
         specifier: workspace:*
         version: link:../domain-model
@@ -217,9 +275,6 @@ importers:
       jsonwebtoken:
         specifier: ^8.5.1
         version: 8.5.1
-      kysely:
-        specifier: ^0.27.6
-        version: 0.27.6
       multer:
         specifier: ^1.4.2
         version: 1.4.4
@@ -229,12 +284,6 @@ importers:
       node-fetch:
         specifier: ^2.6.7
         version: 2.7.0
-      pg:
-        specifier: ^8.14.1
-        version: 8.16.0
-      yaml:
-        specifier: ^2.7.1
-        version: 2.7.1
     devDependencies:
       '@graphql-codegen/cli':
         specifier: ^2.13.8
@@ -266,9 +315,6 @@ importers:
       '@types/node-fetch':
         specifier: ^2.6.2
         version: 2.6.12
-      '@types/pg':
-        specifier: ^8.11.11
-        version: 8.15.1
       nodemon:
         specifier: ^2.0.19
         version: 2.0.22
@@ -3279,6 +3325,10 @@ packages:
   combined-stream@1.0.8:
     resolution: {integrity: sha512-FQN4MRfuJeHf7cBbBMJFXhKSDq+2kAArBlmRBvcvFE5BB1HZKXtSFASDhdlz9zOYwxh8lDdnvmMOe/+5cdoEdg==}
     engines: {node: '>= 0.8'}
+
+  commander@13.1.0:
+    resolution: {integrity: sha512-/rFeCpNJQbhSZjGVwO9RFV3xPqbnERS8MmIQzCtD/zl6gpJuV/bMLuN92oG3F7d8oDEHHRrujSXNUr8fpjntKw==}
+    engines: {node: '>=18'}
 
   commander@2.20.3:
     resolution: {integrity: sha512-GpVkmM8vF2vQUkj2LvZmD35JxeJOLCwJ9cUkugyk2nuhbv3+mJvpLYYt+0+USMxE+oj+ey/lJEnhZw75x/OMcQ==}
@@ -12363,6 +12413,8 @@ snapshots:
   combined-stream@1.0.8:
     dependencies:
       delayed-stream: 1.0.0
+
+  commander@13.1.0: {}
 
   commander@2.20.3: {}
 

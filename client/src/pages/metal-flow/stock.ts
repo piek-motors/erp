@@ -62,14 +62,14 @@ export const useStockStore = create<IStock>(set => ({
 
   getRounded(material?: Material): string {
     if (!material) return '-'
-    const qty = (this.stock.get(material.id) || 0).toFixed()
-    return `${qty} ${uiUnit(material.unit)}`
+    // const qty = (this.stock.get(material.id) || 0).toFixed()
+    return `${0} ${uiUnit(material.unit)}`
   },
 
   getPrecise(material?: Material): string {
     if (!material) return '-'
-    const qty = (this.stock.get(material.id) || 0).toFixed(3)
-    return `${qty} ${uiUnit(material.unit)}`
+    // const qty = (this.stock.get(material.id) || 0).toFixed(3)
+    return `${0} ${uiUnit(material.unit)}`
   },
 
   getByIdRounded(materialId: number): string {

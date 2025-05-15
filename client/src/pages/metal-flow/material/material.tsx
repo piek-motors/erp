@@ -43,8 +43,9 @@ import {
   SquareMaterialInput
 } from './shape-data'
 
-function StockAmount(props: { materialId: number }) {
+function StockAmount(props: { materialId: number | null }) {
   const stockStore = useStockStore()
+  if (!props.materialId) return '-'
   return stockStore.getByIdRounded(props.materialId)
 }
 
@@ -103,6 +104,7 @@ export function MaterialsList(props: { store: MaterialListStore }) {
           <Table
             columns={columnList}
             data={store.materials.filter(each => {
+              if (!each.id) return false
               if (!store.filterKeyword) return true
 
               if (store.searchResult) {
@@ -112,6 +114,7 @@ export function MaterialsList(props: { store: MaterialListStore }) {
               return true
             })}
             onDoubleRowClick={row => {
+              if (!row.id) throw Error('Material id is null')
               navigate(goTo(MetalFlowSys.material_update, row.id))
             }}
           />

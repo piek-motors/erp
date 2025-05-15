@@ -1,5 +1,5 @@
-import { tables } from '../const.ts'
-import { type KDB } from '../schema.ts'
+import { tables } from '../const'
+import { KDB } from '../schema'
 
 export const up = async (db: KDB) => {
   await db.schema

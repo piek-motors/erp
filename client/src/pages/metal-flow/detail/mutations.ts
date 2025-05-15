@@ -18,6 +18,8 @@ export const handleUpdateDetail = async (state: IDetail) => {
   })
 
   for (const [material, relationData] of state.materials.entries()) {
+    if (!material.id) throw Error('Material id is null')
+    
     await apolloClient.mutate<
       gql.UpdateDetailMaterialRelationDataMutation,
       gql.UpdateDetailMaterialRelationDataMutationVariables
