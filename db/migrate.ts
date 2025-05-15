@@ -1,12 +1,13 @@
-import { config } from 'dotenv'
-import { promises as fs } from 'node:fs'
+require('dotenv').config({ path: require('find-config')('.env') })
+
+import { Command } from 'commander'
 import {
   FileMigrationProvider,
   Migrator,
   type MigrationResultSet
 } from 'kysely'
+import { promises as fs } from 'node:fs'
 import * as path from 'path'
-import { Command } from 'commander'
 import { connect } from './connect'
 
 const program = new Command()
@@ -15,7 +16,6 @@ const program = new Command()
 
 const { revert } = program.opts()
 
-config()
 const connectionString = process.env.PG_CONN_STR
 if (!connectionString) {
   throw new Error('Database connection string is required')

@@ -24,14 +24,17 @@ ssh "$TARGET" <<EOF
   git pull
   pnpm i --frozen-lockfile
 
-  cd ~/erp/shared
+  cd ~/erp/domain-model
   npm run build
 
   cd ~/erp/server
   npm run build
 
+  cd ~/erp/db
   npm run migrate
 
+  cd ~/erp/server
+  
   if npx pm2 describe "$PM2_PROCESS_NAME" > /dev/null; then
     echo "Process exists. Restarting..."
     npx pm2 restart "$PM2_PROCESS_NAME"
