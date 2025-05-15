@@ -1,20 +1,22 @@
 import type {
   Generated,
   GeneratedAlways,
-  Insertable,
   JSONColumnType,
   Kysely,
-  Selectable,
-  Updateable
+  Selectable as KyselySelectable,
+  Updateable as KyselyUpdateable
 } from 'kysely'
-import type {
+
+import {
   EnMaterialShape,
   EnUnit,
   EnWriteoffReason,
   EnWriteoffType
-} from 'shared/enumerations'
+} from 'domain-model'
 
 export type KDB = Kysely<DB.Schema>
+export type Selectable<T> = KyselySelectable<T>
+export type Updateable<T> = KyselyUpdateable<T>
 
 export namespace DB {
   export interface Schema {
@@ -34,9 +36,6 @@ export namespace DB {
     AccessLevelID: number | null
     Password: string | null
   }
-  export type User = Selectable<UserTable>
-  export type InsertableUser = Insertable<UserTable>
-  export type UpdateableUser = Updateable<UserTable>
 
   export interface MaterialTable {
     id: Generated<number>
@@ -44,6 +43,8 @@ export namespace DB {
     shape: EnMaterialShape
     shape_data: JSONColumnType<any, any, any>
   }
+
+  export type Material = KyselySelectable<MaterialTable>
 
   export interface DetailTable {
     id: Generated<number>

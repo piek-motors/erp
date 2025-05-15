@@ -2,7 +2,7 @@ import { parse } from 'csv'
 import { log } from 'node:console'
 import fs from 'node:fs'
 import path from 'node:path'
-import { Detail, Material } from 'shared/domain'
+import { Detail, Material } from 'domain-model'
 import {
   filterMaterialsOnlyWithDetails,
   processCsvLine
@@ -30,10 +30,10 @@ async function processCsvData(
 
 function getMaterialTextId(material: Material): string {
   try {
-    return material.getTextId()
+    return material.getIdentifier()
   } catch (error) {
     throw new Error(
-      `Failed to get text ID for material ${material.id}: ${error}`
+      `Failed to get text ID for material ${material.shape}: ${error}`
     )
   }
 }

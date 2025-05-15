@@ -1,8 +1,10 @@
-import { MetalFlowSys } from 'src/lib/routes'
-import { RouteConfig } from 'src/types/global'
+import { MetalFlowSys } from 'lib/routes'
+import { Observer } from 'mobx-react-lite'
+import { RouteConfig } from 'types/global'
 import { DetailAddForm, DetailsList, DetailUpdateForm } from './detail/detail'
 import { AddMaterial, MaterialsList, UpdateMaterial } from './material/material'
 import { MetalFlowSubsystem } from './spa'
+import { materialListStore, materialStore } from './stores'
 import { AddSuply, SuppliesList } from './supply/components'
 import { AddWriteOff, WriteoffsList } from './writeoff/components'
 
@@ -12,15 +14,15 @@ const routes = [
     path: MetalFlowSys.root
   },
   {
-    element: <MaterialsList />,
+    element: <MaterialsList store={materialListStore} />,
     path: MetalFlowSys.materials
   },
   {
-    element: <AddMaterial />,
+    element: <AddMaterial store={materialStore} />,
     path: MetalFlowSys.material_add
   },
   {
-    element: <UpdateMaterial />,
+    element: <UpdateMaterial store={materialStore} />,
     path: MetalFlowSys.material_update
   },
   {
@@ -56,5 +58,12 @@ const routes = [
 export default routes
 
 export function getComponentByCurrentPath(path: string) {
-  return routes.find(r => r.path === path)?.element
+  return (
+    <Observer
+      render={() => {
+        const component = routes.find(r => r.path === path)?.element || <></>
+        return component
+      }}
+    />
+  )
 }

@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { Sheet } from '@mui/joy'
 import { useTable } from 'react-table'
-import { PreparedEmployeeDto } from 'src/types/global'
+import { PreparedEmployeeDto } from 'types/global'
 
 interface ITableProps {
   readonly columns: any[]

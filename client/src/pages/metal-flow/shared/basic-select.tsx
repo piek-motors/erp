@@ -1,5 +1,5 @@
 import { FormControl, FormLabel, Option, Select } from '@mui/joy'
-import { EnUnit } from 'shared/enumerations'
+import { EnUnit } from '../../../../../domain-model/dist'
 
 export function MySelect(props: {
   value?: any
@@ -28,4 +28,3 @@ export function MySelect(props: {
     </FormControl>
   )
 }
-

@@ -1,5 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { Box, Card, Typography } from '@mui/joy'
+import { AppRoutes } from 'lib/routes'
 import { useState } from 'react'
 import {
   DragDropContext,
@@ -11,16 +12,15 @@ import {
   OnDragEndResponder
 } from 'react-beautiful-dnd'
 import { useNavigate } from 'react-router-dom'
-import { OrderStatus } from 'shared'
-import { AppRoutes } from 'src/lib/routes'
-import { RouteConfig, TReclamationOrder } from 'src/types/global'
+import { OrderStatus } from 'domain-model'
+import { RouteConfig, TReclamationOrder } from 'types/global'
+import { PageTitle } from '../components'
+import { AddResourceButton, Pre } from '../shortcuts'
 import {
   useGetReclamationOrdersQuery,
   useInsertOrderMutation,
   useUpdateOrderStatusMutation
-} from 'src/types/graphql-shema'
-import { PageTitle } from '../components'
-import { AddResourceButton, Pre } from '../shortcuts'
+} from '../types/graphql-shema'
 
 interface IReclamationProps {
   inbox: TReclamationOrder[]

@@ -1,12 +1,8 @@
 /** @jsxImportSource @emotion/react */
 import { Box, Stack, Typography } from '@mui/joy'
-import { TOrderItem } from 'src/types/global'
-import { useDeleteOrderItemByPkMutation } from 'src/types/graphql-shema'
-import {
-  DeleteResourceButton,
-  Row,
-  UpdateResourceButton
-} from '../../shortcuts'
+import { DeleteResourceButton, Row, UpdateResourceButton } from 'shortcuts'
+import { TOrderItem } from 'types/global'
+import { useDeleteOrderItemByPkMutation } from 'types/graphql-shema'
 import { useOrderDetailStore } from './state'
 
 interface IOrderItemListProps {

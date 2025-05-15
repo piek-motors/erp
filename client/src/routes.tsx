@@ -1,5 +1,5 @@
-import help from 'src/pages/attendance/help'
-import Attendance from 'src/pages/attendance/main'
+import help from 'pages/attendance/help'
+import Attendance from 'pages/attendance/main'
 import { RouteConfig } from '../src/types/global'
 import { AppRoutes } from './lib/routes'
 import { MentionList } from './pages/mentions'

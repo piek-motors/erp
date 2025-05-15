@@ -2,12 +2,12 @@
 import { UilFile, UilFileAlt, UilImage } from '@iconscout/react-unicons'
 import { Box, Stack, Typography } from '@mui/joy'
 import moment from 'moment'
+import { useOrderDetailStore } from 'pages/order/state'
 import { useEffect } from 'react'
-import { useOrderDetailStore } from 'src/pages/order/state'
-import { TOrderDocument } from 'src/types/global'
-import { FileService } from '../../services/file.service'
-import { DeleteResourceButton, Row } from '../../shortcuts'
-import { useNotifier } from '../../store/notifier.store'
+import { FileService } from 'services/file.service'
+import { DeleteResourceButton, Row } from 'shortcuts'
+import { useNotifier } from 'store/notifier.store'
+import { TOrderDocument } from 'types/global'
 
 function File(props: {
   file: TOrderDocument

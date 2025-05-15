@@ -1,18 +1,20 @@
 import { Button, ToggleButtonGroup } from '@mui/joy'
-import { EnUnit, PipeShapeData, uiUnit } from 'shared'
 import {
-  CircleShapeData,
+  EnUnit,
   ListShapeData,
-  SquareShapeData
-} from 'shared/shape-data'
+  PipeShapeData,
+  RoundBarShapeData,
+  SquareBarShapeData,
+  uiUnit
+} from 'domain-model'
 import { InputStack, MyInput } from '../../../shortcuts'
 import { AlloyAutocomplete } from '../shared/alloy-autocomplete'
+import { useMaterialStore } from '../stores'
 import { t } from '../text'
-import { useMaterialStore } from './state'
 
 export function SquareMaterialInput() {
   const store = useMaterialStore()
-  const d = store.shapeData as SquareShapeData
+  const d = store.shapeData as SquareBarShapeData
   return (
     <InputStack>
       <MyInput
@@ -40,10 +42,10 @@ export function ListMaterialInput() {
   return (
     <InputStack>
       <MyInput
-        label={'G'}
-        value={d.g}
+        label={t.Thickness}
+        value={d.thickness}
         onChange={e => {
-          d.g = Number(e.target.value)
+          d.thickness = Number(e.target.value)
           store.setShapeData(d)
         }}
       />
@@ -85,11 +87,9 @@ export function PipeMaterialInput() {
   )
 }
 
-export function CircleMaterialInput() {
+export function RoundBarInput() {
   const store = useMaterialStore()
-  if (!store.shapeData) return <>Shape data is not specified</>
-  const circle = store.shapeData as CircleShapeData
-
+  const circle = store.shapeData as RoundBarShapeData
   return (
     <InputStack>
       <MyInput

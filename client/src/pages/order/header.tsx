@@ -1,5 +1,4 @@
 /** @jsxImportSource @emotion/react */
-import React from 'react'
 import {
   Icon,
   UilClockThree,
@@ -12,19 +11,20 @@ import {
   UilUnlock
 } from '@iconscout/react-unicons'
 import { IconButton, Tooltip } from '@mui/joy'
+import { useOrderDetailStore } from 'pages/order/state'
+import React from 'react'
 import { useNavigate } from 'react-router-dom'
-import { OrderStatus } from 'shared'
-import { useOrderDetailStore } from 'src/pages/order/state'
-import { TOrder } from 'src/types/global'
+import { OrderStatus } from 'domain-model'
+import { ICON_OPACITY, ICON_WIDTH, Row, text } from 'shortcuts'
+import { useNotifier } from 'store/notifier.store'
+import { TOrder } from 'types/global'
 import {
   useDeleteOrderMutation,
   useMoveOrderToArchiveMutation,
   useMoveOrderToPriorityMutation,
   useUpdateAwaitingDispatchMutation,
   useUpdateNeedAttentionMutation
-} from 'src/types/graphql-shema'
-import { ICON_OPACITY, ICON_WIDTH, Row, text } from '../../shortcuts'
-import { useNotifier } from '../../store/notifier.store'
+} from 'types/graphql-shema'
 import { DeleteOrderDialog } from './dialogs/delete-order-dialog'
 import { TransferOrderDialog } from './dialogs/transfer-order.dialog'
 

@@ -1,15 +1,7 @@
 import { assert } from 'console'
-import {
-  CircleShapeData,
-  EnMaterialShape,
-  EnUnit,
-  ListShapeData,
-  PipeShapeData,
-  SquareShapeData
-} from 'shared'
-import { Material } from 'shared/domain'
+import { List, Material, Pipe, RoundBar, SquareBar } from 'domain-model'
 
-// Material namae parser of the details table
+// Material name parser of the details table
 export class MaterialParser {
   static parse(name: string): Material | undefined {
     const parser = new MaterialParser()
@@ -32,7 +24,7 @@ export class MaterialParser {
   parseSquare(name: string) {
     const [_, size, alloy, alloySecond] = name.split(' ')
     const sideSize = Number(size.split(/[хx]/)[1])
-    const square = new SquareShapeData()
+    const square = new SquareBar(null)
     square.length = sideSize
     if (Number.isNaN(square.length) || square.length === 0) {
       throw new Error(`sideSize is NaN, name: ${name}`)
@@ -40,19 +32,34 @@ export class MaterialParser {
     if (alloy) {
       square.alloy = `${alloy}${alloySecond || ''}`
     }
-    return new Material(0, EnUnit.Kg, EnMaterialShape.Square, square)
+    return square
   }
 
   parseList(name: string) {
-    const thicknessMatch = name
+    let thicknessMatch = name
       .split('G')[1]
       ?.split(' ')[0]
       .replace('=', '')
       .replace(',', '.')
+
+    console.log('thicknessMatch', thicknessMatch)
+    // if thickness match includes english x or russian х split by it and take the first part
+    if (thicknessMatch.includes('x') || thicknessMatch.includes('х')) {
+      const parts = thicknessMatch.split(/[xх]/)
+      thicknessMatch = parts[0]
+    }
+
     const thickness = Number(thicknessMatch)
-    const list = new ListShapeData()
-    list.g = thickness
-    return new Material(0, EnUnit.Kg, EnMaterialShape.List, list)
+    const list = new List(null)
+    list.thickness = thickness
+
+    // Extract alloy if present
+    const alloyMatch = name.split('G')[1]?.split(' ').slice(1).join(' ').trim()
+    if (alloyMatch) {
+      list.alloy = alloyMatch
+    }
+
+    return list
   }
 
   parsePipe(name: string) {
@@ -68,13 +75,13 @@ export class MaterialParser {
         return Number(cleanNum)
       })
     const alloy = name.split('ф')[1].split(' ')[1]?.trim() || ''
-    const pipe = new PipeShapeData()
+    const pipe = new Pipe(null)
     assert(!Number.isNaN(diameter), `diameter is NaN, name: ${name}`)
     assert(!Number.isNaN(thickness), `thickness is NaN, name: ${name}`)
     pipe.diameter = diameter
     pipe.thickness = thickness
     pipe.alloy = alloy
-    return new Material(0, EnUnit.Kg, EnMaterialShape.Pipe, pipe)
+    return pipe
   }
 
   parseCircle(name: string) {
@@ -89,12 +96,12 @@ export class MaterialParser {
         each => !each.includes('калибровка') && !each.includes('колибровка')
       )
       .join(' ')
-    const circle = new CircleShapeData()
+    const circle = new RoundBar(null)
     circle.alloy = alloy
     circle.calibrated = isCalibrated
     circle.diameter = Number(diameter)
     assert(!Number.isNaN(circle.diameter), `diameter is NaN, name: ${name}`)
-    return new Material(0, EnUnit.Kg, EnMaterialShape.Circle, circle)
+    return circle
   }
 
   parseSircle(name: string) {
@@ -109,7 +116,7 @@ export class MaterialParser {
         each => !each.includes('калибровка') && !each.includes('колибровка')
       )
       .join(' ')
-    const circle = new CircleShapeData()
+    const circle = new RoundBar(null)
     circle.alloy = alloy
     circle.calibrated = isCalibrated
     circle.diameter = Number(diameter)
@@ -117,6 +124,6 @@ export class MaterialParser {
     if (Number.isNaN(circle.diameter)) {
       throw new Error(`diameter is NaN, name: ${name}`)
     }
-    return new Material(0, EnUnit.Kg, EnMaterialShape.Circle, circle)
+    return circle
   }
 }

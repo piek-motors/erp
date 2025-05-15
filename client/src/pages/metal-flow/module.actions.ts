@@ -1,5 +1,5 @@
 import { Icon, UilPlusCircle } from '@iconscout/react-unicons'
-import { MetalFlowSys } from 'src/lib/routes'
+import { MetalFlowSys } from 'lib/routes'
 import { t } from './text'
 
 export type Action = {

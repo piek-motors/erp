@@ -1,5 +1,5 @@
 import { FormControl, Option, Select } from '@mui/joy'
-import { OrderStatus } from 'shared'
+import { OrderStatus } from 'domain-model'
 
 interface IOrderTypeFilterProps {
   value: OrderStatus | ''

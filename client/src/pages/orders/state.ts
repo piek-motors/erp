@@ -1,5 +1,5 @@
 import { ChangeEvent } from 'react'
-import { OrderStatus } from 'shared'
+import { OrderStatus } from 'domain-model'
 import { create } from 'zustand'
 
 interface IOrderListPageStore {

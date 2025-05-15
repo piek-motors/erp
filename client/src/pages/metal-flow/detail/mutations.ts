@@ -1,7 +1,7 @@
-import { apolloClient } from 'src/api'
-import * as gql from 'src/types/graphql-shema'
+import { apolloClient } from 'api'
+import { Detail, Material } from 'domain-model'
+import * as gql from 'types/graphql-shema'
 import { IDetail } from './state'
-import { Detail, Material } from 'shared/domain'
 
 export const handleUpdateDetail = async (state: IDetail) => {
   await apolloClient.mutate<

@@ -2,19 +2,27 @@
 import { css } from '@emotion/react'
 import { UilTrash } from '@iconscout/react-unicons'
 import { Autocomplete, Box, IconButton, Sheet, Stack } from '@mui/joy'
+import { PageTitle } from 'components'
+import { Table } from 'components/table.impl'
+import { MetalFlowSys } from 'lib/routes'
 import { useEffect, useState } from 'react'
-import { uiWriteoffReason, UiWriteoffReason } from 'shared'
-import { Detail } from 'shared/domain/detail'
-import { WriteoffTroughDetail } from 'shared/domain/writeoff'
-import { EnWriteoffType } from 'shared/enumerations'
-import { MetalFlowSys } from 'src/lib/routes'
-import { Table } from '../../../components/table.impl'
+import {
+  Detail,
+  EnWriteoffType,
+  uiWriteoffReason,
+  UiWriteoffReason,
+  WriteoffTroughDetail
+} from 'domain-model'
+import { AddResourceButton, MyInput, MyTabs, SendMutation } from 'shortcuts'
+import { useNotifier } from 'store/notifier.store'
 import {
   useDeleteWriteOffMutation,
   useGetWrietOffsQuery
-} from '../../../types/graphql-shema'
-import { SmallInputForm } from '../shared'
+} from 'types/graphql-shema'
+import { QtyInputWithUnit, SmallInputForm } from '../shared'
 import { DetailSelect } from '../shared/detail-select'
+import { MaterialSelect } from '../shared/material-select'
+import { goTo } from '../spa'
 import { t } from '../text'
 import { getColumns } from './columns.decl'
 import { useWriteOffStore } from './state'
@@ -138,17 +146,6 @@ function TotalCost(props: { detail: Detail; qty: number }) {
   )
 }
 
-import { PageTitle } from '../../../components'
-import {
-  AddResourceButton,
-  MyInput,
-  MyTabs,
-  SendMutation
-} from '../../../shortcuts'
-import { useNotifier } from '../../../store/notifier.store'
-import { QtyInputWithUnit } from '../shared'
-import { MaterialSelect } from '../shared/material-select'
-import { goTo } from '../spa'
 
 export function WriteOffThroughMaterial() {
   const state = useWriteOffStore()
@@ -165,7 +162,7 @@ export function WriteOffThroughMaterial() {
       <QtyInputWithUnit
         label={t.Qty}
         setValue={v => state.setQty(Number(v))}
-        unitId={material?.unitId}
+        unitId={material?.unit}
         value={state.qty.toString()}
       />
     </>

@@ -1,4 +1,4 @@
-import { EnWriteoffReason, EnWriteoffType } from '../enumerations'
+import { EnWriteoffReason, EnWriteoffType } from './enums'
 import { Material } from './material'
 
 export class Writeoff {
@@ -10,7 +10,7 @@ export class Writeoff {
     readonly material: Material,
     readonly type: EnWriteoffType,
     readonly typeData: WriteoffTroughDetail | WriteoffDirectUnit
-  ) { }
+  ) {}
 }
 
 export interface WriteoffTroughDetail {
@@ -19,4 +19,4 @@ export interface WriteoffTroughDetail {
   totalCost: number
 }
 
-export interface WriteoffDirectUnit { }
+export interface WriteoffDirectUnit {}

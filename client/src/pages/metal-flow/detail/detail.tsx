@@ -1,19 +1,18 @@
 import { Sheet, Stack, Typography } from '@mui/joy'
+import { MetalFlowSys } from 'lib/routes'
 import { useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Column } from 'react-table'
-import { Material } from 'shared/domain'
-import { EnUnit } from 'shared/enumerations'
-import { MetalFlowSys } from 'src/lib/routes'
+import { EnUnit, Material } from 'domain-model'
 import {
   AddResourceButton,
   MyInput,
   Row,
   SendMutation,
   TakeLookHint
-} from 'src/shortcuts'
-import * as gql from 'src/types/graphql-shema'
-import { GetDetailsQuery, useGetMaterialsQuery } from 'src/types/graphql-shema'
+} from 'shortcuts'
+import * as gql from 'types/graphql-shema'
+import { GetDetailsQuery, useGetMaterialsQuery } from 'types/graphql-shema'
 import { PageTitle } from '../../../components'
 import { Table } from '../../../components/table.impl'
 import { map } from '../mappers'
@@ -76,7 +75,7 @@ function DetailMaterialRelationForm() {
             <Stack sx={{ width: 'max-content' }} key={m.id}>
               <Row sx={{ fontWeight: 'bold' }}>
                 <Typography>Материал</Typography>
-                <ResourceName resource={m.resourceName()} />
+                <ResourceName resource={m.getResourceNameProps()} />
               </Row>
               <Stack p={1}>
                 <MaterialWeightInput material={m} />

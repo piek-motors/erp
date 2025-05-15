@@ -1,5 +1,5 @@
-import { OrderStatus } from 'shared'
-import { TOrder, TReclamationOrder } from 'src/types/global'
+import { OrderStatus } from 'domain-model'
+import { TOrder, TReclamationOrder } from 'types/global'
 
 export function orderStatus(order: TOrder) {
   // add a note to the title if this is a pre-order

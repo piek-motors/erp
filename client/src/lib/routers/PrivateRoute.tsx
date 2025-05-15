@@ -1,6 +1,6 @@
 import { ReactElement, useContext, useEffect, useState } from 'react'
 import { Navigate } from 'react-router-dom'
-import { Context } from 'src'
+import { Context } from '../..'
 
 type IRequireAuthProps = {
   children: ReactElement

@@ -5,7 +5,7 @@ import {
   ContainerProps,
   ToggleButtonGroup
 } from '@mui/joy'
-import { EnUnit, UiUnit } from 'shared'
+import { EnUnit, UiUnit } from 'domain-model'
 
 export function WorkPage(props: ContainerProps) {
   return (

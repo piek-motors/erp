@@ -9,7 +9,7 @@ import {
 } from '@iconscout/react-unicons'
 import { IconButton, Stack, Tooltip } from '@mui/joy'
 import { NavLink } from 'react-router-dom'
-import { AppRoutes, MetalFlowSys } from 'src/lib/routes'
+import { AppRoutes, MetalFlowSys } from 'lib/routes'
 
 export const links = [
   {

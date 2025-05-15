@@ -11,25 +11,23 @@ import {
   Tooltip,
   Typography
 } from '@mui/joy'
+import { apolloClient } from 'api'
 import moment from 'moment'
+import { useOrderDetailStore } from 'pages/order/state'
 import React, { useRef, useState } from 'react'
-import { useOrderDetailStore } from 'src/pages/order/state'
-import { TComment, TUser } from 'src/types/global'
+import { DeleteResourceButton, Row, text } from 'shortcuts'
+import { TComment, TUser } from 'types/global'
 import {
+  InsertCommentDocument,
+  InsertCommentMutation,
+  InsertCommentMutationVariables,
   useCommentsSubscription,
   useDeleteCommentMutation,
   useGetAllUsersQuery,
   useInsertCommentMutation,
   useInsertNotificationMutation,
   useUpdateCommentMutation
-} from 'src/types/graphql-shema'
-import { apolloClient } from '../../../api'
-import { DeleteResourceButton, Row, text } from '../../../shortcuts'
-import {
-  InsertCommentDocument,
-  InsertCommentMutation,
-  InsertCommentMutationVariables
-} from '../../../types/graphql-shema'
+} from 'types/graphql-shema'
 import { UserListPopover } from './user-list.popover'
 
 async function insertComment(comment: string, orderId: number, userId: number) {

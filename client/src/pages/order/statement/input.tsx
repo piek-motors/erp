@@ -1,15 +1,10 @@
 /** @jsxImportSource @emotion/react */
 import moment from 'moment'
+import { MySelect } from 'pages/metal-flow/shared/basic-select'
 import React, { useEffect } from 'react'
-import { TOrder, TUser } from 'src/types/global'
-import { useUpdateOrderInfoMutation } from 'src/types/graphql-shema'
-import {
-  InputStack,
-  MultilineInput,
-  MyInput,
-  SendMutation
-} from '../../../shortcuts'
-import { MySelect } from '../../metal-flow/shared/basic-select'
+import { InputStack, MultilineInput, MyInput, SendMutation } from 'shortcuts'
+import { TOrder, TUser } from 'types/global'
+import { useUpdateOrderInfoMutation } from 'types/graphql-shema'
 
 enum FieldNames {
   InvoiceNumber = 'InvoiceNumber',

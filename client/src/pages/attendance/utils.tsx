@@ -1,7 +1,7 @@
 /* eslint-disable no-loop-func */
+import { NullTimeError, formatTime, timedeltaInSeconds } from 'lib/date'
 import moment from 'moment'
-import { NullTimeError, formatTime, timedeltaInSeconds } from 'src/lib/date'
-import { Employee, PreparedEmployeeDto } from 'src/types/global'
+import { Employee, PreparedEmployeeDto } from 'types/global'
 import { SelectedMonth, State } from './main'
 
 const BROKEN_INTERVAL_TIME = 4 * 3600

@@ -1,10 +1,14 @@
-import { plainToInstance } from 'class-transformer'
+import type { Insertable } from 'kysely'
 import { log } from 'node:console'
-import { getShapeDataConstructor } from 'shared'
-import { Detail, Material } from 'shared/domain'
+import { Detail, EnMaterialShape, Material } from 'domain-model'
+import { MaterialFactory } from '../adapters/materials/factory.ts'
+import { MaterialMapper } from '../adapters/materials/mapper.ts'
 import { db } from '../db/conn.ts'
+import type { DB } from '../db/schema.ts'
 
 export class Repo {
+  private materialMapper = new MaterialMapper()
+
   async insertMaterials(materials: Material[]) {
     const lastId = await db
       .selectFrom('metal_pdo.materials')
@@ -13,17 +17,19 @@ export class Repo {
       .limit(1)
       .executeTakeFirstOrThrow()
 
-    await db
-      .insertInto('metal_pdo.materials')
-      .values(
-        materials.map((m, idx) => ({
-          id: lastId.id + idx + 1,
-          unit: m.unitId,
-          shape: m.shapeId,
-          shape_data: m.shapeData
-        }))
-      )
-      .execute()
+    const insertables: Insertable<DB.MaterialTable>[] = []
+
+    for (const [idx, m] of materials.entries()) {
+      const shapeData = this.materialMapper.toPersistence(m).shape_data
+      insertables.push({
+        id: m.id ?? lastId.id + idx + 1,
+        unit: m.unit,
+        shape: m.shape,
+        shape_data: shapeData
+      })
+    }
+
+    await db.insertInto('metal_pdo.materials').values(insertables).execute()
   }
 
   async getAllMaterials(): Promise<Material[]> {
@@ -33,12 +39,13 @@ export class Repo {
       .execute()
 
     return dbMaterials.map(m => {
-      const shapeDataConstructor = getShapeDataConstructor(m.shape)
-      if (shapeDataConstructor == null) {
-        throw new Error(`material mapper: unknown shape ${m.shape}`)
-      }
-      const shape = plainToInstance(shapeDataConstructor, m.shape_data) as any
-      return new Material(m.id, m.unit, m.shape, shape)
+      const factory = MaterialFactory.create(m.shape as EnMaterialShape)
+      return factory.createFromDB({
+        id: m.id,
+        unit: m.unit,
+        shape: m.shape as EnMaterialShape,
+        shape_data: m.shape_data
+      })
     })
   }
 
@@ -67,7 +74,7 @@ export class Repo {
 
     const relations = details
       .map(detail => {
-        if (!material.id) {
+        if (!material.shape) {
           throw new Error(`material id not set`)
         }
 
@@ -85,7 +92,7 @@ export class Repo {
         }
         return {
           detail_id: detail.id,
-          material_id: material.id,
+          material_id: material.shape,
           data: {
             width: relationData?.weight,
             length: relationData?.length

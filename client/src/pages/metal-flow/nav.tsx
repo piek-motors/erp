@@ -1,6 +1,6 @@
 import { Box, Button, IconButton, Stack } from '@mui/joy'
+import { PageTitle } from 'components'
 import { Link } from 'react-router-dom'
-import { PageTitle } from 'src/components'
 import { Action, actions } from './module.actions'
 import { t } from './text'
 

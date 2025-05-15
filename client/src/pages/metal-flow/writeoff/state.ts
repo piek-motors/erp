@@ -1,5 +1,4 @@
-import { Material } from 'shared/domain'
-import { EnWriteoffReason, EnWriteoffType } from 'shared/enumerations'
+import { EnWriteoffReason, EnWriteoffType, Material } from 'domain-model'
 import { create } from 'zustand'
 
 export interface IWriteOff {

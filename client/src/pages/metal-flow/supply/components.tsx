@@ -2,18 +2,18 @@
 import { css } from '@emotion/react'
 import { UilTrash } from '@iconscout/react-unicons'
 import { Box, IconButton, Sheet, Stack } from '@mui/joy'
+import { PageTitle } from 'components'
+import { Table } from 'components/table.impl'
+import { MetalFlowSys } from 'lib/routes'
 import { useState } from 'react'
-import { Material } from 'shared/domain'
-import { useInsertMaterialSupplyMutation } from 'src/types/graphql-shema'
-import { PageTitle } from '../../../components'
-import { Table } from '../../../components/table.impl'
-import { MetalFlowSys } from '../../../lib/routes'
-import { AddResourceButton, SendMutation } from '../../../shortcuts'
-import { useNotifier } from '../../../store/notifier.store'
+import { Material } from '../../../../../domain-model/dist'
+import { AddResourceButton, SendMutation } from 'shortcuts'
+import { useNotifier } from 'store/notifier.store'
 import {
   useDeleteSupplyMutation,
-  useGetSuppliesQuery
-} from '../../../types/graphql-shema'
+  useGetSuppliesQuery,
+  useInsertMaterialSupplyMutation
+} from 'types/graphql-shema'
 import { QtyInputWithUnit, SmallInputForm } from '../shared'
 import { MaterialSelect } from '../shared/material-select'
 import { goTo } from '../spa'
@@ -90,7 +90,7 @@ export function AddSuply() {
         currentQty={stockStore.getPrecise(material)}
       />
       <QtyInputWithUnit
-        unitId={material?.unitId}
+        unitId={material?.unit}
         value={qty}
         setValue={setQty}
         label={t.Qty}

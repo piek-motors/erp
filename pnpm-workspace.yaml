@@ -1,5 +1,5 @@
 packages:
-  - shared
-  - client
+  - domain-model
   - server
+  - client
   - metal-flow-import

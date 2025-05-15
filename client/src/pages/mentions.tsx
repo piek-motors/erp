@@ -1,17 +1,16 @@
-import { Box, Container, Stack, Typography } from '@mui/joy'
-import { useContext, useState } from 'react'
-import { TNotification } from 'src/types/global'
-import { useGetNotificationsSubscription } from 'src/types/graphql-shema'
-import { Context } from '..'
-
 /** @jsxImportSource @emotion/react */
 import styled from '@emotion/styled'
 import { UilArrowRight } from '@iconscout/react-unicons'
-import { Button, Sheet } from '@mui/joy'
+import { Box, Button, Container, Sheet, Stack, Typography } from '@mui/joy'
 import moment from 'moment'
+import { useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-
-import { useUpdateViewedMutation } from 'src/types/graphql-shema'
+import { TNotification } from 'types/global'
+import {
+  useGetNotificationsSubscription,
+  useUpdateViewedMutation
+} from 'types/graphql-shema'
+import { Context } from '..'
 import { PageTitle } from '../components'
 import { ICON_OPACITY, ICON_WIDTH, Row } from '../shortcuts'
 

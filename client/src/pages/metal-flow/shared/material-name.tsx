@@ -1,5 +1,5 @@
 import { Box, Stack, Typography } from '@mui/joy'
-import { Btn } from 'src/shortcuts'
+import { Btn } from 'shortcuts'
 
 type Flag = {
   color: number

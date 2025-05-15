@@ -1,5 +1,5 @@
-import { OrderStatus } from 'shared'
-import { TOrderColumnData } from 'src/types/global'
+import { OrderStatus } from '../../../domain-model/dist'
+import { TOrderColumnData } from 'types/global'
 import keywordComparator from '../utils/comparators'
 
 interface UseApplyFiltersProps {

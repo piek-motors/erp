@@ -1,11 +1,11 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import { Box, Button, Typography } from '@mui/joy'
+import { useAppContext } from 'hooks'
+import { AppRoutes } from 'lib/routes'
 import { ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useAppContext } from 'src/hooks'
-import { AppRoutes } from 'src/lib/routes'
-import { RouteConfig } from 'src/types/global'
+import { RouteConfig } from 'types/global'
 
 function Settings() {
   const { store } = useAppContext()

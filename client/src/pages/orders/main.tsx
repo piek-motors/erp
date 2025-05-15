@@ -1,20 +1,20 @@
 /** @jsxImportSource @emotion/react */
 import { Sheet } from '@mui/joy'
+import { ManagerFilter, Search } from 'components'
+import { OrderTypeFilter } from 'components/order-type-filter'
+import { TableName } from 'components/table-name'
+import { useFilter } from 'hooks'
+import { RuMonths } from 'lib/constants'
+import { formatOnlyDate, getPreviousMonth } from 'lib/date'
 import moment from 'moment'
 import { useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { EnOrderStatus, OrderStatus } from 'shared'
-import { ManagerFilter, Search } from 'src/components'
-import { OrderTypeFilter } from 'src/components/order-type-filter'
-import { TableName } from 'src/components/table-name'
-import { useFilter } from 'src/hooks'
-import { RuMonths } from 'src/lib/constants'
-import { formatOnlyDate, getPreviousMonth } from 'src/lib/date'
+import { EnOrderStatus, OrderStatus } from 'domain-model'
 import {
   useGetOrdersArchivedBySearchKeywordQuery,
   useGetOrdersByStatusQuery,
   useInsertOrderMutation
-} from 'src/types/graphql-shema'
+} from 'types/graphql-shema'
 import { PageTitle } from '../../components'
 import { AddResourceButton, MyTabs } from '../../shortcuts'
 import { columnsList, OrdersTable } from './columns'

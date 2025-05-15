@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { Box, Typography } from '@mui/joy'
-import { formatOnlyDate } from 'src/lib/date'
-import { TOrder } from 'src/types/global'
+import { formatOnlyDate } from 'lib/date'
+import { TOrder } from 'types/global'
 
 interface IAboutOrderProps {
   data: TOrder

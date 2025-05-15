@@ -1,4 +1,4 @@
-import { TOrderItem } from 'src/types/global'
+import { TOrderItem } from 'types/global'
 import { create } from 'zustand'
 
 interface IOrderDetailState {

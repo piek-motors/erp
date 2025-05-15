@@ -1,5 +1,5 @@
 import { FormControl, Option, Select } from '@mui/joy'
-import { useGetManagersQuery } from 'src/types/graphql-shema'
+import { useGetManagersQuery } from 'types/graphql-shema'
 
 interface IManagerFilterProps {
   value: any

@@ -1,6 +1,6 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
-import { LoginForm } from 'src/pages/login'
-import { protectedRoutes } from 'src/routes'
+import { LoginForm } from 'pages/login'
+import { protectedRoutes } from 'routes'
 import { AppRoutes } from '../routes'
 import RequireAuth from './PrivateRoute'
 

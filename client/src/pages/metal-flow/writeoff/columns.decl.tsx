@@ -1,13 +1,11 @@
 import { Column } from 'react-table'
-import { uiUnit, uiWriteoffReason } from 'shared'
-import { EnWriteoffType } from 'shared/enumerations'
-import { formatDateWithTime } from '../../../lib/date'
-import { GetWrietOffsQuery } from '../../../types/graphql-shema'
+import { formatDateWithTime } from 'lib/date'
+import { GetWrietOffsQuery } from 'types/graphql-shema'
 import { map } from '../mappers'
 import { ResourceName } from '../shared/material-name'
 import { t } from '../text'
 import { DeleteWrireOff } from './components'
-
+import { EnWriteoffType, uiUnit, uiWriteoffReason } from 'domain-model'
 export type SupplyDto = GetWrietOffsQuery['metal_pdo_writeoffs'][number]
 
 export function getColumns(props: {
@@ -25,7 +23,7 @@ export function getColumns(props: {
       id: 'name',
       accessor: data => {
         const ma = map.material.fromDto(data.material)
-        return <ResourceName resource={ma.resourceName()} />
+        return <ResourceName resource={ma.getResourceNameProps()} />
       }
     },
     {

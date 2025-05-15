@@ -1,10 +1,9 @@
 import { UilArrowLeft } from '@iconscout/react-unicons'
-
 import { Box, IconButton, Sheet, Stack, Typography } from '@mui/joy'
 import { JSX } from 'react'
 import { NavigateOptions, To, useNavigate } from 'react-router-dom'
-import { uiUnit } from 'shared'
-import { MyInput } from 'src/shortcuts'
+import { uiUnit } from 'domain-model'
+import { MyInput } from 'shortcuts'
 import { PageTitle } from '../../components'
 
 type GoBackBtnProps = { to?: To; options?: NavigateOptions; delta?: number }

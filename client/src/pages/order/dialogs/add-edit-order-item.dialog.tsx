@@ -6,14 +6,14 @@ import {
   ModalDialog,
   Typography
 } from '@mui/joy'
+import { useOrderDetailStore } from 'pages/order/state'
 import { useEffect, useState } from 'react'
-import { useOrderDetailStore } from 'src/pages/order/state'
-import { TOrderItem } from 'src/types/global'
+import { CancelButton, MultilineInput, MyInput, Row } from 'shortcuts'
+import { TOrderItem } from 'types/global'
 import {
   useInsertOrderItemMutation,
   useUpdateOrderItemByPkMutation
-} from 'src/types/graphql-shema'
-import { CancelButton, MultilineInput, MyInput, Row } from '../../../shortcuts'
+} from 'types/graphql-shema'
 
 export interface IDialogEditOrderItemProps {
   refetch: () => void

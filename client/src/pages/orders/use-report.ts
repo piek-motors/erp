@@ -1,6 +1,6 @@
 import moment from 'moment'
-import { useFilter } from 'src/hooks'
-import { useGetOrdersArchivedByIntervalQuery } from 'src/types/graphql-shema'
+import { useFilter } from 'hooks'
+import { useGetOrdersArchivedByIntervalQuery } from 'types/graphql-shema'
 import { useOrderListPageStore } from './state'
 
 export function useReport() {

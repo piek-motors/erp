@@ -1,7 +1,6 @@
 import { Column } from 'react-table'
-import { uiUnit } from 'shared'
-import { formatDateWithTime } from '../../../lib/date'
-import { GetSuppliesQuery } from '../../../types/graphql-shema'
+import { formatDateWithTime } from 'lib/date'
+import { GetSuppliesQuery } from 'types/graphql-shema'
 import { map } from '../mappers'
 import { ResourceName } from '../shared/material-name'
 import { t } from '../text'
@@ -25,12 +24,12 @@ export function getColumns(props: {
       accessor: data => {
         if (!data.material) return '-'
         const ma = map.material.fromDto(data.material)
-        return <ResourceName resource={ma.resourceName()} />
+        return <ResourceName resource={ma.getResourceNameProps()} />
       }
     },
     {
-      Header: 'Кол-во',
-      accessor: data => `${data.qty} ${uiUnit(data?.material?.unit as any)}`
+      Header: 'Кол-во'
+      // accessor: data => `${data.qty} ${data.material.}`
     },
     {
       Header: 'Дата поставки',

@@ -1,5 +1,4 @@
-import { Detail, Material } from 'shared/domain'
-// @ts-ignore
+import { Detail, Material } from 'domain-model'
 import { MaterialParser } from './material-parser.ts'
 
 // Types
@@ -48,9 +47,9 @@ export function processCsvLine(
       if (material) {
         materialDetails.set(material, [])
 
-        // check if material is valid
         try {
-          material.getTextId()
+          // check if material is valid
+          material.getIdentifier()
         } catch (e) {
           console.error(`\n\nfailed to parse material ${name}\n\n`, material)
           throw new Error(`failed to parse material ${name}`)

@@ -1,6 +1,6 @@
 import { Autocomplete } from '@mui/joy'
-import { Detail } from 'shared/domain'
-import { useGetDetailsQuery } from '../../../types/graphql-shema'
+import { Detail } from '../../../../../domain-model/dist'
+import { useGetDetailsQuery } from 'types/graphql-shema'
 import { map } from '../mappers'
 
 export function DetailSelect(props: {

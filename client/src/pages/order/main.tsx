@@ -1,21 +1,18 @@
 import { Box, Divider, Stack, Typography } from '@mui/joy'
 import Grid from '@mui/joy/Grid'
+import { PageTitle } from 'components'
+import { InputFiles } from 'components/input-files'
+import { useAppContext } from 'hooks'
+import { AppRoutes } from 'lib/routes'
+import { useOrderDetailStore } from 'pages/order/state'
 import { useCallback, useLayoutEffect, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { useLocation, useParams } from 'react-router-dom'
-import { useAppContext } from 'src/hooks'
-import { AppRoutes } from 'src/lib/routes'
-import { useOrderDetailStore } from 'src/pages/order/state'
-import { RouteConfig } from 'src/types/global'
-import {
-  useGetManagersQuery,
-  useGetOrderByPkQuery
-} from 'src/types/graphql-shema'
-import { PageTitle } from '../../components'
-import { InputFiles } from '../../components/input-files'
-import { FileService } from '../../services/file.service'
-import { bgcolors, MyChip, Row, text } from '../../shortcuts'
-import { orderStatus } from '../../utils/orderColorIndication'
+import { FileService } from 'services/file.service'
+import { bgcolors, MyChip, Row, text } from 'shortcuts'
+import { RouteConfig } from 'types/global'
+import { useGetManagersQuery, useGetOrderByPkQuery } from 'types/graphql-shema'
+import { orderStatus } from 'utils/orderColorIndication'
 import {
   CommentInputViewPort,
   CommentListViewPort

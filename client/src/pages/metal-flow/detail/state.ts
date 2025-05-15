@@ -1,4 +1,4 @@
-import { Detail, Material } from 'shared/domain'
+import { Detail, Material } from '../../../../../domain-model/dist'
 import { create } from 'zustand'
 
 export interface IDetail {

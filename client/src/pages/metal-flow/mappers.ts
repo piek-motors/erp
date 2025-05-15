@@ -1,10 +1,11 @@
 import { plainToInstance } from 'class-transformer'
-import { getShapeDataConstructor } from 'shared'
-import { Detail, Material } from 'shared/domain'
 import {
-  GetDetailByPkQuery,
-  GetMaterialByPkQuery
-} from 'src/types/graphql-shema'
+  Detail,
+  getMaterialConstructor,
+  getShapeDataConstructor,
+  Material
+} from 'domain-model'
+import { GetDetailByPkQuery, GetMaterialByPkQuery } from 'types/graphql-shema'
 
 class MaterialMapper {
   fromDto(dto: GetMaterialByPkQuery['metal_pdo_materials_by_pk']): Material {
@@ -16,15 +17,10 @@ class MaterialMapper {
     }
 
     const shapeDataConstructor = getShapeDataConstructor(dto.shape)
-    if (shapeDataConstructor == null) {
-      throw new Error(`material mapper: unknown shape ${dto.shape}`)
-    }
-
-    const instance = plainToInstance(
-      shapeDataConstructor,
-      dto.shape_data
-    ) as any
-    return new Material(dto.id, dto.unit, dto.shape, instance)
+    const shapeData = plainToInstance(shapeDataConstructor, dto.shape_data)
+    const MaterialConstructor = getMaterialConstructor<any>(dto.shape)
+    const material = new MaterialConstructor(dto.id)
+    return material.load(dto.id, shapeData)
   }
 
   convertable(dto: GetMaterialByPkQuery['metal_pdo_materials_by_pk']): boolean {
@@ -50,9 +46,8 @@ class DetailMapper {
     for (const each of raw.detail_materials) {
       const material = this.materialMapper.fromDto(each.material)
       const relationData = {
-        // TODO: Add typesafety
-        weight: each?.data?.weight,
-        length: each?.data?.length
+        weight: each?.data?.weight || 0,
+        length: each?.data?.length || 0
       }
       detailMaterials.set(material, relationData)
     }

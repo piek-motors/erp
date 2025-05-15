@@ -1,8 +1,8 @@
 import { Box, Typography } from '@mui/joy'
 import { useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { Material } from 'shared/domain'
-import { useGetMaterialsQuery } from 'src/types/graphql-shema'
+import { Material } from '../../../../../domain-model/dist'
+import { useGetMaterialsQuery } from 'types/graphql-shema'
 import { map } from '../mappers'
 import { useStockStore } from '../stock'
 import { t } from '../text'
@@ -36,7 +36,7 @@ export function MaterialSelect(props: {
     return (
       <Box>
         <Typography>{t.Material}:</Typography>
-        <ResourceName resource={props.material?.resourceName()} />
+        <ResourceName resource={props.material?.getResourceNameProps()} />
         <Typography>
           {t.Remaining}: {stockStore.getPrecise(material)}
         </Typography>

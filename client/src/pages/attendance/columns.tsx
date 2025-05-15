@@ -1,7 +1,7 @@
 import { Typography } from '@mui/joy'
+import { sec2hours } from 'lib/date'
 import { CellProps, Column } from 'react-table'
-import { sec2hours } from 'src/lib/date'
-import { PreparedEmployeeDto } from 'src/types/global'
+import { PreparedEmployeeDto } from 'types/global'
 import { State } from './main'
 import { ArrayFromDaysInMonth } from './utils'
 

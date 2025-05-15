@@ -1,8 +1,8 @@
 /** @jsxImportSource @emotion/react */
 import { Button, Checkbox, Input, Stack, Typography } from '@mui/joy'
+import { monthAdd } from 'lib/date'
 import { ReactNode } from 'react'
-import { monthAdd } from 'src/lib/date'
-import { useUpdateTimeDeductionMutation } from 'src/types/graphql-shema'
+import { useUpdateTimeDeductionMutation } from 'types/graphql-shema'
 import { Row } from '../../shortcuts'
 import { State } from './main'
 
