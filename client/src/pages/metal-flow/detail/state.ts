@@ -1,4 +1,4 @@
-import { Detail, Material } from '../../../../../domain-model/dist'
+import { Detail, Material } from 'domain-model'
 import { create } from 'zustand'
 
 export interface IDetail {

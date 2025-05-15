@@ -5,17 +5,10 @@ import { AppColorTheme, TUser } from 'types/global'
 import { API_URL } from '../api/axios'
 import { AuthService } from '../services/auth.service'
 
-type UItheme = {
-  state: AppColorTheme
-  dispatch: React.Dispatch<string>
-}
 
 export class Store {
   user: TUser | null = null
   isLoading = false
-
-  UItheme: UItheme | undefined = undefined
-
   inMemoryToken: string | undefined | null = undefined
 
   constructor() {
@@ -32,10 +25,6 @@ export class Store {
 
   setInMemoryToken(token: string | null) {
     this.inMemoryToken = token
-  }
-
-  setUItheme(state: UItheme['state'], dispatch: UItheme['dispatch']) {
-    this.UItheme = { state, dispatch }
   }
 
   async login(email: string, password: string) {

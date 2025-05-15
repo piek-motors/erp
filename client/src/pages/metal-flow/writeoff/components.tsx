@@ -169,7 +169,7 @@ export function WriteOffThroughMaterial() {
   )
 }
 
-export function WriteoffsList() {
+export function ListWriteoffs() {
   const { data, refetch } = useGetWrietOffsQuery()
   const [key, setKey] = useState(0)
 

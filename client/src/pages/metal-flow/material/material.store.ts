@@ -1,20 +1,16 @@
-import { makeAutoObservable } from 'mobx'
+import { apolloClient } from 'api'
 import {
   EnMaterialShape,
   EnUnit,
   GenericShapeData,
   getShapeDataConstructor,
   Material,
-  ResourceNameProps,
   RoundBar,
   RoundBarShapeData
 } from 'domain-model'
-import { apolloClient } from 'api'
-import {
-  InsertMaterialDocument,
-  InsertMaterialMutation,
-  InsertMaterialMutationVariables
-} from 'types/graphql-shema'
+import { makeAutoObservable } from 'mobx'
+import * as gql from 'types/graphql-shema'
+import { map } from '../mappers'
 
 export class MaterialStore {
   constructor() {
@@ -26,12 +22,10 @@ export class MaterialStore {
   shape: EnMaterialShape = EnMaterialShape.RoundBar
   shapeData: GenericShapeData = new RoundBarShapeData()
 
-  getIdentifier(): string {
-    throw new Error('Method not implemented.')
-  }
-  getResourceNameProps(): ResourceNameProps {
-    throw new Error('Method not implemented.')
-  }
+  loading = false
+  error: Error | null = null
+  material?: Material
+
   clear() {
     this.id = undefined
     this.unit = EnUnit.Kg
@@ -41,25 +35,59 @@ export class MaterialStore {
 
   insertedMaterialId?: number
   async insert() {
-    const res = await apolloClient.mutate<
-      InsertMaterialMutation,
-      InsertMaterialMutationVariables
-    >({
-      mutation: InsertMaterialDocument,
-      variables: {
-        object: {
-          unit: this.unit,
-          shape: this.shape,
-          shape_data: this.shapeData
+    this.loading = true
+    this.error = null
+    try {
+      const res = await apolloClient.mutate<
+        gql.InsertMaterialMutation,
+        gql.InsertMaterialMutationVariables
+      >({
+        mutation: gql.InsertMaterialDocument,
+        variables: {
+          object: {
+            unit: this.unit,
+            shape: this.shape,
+            shape_data: this.shapeData
+          }
         }
+      })
+      this.clear()
+      const id = res.data?.insert_metal_pdo_materials_one?.id
+      if (id) {
+        this.insertedMaterialId = id
       }
-    })
-    this.clear()
-    const id = res.data?.insert_metal_pdo_materials_one?.id
-    if (id) {
-      this.insertedMaterialId = id
+      return id
+    } catch (e) {
+      this.error = e as Error
+      throw e
+    } finally {
+      this.loading = false
     }
-    return id
+  }
+
+  async load(id: number) {
+    this.loading = true
+    this.error = null
+    try {
+      const res = await apolloClient.query<
+        gql.GetMaterialByPkQuery,
+        gql.GetMaterialByPkQueryVariables
+      >({
+        query: gql.GetMaterialByPkDocument,
+        variables: { id }
+      })
+      const d = res.data?.metal_pdo_materials_by_pk
+      if (!d) throw new Error('Material not found')
+
+      const material = map.material.fromDto(d)
+      this.syncState(material)
+      return material
+    } catch (e) {
+      this.error = e as Error
+      throw e
+    } finally {
+      this.loading = false
+    }
   }
 
   setShape(shape: EnMaterialShape) {

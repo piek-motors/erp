@@ -25,7 +25,7 @@ export function Table<T extends object>(props: Props<T>) {
       <MuiTable {...getTableProps()} style={{ tableLayout: 'auto' }}>
         <thead>
           {headerGroups.map((headerGroup, i) => (
-            <tr {...headerGroup.getHeaderGroupProps()}>
+            <tr {...headerGroup.getHeaderGroupProps()} key={i}>
               {headerGroup.headers.map((column, i) => {
                 const col = column as any
                 return (
@@ -34,6 +34,7 @@ export function Table<T extends object>(props: Props<T>) {
                       ...(column as any).getSortByToggleProps(),
                       width: 'min-content'
                     })}
+                    key={i}
                   >
                     <Stack direction={'row'} alignItems={'center'}>
                       <Typography>{column.render('Header')}</Typography>
@@ -59,10 +60,13 @@ export function Table<T extends object>(props: Props<T>) {
                     if (props.onDoubleRowClick)
                       props.onDoubleRowClick(row.original)
                   }}
+                  key={i}
                 >
                   {row.cells.map((cell, i) => {
                     return (
-                      <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+                      <td {...cell.getCellProps()} key={i}>
+                        {cell.render('Cell')}
+                      </td>
                     )
                   })}
                 </tr>

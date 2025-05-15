@@ -1,28 +1,26 @@
 import { MetalFlowSys } from 'lib/routes'
-import { Observer } from 'mobx-react-lite'
 import { RouteConfig } from 'types/global'
-import { DetailAddForm, DetailsList, DetailUpdateForm } from './detail/detail'
-import { AddMaterial, MaterialsList, UpdateMaterial } from './material/material'
-import { MetalFlowSubsystem } from './spa'
-import { materialListStore, materialStore } from './stores'
-import { AddSuply, SuppliesList } from './supply/components'
-import { AddWriteOff, WriteoffsList } from './writeoff/components'
+import { AddDetail, ListDetails, UpdateDetail } from './detail/detail'
+import { AddMaterial, ListMaterials, UpdateMaterial } from './material/material'
+import { MetalFlowSubSystem } from './spa'
+import { AddSuply, ListSupplies } from './supply/components'
+import { AddWriteOff, ListWriteoffs } from './writeoff/components'
 
 const routes = [
   {
-    element: <MetalFlowSubsystem />,
+    element: <MetalFlowSubSystem />,
     path: MetalFlowSys.root
   },
   {
-    element: <MaterialsList store={materialListStore} />,
+    element: <ListMaterials />,
     path: MetalFlowSys.materials
   },
   {
-    element: <AddMaterial store={materialStore} />,
+    element: <AddMaterial />,
     path: MetalFlowSys.material_add
   },
   {
-    element: <UpdateMaterial store={materialStore} />,
+    element: <UpdateMaterial />,
     path: MetalFlowSys.material_update
   },
   {
@@ -34,23 +32,23 @@ const routes = [
     path: MetalFlowSys.writeoff_add
   },
   {
-    element: <DetailsList />,
+    element: <ListDetails />,
     path: MetalFlowSys.details
   },
   {
-    element: <DetailAddForm />,
+    element: <AddDetail />,
     path: MetalFlowSys.detail_add
   },
   {
-    element: <DetailUpdateForm />,
+    element: <UpdateDetail />,
     path: MetalFlowSys.detail_update
   },
   {
-    element: <SuppliesList />,
+    element: <ListSupplies />,
     path: MetalFlowSys.supplies
   },
   {
-    element: <WriteoffsList />,
+    element: <ListWriteoffs />,
     path: MetalFlowSys.writeoffs
   }
 ] as RouteConfig[]
@@ -58,12 +56,5 @@ const routes = [
 export default routes
 
 export function getComponentByCurrentPath(path: string) {
-  return (
-    <Observer
-      render={() => {
-        const component = routes.find(r => r.path === path)?.element || <></>
-        return component
-      }}
-    />
-  )
+  return routes.find(r => r.path === path)?.element || <></>
 }

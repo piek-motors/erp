@@ -3,6 +3,7 @@ import {
   Box,
   Button,
   ChipProps,
+  CircularProgress,
   FormControl,
   FormHelperText,
   FormLabel,
@@ -176,7 +177,14 @@ export function ErrorHint(props: { e?: Error | any }) {
 }
 
 export function LoadingHint(props: { show: boolean }) {
-  return props.show && <Typography>Загрузка...</Typography>
+  return (
+    props.show && (
+      <Row p={2} gap={1}>
+        <Typography>Загрузка...</Typography>
+        <CircularProgress size="sm" color="neutral" />
+      </Row>
+    )
+  )
 }
 
 export function TakeLookHint(props: { text: string; link: string }) {

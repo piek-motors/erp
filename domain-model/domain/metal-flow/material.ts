@@ -231,7 +231,10 @@ export class Pipe extends Material<PipeShapeData> {
     return `${this.shapeUI} D${this.diameter} ${this.alloy}`
   }
   getResourceNameProps(): ResourceNameProps {
-    throw new Error('Method not implemented.')
+    return {
+      name: this.getIdentifier(),
+      caption: this.alloy
+    }
   }
   load(id: number | null, shapeData: PipeShapeData): this {
     return plainToInstance(Pipe, {
@@ -280,7 +283,10 @@ export class SquareBar extends Material<SquareBarShapeData> {
     return `${this.name} ${this.length}x${this.alloy}`
   }
   getResourceNameProps(): ResourceNameProps {
-    throw new Error('Method not implemented.')
+    return {
+      name: this.name,
+      caption: this.alloy
+    }
   }
   load(id: number | null, shapeData: SquareBarShapeData): this {
     return plainToInstance(SquareBar, {

@@ -1,18 +1,10 @@
 import { Box } from '@mui/joy'
-import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import { NavigationBlock } from './nav'
 import { getComponentByCurrentPath } from './routes'
-import { useStockStore } from './stock'
 
-export function MetalFlowSubsystem() {
+export function MetalFlowSubSystem() {
   const path = new URLSearchParams(useLocation().search).get('path')
-  const stockStore = useStockStore()
-
-  useEffect(() => {
-    stockStore.load()
-  }, [])
-
   return (
     <Box
       sx={{
@@ -30,7 +22,7 @@ export function MetalFlowSubsystem() {
       <NavigationBlock />
       {path && (
         <Box sx={{ overflow: 'scroll', flexGrow: 1 }}>
-          {(path && getComponentByCurrentPath(path)) || <></>}
+          {path ? getComponentByCurrentPath(path) : null}
         </Box>
       )}
     </Box>

@@ -19,6 +19,10 @@ class MaterialMapper {
     const shapeDataConstructor = getShapeDataConstructor(dto.shape)
     const shapeData = plainToInstance(shapeDataConstructor, dto.shape_data)
     const MaterialConstructor = getMaterialConstructor<any>(dto.shape)
+    if (!MaterialConstructor) {
+      throw new Error('material mapper: material constructor not found')
+    }
+    
     const material = new MaterialConstructor(dto.id)
     return material.load(dto.id, shapeData)
   }

@@ -67,12 +67,6 @@ export const up = async (db: KDB) => {
     .addColumn('unit', 'integer', b => b.notNull().defaultTo(0))
     .execute()
 
-  // await db.schema.alterTable(tables.pdo.materials).dropColumn('shape')..execute()
-  await db.schema
-    .alterTable(tables.pdo.materials)
-    .addColumn('shape', 'integer', b => b.notNull().defaultTo(0))
-    .execute()
-
   // add unique constraint to detain names
   await sql`
     DELETE from metal_pdo.details;

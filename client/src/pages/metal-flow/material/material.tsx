@@ -1,18 +1,14 @@
 /** @jsxImportSource @emotion/react */
-import {
-  Box,
-  Button,
-  CircularProgress,
-  Divider,
-  Sheet,
-  Typography
-} from '@mui/joy'
+import { Box, Button, Divider, Sheet, Typography } from '@mui/joy'
+import { PageTitle } from 'components'
 import { Search } from 'components/search-input'
+import { Table } from 'components/table.impl'
+import { EnMaterialShape, Material, UiMaterialShape } from 'domain-model'
 import { MetalFlowSys } from 'lib/routes'
-import { JSX, useEffect, useState } from 'react'
+import { Observer } from 'mobx-react-lite'
+import { JSX, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Column } from 'react-table'
-import { EnMaterialShape, Material, UiMaterialShape } from 'domain-model'
 import {
   AddResourceButton,
   ErrorHint,
@@ -23,19 +19,16 @@ import {
   SendMutation,
   TakeLookHint
 } from 'shortcuts'
+import { useNotifier } from 'store/notifier.store'
 import * as gql from 'types/graphql-shema'
-import { PageTitle } from '../../../components'
-import { Table } from '../../../components/table.impl'
-import { useNotifier } from '../../../store/notifier.store'
 import { map } from '../mappers'
 import { SmallInputForm } from '../shared'
 import { MaterialUnitSelect } from '../shared/basic'
 import { ResourceName } from '../shared/material-name'
 import { goTo } from '../spa'
 import { useStockStore } from '../stock'
+import { materialListStore, materialStore } from '../stores'
 import { t } from '../text'
-import { MaterialListStore } from './material-list.store'
-import { MaterialStore } from './material.store'
 import {
   ListMaterialInput,
   PipeMaterialInput,
@@ -51,7 +44,7 @@ function StockAmount(props: { materialId: number | null }) {
 
 const columnList: Column<Material>[] = [
   {
-    Header: 'Id',
+    Header: 'ID',
     accessor: 'id'
   },
   {
@@ -72,60 +65,56 @@ const columnList: Column<Material>[] = [
   }
 ]
 
-export function MaterialsList(props: { store: MaterialListStore }) {
-  const { store } = props
-  const { data, loading, error } = gql.useGetMaterialsQuery()
+export function ListMaterials() {
   const navigate = useNavigate()
-
   useEffect(() => {
-    if (data) {
-      const mtrls = data.metal_pdo_materials.map(map.material.fromDto)
-      store.setMaterials(mtrls)
-    }
-  }, [data])
-
+    materialListStore.fetchAll()
+  }, [])
   return (
-    <>
-      <PageTitle title={t.MaterialsList} hideIcon>
-        <AddResourceButton navigateTo={goTo(MetalFlowSys.material_add)} />
-      </PageTitle>
+    <Observer
+      render={() => (
+        <>
+          <PageTitle title={t.MaterialsList} hideIcon>
+            <AddResourceButton navigateTo={goTo(MetalFlowSys.material_add)} />
+          </PageTitle>
 
-      <Search
-        onChange={e => {
-          store.search(e.target.value)
-        }}
-        value={store.filterKeyword}
-      />
-      <LoadingHint show={loading} />
-      <ErrorHint e={error} />
-
-      <Sheet>
-        {store.materials && (
-          <Table
-            columns={columnList}
-            data={store.materials.filter(each => {
-              if (!each.id) return false
-              if (!store.filterKeyword) return true
-
-              if (store.searchResult) {
-                return store.searchResult.includes(each.id)
-              }
-
-              return true
-            })}
-            onDoubleRowClick={row => {
-              if (!row.id) throw Error('Material id is null')
-              navigate(goTo(MetalFlowSys.material_update, row.id))
+          <Search
+            onChange={e => {
+              materialListStore.search(e.target.value)
             }}
+            value={materialListStore.filterKeyword}
           />
-        )}
-      </Sheet>
-    </>
+          <LoadingHint show={materialListStore.loading} />
+          <ErrorHint e={materialListStore.error} />
+
+          <Sheet>
+            {materialListStore.materials && (
+              <Table
+                columns={columnList}
+                data={materialListStore.materials.filter(each => {
+                  if (!each.id) return false
+                  if (!materialListStore.filterKeyword) return true
+
+                  if (materialListStore.searchResult) {
+                    return materialListStore.searchResult.includes(each.id)
+                  }
+
+                  return true
+                })}
+                onDoubleRowClick={row => {
+                  if (!row.id) throw Error('Material id is null')
+                  navigate(goTo(MetalFlowSys.material_update, row.id))
+                }}
+              />
+            )}
+          </Sheet>
+        </>
+      )}
+    />
   )
 }
 
-export function AddMaterial(props: { store: MaterialStore }) {
-  const { store } = props
+export function AddMaterial() {
   const uiTabs: Record<string, JSX.Element> = {}
   for (const [key, val] of Object.entries(tabs)) {
     uiTabs[UiMaterialShape[key]] = val
@@ -136,47 +125,37 @@ export function AddMaterial(props: { store: MaterialStore }) {
       header={t.AddMaterial}
       last={
         <>
-          <SendMutation onClick={store.insert} />
-          {store.insertedMaterialId && (
+          <SendMutation onClick={materialStore.insert} />
+          {materialStore.insertedMaterialId && (
             <TakeLookHint
               text={t.RecentlyNewMaterialAdded}
               link={goTo(
                 MetalFlowSys.material_update,
-                store.insertedMaterialId
+                materialStore.insertedMaterialId
               )}
             />
           )}
         </>
       }
     >
-      <MyTabs tabs={uiTabs} handleChange={store.setShape} />
+      <MyTabs tabs={uiTabs} handleChange={materialStore.setShape} />
 
-      <MaterialUnitSelect value={store.unit} onChange={store.setUnit} />
+      <MaterialUnitSelect
+        value={materialStore.unit}
+        onChange={materialStore.setUnit}
+      />
     </SmallInputForm>
   )
 }
 
-export function UpdateMaterial(props: { store: MaterialStore }) {
+export function UpdateMaterial() {
   const id = Number(new URLSearchParams(useLocation().search).get('id'))
   if (!id) {
     return <>No id</>
   }
-  const { store } = props
-  const [ready, setReady] = useState<boolean>(false)
-  const { data: existing } = gql.useGetMaterialByPkQuery({
-    variables: {
-      id
-    }
-  })
-
   useEffect(() => {
-    if (existing) {
-      const d = existing.metal_pdo_materials_by_pk
-      if (!d) throw Error('Material not found')
-      store.syncState(map.material.fromDto(d))
-      setReady(true)
-    }
-  }, [existing])
+    materialStore.load(id)
+  }, [])
 
   const [mut] = gql.useUpdateMaterialMutation()
   const notifier = useNotifier()
@@ -186,8 +165,8 @@ export function UpdateMaterial(props: { store: MaterialStore }) {
         id,
         _set: {
           id,
-          shape: store.shape,
-          shape_data: store.shapeData
+          shape: materialStore.shape,
+          shape_data: materialStore.shapeData
         }
       }
     })
@@ -201,31 +180,35 @@ export function UpdateMaterial(props: { store: MaterialStore }) {
     }
   }
 
-  if (ready) {
-    return (
-      <SmallInputForm
-        header={t.EditMaterial}
-        name={
-          map.material.convertable(existing?.metal_pdo_materials_by_pk) ? (
-            <>
-              <Box>
-                <Typography level="h4">
-                  <ResourceName resource={store.getResourceNameProps()} />
-                </Typography>
-                {t.Unit} {store.unit}
-              </Box>
-              <UpdateMaterialUpdateStockLinks id={id} />
-            </>
-          ) : (
-            <></>
-          )
-        }
-        last={<SendMutation onClick={handleSave} />}
-      >
-        <InputStack>{tabs[store.shape]}</InputStack>
-      </SmallInputForm>
-    )
-  } else return <CircularProgress />
+  return (
+    <Observer
+      render={() => (
+        <SmallInputForm
+          header={t.EditMaterial}
+          name={
+            map.material.convertable(materialStore.material) ? (
+              <>
+                <Box>
+                  <Typography level="h4">
+                    <ResourceName
+                      resource={materialStore.material?.getResourceNameProps()}
+                    />
+                  </Typography>
+                  {t.Unit} {materialStore.unit}
+                </Box>
+                <UpdateMaterialUpdateStockLinks id={id} />
+              </>
+            ) : (
+              <></>
+            )
+          }
+          last={<SendMutation onClick={handleSave} />}
+        >
+          <InputStack>{tabs[materialStore.shape]}</InputStack>
+        </SmallInputForm>
+      )}
+    />
+  )
 }
 
 function UpdateMaterialUpdateStockLinks(props: { id: number }) {
@@ -255,38 +238,6 @@ function UpdateMaterialUpdateStockLinks(props: { id: number }) {
       </Button>
       <Divider />
     </Row>
-  )
-}
-
-export function DeleteMaterial(props: { id: number }) {
-  const notifier = useNotifier()
-  const [mut, { loading }] = gql.useDeleteMaterialMutation({
-    variables: {
-      id: props.id
-    }
-  })
-
-  const navigate = useNavigate()
-  const handle = async () => {
-    const res = await mut()
-    if (res.data?.delete_metal_pdo_materials_by_pk?.id) {
-      navigate(goTo(MetalFlowSys.materials))
-      notifier.notify('info', 'Материал успешно удален')
-    } else {
-      alert(res.errors)
-    }
-  }
-
-  return (
-    <Button
-      variant="outlined"
-      color="danger"
-      sx={{ width: 'max-content' }}
-      onClick={handle}
-      disabled={loading}
-    >
-      {t.Delete}
-    </Button>
   )
 }
 

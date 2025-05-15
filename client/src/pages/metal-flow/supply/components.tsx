@@ -21,7 +21,7 @@ import { useStockStore } from '../stock'
 import { t } from '../text'
 import { getColumns } from './columns.decl'
 
-export function SuppliesList() {
+export function ListSupplies() {
   const { data, refetch } = useGetSuppliesQuery()
   const [key, setKey] = useState(0)
 
