@@ -81,16 +81,21 @@ export function CancelButton(props: { onClick: () => void }) {
 
 export function DeleteResourceButton(props: { onClick: () => void }) {
   return (
-    <IconButton variant="solid" color="danger" onClick={props.onClick}>
-      <UilTrash width={ICON_WIDTH} opacity={ICON_OPACITY} fill="#fff" />
+    <IconButton variant="soft" color="danger" onClick={props.onClick} size="sm">
+      <UilTrash width={ICON_WIDTH} opacity={ICON_OPACITY} fill="red" />
     </IconButton>
   )
 }
 
 export function UpdateResourceButton(props: { onClick: () => void }) {
   return (
-    <IconButton variant="solid" color="primary" onClick={props.onClick}>
-      <UilPen width={ICON_WIDTH} opacity={ICON_OPACITY} fill="#fff" />
+    <IconButton
+      variant="soft"
+      color="primary"
+      onClick={props.onClick}
+      size="sm"
+    >
+      <UilPen width={ICON_WIDTH} opacity={ICON_OPACITY} />
     </IconButton>
   )
 }

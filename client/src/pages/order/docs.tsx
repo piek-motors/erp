@@ -1,7 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { UilFile, UilFileAlt, UilImage } from '@iconscout/react-unicons'
-import { Box, Stack, Typography } from '@mui/joy'
-import moment from 'moment'
+import { Box, Button, Stack, Typography } from '@mui/joy'
 import { useOrderDetailStore } from 'pages/order/state'
 import { useEffect } from 'react'
 import { FileService } from 'services/file.service'
@@ -26,7 +25,7 @@ function File(props: {
 
   return (
     <Row>
-      <Box gap={1}>
+      <Box>
         <a
           href={`${process.env.REACT_APP_API_URL}/s3/${file.Key}`}
           target="_blank"
@@ -38,20 +37,16 @@ function File(props: {
             fontWeight: 'normal'
           }}
         >
-          <Row>
-            {getformatAssociatedIcon(file.FileName ?? '')}
-            <Typography>{file.FileName}</Typography>
-          </Row>
-
-          {!uploading ? (
-            <Row>
-              <Typography level="body-sm" fontWeight={400}>
-                {formatBytes(file.Size!)}
-                {', '}
-                {moment(file.UploadingDate).format('D MMMM')}
-              </Typography>
-            </Row>
-          ) : (
+          <Button
+            variant="plain"
+            sx={{ fontSize: '1rem', textAlign: 'left', fontWeight: 'normal' }}
+            color="primary"
+            size="sm"
+            startDecorator={getformatAssociatedIcon(file.FileName ?? '')}
+          >
+            <Typography level="body-sm">{file.FileName}</Typography>
+          </Button>
+          {uploading && (
             <Typography level="body-sm">Файл выгружается...</Typography>
           )}
         </a>

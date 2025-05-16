@@ -171,7 +171,9 @@ function OrderDetail() {
               refetch={refetch}
             />
             <InputFiles
-              variant="soft"
+              size="sm"
+              variant="outlined"
+              sx={{ fontSize: '.8rem' }}
               upload={files => {
                 handleFileOnDrop([...files])
               }}
