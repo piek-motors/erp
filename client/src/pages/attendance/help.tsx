@@ -1,9 +1,48 @@
+/** @jsxImportSource @emotion/react */
 import { Container, IconButton, Stack, Typography } from '@mui/joy'
-import { links } from 'components/sidebar'
-import { AppRoutes } from 'lib/routes'
+import { AppRoutes, ListOrdersRoutes } from 'lib/routes'
 import { useNavigate } from 'react-router-dom'
 import { RouteConfig } from 'types/global'
-import { Row } from '../../shortcuts'
+import { Row } from 'shortcuts'
+
+import {
+  UilBell,
+  UilCalculatorAlt,
+  UilConstructor,
+  UilListOl,
+  UilSetting,
+  UilWrench
+} from '@iconscout/react-unicons'
+import { MetalFlowRoutes } from 'lib/routes'
+
+export const links = [
+  {
+    href: ListOrdersRoutes.priority_list,
+    icon: UilListOl,
+    name: 'Очередность выполнения'
+  },
+  { href: AppRoutes.reclamation, icon: UilWrench, name: 'Рекламации' },
+  {
+    href: MetalFlowRoutes.root,
+    icon: UilCalculatorAlt,
+    name: 'Материаловедение'
+  },
+  {
+    href: AppRoutes.attendance,
+    icon: UilConstructor,
+    name: 'Рабочее время'
+  },
+  {
+    href: AppRoutes.mentions,
+    icon: UilBell,
+    name: 'Упоминания'
+  },
+  {
+    href: AppRoutes.settings,
+    icon: UilSetting,
+    name: 'Настройки'
+  }
+]
 
 function Help() {
   const navigate = useNavigate()

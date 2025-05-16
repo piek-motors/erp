@@ -4,9 +4,8 @@ import { UilTrash } from '@iconscout/react-unicons'
 import { Box, IconButton, Sheet, Stack } from '@mui/joy'
 import { PageTitle } from 'components'
 import { Table } from 'components/table.impl'
-import { MetalFlowSys } from 'lib/routes'
+import { openMetalFlowPage, MetalFlowRoutes } from 'lib/routes'
 import { useState } from 'react'
-import { Material } from '../../../../../domain-model/dist'
 import { AddResourceButton, SendMutation } from 'shortcuts'
 import { useNotifier } from 'store/notifier.store'
 import {
@@ -14,9 +13,9 @@ import {
   useGetSuppliesQuery,
   useInsertMaterialSupplyMutation
 } from 'types/graphql-shema'
+import { Material } from 'domain-model'
 import { QtyInputWithUnit, SmallInputForm } from '../shared'
 import { MaterialSelect } from '../shared/material-select'
-import { goTo } from '../spa'
 import { useStockStore } from '../stock'
 import { t } from '../text'
 import { getColumns } from './columns.decl'
@@ -28,7 +27,9 @@ export function ListSupplies() {
   return (
     <>
       <PageTitle title={t.SuppliesList}>
-        <AddResourceButton navigateTo={goTo(MetalFlowSys.supply_add)} />
+        <AddResourceButton
+          navigateTo={openMetalFlowPage(MetalFlowRoutes.supply_add)}
+        />
       </PageTitle>
       <Sheet sx={{ gap: 2 }}>
         <Box

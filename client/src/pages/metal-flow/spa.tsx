@@ -29,18 +29,3 @@ export function MetalFlowSubSystem() {
   )
 }
 
-export function goTo(
-  to: string,
-  withId?: number,
-  params: Record<string, any> = {}
-) {
-  let s = `?path=${to}`
-  if (withId) {
-    s = s.concat(`&id=${withId}`)
-  }
-
-  if (Object.keys(params).length > 0) {
-    s = s.concat(`&${new URLSearchParams(params).toString()}`)
-  }
-  return s
-}

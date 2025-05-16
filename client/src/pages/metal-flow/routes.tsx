@@ -1,4 +1,4 @@
-import { MetalFlowSys } from 'lib/routes'
+import { MetalFlowRoutes } from 'lib/routes'
 import { RouteConfig } from 'types/global'
 import { AddDetail, ListDetails, UpdateDetail } from './detail/detail'
 import { AddMaterial, ListMaterials, UpdateMaterial } from './material/material'
@@ -9,47 +9,47 @@ import { AddWriteOff, ListWriteoffs } from './writeoff/components'
 const routes = [
   {
     element: <MetalFlowSubSystem />,
-    path: MetalFlowSys.root
+    path: MetalFlowRoutes.root
   },
   {
     element: <ListMaterials />,
-    path: MetalFlowSys.materials
+    path: MetalFlowRoutes.materials
   },
   {
     element: <AddMaterial />,
-    path: MetalFlowSys.material_add
+    path: MetalFlowRoutes.material_add
   },
   {
     element: <UpdateMaterial />,
-    path: MetalFlowSys.material_update
+    path: MetalFlowRoutes.material_update
   },
   {
     element: <AddSuply />,
-    path: MetalFlowSys.supply_add
+    path: MetalFlowRoutes.supply_add
   },
   {
     element: <AddWriteOff />,
-    path: MetalFlowSys.writeoff_add
+    path: MetalFlowRoutes.writeoff_add
   },
   {
     element: <ListDetails />,
-    path: MetalFlowSys.details
+    path: MetalFlowRoutes.details
   },
   {
     element: <AddDetail />,
-    path: MetalFlowSys.detail_add
+    path: MetalFlowRoutes.detail_add
   },
   {
     element: <UpdateDetail />,
-    path: MetalFlowSys.detail_update
+    path: MetalFlowRoutes.detail_update
   },
   {
     element: <ListSupplies />,
-    path: MetalFlowSys.supplies
+    path: MetalFlowRoutes.supplies
   },
   {
     element: <ListWriteoffs />,
-    path: MetalFlowSys.writeoffs
+    path: MetalFlowRoutes.writeoffs
   }
 ] as RouteConfig[]
 

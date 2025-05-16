@@ -32,7 +32,7 @@ function OrderDetail() {
     : false
   const queryParams = useParams<{ id: string }>()
   const orderId = parseInt(queryParams.id || '')
-  if (!orderId) throw Error('Null OrderId at the local store')
+  if (!orderId) throw Error('Order id is missing in the url')
   const { editMode, initialize } = useOrderDetailStore()
 
   useLayoutEffect(() => {

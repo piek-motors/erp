@@ -13,6 +13,7 @@ import {
 import { Context } from '..'
 import { PageTitle } from '../components'
 import { ICON_OPACITY, ICON_WIDTH, Row } from '../shortcuts'
+import { openOrderDetailPage } from 'lib/routes'
 
 interface INotificationProps {
   data: any
@@ -34,7 +35,7 @@ function Mention({ data, readed }: INotificationProps) {
   `
 
   function toOrderDetailPageHandler() {
-    navigate(`/orders/${data.Order.OrderID}`)
+    navigate(openOrderDetailPage(data.Order.OrderID))
     updateViewedMutration({ variables: { ID: data.ID, Viewed: true } })
   }
 

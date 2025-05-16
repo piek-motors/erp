@@ -149,12 +149,27 @@ export function MultilineInput(
 export function MyTabs(props: {
   tabs: Record<string, ReactNode>
   handleChange?: (newVal: any) => void
+  value?: string
 }) {
   return (
-    <Tabs>
+    <Tabs
+      value={props.value}
+      onChange={(e, v) => {
+        if (v == null) return
+        if (props.handleChange) {
+          props.handleChange(Object.values(props.tabs)[v])
+        }
+      }}
+    >
       <TabList>
-        {Object.keys(props.tabs).map((each, idx) => (
-          <Tab key={each}>{each}</Tab>
+        {Object.entries(props.tabs).map(([key, value], idx) => (
+          <Tab
+            key={key}
+            color={props.value == value ? 'primary' : 'neutral'}
+            variant={props.value == value ? 'soft' : 'plain'}
+          >
+            {key}
+          </Tab>
         ))}
       </TabList>
       {Object.values(props.tabs).map((component, idx) => (
@@ -283,3 +298,4 @@ export function MyChip(props: { if: boolean; text: string } & ChipProps) {
     </MuiChip>
   )
 }
+

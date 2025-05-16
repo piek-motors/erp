@@ -4,7 +4,7 @@ import { PageTitle } from 'components'
 import { Search } from 'components/search-input'
 import { Table } from 'components/table.impl'
 import { EnMaterialShape, Material, UiMaterialShape } from 'domain-model'
-import { MetalFlowSys } from 'lib/routes'
+import { MetalFlowRoutes, openMetalFlowPage } from 'lib/routes'
 import { Observer } from 'mobx-react-lite'
 import { JSX, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
@@ -23,7 +23,6 @@ import { map } from '../mappers'
 import { SmallInputForm } from '../shared'
 import { MaterialUnitSelect } from '../shared/basic'
 import { ResourceName } from '../shared/material-name'
-import { goTo } from '../spa'
 import { useStockStore } from '../stock'
 import { materialListStore, materialStore } from '../store'
 import { t } from '../text'
@@ -80,7 +79,9 @@ export function ListMaterials() {
       render={() => (
         <>
           <PageTitle title={t.MaterialsList} hideIcon>
-            <AddResourceButton navigateTo={goTo(MetalFlowSys.material_add)} />
+            <AddResourceButton
+              navigateTo={openMetalFlowPage(MetalFlowRoutes.material_add)}
+            />
           </PageTitle>
 
           <Search
@@ -107,7 +108,9 @@ export function ListMaterials() {
                 })}
                 onDoubleRowClick={row => {
                   if (!row.id) throw Error('Material id is null')
-                  navigate(goTo(MetalFlowSys.material_update, row.id))
+                  navigate(
+                    openMetalFlowPage(MetalFlowRoutes.material_update, row.id)
+                  )
                 }}
               />
             )}
@@ -137,8 +140,8 @@ export function AddMaterial() {
               {materialStore.insertedMaterialId && (
                 <TakeLookHint
                   text={t.RecentlyNewMaterialAdded}
-                  link={goTo(
-                    MetalFlowSys.material_update,
+                  link={openMetalFlowPage(
+                    MetalFlowRoutes.material_update,
                     materialStore.insertedMaterialId
                   )}
                 />
@@ -208,7 +211,11 @@ function UpdateMaterialUpdateStockLinks(props: { id: number }) {
         variant="outlined"
         color="warning"
         onClick={() =>
-          navigate(goTo(MetalFlowSys.supply_add, id, { material_id: id }))
+          navigate(
+            openMetalFlowPage(MetalFlowRoutes.supply_add, id, {
+              material_id: id
+            })
+          )
         }
       >
         {t.AddSupply}
@@ -217,7 +224,11 @@ function UpdateMaterialUpdateStockLinks(props: { id: number }) {
         variant="outlined"
         color="warning"
         onClick={() =>
-          navigate(goTo(MetalFlowSys.writeoff_add, id, { material_id: id }))
+          navigate(
+            openMetalFlowPage(MetalFlowRoutes.writeoff_add, id, {
+              material_id: id
+            })
+          )
         }
       >
         {t.AddWriteoff}

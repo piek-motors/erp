@@ -1,9 +1,11 @@
 import { UilArrowDown, UilArrowUp } from '@iconscout/react-unicons'
 import { Table as MuiTable, Sheet, Stack, Typography } from '@mui/joy'
-import { TableOptions, useSortBy, useTable } from 'react-table'
+import { Row, TableOptions, useSortBy, useTable } from 'react-table'
 
 type Props<T extends object> = TableOptions<T> & {
+  onRowClick?: (row: T) => void
   onDoubleRowClick?: (row: T) => void
+  trStyleCallback?: (row: Row<T>) => React.CSSProperties
 }
 /**
  * Generic table implementation for metal-flow subsystem
@@ -56,6 +58,14 @@ export function Table<T extends object>(props: Props<T>) {
               return (
                 <tr
                   {...row.getRowProps()}
+                  style={{
+                    ...(props.trStyleCallback
+                      ? props.trStyleCallback(row)
+                      : undefined)
+                  }}
+                  onClick={() => {
+                    if (props.onRowClick) props.onRowClick(row.original)
+                  }}
                   onDoubleClick={() => {
                     if (props.onDoubleRowClick)
                       props.onDoubleRowClick(row.original)

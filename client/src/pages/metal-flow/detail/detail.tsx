@@ -2,7 +2,7 @@ import { Sheet, Stack, Typography } from '@mui/joy'
 import { PageTitle } from 'components'
 import { Table } from 'components/table.impl'
 import { Detail, EnUnit, Material } from 'domain-model'
-import { MetalFlowSys } from 'lib/routes'
+import { openMetalFlowPage, MetalFlowRoutes } from 'lib/routes'
 import { Observer } from 'mobx-react-lite'
 import { useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
@@ -20,7 +20,6 @@ import { map } from '../mappers'
 import { QtyInputWithUnit, SmallInputForm } from '../shared'
 import { MaterialAutocompleteMulti } from '../shared/material-autocomplete'
 import { ResourceName } from '../shared/material-name'
-import { goTo } from '../spa'
 import { detailStore, materialListStore } from '../store'
 import { t } from '../text'
 
@@ -111,14 +110,18 @@ export function ListDetails() {
       render={() => (
         <>
           <PageTitle title={t.DetailsList} hideIcon>
-            <AddResourceButton navigateTo={goTo(MetalFlowSys.detail_add)} />
+            <AddResourceButton
+              navigateTo={openMetalFlowPage(MetalFlowRoutes.detail_add)}
+            />
           </PageTitle>
           <Sheet>
             <Table
               columns={columnList}
               data={details || []}
               onDoubleRowClick={row =>
-                navigate(goTo(MetalFlowSys.detail_update, row.id))
+                navigate(
+                  openMetalFlowPage(MetalFlowRoutes.detail_update, row.id)
+                )
               }
             />
           </Sheet>
@@ -174,7 +177,7 @@ export function AddDetail() {
               additionals={(err, res) => (
                 <TakeLookHint
                   text={t.RecentlyNewDetailAdded}
-                  link={goTo(MetalFlowSys.detail_update, res)}
+                  link={openMetalFlowPage(MetalFlowRoutes.detail_update, res)}
                 />
               )}
             />

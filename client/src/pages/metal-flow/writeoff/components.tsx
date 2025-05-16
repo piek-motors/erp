@@ -4,8 +4,6 @@ import { UilTrash } from '@iconscout/react-unicons'
 import { Autocomplete, Box, IconButton, Sheet, Stack } from '@mui/joy'
 import { PageTitle } from 'components'
 import { Table } from 'components/table.impl'
-import { MetalFlowSys } from 'lib/routes'
-import { useEffect, useState } from 'react'
 import {
   Detail,
   EnWriteoffType,
@@ -13,6 +11,8 @@ import {
   UiWriteoffReason,
   WriteoffTroughDetail
 } from 'domain-model'
+import { openMetalFlowPage, MetalFlowRoutes } from 'lib/routes'
+import { useEffect, useState } from 'react'
 import { AddResourceButton, MyInput, MyTabs, SendMutation } from 'shortcuts'
 import { useNotifier } from 'store/notifier.store'
 import {
@@ -22,7 +22,6 @@ import {
 import { QtyInputWithUnit, SmallInputForm } from '../shared'
 import { DetailSelect } from '../shared/detail-select'
 import { MaterialSelect } from '../shared/material-select'
-import { goTo } from '../spa'
 import { t } from '../text'
 import { getColumns } from './columns.decl'
 import { useWriteOffStore } from './state'
@@ -146,7 +145,6 @@ function TotalCost(props: { detail: Detail; qty: number }) {
   )
 }
 
-
 export function WriteOffThroughMaterial() {
   const state = useWriteOffStore()
   const { material } = state
@@ -176,7 +174,9 @@ export function ListWriteoffs() {
   return (
     <>
       <PageTitle title={t.WriteoffsList}>
-        <AddResourceButton navigateTo={goTo(MetalFlowSys.writeoff_add)} />
+        <AddResourceButton
+          navigateTo={openMetalFlowPage(MetalFlowRoutes.writeoff_add)}
+        />
       </PageTitle>
 
       <Sheet sx={{ gap: 2 }}>

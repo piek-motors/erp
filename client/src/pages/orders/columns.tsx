@@ -5,50 +5,45 @@ import { Link, useNavigate } from 'react-router-dom'
 import { Column } from 'react-table'
 import { TOrderColumnData } from 'types/global'
 import { percentage } from 'utils/formatting'
-import { Table } from '../../components/table.impl'
-import { MyChip, Pre, Row } from '../../shortcuts'
+import { Table } from 'components/table.impl'
+import { Pre } from 'shortcuts'
+import { t } from './text'
+import { openOrderDetailPage } from 'lib/routes'
+
+const NEED_ATTENTION_COLOR = '#f5b9b9ba'
+const AWAITING_DISPATCH_COLOR = '#cae9b4a3'
 
 export const columnsList: Column<TOrderColumnData>[] = [
   {
-    Header: 'ID',
+    Header: t.id,
     id: 'index',
     accessor: (_row, counter) => counter + 1
   },
   {
-    Header: 'Наим.',
+    Header: t.name,
     id: 'orderItems',
     accessor: data => {
       if (data.OrderItems.length === 0)
         return (
-          <Link to={`/orders/${data.OrderID}`}>
-            <Typography>Нет содержимого</Typography>
+          <Link to={openOrderDetailPage(data.OrderID)}>
+            <Typography>{t.noContent}</Typography>
           </Link>
         )
-      else
+      else {
         return (
-          <Row gap={1}>
-            <Stack gap={1}>
-              {data.OrderItems.map(item => (
-                <div key={item.OrderItemID}>
-                  <Pre>{item.Name.trim()}</Pre>
-                </div>
-              ))}
-            </Stack>
-
-            <Stack direction="row" gap={1}>
-              <MyChip if={data.AwaitingDispatch} text={'Готов'} />
-              <MyChip
-                if={data.NeedAttention === 'true'}
-                color="danger"
-                text={'Внимание'}
-              />
-            </Stack>
-          </Row>
+          <Stack gap={1}>
+            {data.OrderItems.map(item => (
+              <div key={item.OrderItemID}>
+                <Pre>{item.Name.trim()}</Pre>
+              </div>
+            ))}
+          </Stack>
         )
+      }
     }
   },
   {
-    Header: 'Кол-во',
+    Header: t.quantity,
     accessor: data => (
       <Stack gap={1}>
         {data.OrderItems.map(item => (
@@ -58,33 +53,32 @@ export const columnsList: Column<TOrderColumnData>[] = [
     )
   },
   {
-    Header: 'План. отгрузка',
+    Header: t.plannedShipping,
     accessor: order => (
       <>{order.ShippingDate && moment(order.ShippingDate).format('DD.MM.YY')}</>
     )
   },
   {
-    Header: 'Счет',
+    Header: t.invoice,
     accessor: 'InvoiceNumber'
   },
   {
-    Header: 'Оплата',
+    Header: t.payment,
     accessor: data => {
       const paidAmount = data.PaidAmount || data.PaymentHistories[0]?.PaidAmount
       return percentage(paidAmount, data.TotalAmount)
     }
   },
   {
-    Header: 'Контрагент',
+    Header: t.contractor,
     accessor: data => <>{data.Entity}</>
   },
   {
-    Header: 'Город',
+    Header: t.city,
     accessor: data => <>{data.City}</>
   },
-
   {
-    Header: 'Менеджер',
+    Header: t.manager,
     accessor: data => <> {data.User?.FirstName ? data.User?.FirstName : ''} </>
   }
 ]
@@ -92,13 +86,21 @@ export const columnsList: Column<TOrderColumnData>[] = [
 export function OrdersTable(props: { data: TOrderColumnData[] }) {
   const navigate = useNavigate()
   const onDoubleRowClick = (row: TOrderColumnData) => {
-    navigate(`/orders/${row.OrderID}`)
+    navigate(openOrderDetailPage(row.OrderID))
   }
-
   const columns = useMemo(() => columnsList, [])
-
   return (
     <Table
+      trStyleCallback={row => {
+        return {
+          background:
+            row.original?.NeedAttention === 'true'
+              ? NEED_ATTENTION_COLOR
+              : row.original?.AwaitingDispatch
+              ? AWAITING_DISPATCH_COLOR
+              : ''
+        }
+      }}
       columns={columns}
       data={props.data}
       onDoubleRowClick={onDoubleRowClick}
