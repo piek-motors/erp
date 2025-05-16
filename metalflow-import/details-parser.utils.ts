@@ -1,5 +1,5 @@
 import { Detail, Material } from 'domain-model'
-import { MaterialParser } from './material-parser.ts'
+import { MaterialParser } from './material-parser'
 
 // Types
 type MaterialDetails = Map<Material, Array<Detail>>
@@ -49,7 +49,7 @@ export function processCsvLine(
 
         try {
           // check if material is valid
-          material.getIdentifier()
+          material.deriveLabel()
         } catch (e) {
           console.error(`\n\nfailed to parse material ${name}\n\n`, material)
           throw new Error(`failed to parse material ${name}`)

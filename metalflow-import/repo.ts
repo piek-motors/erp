@@ -1,16 +1,19 @@
-import type { Insertable } from 'kysely'
-import { log } from 'node:console'
 import { Detail, EnMaterialShape, Material } from 'domain-model'
-import { MaterialFactory } from '../adapters/materials/factory.ts'
-import { MaterialMapper } from '../adapters/materials/mapper.ts'
-import { db } from '../db/conn.ts'
-import type { DB } from '../db/schema.ts'
+import type { Insertable, Kysely } from 'kysely'
+import { log } from 'node:console'
+import type { DB } from '../db/schema'
+import { MaterialFactory } from './adapters/materials/factory'
+import { MaterialMapper } from './adapters/materials/mapper'
 
 export class Repo {
   private materialMapper = new MaterialMapper()
+  db: Kysely<DB.Schema>
+  constructor(db: Kysely<DB.Schema>) {
+    this.db = db
+  }
 
   async insertMaterials(materials: Material[]) {
-    const lastId = await db
+    const lastId = await this.db
       .selectFrom('metal_pdo.materials')
       .select('id')
       .orderBy('id', 'desc')
@@ -29,11 +32,14 @@ export class Repo {
       })
     }
 
-    await db.insertInto('metal_pdo.materials').values(insertables).execute()
+    await this.db
+      .insertInto('metal_pdo.materials')
+      .values(insertables)
+      .execute()
   }
 
   async getAllMaterials(): Promise<Material[]> {
-    const dbMaterials = await db
+    const dbMaterials = await this.db
       .selectFrom('metal_pdo.materials')
       .selectAll()
       .execute()
@@ -50,8 +56,8 @@ export class Repo {
   }
 
   async dropDetailsTable() {
-    await db.deleteFrom('metal_pdo.detail_materials').execute()
-    await db.deleteFrom('metal_pdo.details').execute()
+    await this.db.deleteFrom('metal_pdo.detail_materials').execute()
+    await this.db.deleteFrom('metal_pdo.details').execute()
     log('details dropped')
   }
 
@@ -61,7 +67,7 @@ export class Repo {
   ): Promise<void> {
     const filteredDetails = details.filter(detail => detail.name)
     if (!filteredDetails.length) return
-    await db
+    await this.db
       .insertInto('metal_pdo.details')
       .values(
         filteredDetails.map(detail => ({
@@ -83,11 +89,14 @@ export class Repo {
             `material mapper: no materials for detail ${detail.id}`
           )
         }
-        const relationData = detail.materials[0]
+
+        const relationData = Array.from(detail.materials.values())[0]
+
         if (relationData == null) {
           // throw new Error(
           //   `no detail material relation data for detail ${detail.name}`
           // )
+          // TODO: fix me
           return
         }
         return {
@@ -99,10 +108,10 @@ export class Repo {
           }
         }
       })
-      .filter(Boolean)
+      .filter(each => each != null)
 
     if (relations.length > 0) {
-      await db
+      await this.db
         .insertInto('metal_pdo.detail_materials')
         .values(relations)
         .execute()

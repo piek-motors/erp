@@ -36,7 +36,7 @@ export class MaterialFactory {
 
 export class ListFactory implements IMaterialFactory {
   createFromShapeData(shapeData: ListShapeData): Material {
-    const m = new List(null)
+    const m = new List(0)
     m.thickness = shapeData.thickness
     if (shapeData.alloy) m.alloy = shapeData.alloy
     if (shapeData.width) m.width = shapeData.width
@@ -54,7 +54,7 @@ export class ListFactory implements IMaterialFactory {
 
 export class PipeFactory implements IMaterialFactory {
   createFromShapeData(shapeData: PipeShapeData): Material {
-    const m = new Pipe(null)
+    const m = new Pipe(0)
     m.diameter = shapeData.diameter
     m.alloy = shapeData.alloy
     m.thickness = shapeData.thickness
@@ -72,7 +72,7 @@ export class PipeFactory implements IMaterialFactory {
 
 export class RoundBarFactory implements IMaterialFactory {
   createFromShapeData(shapeData: RoundBarShapeData): Material {
-    const m = new RoundBar(null)
+    const m = new RoundBar(0)
     m.diameter = shapeData.diameter
     m.alloy = shapeData.alloy
     m.calibrated = shapeData.calibrated
@@ -95,7 +95,7 @@ export class RoundBarFactory implements IMaterialFactory {
 
 export class SquareBarFactory implements IMaterialFactory {
   createFromShapeData(shapeData: SquareBarShapeData): Material {
-    const m = new SquareBar(null)
+    const m = new SquareBar(0)
     m.length = shapeData.length
     m.alloy = shapeData.alloy
     return m

@@ -203,6 +203,9 @@ importers:
 
   metalflow-import:
     dependencies:
+      class-transformer:
+        specifier: ^0.5.1
+        version: 0.5.1
       csv:
         specifier: ^6.3.11
         version: 6.3.11

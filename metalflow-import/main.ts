@@ -1,13 +1,14 @@
 import { parse } from 'csv'
+import { connect } from 'db'
+import { Detail, Material } from 'domain-model'
 import { log } from 'node:console'
 import fs from 'node:fs'
 import path from 'node:path'
-import { Detail, Material } from 'domain-model'
 import {
   filterMaterialsOnlyWithDetails,
   processCsvLine
-} from './details-parser.utils.ts'
-import { Repo } from './repo.ts'
+} from './details-parser.utils'
+import { Repo } from './repo'
 
 const CSV_PATH = path.resolve('src/metal-flow-import', './data/details.csv')
 
@@ -30,7 +31,7 @@ async function processCsvData(
 
 function getMaterialTextId(material: Material): string {
   try {
-    return material.getIdentifier()
+    return material.deriveLabel()
   } catch (error) {
     throw new Error(
       `Failed to get text ID for material ${material.shape}: ${error}`
@@ -73,12 +74,18 @@ async function processMaterialDetails(
 async function main() {
   try {
     const csv = fs.readFileSync(CSV_PATH)
+    const connStr = process.env.PG_CONN_STR
+    if (!connStr) {
+      throw new Error('PG_CONN_STR is not set')
+    }
+
+    const db = connect(connStr)
     parse(csv, { delimiter: ',' }, async (err, csvData) => {
       if (err) {
         throw new Error(`Error parsing CSV: ${err}`)
       }
 
-      const repo = new Repo()
+      const repo = new Repo(db)
       const materialDetails = await processCsvData(csvData)
       const dbMaterials = await repo.getAllMaterials()
       const materialsToInsert = findMaterialsToInsert(
