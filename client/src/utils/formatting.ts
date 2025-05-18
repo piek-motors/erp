@@ -4,7 +4,8 @@ export function money(value: number) {
     style: 'currency',
     currency: 'RUB',
     maximumFractionDigits: 0,
-    minimumFractionDigits: 0
+    minimumFractionDigits: 0,
+    currencyDisplay: 'narrowSymbol'
   })
 }
 

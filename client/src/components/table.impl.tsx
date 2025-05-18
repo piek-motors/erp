@@ -1,3 +1,5 @@
+/** @jsxImportSource @emotion/react */
+import { css } from '@emotion/react'
 import { UilArrowDown, UilArrowUp } from '@iconscout/react-unicons'
 import { Table as MuiTable, Sheet, Stack, Typography } from '@mui/joy'
 import { Row, TableOptions, useSortBy, useTable } from 'react-table'
@@ -55,13 +57,27 @@ export function Table<T extends object>(props: Props<T>) {
           <tbody {...getTableBodyProps()}>
             {rows.map((row, i) => {
               prepareRow(row)
+
+              const cursor =
+                props.onRowClick || props.onDoubleRowClick
+                  ? 'pointer'
+                  : 'default'
+
               return (
                 <tr
                   {...row.getRowProps()}
+                  css={css(css`
+                    &:hover {
+                      background-color: ${cursor === 'pointer'
+                        ? 'rgba(0, 0, 0, 0.04)'
+                        : 'inherit'};
+                    }
+                  `)}
                   style={{
                     ...(props.trStyleCallback
                       ? props.trStyleCallback(row)
-                      : undefined)
+                      : undefined),
+                    cursor: cursor
                   }}
                   onClick={() => {
                     if (props.onRowClick) props.onRowClick(row.original)
@@ -88,7 +104,6 @@ export function Table<T extends object>(props: Props<T>) {
     </Sheet>
   )
 }
-
 
 export function SortingState(props: {
   isSorted: boolean

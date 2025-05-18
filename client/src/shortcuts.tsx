@@ -1,4 +1,4 @@
-import { UilPen, UilTrash } from '@iconscout/react-unicons'
+import { UilPen, UilTrashAlt } from '@iconscout/react-unicons'
 import {
   Box,
   Button,
@@ -82,7 +82,7 @@ export function CancelButton(props: { onClick: () => void }) {
 export function DeleteResourceButton(props: { onClick: () => void }) {
   return (
     <IconButton variant="soft" color="danger" onClick={props.onClick} size="sm">
-      <UilTrash width={ICON_WIDTH} opacity={ICON_OPACITY} fill="red" />
+      <UilTrashAlt width={ICON_WIDTH} opacity={ICON_OPACITY} fill="red" />
     </IconButton>
   )
 }
@@ -298,4 +298,3 @@ export function MyChip(props: { if: boolean; text: string } & ChipProps) {
     </MuiChip>
   )
 }
-

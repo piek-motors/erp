@@ -19,7 +19,7 @@ export interface IDialogEditOrderItemProps {
   refetch: () => void
 }
 
-export function DialogAddEditOrderItem({ refetch }: IDialogEditOrderItemProps) {
+export function UpdatePositionBtn({ refetch }: IDialogEditOrderItemProps) {
   const {
     orderId,
     addOrderItemDialog: isOpen,

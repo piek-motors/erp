@@ -11,10 +11,11 @@ import {
   UilUnlock
 } from '@iconscout/react-unicons'
 import { IconButton, Tooltip } from '@mui/joy'
+import { OrderStatus } from 'domain-model'
+import { Observer } from 'mobx-react-lite'
 import { useOrderDetailStore } from 'pages/order/state'
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
-import { OrderStatus } from 'domain-model'
 import { ICON_OPACITY, ICON_WIDTH, Row, text } from 'shortcuts'
 import { useNotifier } from 'store/notifier.store'
 import { TOrder } from 'types/global'
@@ -27,6 +28,7 @@ import {
 } from 'types/graphql-shema'
 import { DeleteOrderDialog } from './dialogs/delete-order-dialog'
 import { TransferOrderDialog } from './dialogs/transfer-order.dialog'
+import { orderStore } from './order.store'
 
 // Types
 export type ActionButton = {
@@ -40,7 +42,6 @@ export type ActionButton = {
 
 interface IStatusButtonsProps {
   order: TOrder
-  renderAlg: (buttons: ActionButton[]) => React.ReactElement | null
 }
 
 // Custom hook for order mutations
@@ -146,7 +147,8 @@ function useOrderMutations(orderId: number | null) {
 }
 
 // Button rendering component
-const ActionButton = (buttons: ActionButton[]) => {
+const ActionButton = (props: { buttons: ActionButton[] }) => {
+  const { buttons } = props
   const renderResult = buttons
     .filter(btn => !btn.hidden)
     .map(btn => {
@@ -176,7 +178,7 @@ const ActionButton = (buttons: ActionButton[]) => {
   return <Row gap={1}>{renderResult}</Row>
 }
 
-function SwitchOrderStatusBtn({ order, renderAlg }: IStatusButtonsProps) {
+function SwitchOrderStatusBtn({ order }: IStatusButtonsProps) {
   const { updateAwaitingDispatch, updateNeedAttention } = useOrderMutations(
     order.OrderID
   )
@@ -197,17 +199,12 @@ function SwitchOrderStatusBtn({ order, renderAlg }: IStatusButtonsProps) {
     }
   ]
 
-  return renderAlg(statusButtons)
+  return <ActionButton buttons={statusButtons} />
 }
 
 export function OrderActions({ order }: { order: TOrder }) {
-  const {
-    orderId,
-    editMode,
-    setEditMode,
-    setAddOrderItemDialog,
-    setEditedOrderItem
-  } = useOrderDetailStore()
+  const { orderId, setAddOrderItemDialog, setEditedOrderItem } =
+    useOrderDetailStore()
 
   const { moveToArchive, moveToPriority, deleteOrder } =
     useOrderMutations(orderId)
@@ -224,64 +221,73 @@ export function OrderActions({ order }: { order: TOrder }) {
     return '/'
   }
 
-  const buttons: ActionButton[] = [
-    {
-      tip: text.moveToPriority,
-      handler: moveToPriority,
-      icon: UilFileCheck,
-      hidden: ![OrderStatus.ordRegistration].includes(order.OrderStatusID)
-    },
-    {
-      dialog: TransferOrderDialog,
-      dialogHandler: () => moveToArchive(3),
-      tip: text.orderCompleted,
-      icon: UilTruck,
-      hidden: ![OrderStatus.ordProduction].includes(order.OrderStatusID)
-    },
-    {
-      dialog: TransferOrderDialog,
-      dialogHandler: () => moveToArchive(13),
-      tip: text.orderCompleted,
-      icon: UilTruck,
-      hidden: ![OrderStatus.reclProduction].includes(order.OrderStatusID)
-    },
-    {
-      dialog: DeleteOrderDialog,
-      dialogHandler: () => deleteOrder(getResource()),
-      tip: text.delete,
-      icon: UilTrashAlt,
-      hidden: ![
-        OrderStatus.ordRegistration,
-        OrderStatus.ordProduction,
-        OrderStatus.reclInbox,
-        OrderStatus.reclDecision,
-        OrderStatus.reclInbox
-      ].includes(order.OrderStatusID)
-    },
-    {
-      tip: text.addPosition,
-      handler: () => {
-        setEditedOrderItem(null)
-        setAddOrderItemDialog(true)
-      },
-      icon: UilPlus,
-      hidden: [OrderStatus.ordArchived, OrderStatus.reclArchived].includes(
-        order.OrderStatusID
-      )
-    },
-    {
-      tip: text.change,
-      handler: () => setEditMode(!editMode),
-      icon: editMode ? UilUnlock : UilLock
-    }
-  ]
-
   return (
-    <Row>
-      <Row>
-        <SwitchOrderStatusBtn order={order} renderAlg={ActionButton} />
-      </Row>
-      {ActionButton(buttons)}
-    </Row>
+    <Observer
+      render={() => {
+        const buttons: ActionButton[] = [
+          {
+            tip: text.moveToPriority,
+            handler: moveToPriority,
+            icon: UilFileCheck,
+            hidden: ![OrderStatus.ordRegistration].includes(order.OrderStatusID)
+          },
+          {
+            dialog: TransferOrderDialog,
+            dialogHandler: () => moveToArchive(3),
+            tip: text.orderCompleted,
+            icon: UilTruck,
+            hidden: ![OrderStatus.ordProduction].includes(order.OrderStatusID)
+          },
+          {
+            dialog: TransferOrderDialog,
+            dialogHandler: () => moveToArchive(13),
+            tip: text.orderCompleted,
+            icon: UilTruck,
+            hidden: ![OrderStatus.reclProduction].includes(order.OrderStatusID)
+          },
+          {
+            dialog: DeleteOrderDialog,
+            dialogHandler: () => deleteOrder(getResource()),
+            tip: text.delete,
+            icon: UilTrashAlt,
+            hidden: ![
+              OrderStatus.ordRegistration,
+              OrderStatus.ordProduction,
+              OrderStatus.reclInbox,
+              OrderStatus.reclDecision,
+              OrderStatus.reclInbox
+            ].includes(order.OrderStatusID)
+          },
+          {
+            tip: text.addPosition,
+            handler: () => {
+              setEditedOrderItem(null)
+              setAddOrderItemDialog(true)
+            },
+            icon: UilPlus,
+            hidden: [
+              OrderStatus.ordArchived,
+              OrderStatus.reclArchived
+            ].includes(order.OrderStatusID)
+          },
+          {
+            tip: text.change,
+            handler: () => {
+              orderStore.switchEditMode()
+            },
+            icon: orderStore.editMode ? UilUnlock : UilLock
+          }
+        ]
+
+        return (
+          <Row>
+            <Row>
+              <SwitchOrderStatusBtn order={order} />
+            </Row>
+            {<ActionButton buttons={buttons} />}
+          </Row>
+        )
+      }}
+    />
   )
 }

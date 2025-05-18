@@ -1,12 +1,13 @@
 /** @jsxImportSource @emotion/react */
 import { UilFile, UilFileAlt, UilImage } from '@iconscout/react-unicons'
 import { Box, Button, Stack, Typography } from '@mui/joy'
-import { useOrderDetailStore } from 'pages/order/state'
+import { Observer } from 'mobx-react-lite'
 import { useEffect } from 'react'
 import { FileService } from 'services/file.service'
 import { DeleteResourceButton, Row } from 'shortcuts'
 import { useNotifier } from 'store/notifier.store'
 import { TOrderDocument } from 'types/global'
+import { orderStore } from './order.store'
 
 function File(props: {
   file: TOrderDocument
@@ -24,7 +25,7 @@ function File(props: {
   }
 
   return (
-    <Row>
+    <Row justifyContent={'space-between'}>
       <Box>
         <a
           href={`${process.env.REACT_APP_API_URL}/s3/${file.Key}`}
@@ -63,7 +64,6 @@ export function Docs(props: {
   onUpload: File[]
 }) {
   const { refetch, data, onUpload } = props
-  const { editMode } = useOrderDetailStore()
   const handleClickOpenDialog = async (file: TOrderDocument) => {
     await FileService.deleteFile(file.Key!)
     refetch()
@@ -81,39 +81,45 @@ export function Docs(props: {
   }
 
   return (
-    <div>
-      <Row gap={2}>
-        <Typography>Документы [{data.length}]</Typography>
-      </Row>
-      <Stack gap={1} py={2}>
-        {data.map(file => (
-          <File
-            refetch={refetch}
-            key={file.Key}
-            file={file}
-            editState={editMode}
-            handleOnDelete={handleClickOpenDialog}
-          />
-        ))}
+    <Observer
+      render={() => {
+        return (
+          <>
+            <Row gap={2}>
+              <Typography>Документы [{data.length}]</Typography>
+            </Row>
+            <Stack gap={1} py={2}>
+              {data.map(file => (
+                <File
+                  refetch={refetch}
+                  key={file.Key}
+                  file={file}
+                  editState={orderStore.editMode}
+                  handleOnDelete={handleClickOpenDialog}
+                />
+              ))}
 
-        {!!onUpload.length &&
-          onUpload.map(file => (
-            <File
-              refetch={refetch}
-              file={{
-                ...file,
-                FileName: file.name,
-                Key: file.name,
-                ID: crypto.getRandomValues(new Uint32Array(1))[0]
-              }}
-              key={file.name}
-              editState={editMode}
-              handleOnDelete={handleClickOpenDialog}
-              uploading
-            />
-          ))}
-      </Stack>
-    </div>
+              {!!onUpload.length &&
+                onUpload.map(file => (
+                  <File
+                    refetch={refetch}
+                    file={{
+                      ...file,
+                      FileName: file.name,
+                      Key: file.name,
+                      ID: crypto.getRandomValues(new Uint32Array(1))[0]
+                    }}
+                    key={file.name}
+                    editState={orderStore.editMode}
+                    handleOnDelete={handleClickOpenDialog}
+                    uploading
+                  />
+                ))}
+            </Stack>
+          </>
+        )
+      }}
+    />
   )
 }
 

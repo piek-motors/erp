@@ -2,27 +2,23 @@ import { TOrderItem } from 'types/global'
 import { create } from 'zustand'
 
 interface IOrderDetailState {
-  editMode: boolean
   addOrderItemDialog: boolean
   editedOrderItem: TOrderItem | null
   orderId: number | null
-  initialize(orderId: number, editMode: boolean): void
+  initialize(orderId: number): void
   setAddOrderItemDialog(value: boolean): void
-  setEditMode(mode: boolean): void
   setEditedOrderItem(value: TOrderItem | null): void
 }
 
 export const useOrderDetailStore = create<IOrderDetailState>(set => ({
   // initial state
   orderId: null,
-  editMode: false,
   addOrderItemDialog: false,
   editedOrderItem: null,
   // methods for manipulating state
-  initialize(orderId: number, editMode: boolean) {
+  initialize(orderId: number) {
     set(() => ({
       orderId,
-      editMode,
       addOrderItemDialog: false
     }))
   },
@@ -35,11 +31,6 @@ export const useOrderDetailStore = create<IOrderDetailState>(set => ({
   setAddOrderItemDialog(value) {
     set(() => ({
       addOrderItemDialog: value
-    }))
-  },
-  setEditMode(mode: boolean) {
-    set(state => ({
-      editMode: mode
     }))
   }
 }))

@@ -1,14 +1,14 @@
 import { Stack, Typography } from '@mui/joy'
+import { Table } from 'components/table.impl'
+import { openOrderDetailPage } from 'lib/routes'
 import moment from 'moment'
 import { useMemo } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Column } from 'react-table'
+import { Pre } from 'shortcuts'
 import { TOrderColumnData } from 'types/global'
 import { percentage } from 'utils/formatting'
-import { Table } from 'components/table.impl'
-import { Pre } from 'shortcuts'
 import { t } from './text'
-import { openOrderDetailPage } from 'lib/routes'
 
 const NEED_ATTENTION_COLOR = '#f5b9b9ba'
 const AWAITING_DISPATCH_COLOR = '#cae9b4a3'
@@ -85,7 +85,7 @@ export const columnsList: Column<TOrderColumnData>[] = [
 
 export function OrdersTable(props: { data: TOrderColumnData[] }) {
   const navigate = useNavigate()
-  const onDoubleRowClick = (row: TOrderColumnData) => {
+  const onRowClick = (row: TOrderColumnData) => {
     navigate(openOrderDetailPage(row.OrderID))
   }
   const columns = useMemo(() => columnsList, [])
@@ -103,7 +103,7 @@ export function OrdersTable(props: { data: TOrderColumnData[] }) {
       }}
       columns={columns}
       data={props.data}
-      onDoubleRowClick={onDoubleRowClick}
+      onRowClick={onRowClick}
     />
   )
 }

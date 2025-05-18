@@ -3,6 +3,7 @@ import {
   Box,
   Button,
   Card,
+  Divider,
   IconButton,
   Menu,
   MenuItem,
@@ -12,10 +13,17 @@ import {
   Typography
 } from '@mui/joy'
 import { apolloClient } from 'api'
+import { Observer } from 'mobx-react-lite'
 import moment from 'moment'
 import { useOrderDetailStore } from 'pages/order/state'
 import React, { useRef, useState } from 'react'
-import { DeleteResourceButton, Row, text } from 'shortcuts'
+import {
+  DeleteResourceButton,
+  ICON_OPACITY,
+  ICON_WIDTH,
+  Row,
+  text
+} from 'shortcuts'
 import { TComment, TUser } from 'types/global'
 import {
   InsertCommentDocument,
@@ -28,6 +36,7 @@ import {
   useInsertNotificationMutation,
   useUpdateCommentMutation
 } from 'types/graphql-shema'
+import { orderStore } from '../order.store'
 import { UserListPopover } from './user-list.popover'
 
 async function insertComment(comment: string, orderId: number, userId: number) {
@@ -116,7 +125,7 @@ function InputForm({ insertComment, inputRef }: InputFormProps) {
       />
       <Stack flexGrow={1}>
         <Textarea
-          size="lg"
+          size="sm"
           variant="soft"
           color="neutral"
           onChange={handleChange}
@@ -141,7 +150,7 @@ function InsertCommentButton(props: { onClick: () => void }) {
   return (
     <Tooltip title="Прикрепить комментарий">
       <IconButton onClick={props.onClick}>
-        <UilMessage />
+        <UilMessage width={ICON_WIDTH} opacity={ICON_OPACITY} />
       </IconButton>
     </Tooltip>
   )
@@ -205,7 +214,7 @@ interface ICommentProps {
   showDelete?: boolean
 }
 
-export function Comment({ data, userID, showDelete: editMode }: ICommentProps) {
+export function Comment({ data, userID }: ICommentProps) {
   const [deleteMutation] = useDeleteCommentMutation()
   const [updateMutation] = useUpdateCommentMutation()
   function updateComment(id: number, newText: string) {
@@ -222,10 +231,7 @@ export function Comment({ data, userID, showDelete: editMode }: ICommentProps) {
   function sender() {
     return `${data.User.FirstName} ${data.User.LastName}`
   }
-  function actions() {
-    if (editMode && userID === data.User.UserID)
-      return <DeleteResourceButton onClick={handleDelete} />
-  }
+
   function timestamp() {
     const date = moment(data.Timestamp)
     return date.format('MMM D') + ' at ' + date.format('hh:mm')
@@ -234,6 +240,9 @@ export function Comment({ data, userID, showDelete: editMode }: ICommentProps) {
     const isYourComment = userID === data.User.UserID
     return isYourComment ? (
       <div
+        style={{
+          fontSize: '0.8rem'
+        }}
         contentEditable="true"
         key={data.CommentID}
         suppressContentEditableWarning={true}
@@ -251,18 +260,30 @@ export function Comment({ data, userID, showDelete: editMode }: ICommentProps) {
   }
 
   return (
-    <Card sx={{ my: 1, py: 1 }} variant="soft">
-      <Row sx={{ justifyContent: 'space-between' }}>
-        <Typography>
-          <b>{sender()} </b>
-        </Typography>
-        <Row>
-          <Typography level="body-xs"> {timestamp()} </Typography>
-          <div>{actions()}</div>
-        </Row>
-      </Row>
-      {getCommentContent()}
-    </Card>
+    <Observer
+      render={() => {
+        function actions() {
+          if (orderStore.editMode && userID === data.User.UserID)
+            return <DeleteResourceButton onClick={handleDelete} />
+        }
+
+        return (
+          <Card sx={{ my: 0.5, p: 1, gap: 0.5 }} variant="outlined">
+            <Row sx={{ justifyContent: 'space-between' }}>
+              <Typography level="body-xs">
+                <b>{sender()} </b>
+              </Typography>
+              <Row>
+                <Typography level="body-xs"> {timestamp()} </Typography>
+                <div>{actions()}</div>
+              </Row>
+            </Row>
+            <Divider />
+            {getCommentContent()}
+          </Card>
+        )
+      }}
+    />
   )
 }
 
@@ -271,7 +292,7 @@ interface ICommentsListProps {
 }
 
 export function CommentListViewPort({ user }: ICommentsListProps) {
-  const { orderId, editMode } = useOrderDetailStore()
+  const { orderId } = useOrderDetailStore()
   if (!orderId) throw Error('Null OrderId at the local store')
   const [insertOrderCommentMutation] = useInsertCommentMutation()
   const [insertNotificationMutation] = useInsertNotificationMutation()
@@ -300,8 +321,8 @@ export function CommentListViewPort({ user }: ICommentsListProps) {
     <Box>
       <Box sx={{ overflow: 'scroll' }}>
         {sortedComments.length > visibleComments && (
-          <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
-            <Button variant="soft" onClick={handleShowMore}>
+          <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
+            <Button variant="soft" onClick={handleShowMore} size="sm">
               {text.showMore}
             </Button>
           </Box>
@@ -310,7 +331,6 @@ export function CommentListViewPort({ user }: ICommentsListProps) {
         {!loading &&
           commentsToShow.map(comment => (
             <Comment
-              showDelete={editMode}
               data={comment}
               key={comment.CommentID}
               userID={user.UserID}
