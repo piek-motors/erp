@@ -7,7 +7,7 @@ cd ..
 # Commit build artifacts and push to repo
 echo "Committing and pushing build artifacts..."
 git add client/build || true
-git commit -m "chore: build client before deploy" || true
+git commit -m "deploy" || true
 git push
 
 # Choose your target host (you can pass 'namegs' or 'piek' as argument)
