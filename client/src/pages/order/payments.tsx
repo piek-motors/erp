@@ -26,7 +26,6 @@ import * as formatter from 'utils/formatting'
 import { orderStore } from './order.store'
 
 type Order = Pick<TOrder, 'TotalAmount' | 'OrderID'>
-
 export const NO_TOTAL_AMOUNT_MESSAGE = 'Не задана сумма заказа'
 
 export function Paymnets({ data }: { data: TOrder }) {
@@ -137,10 +136,6 @@ function NewPaymentInput(props: NewPaymentInputProps) {
     amount?: number
   }>(props.defaultValues)
 
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget)
-  }
-
   const handleClose = () => {
     setAnchorEl(null)
   }
@@ -169,15 +164,23 @@ function NewPaymentInput(props: NewPaymentInputProps) {
   }
 
   function handleAmountChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setData({
-      ...data,
-      amount: parseInt(e.target.value.replace(',', '').replace('.', ''))
-    })
+    const parsedValue = e.target.value.replace(',', '').replace('.', '')
+    const amount = parseInt(parsedValue)
+    setData({ ...data, amount })
   }
 
   return (
-    <Dropdown>
-      <MenuButton onClick={handleClick} variant="plain" size="sm">
+    <Dropdown
+      open={open}
+      onOpenChange={(e, open) => {
+        if (open === false) {
+          setAnchorEl(null)
+        } else {
+          setAnchorEl(e?.target as HTMLButtonElement)
+        }
+      }}
+    >
+      <MenuButton variant="plain" size="sm">
         Добавить
       </MenuButton>
       <Menu
@@ -191,7 +194,7 @@ function NewPaymentInput(props: NewPaymentInputProps) {
           }
         }}
       >
-        <Stack gap={1} p={2}>
+        <Stack gap={1} p={1}>
           <MyInput
             label="Дата"
             placeholder="dd.mm.yy"
@@ -204,6 +207,8 @@ function NewPaymentInput(props: NewPaymentInputProps) {
               type="number"
               onChange={handleAmountChange}
               default={props.defaultValues?.amount?.toString() || ''}
+              // TODO: make controlled intput in order to make button for payed alll
+              // value={props.order.TotalAmount}
               autoFocus
             />
             <Typography>

@@ -1,28 +1,27 @@
 /** @jsxImportSource @emotion/react */
 import { Box, Sheet } from '@mui/joy'
-import { ManagerFilter, Search } from 'components'
+import { ManagerFilter, PageTitle, Search } from 'components'
 import { OrderTypeFilter } from 'components/order-type-filter'
 import { TableName } from 'components/table-name'
 import { EnOrderStatus, OrderStatus } from 'domain-model'
 import { useFilter } from 'hooks'
-import { RuMonths, SxProperty } from 'lib/constants'
-import { formatOnlyDate, getPreviousMonth } from 'lib/date'
+import { SxProperty } from 'lib/constants'
+import { formatOnlyDate } from 'lib/date'
+import { ListOrdersRoutes } from 'lib/routes'
 import moment from 'moment'
 import { useMemo } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
+import { AddResourceButton, MyTabs } from 'shortcuts'
+import { RouteConfig } from 'types/global'
 import {
   useGetOrdersArchivedBySearchKeywordQuery,
   useGetOrdersByStatusQuery,
   useInsertOrderMutation
 } from 'types/graphql-shema'
-import { PageTitle } from 'components'
-import { ListOrdersRoutes } from 'lib/routes'
-import { AddResourceButton, MyTabs } from 'shortcuts'
-import { RouteConfig } from 'types/global'
 import { columnsList, OrdersTable } from './columns'
 import { useOrderListPageStore } from './state'
 import { t } from './text'
-import { useReport } from './use-report'
+import { RequestReportPage } from './report.page'
 
 function PriorityList() {
   const store = useOrderListPageStore()
@@ -117,36 +116,6 @@ function NewOrderList() {
 
       <TableName name={t.yesterday} />
       <OrdersTable data={ordersByYesterday} />
-    </>
-  )
-}
-
-function Report() {
-  const { data } = useReport()
-  const columns = useMemo(() => {
-    const a = [...columnsList]
-    a[3] = {
-      Header: 'Факт отгрузка',
-      accessor: order => formatOnlyDate(order.ActualShippingDate)
-    }
-    return a
-  }, [])
-
-  if (data.loading) return null
-
-  return (
-    <>
-      <TableName name={t.shipmentsInTheCurrentMonth} />
-      {Array.isArray(data.ordersCurrentMonth) && (
-        <OrdersTable data={data.ordersCurrentMonth} />
-      )}
-
-      <div>
-        <TableName name={`Отгрузка за ${RuMonths[getPreviousMonth()]}`} />
-        {Array.isArray(data.ordersAccountingMonth) && (
-          <OrdersTable data={data.ordersAccountingMonth} />
-        )}
-      </div>
     </>
   )
 }
@@ -269,7 +238,7 @@ const routes = [
   {
     path: ListOrdersRoutes.report,
     title: t.report,
-    element: <Report />
+    element: <RequestReportPage />
   },
   {
     path: ListOrdersRoutes.search_in_archive,

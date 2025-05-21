@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import moment from 'moment'
-import { MySelect } from 'pages/metal-flow/shared/basic-select'
+import { Select } from 'pages/metal-flow/shared/select'
 import React, { useEffect } from 'react'
 import { InputStack, MultilineInput, MyInput, SendMutation } from 'shortcuts'
 import { TOrder, TUser } from 'types/global'
@@ -95,7 +95,7 @@ export function StatementInput({ data, refetch, users }: IEditableInfoProps) {
           onChange={addField}
         />
 
-        <MySelect
+        <Select
           label="Менеджер"
           selectElements={users.map(each => ({
             name: `${each.FirstName} ${each.LastName}`,
