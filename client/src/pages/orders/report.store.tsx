@@ -3,10 +3,10 @@ import moment from 'moment'
 import { apolloClient } from '../../api'
 import { MonthSelectStore } from '../../components/month-select'
 import {
-  OrderFragment,
+  GetOrdersArchivedByIntervalDocument,
   GetOrdersArchivedByIntervalQuery,
   GetOrdersArchivedByIntervalQueryVariables,
-  GetOrdersArchivedByIntervalDocument
+  OrderFragment
 } from '../../types/graphql-shema'
 
 class ReportPageStore {
@@ -19,6 +19,10 @@ class ReportPageStore {
     makeAutoObservable(this, {
       monthSelect: true
     })
+  }
+
+  async init() {
+    this.onSearch(this.monthSelect.month, this.monthSelect.year)
   }
 
   async onSearch(m: number, y: number) {
