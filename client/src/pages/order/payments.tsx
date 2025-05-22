@@ -1,20 +1,22 @@
 /** @jsxImportSource @emotion/react */
+import { css } from '@emotion/react'
+import { JSX } from '@emotion/react/jsx-runtime'
 import {
   Box,
   Button,
   Dropdown,
   Menu,
   MenuButton,
-  Sheet,
   Stack,
+  Table,
   Typography
 } from '@mui/joy'
 import { Roles } from 'domain-model'
 import { useAppContext } from 'hooks'
-import { Observer } from 'mobx-react-lite'
+import { observer } from 'mobx-react-lite'
 import moment from 'moment'
 import * as React from 'react'
-import { DeleteResourceButton, MyInput, Row } from 'shortcuts'
+import { MyInput, Row } from 'shortcuts'
 import { TOrder } from 'types/global'
 import {
   GetOrderPaymentsQuery,
@@ -23,7 +25,6 @@ import {
   useInsertPaymentMutation
 } from 'types/graphql-shema'
 import * as formatter from 'utils/formatting'
-import { orderStore } from './order.store'
 
 type Order = Pick<TOrder, 'TotalAmount' | 'OrderID'>
 export const NO_TOTAL_AMOUNT_MESSAGE = 'Не задана сумма заказа'
@@ -51,73 +52,87 @@ export function Paymnets({ data }: { data: TOrder }) {
     Roles.bookkeeping
   ].includes(store?.user?.AccessLevelID)
 
+  const paymentHistoryContent = data.TotalAmount ? (
+    <PaymentsTable
+      data={payments?.erp_PaymentHistory || []}
+      onDelete={ID => handleDelete(ID)}
+      totalAmount={data.TotalAmount}
+      footerComponent={
+        <Box>
+          {isHaveFullRight && (
+            <NewPaymentInput
+              order={data}
+              refetch={refetch}
+              defaultValues={{ date: new Date().toISOString() }}
+            />
+          )}
+        </Box>
+      }
+    />
+  ) : (
+    <Typography>{NO_TOTAL_AMOUNT_MESSAGE}</Typography>
+  )
+
   return (
-    <Box width={'min-content'} my={2}>
-      <Sheet sx={{ borderRadius: 5 }}>
-        <Row p={1} gap={5} alignItems={'start'} justifyContent={'start'}>
-          <Typography>Платежи</Typography>
-          <Box>
-            {data.TotalAmount ? (
-              <PrintPayment
-                data={payments?.erp_PaymentHistory || []}
-                isHaveFullRight
-                onDelete={ID => handleDelete(ID)}
-                totalAmount={data.TotalAmount}
-              />
-            ) : (
-              <Typography>{NO_TOTAL_AMOUNT_MESSAGE}</Typography>
-            )}
-            {isHaveFullRight && (
-              <NewPaymentInput
-                order={data}
-                refetch={refetch}
-                defaultValues={{ date: new Date().toISOString() }}
-              />
-            )}
-          </Box>
-        </Row>
-      </Sheet>
+    <Box my={1}>
+      <Typography>Платежи</Typography>
+      {paymentHistoryContent}
     </Box>
   )
 }
 
-function PrintPayment(props: {
-  data: GetOrderPaymentsQuery['erp_PaymentHistory']
-  isHaveFullRight?: boolean
-  totalAmount: number
-  onDelete?: (ID: number) => void
-}) {
-  const { totalAmount, isHaveFullRight } = props
+const PaymentsTable = observer(
+  (props: {
+    data: GetOrderPaymentsQuery['erp_PaymentHistory']
+    totalAmount: number
+    onDelete?: (ID: number) => void
+    footerComponent: JSX.Element
+  }) => {
+    const { totalAmount } = props
 
-  return (
-    <Observer
-      render={() => {
-        return (
-          <Stack>
+    const totalPaid = props.data.reduce((acc, payment) => {
+      return acc + payment.PaidAmount
+    }, 0)
+
+    const totalPaidPercent = formatter.percentage(totalPaid, totalAmount)
+
+    return (
+      <Box>
+        <Table
+          css={css`
+            td {
+              padding: 5px 10px;
+              text-align: center;
+            }
+            th {
+              text-align: center;
+            }
+          `}
+          sx={{ width: 'max-content' }}
+          size="sm"
+          style={{ tableLayout: 'auto' }}
+        >
+          <tbody>
             {props.data.map(payment => (
-              <Row
-                key={payment.Date + payment.PaidAmount}
-                justifyContent={'space-between'}
-              >
-                <Row>
-                  <Typography>
-                    {formatter.percentage(payment.PaidAmount, totalAmount)}
-                  </Typography>
-                  <Typography>{formatter.money(payment.PaidAmount)}</Typography>
-                </Row>
-                {isHaveFullRight && orderStore.editMode && (
-                  <DeleteResourceButton
-                    onClick={() => props.onDelete?.(payment.ID)}
-                  />
-                )}
-              </Row>
+              <tr>
+                <td>{formatter.percentage(payment.PaidAmount, totalAmount)}</td>
+                <td>{formatter.money(payment.PaidAmount)}</td>
+                <td>{formatter.formatOnlyDate(payment.Date)}</td>
+              </tr>
             ))}
-          </Stack>
-        )
-      }}
-    />
-  )
-}
+          </tbody>
+          <tfoot>
+            <tr>
+              <td> {totalPaidPercent}</td>
+              <td>{formatter.money(totalPaid)}</td>
+              {props.footerComponent && <td>{props.footerComponent}</td>}
+            </tr>
+          </tfoot>
+        </Table>
+      </Box>
+    )
+  }
+)
 
 interface NewPaymentInputProps {
   defaultValues: {
@@ -180,7 +195,7 @@ function NewPaymentInput(props: NewPaymentInputProps) {
         }
       }}
     >
-      <MenuButton variant="plain" size="sm">
+      <MenuButton variant="outlined" size="sm">
         Добавить
       </MenuButton>
       <Menu

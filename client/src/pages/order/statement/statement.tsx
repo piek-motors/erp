@@ -1,13 +1,20 @@
 /** @jsxImportSource @emotion/react */
 import { Box, Typography } from '@mui/joy'
-import { formatOnlyDate } from 'lib/date'
+import { formatOnlyDate } from 'utils/formatting'
 import { TOrder } from 'types/global'
+import { money } from 'utils/formatting'
 
 interface IAboutOrderProps {
   data: TOrder
 }
 
 export function AboutOrder({ data }: IAboutOrderProps) {
+  const paid = data.PaymentHistories.reduce((acc, curr) => {
+    return acc + curr.PaidAmount
+  }, 0)
+
+  const paidPercent = (paid / data.TotalAmount) * 100
+
   const columns = [
     {
       heading: 'План. отгрузка',
@@ -18,8 +25,16 @@ export function AboutOrder({ data }: IAboutOrderProps) {
       data: data.OrderNumber
     },
     {
-      heading: 'Счет / оплата',
+      heading: 'Номер счета',
       data: data.InvoiceNumber || ''
+    },
+    {
+      heading: 'Сумма заказа',
+      data: money(data.TotalAmount)
+    },
+    {
+      heading: 'Оплачено',
+      data: paid && `${money(paid)} (${paidPercent.toFixed(2)}%)`
     },
     {
       heading: 'Контрагент',
@@ -80,3 +95,4 @@ function OrderProperty(props: { title: string; value: any }) {
     </Box>
   )
 }
+

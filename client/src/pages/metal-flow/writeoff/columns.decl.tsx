@@ -1,5 +1,5 @@
 import { Column } from 'react-table'
-import { formatDateWithTime } from 'lib/date'
+import { formatDateWithTime } from 'utils/formatting'
 import { GetWrietOffsQuery } from 'types/graphql-shema'
 import { map } from '../mappers'
 import { ResourceName } from '../shared/material-name'
