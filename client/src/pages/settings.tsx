@@ -1,11 +1,11 @@
 /** @jsxImportSource @emotion/react */
-import { css } from '@emotion/react'
-import { Box, Button, Typography } from '@mui/joy'
+import { Box, Button, Container, Typography } from '@mui/joy'
 import { useAppContext } from 'hooks'
 import { AppRoutes } from 'lib/routes'
 import { ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { RouteConfig } from 'types/global'
+import { PageTitle } from '../components'
 
 function Settings() {
   const { store } = useAppContext()
@@ -29,44 +29,23 @@ function Settings() {
     </Box>
   )
 
-  const styles = css`
-    margin: 1rem;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    column-gap: 20px;
-    row-gap: 20px;
-
-    .gridCard {
-      background: var(--L1);
-      border-radius: var(--br);
-      line-height: 2;
-      padding: 10px 20px 20px;
-    }
-
-    .theme {
-      display: flex;
-      align-items: center;
-      column-gap: 15px;
-    }
-  `
-
   return (
-    <div css={styles}>
-      <GridCard title="Аккаунт">
-        <div>
-          {store.user?.FirstName} {store.user?.LastName}
-        </div>
-        <div> Уровень доступа: {(store.user as any).AccessLevelID}</div>
-        <div> Email: {(store.user as any).Email}</div>
-        <Button onClick={handleLogout} sx={{ mt: '10px' }}>
-          Выйти
-        </Button>
-      </GridCard>
-
-      <GridCard title="Data Provider">
-        <div>https://{process.env.REACT_APP_HASURA_ENDPOINT}</div>
-      </GridCard>
-    </div>
+    <Container maxWidth="sm">
+      <PageTitle title="Аккаунт" />
+      <Typography>
+        {store.user?.FirstName} {store.user?.LastName}
+      </Typography>
+      <Typography>
+        Уровень доступа: {(store.user as any).AccessLevelID}
+      </Typography>
+      <Typography> Email: {(store.user as any).Email}</Typography>
+      <Typography level="body-sm">
+        Data provider: https://{process.env.REACT_APP_HASURA_ENDPOINT}
+      </Typography>
+      <Button onClick={handleLogout} sx={{ mt: '10px' }}>
+        Выйти
+      </Button>
+    </Container>
   )
 }
 

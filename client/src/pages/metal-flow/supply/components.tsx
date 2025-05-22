@@ -26,7 +26,7 @@ export function ListSupplies() {
 
   return (
     <>
-      <PageTitle title={t.SuppliesList}>
+      <PageTitle title={t.SuppliesList} hideIcon>
         <AddResourceButton
           navigateTo={openMetalFlowPage(MetalFlowRoutes.supply_add)}
         />

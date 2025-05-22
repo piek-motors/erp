@@ -10004,7 +10004,7 @@ export type OrderFragment = { __typename?: 'erp_Orders', OrderID: number, Entity
 export type GetReclamationOrdersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetReclamationOrdersQuery = { __typename?: 'query_root', erp_Orders: Array<{ __typename?: 'erp_Orders', AwaitingDispatch: boolean, NeedAttention?: string | null, OrderID: number, Entity?: string | null, City?: string | null, OrderStatusID: number, OrderItems: Array<{ __typename?: 'erp_OrderItems', OrderItemID: number, Name: string }> }> };
+export type GetReclamationOrdersQuery = { __typename?: 'query_root', erp_Orders: Array<{ __typename?: 'erp_Orders', OrderID: number, Entity?: string | null, InvoiceNumber?: string | null, City?: string | null, ShippingDate?: any | null, ActualShippingDate?: any | null, AcceptanceDate?: any | null, PaidAmount?: any | null, TotalAmount?: any | null, AwaitingDispatch: boolean, NeedAttention?: string | null, CreatingDate: any, ManagerID?: number | null, OrderStatusID: number, OrderStatus: { __typename?: 'erp_OrderStatus', Name: string, ID: number }, OrderItems: Array<{ __typename?: 'erp_OrderItems', Quantity: number, OrderItemID: number, Name: string, OrderID: number }>, User?: { __typename?: 'erp_Users', FirstName?: string | null, LastName?: string | null } | null, PaymentHistories: Array<{ __typename?: 'erp_PaymentHistory', ID: number, PaidAmount: any, Date: any }> }> };
 
 export type UpdateOrderStatusMutationVariables = Exact<{
   OrderID: Scalars['Int']['input'];
@@ -11390,19 +11390,10 @@ export type InsertOrderMutationOptions = Apollo.BaseMutationOptions<InsertOrderM
 export const GetReclamationOrdersDocument = gql`
     query GetReclamationOrders {
   erp_Orders(where: {OrderStatusID: {_in: [10, 11, 12]}}) {
-    AwaitingDispatch
-    NeedAttention
-    OrderID
-    Entity
-    City
-    OrderStatusID
-    OrderItems(order_by: {OrderItemID: asc}) {
-      OrderItemID
-      Name
-    }
+    ...Order
   }
 }
-    `;
+    ${OrderFragmentDoc}`;
 
 /**
  * __useGetReclamationOrdersQuery__

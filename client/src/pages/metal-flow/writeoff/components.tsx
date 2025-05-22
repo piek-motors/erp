@@ -173,7 +173,7 @@ export function ListWriteoffs() {
 
   return (
     <>
-      <PageTitle title={t.WriteoffsList}>
+      <PageTitle title={t.WriteoffsList} hideIcon>
         <AddResourceButton
           navigateTo={openMetalFlowPage(MetalFlowRoutes.writeoff_add)}
         />

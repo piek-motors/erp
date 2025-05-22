@@ -1,12 +1,11 @@
 /** @jsxImportSource @emotion/react */
-import { Box, Sheet } from '@mui/joy'
+import { Box, Sheet, Stack } from '@mui/joy'
 import { ManagerFilter, PageTitle, Search } from 'components'
 import { OrderTypeFilter } from 'components/order-type-filter'
 import { TableName } from 'components/table-name'
 import { EnOrderStatus, OrderStatus } from 'domain-model'
 import { useFilter } from 'hooks'
 import { SxProperty } from 'lib/constants'
-import { formatOnlyDate } from 'utils/formatting'
 import { ListOrdersRoutes } from 'lib/routes'
 import moment from 'moment'
 import { useMemo } from 'react'
@@ -18,10 +17,11 @@ import {
   useGetOrdersByStatusQuery,
   useInsertOrderMutation
 } from 'types/graphql-shema'
+import { formatOnlyDate } from 'utils/formatting'
 import { columnsList, OrdersTable } from './columns'
+import { RequestReportPage } from './report.page'
 import { useOrderListPageStore } from './state'
 import { t } from './text'
-import { RequestReportPage } from './report.page'
 
 function PriorityList() {
   const store = useOrderListPageStore()
@@ -170,7 +170,6 @@ function Wrapper(props: { children: React.ReactNode; sx?: SxProperty }) {
     }
   })
 
-  // const currentTab = searchParams.get('tab') || t.PreOrders
   const currentTab = useLocation().pathname
   function insertOrderHandler() {
     insertOrderMutation().then(res => {
@@ -188,7 +187,7 @@ function Wrapper(props: { children: React.ReactNode; sx?: SxProperty }) {
     [t.searchInArchive]: ListOrdersRoutes.search_in_archive
   }
   return (
-    <>
+    <Stack p={1}>
       <PageTitle title={t.ordersTitle}>
         <AddResourceButton onClick={() => insertOrderHandler()} />
       </PageTitle>
@@ -201,7 +200,7 @@ function Wrapper(props: { children: React.ReactNode; sx?: SxProperty }) {
         }}
       />
       <Box sx={props.sx}>{props.children}</Box>
-    </>
+    </Stack>
   )
 }
 

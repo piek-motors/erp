@@ -15,7 +15,7 @@ export interface Props {
 
 export function PageTitle(props: Props) {
   return (
-    <Stack direction="row" gap={2} p={1}>
+    <Stack direction="row" gap={1} pb={1}>
       {!props.hideIcon && (
         <Tooltip title="Перейти на главную страницу">
           <Link to="/help">

@@ -1,15 +1,6 @@
 query GetReclamationOrders {
   erp_Orders(where: { OrderStatusID: { _in: [10, 11, 12] } }) {
-    AwaitingDispatch
-    NeedAttention
-    OrderID
-    Entity
-    City
-    OrderStatusID
-    OrderItems(order_by: { OrderItemID: asc }) {
-      OrderItemID
-      Name
-    }
+    ...Order
   }
 }
 

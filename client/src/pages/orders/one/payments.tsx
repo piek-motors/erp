@@ -27,7 +27,7 @@ import {
 import * as formatter from 'utils/formatting'
 
 type Order = Pick<TOrder, 'TotalAmount' | 'OrderID'>
-export const NO_TOTAL_AMOUNT_MESSAGE = 'Не задана сумма заказа'
+
 
 export function Paymnets({ data }: { data: TOrder }) {
   const [deletePayment] = useDeletePaymentMutation()
@@ -70,11 +70,13 @@ export function Paymnets({ data }: { data: TOrder }) {
       }
     />
   ) : (
-    <Typography>{NO_TOTAL_AMOUNT_MESSAGE}</Typography>
+    <Typography level="body-xs" color="danger">
+      Не задана сумма заказа
+    </Typography>
   )
 
   return (
-    <Box my={1}>
+    <Box my={1} className="no-print">
       <Typography>Платежи</Typography>
       {paymentHistoryContent}
     </Box>
@@ -211,14 +213,14 @@ function NewPaymentInput(props: NewPaymentInputProps) {
       >
         <Stack gap={1} p={1}>
           <MyInput
-            label="Дата"
+            label="Дата платежа"
             placeholder="dd.mm.yy"
             onChange={handleDateChange}
             default={moment(props.defaultValues?.date).format('DD.MM.YY')}
           />
           <Row gap={1}>
             <MyInput
-              label="Уже оплачено"
+              label="Сумма платежа"
               type="number"
               onChange={handleAmountChange}
               default={props.defaultValues?.amount?.toString() || ''}

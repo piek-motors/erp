@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { Box, Card, Typography } from '@mui/joy'
+import { Box, Card, Stack, Typography } from '@mui/joy'
 import { AppRoutes } from 'lib/routes'
 import { useState } from 'react'
 import {
@@ -12,15 +12,16 @@ import {
   OnDragEndResponder
 } from 'react-beautiful-dnd'
 import { useNavigate } from 'react-router-dom'
-import { OrderStatus } from 'domain-model'
+import { Order, OrderStatus } from 'domain-model'
 import { RouteConfig, TReclamationOrder } from 'types/global'
 import { PageTitle } from '../components'
-import { AddResourceButton, Pre } from '../shortcuts'
+import { AddResourceButton, LoadingHint, Pre } from '../shortcuts'
 import {
   useGetReclamationOrdersQuery,
   useInsertOrderMutation,
   useUpdateOrderStatusMutation
 } from '../types/graphql-shema'
+import { map } from './orders/mappers'
 
 interface IReclamationProps {
   inbox: TReclamationOrder[]
@@ -165,19 +166,23 @@ export interface IReclamationItemProps {
   order: TReclamationOrder
 }
 
-function ReclamationItem({ order }: IReclamationItemProps) {
-  const link = AppRoutes.order_detail.replace(':id', order.OrderID.toString())
+function ReclamationItem({ order }: { order: Order }) {
+  const link = AppRoutes.order_detail.replace(':id', order.id.toString())
   const navigate = useNavigate()
   return (
-    <Card sx={{ my: 1 }} variant="soft" onDoubleClick={() => navigate(link)}>
+    <Card
+      sx={{ my: 1, backgroundColor: order.getBackgroundColor() }}
+      variant="soft"
+      onDoubleClick={() => navigate(link)}
+    >
       <Typography color="primary">
-        {order.Entity}__{order.City}
+        {order.contractor}__{order.city}
       </Typography>
       <div>
-        {order.OrderItems.length ? (
-          order.OrderItems.map(item => (
-            <div key={item.OrderItemID}>
-              <Pre>- {item.Name}</Pre>
+        {order.items.length ? (
+          order.items.map(item => (
+            <div key={item.id}>
+              <Pre>- {item.name}</Pre>
             </div>
           ))
         ) : (
@@ -201,7 +206,9 @@ function DroppableContainer({
 }: IDroppableContainerProps) {
   return (
     <Box key={droppableId} sx={{ height: '100%', width: '100%' }}>
-      <Typography>{columnName}</Typography>
+      <Typography color="neutral" level="h4">
+        {columnName}
+      </Typography>
       <Droppable
         droppableId={droppableId.toString()}
         isDropDisabled={false}
@@ -228,7 +235,7 @@ function DroppableContainer({
                       provided.draggableProps.style!
                     )}
                   >
-                    {<ReclamationItem order={item} />}
+                    {<ReclamationItem order={map.order.fromDto(item)} />}
                   </div>
                 )}
               </Draggable>
@@ -260,13 +267,14 @@ function ReclamationContainer() {
     return array.filter(each => each.OrderStatusID === status)
   }
   return (
-    <>
+    <Stack p={1}>
       <PageTitle title="Рекламация">
         <AddResourceButton onClick={handleAddOrder} />
       </PageTitle>
 
-      <Box p={1}>
-        {!loading && (
+      <Box>
+        <LoadingHint show={loading} />
+        {data && (
           <Reclamation
             inbox={filterByStatus(
               data?.erp_Orders || [],
@@ -283,7 +291,7 @@ function ReclamationContainer() {
           />
         )}
       </Box>
-    </>
+    </Stack>
   )
 }
 

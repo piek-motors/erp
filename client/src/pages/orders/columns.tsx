@@ -10,8 +10,6 @@ import { map } from './mappers'
 import { t } from './text'
 import { useMemo } from 'react'
 
-const NEED_ATTENTION_COLOR = '#f5b9b9ba'
-const AWAITING_DISPATCH_COLOR = '#cae9b4a3'
 
 export const columnsList: Column<Order>[] = [
   {
@@ -86,11 +84,7 @@ export function OrdersTable(props: { data: TOrderColumnData[] }) {
     <Table
       trStyleCallback={row => {
         return {
-          background: row.original?.needAttention
-            ? NEED_ATTENTION_COLOR
-            : row.original?.awatingDispatch
-            ? AWAITING_DISPATCH_COLOR
-            : ''
+          background: row.original?.getBackgroundColor()
         }
       }}
       columns={columns}

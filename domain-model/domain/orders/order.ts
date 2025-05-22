@@ -71,6 +71,12 @@ export class Order {
     return `${this.manager.firstName} ${this.manager.lastName}`
   }
 
+  getBackgroundColor(): string {
+    if (this.needAttention) return '#f5b9b9ba'
+    if (this.awatingDispatch) return '#cae9b4a3'
+    return ''
+  }
+
   addPayment(payment: Payment) {
     this.payments.push(payment)
   }

@@ -4,11 +4,11 @@ import { Link } from 'react-router-dom'
 import { Action, actions } from './module.actions'
 import { t } from './text'
 
-export function NavigationBlock() {
+export function NavigationSideBar() {
   return (
-    <Stack p={1}>
+    <Stack>
       <PageTitle title={t.PdoModuleTitle} />
-      <Stack gap={2}>
+      <Stack gap={1}>
         {actions.map(each => (
           <RenderAction action={each} key={each.href} />
         ))}

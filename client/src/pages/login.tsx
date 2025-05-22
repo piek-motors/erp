@@ -1,9 +1,9 @@
 /** @jsxImportSource @emotion/react */
-import { Button, Sheet, Stack } from '@mui/joy'
+import { Box, Button, Stack, Typography } from '@mui/joy'
 import axios from 'axios'
+import { useAppContext } from 'hooks'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useAppContext } from 'hooks'
 import { AuthService } from 'services/auth.service'
 import { ServerErrorResponse } from 'types/global'
 import { CenteredContainer } from '../components/centered-container'
@@ -34,24 +34,30 @@ export const LoginForm = () => {
 
   return (
     <CenteredContainer maxWidth="sm">
-      <Sheet sx={{ p: 2 }}>
-        <Stack gap={2}>
-          <h2>Piek ERP</h2>
-          <MyInput
-            label="Email"
-            onChange={e => setEmail(e.target.value.trim())}
-          />
-          <MyInput
-            label="Password"
-            type="password"
-            onChange={e => setPassword(e.target.value.trim())}
-          />
-          {error && <div className="error">{error}</div>}
+      <Stack gap={1} my={5}>
+        <Typography level="h4" color="primary">
+          Piek Factory
+        </Typography>
+        <MyInput
+          placeholder="Email"
+          onChange={e => setEmail(e.target.value.trim())}
+        />
+        <MyInput
+          placeholder="Password"
+          type="password"
+          onChange={e => setPassword(e.target.value.trim())}
+        />
+        <Box>
+          {error && (
+            <Typography color="danger" pb={1}>
+              {error}
+            </Typography>
+          )}
           <Button className="button" variant="outlined" onClick={handleSubmit}>
             Войти
           </Button>
-        </Stack>
-      </Sheet>
+        </Box>
+      </Stack>
     </CenteredContainer>
   )
 }

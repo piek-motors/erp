@@ -1,6 +1,6 @@
 import { Box } from '@mui/joy'
 import { useLocation } from 'react-router-dom'
-import { NavigationBlock } from './nav'
+import { NavigationSideBar } from './nav'
 import { getComponentByCurrentPath } from './routes'
 
 export function MetalFlowSubSystem() {
@@ -12,14 +12,14 @@ export function MetalFlowSubSystem() {
         display: 'flex',
         alignItems: 'stretch',
         justifyContent: 'start',
-        gap: 2,
+        p: 1,
         flexDirection: {
           xs: 'column',
           sm: 'row'
         }
       }}
     >
-      <NavigationBlock />
+      <NavigationSideBar />
       {path && (
         <Box sx={{ overflow: 'scroll', flexGrow: 1 }}>
           {path ? getComponentByCurrentPath(path) : null}
