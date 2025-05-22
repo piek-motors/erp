@@ -121,20 +121,6 @@ function NewOrderList() {
 }
 
 function Archive() {
-  const columns = useMemo(() => {
-    const a = [...columnsList]
-    a[3] = {
-      Header: t.factShipment,
-      accessor: order => (
-        <>
-          {order.ActualShippingDate &&
-            moment(order.ActualShippingDate).format('DD.MM.YY')}
-        </>
-      )
-    }
-    return a
-  }, [])
-
   const store = useOrderListPageStore()
 
   const keyword = () => {

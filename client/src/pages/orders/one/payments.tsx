@@ -114,7 +114,7 @@ const PaymentsTable = observer(
         >
           <tbody>
             {props.data.map(payment => (
-              <tr>
+              <tr key={payment.ID}>
                 <td>{formatter.percentage(payment.PaidAmount, totalAmount)}</td>
                 <td>{formatter.money(payment.PaidAmount)}</td>
                 <td>{formatter.formatOnlyDate(payment.Date)}</td>

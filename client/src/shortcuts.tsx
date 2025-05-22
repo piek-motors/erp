@@ -1,4 +1,4 @@
-import { UilPen, UilTrashAlt } from '@iconscout/react-unicons'
+import { Icon, UilPen, UilTrashAlt } from '@iconscout/react-unicons'
 import {
   Box,
   Button,
@@ -82,7 +82,7 @@ export function CancelButton(props: { onClick: () => void }) {
 export function DeleteResourceButton(props: { onClick: () => void }) {
   return (
     <IconButton variant="soft" color="danger" onClick={props.onClick} size="sm">
-      <UilTrashAlt width={ICON_WIDTH} opacity={ICON_OPACITY} fill="red" />
+      <UseIcon icon={UilTrashAlt} />
     </IconButton>
   )
 }
@@ -95,7 +95,7 @@ export function UpdateResourceButton(props: { onClick: () => void }) {
       onClick={props.onClick}
       size="sm"
     >
-      <UilPen width={ICON_WIDTH} opacity={ICON_OPACITY} />
+      <UseIcon icon={UilPen} />
     </IconButton>
   )
 }
@@ -287,8 +287,21 @@ export const text = {
   orderCompleted: 'Заказ был выполнен'
 }
 
-export const ICON_OPACITY = 0.7
-export const ICON_WIDTH = 22
+export const IconSettings = {
+  opacity: 0.6,
+  width: 22,
+  fill: 'black'
+}
+
+export function UseIcon(props: { icon: Icon }) {
+  return (
+    <props.icon
+      width={IconSettings.width}
+      opacity={IconSettings.opacity}
+      fill={IconSettings.fill}
+    />
+  )
+}
 
 export function MyChip(props: { if: boolean; text: string } & ChipProps) {
   if (!props.if) return null

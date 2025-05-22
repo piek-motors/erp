@@ -6,7 +6,7 @@ import {
   ModalDialog,
   Typography
 } from '@mui/joy'
-import { useOrderDetailStore } from 'pages/order/state'
+import { useOrderDetailStore } from 'pages/orders/one/state'
 import { useEffect, useState } from 'react'
 import { CancelButton, MultilineInput, MyInput, Row } from 'shortcuts'
 import { TOrderItem } from 'types/global'

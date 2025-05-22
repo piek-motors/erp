@@ -4,7 +4,7 @@ import { Box, Button, Stack, Typography } from '@mui/joy'
 import { Observer } from 'mobx-react-lite'
 import { useEffect } from 'react'
 import { FileService } from 'services/file.service'
-import { DeleteResourceButton, Row } from 'shortcuts'
+import { DeleteResourceButton, Row, UseIcon } from 'shortcuts'
 import { useNotifier } from 'store/notifier.store'
 import { TOrderDocument } from 'types/global'
 import { orderStore } from './order.store'
@@ -138,10 +138,10 @@ export function getformatAssociatedIcon(filename: string) {
   const fileExtension = filename.split('.')[filename.split('.').length - 1]
 
   if (['png', 'jpg', 'jpeg'].includes(fileExtension)) {
-    return <UilImage width={size} />
+    return <UseIcon icon={UilImage} />
   } else if (['pdf', 'doc', 'docx'].includes(fileExtension)) {
-    return <UilFileAlt width={size} />
+    return <UseIcon icon={UilFileAlt} />
   } else {
-    return <UilFile width={size} />
+    return <UseIcon icon={UilFile} />
   }
 }

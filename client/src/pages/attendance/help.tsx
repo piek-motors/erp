@@ -3,7 +3,7 @@ import { Container, IconButton, Stack, Typography } from '@mui/joy'
 import { AppRoutes, ListOrdersRoutes } from 'lib/routes'
 import { useNavigate } from 'react-router-dom'
 import { RouteConfig } from 'types/global'
-import { Row } from 'shortcuts'
+import { Row, UseIcon } from 'shortcuts'
 
 import {
   UilBell,
@@ -58,7 +58,7 @@ function Help() {
               onClick={() => navigate(each.href)}
             >
               <Row gap={2}>
-                <each.icon width={24} height={24} />
+                <UseIcon icon={each.icon} />
                 <Typography>{each.name}</Typography>
               </Row>
             </IconButton>

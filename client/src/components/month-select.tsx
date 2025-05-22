@@ -2,7 +2,7 @@ import { UilSearch } from '@iconscout/react-unicons'
 import { IconButton } from '@mui/joy'
 import { makeAutoObservable } from 'mobx'
 import { observer } from 'mobx-react-lite'
-import { ICON_OPACITY, ICON_WIDTH, Row } from 'shortcuts'
+import { Row, UseIcon } from 'shortcuts'
 import { Select } from '../pages/metal-flow/shared/select'
 
 const months = [
@@ -86,7 +86,7 @@ function _MonthSelect({ onSearch, store }: IReportConfiguratorProps) {
           onSearch(store.month, store.year)
         }}
       >
-        <UilSearch width={ICON_WIDTH} opacity={ICON_OPACITY} />
+        <UseIcon icon={UilSearch} />
       </IconButton>
     </Row>
   )

@@ -12,7 +12,7 @@ import {
 } from 'types/graphql-shema'
 import { Context } from '..'
 import { PageTitle } from '../components'
-import { ICON_OPACITY, ICON_WIDTH, Row } from '../shortcuts'
+import { Row, UseIcon } from '../shortcuts'
 import { openOrderDetailPage } from 'lib/routes'
 
 interface INotificationProps {
@@ -72,7 +72,7 @@ function Mention({ data, readed }: INotificationProps) {
                   <Typography sx={{ whiteSpace: 'nowrap' }}>
                     К заказу
                   </Typography>
-                  <UilArrowRight width={ICON_WIDTH} opacity={ICON_OPACITY} />
+                  <UseIcon icon={UilArrowRight} />
                 </Row>
               </Button>
             </Box>

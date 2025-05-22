@@ -1,40 +1,38 @@
 import { Stack, Typography } from '@mui/joy'
 import { Table } from 'components/table.impl'
+import { Order } from 'domain-model'
 import { openOrderDetailPage } from 'lib/routes'
-import moment from 'moment'
-import { useMemo } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Column } from 'react-table'
 import { Pre } from 'shortcuts'
 import { TOrderColumnData } from 'types/global'
-import { percentage } from 'utils/formatting'
+import { map } from './mappers'
 import { t } from './text'
+import { useMemo } from 'react'
 
 const NEED_ATTENTION_COLOR = '#f5b9b9ba'
 const AWAITING_DISPATCH_COLOR = '#cae9b4a3'
 
-export const columnsList: Column<TOrderColumnData>[] = [
+export const columnsList: Column<Order>[] = [
   {
     Header: t.id,
-    id: 'index',
     accessor: (_row, counter) => counter + 1
   },
   {
     Header: t.name,
-    id: 'orderItems',
-    accessor: data => {
-      if (data.OrderItems.length === 0)
+    accessor: o => {
+      if (o.items.length === 0)
         return (
-          <Link to={openOrderDetailPage(data.OrderID)}>
+          <Link to={openOrderDetailPage(o.id)}>
             <Typography>{t.noContent}</Typography>
           </Link>
         )
       else {
         return (
           <Stack gap={1}>
-            {data.OrderItems.map(item => (
-              <div key={item.OrderItemID}>
-                <Pre>{item.Name.trim()}</Pre>
+            {o.items.map(item => (
+              <div key={item.id}>
+                <Pre>{item.name.trim()}</Pre>
               </div>
             ))}
           </Stack>
@@ -44,65 +42,59 @@ export const columnsList: Column<TOrderColumnData>[] = [
   },
   {
     Header: t.quantity,
-    accessor: data => (
+    accessor: o => (
       <Stack gap={1}>
-        {data.OrderItems.map(item => (
-          <Pre>{item.Quantity}</Pre>
+        {o.items.map(item => (
+          <Pre key={item.id}>{item.quantity}</Pre>
         ))}
       </Stack>
     )
   },
   {
     Header: t.plannedShipping,
-    accessor: order => (
-      <>{order.ShippingDate && moment(order.ShippingDate).format('DD.MM.YY')}</>
-    )
+    accessor: o => o.shippingDateString()
   },
   {
     Header: t.invoice,
-    accessor: 'InvoiceNumber'
+    accessor: o => o.invoiceNumber
   },
   {
     Header: t.payment,
-    accessor: data => {
-      const paidAmount = data.PaidAmount || data.PaymentHistories[0]?.PaidAmount
-      return percentage(paidAmount, data.TotalAmount)
-    }
+    accessor: o => o.paidPercentage()
   },
   {
     Header: t.contractor,
-    accessor: data => <>{data.Entity}</>
+    accessor: o => o.contractor
   },
   {
     Header: t.city,
-    accessor: data => <>{data.City}</>
+    accessor: o => o.city
   },
   {
     Header: t.manager,
-    accessor: data => <> {data.User?.FirstName ? data.User?.FirstName : ''} </>
+    accessor: o => o.managerString()
   }
 ]
 
 export function OrdersTable(props: { data: TOrderColumnData[] }) {
   const navigate = useNavigate()
-  const onRowClick = (row: TOrderColumnData) => {
-    navigate(openOrderDetailPage(row.OrderID))
+  const onRowClick = (order: Order) => {
+    navigate(openOrderDetailPage(order.id))
   }
   const columns = useMemo(() => columnsList, [])
   return (
     <Table
       trStyleCallback={row => {
         return {
-          background:
-            row.original?.NeedAttention === 'true'
-              ? NEED_ATTENTION_COLOR
-              : row.original?.AwaitingDispatch
-              ? AWAITING_DISPATCH_COLOR
-              : ''
+          background: row.original?.needAttention
+            ? NEED_ATTENTION_COLOR
+            : row.original?.awatingDispatch
+            ? AWAITING_DISPATCH_COLOR
+            : ''
         }
       }}
       columns={columns}
-      data={props.data}
+      data={props.data.map(e => map.order.fromDto(e))}
       onRowClick={onRowClick}
     />
   )

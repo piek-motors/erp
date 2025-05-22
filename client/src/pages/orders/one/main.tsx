@@ -6,7 +6,7 @@ import { InputFiles } from 'components/input-files'
 import { useAppContext } from 'hooks'
 import { AppRoutes } from 'lib/routes'
 import { Observer } from 'mobx-react-lite'
-import { useOrderDetailStore } from 'pages/order/state'
+import { useOrderDetailStore } from 'pages/orders/one/state'
 import { useCallback, useLayoutEffect, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { useLocation, useParams } from 'react-router-dom'
@@ -233,14 +233,12 @@ function OrderDetail() {
         }}
       >
         <UpdatePositionBtn refetch={refetch} />
-
         <OrderLeftPanel
           order={order}
           refetch={refetch}
           users={users.erp_Users}
           p={p}
         />
-
         <OrderRightPanel
           order={order}
           onUploadFiles={onUploadFiles}

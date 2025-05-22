@@ -15,15 +15,9 @@ import {
 import { apolloClient } from 'api'
 import { Observer } from 'mobx-react-lite'
 import moment from 'moment'
-import { useOrderDetailStore } from 'pages/order/state'
+import { useOrderDetailStore } from 'pages/orders/one/state'
 import React, { useRef, useState } from 'react'
-import {
-  DeleteResourceButton,
-  ICON_OPACITY,
-  ICON_WIDTH,
-  Row,
-  text
-} from 'shortcuts'
+import { DeleteResourceButton, Row, text, UseIcon } from 'shortcuts'
 import { TComment, TUser } from 'types/global'
 import {
   InsertCommentDocument,
@@ -150,7 +144,7 @@ function InsertCommentButton(props: { onClick: () => void }) {
   return (
     <Tooltip title="Прикрепить комментарий">
       <IconButton onClick={props.onClick}>
-        <UilMessage width={ICON_WIDTH} opacity={ICON_OPACITY} />
+        <UseIcon icon={UilMessage} />
       </IconButton>
     </Tooltip>
   )

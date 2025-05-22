@@ -1,5 +1,5 @@
 import { ReactNode } from 'react'
-import { ConfirmDialog } from '../../../components/confirm-dialog'
+import { ConfirmDialog } from 'components/confirm-dialog'
 
 interface ITransferOrderDialogProps {
   handler: () => void

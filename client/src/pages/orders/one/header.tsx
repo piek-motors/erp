@@ -13,10 +13,10 @@ import {
 import { IconButton, Tooltip } from '@mui/joy'
 import { OrderStatus } from 'domain-model'
 import { Observer } from 'mobx-react-lite'
-import { useOrderDetailStore } from 'pages/order/state'
+import { useOrderDetailStore } from 'pages/orders/one/state'
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ICON_OPACITY, ICON_WIDTH, Row, text } from 'shortcuts'
+import { Row, text, UseIcon } from 'shortcuts'
 import { useNotifier } from 'store/notifier.store'
 import { TOrder } from 'types/global'
 import {
@@ -160,7 +160,7 @@ const ActionButton = (props: { buttons: ActionButton[] }) => {
             data-tip={btn.tip}
             onClick={btn.handler}
           >
-            <btn.icon width={ICON_WIDTH} opacity={ICON_OPACITY} />
+            <UseIcon icon={btn.icon} />
           </IconButton>
         </Tooltip>
       )
