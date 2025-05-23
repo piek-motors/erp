@@ -6,9 +6,9 @@ export enum AppRoutes {
   settings = '/settings',
   reclamation = '/reclamation',
   attendance = '/attendance'
-
-  // Helper function to generate order detail URL
 }
+
+// Helper function to generate order detail URL
 export function openOrderDetailPage(orderId: string | number) {
   return `/order/${orderId}`
 }

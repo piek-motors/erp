@@ -11,13 +11,12 @@ import {
   Table,
   Typography
 } from '@mui/joy'
-import { Roles } from 'domain-model'
+import { Order, Roles } from 'domain-model'
 import { useAppContext } from 'hooks'
 import { observer } from 'mobx-react-lite'
 import moment from 'moment'
 import * as React from 'react'
 import { MyInput, Row } from 'shortcuts'
-import { TOrder } from 'types/global'
 import {
   GetOrderPaymentsQuery,
   useDeletePaymentMutation,
@@ -26,13 +25,10 @@ import {
 } from 'types/graphql-shema'
 import * as formatter from 'utils/formatting'
 
-type Order = Pick<TOrder, 'TotalAmount' | 'OrderID'>
-
-
-export function Paymnets({ data }: { data: TOrder }) {
+export function Paymnets({ data }: { data: Order }) {
   const [deletePayment] = useDeletePaymentMutation()
   const { data: payments, refetch } = useGetOrderPaymentsQuery({
-    variables: { _eq: data.OrderID }
+    variables: { _eq: data.id }
   })
   const { store }: any = useAppContext()
 
@@ -52,11 +48,11 @@ export function Paymnets({ data }: { data: TOrder }) {
     Roles.bookkeeping
   ].includes(store?.user?.AccessLevelID)
 
-  const paymentHistoryContent = data.TotalAmount ? (
+  const paymentHistoryContent = data.totalAmount ? (
     <PaymentsTable
       data={payments?.erp_PaymentHistory || []}
       onDelete={ID => handleDelete(ID)}
-      totalAmount={data.TotalAmount}
+      totalAmount={data.totalAmount}
       footerComponent={
         <Box>
           {isHaveFullRight && (
@@ -76,7 +72,7 @@ export function Paymnets({ data }: { data: TOrder }) {
   )
 
   return (
-    <Box my={1} className="no-print">
+    <Box my={1}>
       <Typography>Платежи</Typography>
       {paymentHistoryContent}
     </Box>
@@ -167,7 +163,7 @@ function NewPaymentInput(props: NewPaymentInputProps) {
     await insertPayment({
       variables: {
         Date: moment(data.date).toISOString(),
-        OrderID: props.order.OrderID,
+        OrderID: props.order.id,
         PaidAmount: data.amount
       }
     })
@@ -229,7 +225,7 @@ function NewPaymentInput(props: NewPaymentInputProps) {
               autoFocus
             />
             <Typography>
-              из {formatter.money(props.order.TotalAmount)}
+              из {formatter.money(props.order.totalAmount)}
             </Typography>
           </Row>
           <Button onClick={handleSave}>Сохранить</Button>

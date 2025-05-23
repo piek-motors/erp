@@ -1,9 +1,10 @@
 /** @jsxImportSource @emotion/react */
+import { Order } from 'domain-model'
 import moment from 'moment'
 import { Select } from 'pages/metal-flow/shared/select'
 import React, { useEffect } from 'react'
 import { InputStack, MultilineInput, MyInput, SendMutation } from 'shortcuts'
-import { TOrder, TUser } from 'types/global'
+import { TUser } from 'types/global'
 import { useUpdateOrderInfoMutation } from 'types/graphql-shema'
 
 enum FieldNames {
@@ -23,14 +24,14 @@ type FieldsValuesMap = {
 }
 
 interface IEditableInfoProps {
-  data: TOrder
+  order: Order
   refetch(): void
   users: TUser[]
 }
 
 let fields: Partial<FieldsValuesMap> = {}
 
-export function StatementInput({ data, refetch, users }: IEditableInfoProps) {
+export function StatementInput({ order, refetch, users }: IEditableInfoProps) {
   const addField = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => (fields[e.target.name as FieldNames] = e.target.value)
@@ -46,7 +47,7 @@ export function StatementInput({ data, refetch, users }: IEditableInfoProps) {
     try {
       await updateOrderInfo({
         variables: {
-          OrderID: data.OrderID,
+          OrderID: order.id,
           fields
         }
       })
@@ -71,7 +72,7 @@ export function StatementInput({ data, refetch, users }: IEditableInfoProps) {
           label="План. отгрузка"
           placeholder="ДД.ММ.ГГ"
           name={FieldNames.ShippingDate}
-          default={moment(data.ShippingDate).format('DD.MM.YY') || ''}
+          default={order.shippingDateString()}
           onChange={e => {
             setField(
               FieldNames.ShippingDate,
@@ -84,14 +85,14 @@ export function StatementInput({ data, refetch, users }: IEditableInfoProps) {
           label="Номер счета"
           type="number"
           name={FieldNames.InvoiceNumber}
-          default={data.InvoiceNumber || ''}
+          default={order.invoiceNumber}
           onChange={addField}
         />
 
         <MyInput
           label="Номер заказа"
           name={FieldNames.OrderNumber}
-          default={data.OrderNumber}
+          default={order.factoryNumber}
           onChange={addField}
         />
 
@@ -101,25 +102,25 @@ export function StatementInput({ data, refetch, users }: IEditableInfoProps) {
             name: `${each.FirstName} ${each.LastName}`,
             value: each.UserID
           }))}
-          defaultValue={data.User?.UserID}
+          defaultValue={order.manager?.id}
           onChange={newValue => {
             if (!newValue) return
             fields.ManagerID = newValue || null
           }}
-          disabled={data.User?.UserID === null}
+          disabled={order.manager?.id === null}
         />
 
         <MyInput
           label="Контрагент"
           name={FieldNames.Entity}
-          default={data.Entity}
+          default={order.contractor}
           onChange={addField}
         />
 
         <MyInput
           label="Город"
           name={FieldNames.City}
-          default={data.City}
+          default={order.city}
           onChange={addField}
         />
 
@@ -127,14 +128,14 @@ export function StatementInput({ data, refetch, users }: IEditableInfoProps) {
           type="number"
           label="Сумма заказа"
           name={FieldNames.TotalAmount}
-          default={data.TotalAmount}
+          default={order.totalAmount.toString()}
           onChange={addField}
         />
 
         <MultilineInput
           label="Комментарий"
           name={FieldNames.Comment}
-          defaultValue={data.Comment || ''}
+          defaultValue={order.comment || ''}
           onChange={addField}
         />
       </InputStack>
@@ -142,7 +143,7 @@ export function StatementInput({ data, refetch, users }: IEditableInfoProps) {
         onClick={() =>
           updateOrderInfo({
             variables: {
-              OrderID: data.OrderID,
+              OrderID: order.id,
               fields
             }
           })

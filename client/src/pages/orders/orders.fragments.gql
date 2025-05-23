@@ -1,0 +1,37 @@
+fragment Order on erp_Orders {
+  NeedAttention
+    AwaitingDispatch
+    OrderStatusID
+    OrderStatus {
+      Name
+      ID
+    }
+    ActualShippingDate
+    AcceptanceDate
+    ShippingDate
+    CreatingDate
+    OrderID
+    ManagerID
+    City
+    Comment
+    Entity
+    InvoiceNumber
+    OrderNumber
+    User {
+      FirstName
+      LastName
+      UserID
+    }
+    OrderItems(order_by: { OrderItemID: asc }) {
+      Name
+      FullName
+      OrderItemID
+      Quantity
+    }
+    TotalAmount
+    PaymentHistories(where: { PaidAmount: { _neq: 0 } }) {
+      ID
+      PaidAmount
+      Date
+    }
+}

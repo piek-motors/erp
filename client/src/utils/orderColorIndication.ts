@@ -1,22 +1,21 @@
-import { OrderStatus } from 'domain-model'
+import { Order, OrderStatus } from 'domain-model'
 import { TOrder, TReclamationOrder } from 'types/global'
 
-export function orderStatus(order: TOrder) {
+export function orderStatus(order: Order) {
   // add a note to the title if this is a pre-order
-  if (order.OrderStatusID === OrderStatus.ordRegistration) return ' Предзаказ'
-  if (order.OrderStatusID === OrderStatus.ordArchived) return ' В архиве'
+  if (order.statusID === OrderStatus.ordRegistration) return ' Предзаказ'
+  if (order.statusID === OrderStatus.ordArchived) return ' В архиве'
   if (
     [
       OrderStatus.reclInbox,
       OrderStatus.reclDecision,
       OrderStatus.reclProduction,
       OrderStatus.reclArchived
-    ].includes(order.OrderStatusID)
+    ].includes(order.statusID)
   )
     return ' Рекламация'
 
-  if (order.OrderStatusID === OrderStatus.ordProduction)
-    return ' В производстве'
+  if (order.statusID === OrderStatus.ordProduction) return ' В производстве'
 }
 
 export function orderStatusHighlighting(order: TOrder | TReclamationOrder) {

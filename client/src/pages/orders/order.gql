@@ -1,4 +1,7 @@
-query getOrdersByStatus($ShippingDate: order_by = asc_nulls_first, $orderStatus: Int!) {
+query getOrdersByStatus(
+  $ShippingDate: order_by = asc_nulls_first
+  $orderStatus: Int!
+) {
   erp_Orders(
     where: { OrderStatusID: { _eq: $orderStatus } }
     order_by: { ShippingDate: $ShippingDate }
@@ -44,26 +47,23 @@ query GetManagers {
 
 query GetOrderByPK($OrderID: Int!) {
   erp_Orders(where: { OrderID: { _eq: $OrderID } }) {
-    # visual statuses
     NeedAttention
     AwaitingDispatch
     OrderStatusID
-
-    # dates
+    OrderStatus {
+      Name
+      ID
+    }
     ActualShippingDate
     AcceptanceDate
     ShippingDate
     CreatingDate
-
     OrderID
     ManagerID
-
     City
-
     Comment
     Entity
     InvoiceNumber
-
     OrderNumber
     User {
       FirstName
@@ -76,22 +76,21 @@ query GetOrderByPK($OrderID: Int!) {
       OrderItemID
       Quantity
     }
-    Docs {
-      ID
-      Key
-      FileName
-      Size
-      UploadingDate
-    }
-
-    # finances
-    PaidAmount
     TotalAmount
     PaymentHistories(where: { PaidAmount: { _neq: 0 } }) {
       ID
       PaidAmount
       Date
     }
+  }
+}
+
+query GetOrderAttachments($OrderID: Int!) {
+ erp_Docs(where: {OrderID: {_eq: $OrderID}}) {
+    FileName
+    ID
+    Key
+    Size
   }
 }
 

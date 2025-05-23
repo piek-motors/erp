@@ -3,7 +3,7 @@ import { $api } from 'api'
 export class FileService {
   static s3_url = '/s3/'
 
-  static async uploadFile(acceptedFiles: File[], OrderID: number) {
+  static async uploadFiles(acceptedFiles: File[], OrderID: number) {
     const formData = new FormData()
     acceptedFiles.map(file => formData.append('files', file))
 

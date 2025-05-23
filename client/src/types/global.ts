@@ -66,8 +66,6 @@ export type TReclamationOrder = GetReclamationOrdersQuery['erp_Orders'][number]
 export type TOrder = GetOrderByPkQuery['erp_Orders'][number]
 export type TOrderColumnData = OrderFragment
 
-export type TOrderDocument =
-  GetOrderByPkQuery['erp_Orders'][number]['Docs'][number]
 export type TPaymentsHistory =
   GetOrderByPkQuery['erp_Orders'][number]['PaymentHistories'][number]
 export type TComment = CommentsSubscription['erp_Comments'][number]

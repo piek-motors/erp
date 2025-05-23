@@ -30,6 +30,26 @@ export class OrderItem {
   }
 }
 
+export class OrderAttachment {
+  id!: number
+  name!: string
+  size?: number | null
+  key!: string
+  constructor(init: ClassProperties<OrderAttachment>) {
+    Object.assign(this, init)
+  }
+
+  // converts file size from bytes to human-readable string
+  sizeWithUnit(): string {
+    if (!this.size) return '0 Bytes'
+    var k = 1024,
+      dm = 1,
+      sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
+      i = Math.floor(Math.log(this.size) / Math.log(k))
+    return parseFloat((this.size / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i]
+  }
+}
+
 export class Order {
   id!: number
   totalAmount!: number
@@ -38,10 +58,17 @@ export class Order {
   shippingDate!: Date
   items!: OrderItem[]
   contractor?: string | null
+  factoryNumber?: string | null
   city?: string | null
   manager!: User
   needAttention?: boolean
   awatingDispatch?: boolean
+  createdAt!: Date
+  acceptanceDate!: Date
+  actualShippingDate!: Date
+  comment?: string | null
+  documents!: OrderAttachment[]
+  statusID!: number
 
   constructor(init: ClassProperties<Order>) {
     Object.assign(this, init)
@@ -60,10 +87,24 @@ export class Order {
     return `${((this.totalPaid() / this.totalAmount) * 100).toFixed(0)}%`
   }
 
+  createdAtString(): string {
+    if (!this.createdAt) return ''
+    return moment(this.createdAt).format('DD.MM.YY')
+  }
+
   shippingDateString(): string {
     if (!this.shippingDate) return ''
-
     return moment(this.shippingDate).format('DD.MM.YY')
+  }
+
+  acceptanceDateString(): string {
+    if (!this.acceptanceDate) return ''
+    return moment(this.acceptanceDate).format('DD.MM.YY')
+  }
+
+  actualShippingDateString(): string {
+    if (!this.actualShippingDate) return ''
+    return moment(this.actualShippingDate).format('DD.MM.YY')
   }
 
   managerString(): string {
@@ -75,13 +116,5 @@ export class Order {
     if (this.needAttention) return '#f5b9b9ba'
     if (this.awatingDispatch) return '#cae9b4a3'
     return ''
-  }
-
-  addPayment(payment: Payment) {
-    this.payments.push(payment)
-  }
-
-  addOrderItem(orderItem: OrderItem) {
-    this.items.push(orderItem)
   }
 }

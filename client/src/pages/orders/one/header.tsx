@@ -11,7 +11,7 @@ import {
   UilUnlock
 } from '@iconscout/react-unicons'
 import { IconButton, Tooltip } from '@mui/joy'
-import { OrderStatus } from 'domain-model'
+import { Order, OrderStatus } from 'domain-model'
 import { Observer } from 'mobx-react-lite'
 import { useOrderDetailStore } from 'pages/orders/one/state'
 import React from 'react'
@@ -104,18 +104,19 @@ function useOrderMutations(orderId: number | null) {
     }
   }
 
-  const updateAwaitingDispatch = async (order: TOrder) => {
+  const updateAwaitingDispatch = async (order: Order) => {
     try {
       await mutationAwaitingDispatch({
         variables: {
-          OrderID: order.OrderID,
-          AwaitingDispatch: !order.AwaitingDispatch
+          OrderID: order.id,
+          AwaitingDispatch: !order.awatingDispatch
         },
         optimisticResponse: {
           update_erp_Orders_by_pk: {
             __typename: 'erp_Orders',
             ...order,
-            AwaitingDispatch: !order.AwaitingDispatch
+            OrderID: order.id,
+            AwaitingDispatch: !order.awatingDispatch
           }
         }
       })
@@ -124,12 +125,12 @@ function useOrderMutations(orderId: number | null) {
     }
   }
 
-  const updateNeedAttention = async (order: TOrder) => {
+  const updateNeedAttention = async (order: Order) => {
     try {
       await mutationNeedAttention({
         variables: {
-          OrderID: order.OrderID,
-          NeedAttention: order.NeedAttention === 'true' ? 'false' : 'true'
+          OrderID: order.id,
+          NeedAttention: order.needAttention ? 'true' : 'false'
         }
       })
     } catch (error) {
@@ -178,9 +179,9 @@ const ActionButton = (props: { buttons: ActionButton[] }) => {
   return <Row gap={1}>{renderResult}</Row>
 }
 
-function SwitchOrderStatusBtn({ order }: IStatusButtonsProps) {
+function SwitchOrderStatusBtn({ order }: { order: Order }) {
   const { updateAwaitingDispatch, updateNeedAttention } = useOrderMutations(
-    order.OrderID
+    order.id
   )
 
   const statusButtons: ActionButton[] = [
@@ -194,7 +195,7 @@ function SwitchOrderStatusBtn({ order }: IStatusButtonsProps) {
       handler: () => updateAwaitingDispatch(order),
       icon: UilClockThree,
       hidden: ![OrderStatus.ordProduction, OrderStatus.reclProduction].includes(
-        order.OrderStatusID
+        order.statusID
       )
     }
   ]
@@ -202,7 +203,7 @@ function SwitchOrderStatusBtn({ order }: IStatusButtonsProps) {
   return <ActionButton buttons={statusButtons} />
 }
 
-export function OrderActions({ order }: { order: TOrder }) {
+export function OrderActions({ order }: { order: Order }) {
   const { orderId, setAddOrderItemDialog, setEditedOrderItem } =
     useOrderDetailStore()
 
@@ -215,7 +216,7 @@ export function OrderActions({ order }: { order: TOrder }) {
         OrderStatus.reclDecision,
         OrderStatus.reclInbox,
         OrderStatus.reclProduction
-      ].includes(order.OrderStatusID)
+      ].includes(order.statusID)
     )
       return '/reclamation'
     return '/'
@@ -229,21 +230,21 @@ export function OrderActions({ order }: { order: TOrder }) {
             tip: text.moveToPriority,
             handler: moveToPriority,
             icon: UilFileCheck,
-            hidden: ![OrderStatus.ordRegistration].includes(order.OrderStatusID)
+            hidden: ![OrderStatus.ordRegistration].includes(order.statusID)
           },
           {
             dialog: TransferOrderDialog,
             dialogHandler: () => moveToArchive(3),
             tip: text.orderCompleted,
             icon: UilTruck,
-            hidden: ![OrderStatus.ordProduction].includes(order.OrderStatusID)
+            hidden: ![OrderStatus.ordProduction].includes(order.statusID)
           },
           {
             dialog: TransferOrderDialog,
             dialogHandler: () => moveToArchive(13),
             tip: text.orderCompleted,
             icon: UilTruck,
-            hidden: ![OrderStatus.reclProduction].includes(order.OrderStatusID)
+            hidden: ![OrderStatus.reclProduction].includes(order.statusID)
           },
           {
             dialog: DeleteOrderDialog,
@@ -256,7 +257,7 @@ export function OrderActions({ order }: { order: TOrder }) {
               OrderStatus.reclInbox,
               OrderStatus.reclDecision,
               OrderStatus.reclInbox
-            ].includes(order.OrderStatusID)
+            ].includes(order.statusID)
           },
           {
             tip: text.addPosition,
@@ -268,7 +269,7 @@ export function OrderActions({ order }: { order: TOrder }) {
             hidden: [
               OrderStatus.ordArchived,
               OrderStatus.reclArchived
-            ].includes(order.OrderStatusID)
+            ].includes(order.statusID)
           },
           {
             tip: text.change,

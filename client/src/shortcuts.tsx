@@ -303,7 +303,7 @@ export function UseIcon(props: { icon: Icon }) {
   )
 }
 
-export function MyChip(props: { if: boolean; text: string } & ChipProps) {
+export function Chip(props: { if: boolean; text: string } & ChipProps) {
   if (!props.if) return null
   return (
     <MuiChip color="success" variant="outlined" size="sm" {...props}>

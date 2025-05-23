@@ -1,13 +1,13 @@
-import { TOrderItem } from 'types/global'
+import { OrderItem } from 'domain-model'
 import { create } from 'zustand'
 
 interface IOrderDetailState {
   addOrderItemDialog: boolean
-  editedOrderItem: TOrderItem | null
+  editedOrderItem: OrderItem | null
   orderId: number | null
   initialize(orderId: number): void
   setAddOrderItemDialog(value: boolean): void
-  setEditedOrderItem(value: TOrderItem | null): void
+  setEditedOrderItem(value: OrderItem | null): void
 }
 
 export const useOrderDetailStore = create<IOrderDetailState>(set => ({
@@ -22,7 +22,7 @@ export const useOrderDetailStore = create<IOrderDetailState>(set => ({
       addOrderItemDialog: false
     }))
   },
-  setEditedOrderItem(value: TOrderItem | null) {
+  setEditedOrderItem(value: OrderItem | null) {
     set(() => ({
       editedOrderItem: value,
       addOrderItemDialog: true

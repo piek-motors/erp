@@ -1,64 +1,56 @@
 /** @jsxImportSource @emotion/react */
 import { Box, Typography } from '@mui/joy'
-import { formatOnlyDate } from 'utils/formatting'
-import { TOrder } from 'types/global'
-import { money } from 'utils/formatting'
+import { Order } from 'domain-model'
 
 interface IAboutOrderProps {
-  data: TOrder
+  o: Order
 }
 
-export function AboutOrder({ data }: IAboutOrderProps) {
-  const paid = data.PaymentHistories.reduce((acc, curr) => {
-    return acc + curr.PaidAmount
-  }, 0)
-
-  const paidPercent = (paid / data.TotalAmount) * 100
-
+export function AboutOrder({ o }: IAboutOrderProps) {
   const columns = [
     {
       heading: 'План. отгрузка',
-      data: data.ShippingDate && formatOnlyDate(data.ShippingDate)
+      data: o.shippingDateString()
     },
     {
       heading: 'Номер заказа',
-      data: data.OrderNumber
+      data: o.factoryNumber
     },
     {
       heading: 'Номер счета',
-      data: data.InvoiceNumber || ''
+      data: o.invoiceNumber
     },
     {
       heading: 'Сумма заказа',
-      data: money(data.TotalAmount)
+      data: o.totalAmount
     },
     {
       heading: 'Оплачено',
-      data: paid && `${money(paid)} (${paidPercent.toFixed(2)}%)`
+      data: `${o.totalPaidString()} (${o.paidPercentage()})`
     },
     {
       heading: 'Контрагент',
-      data: data.Entity
+      data: o.contractor
     },
     {
       heading: 'Менеджер',
-      data: data.User && `${data.User.FirstName} ${data.User.LastName}`
+      data: o.managerString()
     },
     {
       heading: 'Записан в системе',
-      data: formatOnlyDate(data.CreatingDate)
+      data: o.createdAtString()
     },
     {
       heading: 'Добавлен в очередность',
-      data: formatOnlyDate(data.AcceptanceDate)
+      data: o.acceptanceDateString()
     },
     {
       heading: 'Факт. отгрузка',
-      data: formatOnlyDate(data.ActualShippingDate)
+      data: o.actualShippingDateString()
     },
     {
       heading: 'Комментарий',
-      data: data.Comment
+      data: o.comment
     }
   ]
   return (

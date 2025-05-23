@@ -1,34 +1,21 @@
 /** @jsxImportSource @emotion/react */
 import { UilFile, UilFileAlt, UilImage } from '@iconscout/react-unicons'
 import { Box, Button, Stack, Typography } from '@mui/joy'
-import { Observer } from 'mobx-react-lite'
+import { OrderAttachment } from 'domain-model'
+import { observer } from 'mobx-react-lite'
+import { docsStore } from 'pages/orders/one/docs.store'
 import { useEffect } from 'react'
-import { FileService } from 'services/file.service'
-import { DeleteResourceButton, Row, UseIcon } from 'shortcuts'
-import { useNotifier } from 'store/notifier.store'
-import { TOrderDocument } from 'types/global'
+import { DeleteResourceButton, Row, text, UseIcon } from 'shortcuts'
 import { orderStore } from './order.store'
 
-function File(props: {
-  file: TOrderDocument
-  handleOnDelete: (file: TOrderDocument) => void
-  uploading?: boolean
-  editState: boolean
-  refetch: () => void
-}) {
-  const notifier = useNotifier()
-  const { file, uploading, editState } = props
-  const handleDeleteFile = async () => {
-    await FileService.deleteFile(props.file.Key!)
-    notifier.notify('info', `Файл ${props.file.FileName} удален`)
-    props.refetch()
-  }
+const File = observer((props: { file: OrderAttachment }) => {
+  const { file } = props
 
   return (
     <Row justifyContent={'space-between'}>
       <Box>
         <a
-          href={`${process.env.REACT_APP_API_URL}/s3/${file.Key}`}
+          href={`${process.env.REACT_APP_API_URL}/s3/${file.key}`}
           target="_blank"
           rel="noreferrer"
           style={{
@@ -43,100 +30,71 @@ function File(props: {
             sx={{ fontSize: '1rem', textAlign: 'left', fontWeight: 'normal' }}
             color="primary"
             size="sm"
-            startDecorator={getformatAssociatedIcon(file.FileName ?? '')}
+            startDecorator={getformatAssociatedIcon(file.name)}
           >
-            <Typography level="body-sm">{file.FileName}</Typography>
+            <Typography level="body-sm">{file.name}</Typography>
           </Button>
-          {uploading && (
+          {docsStore.uploading && (
             <Typography level="body-sm">Файл выгружается...</Typography>
           )}
         </a>
       </Box>
 
-      {editState && <DeleteResourceButton onClick={handleDeleteFile} />}
+      {orderStore.editMode && (
+        <DeleteResourceButton onClick={() => docsStore.deleteFile(file)} />
+      )}
     </Row>
   )
-}
+})
 
-export function Docs(props: {
-  data: TOrderDocument[]
-  refetch(): void
-  onUpload: File[]
-}) {
-  const { refetch, data, onUpload } = props
-  const handleClickOpenDialog = async (file: TOrderDocument) => {
-    await FileService.deleteFile(file.Key!)
-    refetch()
-  }
+export const Docs = observer((props: { orderId: number }) => {
+  const { orderId } = props
   useEffect(() => {
-    onUpload.map((file: File) => ({ ...file, FileName: file.name }))
-  }, [onUpload])
+    orderId && docsStore.fetchAttachments(orderId)
+  }, [])
 
-  if (!data.length) {
+  const data = docsStore.files
+  if (!data?.length) {
     return (
       <Typography p={1} color="neutral">
         Нет документов
       </Typography>
     )
   }
-
   return (
-    <Observer
-      render={() => {
-        return (
-          <>
-            <Row gap={2}>
-              <Typography>Документы [{data.length}]</Typography>
-            </Row>
-            <Stack gap={1} py={2}>
-              {data.map(file => (
-                <File
-                  refetch={refetch}
-                  key={file.Key}
-                  file={file}
-                  editState={orderStore.editMode}
-                  handleOnDelete={handleClickOpenDialog}
-                />
-              ))}
+    <>
+      <Row gap={2}>
+        <Typography>Документы [{data.length}]</Typography>
+      </Row>
+      <Stack gap={1} py={2}>
+        {data.map(file => (
+          <File key={file.key} file={file} />
+        ))}
 
-              {!!onUpload.length &&
-                onUpload.map(file => (
-                  <File
-                    refetch={refetch}
-                    file={{
-                      ...file,
-                      FileName: file.name,
-                      Key: file.name,
-                      ID: crypto.getRandomValues(new Uint32Array(1))[0]
-                    }}
-                    key={file.name}
-                    editState={orderStore.editMode}
-                    handleOnDelete={handleClickOpenDialog}
-                    uploading
-                  />
-                ))}
-            </Stack>
-          </>
-        )
-      }}
-    />
+        {!!docsStore.uploadingFiles.length &&
+          docsStore.uploadingFiles.map(file => (
+            <Box>
+              <Typography level="body-sm">{text.loading}</Typography>
+              <File
+                file={
+                  new OrderAttachment({
+                    ...file,
+                    key: file.name,
+                    name: file.name,
+                    id: crypto.getRandomValues(new Uint32Array(1))[0]
+                  })
+                }
+                key={file.name}
+              />
+            </Box>
+          ))}
+      </Stack>
+    </>
   )
-}
-
-// converts file size from bytes to human-readable string
-export function formatBytes(bytes: number): string {
-  if (!bytes) return '0 Bytes'
-  var k = 1024,
-    dm = 1,
-    sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
-    i = Math.floor(Math.log(bytes) / Math.log(k))
-  return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i]
-}
+})
 
 export function getformatAssociatedIcon(filename: string) {
-  const size = 24
   const fileExtension = filename.split('.')[filename.split('.').length - 1]
-
   if (['png', 'jpg', 'jpeg'].includes(fileExtension)) {
     return <UseIcon icon={UilImage} />
   } else if (['pdf', 'doc', 'docx'].includes(fileExtension)) {

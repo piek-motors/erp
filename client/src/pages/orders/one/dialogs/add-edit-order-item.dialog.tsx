@@ -6,10 +6,10 @@ import {
   ModalDialog,
   Typography
 } from '@mui/joy'
+import { OrderItem } from 'domain-model'
 import { useOrderDetailStore } from 'pages/orders/one/state'
 import { useEffect, useState } from 'react'
 import { CancelButton, MultilineInput, MyInput, Row } from 'shortcuts'
-import { TOrderItem } from 'types/global'
 import {
   useInsertOrderItemMutation,
   useUpdateOrderItemByPkMutation
@@ -27,9 +27,9 @@ export function UpdatePositionBtn({ refetch }: IDialogEditOrderItemProps) {
     editedOrderItem
   } = useOrderDetailStore()
 
-  const defaultState: Partial<TOrderItem> = {}
+  const defaultState: Partial<OrderItem> = {}
 
-  const [state, setState] = useState<Partial<TOrderItem>>(
+  const [orderItem, setState] = useState<Partial<OrderItem>>(
     editedOrderItem || defaultState
   )
 
@@ -44,14 +44,14 @@ export function UpdatePositionBtn({ refetch }: IDialogEditOrderItemProps) {
 
   const handleUpdate = (): void => {
     handleClose()
-    if (!state.Quantity || !state.Name || !state.OrderItemID) return
+    if (!orderItem.quantity || !orderItem.name || !orderItem.id) return
 
     updateMutation({
       variables: {
-        id: state.OrderItemID,
-        Name: state.Name,
-        Quantity: state.Quantity,
-        FullName: state.FullName ?? ''
+        id: orderItem.id,
+        Name: orderItem.name ?? '',
+        Quantity: orderItem.quantity,
+        FullName: orderItem.description ?? ''
       },
       onCompleted() {
         setState(defaultState)
@@ -63,14 +63,14 @@ export function UpdatePositionBtn({ refetch }: IDialogEditOrderItemProps) {
   const handlerInsert = (): void => {
     handleClose()
     if (!orderId) throw Error('orderId is null')
-    if (!state.Quantity || !state.Name) throw Error()
+    if (!orderItem.quantity || !orderItem.name) throw Error()
 
     insertMutation({
       variables: {
         orderID: orderId,
-        name: state.Name,
-        quantity: state.Quantity,
-        fullName: state.FullName ?? ''
+        name: orderItem.name,
+        quantity: orderItem.quantity,
+        fullName: orderItem.description ?? ''
       },
       onCompleted() {
         setState(defaultState)
@@ -81,12 +81,12 @@ export function UpdatePositionBtn({ refetch }: IDialogEditOrderItemProps) {
 
   const handleInputChange = (e: React.ChangeEvent<any>) => {
     setState({
-      ...state,
+      ...orderItem,
       [e.target.name]: e.target.value
     })
   }
 
-  const disableSaveButton = !Boolean(state.Name && state.Quantity)
+  const disableSaveButton = !Boolean(orderItem.name && orderItem.quantity)
   return (
     <Modal open={isOpen} onClose={handleClose}>
       <ModalDialog minWidth={600}>
@@ -99,29 +99,29 @@ export function UpdatePositionBtn({ refetch }: IDialogEditOrderItemProps) {
           <MyInput
             fullWidth
             label="Наименование"
-            value={state.Name}
+            value={orderItem.name}
             sx={{ mb: '8px' }}
-            name="Name"
+            name="name"
             onChange={handleInputChange}
           />
           <MultilineInput
             label="Полное наименование"
             sx={{ mb: '8px' }}
-            value={state.FullName ?? ''}
-            name="FullName"
+            value={orderItem.description ?? ''}
+            name="description"
             onChange={handleInputChange}
           />
           <MyInput
             label="Введите кол-во"
             type="number"
-            name="Quantity"
+            name="quantity"
             sx={{ mb: '8px' }}
-            value={state.Quantity}
+            value={orderItem.quantity}
             onChange={handleInputChange}
           />
         </Box>
         <Row gap={2}>
-          {!state.OrderItemID ? (
+          {!orderItem.id ? (
             <Button onClick={handlerInsert} disabled={disableSaveButton}>
               Добавить
             </Button>
