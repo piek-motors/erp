@@ -102,6 +102,7 @@
   "include": [
     "./src/**/*",
     "./migrations/**/*",
-    "src/db/schema.ts"
+    "src/db/schema.ts",
+    "./generated/**/*"
  ],
 }

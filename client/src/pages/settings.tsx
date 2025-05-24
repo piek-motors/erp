@@ -33,7 +33,7 @@ function Settings() {
     <Container maxWidth="sm">
       <PageTitle title="Аккаунт" />
       <Typography>
-        {store.user?.FirstName} {store.user?.LastName}
+        {store.user?.first_name} {store.user?.last_name}
       </Typography>
       <Typography>
         Уровень доступа: {(store.user as any).AccessLevelID}

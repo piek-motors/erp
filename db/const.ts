@@ -1,4 +1,4 @@
-export const schema = 'metal_pdo'
+export const schema = 'metal_flow'
 
 export const enums = {
   unit: `unit_enum`,
@@ -9,11 +9,11 @@ export const enums = {
 
 export const tables = {
   pdo: {
-    materials: 'metal_pdo.materials',
-    supplies: 'metal_pdo.supplies',
-    writeoffs: 'metal_pdo.writeoffs',
-    details: 'metal_pdo.details',
-    detail_materials: 'metal_pdo.detail_materials'
+    materials: 'metal_flow.materials',
+    supplies: 'metal_flow.supplies',
+    writeoffs: 'metal_flow.writeoffs',
+    details: 'metal_flow.details',
+    detail_materials: 'metal_flow.detail_materials'
   },
   erp: {
     users: 'erp.Users'

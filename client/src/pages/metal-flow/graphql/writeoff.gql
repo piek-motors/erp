@@ -1,13 +1,13 @@
 mutation InsertMaterialWriteoff(
-  $objects: [metal_pdo_writeoffs_insert_input!]!
+  $objects: [metal_flow_writeoffs_insert_input!]!
 ) {
-  insert_metal_pdo_writeoffs(objects: $objects) {
+  insert_metal_flow_writeoffs(objects: $objects) {
     affected_rows
   }
 }
 
 query GetWrietOffs {
-  metal_pdo_writeoffs(order_by: { id: desc }) {
+  metal_flow_writeoffs(order_by: { id: desc }) {
     id
     date
     qty
@@ -21,7 +21,7 @@ query GetWrietOffs {
 }
 
 mutation DeleteWriteOff($id: Int!) {
-  delete_metal_pdo_writeoffs_by_pk(id: $id) {
+  delete_metal_flow_writeoffs_by_pk(id: $id) {
     id
   }
 }

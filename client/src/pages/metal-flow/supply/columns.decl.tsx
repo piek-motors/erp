@@ -1,12 +1,12 @@
 import { Column } from 'react-table'
-import { formatDateWithTime } from 'utils/formatting'
 import { GetSuppliesQuery } from 'types/graphql-shema'
+import { formatDateWithTime } from 'utils/formatting'
 import { map } from '../mappers'
 import { ResourceName } from '../shared/material-name'
 import { t } from '../text'
 import { DeleteSupply } from './components'
 
-export type SupplyDto = GetSuppliesQuery['metal_pdo_supplies'][number]
+export type SupplyDto = GetSuppliesQuery['metal_flow_supplies'][number]
 
 export function getColumns(props: {
   key: number

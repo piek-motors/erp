@@ -11,7 +11,7 @@ import {
   UiWriteoffReason,
   WriteoffTroughDetail
 } from 'domain-model'
-import { openMetalFlowPage, MetalFlowRoutes } from 'lib/routes'
+import { MetalFlowRoutes, openMetalFlowPage } from 'lib/routes'
 import { useEffect, useState } from 'react'
 import { AddResourceButton, MyInput, MyTabs, SendMutation } from 'shortcuts'
 import { useNotifier } from 'store/notifier.store'
@@ -197,7 +197,7 @@ export function ListWriteoffs() {
         >
           <Table
             columns={getColumns({ key, setKey, refetch })}
-            data={data?.metal_pdo_writeoffs || []}
+            data={data?.metal_flow_writeoffs || []}
           />
         </Box>
       </Sheet>

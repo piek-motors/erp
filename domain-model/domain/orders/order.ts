@@ -1,3 +1,4 @@
+import { OrderStatus } from 'domain/orders/enums'
 import * as moment from 'moment'
 import { formatMoney } from '../../shared/format/money'
 import { User } from '../user'
@@ -25,6 +26,7 @@ export class OrderItem {
   name!: string
   description?: string | null
   quantity!: number
+  assembler_name?: string
   constructor(init: ClassProperties<OrderItem>) {
     Object.assign(this, init)
   }
@@ -68,7 +70,7 @@ export class Order {
   actualShippingDate!: Date
   comment?: string | null
   documents!: OrderAttachment[]
-  statusID!: number
+  status!: OrderStatus
 
   constructor(init: ClassProperties<Order>) {
     Object.assign(this, init)

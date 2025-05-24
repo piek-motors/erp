@@ -53,7 +53,7 @@ export class MaterialListStore {
         query: GetMaterialsDocument,
         fetchPolicy: 'cache-first'
       })
-      const materials = res.data?.metal_pdo_materials.map(map.material.fromDto)
+      const materials = res.data?.metal_flow_materials.map(map.material.fromDto)
       this.setMaterials(materials)
     } catch (error) {
       this.error = error as Error

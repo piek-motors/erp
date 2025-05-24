@@ -19,9 +19,9 @@ export function ManagerFilter({ value, onChange }: IManagerFilterProps) {
         <Option value={0}>Все</Option>
 
         {!loading &&
-          data?.erp_Users.map(user => (
-            <Option value={user.UserID} key={user.UserID}>
-              {`${user.FirstName} ${user.LastName}`}
+          data?.users.map(user => (
+            <Option value={user.id} key={user.id}>
+              {`${user.first_name} ${user.last_name}`}
             </Option>
           ))}
       </Select>

@@ -1,6 +1,6 @@
 import { Autocomplete } from '@mui/joy'
-import { Detail } from '../../../../../domain-model/dist'
 import { useGetDetailsQuery } from 'types/graphql-shema'
+import { Detail } from '../../../../../domain-model/dist'
 import { map } from '../mappers'
 
 export function DetailSelect(props: {
@@ -9,7 +9,7 @@ export function DetailSelect(props: {
 }) {
   const details = useGetDetailsQuery()
   const options =
-    details.data?.metal_pdo_details.map(each => ({
+    details.data?.metal_flow_details.map(each => ({
       label: each.name,
       data: map.detail.fromDto(each)
     })) || []

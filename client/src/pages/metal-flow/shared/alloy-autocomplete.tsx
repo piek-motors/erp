@@ -1,5 +1,4 @@
 import { Autocomplete, createFilterOptions, FormLabel } from '@mui/joy'
-import { EnMaterialShape } from 'domain-model'
 import { ErrorHint } from 'shortcuts'
 import { useGetPossibleAlloysQuery } from 'types/graphql-shema'
 import { t } from '../text'
@@ -14,7 +13,8 @@ export function AlloyAutocomplete(props: {
   const { data, loading, error } = useGetPossibleAlloysQuery()
 
   const options =
-    Array.from(new Set(data?.metal_pdo_materials?.map(e => e.shape_data))) || []
+    Array.from(new Set(data?.metal_flow_materials?.map(e => e.shape_data))) ||
+    []
 
   return (
     <>

@@ -1,137 +1,157 @@
 query GetAllUsers {
-  erp_Users {
-    FirstName
-    LastName
-    UserID
-    AccessLevelID
+  users {
+    first_name
+    last_name
+    id
+    role
   }
 }
 
 query GetOrderPayments($_eq: Int!) {
-  erp_PaymentHistory(where: { OrderID: { _eq: $_eq } }, order_by: { Date: asc }) {
-    Date
-    ID
-    PaidAmount
+  orders_order_payments(
+    where: { order_id: { _eq: $_eq } }
+    order_by: { date: asc }
+  ) {
+    date
+    id
+    amount
   }
 }
 
-mutation InsertNotification($CommentID: Int!, $MentionedUser: Int!, $OrderID: Int!) {
-  insert_erp_Notifications(
-    objects: { CommentID: $CommentID, MentionedUser: $MentionedUser, OrderID: $OrderID }
+mutation InsertNotification(
+  $comment_id: Int!
+  $user_id: Int!
+  $order_id: Int!
+) {
+  insert_orders_notifications(
+    objects: {
+      comment_id: $comment_id
+      user_id: $user_id
+      order_id: $order_id
+    }
   ) {
     returning {
-      MentionedUser
-      ID
+      user_id
+      id
     }
   }
 }
 
 # DOCS
-mutation InsertDocumentsArray($objects: [erp_Docs_insert_input!]!) {
-  insert_erp_Docs(objects: $objects) {
+mutation InsertDocumentsArray($objects: [orders_attachments_insert_input!]!) {
+  insert_orders_attachments(objects: $objects) {
     returning {
-      ID
+      id
     }
   }
 }
 
-mutation InsertPayment($PaidAmount: numeric!, $Date: timestamp!, $OrderID: Int!) {
-  insert_erp_PaymentHistory_one(
-    object: { PaidAmount: $PaidAmount, OrderID: $OrderID, Date: $Date }
+mutation InsertPayment($amount: numeric!, $date: timestamp!, $order_id: Int!) {
+  insert_orders_order_payments_one(
+    object: { amount: $amount, order_id: $order_id, date: $date }
   ) {
-    ID
-    OrderID
+    id
+    order_id
   }
 }
 
-mutation DeletePayment($ID: Int!) {
-  delete_erp_PaymentHistory_by_pk(ID: $ID) {
-    ID
+mutation DeletePayment($id: Int!) {
+  delete_orders_order_payments_by_pk(id: $id) {
+    id
   }
 }
 
-mutation DeleteOrder($OrderID: Int!) {
-  delete_erp_Orders_by_pk(OrderID: $OrderID) {
-    OrderID
+mutation DeleteOrder($id: Int!) {
+  delete_orders_orders_by_pk(id: $id) {
+    id
   }
 }
 
-mutation InsertOrderItem($name: String!, $orderID: Int!, $quantity: Int!, $fullName: String!) {
-  insert_erp_OrderItems_one(
-    object: { OrderID: $orderID, Name: $name, FullName: $fullName, Quantity: $quantity }
+mutation InsertOrderItem(
+  $name: String!
+  $order_id: Int!
+  $quantity: Int!
+  $description: String!
+) {
+  insert_orders_order_items_one(
+    object: {
+      order_id: $order_id
+      name: $name
+      description: $description
+      quantity: $quantity
+    }
   ) {
-    OrderItemID
-    OrderID
+    id
+    order_id
   }
 }
 
 mutation DeleteOrderItemByPk($id: Int!) {
-  delete_erp_OrderItems_by_pk(OrderItemID: $id) {
-    OrderItemID
+  delete_orders_order_items_by_pk(id: $id) {
+    id
   }
 }
 
-mutation UpdateOrderItemByPk($id: Int!, $FullName: String!, $Name: String!, $Quantity: Int!) {
-  update_erp_OrderItems_by_pk(
-    pk_columns: { OrderItemID: $id }
-    _set: { FullName: $FullName, Name: $Name, Quantity: $Quantity }
+mutation UpdateOrderItemByPk($id: Int!, $_set: orders_order_items_set_input!) {
+  update_orders_order_items_by_pk(pk_columns: {id: $id}, _set: $_set) {
+    id
+  }
+}
+
+
+mutation MoveOrderToPriority($id: Int!, $acceptance_date: timestamp!) {
+  update_orders_orders_by_pk(
+    pk_columns: { id: $id }
+    _set: { status: 2, acceptance_date: $acceptance_date }
   ) {
-    Name
-    FullName
-    OrderItemID
-    Quantity
+    id
+    status
   }
 }
 
-mutation MoveOrderToPriority($OrderID: Int!, $AcceptanceDate: timestamp!) {
-  update_erp_Orders_by_pk(
-    pk_columns: { OrderID: $OrderID }
-    _set: { OrderStatusID: 2, AcceptanceDate: $AcceptanceDate }
-  ) {
-    OrderID
-    OrderStatusID
-  }
-}
-
-mutation MoveOrderToArchive($OrderID: Int!, $ActualShippingDate: timestamp!, $OrderStatusID: Int!) {
-  update_erp_Orders_by_pk(
-    pk_columns: { OrderID: $OrderID }
+mutation MoveOrderToArchive(
+  $id: Int!
+  $actual_shipping_date: timestamp!
+  $status: Int!
+) {
+  update_orders_orders_by_pk(
+    pk_columns: { id: $id }
     _set: {
-      OrderStatusID: $OrderStatusID
-      AwaitingDispatch: false
-      ActualShippingDate: $ActualShippingDate
+      status: $status
+      awaiting_dispatch: false
+      actual_shipping_date: $actual_shipping_date
     }
   ) {
-    OrderID
-    OrderStatusID
+    id
+    status
   }
 }
 
-mutation UpdateNeedAttention($OrderID: Int!, $NeedAttention: String!) {
-  update_erp_Orders_by_pk(
-    pk_columns: { OrderID: $OrderID }
-    _set: { NeedAttention: $NeedAttention }
+mutation UpdateNeedAttention($id: Int!, $need_attention: String!) {
+  update_orders_orders_by_pk(
+    pk_columns: { id: $id }
+    _set: { need_attention: $need_attention }
   ) {
-    OrderID
-    NeedAttention
+    id
+    need_attention
   }
 }
 
-mutation UpdateAwaitingDispatch($OrderID: Int!, $AwaitingDispatch: Boolean!) {
-  update_erp_Orders_by_pk(
-    pk_columns: { OrderID: $OrderID }
-    _set: { AwaitingDispatch: $AwaitingDispatch }
+mutation UpdateAwaitingDispatch($id: Int!, $awaiting_dispatch: Boolean!) {
+  update_orders_orders_by_pk(
+    pk_columns: { id: $id }
+    _set: { awaiting_dispatch: $awaiting_dispatch }
   ) {
-    OrderID
-    AwaitingDispatch
+    id
+    awaiting_dispatch
   }
 }
 
-mutation UpdateOrderInfo($OrderID: Int!, $fields: erp_Orders_set_input) {
-  update_erp_Orders_by_pk(pk_columns: { OrderID: $OrderID }, _set: $fields) {
-    OrderID
-    Entity
-    City
-    CreatingDate
+mutation UpdateOrderInfo($id: Int!, $fields: orders_orders_set_input) {
+  update_orders_orders_by_pk(pk_columns: { id: $id }, _set: $fields) {
+    id
+    contractor
+    city
+    created_at
   }
 }

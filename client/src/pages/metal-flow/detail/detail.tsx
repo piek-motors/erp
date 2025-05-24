@@ -2,7 +2,7 @@ import { Sheet, Stack, Typography } from '@mui/joy'
 import { PageTitle } from 'components'
 import { Table } from 'components/table.impl'
 import { Detail, EnUnit, Material } from 'domain-model'
-import { openMetalFlowPage, MetalFlowRoutes } from 'lib/routes'
+import { MetalFlowRoutes, openMetalFlowPage } from 'lib/routes'
 import { Observer } from 'mobx-react-lite'
 import { useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
@@ -99,7 +99,7 @@ function DetailMaterialRelationForm() {
 export function ListDetails() {
   const navigate = useNavigate()
   const { data } = gql.useGetDetailsQuery()
-  const details = data?.metal_pdo_details
+  const details = data?.metal_flow_details
     ?.map(d => map.detail.fromDto(d))
     .filter(each => {
       return !!each

@@ -15,8 +15,8 @@ export function OrderTypeFilter({ value, onChange }: IOrderTypeFilterProps) {
         onChange={onChange}
         placeholder="Тип заказа"
       >
-        <Option value={OrderStatus.ordArchived}>Заказы</Option>
-        <Option value={OrderStatus.reclArchived}>Рекламации</Option>
+        <Option value={OrderStatus.Archived}>Заказы</Option>
+        <Option value={OrderStatus.ReclamationArchived}>Рекламации</Option>
       </Select>
     </FormControl>
   )

@@ -8,15 +8,14 @@ import { TUser } from 'types/global'
 import { useUpdateOrderInfoMutation } from 'types/graphql-shema'
 
 enum FieldNames {
-  InvoiceNumber = 'InvoiceNumber',
-  ShippingDate = 'ShippingDate',
-  OrderNumber = 'OrderNumber',
-  ManagerID = 'ManagerID',
-  Entity = 'Entity',
-  City = 'City',
-  TotalAmount = 'TotalAmount',
-  PaidAmount = 'PaidAmount',
-  Comment = 'Comment'
+  InvoiceNumber = 'invoice_number',
+  ShippingDate = 'shipping_date',
+  OrderNumber = 'order_number',
+  ManagerID = 'manager_id',
+  Entity = 'contractor',
+  City = 'city',
+  TotalAmount = 'total_amount',
+  Comment = 'comment'
 }
 
 type FieldsValuesMap = {
@@ -47,7 +46,7 @@ export function StatementInput({ order, refetch, users }: IEditableInfoProps) {
     try {
       await updateOrderInfo({
         variables: {
-          OrderID: order.id,
+          id: order.id,
           fields
         }
       })
@@ -99,13 +98,13 @@ export function StatementInput({ order, refetch, users }: IEditableInfoProps) {
         <Select
           label="Менеджер"
           selectElements={users.map(each => ({
-            name: `${each.FirstName} ${each.LastName}`,
-            value: each.UserID
+            name: `${each.first_name} ${each.last_name}`,
+            value: each.id
           }))}
           defaultValue={order.manager?.id}
           onChange={newValue => {
             if (!newValue) return
-            fields.ManagerID = newValue || null
+            fields.manager_id = newValue || null
           }}
           disabled={order.manager?.id === null}
         />
@@ -143,7 +142,7 @@ export function StatementInput({ order, refetch, users }: IEditableInfoProps) {
         onClick={() =>
           updateOrderInfo({
             variables: {
-              OrderID: order.id,
+              id: order.id,
               fields
             }
           })

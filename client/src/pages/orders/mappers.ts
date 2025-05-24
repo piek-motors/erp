@@ -9,62 +9,63 @@ class OrderMapper {
   fromDto(dto: OrderFragment): Order {
     console.log(dto)
     return new Order({
-      id: dto.OrderID,
-      shippingDate: dto.ShippingDate,
-      totalAmount: dto.TotalAmount,
-      payments: dto.PaymentHistories.map(
+      id: dto.id,
+      shippingDate: dto.shipping_date,
+      totalAmount: dto.total_amount,
+      payments: dto.order_payments.map(
         payment =>
           new Payment({
-            id: payment.ID,
-            amount: payment.PaidAmount,
-            date: payment.Date
+            id: payment.id,
+            amount: payment.amount,
+            date: payment.date
           })
       ),
-      contractor: dto.Entity,
-      city: dto.City,
-      awatingDispatch: dto.AwaitingDispatch,
-      needAttention: dto.NeedAttention === 'true',
-      invoiceNumber: dto.InvoiceNumber,
+      contractor: dto.contractor,
+      city: dto.city,
+      awatingDispatch: dto.awaiting_dispatch,
+      needAttention: dto.need_attention === 'true',
+      invoiceNumber: dto.invoice_number,
       manager: new User({
         email: '',
-        firstName: dto.User?.FirstName!,
-        lastName: dto.User?.LastName
+        firstName: dto.user?.first_name!,
+        lastName: dto.user?.last_name!
       }),
-      items: dto.OrderItems?.map(
+      items: dto.order_items.map(
         item =>
           new OrderItem({
-            id: item.OrderItemID,
-            name: item.Name,
-            quantity: item.Quantity
+            id: item.id,
+            name: item.name,
+            quantity: item.quantity,
+            description: item.description
           })
       ),
       documents: [],
-      createdAt: dto.CreatingDate,
-      acceptanceDate: dto.AcceptanceDate,
-      actualShippingDate: dto.ActualShippingDate,
-      comment: dto.Comment,
-      statusID: dto.OrderStatusID
+      createdAt: dto.created_at,
+      acceptanceDate: dto.acceptance_date,
+      actualShippingDate: dto.actual_shipping_date,
+      comment: dto.comment,
+      status: dto.status
     })
   }
 
   docsFromDto(
-    doc: GetOrderAttachmentsQuery['erp_Docs'][number]
+    doc: GetOrderAttachmentsQuery['orders_attachments'][number]
   ): OrderAttachment {
     return new OrderAttachment({
-      id: doc.ID,
-      name: doc.FileName ?? '',
-      key: doc.Key ?? '',
-      size: doc.Size
+      id: doc.id,
+      name: doc.filename ?? '',
+      key: doc.key ?? '',
+      size: doc.size
     })
   }
 }
 
 class UserMapper {
-  fromDto(dto: GetAllUsersQuery['erp_Users'][number]): User {
+  fromDto(dto: GetAllUsersQuery['users'][number]): User {
     return new User({
-      id: dto.UserID,
-      firstName: dto.FirstName!,
-      lastName: dto.LastName!
+      id: dto.id,
+      firstName: dto.first_name!,
+      lastName: dto.last_name!
     })
   }
 }

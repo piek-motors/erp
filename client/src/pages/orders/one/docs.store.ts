@@ -47,11 +47,11 @@ class DocsState {
     >({
       query: GetOrderAttachmentsDocument,
       variables: {
-        OrderID: orderId
+        order_id: orderId
       }
     })
 
-    this.files = res.data.erp_Docs.map(map.order.docsFromDto)
+    this.files = res.data.orders_attachments.map(map.order.docsFromDto)
   }
 }
 

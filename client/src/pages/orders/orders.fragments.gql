@@ -1,37 +1,33 @@
-fragment Order on erp_Orders {
-  NeedAttention
-    AwaitingDispatch
-    OrderStatusID
-    OrderStatus {
-      Name
-      ID
-    }
-    ActualShippingDate
-    AcceptanceDate
-    ShippingDate
-    CreatingDate
-    OrderID
-    ManagerID
-    City
-    Comment
-    Entity
-    InvoiceNumber
-    OrderNumber
-    User {
-      FirstName
-      LastName
-      UserID
-    }
-    OrderItems(order_by: { OrderItemID: asc }) {
-      Name
-      FullName
-      OrderItemID
-      Quantity
-    }
-    TotalAmount
-    PaymentHistories(where: { PaidAmount: { _neq: 0 } }) {
-      ID
-      PaidAmount
-      Date
-    }
+fragment Order on orders_orders {
+  id
+  status 
+  city
+  contractor
+  invoice_number
+  total_amount
+  order_number
+  need_attention
+  awaiting_dispatch
+  actual_shipping_date
+  acceptance_date
+  shipping_date
+  created_at
+  manager_id
+  comment
+  user {
+    id
+    first_name
+    last_name
+  }
+  order_items(order_by: { id: asc }) {
+    id
+    name
+    description
+    quantity
+  }
+  order_payments(where: { amount: { _neq: 0 } }) {
+    id
+    amount
+    date
+  }
 }

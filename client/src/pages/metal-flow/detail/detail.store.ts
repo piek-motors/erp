@@ -85,7 +85,7 @@ export class DetailStore {
       variables: { id }
     })
 
-    const d = res.data?.metal_pdo_details_by_pk
+    const d = res.data?.metal_flow_details_by_pk
     this.id = d?.id
     this.name = d?.name || ''
     this.materials = new Map(
@@ -109,7 +109,7 @@ export class DetailStore {
         }
       }
     })
-    const detail = res.data?.insert_metal_pdo_details_one
+    const detail = res.data?.insert_metal_flow_details_one
     if (detail) {
       this.recentlyAdded = this.createDetailFromResponse(detail)
     }
@@ -130,7 +130,7 @@ export class DetailStore {
         }
       }
     })
-    const detail = res.data?.update_metal_pdo_details_by_pk
+    const detail = res.data?.update_metal_flow_details_by_pk
     if (detail) {
       this.recentlyUpdated = this.createDetailFromResponse(detail)
     }
@@ -184,7 +184,7 @@ export class DetailStore {
   }
 
   async handleInsertDetail(state: Detail) {
-    const payload: gql.Metal_Pdo_Detail_Materials_Insert_Input[] = []
+    const payload: gql.Metal_Flow_Detail_Materials_Insert_Input[] = []
     for (const [material, relationData] of state.materials.entries()) {
       payload.push({
         material_id: material.id,
@@ -208,6 +208,6 @@ export class DetailStore {
     if (res.errors?.length) {
       throw Error(res.errors.join('\n'))
     }
-    return res.data?.insert_metal_pdo_details_one?.id
+    return res.data?.insert_metal_flow_details_one?.id
   }
 }

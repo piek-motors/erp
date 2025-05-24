@@ -19,21 +19,21 @@ export type Updateable<T> = KyselyUpdateable<T>
 
 export namespace DB {
   export interface Schema {
-    ['erp.Users']: UserTable
-    ['metal_pdo.materials']: MaterialTable
-    ['metal_pdo.details']: DetailTable
-    ['metal_pdo.detail_materials']: DetailMaterialsTable
-    ['metal_pdo.supplies']: SuppliesTable
-    ['metal_pdo.writeoffs']: WriteoffsTable
+    ['users']: UserTable
+    ['metal_flow.materials']: MaterialTable
+    ['metal_flow.details']: DetailTable
+    ['metal_flow.detail_materials']: DetailMaterialsTable
+    ['metal_flow.supplies']: SuppliesTable
+    ['metal_flow.writeoffs']: WriteoffsTable
   }
 
   export interface UserTable {
-    UserID: GeneratedAlways<number>
-    FirstName: string | null
-    LastName: string | null
-    Email: string | null
-    AccessLevelID: number | null
-    Password: string | null
+    id: GeneratedAlways<number>
+    first_name: string | null
+    last_name: string | null
+    email: string | null
+    role: number | null
+    password: string | null
   }
 
   export interface MaterialTable {

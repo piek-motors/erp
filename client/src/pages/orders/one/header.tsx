@@ -63,9 +63,9 @@ function useOrderMutations(orderId: number | null) {
     try {
       const res = await mutationMoveOrderToArchive({
         variables: {
-          OrderID: orderId,
-          ActualShippingDate: new Date(),
-          OrderStatusID
+          id: orderId,
+          actual_shipping_date: new Date(),
+          status: OrderStatusID
         }
       })
       if (res.errors) throw new Error(res.errors.toString())
@@ -80,8 +80,8 @@ function useOrderMutations(orderId: number | null) {
     try {
       const res = await mutationMoveOrderToPriority({
         variables: {
-          OrderID: orderId,
-          AcceptanceDate: new Date()
+          id: orderId,
+          acceptance_date: new Date()
         }
       })
       if (res.errors) throw new Error(res.errors.toString())
@@ -95,7 +95,7 @@ function useOrderMutations(orderId: number | null) {
     if (!orderId) throw Error('orderId is null')
     try {
       const res = await mutationDeleteOrder({
-        variables: { OrderID: orderId }
+        variables: { id: orderId }
       })
       if (res.errors) throw new Error(res.errors.toString())
       navigate(redirectPath)
@@ -108,15 +108,15 @@ function useOrderMutations(orderId: number | null) {
     try {
       await mutationAwaitingDispatch({
         variables: {
-          OrderID: order.id,
-          AwaitingDispatch: !order.awatingDispatch
+          id: order.id,
+          awaiting_dispatch: !order.awatingDispatch
         },
         optimisticResponse: {
-          update_erp_Orders_by_pk: {
-            __typename: 'erp_Orders',
+          update_orders_orders_by_pk: {
+            __typename: 'orders_orders',
             ...order,
-            OrderID: order.id,
-            AwaitingDispatch: !order.awatingDispatch
+            id: order.id,
+            awaiting_dispatch: !order.awatingDispatch
           }
         }
       })
@@ -129,8 +129,8 @@ function useOrderMutations(orderId: number | null) {
     try {
       await mutationNeedAttention({
         variables: {
-          OrderID: order.id,
-          NeedAttention: order.needAttention ? 'true' : 'false'
+          id: order.id,
+          need_attention: order.needAttention ? 'true' : 'false'
         }
       })
     } catch (error) {
@@ -194,9 +194,10 @@ function SwitchOrderStatusBtn({ order }: { order: Order }) {
       tip: text.orderReadyForDispatch,
       handler: () => updateAwaitingDispatch(order),
       icon: UilClockThree,
-      hidden: ![OrderStatus.ordProduction, OrderStatus.reclProduction].includes(
-        order.statusID
-      )
+      hidden: ![
+        OrderStatus.InProduction,
+        OrderStatus.ReclamationInProduction
+      ].includes(order.status)
     }
   ]
 
@@ -213,10 +214,10 @@ export function OrderActions({ order }: { order: Order }) {
   const getResource = () => {
     if (
       [
-        OrderStatus.reclDecision,
-        OrderStatus.reclInbox,
-        OrderStatus.reclProduction
-      ].includes(order.statusID)
+        OrderStatus.ReclamationDecision,
+        OrderStatus.ReclamationIncoming,
+        OrderStatus.ReclamationInProduction
+      ].includes(order.status)
     )
       return '/reclamation'
     return '/'
@@ -230,21 +231,23 @@ export function OrderActions({ order }: { order: Order }) {
             tip: text.moveToPriority,
             handler: moveToPriority,
             icon: UilFileCheck,
-            hidden: ![OrderStatus.ordRegistration].includes(order.statusID)
+            hidden: ![OrderStatus.PreOrder].includes(order.status)
           },
           {
             dialog: TransferOrderDialog,
             dialogHandler: () => moveToArchive(3),
             tip: text.orderCompleted,
             icon: UilTruck,
-            hidden: ![OrderStatus.ordProduction].includes(order.statusID)
+            hidden: ![OrderStatus.InProduction].includes(order.status)
           },
           {
             dialog: TransferOrderDialog,
             dialogHandler: () => moveToArchive(13),
             tip: text.orderCompleted,
             icon: UilTruck,
-            hidden: ![OrderStatus.reclProduction].includes(order.statusID)
+            hidden: ![OrderStatus.ReclamationInProduction].includes(
+              order.status
+            )
           },
           {
             dialog: DeleteOrderDialog,
@@ -252,12 +255,12 @@ export function OrderActions({ order }: { order: Order }) {
             tip: text.delete,
             icon: UilTrashAlt,
             hidden: ![
-              OrderStatus.ordRegistration,
-              OrderStatus.ordProduction,
-              OrderStatus.reclInbox,
-              OrderStatus.reclDecision,
-              OrderStatus.reclInbox
-            ].includes(order.statusID)
+              OrderStatus.PreOrder,
+              OrderStatus.InProduction,
+              OrderStatus.ReclamationIncoming,
+              OrderStatus.ReclamationDecision,
+              OrderStatus.ReclamationInProduction
+            ].includes(order.status)
           },
           {
             tip: text.addPosition,
@@ -267,9 +270,9 @@ export function OrderActions({ order }: { order: Order }) {
             },
             icon: UilPlus,
             hidden: [
-              OrderStatus.ordArchived,
-              OrderStatus.reclArchived
-            ].includes(order.statusID)
+              OrderStatus.Archived,
+              OrderStatus.ReclamationArchived
+            ].includes(order.status)
           },
           {
             tip: text.change,

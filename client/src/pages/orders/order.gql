@@ -1,26 +1,24 @@
 query getOrdersByStatus(
-  $ShippingDate: order_by = asc_nulls_first
-  $orderStatus: Int!
+  $shipping_date: order_by = asc_nulls_first
+  $order_status: Int!
 ) {
-  erp_Orders(
-    where: { OrderStatusID: { _eq: $orderStatus } }
-    order_by: { ShippingDate: $ShippingDate }
+  orders_orders(
+    where: { status: { _eq: $order_status } }
+    order_by: { shipping_date: $shipping_date }
   ) {
     ...Order
   }
 }
 
-query getOrdersArchivedBySearchKeyword($keyword: String!, $OrderStatus: Int!) {
-  erp_Orders(
-    order_by: { ActualShippingDate: desc_nulls_last }
+query getOrdersArchivedBySearchKeyword($keyword: String!, $order_status: Int!) {
+  orders_orders(
+    order_by: { actual_shipping_date: desc_nulls_last }
     where: {
       _or: [
-        { Entity: { _ilike: $keyword } }
-        { InvoiceNumber: { _ilike: $keyword, _is_null: false } }
-        # { OrderItems: {_and: [{SerialStarts: {_lte: $keyword}}, {SerialEnds: {_gte: $keyword }}] } },
+        { contractor: { _ilike: $keyword } }
+        { invoice_number: { _ilike: $keyword, _is_null: false } }
       ]
-      # ManagerID: { _eq: $ManagerID }
-      OrderStatusID: { _eq: $OrderStatus }
+      status: { _eq: $order_status }
     }
   ) {
     ...Order
@@ -28,76 +26,42 @@ query getOrdersArchivedBySearchKeyword($keyword: String!, $OrderStatus: Int!) {
 }
 
 query GetOrdersArchivedByInterval($_lte: timestamp!, $_gte: timestamp!) {
-  erp_Orders(
-    where: { ActualShippingDate: { _lte: $_lte, _gte: $_gte } }
-    order_by: { ActualShippingDate: asc }
+  orders_orders(
+    where: { actual_shipping_date: { _lte: $_lte, _gte: $_gte } }
+    order_by: { actual_shipping_date: asc }
   ) {
     ...Order
   }
 }
 
 query GetManagers {
-  erp_Users(where: { AccessLevel: { AccessLevelID: { _lte: 2 } } }) {
-    FirstName
-    LastName
-    UserID
-    AccessLevelID
+  users(where: { role: { _lte: 2 } }) {
+    first_name
+    last_name
+    id
+    role
   }
 }
 
-query GetOrderByPK($OrderID: Int!) {
-  erp_Orders(where: { OrderID: { _eq: $OrderID } }) {
-    NeedAttention
-    AwaitingDispatch
-    OrderStatusID
-    OrderStatus {
-      Name
-      ID
-    }
-    ActualShippingDate
-    AcceptanceDate
-    ShippingDate
-    CreatingDate
-    OrderID
-    ManagerID
-    City
-    Comment
-    Entity
-    InvoiceNumber
-    OrderNumber
-    User {
-      FirstName
-      LastName
-      UserID
-    }
-    OrderItems(order_by: { OrderItemID: asc }) {
-      Name
-      FullName
-      OrderItemID
-      Quantity
-    }
-    TotalAmount
-    PaymentHistories(where: { PaidAmount: { _neq: 0 } }) {
-      ID
-      PaidAmount
-      Date
-    }
+query GetOrderByPK($id: Int!) {
+  orders_orders(where: { id: { _eq: $id } }) {
+    ...Order
   }
 }
 
-query GetOrderAttachments($OrderID: Int!) {
- erp_Docs(where: {OrderID: {_eq: $OrderID}}) {
-    FileName
-    ID
-    Key
-    Size
+query GetOrderAttachments($order_id: Int!) {
+  orders_attachments(where: { order_id: { _eq: $order_id } }) {
+    filename
+    id
+    key
+    size
   }
 }
 
-mutation InsertOrder($orderStatusID: Int!) {
-  insert_erp_Orders(objects: { OrderStatusID: $orderStatusID }) {
+mutation InsertOrder($status: Int!) {
+  insert_orders_orders(objects: { status: $status }) {
     returning {
-      OrderID
+      id
     }
   }
 }

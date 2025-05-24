@@ -4,13 +4,13 @@ export enum EnOrderStatus {
 }
 
 export enum OrderStatus {
-  ordRegistration = 1,
-  ordProduction = 2,
-  ordArchived = 3,
-  reclInbox = 10,
-  reclDecision = 11,
-  reclProduction = 12,
-  reclArchived = 13
+  PreOrder = 1,
+  InProduction = 2,
+  Archived = 3,
+  ReclamationIncoming = 10,
+  ReclamationDecision = 11,
+  ReclamationInProduction = 12,
+  ReclamationArchived = 13
 }
 
 export enum Roles {

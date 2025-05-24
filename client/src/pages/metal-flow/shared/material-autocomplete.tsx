@@ -1,7 +1,7 @@
 import { Autocomplete, FormControl, FormLabel } from '@mui/joy'
 import { useGetMaterialsQuery } from 'types/graphql-shema'
-import { map } from '../mappers'
 import { Material } from '../../../../../domain-model/dist'
+import { map } from '../mappers'
 
 export function MaterialAutocomplete(props: {
   data?: ReturnType<typeof useGetMaterialsQuery>['data']
@@ -11,7 +11,7 @@ export function MaterialAutocomplete(props: {
   const { data, value, onChange } = props
 
   const options =
-    data?.metal_pdo_materials.map(map.material.fromDto).map(material => ({
+    data?.metal_flow_materials.map(map.material.fromDto).map(material => ({
       label: material.deriveLabel(),
       material
     })) || []
@@ -48,7 +48,7 @@ export function MaterialAutocompleteMulti(props: {
 }) {
   const { data, value, onChange } = props
   const options =
-    data?.metal_pdo_materials.map(map.material.fromDto).map(material => ({
+    data?.metal_flow_materials.map(map.material.fromDto).map(material => ({
       label: material.deriveLabel(),
       material
     })) || []

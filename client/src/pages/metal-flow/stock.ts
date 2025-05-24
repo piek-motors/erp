@@ -23,7 +23,7 @@ export const useStockStore = create<IStock>(set => ({
     //     fetchPolicy: 'network-only'
     //   })
     // ])
-    // const supplies = suppliesRaw.data?.metal_pdo_supplies.map(s => {
+    // const supplies = suppliesRaw.data?.metal_flow_supplies.map(s => {
     //   const m = s.material
     //   if (!m) throw Error('Material not found')
     //   // consy factory = new
@@ -35,7 +35,7 @@ export const useStockStore = create<IStock>(set => ({
     //     s.supplier_name
     //   )
     // })
-    // const writeoffs = writeoffsRaw.data?.metal_pdo_writeoffs.map(w => {
+    // const writeoffs = writeoffsRaw.data?.metal_flow_writeoffs.map(w => {
     //   const m = w.material
     //   if (!m) throw Error('Material not found')
     //   return new Writeoff(

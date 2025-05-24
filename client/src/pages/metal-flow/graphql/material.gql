@@ -1,4 +1,4 @@
-fragment MaterialFragment on metal_pdo_materials {
+fragment MaterialFragment on metal_flow_materials {
   id
   unit
   shape
@@ -7,37 +7,37 @@ fragment MaterialFragment on metal_pdo_materials {
 }
 
 query GetMaterials {
-  metal_pdo_materials {
+  metal_flow_materials {
     ...MaterialFragment
   }
 }
 
 query GetMaterialByPk($id: Int!) {
-  metal_pdo_materials_by_pk(id: $id) {
+  metal_flow_materials_by_pk(id: $id) {
     ...MaterialFragment
   }
 }
 
 query GetPossibleAlloys {
-  metal_pdo_materials {
+  metal_flow_materials {
     shape_data(path: "alloy")
   }
 }
 
-mutation InsertMaterial($object: metal_pdo_materials_insert_input!) {
-  insert_metal_pdo_materials_one(object: $object) {
+mutation InsertMaterial($object: metal_flow_materials_insert_input!) {
+  insert_metal_flow_materials_one(object: $object) {
     id
   }
 }
 
-mutation UpdateMaterial($id: Int!, $_set: metal_pdo_materials_set_input!) {
-  update_metal_pdo_materials_by_pk(pk_columns: { id: $id }, _set: $_set) {
+mutation UpdateMaterial($id: Int!, $_set: metal_flow_materials_set_input!) {
+  update_metal_flow_materials_by_pk(pk_columns: { id: $id }, _set: $_set) {
     id
   }
 }
 
 mutation DeleteMaterial($id: Int!) {
-  delete_metal_pdo_materials_by_pk(id: $id) {
+  delete_metal_flow_materials_by_pk(id: $id) {
     id
   }
 }

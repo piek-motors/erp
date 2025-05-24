@@ -1,5 +1,5 @@
 query GetDetails {
-  metal_pdo_details {
+  metal_flow_details {
     id
     name
     detail_materials {
@@ -12,7 +12,7 @@ query GetDetails {
 }
 
 query GetDetailByPk($id: Int!) {
-  metal_pdo_details_by_pk(id: $id) {
+  metal_flow_details_by_pk(id: $id) {
     id
     name
     detail_materials {
@@ -24,15 +24,15 @@ query GetDetailByPk($id: Int!) {
   }
 }
 
-mutation InsertDetail($object: metal_pdo_details_insert_input!) {
-  insert_metal_pdo_details_one(object: $object) {
+mutation InsertDetail($object: metal_flow_details_insert_input!) {
+  insert_metal_flow_details_one(object: $object) {
     id
     name
   }
 }
 
-mutation UpdateDetail($_set: metal_pdo_details_set_input!, $id: Int!) {
-  update_metal_pdo_details_by_pk(pk_columns: { id: $id }, _set: $_set) {
+mutation UpdateDetail($_set: metal_flow_details_set_input!, $id: Int!) {
+  update_metal_flow_details_by_pk(pk_columns: { id: $id }, _set: $_set) {
     id
   }
 }
@@ -42,7 +42,7 @@ mutation UpdateDetailMaterialRelationData(
   $material_id: Int!
   $data: jsonb!
 ) {
-  update_metal_pdo_detail_materials_by_pk(
+  update_metal_flow_detail_materials_by_pk(
     pk_columns: { detail_id: $detail_id, material_id: $material_id }
     _set: { data: $data }
   ) {
@@ -51,13 +51,13 @@ mutation UpdateDetailMaterialRelationData(
 }
 
 mutation DeleteDetail($id: Int!) {
-  delete_metal_pdo_details_by_pk(id: $id) {
+  delete_metal_flow_details_by_pk(id: $id) {
     id
   }
 }
 
 query GetDetailMaterials($_eq: Int!) {
-  metal_pdo_detail_materials(where: { material_id: { _eq: $_eq } }) {
+  metal_flow_detail_materials(where: { material_id: { _eq: $_eq } }) {
     material {
       ...MaterialFragment
     }
@@ -65,7 +65,7 @@ query GetDetailMaterials($_eq: Int!) {
 }
 
 query GetDetailsMadeFromThatMaterial($_eq: Int!) {
-  metal_pdo_detail_materials(where: { material_id: { _eq: $_eq } }) {
+  metal_flow_detail_materials(where: { material_id: { _eq: $_eq } }) {
     detail {
       id
       name
@@ -74,9 +74,9 @@ query GetDetailsMadeFromThatMaterial($_eq: Int!) {
 }
 
 mutation InsertDetailMaterials(
-  $objects: [metal_pdo_detail_materials_insert_input!]!
+  $objects: [metal_flow_detail_materials_insert_input!]!
 ) {
-  insert_metal_pdo_detail_materials(
+  insert_metal_flow_detail_materials(
     objects: $objects
     on_conflict: { constraint: detail_materials_p_key }
   ) {

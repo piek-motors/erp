@@ -18,9 +18,9 @@ export const up = async (db: KDB) => {
 
   // Create stock table
   await db.schema
-    .createTable(`metal_pdo.stock`)
+    .createTable(`metal_flow.stock`)
     .addColumn('material_id', 'integer', b =>
-      b.primaryKey().references('metal_pdo.materials.id').onDelete('cascade')
+      b.primaryKey().references('metal_flow.materials.id').onDelete('cascade')
     )
     .addColumn('current_qty', 'numeric', b =>
       b
@@ -35,7 +35,7 @@ export const up = async (db: KDB) => {
     .createTable(tables.pdo.supplies)
     .addColumn('id', 'serial', b => b.primaryKey())
     .addColumn('material_id', 'integer', b =>
-      b.references('metal_pdo.materials.id').notNull()
+      b.references('metal_flow.materials.id').notNull()
     )
     .addColumn('qty', 'numeric', b => b.notNull().check(sql`qty > 0`))
     .addColumn('supplied_at', 'timestamp', b => b.notNull())
@@ -47,7 +47,7 @@ export const up = async (db: KDB) => {
     .createTable(tables.pdo.writeoffs)
     .addColumn('id', 'serial', b => b.primaryKey())
     .addColumn('material_id', 'integer', b =>
-      b.references('metal_pdo.materials.id').notNull()
+      b.references('metal_flow.materials.id').notNull()
     )
     .addColumn('qty', 'numeric', b => b.notNull().check(sql`qty > 0`))
     .addColumn('writeoff_at', 'timestamp', b => b.notNull())
@@ -56,12 +56,12 @@ export const up = async (db: KDB) => {
 
   // Create trigger function for supplies using raw SQL
   await sql`
-    CREATE FUNCTION metal_pdo.update_stock_on_supply() RETURNS trigger AS $$
+    CREATE FUNCTION metal_flow.update_stock_on_supply() RETURNS trigger AS $$
     BEGIN
-        INSERT INTO metal_pdo.stock (material_id, current_qty)
+        INSERT INTO metal_flow.stock (material_id, current_qty)
         VALUES (NEW.material_id, NEW.qty)
         ON CONFLICT (material_id)
-        DO UPDATE SET current_qty = metal_pdo.stock.current_qty + NEW.qty;
+        DO UPDATE SET current_qty = metal_flow.stock.current_qty + NEW.qty;
         RETURN NEW;
     END;
     $$ LANGUAGE plpgsql;
@@ -69,12 +69,12 @@ export const up = async (db: KDB) => {
 
   // Create trigger function for writeoffs using raw SQL
   await sql`
-    CREATE FUNCTION metal_pdo.update_stock_on_writeoff() RETURNS trigger AS $$
+    CREATE FUNCTION metal_flow.update_stock_on_writeoff() RETURNS trigger AS $$
     BEGIN
-        IF (SELECT current_qty FROM metal_pdo.stock WHERE material_id = NEW.material_id) < NEW.qty THEN
+        IF (SELECT current_qty FROM metal_flow.stock WHERE material_id = NEW.material_id) < NEW.qty THEN
             RAISE EXCEPTION 'Insufficient stock for material_id %', NEW.material_id;
         END IF;
-        UPDATE metal_pdo.stock
+        UPDATE metal_flow.stock
         SET current_qty = current_qty - NEW.qty
         WHERE material_id = NEW.material_id;
         RETURN NEW;
@@ -85,17 +85,17 @@ export const up = async (db: KDB) => {
   // Create trigger for supplies using raw SQL
   await sql`
     CREATE TRIGGER supplies_after_insert
-    AFTER INSERT ON metal_pdo.supplies
+    AFTER INSERT ON metal_flow.supplies
     FOR EACH ROW
-    EXECUTE FUNCTION metal_pdo.update_stock_on_supply();
+    EXECUTE FUNCTION metal_flow.update_stock_on_supply();
   `.execute(db)
 
   // Create trigger for writeoffs using raw SQL
   await sql`
     CREATE TRIGGER writeoffs_before_insert
-    BEFORE INSERT ON metal_pdo.writeoffs
+    BEFORE INSERT ON metal_flow.writeoffs
     FOR EACH ROW
-    EXECUTE FUNCTION metal_pdo.update_stock_on_writeoff();
+    EXECUTE FUNCTION metal_flow.update_stock_on_writeoff();
   `.execute(db)
 }
 

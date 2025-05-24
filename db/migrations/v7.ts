@@ -2,7 +2,7 @@ import { tables } from '../const'
 import { type KDB } from '../schema'
 
 export const up = async (db: KDB) => {
-  await db.deleteFrom('metal_pdo.materials').execute()
+  await db.deleteFrom('metal_flow.materials').execute()
   await db.schema
     .alterTable(tables.pdo.materials)
     .addColumn('label', 'text', b => b.notNull().unique())

@@ -3,7 +3,7 @@ import { tables } from '../const'
 import type { KDB } from '../schema'
 
 export const up = async (db: KDB) => {
-  // alter table supplies drop column matrertial_id and add column material_id integer references metal_pdo.materials(id) on delete cascade;
+  // alter table supplies drop column matrertial_id and add column material_id integer references metal_flow.materials(id) on delete cascade;
   await db.schema
     .alterTable(tables.pdo.supplies)
     .dropColumn('material_id')
@@ -12,7 +12,7 @@ export const up = async (db: KDB) => {
   await db.schema
     .alterTable(tables.pdo.supplies)
     .addColumn('material_id', 'integer', b =>
-      b.references('metal_pdo.materials.id').onDelete('cascade')
+      b.references('metal_flow.materials.id').onDelete('cascade')
     )
     .execute()
 
@@ -24,30 +24,30 @@ export const up = async (db: KDB) => {
   await db.schema
     .alterTable(tables.pdo.writeoffs)
     .addColumn('material_id', 'integer', b =>
-      b.references('metal_pdo.materials.id').onDelete('cascade')
+      b.references('metal_flow.materials.id').onDelete('cascade')
     )
     .execute()
 
-  await db.schema.dropTable('metal_pdo.stock').ifExists().execute()
+  await db.schema.dropTable('metal_flow.stock').ifExists().execute()
 
   await sql`
-  drop function if exists metal_pdo.update_stock_on_writeoff cascade;
-  drop function if exists metal_pdo.update_stock_on_supply cascade;
+  drop function if exists metal_flow.update_stock_on_writeoff cascade;
+  drop function if exists metal_flow.update_stock_on_supply cascade;
   `.execute(db)
 
   await sql`
-    drop trigger if exists supplies_after_insert on metal_pdo.supplies cascade;
-    drop trigger if exists writeoffs_before_insert on metal_pdo.writeoffs cascade;  
+    drop trigger if exists supplies_after_insert on metal_flow.supplies cascade;
+    drop trigger if exists writeoffs_before_insert on metal_flow.writeoffs cascade;  
   `.execute(db)
 
   await sql`
-    drop table metal_pdo.writeoffs cascade;
+    drop table metal_flow.writeoffs cascade;
   `.execute(db)
 
   await sql`
-  create table metal_pdo.writeoffs (
+  create table metal_flow.writeoffs (
     id serial primary key,
-    material_id integer not null references metal_pdo.materials(id) on delete cascade,
+    material_id integer not null references metal_flow.materials(id) on delete cascade,
     date timestamptz not null,
     qty numeric not null,
     reason integer not null,
@@ -69,8 +69,8 @@ export const up = async (db: KDB) => {
 
   // add unique constraint to detain names
   await sql`
-    DELETE from metal_pdo.details;
-    CREATE UNIQUE INDEX detail_name_unique_idx ON metal_pdo.details (name);
+    DELETE from metal_flow.details;
+    CREATE UNIQUE INDEX detail_name_unique_idx ON metal_flow.details (name);
   `.execute(db)
 }
 

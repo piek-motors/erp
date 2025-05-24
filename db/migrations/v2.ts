@@ -12,10 +12,10 @@ export const up = async (db: KDB) => {
   await db.schema
     .createTable(tables.pdo.detail_materials)
     .addColumn('detail_id', 'integer', b =>
-      b.references('metal_pdo.details.id').onDelete('cascade')
+      b.references('metal_flow.details.id').onDelete('cascade')
     )
     .addColumn('material_id', 'integer', b =>
-      b.references('metal_pdo.materials.id').onDelete('cascade')
+      b.references('metal_flow.materials.id').onDelete('cascade')
     )
     .addPrimaryKeyConstraint('detail_materials_p_key', [
       'detail_id',

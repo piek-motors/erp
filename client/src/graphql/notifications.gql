@@ -1,32 +1,35 @@
 subscription GetNotifications($_eq: Int!, $limit: Int) {
-  erp_Notifications(
-    where: { MentionedUser: { _eq: $_eq } }
+  orders_notifications(
+    where: { user_id: { _eq: $_eq } }
     limit: $limit
-    order_by: { ID: desc }
+    order_by: { id: desc }
   ) {
-    ID
-    Viewed
-    Comment {
-      CommentID
-      Text
-      Timestamp
-      User {
-        UserID
-        FirstName
-        LastName
+    id
+    seen
+    comment {
+      id
+      text
+      created_at
+      user {
+        id
+        first_name
+        last_name
       }
     }
-    Order {
-      OrderID
-      City
-      Entity
+    order {
+      id
+      city
+      contractor
     }
   }
 }
 
-mutation UpdateViewed($ID: Int!, $Viewed: Boolean!) {
-  update_erp_Notifications_by_pk(pk_columns: { ID: $ID }, _set: { Viewed: $Viewed }) {
-    ID
-    Viewed
+mutation UpdateNotificationSeen($ID: Int!, $Seen: Boolean!) {
+  update_orders_notifications_by_pk(
+    pk_columns: { id: $ID }
+    _set: { seen: $Seen }
+  ) {
+    id
+    seen
   }
 }

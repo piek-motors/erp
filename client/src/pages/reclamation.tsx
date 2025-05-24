@@ -1,5 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { Box, Card, Stack, Typography } from '@mui/joy'
+import { Order, OrderStatus } from 'domain-model'
 import { AppRoutes } from 'lib/routes'
 import { useState } from 'react'
 import {
@@ -12,7 +13,6 @@ import {
   OnDragEndResponder
 } from 'react-beautiful-dnd'
 import { useNavigate } from 'react-router-dom'
-import { Order, OrderStatus } from 'domain-model'
 import { RouteConfig, TReclamationOrder } from 'types/global'
 import { PageTitle } from '../components'
 import { AddResourceButton, LoadingHint, Pre } from '../shortcuts'
@@ -68,11 +68,11 @@ const getOrderStatusByDroppableId = (
 ): number => {
   switch (droppableId) {
     case 'inbox':
-      return OrderStatus.reclInbox
+      return OrderStatus.ReclamationIncoming
     case 'decision':
-      return OrderStatus.reclDecision
+      return OrderStatus.ReclamationDecision
     case 'inproduction':
-      return OrderStatus.reclProduction
+      return OrderStatus.ReclamationInProduction
     default:
       throw Error('droppableId is not valid')
   }
@@ -120,12 +120,12 @@ function Reclamation(props: IReclamationProps) {
       const result = move(state[sInd], state[dInd], source, destination)
       setState({ ...state, ...result })
       const draggableElement: TReclamationOrder = state[sInd].find(
-        each => each.OrderID.toString() === draggableId
+        each => each.id.toString() === draggableId
       )!
       updateOrderStatus({
         variables: {
-          OrderID: draggableElement.OrderID,
-          OrderStatusID: getOrderStatusByDroppableId(dInd)
+          id: draggableElement.id,
+          status: getOrderStatusByDroppableId(dInd)
         }
       })
     }
@@ -221,8 +221,8 @@ function DroppableContainer({
           <Box ref={provided.innerRef} sx={{ height: '100%', width: '100%' }}>
             {data.map((item, index) => (
               <Draggable
-                key={item.OrderID.toString()}
-                draggableId={item.OrderID.toString()}
+                key={item.id.toString()}
+                draggableId={item.id.toString()}
                 index={index}
               >
                 {(provided, snapshot) => (
@@ -253,18 +253,18 @@ function ReclamationContainer() {
   const navigate = useNavigate()
   const [insertOrder] = useInsertOrderMutation({
     variables: {
-      orderStatusID: OrderStatus.reclInbox
+      status: OrderStatus.ReclamationIncoming
     }
   })
   async function handleAddOrder() {
     const res = await insertOrder()
-    const id = res.data?.insert_erp_Orders?.returning[0].OrderID
+    const id = res.data?.insert_orders_orders?.returning[0].id
     navigate(AppRoutes.order_detail + id + ' ?edit=true')
   }
   const { data, loading } = useGetReclamationOrdersQuery()
   const filterByStatus = (array: TReclamationOrder[], status: OrderStatus) => {
     if (!array) return []
-    return array.filter(each => each.OrderStatusID === status)
+    return array.filter(each => each.status === status)
   }
   return (
     <Stack p={1}>
@@ -277,16 +277,16 @@ function ReclamationContainer() {
         {data && (
           <Reclamation
             inbox={filterByStatus(
-              data?.erp_Orders || [],
-              OrderStatus.reclInbox
+              data?.orders_orders || [],
+              OrderStatus.ReclamationIncoming
             )}
             decision={filterByStatus(
-              data?.erp_Orders || [],
-              OrderStatus.reclDecision
+              data?.orders_orders || [],
+              OrderStatus.ReclamationDecision
             )}
             inproduction={filterByStatus(
-              data?.erp_Orders || [],
-              OrderStatus.reclProduction
+              data?.orders_orders || [],
+              OrderStatus.ReclamationInProduction
             )}
           />
         )}

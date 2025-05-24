@@ -1,32 +1,33 @@
 query AllOrdersPaymentsDataQuery {
-  erp_Orders(where: { OrderStatusID: { _eq: 3 } }, order_by: { OrderID: desc }) {
-    OrderID
-    PaidAmount
-    TotalAmount
+  orders_orders(where: { status: { _eq: 3 } }, order_by: { id: desc }) {
+    id
+    total_amount
   }
 }
 
 query UnpaidOrdersQuery($unpaidIDs: [Int!], $OrderStatus: Int!) {
-  erp_Orders(where: { OrderStatusID: { _eq: $OrderStatus }, OrderID: { _in: $unpaidIDs } }) {
-    OrderID
-    Entity
-    InvoiceNumber
-    City
-    OrderStatusID
-    ShippingDate
-    PaidAmount
-    TotalAmount
-    AwaitingDispatch
-    ActualShippingDate
-    CreatingDate
-    ManagerID
-    OrderItems {
-      Quantity
-      OrderItemID
-      Name
+  orders_orders(
+    where: { status: { _eq: $OrderStatus }, id: { _in: $unpaidIDs } }
+  ) {
+    id
+    contractor
+    invoice_number
+    city
+    status
+    shipping_date
+    total_amount
+    awaiting_dispatch
+    actual_shipping_date
+    created_at
+    manager_id
+    order_items {
+      id
+      quantity
+      name
     }
-    User {
-      FirstName
+    user {
+      first_name
+      last_name
     }
   }
 }

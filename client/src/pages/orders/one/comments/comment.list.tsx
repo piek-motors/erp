@@ -114,7 +114,7 @@ function InputForm({ insertComment, inputRef }: InputFormProps) {
         anchorEl={anchorULP}
         open={Boolean(anchorULP)}
         handleClose={handleCloseUserListPopover}
-        users={users?.erp_Users || []}
+        users={users?.users || []}
         inputRef={inputRef}
       />
       <Stack flexGrow={1}>
@@ -220,36 +220,36 @@ export function Comment({ data, userID }: ICommentProps) {
     })
   }
   function handleDelete() {
-    deleteMutation({ variables: { CommentID: data.CommentID } })
+    deleteMutation({ variables: { CommentID: data.id } })
   }
   function sender() {
-    return `${data.User.FirstName} ${data.User.LastName}`
+    return `${data.user.first_name} ${data.user.last_name}`
   }
 
   function timestamp() {
-    const date = moment(data.Timestamp)
+    const date = moment(data.created_at)
     return date.format('MMM D') + ' at ' + date.format('hh:mm')
   }
   function getCommentContent() {
-    const isYourComment = userID === data.User.UserID
+    const isYourComment = userID === data.user.id
     return isYourComment ? (
       <div
         style={{
           fontSize: '0.8rem'
         }}
         contentEditable="true"
-        key={data.CommentID}
+        key={data.id}
         suppressContentEditableWarning={true}
         onBlur={async e => {
-          await updateComment(data.CommentID, e.target.innerHTML)
+          await updateComment(data.id, e.target.innerHTML)
         }}
         onMouseLeave={async e => {
-          await updateComment(data.CommentID, e.currentTarget.innerHTML)
+          await updateComment(data.id, e.currentTarget.innerHTML)
         }}
-        dangerouslySetInnerHTML={{ __html: data.Text }}
+        dangerouslySetInnerHTML={{ __html: data.text }}
       />
     ) : (
-      <div dangerouslySetInnerHTML={{ __html: data.Text }} />
+      <div dangerouslySetInnerHTML={{ __html: data.text }} />
     )
   }
 
@@ -257,7 +257,7 @@ export function Comment({ data, userID }: ICommentProps) {
     <Observer
       render={() => {
         function actions() {
-          if (orderStore.editMode && userID === data.User.UserID)
+          if (orderStore.editMode && userID === data.user.id)
             return <DeleteResourceButton onClick={handleDelete} />
         }
 
@@ -299,9 +299,9 @@ export function CommentListViewPort({ user }: ICommentsListProps) {
 
   // Sort comments from oldest to newest
   const sortedComments =
-    data?.erp_Comments.sort(
+    data?.orders_comments.sort(
       (a, b) =>
-        new Date(a.Timestamp).getTime() - new Date(b.Timestamp).getTime()
+        new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
     ) || []
 
   // Always show the latest comments at the bottom
@@ -324,11 +324,7 @@ export function CommentListViewPort({ user }: ICommentsListProps) {
 
         {!loading &&
           commentsToShow.map(comment => (
-            <Comment
-              data={comment}
-              key={comment.CommentID}
-              userID={user.UserID}
-            />
+            <Comment data={comment} key={comment.id} userID={user.id} />
           ))}
       </Box>
     </Box>
@@ -344,7 +340,7 @@ export function CommentInputViewPort({ user }: ICommentsListProps) {
       <Box sx={{ overflow: 'scroll', py: 2 }}>
         <InputForm
           insertComment={async comment => {
-            insertComment(comment, orderId, user.UserID)
+            insertComment(comment, orderId, user.id)
           }}
           inputRef={inputRef}
         />

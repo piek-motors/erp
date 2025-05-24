@@ -1,8 +1,8 @@
 import { Box, Typography } from '@mui/joy'
 import { useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { Material } from '../../../../../domain-model/dist'
 import { useGetMaterialsQuery } from 'types/graphql-shema'
+import { Material } from '../../../../../domain-model/dist'
 import { map } from '../mappers'
 import { useStockStore } from '../stock'
 import { t } from '../text'
@@ -25,7 +25,7 @@ export function MaterialSelect(props: {
     if (data) {
       if (!materialid) return
 
-      const m = data?.metal_pdo_materials.find(each => each.id === +materialid)
+      const m = data?.metal_flow_materials.find(each => each.id === +materialid)
       if (!m) throw Error(`material with this id not found`)
 
       setMaterial(map.material.fromDto(m))

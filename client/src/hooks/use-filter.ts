@@ -1,5 +1,5 @@
-import { OrderStatus } from '../../../domain-model/dist'
 import { TOrderColumnData } from 'types/global'
+import { OrderStatus } from '../../../domain-model/dist'
 import keywordComparator from '../utils/comparators'
 
 interface UseApplyFiltersProps {
@@ -24,13 +24,13 @@ export function useFilter({ orders, options }: UseApplyFiltersProps) {
     byStatus: order => {
       if (!orderStatusId) return true
 
-      const isSuit = order.OrderStatusID === orderStatusId
+      const isSuit = order.status === orderStatusId
       return isSuit
     },
     byManager: order => {
       if (!managerId) return true
 
-      const isSuit = order.ManagerID === managerId
+      const isSuit = order.manager_id === managerId
       return isSuit
     },
     bySearch: order => {
@@ -38,8 +38,8 @@ export function useFilter({ orders, options }: UseApplyFiltersProps) {
 
       const isSuit = keywordComparator(
         searchKeyword,
-        order.InvoiceNumber?.toString() ?? '',
-        order.Entity ?? ''
+        order.invoice_number?.toString() ?? '',
+        order.contractor ?? ''
       )
       return isSuit
     }

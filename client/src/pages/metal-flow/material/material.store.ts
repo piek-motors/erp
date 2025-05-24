@@ -68,7 +68,7 @@ export class MaterialStore {
         query: gql.GetMaterialByPkDocument,
         variables: { id }
       })
-      const d = res.data?.metal_pdo_materials_by_pk
+      const d = res.data?.metal_flow_materials_by_pk
       if (!d) throw new Error('Material not found')
 
       const material = map.material.fromDto(d)
@@ -102,7 +102,7 @@ export class MaterialStore {
           }
         }
       })
-      const id = res.data?.insert_metal_pdo_materials_one?.id
+      const id = res.data?.insert_metal_flow_materials_one?.id
       if (id) {
         this.insertedMaterialId = id
         this.clear()

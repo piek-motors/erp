@@ -21,7 +21,7 @@ export function UserListPopover({
     handleClose()
     if (!inputRef.current) return
 
-    const user = users.find(e => e.UserID === user_id)
+    const user = users.find(e => e.id === user_id)
     const inputform = document.getElementById('Comments_InputForm')
 
     if (!user) throw Error('user is null')
@@ -30,8 +30,8 @@ export function UserListPopover({
     const elem = document.createElement('span')
     inputRef.current.innerText = inputRef.current?.innerText.slice(0, -1)
 
-    elem.innerHTML = '@' + [user.FirstName, user.LastName].join(' ') + ', '
-    elem.dataset.mentionedUser = user.UserID.toString()
+    elem.innerHTML = '@' + [user.first_name, user.last_name].join(' ') + ', '
+    elem.dataset.mentionedUser = user.id.toString()
     elem.contentEditable = 'false'
     inputform?.appendChild(elem)
 
@@ -51,8 +51,8 @@ export function UserListPopover({
     >
       {users &&
         users.map(user => (
-          <MenuItem key={user.UserID} onClick={() => handleClick(user.UserID)}>
-            {user.FirstName} {user.LastName}
+          <MenuItem key={user.id} onClick={() => handleClick(user.id)}>
+            {user.first_name} {user.last_name}
           </MenuItem>
         ))}
     </Menu>

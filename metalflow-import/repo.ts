@@ -14,7 +14,7 @@ export class Repo {
 
   async insertMaterials(materials: Material[]) {
     const lastId = await this.db
-      .selectFrom('metal_pdo.materials')
+      .selectFrom('metal_flow.materials')
       .select('id')
       .orderBy('id', 'desc')
       .limit(1)
@@ -33,14 +33,14 @@ export class Repo {
     }
 
     await this.db
-      .insertInto('metal_pdo.materials')
+      .insertInto('metal_flow.materials')
       .values(insertables)
       .execute()
   }
 
   async getAllMaterials(): Promise<Material[]> {
     const dbMaterials = await this.db
-      .selectFrom('metal_pdo.materials')
+      .selectFrom('metal_flow.materials')
       .selectAll()
       .execute()
 
@@ -56,8 +56,8 @@ export class Repo {
   }
 
   async dropDetailsTable() {
-    await this.db.deleteFrom('metal_pdo.detail_materials').execute()
-    await this.db.deleteFrom('metal_pdo.details').execute()
+    await this.db.deleteFrom('metal_flow.detail_materials').execute()
+    await this.db.deleteFrom('metal_flow.details').execute()
     log('details dropped')
   }
 
@@ -68,7 +68,7 @@ export class Repo {
     const filteredDetails = details.filter(detail => detail.name)
     if (!filteredDetails.length) return
     await this.db
-      .insertInto('metal_pdo.details')
+      .insertInto('metal_flow.details')
       .values(
         filteredDetails.map(detail => ({
           id: detail.id,
@@ -112,7 +112,7 @@ export class Repo {
 
     if (relations.length > 0) {
       await this.db
-        .insertInto('metal_pdo.detail_materials')
+        .insertInto('metal_flow.detail_materials')
         .values(relations)
         .execute()
     }

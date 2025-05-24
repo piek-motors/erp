@@ -31,7 +31,7 @@ function OrderDetail() {
 
   const { data, refetch } = useGetOrderByPkQuery({
     variables: {
-      OrderID: orderId
+      id: orderId
     }
   })
 
@@ -42,12 +42,12 @@ function OrderDetail() {
     noClick: true
   })
 
-  if (!data?.erp_Orders || !store.user?.UserID) return null
+  if (!data?.orders_orders || !store.user?.id) return null
   const p = 2
 
-  if (!data?.erp_Orders || !users?.erp_Users) return <>No data</>
-  const d_order = map.order.fromDto(data.erp_Orders[0])
-  const d_users = users?.erp_Users?.map(map.user.fromDto)
+  if (!data?.orders_orders || !users?.users) return <>No data</>
+  const d_order = map.order.fromDto(data.orders_orders[0])
+  const d_users = users?.users?.map(map.user.fromDto)
 
   return (
     <section {...getRootProps()} id="dropzone">

@@ -60,18 +60,19 @@ export type Employee =
   GetEmployeeListQuery['attendance_users_aggregate']['nodes'][number]
 
 export type TOrderItem =
-  GetOrderByPkQuery['erp_Orders'][number]['OrderItems'][number]
-export type TReclamationOrder = GetReclamationOrdersQuery['erp_Orders'][number]
+  GetOrderByPkQuery['orders_orders'][number]['order_items'][number]
+export type TReclamationOrder =
+  GetReclamationOrdersQuery['orders_orders'][number]
 
-export type TOrder = GetOrderByPkQuery['erp_Orders'][number]
+export type TOrder = GetOrderByPkQuery['orders_orders'][number]
 export type TOrderColumnData = OrderFragment
 
 export type TPaymentsHistory =
-  GetOrderByPkQuery['erp_Orders'][number]['PaymentHistories'][number]
-export type TComment = CommentsSubscription['erp_Comments'][number]
-export type TUser = GetAllUsersQuery['erp_Users'][number]
+  GetOrderByPkQuery['orders_orders'][number]['order_payments'][number]
+export type TComment = CommentsSubscription['orders_comments'][number]
+export type TUser = GetAllUsersQuery['users'][number]
 export type TNotification =
-  GetNotificationsSubscription['erp_Notifications'][number]
+  GetNotificationsSubscription['orders_notifications'][number]
 
 export interface RouteConfig {
   path: string

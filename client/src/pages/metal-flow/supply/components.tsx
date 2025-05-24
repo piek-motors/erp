@@ -4,7 +4,8 @@ import { UilTrash } from '@iconscout/react-unicons'
 import { Box, IconButton, Sheet, Stack } from '@mui/joy'
 import { PageTitle } from 'components'
 import { Table } from 'components/table.impl'
-import { openMetalFlowPage, MetalFlowRoutes } from 'lib/routes'
+import { Material } from 'domain-model'
+import { MetalFlowRoutes, openMetalFlowPage } from 'lib/routes'
 import { useState } from 'react'
 import { AddResourceButton, SendMutation } from 'shortcuts'
 import { useNotifier } from 'store/notifier.store'
@@ -13,7 +14,6 @@ import {
   useGetSuppliesQuery,
   useInsertMaterialSupplyMutation
 } from 'types/graphql-shema'
-import { Material } from 'domain-model'
 import { QtyInputWithUnit, SmallInputForm } from '../shared'
 import { MaterialSelect } from '../shared/material-select'
 import { useStockStore } from '../stock'
@@ -49,7 +49,7 @@ export function ListSupplies() {
         >
           <Table
             columns={getColumns({ key, setKey, refetch })}
-            data={data?.metal_pdo_supplies || []}
+            data={data?.metal_flow_supplies || []}
           />
         </Box>
       </Sheet>

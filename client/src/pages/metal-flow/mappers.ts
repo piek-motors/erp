@@ -8,7 +8,7 @@ import {
 import { GetDetailByPkQuery, GetMaterialByPkQuery } from 'types/graphql-shema'
 
 class MaterialMapper {
-  fromDto(dto: GetMaterialByPkQuery['metal_pdo_materials_by_pk']): Material {
+  fromDto(dto: GetMaterialByPkQuery['metal_flow_materials_by_pk']): Material {
     if (dto == null) {
       throw new Error('material mapper: empty dto passed')
     }
@@ -22,12 +22,14 @@ class MaterialMapper {
     if (!MaterialConstructor) {
       throw new Error('material mapper: material constructor not found')
     }
-    
+
     const material = new MaterialConstructor(dto.id)
     return material.load(dto.id, shapeData)
   }
 
-  convertable(dto: GetMaterialByPkQuery['metal_pdo_materials_by_pk']): boolean {
+  convertable(
+    dto: GetMaterialByPkQuery['metal_flow_materials_by_pk']
+  ): boolean {
     try {
       this.fromDto(dto)
       return true
@@ -40,7 +42,7 @@ class MaterialMapper {
 class DetailMapper {
   private materialMapper = new MaterialMapper()
 
-  fromDto(raw: GetDetailByPkQuery['metal_pdo_details_by_pk']): Detail | null {
+  fromDto(raw: GetDetailByPkQuery['metal_flow_details_by_pk']): Detail | null {
     if (!raw) return null
     const detailMaterials = new Map<
       Material,

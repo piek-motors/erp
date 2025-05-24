@@ -10,40 +10,42 @@ class AuthService {
         'x-hasura-allowed-roles': ['admin'],
         'x-hasura-default-role': 'admin'
       },
-      UserID: o.UserID,
-      FirstName: o.FirstName,
-      LastName: o.LastName,
-      Email: o.Email,
-      AccessLevelID: o.AccessLevelID
+      id: o.id,
+      first_name: o.first_name,
+      last_name: o.last_name,
+      email: o.email,
+      role: o.role
     }
   }
 
   async login(email: string, password: string) {
-    const users = (await database.AllUsersQuery()).erp_Users
-
-    const user = users.find(el => el.Email === email)
+    const users = (await database.AllUsersQuery()).users
+    const user = users.find(el => el.email === email)
 
     if (!user) {
       throw ApiError.UnauthorizedError(StaticStringKeys.INVALID_CREDENTIAL)
-    } else if (password !== user['Password']) {
+    } else if (password !== user.password) {
       throw ApiError.UnauthorizedError(StaticStringKeys.INVALID_CREDENTIAL)
     }
     ///нужно проверить есть ли просроченные токены у этого юзера
     const tokens = tokenService.generateTokens(this.formPayload(user))
 
     const userCredentials = {
-      UserID: user.UserID,
-      FirstName: user.FirstName,
-      LastName: user.LastName,
-      Email: user.Email,
-      AccessLevelID: user.AccessLevelID
+      id: user.id,
+      first_name: user.first_name,
+      last_name: user.last_name,
+      email: user.email,
+      role: user.role
     }
-    await database.InsertTokenMutation({ refreshToken: tokens.refreshToken, UserID: user.UserID })
+    await database.InsertTokenMutation({
+      token: tokens.refreshToken,
+      user_id: user.id
+    })
     return { ...tokens, user: userCredentials }
   }
 
   async logout(refreshToken: string): Promise<void> {
-    await database.DeleteTokenMutation({ refreshToken })
+    await database.DeleteTokenMutation({ token: refreshToken })
   }
 
   async refresh(refreshToken: string) {
@@ -62,8 +64,8 @@ class AuthService {
     const newTokens = tokenService.generateTokens(user)
 
     await database.UpdateTokenMutation({
-      refreshToken: newTokens.refreshToken,
-      tokenID: tokenFromDb.ID
+      token: newTokens.refreshToken,
+      token_id: tokenFromDb.id
     })
 
     return { ...newTokens, user }

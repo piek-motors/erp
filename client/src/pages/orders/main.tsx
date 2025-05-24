@@ -3,7 +3,7 @@ import { Box, Sheet, Stack } from '@mui/joy'
 import { ManagerFilter, PageTitle, Search } from 'components'
 import { OrderTypeFilter } from 'components/order-type-filter'
 import { TableName } from 'components/table-name'
-import { EnOrderStatus, OrderStatus } from 'domain-model'
+import { EnOrderStatus } from 'domain-model'
 import { useFilter } from 'hooks'
 import { SxProperty } from 'lib/constants'
 import { ListOrdersRoutes } from 'lib/routes'
@@ -27,11 +27,11 @@ function PriorityList() {
   const store = useOrderListPageStore()
   const { data } = useGetOrdersByStatusQuery({
     variables: {
-      orderStatus: EnOrderStatus.Production
+      order_status: EnOrderStatus.Production
     }
   })
   const orders = useFilter({
-    orders: data?.erp_Orders || [],
+    orders: data?.orders_orders || [],
     options: {
       managerId: store.managerId,
       searchKeyword: store.searchTerm
@@ -61,11 +61,11 @@ function RegistrationList() {
   const store = useOrderListPageStore()
   const { data } = useGetOrdersByStatusQuery({
     variables: {
-      orderStatus: EnOrderStatus.Registration
+      order_status: EnOrderStatus.Registration
     }
   })
   const orders = useFilter({
-    orders: data?.erp_Orders || [],
+    orders: data?.orders_orders || [],
     options: {
       managerId: store.managerId,
       searchKeyword: store.searchTerm
@@ -90,20 +90,20 @@ function RegistrationList() {
 
 function NewOrderList() {
   const { data } = useGetOrdersByStatusQuery({
-    variables: { orderStatus: OrderStatus.ordProduction }
+    variables: { order_status: EnOrderStatus.Production }
   })
 
   const ordersByToday =
-    data?.erp_Orders.filter(
+    data?.orders_orders.filter(
       each =>
-        formatOnlyDate(each.AcceptanceDate) ===
+        formatOnlyDate(each.acceptance_date) ===
         formatOnlyDate(moment().toISOString())
     ) || []
 
   const ordersByYesterday =
-    data?.erp_Orders.filter(
+    data?.orders_orders.filter(
       each =>
-        formatOnlyDate(each.AcceptanceDate) ===
+        formatOnlyDate(each.acceptance_date) ===
         formatOnlyDate(moment().subtract(1, 'day').toISOString())
     ) || []
 
@@ -131,11 +131,11 @@ function Archive() {
   const { data } = useGetOrdersArchivedBySearchKeywordQuery({
     variables: {
       keyword: keyword(),
-      OrderStatus: store.orderStatusId
+      order_status: store.orderStatusId
     }
   })
   const orders = useFilter({
-    orders: data?.erp_Orders || [],
+    orders: data?.orders_orders || [],
     options: {
       managerId: store.managerId,
       orderStatusId: store.orderStatusId
@@ -166,7 +166,7 @@ function Wrapper(props: { children: React.ReactNode; sx?: SxProperty }) {
   const navigate = useNavigate()
   const [insertOrderMutation] = useInsertOrderMutation({
     variables: {
-      orderStatusID: OrderStatus.ordRegistration
+      status: EnOrderStatus.Registration
     }
   })
 
@@ -174,7 +174,7 @@ function Wrapper(props: { children: React.ReactNode; sx?: SxProperty }) {
   function insertOrderHandler() {
     insertOrderMutation().then(res => {
       navigate(
-        `/order/${res.data?.insert_erp_Orders?.returning[0].OrderID}?edit=true`
+        `/order/${res.data?.insert_orders_orders?.returning[0].id}?edit=true`
       )
     })
   }

@@ -49,9 +49,11 @@ export function UpdatePositionBtn({ refetch }: IDialogEditOrderItemProps) {
     updateMutation({
       variables: {
         id: orderItem.id,
-        Name: orderItem.name ?? '',
-        Quantity: orderItem.quantity,
-        FullName: orderItem.description ?? ''
+        _set: {
+          name: orderItem.name ?? '',
+          quantity: orderItem.quantity,
+          description: orderItem.description ?? ''
+        }
       },
       onCompleted() {
         setState(defaultState)
@@ -67,10 +69,10 @@ export function UpdatePositionBtn({ refetch }: IDialogEditOrderItemProps) {
 
     insertMutation({
       variables: {
-        orderID: orderId,
+        order_id: orderId,
         name: orderItem.name,
         quantity: orderItem.quantity,
-        fullName: orderItem.description ?? ''
+        description: orderItem.description ?? ''
       },
       onCompleted() {
         setState(defaultState)

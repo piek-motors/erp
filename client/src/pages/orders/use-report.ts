@@ -1,5 +1,5 @@
-import moment from 'moment'
 import { useFilter } from 'hooks'
+import moment from 'moment'
 import { useGetOrdersArchivedByIntervalQuery } from 'types/graphql-shema'
 import { useOrderListPageStore } from './state'
 
@@ -33,7 +33,7 @@ export function useReport() {
   })
 
   const ordersCurrentMonthFiltered = useFilter({
-    orders: ordersCurrentMounth?.erp_Orders || [],
+    orders: ordersCurrentMounth?.orders_orders || [],
     options: {
       managerId: store.managerId,
       searchKeyword: store.searchTerm
@@ -41,7 +41,7 @@ export function useReport() {
   })
 
   const ordersAccountingMonthFiltered = useFilter({
-    orders: ordersAccountingMonth?.erp_Orders || [],
+    orders: ordersAccountingMonth?.orders_orders || [],
     options: {
       managerId: store.managerId,
       searchKeyword: store.searchTerm

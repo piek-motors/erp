@@ -35,7 +35,7 @@ export function Paymnets({ data }: { data: Order }) {
   async function handleDelete(ID: number) {
     await deletePayment({
       variables: {
-        ID
+        id: ID
       }
     })
 
@@ -50,7 +50,7 @@ export function Paymnets({ data }: { data: Order }) {
 
   const paymentHistoryContent = data.totalAmount ? (
     <PaymentsTable
-      data={payments?.erp_PaymentHistory || []}
+      data={payments?.orders_order_payments || []}
       onDelete={ID => handleDelete(ID)}
       totalAmount={data.totalAmount}
       footerComponent={
@@ -81,7 +81,7 @@ export function Paymnets({ data }: { data: Order }) {
 
 const PaymentsTable = observer(
   (props: {
-    data: GetOrderPaymentsQuery['erp_PaymentHistory']
+    data: GetOrderPaymentsQuery['orders_order_payments']
     totalAmount: number
     onDelete?: (ID: number) => void
     footerComponent: JSX.Element
@@ -89,7 +89,7 @@ const PaymentsTable = observer(
     const { totalAmount } = props
 
     const totalPaid = props.data.reduce((acc, payment) => {
-      return acc + payment.PaidAmount
+      return acc + payment.amount
     }, 0)
 
     const totalPaidPercent = formatter.percentage(totalPaid, totalAmount)
@@ -112,10 +112,10 @@ const PaymentsTable = observer(
         >
           <tbody>
             {props.data.map(payment => (
-              <tr key={payment.ID}>
-                <td>{formatter.percentage(payment.PaidAmount, totalAmount)}</td>
-                <td>{formatter.money(payment.PaidAmount)}</td>
-                <td>{formatter.formatOnlyDate(payment.Date)}</td>
+              <tr key={payment.id}>
+                <td>{formatter.percentage(payment.amount, totalAmount)}</td>
+                <td>{formatter.money(payment.amount)}</td>
+                <td>{formatter.formatOnlyDate(payment.date)}</td>
               </tr>
             ))}
           </tbody>
@@ -162,9 +162,9 @@ function NewPaymentInput(props: NewPaymentInputProps) {
     }
     await insertPayment({
       variables: {
-        Date: moment(data.date).toISOString(),
-        OrderID: props.order.id,
-        PaidAmount: data.amount
+        date: moment(data.date).toISOString(),
+        order_id: props.order.id,
+        amount: data.amount
       }
     })
 

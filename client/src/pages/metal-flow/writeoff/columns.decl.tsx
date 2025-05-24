@@ -1,12 +1,12 @@
+import { EnWriteoffType, uiUnit, uiWriteoffReason } from 'domain-model'
 import { Column } from 'react-table'
-import { formatDateWithTime } from 'utils/formatting'
 import { GetWrietOffsQuery } from 'types/graphql-shema'
+import { formatDateWithTime } from 'utils/formatting'
 import { map } from '../mappers'
 import { ResourceName } from '../shared/material-name'
 import { t } from '../text'
 import { DeleteWrireOff } from './components'
-import { EnWriteoffType, uiUnit, uiWriteoffReason } from 'domain-model'
-export type SupplyDto = GetWrietOffsQuery['metal_pdo_writeoffs'][number]
+export type SupplyDto = GetWrietOffsQuery['metal_flow_writeoffs'][number]
 
 export function getColumns(props: {
   key: number

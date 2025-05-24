@@ -6,7 +6,7 @@ import {
   InsertMaterialWriteoffDocument,
   InsertMaterialWriteoffMutation,
   InsertMaterialWriteoffMutationVariables,
-  Metal_Pdo_Writeoffs_Insert_Input
+  Metal_Flow_Writeoffs_Insert_Input
 } from 'types/graphql-shema'
 import { IWriteOff } from './state'
 
@@ -26,7 +26,7 @@ export const handleSubmit = async (state: IWriteOff) => {
       variables: { id: typeData.detailId }
     })
 
-    const d = detail.data.metal_pdo_details_by_pk
+    const d = detail.data.metal_flow_details_by_pk
     if (!d) throw Error('Detail not found')
 
     // const materialCostInBaseUnit = new Detail(
@@ -72,7 +72,7 @@ export const handleSubmit = async (state: IWriteOff) => {
 }
 
 function insert(
-  data: Metal_Pdo_Writeoffs_Insert_Input | Metal_Pdo_Writeoffs_Insert_Input[]
+  data: Metal_Flow_Writeoffs_Insert_Input | Metal_Flow_Writeoffs_Insert_Input[]
 ) {
   return apolloClient.mutate<
     InsertMaterialWriteoffMutation,

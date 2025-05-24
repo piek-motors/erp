@@ -2,18 +2,18 @@
 import styled from '@emotion/styled'
 import { UilArrowRight } from '@iconscout/react-unicons'
 import { Box, Button, Container, Sheet, Stack, Typography } from '@mui/joy'
+import { openOrderDetailPage } from 'lib/routes'
 import moment from 'moment'
 import { useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { TNotification } from 'types/global'
 import {
   useGetNotificationsSubscription,
-  useUpdateViewedMutation
+  useUpdateNotificationSeenMutation
 } from 'types/graphql-shema'
 import { Context } from '..'
 import { PageTitle } from '../components'
 import { Row, UseIcon } from '../shortcuts'
-import { openOrderDetailPage } from 'lib/routes'
 
 interface INotificationProps {
   data: any
@@ -22,7 +22,7 @@ interface INotificationProps {
 
 function Mention({ data, readed }: INotificationProps) {
   const navigate = useNavigate()
-  const [updateViewedMutration] = useUpdateViewedMutation()
+  const [updateViewedMutration] = useUpdateNotificationSeenMutation()
 
   const Body = styled.div`
     a,
@@ -36,7 +36,7 @@ function Mention({ data, readed }: INotificationProps) {
 
   function toOrderDetailPageHandler() {
     navigate(openOrderDetailPage(data.Order.OrderID))
-    updateViewedMutration({ variables: { ID: data.ID, Viewed: true } })
+    updateViewedMutration({ variables: { ID: data.ID, Seen: true } })
   }
 
   return (
@@ -99,11 +99,11 @@ export function MentionList() {
     onData(options) {
       if (!options.data.data) throw Error(options.data.error?.stack)
 
-      const data = options.data.data.erp_Notifications
+      const data = options.data.data.orders_notifications
 
       setNotifications({
-        unviewed: data.filter(e => !e.Viewed),
-        viewed: data.filter(e => e.Viewed)
+        unviewed: data.filter(e => !e.seen),
+        viewed: data.filter(e => e.seen)
       })
     },
     variables: {

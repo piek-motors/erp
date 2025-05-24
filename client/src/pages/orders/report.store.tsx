@@ -57,7 +57,7 @@ class ReportPageStore {
         console.error('Error fetching orders:', res.errors)
         this.data = []
       } else {
-        this.data = res.data?.erp_Orders || []
+        this.data = res.data?.orders_orders || []
         this.dataLabel = `Отгруженные заказы за ${this.monthSelect.getMonthLabel()}`
       }
     } catch (error) {

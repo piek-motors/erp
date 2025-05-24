@@ -1,5 +1,5 @@
-import { ChangeEvent } from 'react'
 import { OrderStatus } from 'domain-model'
+import { ChangeEvent } from 'react'
 import { create } from 'zustand'
 
 interface IOrderListPageStore {
@@ -14,7 +14,7 @@ interface IOrderListPageStore {
 
 export const useOrderListPageStore = create<IOrderListPageStore>(set => ({
   managerId: 0,
-  orderStatusId: OrderStatus.ordArchived,
+  orderStatusId: OrderStatus.Archived,
   searchTerm: '',
   orderTypeFilterHandler(e) {
     set({ orderStatusId: e.target.value as unknown as OrderStatus })
