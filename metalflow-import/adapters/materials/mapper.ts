@@ -1,22 +1,11 @@
 import { plainToInstance } from 'class-transformer'
+import { DB } from 'db'
+import * as dm from 'domain-model'
 import type { Generated } from 'kysely'
-import {
-  EnMaterialShape,
-  List,
-  ListShapeData,
-  Material,
-  Pipe,
-  PipeShapeData,
-  RoundBar,
-  RoundBarShapeData,
-  SquareBar,
-  SquareBarShapeData
-} from 'domain-model'
-import type { DB } from '../../../db/schema.js'
 import { extractShapeData } from './guards.js'
 
 export class MaterialMapper {
-  toPersistence(material: Material): DB.MaterialTable {
+  toPersistence(material: dm.Material): DB.MaterialTable {
     return {
       id: material.id as unknown as Generated<number>,
       unit: material.unit,
@@ -27,30 +16,33 @@ export class MaterialMapper {
     }
   }
 
-  fromPersistence(data: DB.MaterialTable): Material {
+  fromPersistence(data: DB.MaterialTable): dm.Material {
     const raw = data.shape_data
     switch (data.shape) {
-      case EnMaterialShape.RoundBar:
+      case dm.EnMaterialShape.RoundBar:
         return this.createRoundBar(
           data.id,
-          plainToInstance(RoundBarShapeData, raw)
+          plainToInstance(dm.RoundBarShapeData, raw)
         )
-      case EnMaterialShape.List:
-        return this.createList(data.id, plainToInstance(ListShapeData, raw))
-      case EnMaterialShape.Pipe:
-        return this.createPipe(data.id, plainToInstance(PipeShapeData, raw))
-      case EnMaterialShape.SquareBar:
+      case dm.EnMaterialShape.List:
+        return this.createList(data.id, plainToInstance(dm.ListShapeData, raw))
+      case dm.EnMaterialShape.Pipe:
+        return this.createPipe(data.id, plainToInstance(dm.PipeShapeData, raw))
+      case dm.EnMaterialShape.SquareBar:
         return this.createSquareBar(
           data.id,
-          plainToInstance(SquareBarShapeData, raw)
+          plainToInstance(dm.SquareBarShapeData, raw)
         )
       default:
         throw new Error(`Unsupported material shape: ${data.shape}`)
     }
   }
 
-  createRoundBar(id: Generated<number>, data: RoundBarShapeData): Material {
-    const material = new RoundBar(Number(id))
+  createRoundBar(
+    id: Generated<number>,
+    data: dm.RoundBarShapeData
+  ): dm.Material {
+    const material = new dm.RoundBar(Number(id))
     material.diameter = data.diameter
     material.alloy = data.alloy
     material.calibrated = data.calibrated
@@ -59,24 +51,27 @@ export class MaterialMapper {
     return material
   }
 
-  createList(id: Generated<number>, data: ListShapeData): Material {
-    const material = new List(Number(id))
+  createList(id: Generated<number>, data: dm.ListShapeData): dm.Material {
+    const material = new dm.List(Number(id))
     material.thickness = data.thickness
     material.alloy = data.alloy
     if (data.width) material.width = data.width
     return material
   }
 
-  createPipe(id: Generated<number>, data: PipeShapeData): Material {
-    const material = new Pipe(Number(id))
+  createPipe(id: Generated<number>, data: dm.PipeShapeData): dm.Material {
+    const material = new dm.Pipe(Number(id))
     material.diameter = data.diameter
     material.alloy = data.alloy
     material.thickness = data.thickness
     return material
   }
 
-  createSquareBar(id: Generated<number>, data: SquareBarShapeData): Material {
-    const material = new SquareBar(Number(id))
+  createSquareBar(
+    id: Generated<number>,
+    data: dm.SquareBarShapeData
+  ): dm.Material {
+    const material = new dm.SquareBar(Number(id))
     material.length = data.length
     material.alloy = data.alloy
     return material

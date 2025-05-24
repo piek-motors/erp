@@ -28,6 +28,7 @@ class _UserController {
 
       return res.json(userCredentials)
     } catch (e) {
+      console.log(e)
       next(e)
     }
   }

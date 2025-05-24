@@ -1,6 +1,5 @@
-import { createRequire } from 'node:module'
-const require = createRequire(import.meta.url)
-require('dotenv').config({ path: require('find-config')('.env') })
+import dotenv from 'dotenv'
+dotenv.config({ path: '../.env' })
 
 function validate<T>(config: T): T {
   for (const [key, value] of Object.entries(config)) {

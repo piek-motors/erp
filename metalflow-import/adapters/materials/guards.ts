@@ -1,37 +1,25 @@
-import {
-  EnMaterialShape,
-  List,
-  ListShapeData,
-  Material,
-  Pipe,
-  PipeShapeData,
-  RoundBar,
-  RoundBarShapeData,
-  SquareBar,
-  SquareBarShapeData,
-  type ShapeDataUnion
-} from 'domain-model'
 import { plainToInstance } from 'class-transformer'
+import * as dm from 'domain-model'
 
-export function isRoundBar(material: Material): material is RoundBar {
-  return material.shape === EnMaterialShape.RoundBar
+export function isRoundBar(material: dm.Material): material is dm.RoundBar {
+  return material.shape === dm.EnMaterialShape.RoundBar
 }
 
-export function isList(material: Material): material is List {
-  return material.shape === EnMaterialShape.List
+export function isList(material: dm.Material): material is dm.List {
+  return material.shape === dm.EnMaterialShape.List
 }
 
-export function isPipe(material: Material): material is Pipe {
-  return material.shape === EnMaterialShape.Pipe
+export function isPipe(material: dm.Material): material is dm.Pipe {
+  return material.shape === dm.EnMaterialShape.Pipe
 }
 
-export function isSquareBar(material: Material): material is SquareBar {
-  return material.shape === EnMaterialShape.SquareBar
+export function isSquareBar(material: dm.Material): material is dm.SquareBar {
+  return material.shape === dm.EnMaterialShape.SquareBar
 }
 
-export function extractShapeData(material: Material): ShapeDataUnion {
+export function extractShapeData(material: dm.Material): dm.ShapeDataUnion {
   if (isRoundBar(material)) {
-    return plainToInstance(RoundBarShapeData, {
+    return plainToInstance(dm.RoundBarShapeData, {
       diameter: material.diameter,
       alloy: material.alloy,
       calibrated: material.calibrated,
@@ -40,21 +28,21 @@ export function extractShapeData(material: Material): ShapeDataUnion {
     })
   }
   if (isList(material)) {
-    return plainToInstance(ListShapeData, {
+    return plainToInstance(dm.ListShapeData, {
       thickness: material.thickness,
       alloy: material.alloy,
       width: material.width
     })
   }
   if (isPipe(material)) {
-    return plainToInstance(PipeShapeData, {
+    return plainToInstance(dm.PipeShapeData, {
       diameter: material.diameter,
       alloy: material.alloy,
       thickness: material.thickness
     })
   }
   if (isSquareBar(material)) {
-    return plainToInstance(SquareBarShapeData, {
+    return plainToInstance(dm.SquareBarShapeData, {
       length: material.length,
       alloy: material.alloy
     })

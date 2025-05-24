@@ -1,7 +1,7 @@
+import { DB } from 'db'
 import { Detail, EnMaterialShape, Material } from 'domain-model'
 import type { Insertable, Kysely } from 'kysely'
 import { log } from 'node:console'
-import type { DB } from '../db/schema'
 import { MaterialFactory } from './adapters/materials/factory'
 import { MaterialMapper } from './adapters/materials/mapper'
 

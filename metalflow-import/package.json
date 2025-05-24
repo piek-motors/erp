@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "main": "index.js",
   "type": "module",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "start": "node --experimental-transform-types ./main.ts"
+  },
   "dependencies": {
     "class-transformer": "^0.5.1",
     "csv": "^6.3.11",
@@ -10,12 +14,7 @@
     "domain-model": "workspace:*",
     "kysely": "^0.27.6",
     "pg": "^8.14.1",
-    "typescript": "^5.8.3",
     "yaml": "^2.7.1"
-  },
-  "scripts": {
-    "build": "tsc -p tsconfig.json",
-    "start": "node --experimental-transform-types ./main.ts"
   },
   "author": "",
   "license": "ISC",

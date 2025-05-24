@@ -5,10 +5,10 @@ import { database } from '../lib/graphql-client.ts'
 class TokenService {
   generateTokens(payload: any) {
     const accessToken = jwt.sign(payload, config.JWT_ACCESS_SECRET, {
-      expiresIn: +config.JWT_ACCESS_SECRET_EXPIRES
+      expiresIn: config.JWT_ACCESS_SECRET_EXPIRES
     })
     const refreshToken = jwt.sign(payload, config.JWT_REFRESH_SECRET, {
-      expiresIn: +config.JWT_REFRESH_SECRET_EXPIRES
+      expiresIn: config.JWT_REFRESH_SECRET_EXPIRES
     })
     return {
       accessToken,
