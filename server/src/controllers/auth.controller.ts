@@ -9,11 +9,17 @@ class _UserController {
     try {
       const errors = validationResult(req)
 
-      if (!errors.isEmpty() && errors.array().every(each => each.param == 'email')) {
+      if (
+        !errors.isEmpty() &&
+        errors.array().every(each => (each as any).param == 'email')
+      ) {
         throw ApiError.BadRequest(StaticStringKeys.INVALID_EMAIL)
       }
 
-      const userCredentials = await AuthService.login(req.body.email, req.body.password)
+      const userCredentials = await AuthService.login(
+        req.body.email,
+        req.body.password
+      )
 
       res.cookie('refreshToken', userCredentials.refreshToken, {
         maxAge: 30 * 24 * 60 * 60 * 1000,

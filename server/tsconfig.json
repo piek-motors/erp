@@ -97,12 +97,10 @@
   },
   "exclude": [
     "./dist/**/*",
-    "node_modules"
+    "node_modules",
+    "generated",
   ],
   "include": [
     "./src/**/*",
-    "./migrations/**/*",
-    "src/db/schema.ts",
-    "./generated/**/*"
  ],
 }

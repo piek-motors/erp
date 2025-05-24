@@ -59,7 +59,7 @@ class AuthService {
       throw ApiError.UnauthorizedError('sdf')
     }
 
-    const user = this.formPayload(tokenFromDb.User)
+    const user = this.formPayload(tokenFromDb.user)
 
     const newTokens = tokenService.generateTokens(user)
 

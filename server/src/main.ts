@@ -26,7 +26,9 @@ app.use(
   })
 )
 app.use('/api', router)
-app.use(errorMiddleware)
+app.use((err, req, res, next) => {
+  errorMiddleware(err, req, res, next)
+})
 
 // All remaining requests return the React app, so it can handle routing.
 app.get('*', function (request, response) {

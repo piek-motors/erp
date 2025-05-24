@@ -18,7 +18,7 @@ class _S3Controller {
       const key = req.params.key
 
       const data = await S3Service.deleteObject(key, config.S3_BUCKET).then(async s3_responce => {
-        return await database.DeleteDocsMutation({ Key: key })
+        return await database.DeleteDocsMutation({ key })
       })
 
       res.json(data)
@@ -45,15 +45,16 @@ class _S3Controller {
     }
 
     try {
-      const array_of_files = req.files.map(each => ({
-        Key: each.key,
-        OrderID: parseInt(req.headers.orderid),
-        FileName: each.originalname,
-        Size: each.size
-      }))
-
-      const data = (await database.InsertDocsArrayMutation({ objects: array_of_files }))
-        .insert_erp_Docs.returning
+      const data = (
+        await database.InsertDocsArrayMutation({
+          objects: req.files.map(each => ({
+            key: each.key,
+            order_id: parseInt(req.headers.orderid),
+            filename: each.originalname,
+            size: each.size
+          }))
+        })
+      ).insert_orders_attachments.returning
 
       res.send(data)
     } catch (error) {
