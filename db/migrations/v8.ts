@@ -1,6 +1,10 @@
 import { type KDB } from '../schema'
 
 export const up = async (db: KDB) => {
+  await db.schema
+    .alterTable('erp.Users')
+    .dropConstraint('Users_AccessLevelID_fkey')
+    .execute()
   await db.schema.dropTable('erp.AccessLevels').ifExists().execute()
   await db.schema
     .alterTable('erp.Orders')

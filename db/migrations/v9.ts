@@ -5,7 +5,7 @@ export const up = async (db: KDB) => {
   await db.schema.alterTable('erp.users').setSchema('public').execute()
   await db.schema.alterTable('erp.refresh_tokens').setSchema('public').execute()
   await sql`ALTER SCHEMA erp RENAME TO orders`.execute(db)
-  await sql`ALTER SCHEMA metal_flow RENAME TO metal_flow`.execute(db)
+  await sql`ALTER SCHEMA metal_pdo RENAME TO metal_flow`.execute(db)
 
   await db.schema
     .alterTable('public.users')
