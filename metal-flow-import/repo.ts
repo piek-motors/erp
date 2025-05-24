@@ -55,9 +55,10 @@ export class Repo {
     })
   }
 
-  async dropDetailsTable() {
+  async drop() {
     await this.db.deleteFrom('metal_flow.detail_materials').execute()
     await this.db.deleteFrom('metal_flow.details').execute()
+    await this.db.deleteFrom('metal_flow.materials').execute()
     log('details dropped')
   }
 

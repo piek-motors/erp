@@ -1,5 +1,20 @@
 import { assert } from 'console'
-import { List, Material, Pipe, RoundBar, SquareBar } from 'domain-model'
+import { CsvIO } from 'csv-io'
+import {
+  EnMaterialShape,
+  getMaterialConstructor,
+  List,
+  Material,
+  Pipe,
+  RoundBar,
+  SquareBar
+} from 'domain-model'
+import path from 'node:path'
+import { Repo } from 'repo'
+
+const materialsCsvPath = path.resolve(
+  path.join(__dirname, 'data', 'materials.csv')
+)
 
 // Material name parser of the details table
 export class MaterialParser {
@@ -125,5 +140,50 @@ export class MaterialParser {
       throw new Error(`diameter is NaN, name: ${name}`)
     }
     return circle
+  }
+}
+
+export class MaterialsSyncer {
+  constructor(private readonly repo: Repo) {}
+
+  async sync() {
+    const materials = await this.getMaterialsForSync()
+    await this.repo.insertMaterials(materials)
+  }
+
+  async getMaterialsForSync() {
+    const table = CsvIO.read(materialsCsvPath)
+    const materials: Material[] = []
+
+    for (const row of table) {
+      const id = parseInt(row[0])
+      const name = row[1]
+      const density = parseFloat(row[3])
+      const linearMass = parseFloat(row[5].replace(',', '.'))
+
+      const nameSplited = name.split('ф')
+      if (nameSplited.length < 2) continue
+
+      const namespl = nameSplited[1].split(' ').filter(Boolean)
+
+      const diameter = parseFloat(namespl[0].split(',')[0])
+      const alloy = `${namespl[1]} ${namespl[2]}`
+      const isCalibrated = name.includes('калибровка')
+
+      const MaterialConstructor = getMaterialConstructor(
+        EnMaterialShape.RoundBar
+      )
+      const material = new MaterialConstructor(id)
+      material.load(id, {
+        diameter,
+        alloy,
+        calibrated: isCalibrated,
+        density,
+        linearMass
+      })
+      materials.push(material)
+    }
+
+    return materials
   }
 }
