@@ -35,9 +35,7 @@ function Settings() {
       <Typography>
         {store.user?.first_name} {store.user?.last_name}
       </Typography>
-      <Typography>
-        Уровень доступа: {(store.user as any).AccessLevelID}
-      </Typography>
+      <Typography>Уровень доступа: {(store.user as any).role}</Typography>
       <Typography> Email: {(store.user as any).Email}</Typography>
       <Typography level="body-sm">
         Data provider: https://{process.env.REACT_APP_HASURA_ENDPOINT}

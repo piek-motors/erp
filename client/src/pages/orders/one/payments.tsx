@@ -46,7 +46,7 @@ export function Paymnets({ data }: { data: Order }) {
     Roles.general,
     Roles.management,
     Roles.bookkeeping
-  ].includes(store?.user?.AccessLevelID)
+  ].includes(store?.user?.role)
 
   const paymentHistoryContent = data.totalAmount ? (
     <PaymentsTable
