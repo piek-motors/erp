@@ -1,12 +1,10 @@
 import axios from 'axios'
 import { makeAutoObservable } from 'mobx'
-import React from 'react'
-import { AppColorTheme, TUser } from 'types/global'
+import { TUser } from 'types/global'
 import { API_URL } from '../api/axios'
 import { AuthService } from '../services/auth.service'
 
-
-export class Store {
+export class GlobalStore {
   user: TUser | null = null
   isLoading = false
   inMemoryToken: string | undefined | null = undefined
@@ -15,7 +13,7 @@ export class Store {
     makeAutoObservable(this)
   }
 
-  setUser(user: typeof Store.prototype.user) {
+  setUser(user: typeof GlobalStore.prototype.user) {
     this.user = user
   }
 

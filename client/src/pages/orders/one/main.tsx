@@ -2,7 +2,7 @@
 import { useAppContext } from 'hooks'
 import { AppRoutes } from 'lib/routes'
 import { map } from 'pages/orders/mappers'
-import { docsStore } from 'pages/orders/one/docs.store'
+import { docsStore } from 'pages/orders/one/attachments/attachments.store'
 import { DesktopLayout } from 'pages/orders/one/layouts/desktop'
 import { PrintLayout } from 'pages/orders/one/layouts/print'
 import { useOrderDetailStore } from 'pages/orders/one/state'

@@ -6,14 +6,14 @@ import { InputFiles } from 'components/input-files'
 import { User } from 'domain-model'
 import { Order } from 'domain-model/dist/domain/orders/order'
 import { observer, Observer } from 'mobx-react-lite'
-import { docsStore } from 'pages/orders/one/docs.store'
+import { Attachments } from 'pages/orders/one/attachments/attachments'
+import { docsStore } from 'pages/orders/one/attachments/attachments.store'
 import { bgcolors, Chip, Row, text } from 'shortcuts'
 import { orderStatus } from 'utils/orderColorIndication'
 import {
   CommentInputViewPort,
   CommentListViewPort
 } from './comments/comment.list'
-import { Docs } from './docs'
 import { OrderActions } from './header'
 import { orderStore } from './order.store'
 import { Paymnets } from './payments'
@@ -80,7 +80,7 @@ export const OrderInfoSection = ({ order, refetch, users }) => (
 // Component for the documents section
 export const OrderDocsSection = observer(({ order }: { order: Order }) => (
   <>
-    <Docs orderId={order.id} />
+    <Attachments orderId={order.id} />
     <InputFiles
       size="sm"
       variant="outlined"

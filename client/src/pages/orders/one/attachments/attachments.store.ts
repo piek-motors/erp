@@ -10,7 +10,6 @@ import {
   GetOrderAttachmentsQueryVariables
 } from 'types/graphql-shema'
 
-
 type UploadFileResp = {
   filename: string
   id: number
@@ -23,17 +22,13 @@ class DocsState {
   files: OrderAttachment[] = []
   uploading: boolean = false
   editState: boolean = false
-
   uploadingFiles: File[] = []
-
   constructor() {
     makeAutoObservable(this)
   }
-
   setUploadingFiles(files: File[]) {
     this.uploadingFiles = files
   }
-
   setFiles(files: OrderAttachment[]) {
     this.files = files
   }
@@ -59,7 +54,8 @@ class DocsState {
   }
 
   async deleteFile(file: OrderAttachment) {
-    await FileService.deleteFile(file.key!)
+    await FileService.deleteFile(file.key)
+    this.setFiles(this.files.filter(f => f.key !== file.key))
   }
 
   async fetchAttachments(orderId: number) {
@@ -72,7 +68,6 @@ class DocsState {
         order_id: orderId
       }
     })
-
     this.setFiles(res.data.orders_attachments.map(map.order.docsFromDto))
   }
 }

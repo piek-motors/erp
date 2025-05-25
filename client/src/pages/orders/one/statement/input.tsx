@@ -7,7 +7,7 @@ import { InputStack, MultilineInput, MyInput, SendMutation } from 'shortcuts'
 import { TUser } from 'types/global'
 import { useUpdateOrderInfoMutation } from 'types/graphql-shema'
 
-enum FieldNames {
+enum GraphQLFieldNames {
   InvoiceNumber = 'invoice_number',
   ShippingDate = 'shipping_date',
   OrderNumber = 'order_number',
@@ -19,7 +19,7 @@ enum FieldNames {
 }
 
 type FieldsValuesMap = {
-  [key in FieldNames]: any
+  [key in GraphQLFieldNames]: any
 }
 
 interface IEditableInfoProps {
@@ -33,9 +33,9 @@ let fields: Partial<FieldsValuesMap> = {}
 export function StatementInput({ order, refetch, users }: IEditableInfoProps) {
   const addField = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => (fields[e.target.name as FieldNames] = e.target.value)
+  ) => (fields[e.target.name as GraphQLFieldNames] = e.target.value)
 
-  function setField(name: FieldNames, value: string) {
+  function setField(name: GraphQLFieldNames, value: string) {
     fields[name] = value
   }
 
@@ -70,11 +70,11 @@ export function StatementInput({ order, refetch, users }: IEditableInfoProps) {
         <MyInput
           label="План. отгрузка"
           placeholder="ДД.ММ.ГГ"
-          name={FieldNames.ShippingDate}
+          name={GraphQLFieldNames.ShippingDate}
           default={order.shippingDateString()}
           onChange={e => {
             setField(
-              FieldNames.ShippingDate,
+              GraphQLFieldNames.ShippingDate,
               moment(e.target.value, 'DD.MM.YY').format('YYYY-MM-DD')
             )
           }}
@@ -83,14 +83,14 @@ export function StatementInput({ order, refetch, users }: IEditableInfoProps) {
         <MyInput
           label="Номер счета"
           type="number"
-          name={FieldNames.InvoiceNumber}
+          name={GraphQLFieldNames.InvoiceNumber}
           default={order.invoiceNumber}
           onChange={addField}
         />
 
         <MyInput
           label="Номер заказа"
-          name={FieldNames.OrderNumber}
+          name={GraphQLFieldNames.OrderNumber}
           default={order.factoryNumber}
           onChange={addField}
         />
@@ -111,14 +111,14 @@ export function StatementInput({ order, refetch, users }: IEditableInfoProps) {
 
         <MyInput
           label="Контрагент"
-          name={FieldNames.Entity}
+          name={GraphQLFieldNames.Entity}
           default={order.contractor}
           onChange={addField}
         />
 
         <MyInput
           label="Город"
-          name={FieldNames.City}
+          name={GraphQLFieldNames.City}
           default={order.city}
           onChange={addField}
         />
@@ -126,14 +126,14 @@ export function StatementInput({ order, refetch, users }: IEditableInfoProps) {
         <MyInput
           type="number"
           label="Сумма заказа"
-          name={FieldNames.TotalAmount}
+          name={GraphQLFieldNames.TotalAmount}
           default={order.totalAmount.toString()}
           onChange={addField}
         />
 
         <MultilineInput
           label="Комментарий"
-          name={FieldNames.Comment}
+          name={GraphQLFieldNames.Comment}
           defaultValue={order.comment || ''}
           onChange={addField}
         />

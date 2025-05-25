@@ -3,10 +3,10 @@ import { UilFile, UilFileAlt, UilImage } from '@iconscout/react-unicons'
 import { Box, Button, Stack, Typography } from '@mui/joy'
 import { OrderAttachment } from 'domain-model'
 import { observer } from 'mobx-react-lite'
-import { docsStore } from 'pages/orders/one/docs.store'
+import { docsStore } from 'pages/orders/one/attachments/attachments.store'
+import { orderStore } from 'pages/orders/one/order.store'
 import { useEffect } from 'react'
 import { DeleteResourceButton, Row, text, UseIcon } from 'shortcuts'
-import { orderStore } from './order.store'
 
 const File = observer((props: { file: OrderAttachment }) => {
   const { file } = props
@@ -47,14 +47,13 @@ const File = observer((props: { file: OrderAttachment }) => {
   )
 })
 
-export const Docs = observer((props: { orderId: number }) => {
+export const Attachments = observer((props: { orderId: number }) => {
   const { orderId } = props
   useEffect(() => {
     orderId && docsStore.fetchAttachments(orderId)
   }, [])
 
-  const data = docsStore.files
-  if (!data?.length) {
+  if (!docsStore.files?.length) {
     return (
       <Typography p={1} color="neutral">
         Нет документов
@@ -64,10 +63,10 @@ export const Docs = observer((props: { orderId: number }) => {
   return (
     <>
       <Row gap={2}>
-        <Typography>Документы [{data.length}]</Typography>
+        <Typography>Документы [{docsStore.files.length}]</Typography>
       </Row>
       <Stack gap={1} py={2}>
-        {data.map(file => (
+        {docsStore.files.map(file => (
           <File key={file.key} file={file} />
         ))}
 

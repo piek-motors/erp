@@ -5,9 +5,9 @@ import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import { apolloClient } from './api/apollo-client'
 import App from './app'
-import { Store } from './store/store'
+import { GlobalStore } from './store/global.store'
 
-const store = new Store()
+const store = new GlobalStore()
 
 export const Context = createContext({
   store

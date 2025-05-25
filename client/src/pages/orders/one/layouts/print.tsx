@@ -2,7 +2,7 @@
 import { Box, Divider, Stack, Typography } from '@mui/joy'
 import Grid from '@mui/joy/Grid'
 import { Order } from 'domain-model'
-import { Docs } from 'pages/orders/one/docs'
+import { Attachments } from 'pages/orders/one/attachments/attachments'
 import { PositionsList } from 'pages/orders/one/position'
 import { AboutOrder } from 'pages/orders/one/statement/statement'
 import { formatOnlyDate } from 'utils/formatting'
@@ -42,7 +42,7 @@ export const PrintLayout = ({
           <AboutOrder o={order} />
         </Grid>
         <Grid xs={12} md={6}>
-          <Docs orderId={order.id} />
+          <Attachments orderId={order.id} />
         </Grid>
       </Grid>
 
