@@ -8855,14 +8855,40 @@ export type InsertDocsArrayMutationMutationVariables = Exact<{
 }>;
 
 
-export type InsertDocsArrayMutationMutation = { __typename?: 'mutation_root', insert_orders_attachments?: { __typename?: 'orders_attachments_mutation_response', returning: Array<{ __typename?: 'orders_attachments', id: number, key: string }> } | null };
+export type InsertDocsArrayMutationMutation = {
+  __typename?: 'mutation_root'
+  insert_orders_attachments?: {
+    __typename?: 'orders_attachments_mutation_response'
+    affected_rows: number
+    returning: Array<{
+      __typename?: 'orders_attachments'
+      id: number
+      key: string
+      order_id: number
+      size?: number | null
+      uploaded_at?: any | null
+      filename?: string | null
+    }>
+  } | null
+}
 
 export type DeleteDocsMutationMutationVariables = Exact<{
   key: Scalars['String']['input'];
 }>;
 
 
-export type DeleteDocsMutationMutation = { __typename?: 'mutation_root', delete_orders_attachments?: { __typename?: 'orders_attachments_mutation_response', returning: Array<{ __typename?: 'orders_attachments', key: string }> } | null };
+export type DeleteDocsMutationMutation = {
+  __typename?: 'mutation_root'
+  delete_orders_attachments?: {
+    __typename?: 'orders_attachments_mutation_response'
+    affected_rows: number
+    returning: Array<{
+      __typename?: 'orders_attachments'
+      id: number
+      key: string
+    }>
+  } | null
+}
 
 export type AllOrdersPaymentsDataQueryQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -8912,24 +8938,33 @@ export type AllUsersQueryQuery = { __typename?: 'query_root', users: Array<{ __t
 
 
 export const InsertDocsArrayMutationDocument = gql`
-    mutation InsertDocsArrayMutation($objects: [orders_attachments_insert_input!]!) {
-  insert_orders_attachments(objects: $objects) {
-    returning {
-      id
-      key
+  mutation InsertDocsArrayMutation(
+    $objects: [orders_attachments_insert_input!]!
+  ) {
+    insert_orders_attachments(objects: $objects) {
+      affected_rows
+      returning {
+        id
+        key
+        order_id
+        size
+        uploaded_at
+        filename
+      }
     }
   }
-}
-    `;
+`
 export const DeleteDocsMutationDocument = gql`
-    mutation DeleteDocsMutation($key: String!) {
-  delete_orders_attachments(where: {key: {_eq: $key}}) {
-    returning {
-      key
+  mutation DeleteDocsMutation($key: String!) {
+    delete_orders_attachments(where: { key: { _eq: $key } }) {
+      affected_rows
+      returning {
+        id
+        key
+      }
     }
   }
-}
-    `;
+`
 export const AllOrdersPaymentsDataQueryDocument = gql`
     query AllOrdersPaymentsDataQuery {
   orders_orders(where: {status: {_eq: 3}}, order_by: {id: desc}) {

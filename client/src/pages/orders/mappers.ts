@@ -7,7 +7,6 @@ import {
 
 class OrderMapper {
   fromDto(dto: OrderFragment): Order {
-    console.log(dto)
     return new Order({
       id: dto.id,
       shippingDate: dto.shipping_date,

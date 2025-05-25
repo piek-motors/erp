@@ -1,15 +1,22 @@
 mutation InsertDocsArrayMutation($objects: [orders_attachments_insert_input!]!) {
   insert_orders_attachments(objects: $objects) {
+    affected_rows
     returning {
       id
       key
+      order_id
+      size
+      uploaded_at
+      filename
     }
   }
 }
 
 mutation DeleteDocsMutation($key: String!) {
   delete_orders_attachments(where: { key: { _eq: $key } }) {
+    affected_rows
     returning {
+      id
       key
     }
   }

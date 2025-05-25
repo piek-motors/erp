@@ -10,6 +10,15 @@ import {
   GetOrderAttachmentsQueryVariables
 } from 'types/graphql-shema'
 
+
+type UploadFileResp = {
+  filename: string
+  id: number
+  key: string
+  order_id: number
+  size: number
+  uploaded_at: string
+}
 class DocsState {
   files: OrderAttachment[] = []
   uploading: boolean = false
@@ -25,8 +34,11 @@ class DocsState {
     this.uploadingFiles = files
   }
 
+  setFiles(files: OrderAttachment[]) {
+    this.files = files
+  }
+
   async handleFilesOnDrop(files: File[], orderId: number) {
-    console.log('handleFilesOnDrop', files, orderId)
     this.setUploadingFiles(files)
     const res = await FileService.uploadFiles(files, orderId)
     if (res.status === 200) {
@@ -34,6 +46,16 @@ class DocsState {
       console.log('S3 file upload error', res)
     }
     this.setUploadingFiles([])
+    const data = res.data as UploadFileResp[]
+    const newAttachments = data.map(file => {
+      return new OrderAttachment({
+        id: file.id,
+        key: file.key,
+        name: file.filename,
+        size: file.size
+      })
+    })
+    this.setFiles([...this.files, ...newAttachments])
   }
 
   async deleteFile(file: OrderAttachment) {
@@ -51,7 +73,7 @@ class DocsState {
       }
     })
 
-    this.files = res.data.orders_attachments.map(map.order.docsFromDto)
+    this.setFiles(res.data.orders_attachments.map(map.order.docsFromDto))
   }
 }
 

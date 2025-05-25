@@ -26,7 +26,6 @@ export function InputFiles(
         tabIndex={-1}
         variant="outlined"
         color="neutral"
-        {...props}
         startDecorator={
           <SvgIcon>
             <svg

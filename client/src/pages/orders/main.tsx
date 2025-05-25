@@ -195,7 +195,6 @@ function Wrapper(props: { children: React.ReactNode; sx?: SxProperty }) {
         value={currentTab}
         tabs={tabs}
         handleChange={v => {
-          console.log(v)
           navigate(v)
         }}
       />

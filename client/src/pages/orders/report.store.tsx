@@ -38,10 +38,6 @@ class ReportPageStore {
         .set('year', y)
         .endOf('month')
         .toISOString()
-
-      console.log('gte', gte)
-      console.log('lte', lte)
-
       const res = await apolloClient.query<
         GetOrdersArchivedByIntervalQuery,
         GetOrdersArchivedByIntervalQueryVariables

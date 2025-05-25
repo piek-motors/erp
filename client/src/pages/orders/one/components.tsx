@@ -36,16 +36,23 @@ export const OrderMetadata = ({ order }: { order: Order }) => (
       {order.contractor} __ {order.city}
     </Typography>
     <Chip
+      chipProps={{
+        color: 'primary'
+      }}
       if={!!orderStatus(order)}
-      color="primary"
       text={orderStatus(order) || ''}
     />
     <Chip
+      chipProps={{
+        color: 'warning'
+      }}
       if={order.awatingDispatch ?? false}
       text={text.orderReadyForDispatch}
     />
     <Chip
-      color="danger"
+      chipProps={{
+        color: 'danger'
+      }}
       if={order.needAttention ?? false}
       text={text.orderRequiresSpectialAttention}
     />

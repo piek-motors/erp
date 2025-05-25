@@ -37,6 +37,8 @@ export class OrderAttachment {
   name!: string
   size?: number | null
   key!: string
+  order_id?: number
+
   constructor(init: ClassProperties<OrderAttachment>) {
     Object.assign(this, init)
   }

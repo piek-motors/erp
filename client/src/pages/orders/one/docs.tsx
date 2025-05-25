@@ -71,7 +71,7 @@ export const Docs = observer((props: { orderId: number }) => {
           <File key={file.key} file={file} />
         ))}
 
-        {!!docsStore.uploadingFiles.length &&
+        {Boolean(docsStore.uploadingFiles.length) &&
           docsStore.uploadingFiles.map(file => (
             <Box>
               <Typography level="body-sm">{text.loading}</Typography>
