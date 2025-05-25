@@ -1,5 +1,4 @@
 import { assert } from 'console'
-import { CsvIO } from 'csv-io'
 import {
   EnMaterialShape,
   getMaterialConstructor,
@@ -10,11 +9,9 @@ import {
   SquareBar
 } from 'domain-model'
 import path from 'node:path'
-import { Repo } from 'repo'
+import { CsvIO } from './csv-io.ts'
 
-const materialsCsvPath = path.resolve(
-  path.join(__dirname, 'data', 'materials.csv')
-)
+const materialsCsvPath = path.resolve(path.join('data', 'materials.csv'))
 
 // Material name parser of the details table
 export class MaterialParser {
@@ -143,8 +140,12 @@ export class MaterialParser {
   }
 }
 
+interface IRepo {
+  insertMaterials(materials: Material[]): Promise<void>
+}
+
 export class MaterialsSyncer {
-  constructor(private readonly repo: Repo) {}
+  constructor(private readonly repo: IRepo) {}
 
   async sync() {
     const materials = await this.getMaterialsForSync()
@@ -152,9 +153,8 @@ export class MaterialsSyncer {
   }
 
   async getMaterialsForSync() {
-    const table = CsvIO.read(materialsCsvPath)
+    const table = await CsvIO.read(materialsCsvPath)
     const materials: Material[] = []
-
     for (const row of table) {
       const id = parseInt(row[0])
       const name = row[1]

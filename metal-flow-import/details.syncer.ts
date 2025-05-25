@@ -5,6 +5,7 @@ import { log } from 'node:console'
 import path from 'node:path'
 import { Repo } from 'repo'
 
+const __dirname = path.resolve(import.meta.url)
 const detailsCsvPath = path.resolve(path.join(__dirname, 'data', 'details.csv'))
 
 // Types
@@ -15,7 +16,7 @@ export class DetailSyncer {
   constructor(private readonly repo: Repo) {}
 
   async sync() {
-    const table = CsvIO.read(detailsCsvPath)
+    const table = await CsvIO.read(detailsCsvPath)
     const materialDetails = await this.parseTable(table)
     const dbMaterials = await this.repo.getAllMaterials()
 

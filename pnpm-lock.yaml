@@ -51,6 +51,9 @@ importers:
         specifier: ^3.2.0
         version: 3.2.0(eslint@8.57.1)(webpack@5.99.5)
     devDependencies:
+      commander:
+        specifier: ^13.1.0
+        version: 13.1.0
       typescript:
         specifier: ^5.5.4
         version: 5.8.3
@@ -250,7 +253,7 @@ importers:
         specifier: ^5.8.2
         version: 5.8.3
 
-  metalflow-import:
+  metal-flow-import:
     dependencies:
       class-transformer:
         specifier: ^0.5.1
@@ -273,6 +276,10 @@ importers:
       yaml:
         specifier: ^2.7.1
         version: 2.7.1
+    devDependencies:
+      '@types/node':
+        specifier: ^22.15.21
+        version: 22.15.21
 
   server:
     dependencies:

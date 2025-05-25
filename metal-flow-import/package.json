@@ -4,6 +4,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
+    "test": "node --test --experimental-transform-types",
     "build": "tsc -p tsconfig.json",
     "start": "node --experimental-transform-types ./main.ts"
   },
@@ -18,5 +19,8 @@
   },
   "author": "",
   "license": "ISC",
-  "description": ""
+  "description": "",
+  "devDependencies": {
+    "@types/node": "^22.15.21"
+  }
 }
