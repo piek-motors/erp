@@ -1,9 +1,9 @@
 import { UilArrowLeft } from '@iconscout/react-unicons'
 import { Box, IconButton, Sheet, Stack, Typography } from '@mui/joy'
+import { uiUnit } from 'domain-model'
 import { JSX } from 'react'
 import { NavigateOptions, To, useNavigate } from 'react-router-dom'
-import { uiUnit } from 'domain-model'
-import { MyInput } from 'shortcuts'
+import { Inp } from 'shortcuts'
 import { PageTitle } from '../../components'
 
 type GoBackBtnProps = { to?: To; options?: NavigateOptions; delta?: number }
@@ -68,7 +68,7 @@ export const QtyInputWithUnit = (props: {
   const { unitId, value: qty, setValue: setQty } = props
   return (
     <Stack direction="row" alignItems="end" gap={1}>
-      <MyInput
+      <Inp
         autoComplete="off"
         label={props.label}
         value={qty}

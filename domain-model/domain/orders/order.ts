@@ -14,7 +14,6 @@ export class Payment {
   constructor(init: ClassProperties<Payment>) {
     Object.assign(this, init)
   }
-
   getPecentOf(total: number) {
     if (!total) return ''
     return `${(this.amount / total).toFixed(0)}%`
@@ -38,11 +37,9 @@ export class OrderAttachment {
   size?: number | null
   key!: string
   order_id?: number
-
   constructor(init: ClassProperties<OrderAttachment>) {
     Object.assign(this, init)
   }
-
   // converts file size from bytes to human-readable string
   sizeWithUnit(): string {
     if (!this.size) return '0 Bytes'
@@ -73,49 +70,42 @@ export class Order {
   comment?: string | null
   documents!: OrderAttachment[]
   status!: OrderStatus
-
   constructor(init: ClassProperties<Order>) {
     Object.assign(this, init)
   }
-
   totalPaid(): number {
     return this.payments.reduce((acc, payment) => acc + payment.amount, 0)
   }
-
   totalPaidString(): string {
     return formatMoney(this.totalPaid())
   }
-
+  totalAmountString(): string {
+    return formatMoney(this.totalAmount)
+  }
   paidPercentage(): string {
     if (!this.totalAmount) return ''
     return `${((this.totalPaid() / this.totalAmount) * 100).toFixed(0)}%`
   }
-
   createdAtString(): string {
     if (!this.createdAt) return ''
     return moment(this.createdAt).format('DD.MM.YY')
   }
-
   shippingDateString(): string {
     if (!this.shippingDate) return ''
     return moment(this.shippingDate).format('DD.MM.YY')
   }
-
   acceptanceDateString(): string {
     if (!this.acceptanceDate) return ''
     return moment(this.acceptanceDate).format('DD.MM.YY')
   }
-
   actualShippingDateString(): string {
     if (!this.actualShippingDate) return ''
     return moment(this.actualShippingDate).format('DD.MM.YY')
   }
-
   managerString(): string {
     if (!this.manager) return ''
     return `${this.manager.firstName} ${this.manager.lastName}`
   }
-
   getBackgroundColor(): string {
     if (this.needAttention) return '#f5b9b9ba'
     if (this.awatingDispatch) return '#cae9b4a3'

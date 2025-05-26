@@ -1,16 +1,11 @@
-/** @jsxImportSource @emotion/react */
 import { apolloClient } from 'api'
 import { OrderAttachment } from 'domain-model'
 import { makeAutoObservable } from 'mobx'
 import { map } from 'pages/orders/mappers'
 import { FileService } from 'services/file.service'
-import {
-  GetOrderAttachmentsDocument,
-  GetOrderAttachmentsQuery,
-  GetOrderAttachmentsQueryVariables
-} from 'types/graphql-shema'
+import * as gql from 'types/graphql-shema'
 
-type UploadFileResp = {
+interface UploadFileResp {
   filename: string
   id: number
   key: string
@@ -18,7 +13,8 @@ type UploadFileResp = {
   size: number
   uploaded_at: string
 }
-class DocsState {
+
+export class AttachmentsStore {
   files: OrderAttachment[] = []
   uploading: boolean = false
   editState: boolean = false
@@ -32,8 +28,19 @@ class DocsState {
   setFiles(files: OrderAttachment[]) {
     this.files = files
   }
-
-  async handleFilesOnDrop(files: File[], orderId: number) {
+  async load(orderId: number) {
+    const res = await apolloClient.query<
+      gql.GetOrderAttachmentsQuery,
+      gql.GetOrderAttachmentsQueryVariables
+    >({
+      query: gql.GetOrderAttachmentsDocument,
+      variables: {
+        order_id: orderId
+      }
+    })
+    this.setFiles(res.data.orders_attachments.map(map.order.docsFromDto))
+  }
+  async onDrop(files: File[], orderId: number) {
     this.setUploadingFiles(files)
     const res = await FileService.uploadFiles(files, orderId)
     if (res.status === 200) {
@@ -53,23 +60,10 @@ class DocsState {
     this.setFiles([...this.files, ...newAttachments])
   }
 
-  async deleteFile(file: OrderAttachment) {
+  async delete(file: OrderAttachment) {
     await FileService.deleteFile(file.key)
     this.setFiles(this.files.filter(f => f.key !== file.key))
   }
-
-  async fetchAttachments(orderId: number) {
-    const res = await apolloClient.query<
-      GetOrderAttachmentsQuery,
-      GetOrderAttachmentsQueryVariables
-    >({
-      query: GetOrderAttachmentsDocument,
-      variables: {
-        order_id: orderId
-      }
-    })
-    this.setFiles(res.data.orders_attachments.map(map.order.docsFromDto))
-  }
 }
 
-export const docsStore = new DocsState()
+export const attachmentsStore = new AttachmentsStore()

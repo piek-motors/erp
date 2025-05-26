@@ -1,73 +1,53 @@
-/** @jsxImportSource @emotion/react */
-import { useAppContext } from 'hooks'
 import { AppRoutes } from 'lib/routes'
-import { map } from 'pages/orders/mappers'
-import { docsStore } from 'pages/orders/one/attachments/attachments.store'
+import { observer } from 'mobx-react-lite'
 import { DesktopLayout } from 'pages/orders/one/layouts/desktop'
 import { PrintLayout } from 'pages/orders/one/layouts/print'
-import { useOrderDetailStore } from 'pages/orders/one/state'
-import { useLayoutEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useDropzone } from 'react-dropzone'
-import { useLocation, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
+import { LoadingHint } from 'shortcuts'
 import { RouteConfig } from 'types/global'
-import { useGetManagersQuery, useGetOrderByPkQuery } from 'types/graphql-shema'
+import { CreateOrder } from './create'
+import { orderStore } from './stores/order.store'
+import { suggestionsStore } from './stores/suggestions.store'
 
-function OrderDetail() {
-  const { store } = useAppContext()
-  const [onUploadFiles, setOnUploadFiles] = useState<File[]>([])
-  const defaultEditMode = new URLSearchParams(useLocation().search).get('edit')
-    ? true
-    : false
+const OrderDetail = observer(() => {
   const queryParams = useParams<{ id: string }>()
   const orderId = parseInt(queryParams.id || '')
-  if (!orderId) throw Error('Order id is missing in the url')
-  const { initialize } = useOrderDetailStore()
+  if (!orderId) {
+    throw Error('Order id is missing in the url')
+  }
 
-  useLayoutEffect(() => {
-    initialize(orderId)
-  }, [orderId])
+  useEffect(() => {
+    orderStore.init(orderId)
+    suggestionsStore.init()
+  }, [])
 
-
-
-  const { data, refetch } = useGetOrderByPkQuery({
-    variables: {
-      id: orderId
-    }
-  })
-
-  const { data: users } = useGetManagersQuery()
   const { getRootProps } = useDropzone({
-    onDrop: files => docsStore.handleFilesOnDrop(files, orderId),
+    onDrop: files => orderStore.attachments.onDrop(files, orderId),
     noKeyboard: true,
     noClick: true
   })
 
-  if (!data?.orders_orders || !store.user?.id) return null
-  const p = 2
-
-  if (!data?.orders_orders || !users?.users) return <>No data</>
-  const d_order = map.order.fromDto(data.orders_orders[0])
-  const d_users = users?.users?.map(map.user.fromDto)
+  if (!orderStore.order) {
+    return <LoadingHint show={true} />
+  }
 
   return (
     <section {...getRootProps()} id="dropzone">
-      {/* Print Layout - Only visible when printing */}
-      <PrintLayout order={d_order} refetch={refetch} />
-
-      {/* Desktop Layout - Not shown when printing */}
-      <DesktopLayout
-        order={d_order}
-        refetch={refetch}
-        users={d_users}
-        user={map.user.fromDto(store.user)}
-      />
+      <PrintLayout />
+      <DesktopLayout />
     </section>
   )
-}
+})
 
 export default [
   {
     element: <OrderDetail />,
     path: AppRoutes.order_detail
+  },
+  {
+    element: <CreateOrder />,
+    path: AppRoutes.new_order
   }
 ] as RouteConfig[]

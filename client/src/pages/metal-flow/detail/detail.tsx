@@ -9,7 +9,7 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { Column } from 'react-table'
 import {
   AddResourceButton,
-  MyInput,
+  Inp,
   Row,
   SendMutation,
   TakeLookHint
@@ -148,7 +148,7 @@ export function UpdateDetail() {
         >
           <Stack gap={1}>
             <Typography>ID {detailStore.id}</Typography>
-            <MyInput
+            <Inp
               label={t.DetailName}
               onChange={(event: any) => {
                 detailStore.setName(event.target.value)
@@ -183,14 +183,12 @@ export function AddDetail() {
             />
           }
         >
-          <MyInput
+          <Inp
             label={t.DetailName}
             onChange={(event: any) => {
-              // state.setName(event.target.value)
               detailStore.setName(event.target.value)
             }}
             value={detailStore.name}
-            autoComplete="off"
           />
           <MaterialAutocompleteMulti
             data={materials}

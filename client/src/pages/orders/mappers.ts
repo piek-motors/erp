@@ -1,12 +1,8 @@
 import { Order, OrderAttachment, OrderItem, Payment, User } from 'domain-model'
-import {
-  GetAllUsersQuery,
-  GetOrderAttachmentsQuery,
-  OrderFragment
-} from 'types/graphql-shema'
+import * as gql from 'types/graphql-shema'
 
 class OrderMapper {
-  fromDto(dto: OrderFragment): Order {
+  fromDto(dto: gql.OrderFragment): Order {
     return new Order({
       id: dto.id,
       shippingDate: dto.shipping_date,
@@ -24,8 +20,10 @@ class OrderMapper {
       awatingDispatch: dto.awaiting_dispatch,
       needAttention: dto.need_attention === 'true',
       invoiceNumber: dto.invoice_number,
+      factoryNumber: dto.order_number,
       manager: new User({
-        email: '',
+        id: dto.user?.id,
+        email: dto.user?.email ?? '',
         firstName: dto.user?.first_name!,
         lastName: dto.user?.last_name!
       }),
@@ -48,7 +46,7 @@ class OrderMapper {
   }
 
   docsFromDto(
-    doc: GetOrderAttachmentsQuery['orders_attachments'][number]
+    doc: gql.GetOrderAttachmentsQuery['orders_attachments'][number]
   ): OrderAttachment {
     return new OrderAttachment({
       id: doc.id,
@@ -60,16 +58,31 @@ class OrderMapper {
 }
 
 class UserMapper {
-  fromDto(dto: GetAllUsersQuery['users'][number]): User {
+  fromDto(dto: gql.GetAllUsersQuery['users'][number]): User {
     return new User({
       id: dto.id,
       firstName: dto.first_name!,
-      lastName: dto.last_name!
+      lastName: dto.last_name!,
+      role: dto.role
+    })
+  }
+}
+
+class OrderItemMapper {
+  fromDto(
+    dto: gql.GetOrderPositionsQuery['orders_order_items'][number]
+  ): OrderItem {
+    return new OrderItem({
+      id: dto.id,
+      name: dto.name,
+      quantity: dto.quantity,
+      description: dto.description
     })
   }
 }
 
 export const map = {
   order: new OrderMapper(),
-  user: new UserMapper()
+  user: new UserMapper(),
+  orderItem: new OrderItemMapper()
 }

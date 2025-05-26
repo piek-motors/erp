@@ -1,7 +1,7 @@
 import { useFilter } from 'hooks'
 import moment from 'moment'
 import { useGetOrdersArchivedByIntervalQuery } from 'types/graphql-shema'
-import { useOrderListPageStore } from './state'
+import { useOrderListPageStore } from '../stores/state'
 
 export function useReport() {
   const store: any = useOrderListPageStore()

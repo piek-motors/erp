@@ -1,20 +1,15 @@
-/** @jsxImportSource @emotion/react */
-import { Box, Divider, Stack, Typography } from '@mui/joy'
-import Grid from '@mui/joy/Grid'
-import { Order } from 'domain-model'
-import { Attachments } from 'pages/orders/one/attachments/attachments'
-import { PositionsList } from 'pages/orders/one/position'
-import { AboutOrder } from 'pages/orders/one/statement/statement'
+import { Box, Divider, Grid, Stack, Typography } from '@mui/joy'
+import { observer } from 'mobx-react-lite'
+import { Attachments } from 'pages/orders/one/attachments/ui'
+import { PositionsList } from 'pages/orders/one/positions/ui'
+import { StatementView } from 'pages/orders/one/statement/ui'
 import { formatOnlyDate } from 'utils/formatting'
+import { orderStore } from '../stores/order.store'
 
 // Print Layout Component
-export const PrintLayout = ({
-  order,
-  refetch
-}: {
-  order: Order
-  refetch: () => void
-}) => {
+export const PrintLayout = observer(() => {
+  const order = orderStore.order
+  if (!order) return <div>Not found</div>
   return (
     <Stack gap={1} className="print-only">
       <Box sx={{ mb: 3 }}>
@@ -32,14 +27,14 @@ export const PrintLayout = ({
       </Box>
 
       <Box sx={{ mb: 4 }}>
-        <PositionsList data={order.items} refetch={refetch} />
+        <PositionsList />
       </Box>
 
       <Divider sx={{ my: 3 }} />
 
       <Grid container spacing={3}>
         <Grid xs={12} md={6}>
-          <AboutOrder o={order} />
+          <StatementView />
         </Grid>
         <Grid xs={12} md={6}>
           <Attachments orderId={order.id} />
@@ -53,4 +48,4 @@ export const PrintLayout = ({
       </Box>
     </Stack>
   )
-}
+})

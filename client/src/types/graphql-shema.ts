@@ -9026,37 +9026,6 @@ export type DeleteWriteOffMutationVariables = Exact<{
 
 export type DeleteWriteOffMutation = { __typename?: 'mutation_root', delete_metal_flow_writeoffs_by_pk?: { __typename?: 'metal_flow_writeoffs', id: number } | null };
 
-export type CommentsSubscriptionVariables = Exact<{
-  OrderID: Scalars['Int']['input'];
-}>;
-
-
-export type CommentsSubscription = { __typename?: 'subscription_root', orders_comments: Array<{ __typename?: 'orders_comments', id: number, text: string, created_at: any, user: { __typename?: 'users', id: number, first_name?: string | null, last_name?: string | null } }> };
-
-export type InsertCommentMutationVariables = Exact<{
-  OrderID: Scalars['Int']['input'];
-  Text: Scalars['String']['input'];
-  UserID: Scalars['Int']['input'];
-}>;
-
-
-export type InsertCommentMutation = { __typename?: 'mutation_root', insert_orders_comments_one?: { __typename?: 'orders_comments', id: number, order_id: number, text: string, created_at: any, user_id: number } | null };
-
-export type DeleteCommentMutationVariables = Exact<{
-  CommentID: Scalars['Int']['input'];
-}>;
-
-
-export type DeleteCommentMutation = { __typename?: 'mutation_root', delete_orders_comments_by_pk?: { __typename?: 'orders_comments', id: number } | null };
-
-export type UpdateCommentMutationVariables = Exact<{
-  CommentID: Scalars['Int']['input'];
-  Text: Scalars['String']['input'];
-}>;
-
-
-export type UpdateCommentMutation = { __typename?: 'mutation_root', update_orders_comments_by_pk?: { __typename?: 'orders_comments', id: number, order_id: number, text: string, created_at: any, user_id: number } | null };
-
 export type GetAllUsersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -9180,7 +9149,7 @@ export type GetOrdersByStatusQueryVariables = Exact<{
 }>;
 
 
-export type GetOrdersByStatusQuery = { __typename?: 'query_root', orders_orders: Array<{ __typename?: 'orders_orders', id: number, status: number, city?: string | null, contractor?: string | null, invoice_number?: string | null, total_amount?: any | null, order_number?: string | null, need_attention?: string | null, awaiting_dispatch: boolean, actual_shipping_date?: any | null, acceptance_date?: any | null, shipping_date?: any | null, created_at: any, manager_id?: number | null, comment?: string | null, user?: { __typename?: 'users', id: number, first_name?: string | null, last_name?: string | null } | null, order_items: Array<{ __typename?: 'orders_order_items', id: number, name: string, description?: string | null, quantity: number }>, order_payments: Array<{ __typename?: 'orders_order_payments', id: number, amount: any, date: any }> }> };
+export type GetOrdersByStatusQuery = { __typename?: 'query_root', orders_orders: Array<{ __typename?: 'orders_orders', id: number, status: number, city?: string | null, contractor?: string | null, invoice_number?: string | null, total_amount?: any | null, order_number?: string | null, need_attention?: string | null, awaiting_dispatch: boolean, actual_shipping_date?: any | null, acceptance_date?: any | null, shipping_date?: any | null, created_at: any, manager_id?: number | null, comment?: string | null, user?: { __typename?: 'users', id: number, email?: string | null, first_name?: string | null, last_name?: string | null } | null, order_items: Array<{ __typename?: 'orders_order_items', id: number, name: string, description?: string | null, quantity: number }>, order_payments: Array<{ __typename?: 'orders_order_payments', id: number, amount: any, date: any }> }> };
 
 export type GetOrdersArchivedBySearchKeywordQueryVariables = Exact<{
   keyword: Scalars['String']['input'];
@@ -9188,7 +9157,7 @@ export type GetOrdersArchivedBySearchKeywordQueryVariables = Exact<{
 }>;
 
 
-export type GetOrdersArchivedBySearchKeywordQuery = { __typename?: 'query_root', orders_orders: Array<{ __typename?: 'orders_orders', id: number, status: number, city?: string | null, contractor?: string | null, invoice_number?: string | null, total_amount?: any | null, order_number?: string | null, need_attention?: string | null, awaiting_dispatch: boolean, actual_shipping_date?: any | null, acceptance_date?: any | null, shipping_date?: any | null, created_at: any, manager_id?: number | null, comment?: string | null, user?: { __typename?: 'users', id: number, first_name?: string | null, last_name?: string | null } | null, order_items: Array<{ __typename?: 'orders_order_items', id: number, name: string, description?: string | null, quantity: number }>, order_payments: Array<{ __typename?: 'orders_order_payments', id: number, amount: any, date: any }> }> };
+export type GetOrdersArchivedBySearchKeywordQuery = { __typename?: 'query_root', orders_orders: Array<{ __typename?: 'orders_orders', id: number, status: number, city?: string | null, contractor?: string | null, invoice_number?: string | null, total_amount?: any | null, order_number?: string | null, need_attention?: string | null, awaiting_dispatch: boolean, actual_shipping_date?: any | null, acceptance_date?: any | null, shipping_date?: any | null, created_at: any, manager_id?: number | null, comment?: string | null, user?: { __typename?: 'users', id: number, email?: string | null, first_name?: string | null, last_name?: string | null } | null, order_items: Array<{ __typename?: 'orders_order_items', id: number, name: string, description?: string | null, quantity: number }>, order_payments: Array<{ __typename?: 'orders_order_payments', id: number, amount: any, date: any }> }> };
 
 export type GetOrdersArchivedByIntervalQueryVariables = Exact<{
   _lte: Scalars['timestamp']['input'];
@@ -9196,7 +9165,7 @@ export type GetOrdersArchivedByIntervalQueryVariables = Exact<{
 }>;
 
 
-export type GetOrdersArchivedByIntervalQuery = { __typename?: 'query_root', orders_orders: Array<{ __typename?: 'orders_orders', id: number, status: number, city?: string | null, contractor?: string | null, invoice_number?: string | null, total_amount?: any | null, order_number?: string | null, need_attention?: string | null, awaiting_dispatch: boolean, actual_shipping_date?: any | null, acceptance_date?: any | null, shipping_date?: any | null, created_at: any, manager_id?: number | null, comment?: string | null, user?: { __typename?: 'users', id: number, first_name?: string | null, last_name?: string | null } | null, order_items: Array<{ __typename?: 'orders_order_items', id: number, name: string, description?: string | null, quantity: number }>, order_payments: Array<{ __typename?: 'orders_order_payments', id: number, amount: any, date: any }> }> };
+export type GetOrdersArchivedByIntervalQuery = { __typename?: 'query_root', orders_orders: Array<{ __typename?: 'orders_orders', id: number, status: number, city?: string | null, contractor?: string | null, invoice_number?: string | null, total_amount?: any | null, order_number?: string | null, need_attention?: string | null, awaiting_dispatch: boolean, actual_shipping_date?: any | null, acceptance_date?: any | null, shipping_date?: any | null, created_at: any, manager_id?: number | null, comment?: string | null, user?: { __typename?: 'users', id: number, email?: string | null, first_name?: string | null, last_name?: string | null } | null, order_items: Array<{ __typename?: 'orders_order_items', id: number, name: string, description?: string | null, quantity: number }>, order_payments: Array<{ __typename?: 'orders_order_payments', id: number, amount: any, date: any }> }> };
 
 export type GetManagersQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -9208,7 +9177,7 @@ export type GetOrderByPkQueryVariables = Exact<{
 }>;
 
 
-export type GetOrderByPkQuery = { __typename?: 'query_root', orders_orders: Array<{ __typename?: 'orders_orders', id: number, status: number, city?: string | null, contractor?: string | null, invoice_number?: string | null, total_amount?: any | null, order_number?: string | null, need_attention?: string | null, awaiting_dispatch: boolean, actual_shipping_date?: any | null, acceptance_date?: any | null, shipping_date?: any | null, created_at: any, manager_id?: number | null, comment?: string | null, user?: { __typename?: 'users', id: number, first_name?: string | null, last_name?: string | null } | null, order_items: Array<{ __typename?: 'orders_order_items', id: number, name: string, description?: string | null, quantity: number }>, order_payments: Array<{ __typename?: 'orders_order_payments', id: number, amount: any, date: any }> }> };
+export type GetOrderByPkQuery = { __typename?: 'query_root', orders_orders: Array<{ __typename?: 'orders_orders', id: number, status: number, city?: string | null, contractor?: string | null, invoice_number?: string | null, total_amount?: any | null, order_number?: string | null, need_attention?: string | null, awaiting_dispatch: boolean, actual_shipping_date?: any | null, acceptance_date?: any | null, shipping_date?: any | null, created_at: any, manager_id?: number | null, comment?: string | null, user?: { __typename?: 'users', id: number, email?: string | null, first_name?: string | null, last_name?: string | null } | null, order_items: Array<{ __typename?: 'orders_order_items', id: number, name: string, description?: string | null, quantity: number }>, order_payments: Array<{ __typename?: 'orders_order_payments', id: number, amount: any, date: any }> }> };
 
 export type GetOrderAttachmentsQueryVariables = Exact<{
   order_id: Scalars['Int']['input'];
@@ -9218,18 +9187,35 @@ export type GetOrderAttachmentsQueryVariables = Exact<{
 export type GetOrderAttachmentsQuery = { __typename?: 'query_root', orders_attachments: Array<{ __typename?: 'orders_attachments', filename?: string | null, id: number, key: string, size?: number | null }> };
 
 export type InsertOrderMutationVariables = Exact<{
-  status: Scalars['Int']['input'];
+  object: Orders_Orders_Insert_Input;
 }>;
 
 
-export type InsertOrderMutation = { __typename?: 'mutation_root', insert_orders_orders?: { __typename?: 'orders_orders_mutation_response', returning: Array<{ __typename?: 'orders_orders', id: number }> } | null };
+export type InsertOrderMutation = { __typename?: 'mutation_root', insert_orders_orders_one?: { __typename?: 'orders_orders', id: number } | null };
 
-export type OrderFragment = { __typename?: 'orders_orders', id: number, status: number, city?: string | null, contractor?: string | null, invoice_number?: string | null, total_amount?: any | null, order_number?: string | null, need_attention?: string | null, awaiting_dispatch: boolean, actual_shipping_date?: any | null, acceptance_date?: any | null, shipping_date?: any | null, created_at: any, manager_id?: number | null, comment?: string | null, user?: { __typename?: 'users', id: number, first_name?: string | null, last_name?: string | null } | null, order_items: Array<{ __typename?: 'orders_order_items', id: number, name: string, description?: string | null, quantity: number }>, order_payments: Array<{ __typename?: 'orders_order_payments', id: number, amount: any, date: any }> };
+export type GetDistinctCitiesQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetDistinctCitiesQuery = { __typename?: 'query_root', orders_orders: Array<{ __typename?: 'orders_orders', city?: string | null }> };
+
+export type GetDistinctContractorsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetDistinctContractorsQuery = { __typename?: 'query_root', orders_orders: Array<{ __typename?: 'orders_orders', contractor?: string | null }> };
+
+export type GetOrderPositionsQueryVariables = Exact<{
+  order_id: Scalars['Int']['input'];
+}>;
+
+
+export type GetOrderPositionsQuery = { __typename?: 'query_root', orders_order_items: Array<{ __typename?: 'orders_order_items', id: number, name: string, description?: string | null, quantity: number }> };
+
+export type OrderFragment = { __typename?: 'orders_orders', id: number, status: number, city?: string | null, contractor?: string | null, invoice_number?: string | null, total_amount?: any | null, order_number?: string | null, need_attention?: string | null, awaiting_dispatch: boolean, actual_shipping_date?: any | null, acceptance_date?: any | null, shipping_date?: any | null, created_at: any, manager_id?: number | null, comment?: string | null, user?: { __typename?: 'users', id: number, email?: string | null, first_name?: string | null, last_name?: string | null } | null, order_items: Array<{ __typename?: 'orders_order_items', id: number, name: string, description?: string | null, quantity: number }>, order_payments: Array<{ __typename?: 'orders_order_payments', id: number, amount: any, date: any }> };
 
 export type GetReclamationOrdersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetReclamationOrdersQuery = { __typename?: 'query_root', orders_orders: Array<{ __typename?: 'orders_orders', id: number, status: number, city?: string | null, contractor?: string | null, invoice_number?: string | null, total_amount?: any | null, order_number?: string | null, need_attention?: string | null, awaiting_dispatch: boolean, actual_shipping_date?: any | null, acceptance_date?: any | null, shipping_date?: any | null, created_at: any, manager_id?: number | null, comment?: string | null, user?: { __typename?: 'users', id: number, first_name?: string | null, last_name?: string | null } | null, order_items: Array<{ __typename?: 'orders_order_items', id: number, name: string, description?: string | null, quantity: number }>, order_payments: Array<{ __typename?: 'orders_order_payments', id: number, amount: any, date: any }> }> };
+export type GetReclamationOrdersQuery = { __typename?: 'query_root', orders_orders: Array<{ __typename?: 'orders_orders', id: number, status: number, city?: string | null, contractor?: string | null, invoice_number?: string | null, total_amount?: any | null, order_number?: string | null, need_attention?: string | null, awaiting_dispatch: boolean, actual_shipping_date?: any | null, acceptance_date?: any | null, shipping_date?: any | null, created_at: any, manager_id?: number | null, comment?: string | null, user?: { __typename?: 'users', id: number, email?: string | null, first_name?: string | null, last_name?: string | null } | null, order_items: Array<{ __typename?: 'orders_order_items', id: number, name: string, description?: string | null, quantity: number }>, order_payments: Array<{ __typename?: 'orders_order_payments', id: number, amount: any, date: any }> }> };
 
 export type UpdateOrderStatusMutationVariables = Exact<{
   id: Scalars['Int']['input'];
@@ -9238,6 +9224,37 @@ export type UpdateOrderStatusMutationVariables = Exact<{
 
 
 export type UpdateOrderStatusMutation = { __typename?: 'mutation_root', update_orders_orders_by_pk?: { __typename?: 'orders_orders', id: number, status: number } | null };
+
+export type CommentsSubscriptionVariables = Exact<{
+  OrderID: Scalars['Int']['input'];
+}>;
+
+
+export type CommentsSubscription = { __typename?: 'subscription_root', orders_comments: Array<{ __typename?: 'orders_comments', id: number, text: string, created_at: any, user: { __typename?: 'users', id: number, first_name?: string | null, last_name?: string | null } }> };
+
+export type InsertCommentMutationVariables = Exact<{
+  OrderID: Scalars['Int']['input'];
+  Text: Scalars['String']['input'];
+  UserID: Scalars['Int']['input'];
+}>;
+
+
+export type InsertCommentMutation = { __typename?: 'mutation_root', insert_orders_comments_one?: { __typename?: 'orders_comments', id: number, order_id: number, text: string, created_at: any, user_id: number } | null };
+
+export type DeleteCommentMutationVariables = Exact<{
+  CommentID: Scalars['Int']['input'];
+}>;
+
+
+export type DeleteCommentMutation = { __typename?: 'mutation_root', delete_orders_comments_by_pk?: { __typename?: 'orders_comments', id: number } | null };
+
+export type UpdateCommentMutationVariables = Exact<{
+  CommentID: Scalars['Int']['input'];
+  Text: Scalars['String']['input'];
+}>;
+
+
+export type UpdateCommentMutation = { __typename?: 'mutation_root', update_orders_comments_by_pk?: { __typename?: 'orders_comments', id: number, order_id: number, text: string, created_at: any, user_id: number } | null };
 
 export const MaterialFragmentFragmentDoc = gql`
     fragment MaterialFragment on metal_flow_materials {
@@ -9267,6 +9284,7 @@ export const OrderFragmentDoc = gql`
   comment
   user {
     id
+    email
     first_name
     last_name
   }
@@ -10261,155 +10279,6 @@ export function useDeleteWriteOffMutation(baseOptions?: Apollo.MutationHookOptio
 export type DeleteWriteOffMutationHookResult = ReturnType<typeof useDeleteWriteOffMutation>;
 export type DeleteWriteOffMutationResult = Apollo.MutationResult<DeleteWriteOffMutation>;
 export type DeleteWriteOffMutationOptions = Apollo.BaseMutationOptions<DeleteWriteOffMutation, DeleteWriteOffMutationVariables>;
-export const CommentsDocument = gql`
-    subscription Comments($OrderID: Int!) {
-  orders_comments(where: {order_id: {_eq: $OrderID}}, order_by: {id: desc}) {
-    id
-    text
-    created_at
-    user {
-      id
-      first_name
-      last_name
-    }
-  }
-}
-    `;
-
-/**
- * __useCommentsSubscription__
- *
- * To run a query within a React component, call `useCommentsSubscription` and pass it any options that fit your needs.
- * When your component renders, `useCommentsSubscription` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useCommentsSubscription({
- *   variables: {
- *      OrderID: // value for 'OrderID'
- *   },
- * });
- */
-export function useCommentsSubscription(baseOptions: Apollo.SubscriptionHookOptions<CommentsSubscription, CommentsSubscriptionVariables> & ({ variables: CommentsSubscriptionVariables; skip?: boolean; } | { skip: boolean; }) ) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useSubscription<CommentsSubscription, CommentsSubscriptionVariables>(CommentsDocument, options);
-      }
-export type CommentsSubscriptionHookResult = ReturnType<typeof useCommentsSubscription>;
-export type CommentsSubscriptionResult = Apollo.SubscriptionResult<CommentsSubscription>;
-export const InsertCommentDocument = gql`
-    mutation InsertComment($OrderID: Int!, $Text: String!, $UserID: Int!) {
-  insert_orders_comments_one(
-    object: {order_id: $OrderID, text: $Text, user_id: $UserID}
-  ) {
-    id
-    order_id
-    text
-    created_at
-    user_id
-  }
-}
-    `;
-export type InsertCommentMutationFn = Apollo.MutationFunction<InsertCommentMutation, InsertCommentMutationVariables>;
-
-/**
- * __useInsertCommentMutation__
- *
- * To run a mutation, you first call `useInsertCommentMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useInsertCommentMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [insertCommentMutation, { data, loading, error }] = useInsertCommentMutation({
- *   variables: {
- *      OrderID: // value for 'OrderID'
- *      Text: // value for 'Text'
- *      UserID: // value for 'UserID'
- *   },
- * });
- */
-export function useInsertCommentMutation(baseOptions?: Apollo.MutationHookOptions<InsertCommentMutation, InsertCommentMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<InsertCommentMutation, InsertCommentMutationVariables>(InsertCommentDocument, options);
-      }
-export type InsertCommentMutationHookResult = ReturnType<typeof useInsertCommentMutation>;
-export type InsertCommentMutationResult = Apollo.MutationResult<InsertCommentMutation>;
-export type InsertCommentMutationOptions = Apollo.BaseMutationOptions<InsertCommentMutation, InsertCommentMutationVariables>;
-export const DeleteCommentDocument = gql`
-    mutation DeleteComment($CommentID: Int!) {
-  delete_orders_comments_by_pk(id: $CommentID) {
-    id
-  }
-}
-    `;
-export type DeleteCommentMutationFn = Apollo.MutationFunction<DeleteCommentMutation, DeleteCommentMutationVariables>;
-
-/**
- * __useDeleteCommentMutation__
- *
- * To run a mutation, you first call `useDeleteCommentMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useDeleteCommentMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [deleteCommentMutation, { data, loading, error }] = useDeleteCommentMutation({
- *   variables: {
- *      CommentID: // value for 'CommentID'
- *   },
- * });
- */
-export function useDeleteCommentMutation(baseOptions?: Apollo.MutationHookOptions<DeleteCommentMutation, DeleteCommentMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<DeleteCommentMutation, DeleteCommentMutationVariables>(DeleteCommentDocument, options);
-      }
-export type DeleteCommentMutationHookResult = ReturnType<typeof useDeleteCommentMutation>;
-export type DeleteCommentMutationResult = Apollo.MutationResult<DeleteCommentMutation>;
-export type DeleteCommentMutationOptions = Apollo.BaseMutationOptions<DeleteCommentMutation, DeleteCommentMutationVariables>;
-export const UpdateCommentDocument = gql`
-    mutation UpdateComment($CommentID: Int!, $Text: String!) {
-  update_orders_comments_by_pk(pk_columns: {id: $CommentID}, _set: {text: $Text}) {
-    id
-    order_id
-    text
-    created_at
-    user_id
-  }
-}
-    `;
-export type UpdateCommentMutationFn = Apollo.MutationFunction<UpdateCommentMutation, UpdateCommentMutationVariables>;
-
-/**
- * __useUpdateCommentMutation__
- *
- * To run a mutation, you first call `useUpdateCommentMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateCommentMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updateCommentMutation, { data, loading, error }] = useUpdateCommentMutation({
- *   variables: {
- *      CommentID: // value for 'CommentID'
- *      Text: // value for 'Text'
- *   },
- * });
- */
-export function useUpdateCommentMutation(baseOptions?: Apollo.MutationHookOptions<UpdateCommentMutation, UpdateCommentMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UpdateCommentMutation, UpdateCommentMutationVariables>(UpdateCommentDocument, options);
-      }
-export type UpdateCommentMutationHookResult = ReturnType<typeof useUpdateCommentMutation>;
-export type UpdateCommentMutationResult = Apollo.MutationResult<UpdateCommentMutation>;
-export type UpdateCommentMutationOptions = Apollo.BaseMutationOptions<UpdateCommentMutation, UpdateCommentMutationVariables>;
 export const GetAllUsersDocument = gql`
     query GetAllUsers {
   users {
@@ -11103,7 +10972,7 @@ export type GetOrdersArchivedByIntervalSuspenseQueryHookResult = ReturnType<type
 export type GetOrdersArchivedByIntervalQueryResult = Apollo.QueryResult<GetOrdersArchivedByIntervalQuery, GetOrdersArchivedByIntervalQueryVariables>;
 export const GetManagersDocument = gql`
     query GetManagers {
-  users(where: {role: {_lte: 2}}) {
+  users(where: {role: {_eq: 2}}) {
     first_name
     last_name
     id
@@ -11227,11 +11096,9 @@ export type GetOrderAttachmentsLazyQueryHookResult = ReturnType<typeof useGetOrd
 export type GetOrderAttachmentsSuspenseQueryHookResult = ReturnType<typeof useGetOrderAttachmentsSuspenseQuery>;
 export type GetOrderAttachmentsQueryResult = Apollo.QueryResult<GetOrderAttachmentsQuery, GetOrderAttachmentsQueryVariables>;
 export const InsertOrderDocument = gql`
-    mutation InsertOrder($status: Int!) {
-  insert_orders_orders(objects: {status: $status}) {
-    returning {
-      id
-    }
+    mutation InsertOrder($object: orders_orders_insert_input!) {
+  insert_orders_orders_one(object: $object) {
+    id
   }
 }
     `;
@@ -11250,7 +11117,7 @@ export type InsertOrderMutationFn = Apollo.MutationFunction<InsertOrderMutation,
  * @example
  * const [insertOrderMutation, { data, loading, error }] = useInsertOrderMutation({
  *   variables: {
- *      status: // value for 'status'
+ *      object: // value for 'object'
  *   },
  * });
  */
@@ -11261,6 +11128,127 @@ export function useInsertOrderMutation(baseOptions?: Apollo.MutationHookOptions<
 export type InsertOrderMutationHookResult = ReturnType<typeof useInsertOrderMutation>;
 export type InsertOrderMutationResult = Apollo.MutationResult<InsertOrderMutation>;
 export type InsertOrderMutationOptions = Apollo.BaseMutationOptions<InsertOrderMutation, InsertOrderMutationVariables>;
+export const GetDistinctCitiesDocument = gql`
+    query GetDistinctCities {
+  orders_orders(distinct_on: city) {
+    city
+  }
+}
+    `;
+
+/**
+ * __useGetDistinctCitiesQuery__
+ *
+ * To run a query within a React component, call `useGetDistinctCitiesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetDistinctCitiesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetDistinctCitiesQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetDistinctCitiesQuery(baseOptions?: Apollo.QueryHookOptions<GetDistinctCitiesQuery, GetDistinctCitiesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetDistinctCitiesQuery, GetDistinctCitiesQueryVariables>(GetDistinctCitiesDocument, options);
+      }
+export function useGetDistinctCitiesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetDistinctCitiesQuery, GetDistinctCitiesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetDistinctCitiesQuery, GetDistinctCitiesQueryVariables>(GetDistinctCitiesDocument, options);
+        }
+export function useGetDistinctCitiesSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetDistinctCitiesQuery, GetDistinctCitiesQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetDistinctCitiesQuery, GetDistinctCitiesQueryVariables>(GetDistinctCitiesDocument, options);
+        }
+export type GetDistinctCitiesQueryHookResult = ReturnType<typeof useGetDistinctCitiesQuery>;
+export type GetDistinctCitiesLazyQueryHookResult = ReturnType<typeof useGetDistinctCitiesLazyQuery>;
+export type GetDistinctCitiesSuspenseQueryHookResult = ReturnType<typeof useGetDistinctCitiesSuspenseQuery>;
+export type GetDistinctCitiesQueryResult = Apollo.QueryResult<GetDistinctCitiesQuery, GetDistinctCitiesQueryVariables>;
+export const GetDistinctContractorsDocument = gql`
+    query GetDistinctContractors {
+  orders_orders(distinct_on: contractor) {
+    contractor
+  }
+}
+    `;
+
+/**
+ * __useGetDistinctContractorsQuery__
+ *
+ * To run a query within a React component, call `useGetDistinctContractorsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetDistinctContractorsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetDistinctContractorsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetDistinctContractorsQuery(baseOptions?: Apollo.QueryHookOptions<GetDistinctContractorsQuery, GetDistinctContractorsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetDistinctContractorsQuery, GetDistinctContractorsQueryVariables>(GetDistinctContractorsDocument, options);
+      }
+export function useGetDistinctContractorsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetDistinctContractorsQuery, GetDistinctContractorsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetDistinctContractorsQuery, GetDistinctContractorsQueryVariables>(GetDistinctContractorsDocument, options);
+        }
+export function useGetDistinctContractorsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetDistinctContractorsQuery, GetDistinctContractorsQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetDistinctContractorsQuery, GetDistinctContractorsQueryVariables>(GetDistinctContractorsDocument, options);
+        }
+export type GetDistinctContractorsQueryHookResult = ReturnType<typeof useGetDistinctContractorsQuery>;
+export type GetDistinctContractorsLazyQueryHookResult = ReturnType<typeof useGetDistinctContractorsLazyQuery>;
+export type GetDistinctContractorsSuspenseQueryHookResult = ReturnType<typeof useGetDistinctContractorsSuspenseQuery>;
+export type GetDistinctContractorsQueryResult = Apollo.QueryResult<GetDistinctContractorsQuery, GetDistinctContractorsQueryVariables>;
+export const GetOrderPositionsDocument = gql`
+    query GetOrderPositions($order_id: Int!) {
+  orders_order_items(where: {order_id: {_eq: $order_id}}) {
+    id
+    name
+    description
+    quantity
+  }
+}
+    `;
+
+/**
+ * __useGetOrderPositionsQuery__
+ *
+ * To run a query within a React component, call `useGetOrderPositionsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetOrderPositionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetOrderPositionsQuery({
+ *   variables: {
+ *      order_id: // value for 'order_id'
+ *   },
+ * });
+ */
+export function useGetOrderPositionsQuery(baseOptions: Apollo.QueryHookOptions<GetOrderPositionsQuery, GetOrderPositionsQueryVariables> & ({ variables: GetOrderPositionsQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetOrderPositionsQuery, GetOrderPositionsQueryVariables>(GetOrderPositionsDocument, options);
+      }
+export function useGetOrderPositionsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetOrderPositionsQuery, GetOrderPositionsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetOrderPositionsQuery, GetOrderPositionsQueryVariables>(GetOrderPositionsDocument, options);
+        }
+export function useGetOrderPositionsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetOrderPositionsQuery, GetOrderPositionsQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetOrderPositionsQuery, GetOrderPositionsQueryVariables>(GetOrderPositionsDocument, options);
+        }
+export type GetOrderPositionsQueryHookResult = ReturnType<typeof useGetOrderPositionsQuery>;
+export type GetOrderPositionsLazyQueryHookResult = ReturnType<typeof useGetOrderPositionsLazyQuery>;
+export type GetOrderPositionsSuspenseQueryHookResult = ReturnType<typeof useGetOrderPositionsSuspenseQuery>;
+export type GetOrderPositionsQueryResult = Apollo.QueryResult<GetOrderPositionsQuery, GetOrderPositionsQueryVariables>;
 export const GetReclamationOrdersDocument = gql`
     query GetReclamationOrders {
   orders_orders(where: {status: {_in: [10, 11, 12]}}) {
@@ -11335,3 +11323,152 @@ export function useUpdateOrderStatusMutation(baseOptions?: Apollo.MutationHookOp
 export type UpdateOrderStatusMutationHookResult = ReturnType<typeof useUpdateOrderStatusMutation>;
 export type UpdateOrderStatusMutationResult = Apollo.MutationResult<UpdateOrderStatusMutation>;
 export type UpdateOrderStatusMutationOptions = Apollo.BaseMutationOptions<UpdateOrderStatusMutation, UpdateOrderStatusMutationVariables>;
+export const CommentsDocument = gql`
+    subscription Comments($OrderID: Int!) {
+  orders_comments(where: {order_id: {_eq: $OrderID}}, order_by: {id: desc}) {
+    id
+    text
+    created_at
+    user {
+      id
+      first_name
+      last_name
+    }
+  }
+}
+    `;
+
+/**
+ * __useCommentsSubscription__
+ *
+ * To run a query within a React component, call `useCommentsSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useCommentsSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCommentsSubscription({
+ *   variables: {
+ *      OrderID: // value for 'OrderID'
+ *   },
+ * });
+ */
+export function useCommentsSubscription(baseOptions: Apollo.SubscriptionHookOptions<CommentsSubscription, CommentsSubscriptionVariables> & ({ variables: CommentsSubscriptionVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<CommentsSubscription, CommentsSubscriptionVariables>(CommentsDocument, options);
+      }
+export type CommentsSubscriptionHookResult = ReturnType<typeof useCommentsSubscription>;
+export type CommentsSubscriptionResult = Apollo.SubscriptionResult<CommentsSubscription>;
+export const InsertCommentDocument = gql`
+    mutation InsertComment($OrderID: Int!, $Text: String!, $UserID: Int!) {
+  insert_orders_comments_one(
+    object: {order_id: $OrderID, text: $Text, user_id: $UserID}
+  ) {
+    id
+    order_id
+    text
+    created_at
+    user_id
+  }
+}
+    `;
+export type InsertCommentMutationFn = Apollo.MutationFunction<InsertCommentMutation, InsertCommentMutationVariables>;
+
+/**
+ * __useInsertCommentMutation__
+ *
+ * To run a mutation, you first call `useInsertCommentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useInsertCommentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [insertCommentMutation, { data, loading, error }] = useInsertCommentMutation({
+ *   variables: {
+ *      OrderID: // value for 'OrderID'
+ *      Text: // value for 'Text'
+ *      UserID: // value for 'UserID'
+ *   },
+ * });
+ */
+export function useInsertCommentMutation(baseOptions?: Apollo.MutationHookOptions<InsertCommentMutation, InsertCommentMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<InsertCommentMutation, InsertCommentMutationVariables>(InsertCommentDocument, options);
+      }
+export type InsertCommentMutationHookResult = ReturnType<typeof useInsertCommentMutation>;
+export type InsertCommentMutationResult = Apollo.MutationResult<InsertCommentMutation>;
+export type InsertCommentMutationOptions = Apollo.BaseMutationOptions<InsertCommentMutation, InsertCommentMutationVariables>;
+export const DeleteCommentDocument = gql`
+    mutation DeleteComment($CommentID: Int!) {
+  delete_orders_comments_by_pk(id: $CommentID) {
+    id
+  }
+}
+    `;
+export type DeleteCommentMutationFn = Apollo.MutationFunction<DeleteCommentMutation, DeleteCommentMutationVariables>;
+
+/**
+ * __useDeleteCommentMutation__
+ *
+ * To run a mutation, you first call `useDeleteCommentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteCommentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteCommentMutation, { data, loading, error }] = useDeleteCommentMutation({
+ *   variables: {
+ *      CommentID: // value for 'CommentID'
+ *   },
+ * });
+ */
+export function useDeleteCommentMutation(baseOptions?: Apollo.MutationHookOptions<DeleteCommentMutation, DeleteCommentMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteCommentMutation, DeleteCommentMutationVariables>(DeleteCommentDocument, options);
+      }
+export type DeleteCommentMutationHookResult = ReturnType<typeof useDeleteCommentMutation>;
+export type DeleteCommentMutationResult = Apollo.MutationResult<DeleteCommentMutation>;
+export type DeleteCommentMutationOptions = Apollo.BaseMutationOptions<DeleteCommentMutation, DeleteCommentMutationVariables>;
+export const UpdateCommentDocument = gql`
+    mutation UpdateComment($CommentID: Int!, $Text: String!) {
+  update_orders_comments_by_pk(pk_columns: {id: $CommentID}, _set: {text: $Text}) {
+    id
+    order_id
+    text
+    created_at
+    user_id
+  }
+}
+    `;
+export type UpdateCommentMutationFn = Apollo.MutationFunction<UpdateCommentMutation, UpdateCommentMutationVariables>;
+
+/**
+ * __useUpdateCommentMutation__
+ *
+ * To run a mutation, you first call `useUpdateCommentMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateCommentMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateCommentMutation, { data, loading, error }] = useUpdateCommentMutation({
+ *   variables: {
+ *      CommentID: // value for 'CommentID'
+ *      Text: // value for 'Text'
+ *   },
+ * });
+ */
+export function useUpdateCommentMutation(baseOptions?: Apollo.MutationHookOptions<UpdateCommentMutation, UpdateCommentMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateCommentMutation, UpdateCommentMutationVariables>(UpdateCommentDocument, options);
+      }
+export type UpdateCommentMutationHookResult = ReturnType<typeof useUpdateCommentMutation>;
+export type UpdateCommentMutationResult = Apollo.MutationResult<UpdateCommentMutation>;
+export type UpdateCommentMutationOptions = Apollo.BaseMutationOptions<UpdateCommentMutation, UpdateCommentMutationVariables>;

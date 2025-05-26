@@ -1,46 +1,23 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import { JSX } from '@emotion/react/jsx-runtime'
-import {
-  Box,
-  Button,
-  Dropdown,
-  Menu,
-  MenuButton,
-  Stack,
-  Table,
-  Typography
-} from '@mui/joy'
+import * as joy from '@mui/joy'
 import { Order, Roles } from 'domain-model'
 import { useAppContext } from 'hooks'
 import { observer } from 'mobx-react-lite'
 import moment from 'moment'
 import * as React from 'react'
-import { MyInput, Row } from 'shortcuts'
-import {
-  GetOrderPaymentsQuery,
-  useDeletePaymentMutation,
-  useGetOrderPaymentsQuery,
-  useInsertPaymentMutation
-} from 'types/graphql-shema'
+import { useEffect } from 'react'
+import { Inp, Row } from 'shortcuts'
+import { GetOrderPaymentsQuery } from 'types/graphql-shema'
 import * as formatter from 'utils/formatting'
+import { paymentStore } from './store'
 
-export function Paymnets({ data }: { data: Order }) {
-  const [deletePayment] = useDeletePaymentMutation()
-  const { data: payments, refetch } = useGetOrderPaymentsQuery({
-    variables: { _eq: data.id }
-  })
+export const Paymnets = observer(({ order }: { order: Order }) => {
   const { store }: any = useAppContext()
-
-  async function handleDelete(ID: number) {
-    await deletePayment({
-      variables: {
-        id: ID
-      }
-    })
-
-    refetch()
-  }
+  useEffect(() => {
+    paymentStore.init(order.id)
+  }, [order.id])
 
   const isHaveFullRight = [
     Roles.general,
@@ -48,41 +25,37 @@ export function Paymnets({ data }: { data: Order }) {
     Roles.bookkeeping
   ].includes(store?.user?.role)
 
-  const paymentHistoryContent = data.totalAmount ? (
+  const paymentHistoryContent = order.totalAmount ? (
     <PaymentsTable
-      data={payments?.orders_order_payments || []}
-      onDelete={ID => handleDelete(ID)}
-      totalAmount={data.totalAmount}
+      data={paymentStore.payments}
+      onDelete={ID => paymentStore.deletePayment(ID)}
+      totalAmount={order.totalAmount}
+      loading={paymentStore.loading}
       footerComponent={
-        <Box>
-          {isHaveFullRight && (
-            <NewPaymentInput
-              order={data}
-              refetch={refetch}
-              defaultValues={{ date: new Date().toISOString() }}
-            />
-          )}
-        </Box>
+        <joy.Box>
+          {isHaveFullRight && <NewPaymentInput order={order} />}
+        </joy.Box>
       }
     />
   ) : (
-    <Typography level="body-xs" color="danger">
+    <joy.Typography level="body-xs" color="danger">
       Не задана сумма заказа
-    </Typography>
+    </joy.Typography>
   )
 
   return (
-    <Box my={1}>
-      <Typography>Платежи</Typography>
+    <joy.Box my={1}>
+      <joy.Typography>Платежи</joy.Typography>
       {paymentHistoryContent}
-    </Box>
+    </joy.Box>
   )
-}
+})
 
 const PaymentsTable = observer(
   (props: {
     data: GetOrderPaymentsQuery['orders_order_payments']
     totalAmount: number
+    loading: boolean
     onDelete?: (ID: number) => void
     footerComponent: JSX.Element
   }) => {
@@ -94,9 +67,13 @@ const PaymentsTable = observer(
 
     const totalPaidPercent = formatter.percentage(totalPaid, totalAmount)
 
+    if (props.loading) {
+      return <joy.Typography>Загрузка платежей...</joy.Typography>
+    }
+
     return (
-      <Box>
-        <Table
+      <joy.Box>
+        <joy.Table
           css={css`
             td {
               padding: 5px 10px;
@@ -126,77 +103,71 @@ const PaymentsTable = observer(
               {props.footerComponent && <td>{props.footerComponent}</td>}
             </tr>
           </tfoot>
-        </Table>
-      </Box>
+        </joy.Table>
+      </joy.Box>
     )
   }
 )
 
 interface NewPaymentInputProps {
-  defaultValues: {
-    date?: string | null
-    amount?: number
-  }
-  refetch(): void
   order: Order
 }
 
-function NewPaymentInput(props: NewPaymentInputProps) {
+const NewPaymentInput = observer((props: NewPaymentInputProps) => {
+  const { store } = useAppContext()
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null)
-  const [insertPayment] = useInsertPaymentMutation()
-  const [data, setData] = React.useState<{
-    date?: string | null
-    amount?: number
-  }>(props.defaultValues)
 
   const handleClose = () => {
     setAnchorEl(null)
+    paymentStore.closeModal()
   }
 
   const open = Boolean(anchorEl)
   const id = open ? 'simple-popover' : undefined
 
   async function handleSave() {
-    if (!data.date || !data.amount) {
-      throw Error('data is not valid')
+    try {
+      await paymentStore.insertPayment()
+      handleClose()
+    } catch (error) {
+      console.error('Failed to save payment:', error)
     }
-    await insertPayment({
-      variables: {
-        date: moment(data.date).toISOString(),
-        order_id: props.order.id,
-        amount: data.amount
-      }
-    })
-
-    handleClose()
-    props.refetch()
   }
 
-  function handleDateChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setData({ ...data, date: moment(e.target.value, 'DDMMYY').toISOString() })
+  function handleDateChange(v: string) {
+    const date = moment(v, 'DDMMYY').toISOString()
+    paymentStore.setDate(date)
   }
 
-  function handleAmountChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const parsedValue = e.target.value.replace(',', '').replace('.', '')
+  function handleAmountChange(v: string) {
+    const parsedValue = v.replace(',', '').replace('.', '')
     const amount = parseInt(parsedValue)
-    setData({ ...data, amount })
+    paymentStore.setAmount(amount)
   }
 
   return (
-    <Dropdown
+    <joy.Dropdown
       open={open}
       onOpenChange={(e, open) => {
         if (open === false) {
           setAnchorEl(null)
+          paymentStore.closeModal()
         } else {
           setAnchorEl(e?.target as HTMLButtonElement)
+          paymentStore.openModal()
+          // Set default date to today
+          paymentStore.setDate(new Date().toISOString())
         }
       }}
     >
-      <MenuButton variant="outlined" size="sm">
+      <joy.MenuButton
+        variant="outlined"
+        size="sm"
+        disabled={paymentStore.loading}
+      >
         Добавить
-      </MenuButton>
-      <Menu
+      </joy.MenuButton>
+      <joy.Menu
         id={id}
         open={open}
         anchorEl={anchorEl}
@@ -207,30 +178,39 @@ function NewPaymentInput(props: NewPaymentInputProps) {
           }
         }}
       >
-        <Stack gap={1} p={1}>
-          <MyInput
+        <joy.Stack gap={1} p={1}>
+          <Inp
             label="Дата платежа"
             placeholder="dd.mm.yy"
-            onChange={handleDateChange}
-            default={moment(props.defaultValues?.date).format('DD.MM.YY')}
+            onChange={v => {
+              handleDateChange(v)
+            }}
+            defaultValue={moment().format('DD.MM.YY')}
           />
           <Row gap={1}>
-            <MyInput
+            <Inp
               label="Сумма платежа"
               type="number"
-              onChange={handleAmountChange}
-              default={props.defaultValues?.amount?.toString() || ''}
-              // TODO: make controlled intput in order to make button for payed alll
-              // value={props.order.TotalAmount}
+              onChange={v => {
+                handleAmountChange(v)
+              }}
+              value={paymentStore.amount?.toString() || ''}
               autoFocus
             />
-            <Typography>
+            <joy.Typography>
               из {formatter.money(props.order.totalAmount)}
-            </Typography>
+            </joy.Typography>
           </Row>
-          <Button onClick={handleSave}>Сохранить</Button>
-        </Stack>
-      </Menu>
-    </Dropdown>
+          {paymentStore.error && (
+            <joy.Typography color="danger" level="body-sm">
+              {paymentStore.error.message}
+            </joy.Typography>
+          )}
+          <joy.Button onClick={handleSave} loading={paymentStore.loading}>
+            Сохранить
+          </joy.Button>
+        </joy.Stack>
+      </joy.Menu>
+    </joy.Dropdown>
   )
-}
+})

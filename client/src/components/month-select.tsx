@@ -3,7 +3,7 @@ import { IconButton } from '@mui/joy'
 import { makeAutoObservable } from 'mobx'
 import { observer } from 'mobx-react-lite'
 import { Row, UseIcon } from 'shortcuts'
-import { Select } from '../pages/metal-flow/shared/select'
+import { Select } from './select'
 
 const months = [
   'янв',

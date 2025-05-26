@@ -1,5 +1,5 @@
-import { ReactNode } from 'react'
 import { ConfirmDialog } from 'components/confirm-dialog'
+import { ReactNode } from 'react'
 
 interface IDeleteOrderDialogProps {
   handler: () => void
@@ -12,7 +12,6 @@ export function DeleteOrderDialog({
 }: IDeleteOrderDialogProps) {
   const title = ''
   const body = 'Удаление заказа / рекламации необратимо.'
-
   return (
     <ConfirmDialog
       isDangerous

@@ -35,7 +35,7 @@ query GetOrdersArchivedByInterval($_lte: timestamp!, $_gte: timestamp!) {
 }
 
 query GetManagers {
-  users(where: { role: { _lte: 2 } }) {
+  users(where: { role: { _eq: 2 } }) {
     first_name
     last_name
     id
@@ -58,10 +58,31 @@ query GetOrderAttachments($order_id: Int!) {
   }
 }
 
-mutation InsertOrder($status: Int!) {
-  insert_orders_orders(objects: { status: $status }) {
-    returning {
-      id
-    }
+mutation InsertOrder($object: orders_orders_insert_input!) {
+  insert_orders_orders_one(object: $object) {
+    id
+  }
+}
+
+
+
+query GetDistinctCities {
+  orders_orders(distinct_on: city) {
+    city
+  }
+}
+
+query GetDistinctContractors {
+  orders_orders(distinct_on: contractor) {
+    contractor
+  }
+}
+
+query GetOrderPositions($order_id: Int!) {
+  orders_order_items(where: { order_id: { _eq: $order_id } }) {
+    id
+    name
+    description
+    quantity
   }
 }

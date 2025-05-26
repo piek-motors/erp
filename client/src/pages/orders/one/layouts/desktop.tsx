@@ -1,20 +1,11 @@
-/** @jsxImportSource @emotion/react */
 import Grid from '@mui/joy/Grid'
-import { Order, User } from 'domain-model'
-import { OrderLeftPanel, OrderRightPanel } from 'pages/orders/one/components'
-import { UpdatePositionBtn } from 'pages/orders/one/dialogs/add-edit-order-item.dialog'
+import {
+  OrderLeftPanel,
+  OrderRightPanel
+} from 'pages/orders/one/high-level-blocks'
+import { InputPositionModal } from 'pages/orders/one/positions/input.modal'
 
-interface Props {
-  order: Order
-  refetch: () => void
-  users: User[]
-  user: User
-}
-
-// Desktop Layout Component
-export const DesktopLayout = (props: Props) => {
-  const { order, refetch, users, user } = props
-
+export const DesktopLayout = () => {
   return (
     <div
       className="desktop-only"
@@ -35,9 +26,9 @@ export const DesktopLayout = (props: Props) => {
           overflow: 'clip'
         }}
       >
-        <UpdatePositionBtn refetch={refetch} />
-        <OrderLeftPanel order={order} refetch={refetch} users={users} />
-        <OrderRightPanel order={order} user={user} />
+        <InputPositionModal />
+        <OrderLeftPanel />
+        <OrderRightPanel />
       </Grid>
     </div>
   )

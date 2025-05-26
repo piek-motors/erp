@@ -1,13 +1,13 @@
+import { apolloClient } from 'api'
+import { MonthSelectStore } from 'components/month-select'
 import { makeAutoObservable } from 'mobx'
 import moment from 'moment'
-import { apolloClient } from '../../api'
-import { MonthSelectStore } from '../../components/month-select'
 import {
   GetOrdersArchivedByIntervalDocument,
   GetOrdersArchivedByIntervalQuery,
   GetOrdersArchivedByIntervalQueryVariables,
   OrderFragment
-} from '../../types/graphql-shema'
+} from 'types/graphql-shema'
 
 class ReportPageStore {
   data: OrderFragment[] = []

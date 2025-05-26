@@ -29,12 +29,14 @@ export const Btn = Button
 type MyInputProps = InputProps & {
   label?: string
   helperText?: string
-  default?: string | null
+  value?: string | number | null
+  onChange?: (value: string) => void
   customInput?: React.ComponentType<any>
   unit?: string
+  enableAutoComplete?: boolean
 }
 
-export function MyInput(props: MyInputProps) {
+export function Inp(props: MyInputProps) {
   return (
     <FormControl>
       {props.label && <FormLabel sx={{ margin: 0 }}>{props.label}</FormLabel>}
@@ -42,7 +44,14 @@ export function MyInput(props: MyInputProps) {
         <props.customInput onChange={props.onChange} name={props.name} />
       ) : (
         <Row>
-          <Input {...props} defaultValue={props.default || ''} />
+          <Input
+            value={props.value?.toString() || ''}
+            autoComplete={props.enableAutoComplete ? 'on' : 'off'}
+            onChange={e => {
+              props.onChange?.(e.target.value ?? '')
+            }}
+            {...props}
+          />
           {props.unit && <Typography>{props.unit}</Typography>}
         </Row>
       )}
@@ -140,7 +149,7 @@ export function MultilineInput(
 ) {
   return (
     <FormControl>
-      {<FormLabel>{props.label}</FormLabel>}
+      <FormLabel sx={{ margin: 0 }}>{props.label}</FormLabel>
       <Textarea placeholder={props.label} {...props} />
     </FormControl>
   )

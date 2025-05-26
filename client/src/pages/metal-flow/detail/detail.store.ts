@@ -2,6 +2,7 @@ import { apolloClient } from 'api'
 import { Detail, Material } from 'domain-model'
 import { makeAutoObservable } from 'mobx'
 import * as gql from 'types/graphql-shema'
+import { map } from '../mappers'
 
 type MaterialRelationData = {
   length: string
@@ -34,11 +35,10 @@ export class DetailStore {
   }
 
   private createDetailFromResponse(response: any): Detail {
-    return {
-      id: response.id,
-      name: response.name,
-      materials: new Map()
-    }
+    const detail = map.detail.fromDto(response)
+    if (!detail)
+      throw new Error('createDetailFromResponse: detail is not defined')
+    return detail
   }
 
   clear() {

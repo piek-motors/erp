@@ -2,6 +2,7 @@ import { Stack, Typography } from '@mui/joy'
 import { Table } from 'components/table.impl'
 import { Order } from 'domain-model'
 import { openOrderDetailPage } from 'lib/routes'
+import { observer } from 'mobx-react-lite'
 import { useMemo } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Column } from 'react-table'
@@ -73,12 +74,18 @@ export const columnsList: Column<Order>[] = [
   }
 ]
 
-export function OrdersTable(props: { data: TOrderColumnData[] }) {
+export const OrdersTable = observer((props: { data: TOrderColumnData[] }) => {
   const navigate = useNavigate()
   const onRowClick = (order: Order) => {
     navigate(openOrderDetailPage(order.id))
   }
   const columns = useMemo(() => columnsList, [])
+
+  const mappedData = useMemo(
+    () => props.data.map(e => map.order.fromDto(e)),
+    [props.data]
+  )
+
   return (
     <Table
       trStyleCallback={row => {
@@ -87,8 +94,8 @@ export function OrdersTable(props: { data: TOrderColumnData[] }) {
         }
       }}
       columns={columns}
-      data={props.data.map(e => map.order.fromDto(e))}
+      data={mappedData}
       onRowClick={onRowClick}
     />
   )
-}
+})

@@ -1,6 +1,7 @@
-import { Autocomplete, FormControl, FormLabel } from '@mui/joy'
+import { FormControl } from '@mui/joy'
+import { BaseAutocomplete, BaseOption } from 'components/base-autocomplete'
+import { Material } from 'domain-model'
 import { useGetMaterialsQuery } from 'types/graphql-shema'
-import { Material } from '../../../../../domain-model/dist'
 import { map } from '../mappers'
 
 export function MaterialAutocomplete(props: {
@@ -10,31 +11,26 @@ export function MaterialAutocomplete(props: {
 }) {
   const { data, value, onChange } = props
 
-  const options =
+  const options: BaseOption[] =
     data?.metal_flow_materials.map(map.material.fromDto).map(material => ({
       label: material.deriveLabel(),
-      material
+      value: material
     })) || []
 
   return (
-    <Autocomplete
-      onChange={(e: any, selected) => {
-        if (selected) {
-          onChange(selected.material)
+    <BaseAutocomplete
+      options={options}
+      value={value ? { label: value.deriveLabel(), value: value } : null}
+      onChange={newValue => {
+        if (newValue && !Array.isArray(newValue)) {
+          onChange(newValue.value)
         }
       }}
-      options={options}
-      getOptionLabel={option => option.label}
-      isOptionEqualToValue={(option, value) =>
-        option.material.id === value.material.id
+      getOptionLabel={option =>
+        typeof option === 'string' ? option : option.label
       }
-      value={
-        value
-          ? {
-              label: value.deriveLabel(),
-              material: value
-            }
-          : null
+      isOptionEqualToValue={(option, value) =>
+        option.value.id === value.value.id
       }
     />
   )
@@ -47,31 +43,30 @@ export function MaterialAutocompleteMulti(props: {
   disabledInput?: boolean
 }) {
   const { data, value, onChange } = props
-  const options =
+  const options: BaseOption[] =
     data?.metal_flow_materials.map(map.material.fromDto).map(material => ({
       label: material.deriveLabel(),
-      material
+      value: material
     })) || []
 
   return (
     <FormControl>
-      <FormLabel sx={{ m: 0 }}>Выберите материалы</FormLabel>
-      <Autocomplete
+      <BaseAutocomplete
+        label="Выберите материалы"
         multiple
-        disabled={props.disabledInput}
-        onChange={(e: any, selected) => {
-          if (selected) {
-            onChange(selected.map(e => e.material))
+        options={options}
+        value={value?.map(m => ({ label: m.deriveLabel(), value: m })) || []}
+        onChange={newValue => {
+          if (Array.isArray(newValue)) {
+            onChange(newValue.map(v => v.value))
           }
         }}
-        value={value?.map(m => ({
-          label: m.deriveLabel(),
-          material: m
-        }))}
-        options={options}
-        getOptionLabel={option => option.label}
+        disabled={props.disabledInput}
+        getOptionLabel={option =>
+          typeof option === 'string' ? option : option.label
+        }
         isOptionEqualToValue={(option, value) =>
-          option.material.id === value.material.id
+          option.value.id === value.value.id
         }
       />
     </FormControl>

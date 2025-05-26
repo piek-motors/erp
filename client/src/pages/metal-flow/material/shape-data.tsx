@@ -9,8 +9,8 @@ import {
   uiUnit
 } from 'domain-model'
 import { Observer } from 'mobx-react-lite'
-import { InputStack, MyInput } from '../../../shortcuts'
-import { AlloyAutocomplete } from '../shared/alloy-autocomplete'
+import { Inp, InputStack } from 'shortcuts'
+import { AlloyAutocomplete } from '../shared/basic'
 import { materialStore } from '../store'
 import { t } from '../text'
 
@@ -36,7 +36,7 @@ function SquareMaterialInputBase({
 }) {
   return (
     <InputStack>
-      <MyInput
+      <Inp
         label={t.Width}
         value={shapeData.width}
         onChange={e => {
@@ -62,7 +62,7 @@ function SquareMaterialInputBase({
 function ListMaterialInputBase({ shapeData }: { shapeData: ListShapeData }) {
   return (
     <InputStack>
-      <MyInput
+      <Inp
         label={t.Thickness}
         value={shapeData.thickness}
         onChange={e => {
@@ -77,7 +77,7 @@ function ListMaterialInputBase({ shapeData }: { shapeData: ListShapeData }) {
 function PipeMaterialInputBase({ shapeData }: { shapeData: PipeShapeData }) {
   return (
     <InputStack>
-      <MyInput
+      <Inp
         label={t.Diameter}
         type="number"
         value={shapeData.diameter}
@@ -93,7 +93,7 @@ function PipeMaterialInputBase({ shapeData }: { shapeData: PipeShapeData }) {
         }}
         alloy={shapeData.alloy}
       />
-      <MyInput
+      <Inp
         label={t.Thickness}
         value={shapeData.thickness}
         type="number"
@@ -109,12 +109,12 @@ function PipeMaterialInputBase({ shapeData }: { shapeData: PipeShapeData }) {
 function RoundBarInputBase({ shapeData }: { shapeData: RoundBarShapeData }) {
   return (
     <InputStack>
-      <MyInput
+      <Inp
         label={t.Diameter}
         type="number"
         value={shapeData.diameter}
-        onChange={e => {
-          const newData = { ...shapeData, diameter: Number(e.target.value) }
+        onChange={v => {
+          const newData = { ...shapeData, diameter: Number(v) }
           materialStore.setShapeData(
             plainToInstance(RoundBarShapeData, newData)
           )
@@ -130,7 +130,7 @@ function RoundBarInputBase({ shapeData }: { shapeData: RoundBarShapeData }) {
         }}
         alloy={shapeData.alloy}
       />
-      <MyInput
+      <Inp
         label={t.LinearMass}
         value={shapeData.linearMass}
         type="number"
@@ -142,7 +142,7 @@ function RoundBarInputBase({ shapeData }: { shapeData: RoundBarShapeData }) {
         }}
         unit="кг/м"
       />
-      <MyInput
+      <Inp
         label={t.Density}
         value={shapeData.density}
         type="number"

@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom'
 import { AuthService } from 'services/auth.service'
 import { ServerErrorResponse } from 'types/global'
 import { CenteredContainer } from '../components/centered-container'
-import { MyInput } from '../shortcuts'
+import { Inp } from '../shortcuts'
 
 export const LoginForm = () => {
   const [email, setEmail] = useState('')
@@ -37,11 +37,11 @@ export const LoginForm = () => {
         <Typography level="h4" color="primary">
           Piek Factory
         </Typography>
-        <MyInput
+        <Inp
           placeholder="Email"
           onChange={e => setEmail(e.target.value.trim())}
         />
-        <MyInput
+        <Inp
           placeholder="Password"
           type="password"
           onChange={e => setPassword(e.target.value.trim())}

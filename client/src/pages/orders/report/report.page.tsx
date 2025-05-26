@@ -1,11 +1,10 @@
-/** @jsxImportSource @emotion/react */
 import { Box, Typography } from '@mui/joy'
 import { MonthSelect } from 'components/month-select'
 import { TableName } from 'components/table-name'
 import { observer } from 'mobx-react-lite'
 import { useEffect } from 'react'
-import { OrdersTable } from './columns'
-import { report } from './report.store'
+import { OrdersTable } from '../columns'
+import { report } from '../stores/report.store'
 
 export const RequestReportPage = observer(() => {
   const isEmpty = Array.isArray(report.data) && report.data.length === 0

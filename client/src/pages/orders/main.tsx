@@ -7,6 +7,7 @@ import { EnOrderStatus } from 'domain-model'
 import { useFilter } from 'hooks'
 import { SxProperty } from 'lib/constants'
 import { ListOrdersRoutes } from 'lib/routes'
+import { observer } from 'mobx-react-lite'
 import moment from 'moment'
 import { useMemo } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
@@ -14,16 +15,15 @@ import { AddResourceButton, MyTabs } from 'shortcuts'
 import { RouteConfig } from 'types/global'
 import {
   useGetOrdersArchivedBySearchKeywordQuery,
-  useGetOrdersByStatusQuery,
-  useInsertOrderMutation
+  useGetOrdersByStatusQuery
 } from 'types/graphql-shema'
 import { formatOnlyDate } from 'utils/formatting'
-import { columnsList, OrdersTable } from './columns'
-import { RequestReportPage } from './report.page'
-import { useOrderListPageStore } from './state'
+import { OrdersTable } from './columns'
+import { RequestReportPage } from './report/report.page'
+import { useOrderListPageStore } from './stores/state'
 import { t } from './text'
 
-function PriorityList() {
+const PriorityList = observer(() => {
   const store = useOrderListPageStore()
   const { data } = useGetOrdersByStatusQuery({
     variables: {
@@ -55,9 +55,9 @@ function PriorityList() {
       </Sheet>
     )
   )
-}
+})
 
-function RegistrationList() {
+const RegistrationList = observer(() => {
   const store = useOrderListPageStore()
   const { data } = useGetOrdersByStatusQuery({
     variables: {
@@ -86,28 +86,34 @@ function RegistrationList() {
       <OrdersTable data={orders} />
     </>
   )
-}
+})
 
-function NewOrderList() {
+const NewOrderList = observer(() => {
   const { data } = useGetOrdersByStatusQuery({
     variables: { order_status: EnOrderStatus.Production }
   })
 
-  const ordersByToday =
-    data?.orders_orders.filter(
-      each =>
-        formatOnlyDate(each.acceptance_date) ===
-        formatOnlyDate(moment().toISOString())
-    ) || []
+  const { todayDate, yesterdayDate } = useMemo(() => {
+    const today = moment()
+    const yesterday = moment().subtract(1, 'day')
+    return {
+      todayDate: formatOnlyDate(today.toISOString()),
+      yesterdayDate: formatOnlyDate(yesterday.toISOString())
+    }
+  }, [])
 
-  const ordersByYesterday =
-    data?.orders_orders.filter(
-      each =>
-        formatOnlyDate(each.acceptance_date) ===
-        formatOnlyDate(moment().subtract(1, 'day').toISOString())
-    ) || []
+  const { ordersByToday, ordersByYesterday } = useMemo(() => {
+    const orders = data?.orders_orders || []
 
-  const columns = useMemo(() => columnsList, [])
+    return {
+      ordersByToday: orders.filter(
+        each => formatOnlyDate(each.acceptance_date) === todayDate
+      ),
+      ordersByYesterday: orders.filter(
+        each => formatOnlyDate(each.acceptance_date) === yesterdayDate
+      )
+    }
+  }, [data?.orders_orders, todayDate, yesterdayDate])
 
   return (
     <>
@@ -118,9 +124,9 @@ function NewOrderList() {
       <OrdersTable data={ordersByYesterday} />
     </>
   )
-}
+})
 
-function Archive() {
+const Archive = observer(() => {
   const store = useOrderListPageStore()
 
   const keyword = () => {
@@ -160,48 +166,40 @@ function Archive() {
       <OrdersTable data={orders} />
     </>
   )
-}
+})
 
-function Wrapper(props: { children: React.ReactNode; sx?: SxProperty }) {
-  const navigate = useNavigate()
-  const [insertOrderMutation] = useInsertOrderMutation({
-    variables: {
-      status: EnOrderStatus.Registration
+const Wrapper = observer(
+  (props: { children: React.ReactNode; sx?: SxProperty }) => {
+    const navigate = useNavigate()
+    const currentTab = useLocation().pathname
+    function insertNewOrder() {
+      navigate(`/orders/new`)
     }
-  })
 
-  const currentTab = useLocation().pathname
-  function insertOrderHandler() {
-    insertOrderMutation().then(res => {
-      navigate(
-        `/order/${res.data?.insert_orders_orders?.returning[0].id}?edit=true`
-      )
-    })
+    const tabs = {
+      [t.preOrders]: ListOrdersRoutes.pre_orders,
+      [t.priorityList]: ListOrdersRoutes.priority_list,
+      [t.recentlyPaidOrders]: ListOrdersRoutes.recent_paid_orders,
+      [t.report]: ListOrdersRoutes.report,
+      [t.searchInArchive]: ListOrdersRoutes.search_in_archive
+    }
+    return (
+      <Stack p={1}>
+        <PageTitle title={t.ordersTitle}>
+          <AddResourceButton onClick={() => insertNewOrder()} />
+        </PageTitle>
+        <MyTabs
+          value={currentTab}
+          tabs={tabs}
+          handleChange={v => {
+            navigate(v)
+          }}
+        />
+        <Box sx={props.sx}>{props.children}</Box>
+      </Stack>
+    )
   }
-
-  const tabs = {
-    [t.preOrders]: ListOrdersRoutes.pre_orders,
-    [t.priorityList]: ListOrdersRoutes.priority_list,
-    [t.recentlyPaidOrders]: ListOrdersRoutes.recent_paid_orders,
-    [t.report]: ListOrdersRoutes.report,
-    [t.searchInArchive]: ListOrdersRoutes.search_in_archive
-  }
-  return (
-    <Stack p={1}>
-      <PageTitle title={t.ordersTitle}>
-        <AddResourceButton onClick={() => insertOrderHandler()} />
-      </PageTitle>
-      <MyTabs
-        value={currentTab}
-        tabs={tabs}
-        handleChange={v => {
-          navigate(v)
-        }}
-      />
-      <Box sx={props.sx}>{props.children}</Box>
-    </Stack>
-  )
-}
+)
 
 const routes = [
   {

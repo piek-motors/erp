@@ -3,6 +3,7 @@ export enum AppRoutes {
   help = '/help',
   mentions = '/mentions',
   order_detail = '/order/:id',
+  new_order = '/orders/new',
   settings = '/settings',
   reclamation = '/reclamation',
   attendance = '/attendance'

@@ -1,16 +1,14 @@
-/** @jsxImportSource @emotion/react */
 import { UilFile, UilFileAlt, UilImage } from '@iconscout/react-unicons'
 import { Box, Button, Stack, Typography } from '@mui/joy'
 import { OrderAttachment } from 'domain-model'
 import { observer } from 'mobx-react-lite'
-import { docsStore } from 'pages/orders/one/attachments/attachments.store'
-import { orderStore } from 'pages/orders/one/order.store'
 import { useEffect } from 'react'
 import { DeleteResourceButton, Row, text, UseIcon } from 'shortcuts'
+import { orderStore } from '../stores/order.store'
+import { attachmentsStore } from './store'
 
 const File = observer((props: { file: OrderAttachment }) => {
   const { file } = props
-
   return (
     <Row justifyContent={'space-between'}>
       <Box>
@@ -34,14 +32,14 @@ const File = observer((props: { file: OrderAttachment }) => {
           >
             <Typography level="body-sm">{file.name}</Typography>
           </Button>
-          {docsStore.uploading && (
+          {attachmentsStore.uploading && (
             <Typography level="body-sm">Файл выгружается...</Typography>
           )}
         </a>
       </Box>
 
       {orderStore.editMode && (
-        <DeleteResourceButton onClick={() => docsStore.deleteFile(file)} />
+        <DeleteResourceButton onClick={() => attachmentsStore.delete(file)} />
       )}
     </Row>
   )
@@ -50,10 +48,10 @@ const File = observer((props: { file: OrderAttachment }) => {
 export const Attachments = observer((props: { orderId: number }) => {
   const { orderId } = props
   useEffect(() => {
-    orderId && docsStore.fetchAttachments(orderId)
+    orderId && attachmentsStore.load(orderId)
   }, [])
 
-  if (!docsStore.files?.length) {
+  if (!attachmentsStore.files?.length) {
     return (
       <Typography p={1} color="neutral">
         Нет документов
@@ -63,15 +61,15 @@ export const Attachments = observer((props: { orderId: number }) => {
   return (
     <>
       <Row gap={2}>
-        <Typography>Документы [{docsStore.files.length}]</Typography>
+        <Typography>Документы [{attachmentsStore.files.length}]</Typography>
       </Row>
       <Stack gap={1} py={2}>
-        {docsStore.files.map(file => (
+        {attachmentsStore.files.map(file => (
           <File key={file.key} file={file} />
         ))}
 
-        {Boolean(docsStore.uploadingFiles.length) &&
-          docsStore.uploadingFiles.map(file => (
+        {Boolean(attachmentsStore.uploadingFiles.length) &&
+          attachmentsStore.uploadingFiles.map(file => (
             <Box>
               <Typography level="body-sm">{text.loading}</Typography>
               <File
@@ -92,7 +90,7 @@ export const Attachments = observer((props: { orderId: number }) => {
   )
 })
 
-export function getformatAssociatedIcon(filename: string) {
+function getformatAssociatedIcon(filename: string) {
   const fileExtension = filename.split('.')[filename.split('.').length - 1]
   if (['png', 'jpg', 'jpeg'].includes(fileExtension)) {
     return <UseIcon icon={UilImage} />

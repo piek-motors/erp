@@ -13,14 +13,14 @@ import {
 } from 'domain-model'
 import { MetalFlowRoutes, openMetalFlowPage } from 'lib/routes'
 import { useEffect, useState } from 'react'
-import { AddResourceButton, MyInput, MyTabs, SendMutation } from 'shortcuts'
+import { AddResourceButton, Inp, MyTabs, SendMutation } from 'shortcuts'
 import { useNotifier } from 'store/notifier.store'
 import {
   useDeleteWriteOffMutation,
   useGetWrietOffsQuery
 } from 'types/graphql-shema'
 import { QtyInputWithUnit, SmallInputForm } from '../shared'
-import { DetailSelect } from '../shared/detail-select'
+import { DetailSelect } from '../shared/basic'
 import { MaterialSelect } from '../shared/material-select'
 import { t } from '../text'
 import { getColumns } from './columns.decl'
@@ -114,7 +114,7 @@ export function WriteoffThroughDetail() {
         }}
         value={detail}
       />
-      <MyInput
+      <Inp
         label={t.Qty}
         type="number"
         value={typeData.qty || ''}

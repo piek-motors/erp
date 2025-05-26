@@ -44,21 +44,14 @@ class DetailMapper {
 
   fromDto(raw: GetDetailByPkQuery['metal_flow_details_by_pk']): Detail | null {
     if (!raw) return null
-    const detailMaterials = new Map<
-      Material,
-      { weight: number; length: number }
-    >()
+    const detail = new Detail(raw.id, raw.name)
 
     for (const each of raw.detail_materials) {
       const material = this.materialMapper.fromDto(each.material)
-      const relationData = {
-        weight: each?.data?.weight || 0,
-        length: each?.data?.length || 0
-      }
-      detailMaterials.set(material, relationData)
+      detail.madeOf(material, each?.data?.length, each?.data?.weight)
     }
 
-    return new Detail(raw.id, raw.name, detailMaterials)
+    return detail
   }
 }
 

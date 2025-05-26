@@ -2,8 +2,8 @@
 import { Container, IconButton, Stack, Typography } from '@mui/joy'
 import { AppRoutes, ListOrdersRoutes } from 'lib/routes'
 import { useNavigate } from 'react-router-dom'
-import { RouteConfig } from 'types/global'
 import { Row, UseIcon } from 'shortcuts'
+import { RouteConfig } from 'types/global'
 
 import {
   UilBell,
@@ -50,8 +50,8 @@ function Help() {
   return (
     <Container maxWidth="xs">
       <Stack py={3} gap={2}>
-        {links.map(each => (
-          <Stack sx={{ alignSelf: 'flex-start' }}>
+        {links.map((each, idx) => (
+          <Stack sx={{ alignSelf: 'flex-start' }} key={idx}>
             <IconButton
               variant="plain"
               color="neutral"

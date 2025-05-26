@@ -16,6 +16,7 @@ fragment Order on orders_orders {
   comment
   user {
     id
+    email
     first_name
     last_name
   }

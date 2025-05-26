@@ -1,44 +1,22 @@
 import { UilListUl, UilMessage, UilUser } from '@iconscout/react-unicons'
-import {
-  Box,
-  Button,
-  Card,
-  Divider,
-  IconButton,
-  Menu,
-  MenuItem,
-  Stack,
-  Textarea,
-  Tooltip,
-  Typography
-} from '@mui/joy'
+import * as joy from '@mui/joy'
 import { apolloClient } from 'api'
-import { Observer } from 'mobx-react-lite'
+import { User } from 'domain-model'
+import { observer } from 'mobx-react-lite'
 import moment from 'moment'
-import { useOrderDetailStore } from 'pages/orders/one/state'
 import React, { useRef, useState } from 'react'
 import { DeleteResourceButton, Row, text, UseIcon } from 'shortcuts'
-import { TComment, TUser } from 'types/global'
-import {
-  InsertCommentDocument,
-  InsertCommentMutation,
-  InsertCommentMutationVariables,
-  useCommentsSubscription,
-  useDeleteCommentMutation,
-  useGetAllUsersQuery,
-  useInsertCommentMutation,
-  useInsertNotificationMutation,
-  useUpdateCommentMutation
-} from 'types/graphql-shema'
-import { orderStore } from '../order.store'
+import { TComment } from 'types/global'
+import * as gql from 'types/graphql-shema'
+import { orderStore } from '../stores/order.store'
 import { UserListPopover } from './user-list.popover'
 
 async function insertComment(comment: string, orderId: number, userId: number) {
   const res = await apolloClient.mutate<
-    InsertCommentMutation,
-    InsertCommentMutationVariables
+    gql.InsertCommentMutation,
+    gql.InsertCommentMutationVariables
   >({
-    mutation: InsertCommentDocument,
+    mutation: gql.InsertCommentDocument,
     variables: {
       OrderID: orderId,
       Text: comment,
@@ -81,8 +59,8 @@ interface InputFormProps {
   inputRef: React.RefObject<HTMLInputElement>
 }
 
-function InputForm({ insertComment, inputRef }: InputFormProps) {
-  const { data: users } = useGetAllUsersQuery()
+const InputForm = observer(({ insertComment, inputRef }: InputFormProps) => {
+  const { data: users } = gql.useGetAllUsersQuery()
   const [anchorEl, setAnchorEl] = useState<Element | null>(null)
   const [anchorULP, setAnchorULP] = useState<Element | null>(null)
 
@@ -117,8 +95,8 @@ function InputForm({ insertComment, inputRef }: InputFormProps) {
         users={users?.users || []}
         inputRef={inputRef}
       />
-      <Stack flexGrow={1}>
-        <Textarea
+      <joy.Stack flexGrow={1}>
+        <joy.Textarea
           size="sm"
           variant="soft"
           color="neutral"
@@ -126,8 +104,8 @@ function InputForm({ insertComment, inputRef }: InputFormProps) {
           value={value}
           placeholder="Комментарий к заказу"
         />
-      </Stack>
-      <Box>
+      </joy.Stack>
+      <joy.Box>
         <InsertCommentButton
           onClick={() => {
             const temp = value
@@ -135,18 +113,18 @@ function InputForm({ insertComment, inputRef }: InputFormProps) {
             insertComment(temp)
           }}
         />
-      </Box>
+      </joy.Box>
     </Row>
   )
-}
+})
 
 function InsertCommentButton(props: { onClick: () => void }) {
   return (
-    <Tooltip title="Прикрепить комментарий">
-      <IconButton onClick={props.onClick}>
+    <joy.Tooltip title="Прикрепить комментарий">
+      <joy.IconButton onClick={props.onClick}>
         <UseIcon icon={UilMessage} />
-      </IconButton>
-    </Tooltip>
+      </joy.IconButton>
+    </joy.Tooltip>
   )
 }
 
@@ -178,14 +156,14 @@ export default function СommandListPopover({
   }
 
   return (
-    <Menu
+    <joy.Menu
       anchorEl={anchorEl}
       open={open}
       onClose={handleClose}
       placement="bottom-start"
       sx={{ p: 1 }}
     >
-      <MenuItem
+      <joy.MenuItem
         onClick={() => {
           handleClose()
           insertTodoinDOM()
@@ -193,12 +171,12 @@ export default function СommandListPopover({
       >
         <UilListUl />
         Чеклист
-      </MenuItem>
-      <MenuItem onClick={mentionHandler}>
+      </joy.MenuItem>
+      <joy.MenuItem onClick={mentionHandler}>
         <UilUser />
         Упомянуть
-      </MenuItem>
-    </Menu>
+      </joy.MenuItem>
+    </joy.Menu>
   )
 }
 
@@ -209,8 +187,8 @@ interface ICommentProps {
 }
 
 export function Comment({ data, userID }: ICommentProps) {
-  const [deleteMutation] = useDeleteCommentMutation()
-  const [updateMutation] = useUpdateCommentMutation()
+  const [deleteMutation] = gql.useDeleteCommentMutation()
+  const [updateMutation] = gql.useUpdateCommentMutation()
   function updateComment(id: number, newText: string) {
     updateMutation({
       variables: {
@@ -253,46 +231,39 @@ export function Comment({ data, userID }: ICommentProps) {
     )
   }
 
-  return (
-    <Observer
-      render={() => {
-        function actions() {
-          if (orderStore.editMode && userID === data.user.id)
-            return <DeleteResourceButton onClick={handleDelete} />
-        }
+  function actions() {
+    if (orderStore.editMode && userID === data.user.id)
+      return <DeleteResourceButton onClick={handleDelete} />
+  }
 
-        return (
-          <Card sx={{ my: 0.5, p: 1, gap: 0.5 }} variant="outlined">
-            <Row sx={{ justifyContent: 'space-between' }}>
-              <Typography level="body-xs">
-                <b>{sender()} </b>
-              </Typography>
-              <Row>
-                <Typography level="body-xs"> {timestamp()} </Typography>
-                <div>{actions()}</div>
-              </Row>
-            </Row>
-            <Divider />
-            {getCommentContent()}
-          </Card>
-        )
-      }}
-    />
+  return (
+    <joy.Card sx={{ my: 0.5, p: 1, gap: 0.5 }} variant="outlined">
+      <Row sx={{ justifyContent: 'space-between' }}>
+        <joy.Typography level="body-xs">
+          <b>{sender()} </b>
+        </joy.Typography>
+        <Row>
+          <joy.Typography level="body-xs"> {timestamp()} </joy.Typography>
+          <div>{actions()}</div>
+        </Row>
+      </Row>
+      <joy.Divider />
+      {getCommentContent()}
+    </joy.Card>
   )
 }
 
 interface ICommentsListProps {
-  user: TUser
+  user: User
+  orderId: number
 }
 
-export function CommentListViewPort({ user }: ICommentsListProps) {
-  const { orderId } = useOrderDetailStore()
-  if (!orderId) throw Error('Null OrderId at the local store')
-  const [insertOrderCommentMutation] = useInsertCommentMutation()
-  const [insertNotificationMutation] = useInsertNotificationMutation()
+export function CommentListViewPort({ user, orderId }: ICommentsListProps) {
+  const [insertOrderCommentMutation] = gql.useInsertCommentMutation()
+  const [insertNotificationMutation] = gql.useInsertNotificationMutation()
   const inputRef = useRef<HTMLInputElement>(null)
 
-  const { data, loading } = useCommentsSubscription({
+  const { data, loading } = gql.useCommentsSubscription({
     variables: { OrderID: orderId }
   })
   const [visibleComments, setVisibleComments] = useState(5)
@@ -312,39 +283,37 @@ export function CommentListViewPort({ user }: ICommentsListProps) {
   }
 
   return (
-    <Box>
-      <Box sx={{ overflow: 'scroll' }}>
+    <joy.Box>
+      <joy.Box sx={{ overflow: 'scroll' }}>
         {sortedComments.length > visibleComments && (
-          <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
-            <Button variant="soft" onClick={handleShowMore} size="sm">
+          <joy.Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
+            <joy.Button variant="soft" onClick={handleShowMore} size="sm">
               {text.showMore}
-            </Button>
-          </Box>
+            </joy.Button>
+          </joy.Box>
         )}
 
         {!loading &&
           commentsToShow.map(comment => (
             <Comment data={comment} key={comment.id} userID={user.id} />
           ))}
-      </Box>
-    </Box>
+      </joy.Box>
+    </joy.Box>
   )
 }
 
-export function CommentInputViewPort({ user }: ICommentsListProps) {
-  const { orderId } = useOrderDetailStore()
-  if (!orderId) throw Error('Null OrderId at the local store')
+export function CommentInputViewPort({ user, orderId }: ICommentsListProps) {
   const inputRef = useRef<any>(null)
   return (
-    <Box>
-      <Box sx={{ overflow: 'scroll', py: 2 }}>
+    <joy.Box>
+      <joy.Box sx={{ overflow: 'scroll', py: 2 }}>
         <InputForm
           insertComment={async comment => {
             insertComment(comment, orderId, user.id)
           }}
           inputRef={inputRef}
         />
-      </Box>
-    </Box>
+      </joy.Box>
+    </joy.Box>
   )
 }

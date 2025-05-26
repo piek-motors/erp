@@ -1,0 +1,226 @@
+import { apolloClient } from 'api'
+import { Order, OrderStatus } from 'domain-model'
+import { makeAutoObservable } from 'mobx'
+import moment from 'moment'
+import { map } from 'pages/orders/mappers'
+import * as gql from 'types/graphql-shema'
+import { SuggestionsStore } from '../stores/suggestions.store'
+
+export enum InputTypes {
+  Text = 'text',
+  Number = 'number',
+  Money = 'money',
+  Multiline = 'multiline',
+  Manager = 'manager',
+  Contractor = 'contractor',
+  City = 'city'
+}
+
+export type ColumnDefinition = {
+  label: string
+  placeholder?: string
+  inputType?: InputTypes
+  value?: string
+  onChange?: (value: string) => void
+  view?: string
+}
+
+export class StatementStore {
+  suggestions = new SuggestionsStore()
+
+  order?: Order | null
+  status: OrderStatus = OrderStatus.PreOrder
+  invoiceNumber = ''
+  shippingDate = ''
+  orderNumber = ''
+  managerId = ''
+  contractor = ''
+  city = ''
+  totalAmount = ''
+  comment = ''
+
+  constructor() {
+    makeAutoObservable(this)
+  }
+
+  async init(orderId: number) {
+    await this.suggestions.init()
+    const res = await apolloClient.query<
+      gql.GetOrderByPkQuery,
+      gql.GetOrderByPkQueryVariables
+    >({
+      query: gql.GetOrderByPkDocument,
+      variables: {
+        id: orderId
+      }
+    })
+    const o = map.order.fromDto(res.data.orders_orders[0])
+    this.loadState(o)
+  }
+
+  setOrder(order: Order) {
+    this.order = order
+  }
+  setStatus(status: OrderStatus) {
+    this.status = status
+  }
+  // Setters for each field
+  setInvoiceNumber(value: string) {
+    this.invoiceNumber = value
+  }
+  setShippingDate(value: string) {
+    this.shippingDate = value
+  }
+  setOrderNumber(value: string) {
+    this.orderNumber = value
+  }
+  setManagerId(value: string) {
+    this.managerId = value
+  }
+  setContractor(value: string) {
+    this.contractor = value
+  }
+  setCity(value: string) {
+    this.city = value
+  }
+  setTotalAmount(value: string) {
+    this.totalAmount = value
+  }
+  setComment(value: string) {
+    this.comment = value
+  }
+  clear() {
+    this.invoiceNumber = ''
+    this.shippingDate = ''
+    this.orderNumber = ''
+    this.managerId = ''
+    this.contractor = ''
+    this.city = ''
+    this.totalAmount = ''
+    this.comment = ''
+    // Note: status is intentionally not cleared to preserve reclamation status
+  }
+
+  loadState(o: Order) {
+    this.order = o
+    this.invoiceNumber = o.invoiceNumber?.toString() ?? ''
+    this.shippingDate = o.shippingDateString()
+    this.orderNumber = o.factoryNumber?.toString() ?? ''
+    this.managerId = o.manager?.id?.toString()
+    this.contractor = o.contractor ?? ''
+    this.city = o.city ?? ''
+    this.totalAmount = o.totalAmount?.toString()
+    this.comment = o.comment ?? ''
+  }
+  prepareForUpdate(orderId: number): gql.UpdateOrderInfoMutationVariables {
+    const fields: gql.UpdateOrderInfoMutationVariables['fields'] = {}
+    if (this.invoiceNumber) fields.invoice_number = this.invoiceNumber
+    if (this.shippingDate)
+      fields.shipping_date = moment(this.shippingDate, 'DD.MM.YY').format(
+        'YYYY-MM-DD'
+      )
+    if (this.orderNumber) fields.order_number = this.orderNumber
+    if (this.managerId) fields.manager_id = parseInt(this.managerId, 10)
+    if (this.contractor) fields.contractor = this.contractor
+    if (this.city) fields.city = this.city
+    if (this.totalAmount) fields.total_amount = parseFloat(this.totalAmount)
+    if (this.comment) fields.comment = this.comment
+    return {
+      id: orderId,
+      fields
+    }
+  }
+  getcolumns(): ColumnDefinition[] {
+    return [
+      {
+        label: 'План. отгрузка',
+        inputType: InputTypes.Text,
+        placeholder: 'ДД.ММ.ГГ',
+        value: this.shippingDate,
+        onChange: (v: string) => {
+          this.setShippingDate(v)
+        }
+      },
+      {
+        label: 'Контрагент',
+        inputType: InputTypes.Contractor,
+        value: this.contractor,
+        onChange: (v: string) => {
+          this.setContractor(v)
+        }
+      },
+      {
+        label: 'Cчет',
+        inputType: InputTypes.Number,
+        value: this.invoiceNumber,
+        onChange: (v: string) => {
+          this.setInvoiceNumber(v)
+        }
+      },
+      {
+        label: 'Номер заказа',
+        inputType: InputTypes.Text,
+        value: this.orderNumber,
+        onChange: (v: string) => {
+          this.setOrderNumber(v)
+        }
+      },
+      {
+        label: 'Оплачено',
+        view:
+          this.order?.totalPaidString() &&
+          `${this.order.totalPaidString()} (${this.order.paidPercentage()})`
+      },
+      {
+        label: 'Сумма заказа',
+        inputType: InputTypes.Money,
+        value: this.totalAmount,
+        onChange: (v: string) => {
+          this.setTotalAmount(v)
+        },
+        view: this.order?.totalAmountString()
+      },
+      {
+        label: 'Менеджер',
+        inputType: InputTypes.Manager,
+        value: this.managerId,
+        view: this.suggestions.managers.find(m => {
+          const managerId = Number(this.managerId)
+          if (Number.isNaN(managerId)) {
+            return false
+          }
+          return managerId === m.id
+        })?.fullName,
+        onChange: (v: string) => {
+          this.setManagerId(v)
+        }
+      },
+      {
+        label: 'Город',
+        inputType: InputTypes.City,
+        value: this.city,
+        onChange: (v: string) => {
+          this.setCity(v)
+        }
+      },
+      {
+        label: 'Добавлен в очередность',
+        view: this.order?.acceptanceDateString()
+      },
+      {
+        label: 'Отгружен',
+        view: this.order?.actualShippingDateString()
+      },
+      {
+        label: 'Комментарий',
+        inputType: InputTypes.Multiline,
+        value: this.comment,
+        onChange: (v: string) => {
+          this.setComment(v)
+        }
+      }
+    ]
+  }
+}
+
+export const statementStore = new StatementStore()
