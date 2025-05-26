@@ -26,16 +26,14 @@ export abstract class Material<
 > {
   @IsNumber()
   readonly id: number
+  @IsString()
   label: string
-
   abstract readonly unit: EnUnit
   abstract readonly shape: EnMaterialShape
-
   constructor(id: number, label: string = '') {
     this.id = id
     this.label = label
   }
-
   get unitUI() {
     return uiUnit(this.unit)
   }
@@ -44,7 +42,6 @@ export abstract class Material<
   }
   abstract deriveLabel(): string
   abstract getLabelProps(): ResourceNameProps
-
   abstract load(id: number | null, shapeData: ShapeData): this
   abstract shapeData(): ShapeData
 }
@@ -240,7 +237,6 @@ export class Pipe extends Material<PipeShapeData> {
 export class SquareBar extends Material<SquareBarShapeData> {
   unit = EnUnit.Kg
   shape = EnMaterialShape.SquareBar
-
   @IsString()
   name = 'Квадрат'
   /**
@@ -260,7 +256,6 @@ export class SquareBar extends Material<SquareBarShapeData> {
     if (!this.length) {
       throw new Error('length is not specified')
     }
-
     return `${this.name} ${this.length}x${this.alloy}`
   }
   getLabelProps(): ResourceNameProps {

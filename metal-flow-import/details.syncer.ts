@@ -1,9 +1,9 @@
-import { CsvIO } from 'csv-io'
 import { Detail, Material } from 'domain-model'
-import { MaterialParser } from 'materials.syncer'
 import { log } from 'node:console'
 import path from 'node:path'
-import { parseExcelNumber } from 'utils'
+import { CsvIO } from './adapters/csv-io.ts'
+import { MaterialParser } from './materials/materials.syncer.ts'
+import { parseExcelNumber } from './utils.ts'
 
 const detailsCsvPath = path.resolve('data', 'details.csv')
 
@@ -20,8 +20,7 @@ export class DetailSyncer {
   constructor(private readonly repo: IRepo) {}
 
   async sync() {
-    const table = await CsvIO.read(detailsCsvPath)
-    const materialDetails = await this.parseTable(table)
+    const materialDetails = await this.parseTable()
     const dbMaterials = await this.repo.getAllMaterials()
 
     const materialsToInsert = this.findMaterialsToInsert(
@@ -41,9 +40,8 @@ export class DetailSyncer {
     await this.processMaterialDetails(materialDetails, dbMaterials)
   }
 
-  private async parseTable(
-    table: string[][]
-  ): Promise<Map<Material, Array<Detail>>> {
+  async parseTable(): Promise<Map<Material, Array<Detail>>> {
+    const table = await CsvIO.read(detailsCsvPath)
     let detailId = 0
     let material: Material | undefined
     let detailMaterials = new Map<Material, Array<Detail>>()
@@ -60,7 +58,8 @@ export class DetailSyncer {
       detailId = result.detailId
     }
 
-    return this.filterMaterialsOnlyWithDetails(detailMaterials)
+    // return this.filterMaterialsOnlyWithDetails(detailMaterials)
+    return detailMaterials
   }
 
   private findMaterialsToInsert(
@@ -148,7 +147,6 @@ export class DetailSyncer {
     }
 
     const details = materialDetails.get(material) || []
-
     const detail = new Detail(detailId, detailName).madeOf(
       material,
       length,

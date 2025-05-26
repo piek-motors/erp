@@ -1,7 +1,7 @@
 import { connect } from 'db'
-import { DetailSyncer } from 'details.syncer'
-import { MaterialsSyncer } from 'materials.syncer'
+import { DetailSyncer } from 'details/details.syncer'
 import { Repo } from 'repo'
+import { MaterialsSyncer } from './materials/materials.syncer.ts'
 
 async function main() {
   try {

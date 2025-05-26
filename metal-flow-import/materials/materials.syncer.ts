@@ -1,8 +1,9 @@
 import { assert } from 'console'
 import { List, Material, Pipe, RoundBar, SquareBar } from 'domain-model'
 import path from 'node:path'
-import { CsvIO } from './csv-io.ts'
-import { parseExcelNumber } from './utils.ts'
+import { CsvIO } from '../adapters/csv-io.ts'
+import { parseExcelNumber } from '../utils.ts'
+import { MaterialSequence } from './sequence.ts'
 
 const materialsCsvPath = path.resolve(path.join('data', 'materials.csv'))
 
@@ -62,7 +63,7 @@ export class MaterialParser {
   parseSquare(name: string) {
     const [_, size, alloy, alloySecond] = name.split(' ')
     const sideSize = Number(size.split(/[хx]/)[1])
-    const square = new SquareBar(0)
+    const square = new SquareBar(MaterialSequence.next())
     square.length = sideSize
     if (Number.isNaN(square.length) || square.length === 0) {
       throw new Error(`sideSize is NaN, name: ${name}`)
@@ -87,7 +88,7 @@ export class MaterialParser {
     }
 
     const thickness = Number(thicknessMatch)
-    const list = new List(0)
+    const list = new List(MaterialSequence.next())
     list.thickness = thickness
 
     // Extract alloy if present
@@ -112,7 +113,7 @@ export class MaterialParser {
         return Number(cleanNum)
       })
     const alloy = name.split('ф')[1].split(' ')[1]?.trim() || ''
-    const pipe = new Pipe(0)
+    const pipe = new Pipe(MaterialSequence.next())
     assert(!Number.isNaN(diameter), `diameter is NaN, name: ${name}`)
     assert(!Number.isNaN(thickness), `thickness is NaN, name: ${name}`)
     pipe.diameter = diameter
@@ -138,7 +139,7 @@ export class MaterialParser {
       )
       .join(' ')
 
-    const res = new RoundBar(0)
+    const res = new RoundBar(MaterialSequence.next())
     res.diameter = Number(diameter)
     res.alloy = alloy
     res.calibrated = isCalibrated
@@ -159,7 +160,7 @@ export class MaterialParser {
         each => !each.includes('калибровка') && !each.includes('колибровка')
       )
       .join(' ')
-    const circle = new RoundBar(0)
+    const circle = new RoundBar(MaterialSequence.next())
     circle.alloy = alloy
     circle.calibrated = isCalibrated
     circle.diameter = Number(diameter)
