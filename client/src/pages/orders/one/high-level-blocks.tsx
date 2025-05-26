@@ -63,6 +63,8 @@ export const OrderInfoSection = observer(() => {
   if (!orderStore.order) {
     throw new Error('Order not found')
   }
+
+  console.log('orderStore.editMode', orderStore)
   return (
     <Box>
       {orderStore.editMode ? (

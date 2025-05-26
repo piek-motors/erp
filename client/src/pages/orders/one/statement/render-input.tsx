@@ -1,8 +1,9 @@
 import { BaseAutocomplete } from 'components/base-autocomplete'
 import { Select } from 'components/select'
 import { Inp, MultilineInput } from 'shortcuts'
+import { orderStore } from '../stores/order.store'
 import { suggestionsStore } from '../stores/suggestions.store'
-import { ColumnDefinition, InputTypes, statementStore } from './store'
+import { ColumnDefinition, InputTypes } from './store'
 
 export const RenderInput = (props: {
   column: ColumnDefinition
@@ -94,7 +95,7 @@ export const RenderInput = (props: {
           selectElements={managerSuggestions}
           value={value}
           onChange={newValue => {
-            statementStore.setManagerId(newValue)
+            orderStore.statment.setManagerId(newValue)
           }}
         />
       )
@@ -108,9 +109,9 @@ export const RenderInput = (props: {
           freeSolo
           onChange={newValue => {
             if (Array.isArray(newValue)) {
-              statementStore.setContractor(newValue[0]?.label ?? '')
+              orderStore.statment.setContractor(newValue[0]?.label ?? '')
             } else {
-              statementStore.setContractor(newValue?.label ?? '')
+              orderStore.statment.setContractor(newValue?.label ?? '')
             }
           }}
         />
@@ -125,9 +126,9 @@ export const RenderInput = (props: {
           freeSolo
           onChange={newValue => {
             if (Array.isArray(newValue)) {
-              statementStore.setCity(newValue[0]?.label ?? '')
+              orderStore.statment.setCity(newValue[0]?.label ?? '')
             } else {
-              statementStore.setCity(newValue?.label ?? '')
+              orderStore.statment.setCity(newValue?.label ?? '')
             }
           }}
         />

@@ -4,7 +4,6 @@ import { useEffect } from 'react'
 import { InputStack, SendMutation } from 'shortcuts'
 import { orderStore } from '../stores/order.store'
 import { RenderInput } from './render-input'
-import { statementStore } from './store'
 
 export const OrderStatementInput = observer(
   ({
@@ -20,7 +19,7 @@ export const OrderStatementInput = observer(
       }
     }, [orderId])
 
-    const columns = statementStore.getcolumns()
+    const columns = orderStore.statment.getcolumns()
     return (
       <form>
         <InputStack>
@@ -35,7 +34,7 @@ export const OrderStatementInput = observer(
 )
 
 export const StatementView = observer(() => {
-  const columns = statementStore.getcolumns()
+  const columns = orderStore.statment.getcolumns()
   return columns
     .map((column, idx) => {
       const { value, view } = column

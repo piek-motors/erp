@@ -222,5 +222,3 @@ export class StatementStore {
     ]
   }
 }
-
-export const statementStore = new StatementStore()

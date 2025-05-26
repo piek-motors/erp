@@ -7,7 +7,6 @@ import { observer } from 'mobx-react-lite'
 import { useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Row } from 'shortcuts'
-import { statementStore } from './statement/store'
 import { OrderStatementInput } from './statement/ui'
 import { orderStore } from './stores/order.store'
 import { suggestionsStore } from './stores/suggestions.store'
@@ -17,12 +16,12 @@ export const CreateOrder = observer(() => {
   const s = useLocation().state as { reclamation?: boolean }
 
   useEffect(() => {
-    statementStore.clear()
+    orderStore.statment.clear()
     suggestionsStore.init()
 
     // Set status after clearing if this is a reclamation order
     if (s?.reclamation) {
-      statementStore.setStatus(OrderStatus.ReclamationIncoming)
+      orderStore.statment.setStatus(OrderStatus.ReclamationIncoming)
     }
   }, [s?.reclamation])
 
