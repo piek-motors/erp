@@ -1,7 +1,7 @@
 export * from './domain/metal-flow/detail'
 export * from './domain/metal-flow/enums'
-export * from './domain/metal-flow/material'
 export * from './domain/metal-flow/material-shape'
+export * from './domain/metal-flow/materials'
 export * from './domain/metal-flow/supply'
 export * from './domain/metal-flow/ui.translators'
 export * from './domain/metal-flow/writeoff'
@@ -9,3 +9,4 @@ export * from './domain/orders/enums'
 export * from './domain/orders/order'
 export * from './domain/orders/ui.translators'
 export * from './domain/user'
+

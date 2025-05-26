@@ -11,7 +11,7 @@ describe('MaterialsSyncer', () => {
     })
   })
 
-  it('should sync materials', async () => {
+  it('should parse materials', async () => {
     const materials = await instance.getMaterialsForSync()
     assert(materials.length > 1, 'Materials length should be greater than 1')
     // console.log('materials', materials)

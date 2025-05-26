@@ -1,5 +1,5 @@
 import { EnWriteoffReason, EnWriteoffType } from './enums'
-import { Material } from './material'
+import { Material } from './materials'
 
 export class Writeoff {
   constructor(

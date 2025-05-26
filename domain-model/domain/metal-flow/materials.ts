@@ -21,7 +21,9 @@ interface Flag {
   text: string
 }
 
-export abstract class Material<ShapeData extends GenericShapeData = GenericShapeData> {
+export abstract class Material<
+  ShapeData extends GenericShapeData = GenericShapeData
+> {
   @IsNumber()
   readonly id: number
   label: string
@@ -136,7 +138,6 @@ export class List extends Material<ListShapeData> {
   @IsNumber()
   @Min(0)
   thickness!: number
-
   /**
    * Material grade or alloy type (e.g., "медь", "алюминий").
    * Used for material identification and properties lookup.
@@ -144,7 +145,6 @@ export class List extends Material<ListShapeData> {
   @IsString()
   @IsOptional()
   alloy?: string
-
   /**
    * Width of the sheet in millimeters (mm).
    * Optional dimension that can be used for specific sheet sizes.
@@ -153,7 +153,6 @@ export class List extends Material<ListShapeData> {
   @Min(0)
   @IsOptional()
   width?: number
-
   deriveLabel(): string {
     if (Number.isNaN(this.thickness) || this.thickness == null) {
       throw new Error('g is not specified')
@@ -196,14 +195,12 @@ export class Pipe extends Material<PipeShapeData> {
   @IsNumber()
   @Min(0)
   diameter!: number
-
   /**
    * Material grade or alloy type (e.g., "медь", "алюминий").
    * Used for material identification and properties lookup.
    */
   @IsString()
   alloy!: string
-
   /**
    * Wall thickness of the pipe in millimeters (mm).
    * Used together with diameter to calculate cross-sectional area and mass.
@@ -211,7 +208,6 @@ export class Pipe extends Material<PipeShapeData> {
   @IsNumber()
   @Min(0)
   thickness!: number
-
   deriveLabel(): string {
     if (Number.isNaN(this.diameter)) {
       throw new Error('diameter is not specified')
@@ -247,7 +243,6 @@ export class SquareBar extends Material<SquareBarShapeData> {
 
   @IsString()
   name = 'Квадрат'
-
   /**
    * Side length of the square bar in millimeters (mm).
    * This is the primary dimension used for identification and calculations.
@@ -255,14 +250,12 @@ export class SquareBar extends Material<SquareBarShapeData> {
   @IsNumber()
   @Min(0)
   length!: number
-
   /**
    * Material grade or alloy type (e.g., "медь", "алюминий").
    * Used for material identification and properties lookup.
    */
   @IsString()
   alloy!: string
-
   deriveLabel(): string {
     if (!this.length) {
       throw new Error('length is not specified')

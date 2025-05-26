@@ -184,7 +184,7 @@ export class MaterialsSyncer {
   }
 
   async getMaterialsForSync() {
-    const table = await CsvIO.read(materialsCsvPath)
+    const table = await CsvIO.read(materialsCsvPath, { stripHeading: true })
     const materials: Material[] = []
     for (const row of table) {
       const material = MaterialParser.parseRow(row)
@@ -192,10 +192,8 @@ export class MaterialsSyncer {
         console.log(`unrecognized material`)
         continue
       }
-      console.log('material', material)
       materials.push(material)
     }
-
     return materials
   }
 }

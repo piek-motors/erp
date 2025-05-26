@@ -3,17 +3,21 @@ import { Detail, Material } from 'domain-model'
 import { MaterialParser } from 'materials.syncer'
 import { log } from 'node:console'
 import path from 'node:path'
-import { Repo } from 'repo'
+import { parseExcelNumber } from 'utils'
 
-const __dirname = path.resolve(import.meta.url)
-const detailsCsvPath = path.resolve(path.join(__dirname, 'data', 'details.csv'))
+const detailsCsvPath = path.resolve('data', 'details.csv')
 
-// Types
 type MaterialDetails = Map<Material, Array<Detail>>
 type CsvLine = string[]
 
+interface IRepo {
+  getAllMaterials(): Promise<Material[]>
+  insertMaterials(materials: Material[]): Promise<void>
+  saveDetailsAndRelations(material: Material, details: Detail[]): Promise<void>
+}
+
 export class DetailSyncer {
-  constructor(private readonly repo: Repo) {}
+  constructor(private readonly repo: IRepo) {}
 
   async sync() {
     const table = await CsvIO.read(detailsCsvPath)
@@ -34,7 +38,7 @@ export class DetailSyncer {
     }
 
     // Process existing materials and their details
-    await this.processMaterialDetails(materialDetails, dbMaterials, this.repo)
+    await this.processMaterialDetails(materialDetails, dbMaterials)
   }
 
   private async parseTable(
@@ -52,7 +56,7 @@ export class DetailSyncer {
         detailId
       )
       detailMaterials = result.materialDetails
-      material = result.currentMaterial
+      material = result.material
       detailId = result.detailId
     }
 
@@ -73,8 +77,7 @@ export class DetailSyncer {
 
   private async processMaterialDetails(
     materialDetails: Map<Material, Array<Detail>>,
-    dbMaterials: Material[],
-    repo: Repo
+    dbMaterials: Material[]
   ): Promise<void> {
     for (const [material, details] of materialDetails.entries()) {
       const materialTextId = material.deriveLabel()
@@ -86,24 +89,30 @@ export class DetailSyncer {
         throw new Error(`Material not found in database: ${materialTextId}`)
       }
 
-      await repo.saveDetailsAndRelations(dbMaterial, details)
+      await this.repo.saveDetailsAndRelations(dbMaterial, details)
       log(`Processed material: ${materialTextId}`)
     }
   }
 
+  /**
+   * The single csv line can be:
+   * 1. material name
+   * 2. detail name, length, and weight it costs in terms of the material
+   * 3. just empty line
+   */
   private processCsvLine(
-    line: CsvLine,
+    row: CsvLine,
     materialDetails: MaterialDetails,
-    currentMaterial: Material | undefined,
+    material: Material | undefined,
     detailId: number
   ): {
     materialDetails: MaterialDetails
-    currentMaterial: Material | undefined
+    material: Material | undefined
     detailId: number
   } {
-    const id = line[0]
+    const id = row[0]
     if (id) {
-      const name = line[1]
+      const name = row[1]
       if (name) {
         const material = MaterialParser.parseName(name)
         if (material) {
@@ -116,49 +125,39 @@ export class DetailSyncer {
             console.error(`\n\nfailed to parse material ${name}\n\n`, material)
             throw new Error(`failed to parse material ${name}`)
           }
-          return { materialDetails, currentMaterial: material, detailId }
+          return { materialDetails, material: material, detailId }
         }
       }
-      return { materialDetails, currentMaterial, detailId }
+      return { materialDetails, material, detailId }
     }
 
-    if (!currentMaterial) {
-      console.log('Material is not set for detail', line)
-      return { materialDetails, currentMaterial, detailId }
+    if (!material) {
+      console.log('Material is not set for detail', row)
+      return { materialDetails, material, detailId }
     }
 
-    const detailName = line[1]
-    const length = line[3]
-    const weight = line[4]
-    const details = materialDetails.get(currentMaterial) || []
+    const detailName = row[1]
+    const length = parseExcelNumber(row[3])
+    const weight = parseExcelNumber(row[4])
 
-    const detail = this.createDetail(
-      detailId,
-      detailName,
-      currentMaterial,
-      Number(weight),
-      Number(length)
+    if (Number.isNaN(Number(weight))) {
+      console.warn('Weight is not a number', row)
+    }
+    if (Number.isNaN(Number(length))) {
+      console.warn('Length is not a number', row)
+    }
+
+    const details = materialDetails.get(material) || []
+
+    const detail = new Detail(detailId, detailName).madeOf(
+      material,
+      length,
+      weight
     )
 
     details.push(detail)
-    materialDetails.set(currentMaterial, details)
-    return { materialDetails, currentMaterial, detailId: detailId + 1 }
-  }
-
-  // Helper Functions
-  createDetail(
-    id: number,
-    detailName: string,
-    material: Material,
-    weight: number,
-    length: number
-  ): Detail {
-    const materialMap = new Map<Material, { weight: number; length: number }>()
-    materialMap.set(material, {
-      weight: Number(weight),
-      length: Number(length)
-    })
-    return new Detail(id, detailName, materialMap)
+    materialDetails.set(material, details)
+    return { materialDetails, material, detailId: detailId + 1 }
   }
 
   filterMaterialsOnlyWithDetails(details: MaterialDetails): MaterialDetails {
