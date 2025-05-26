@@ -14,10 +14,10 @@ describe('MaterialsSyncer', () => {
   it('should sync materials', async () => {
     const materials = await instance.getMaterialsForSync()
     assert(materials.length > 1, 'Materials length should be greater than 1')
-    console.log('materials', materials)
+    // console.log('materials', materials)
 
     for (const m of materials) {
-      assert(m.label, 'Material label should be defined')
+      assert(m.deriveLabel(), 'Material label should be defined')
       const stringifiedMaterial = JSON.stringify(m)
 
       assert(

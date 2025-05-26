@@ -105,7 +105,7 @@ export class DetailSyncer {
     if (id) {
       const name = line[1]
       if (name) {
-        const material = MaterialParser.parse(name)
+        const material = MaterialParser.parseName(name)
         if (material) {
           materialDetails.set(material, [])
 

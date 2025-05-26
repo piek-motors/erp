@@ -1,25 +1,51 @@
 import { assert } from 'console'
-import {
-  EnMaterialShape,
-  getMaterialConstructor,
-  List,
-  Material,
-  Pipe,
-  RoundBar,
-  SquareBar
-} from 'domain-model'
+import { List, Material, Pipe, RoundBar, SquareBar } from 'domain-model'
 import path from 'node:path'
 import { CsvIO } from './csv-io.ts'
+import { parseExcelNumber } from './utils.ts'
 
 const materialsCsvPath = path.resolve(path.join('data', 'materials.csv'))
 
 // Material name parser of the details table
 export class MaterialParser {
-  static parse(name: string): Material | undefined {
+  static parseName(nameRaw: string): Material | undefined {
     const parser = new MaterialParser()
+    const name = nameRaw.trim().toLowerCase()
+
     if (name.includes('круг')) {
-      return parser.parseCircle(name)
-    } else if (name.includes('S=')) {
+      return parser.parseRoundBar(name)
+    } else if (name.includes('s=')) {
+      return parser.parseSircle(name)
+    } else if (name.includes('труба')) {
+      return parser.parsePipe(name)
+    } else if (name.includes('лист')) {
+      return parser.parseList(name)
+    } else if (name.includes('квадрат')) {
+      return parser.parseSquare(name)
+    } else {
+      console.log(`error: unrecognized material name: ${name}`)
+      return undefined
+    }
+  }
+
+  static parseRow(row: string[]): Material | undefined {
+    const parser = new MaterialParser()
+    const nameRaw = row[1]
+    const density = parseExcelNumber(row[3])
+    const linearMass = parseExcelNumber(row[5])
+    if (Number.isNaN(density)) {
+      console.log(`error: density is NaN, row: ${row}`)
+    }
+    if (Number.isNaN(linearMass)) {
+      console.log(`error: linearMass is NaN, row: ${row}`)
+    }
+    const name = nameRaw.trim().toLowerCase()
+    if (name.includes('круг')) {
+      const b = parser.parseRoundBar(name)
+      b.density = density
+      b.linearMass = Number(linearMass)
+      return b
+    } else if (name.includes('s=')) {
       return parser.parseSircle(name)
     } else if (name.includes('труба')) {
       return parser.parsePipe(name)
@@ -54,7 +80,6 @@ export class MaterialParser {
       .replace('=', '')
       .replace(',', '.')
 
-    console.log('thicknessMatch', thicknessMatch)
     // if thickness match includes english x or russian х split by it and take the first part
     if (thicknessMatch.includes('x') || thicknessMatch.includes('х')) {
       const parts = thicknessMatch.split(/[xх]/)
@@ -96,8 +121,12 @@ export class MaterialParser {
     return pipe
   }
 
-  parseCircle(name: string) {
-    const diameter = parseInt(name.split('ф')[1])
+  parseRoundBar(name: string) {
+    const diameter = parseFloat(name.split('ф')[1])
+    if (Number.isNaN(diameter)) {
+      throw new Error(`diameter is NaN, name: ${name}`)
+    }
+
     const rest = name.split('ф')[1].split(' ').filter(Boolean)
     rest.shift()
     const isCalibrated =
@@ -108,12 +137,14 @@ export class MaterialParser {
         each => !each.includes('калибровка') && !each.includes('колибровка')
       )
       .join(' ')
-    const circle = new RoundBar(0)
-    circle.alloy = alloy
-    circle.calibrated = isCalibrated
-    circle.diameter = Number(diameter)
-    assert(!Number.isNaN(circle.diameter), `diameter is NaN, name: ${name}`)
-    return circle
+
+    const res = new RoundBar(0)
+    res.diameter = Number(diameter)
+    res.alloy = alloy
+    res.calibrated = isCalibrated
+    res.label = res.deriveLabel()
+
+    return res
   }
 
   parseSircle(name: string) {
@@ -156,31 +187,12 @@ export class MaterialsSyncer {
     const table = await CsvIO.read(materialsCsvPath)
     const materials: Material[] = []
     for (const row of table) {
-      const id = parseInt(row[0])
-      const name = row[1]
-      const density = parseFloat(row[3])
-      const linearMass = parseFloat(row[5].replace(',', '.'))
-
-      const nameSplited = name.split('ф')
-      if (nameSplited.length < 2) continue
-
-      const namespl = nameSplited[1].split(' ').filter(Boolean)
-
-      const diameter = parseFloat(namespl[0].split(',')[0])
-      const alloy = `${namespl[1]} ${namespl[2]}`
-      const isCalibrated = name.includes('калибровка')
-
-      const MaterialConstructor = getMaterialConstructor(
-        EnMaterialShape.RoundBar
-      )
-      const material = new MaterialConstructor(id)
-      material.load(id, {
-        diameter,
-        alloy,
-        calibrated: isCalibrated,
-        density,
-        linearMass
-      })
+      const material = MaterialParser.parseRow(row)
+      if (!material) {
+        console.log(`unrecognized material`)
+        continue
+      }
+      console.log('material', material)
       materials.push(material)
     }
 

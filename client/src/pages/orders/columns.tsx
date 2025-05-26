@@ -2,14 +2,13 @@ import { Stack, Typography } from '@mui/joy'
 import { Table } from 'components/table.impl'
 import { Order } from 'domain-model'
 import { openOrderDetailPage } from 'lib/routes'
+import { useMemo } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Column } from 'react-table'
 import { Pre } from 'shortcuts'
 import { TOrderColumnData } from 'types/global'
 import { map } from './mappers'
 import { t } from './text'
-import { useMemo } from 'react'
-
 
 export const columnsList: Column<Order>[] = [
   {
@@ -70,7 +69,7 @@ export const columnsList: Column<Order>[] = [
   },
   {
     Header: t.manager,
-    accessor: o => o.managerString()
+    accessor: o => o.manager.firstName
   }
 ]
 

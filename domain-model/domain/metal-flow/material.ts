@@ -10,29 +10,21 @@ import {
 } from './material-shape'
 import { uiMaterialShape, uiUnit } from './ui.translators'
 
-export interface ResourceNameProps {
+interface ResourceNameProps {
   name: string
   caption?: string
   flags?: Flag[]
 }
 
-type Flag = {
+interface Flag {
   color: number
   text: string
 }
 
-export interface DisplayResourceNameProps {
-  name: string
-  caption?: string
-  flags?: Flag[]
-}
-
-export abstract class Material<
-  ShapeData extends GenericShapeData = GenericShapeData
-> {
+export abstract class Material<ShapeData extends GenericShapeData = GenericShapeData> {
   @IsNumber()
   readonly id: number
-  readonly label: string
+  label: string
 
   abstract readonly unit: EnUnit
   abstract readonly shape: EnMaterialShape
@@ -65,14 +57,12 @@ export class RoundBar extends Material<RoundBarShapeData> {
   @IsNumber()
   @Min(0)
   diameter!: number
-
   /**
    * Material grade or alloy type (e.g., "медь", "алюминий").
    * Used for material identification and properties lookup.
    */
   @IsString()
   alloy!: string
-
   /**
    * Indicates if the material has undergone calibration process.
    * Calibration is an additional machining process that improves:
@@ -82,7 +72,6 @@ export class RoundBar extends Material<RoundBarShapeData> {
    */
   @IsBoolean()
   calibrated!: boolean
-
   /**
    * Material density in kilograms per cubic meter (kg/m³).
    * Used for mass calculations and material identification.
@@ -90,7 +79,6 @@ export class RoundBar extends Material<RoundBarShapeData> {
   @IsNumber()
   @Min(0)
   density!: number
-
   /**
    * Linear mass in kilograms per meter (kg/m).
    * Represents the weight of one meter of the material.
@@ -99,7 +87,6 @@ export class RoundBar extends Material<RoundBarShapeData> {
   @IsNumber()
   @Min(0)
   linearMass!: number
-
   deriveLabel(): string {
     if (Number.isNaN(this.diameter)) {
       throw new Error('diameter is NaN')

@@ -10,3 +10,4 @@ node_modules
 *.LICENSE.txt
 *.js.map
 *.sql
+.early.coverage

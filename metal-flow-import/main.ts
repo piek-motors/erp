@@ -15,7 +15,7 @@ async function main() {
     const detailSyncer = new DetailSyncer(repo)
     const materialsSyncer = new MaterialsSyncer(repo)
     await repo.drop()
-    await materialsSyncer.getMaterialsForSync()
+    await materialsSyncer.sync()
     await detailSyncer.sync()
   } catch (e) {
     console.error(e)
