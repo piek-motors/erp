@@ -1,11 +1,12 @@
 import { apolloClient } from 'api'
 import { makeAutoObservable } from 'mobx'
+import moment from 'moment'
 import * as gql from 'types/graphql-shema'
 
 export class PaymentStore {
   modalOpen = false
   orderId: number | null = null
-  date: string | null = null
+  date: string | null = moment().local().format('DD.MM.YY')
   amount: number | null = null
   payments: gql.GetOrderPaymentsQuery['orders_order_payments'] = []
   loading = false
@@ -42,7 +43,6 @@ export class PaymentStore {
     this.clear()
   }
   clear() {
-    this.date = null
     this.amount = null
     this.error = null
   }
@@ -69,12 +69,17 @@ export class PaymentStore {
 
   async insertPayment() {
     this.assertOrderId()
-    if (!this.date || !this.amount) {
-      throw new Error('Invalid input: orderId, date, and amount are required')
-    }
-
     this.setLoading(true)
     try {
+      if (!this.date || !this.amount) {
+        throw new Error('Invalid input: date, and amount are required')
+      }
+
+      const paymentDate = moment(this.date, 'DD.MM.YY').utc(true)
+      if (!paymentDate.isValid() || paymentDate.isAfter()) {
+        throw new Error('Invalid date format or future date not allowed')
+      }
+
       const res = await apolloClient.mutate<
         gql.InsertPaymentMutation,
         gql.InsertPaymentMutationVariables
@@ -82,11 +87,10 @@ export class PaymentStore {
         mutation: gql.InsertPaymentDocument,
         variables: {
           order_id: this.orderId,
-          date: this.date,
+          date: paymentDate.toISOString(),
           amount: this.amount
         }
       })
-
       const paymentId = res.data?.insert_orders_order_payments_one?.id
       if (!paymentId) {
         throw new Error('Failed to insert payment')

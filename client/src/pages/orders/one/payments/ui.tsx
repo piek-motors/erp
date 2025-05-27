@@ -5,18 +5,17 @@ import * as joy from '@mui/joy'
 import { Order, Roles } from 'domain-model'
 import { useAppContext } from 'hooks'
 import { observer } from 'mobx-react-lite'
-import moment from 'moment'
 import * as React from 'react'
 import { useEffect } from 'react'
 import { Inp, Row } from 'shortcuts'
 import { GetOrderPaymentsQuery } from 'types/graphql-shema'
 import * as formatter from 'utils/formatting'
-import { paymentStore } from './store'
+import { orderStore as os } from '../stores/order.store'
 
 export const Paymnets = observer(({ order }: { order: Order }) => {
   const { store }: any = useAppContext()
   useEffect(() => {
-    paymentStore.init(order.id)
+    os.payments.init(order.id)
   }, [order.id])
 
   const isHaveFullRight = [
@@ -27,10 +26,10 @@ export const Paymnets = observer(({ order }: { order: Order }) => {
 
   const paymentHistoryContent = order.totalAmount ? (
     <PaymentsTable
-      data={paymentStore.payments}
-      onDelete={ID => paymentStore.deletePayment(ID)}
+      data={os.payments.payments}
+      onDelete={ID => os.payments.deletePayment(ID)}
       totalAmount={order.totalAmount}
-      loading={paymentStore.loading}
+      loading={os.payments.loading}
       footerComponent={
         <joy.Box>
           {isHaveFullRight && <NewPaymentInput order={order} />}
@@ -114,35 +113,28 @@ interface NewPaymentInputProps {
 }
 
 const NewPaymentInput = observer((props: NewPaymentInputProps) => {
-  const { store } = useAppContext()
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null)
 
   const handleClose = () => {
     setAnchorEl(null)
-    paymentStore.closeModal()
+    os.payments.closeModal()
   }
 
   const open = Boolean(anchorEl)
-  const id = open ? 'simple-popover' : undefined
 
   async function handleSave() {
     try {
-      await paymentStore.insertPayment()
+      await os.payments.insertPayment()
       handleClose()
     } catch (error) {
       console.error('Failed to save payment:', error)
     }
   }
 
-  function handleDateChange(v: string) {
-    const date = moment(v, 'DDMMYY').toISOString()
-    paymentStore.setDate(date)
-  }
-
   function handleAmountChange(v: string) {
     const parsedValue = v.replace(',', '').replace('.', '')
     const amount = parseInt(parsedValue)
-    paymentStore.setAmount(amount)
+    os.payments.setAmount(amount)
   }
 
   return (
@@ -151,24 +143,21 @@ const NewPaymentInput = observer((props: NewPaymentInputProps) => {
       onOpenChange={(e, open) => {
         if (open === false) {
           setAnchorEl(null)
-          paymentStore.closeModal()
+          os.payments.closeModal()
         } else {
           setAnchorEl(e?.target as HTMLButtonElement)
-          paymentStore.openModal()
-          // Set default date to today
-          paymentStore.setDate(new Date().toISOString())
+          os.payments.openModal()
         }
       }}
     >
       <joy.MenuButton
         variant="outlined"
         size="sm"
-        disabled={paymentStore.loading}
+        disabled={os.payments.loading}
       >
         Добавить
       </joy.MenuButton>
       <joy.Menu
-        id={id}
         open={open}
         anchorEl={anchorEl}
         onClose={handleClose}
@@ -181,11 +170,11 @@ const NewPaymentInput = observer((props: NewPaymentInputProps) => {
         <joy.Stack gap={1} p={1}>
           <Inp
             label="Дата платежа"
-            placeholder="dd.mm.yy"
+            placeholder="ДД.ММ.ГГ"
             onChange={v => {
-              handleDateChange(v)
+              os.payments.setDate(v)
             }}
-            defaultValue={moment().format('DD.MM.YY')}
+            value={os.payments.date || ''}
           />
           <Row gap={1}>
             <Inp
@@ -194,19 +183,19 @@ const NewPaymentInput = observer((props: NewPaymentInputProps) => {
               onChange={v => {
                 handleAmountChange(v)
               }}
-              value={paymentStore.amount?.toString() || ''}
+              value={os.payments.amount?.toString() || ''}
               autoFocus
             />
             <joy.Typography>
               из {formatter.money(props.order.totalAmount)}
             </joy.Typography>
           </Row>
-          {paymentStore.error && (
+          {os.payments.error && (
             <joy.Typography color="danger" level="body-sm">
-              {paymentStore.error.message}
+              {os.payments.error.message}
             </joy.Typography>
           )}
-          <joy.Button onClick={handleSave} loading={paymentStore.loading}>
+          <joy.Button onClick={handleSave} loading={os.payments.loading}>
             Сохранить
           </joy.Button>
         </joy.Stack>

@@ -45,12 +45,12 @@ export function Inp(props: MyInputProps) {
       ) : (
         <Row>
           <Input
+            {...props}
             value={props.value?.toString() || ''}
             autoComplete={props.enableAutoComplete ? 'on' : 'off'}
             onChange={e => {
               props.onChange?.(e.target.value ?? '')
             }}
-            {...props}
           />
           {props.unit && <Typography>{props.unit}</Typography>}
         </Row>

@@ -38,10 +38,12 @@ export const LoginForm = () => {
           Piek Factory
         </Typography>
         <Inp
+          value={email}
           placeholder="Email"
           onChange={e => setEmail(e.target.value.trim())}
         />
         <Inp
+          value={password}
           placeholder="Password"
           type="password"
           onChange={e => setPassword(e.target.value.trim())}
