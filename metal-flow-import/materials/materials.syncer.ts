@@ -12,19 +12,25 @@ export class MaterialParser {
   static parseName(nameRaw: string): Material | undefined {
     const parser = new MaterialParser()
     const name = nameRaw.trim().toLowerCase()
-
-    if (name.includes('круг')) {
-      return parser.parseRoundBar(name)
-    } else if (name.includes('s=')) {
-      return parser.parseSircle(name)
-    } else if (name.includes('труба')) {
-      return parser.parsePipe(name)
-    } else if (name.includes('лист')) {
-      return parser.parseList(name)
-    } else if (name.includes('квадрат')) {
-      return parser.parseSquare(name)
-    } else {
-      console.log(`error: unrecognized material name: ${name}`)
+    try {
+      if (name.includes('круг')) {
+        return parser.parseRoundBar(name)
+      } else if (name.includes('s=')) {
+        return parser.parseSircle(name)
+      } else if (name.includes('труба')) {
+        return parser.parsePipe(name)
+      } else if (name.includes('лист')) {
+        return parser.parseList(name)
+      } else if (name.includes('квадрат')) {
+        return parser.parseSquare(name)
+      } else {
+        console.log(`error: unrecognized material name: ${name}`)
+        return undefined
+      }
+    } catch (e: unknown) {
+      if (e instanceof Error) {
+        console.error(`failed to parse material name: ${name}: ${e.message}`)
+      }
       return undefined
     }
   }
@@ -76,7 +82,7 @@ export class MaterialParser {
 
   parseList(name: string) {
     let thicknessMatch = name
-      .split('G')[1]
+      .split('g')[1]
       ?.split(' ')[0]
       .replace('=', '')
       .replace(',', '.')
@@ -150,7 +156,7 @@ export class MaterialParser {
 
   parseSircle(name: string) {
     const diameter = parseInt(name.split('S=')[1])
-    const rest = name.split('S=')[1].split(' ').filter(Boolean)
+    const rest = name.split('s=')[1].split(' ').filter(Boolean)
     rest.shift()
     const isCalibrated =
       rest.includes('калибровка') || rest.includes('колибровка')

@@ -38,39 +38,34 @@ export class DetailSyncer {
     const table = await CsvIO.read(detailsCsvPath)
     const ctx = new AnalysisContext()
     for (const row of table) {
+      this.parseRow(row, ctx).catch(e => {
+        console.error(e)
+      })
     }
     return ctx
   }
 
+  /**
+   * The single csv line can be:
+   * 1. material name
+   * 2. detail name, length, and weight it costs in terms of the material
+   * 3. just empty line
+   */
   private async parseRow(row: string[], ctx: AnalysisContext) {
-    /**
-     * The single csv line can be:
-     * 1. material name
-     * 2. detail name, length, and weight it costs in terms of the material
-     * 3. just empty line
-     */
     const materialId = row[0]
     if (materialId) {
       const name = row[1]
       if (name) {
         const material = MaterialParser.parseName(name)
         if (!material) {
-          throw Error(`failed to parse material name`)
+          throw Error(`failed to parse material name: ${name}`)
         }
         ctx.openNewScope(material)
       }
     } else {
       const detailName = row[1]
-      const length = parseExcelNumber(row[3])
-      const weight = parseExcelNumber(row[4])
-
-      if (Number.isNaN(Number(weight))) {
-        console.warn('Weight is not a number', row)
-      }
-      if (Number.isNaN(Number(length))) {
-        console.warn('Length is not a number', row)
-      }
-
+      const length = parseNumberOrDefault(parseExcelNumber(row[3]))
+      const weight = parseNumberOrDefault(parseExcelNumber(row[4]))
       const detail = new Detail(DetailSequence.next(), detailName).madeOf(
         ctx.getCurrentMaterial(),
         length,
@@ -80,4 +75,11 @@ export class DetailSyncer {
     }
     return ctx
   }
+}
+
+const parseNumberOrDefault = (value: number) => {
+  if (Number.isNaN(value)) {
+    return 0
+  }
+  return value
 }

@@ -7,14 +7,7 @@ import { InputPositionModal } from 'pages/orders/one/positions/input.modal'
 
 export const DesktopLayout = () => {
   return (
-    <div
-      className="desktop-only"
-      css={{
-        '@media print': {
-          display: 'none'
-        }
-      }}
-    >
+    <div className="no-print">
       <Grid
         container
         direction={'row'}

@@ -40,13 +40,13 @@ export const LoginForm = () => {
         <Inp
           value={email}
           placeholder="Email"
-          onChange={e => setEmail(e.target.value.trim())}
+          onChange={v => setEmail(v.trim())}
         />
         <Inp
           value={password}
           placeholder="Password"
           type="password"
-          onChange={e => setPassword(e.target.value.trim())}
+          onChange={v => setPassword(v.trim())}
         />
         <Box>
           {error && (
