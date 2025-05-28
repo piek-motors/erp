@@ -1,3 +1,4 @@
+/** @jsxImportSource @emotion/react */
 import { Box, Stack, Typography } from '@mui/joy'
 import { observer } from 'mobx-react-lite'
 import { DeleteResourceButton, Row, UpdateResourceButton } from 'shortcuts'
