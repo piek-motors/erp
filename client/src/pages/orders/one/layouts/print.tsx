@@ -6,7 +6,6 @@ import { StatementView } from 'pages/orders/one/statement/ui'
 import { formatOnlyDate } from 'utils/formatting'
 import { orderStore } from '../stores/order.store'
 
-// Print Layout Component
 export const PrintLayout = observer(() => {
   const order = orderStore.order
   if (!order) return <div>Not found</div>
@@ -16,14 +15,6 @@ export const PrintLayout = observer(() => {
         <Typography level="h3" sx={{ mb: 1 }}>
           {order.contractor} - {order.city}
         </Typography>
-        <Typography level="body-md">
-          Счет: {order.invoiceNumber || 'N/A'}
-        </Typography>
-        {order.factoryNumber && (
-          <Typography level="body-md">
-            Номер заказа: {order.factoryNumber}
-          </Typography>
-        )}
       </Box>
 
       <Box sx={{ mb: 4 }}>
