@@ -30,7 +30,7 @@ export const InputPositionModal = observer(() => {
             fullWidth
             label="Наименование"
             value={orderStore.positions.name}
-            onChange={e => orderStore.positions.setName(e.target.value)}
+            onChange={v => orderStore.positions.setName(v)}
           />
           <MultilineInput
             label="Примечание"
@@ -41,7 +41,7 @@ export const InputPositionModal = observer(() => {
             label="Количество"
             type="number"
             value={orderStore.positions.quantity?.toString() ?? ''}
-            onChange={e => orderStore.positions.setQuantity(e.target.value)}
+            onChange={v => orderStore.positions.setQuantity(v)}
           />
         </joy.Box>
         <Row gap={2}>
