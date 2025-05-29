@@ -1,4 +1,5 @@
 import { Box, Typography } from '@mui/joy'
+import { PrintOnly, WebOnly } from 'components/conditional-display'
 import { observer } from 'mobx-react-lite'
 import { useEffect } from 'react'
 import { InputStack, SendMutation } from 'shortcuts'
@@ -37,10 +38,10 @@ export const StatementView = observer(() => {
   const columns = orderStore.statment.getcolumns()
   return columns
     .map((column, idx) => {
-      const { value, view } = column
+      const { value, view, layout } = column
       if (!value && !view) return null
       const v = view ?? value
-      return (
+      const content = (
         <Box
           key={column.label}
           style={{
@@ -62,6 +63,23 @@ export const StatementView = observer(() => {
           <Typography style={{ whiteSpace: 'normal' }}>{v}</Typography>
         </Box>
       )
+
+      if (layout === PrintOnly) {
+        return (
+          <PrintOnly key={idx} display="block">
+            {content}
+          </PrintOnly>
+        )
+      }
+      if (layout === WebOnly) {
+        return (
+          <WebOnly key={idx} display="block">
+            {content}
+          </WebOnly>
+        )
+      }
+
+      return content
     })
     .filter(Boolean)
 })

@@ -1,4 +1,5 @@
 version: '3.6'
+name: piekerp
 networks:
   infra:
     name: infra
@@ -18,13 +19,13 @@ services:
       - db_data:/var/lib/postgresql/data
       - restored_repository:/tmp/restored_repository
     ports:
-      - '5432:5432'
+      - '5433:5432'
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
     networks: [infra]
 
-  graphql-engine:
+  hasura:
     container_name: hasura
     image: hasura/graphql-engine:v2.47.0-beta.1
     ports:

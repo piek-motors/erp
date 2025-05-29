@@ -1,4 +1,5 @@
 import { apolloClient } from 'api'
+import { Layout, PrintOnly, WebOnly } from 'components/conditional-display'
 import { Order, OrderStatus } from 'domain-model'
 import { makeAutoObservable } from 'mobx'
 import moment from 'moment'
@@ -23,6 +24,7 @@ export type ColumnDefinition = {
   value?: string
   onChange?: (value: string) => void
   view?: string
+  layout?: Layout
 }
 
 export class StatementStore {
@@ -167,12 +169,19 @@ export class StatementStore {
       },
       {
         label: 'Оплачено',
+        layout: PrintOnly,
+        view: this.order?.paidPercentage()
+      },
+      {
+        label: 'Оплачено',
+        layout: WebOnly,
         view:
           this.order?.totalPaidString() &&
           `${this.order.totalPaidString()} (${this.order.paidPercentage()})`
       },
       {
         label: 'Сумма заказа',
+        layout: WebOnly,
         inputType: InputTypes.Money,
         value: this.totalAmount,
         onChange: (v: string) => {

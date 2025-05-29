@@ -153,7 +153,7 @@ export const OrderLeftPanel = observer(() => (
 
 // Right panel with docs and comments
 export const OrderRightPanel = observer(() => (
-  <Grid xs={12} md={5} direction={'column'} container className="no-print">
+  <Grid xs={12} md={5} direction={'column'} container>
     <Grid
       sx={{
         p: 2,

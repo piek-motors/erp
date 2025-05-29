@@ -1,13 +1,14 @@
 import Grid from '@mui/joy/Grid'
+import { WebOnly } from 'components/conditional-display'
 import {
   OrderLeftPanel,
   OrderRightPanel
 } from 'pages/orders/one/high-level-blocks'
 import { InputPositionModal } from 'pages/orders/one/positions/input.modal'
 
-export const DesktopLayout = () => {
+export const WebLayout = () => {
   return (
-    <div className="no-print">
+    <WebOnly display="block">
       <Grid
         container
         direction={'row'}
@@ -23,6 +24,6 @@ export const DesktopLayout = () => {
         <OrderLeftPanel />
         <OrderRightPanel />
       </Grid>
-    </div>
+    </WebOnly>
   )
 }

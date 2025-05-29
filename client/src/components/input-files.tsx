@@ -1,4 +1,4 @@
-import { Box, styled } from '@mui/joy'
+import { styled } from '@mui/joy'
 import Button, { ButtonProps } from '@mui/joy/Button'
 import SvgIcon from '@mui/joy/SvgIcon'
 import { text } from 'shortcuts'
@@ -19,7 +19,7 @@ export function InputFiles(
   props: { upload: (files: FileList) => void } & ButtonProps
 ) {
   return (
-    <Box className="no-print">
+    <div>
       <Button
         component="label"
         role={undefined}
@@ -53,6 +53,6 @@ export function InputFiles(
           }}
         />
       </Button>
-    </Box>
+    </div>
   )
 }

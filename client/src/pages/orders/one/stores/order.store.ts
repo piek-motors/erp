@@ -20,7 +20,8 @@ export class OrderStore {
     makeAutoObservable(this)
   }
 
-  async init(orderId: number) {
+  async load(orderId: number) {
+    this.clear()
     await Promise.all([
       this.statment.init(orderId),
       this.loadOrder(orderId),
@@ -206,6 +207,13 @@ export class OrderStore {
       throw new Error(res.errors.toString())
     }
     return res
+  }
+
+  clear() {
+    this.statment.clear()
+    this.positions.clear()
+    this.payments.clear()
+    this.order = null
   }
 }
 

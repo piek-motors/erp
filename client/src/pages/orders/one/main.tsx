@@ -1,7 +1,7 @@
 import { AppRoutes } from 'lib/routes'
 import { observer } from 'mobx-react-lite'
-import { DesktopLayout } from 'pages/orders/one/layouts/desktop'
 import { PrintLayout } from 'pages/orders/one/layouts/print'
+import { WebLayout } from 'pages/orders/one/layouts/web'
 import { useEffect } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { useParams } from 'react-router-dom'
@@ -19,7 +19,7 @@ const OrderDetail = observer(() => {
   }
 
   useEffect(() => {
-    orderStore.init(orderId)
+    orderStore.load(orderId)
     suggestionsStore.init()
   }, [])
 
@@ -36,7 +36,7 @@ const OrderDetail = observer(() => {
   return (
     <section {...getRootProps()} id="dropzone">
       <PrintLayout />
-      <DesktopLayout />
+      <WebLayout />
     </section>
   )
 })
