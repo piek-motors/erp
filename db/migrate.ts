@@ -1,4 +1,9 @@
-require('dotenv').config({ path: require('find-config')('.env') })
+import dotenv from 'dotenv'
+import path from 'path'
+const err = dotenv.config({ path: '../.env' })
+if (err.error) {
+  throw err.error
+}
 
 import { Command } from 'commander'
 import {
@@ -7,7 +12,6 @@ import {
   type MigrationResultSet
 } from 'kysely'
 import { promises as fs } from 'node:fs'
-import * as path from 'path'
 import { connect } from './connect'
 
 const program = new Command()

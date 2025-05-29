@@ -20,6 +20,8 @@ export type Updateable<T> = KyselyUpdateable<T>
 export namespace DB {
   export interface Schema {
     ['users']: UserTable
+    ['orders.orders']: OrderTable
+    ['orders.order_payments']: OrderPaymentsTable
     ['metal_flow.materials']: MaterialTable
     ['metal_flow.details']: DetailTable
     ['metal_flow.detail_materials']: DetailMaterialsTable
@@ -73,5 +75,21 @@ export namespace DB {
     reason: EnWriteoffReason
     type: EnWriteoffType
     type_data: JSONColumnType<any, any, any>
+  }
+
+  export interface OrderPaymentsTable {
+    id: GeneratedAlways<number>
+    order_id: number
+    amount: number
+    date: Date
+    payment_method: string
+    status: string
+    transaction_id: string
+  }
+
+  export interface OrderTable {
+    id: GeneratedAlways<number>
+    total_amount: number
+    created_at: Date
   }
 }

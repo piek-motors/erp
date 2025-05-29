@@ -10,7 +10,8 @@
     "migrate:revert": "npm run build && node ./dist/migrate.js --revert",
     "prebuild": "npm run clean",
     "start": "node ./dist/index.js",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "create": "ts-node scripts/create-migration.ts"
   },
   "exports": {
     ".": {
@@ -23,7 +24,6 @@
   },
   "types": "./dist/index.d.ts",
   "dependencies": {
-    "find-config": "^1.0.0",
     "commander": "^13.1.0",
     "dotenv": "^10.0.0",
     "kysely": "^0.27.6",
