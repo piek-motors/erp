@@ -10,11 +10,11 @@ export class MaterialScope {
 
 export class AnalysisContext {
   currentScope: MaterialScope | undefined
-  readonly scopes = new Array<MaterialScope>()
+  readonly materialScopes = new Array<MaterialScope>()
 
   openNewScope(material: Material) {
     if (this.currentScope) {
-      this.scopes.push(this.currentScope)
+      this.materialScopes.push(this.currentScope)
     }
 
     const scope = new MaterialScope(material)
@@ -36,6 +36,21 @@ export class AnalysisContext {
     }
 
     return this.currentScope.material
+  }
+
+  countDetails() {
+    return this.materialScopes.reduce(
+      (acc, scope) => acc + scope.details.length,
+      0
+    )
+  }
+
+  countMaterials() {
+    return this.materialScopes.length
+  }
+
+  getMaterials() {
+    return this.materialScopes.map(scope => scope.material)
   }
 }
 

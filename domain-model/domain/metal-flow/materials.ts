@@ -91,11 +91,11 @@ export class RoundBar extends Material<RoundBarShapeData> {
       throw new Error('diameter is NaN')
     }
 
-    return `${this.shapeUI} D${this.diameter} ${this.alloy}`
+    return `${this.shapeUI} ${this.diameter} ${this.alloy}`
   }
   getLabelProps(): ResourceNameProps {
     return {
-      name: `${this.shapeUI} D${this.diameter}`,
+      name: `${this.shapeUI} ${this.diameter}`,
       caption: this.alloy,
       flags: [
         {
@@ -154,13 +154,13 @@ export class List extends Material<ListShapeData> {
     if (Number.isNaN(this.thickness) || this.thickness == null) {
       throw new Error('g is not specified')
     }
-    return `${this.shapeUI} G${this.thickness}${
+    return `${this.shapeUI} ${this.thickness}${
       this.width ? `x${this.width}` : ''
     }`
   }
   getLabelProps(): ResourceNameProps {
     return {
-      name: `${this.shapeUI} G${this.thickness}${
+      name: `${this.shapeUI} ${this.thickness}${
         this.width ? `x${this.width}` : ''
       }`
     }
@@ -209,7 +209,7 @@ export class Pipe extends Material<PipeShapeData> {
     if (Number.isNaN(this.diameter)) {
       throw new Error('diameter is not specified')
     }
-    return `${this.shapeUI} D${this.diameter} ${this.alloy}`
+    return `${this.shapeUI} ${this.diameter} ${this.alloy}`.trim()
   }
   getLabelProps(): ResourceNameProps {
     return {
@@ -256,7 +256,7 @@ export class SquareBar extends Material<SquareBarShapeData> {
     if (!this.length) {
       throw new Error('length is not specified')
     }
-    return `${this.name} ${this.length}x${this.alloy}`
+    return `${this.name} ${this.length} ${this.alloy || ''}`
   }
   getLabelProps(): ResourceNameProps {
     return {

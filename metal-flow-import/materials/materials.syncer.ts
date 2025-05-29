@@ -75,7 +75,7 @@ export class MaterialParser {
       throw new Error(`sideSize is NaN, name: ${name}`)
     }
     if (alloy) {
-      square.alloy = `${alloy}${alloySecond || ''}`
+      square.alloy = alloy || ''
     }
     return square
   }
@@ -118,7 +118,13 @@ export class MaterialParser {
         const cleanNum = num.replace(/[()]/g, '').replace(',', '.')
         return Number(cleanNum)
       })
-    const alloy = name.split('ф')[1].split(' ')[1]?.trim() || ''
+
+    // труба ф 89х8 ст 20
+    // труба ф 57х7
+    const t = name.split('х')[1].split(' ')
+    t.shift()
+    const alloy = t.join(' ')
+
     const pipe = new Pipe(MaterialSequence.next())
     assert(!Number.isNaN(diameter), `diameter is NaN, name: ${name}`)
     assert(!Number.isNaN(thickness), `thickness is NaN, name: ${name}`)
@@ -155,24 +161,17 @@ export class MaterialParser {
   }
 
   parseSircle(name: string) {
-    const diameter = parseInt(name.split('S=')[1])
-    const rest = name.split('s=')[1].split(' ').filter(Boolean)
-    rest.shift()
-    const isCalibrated =
-      rest.includes('калибровка') || rest.includes('колибровка')
-    const alloy = rest
-      .filter(Boolean)
-      .filter(
-        each => !each.includes('калибровка') && !each.includes('колибровка')
-      )
-      .join(' ')
+    const [diameterRaw, alloy = ''] = name.split(' ')
+    const diameter = parseInt(diameterRaw.replace('s=', ''))
+
     const circle = new RoundBar(MaterialSequence.next())
     circle.alloy = alloy
-    circle.calibrated = isCalibrated
+    circle.calibrated =
+      name.includes('калибровка') || name.includes('колибровка')
     circle.diameter = Number(diameter)
 
     if (Number.isNaN(circle.diameter)) {
-      throw new Error(`diameter is NaN, name: ${name}`)
+      throw new Error(`diameter is NaN`)
     }
     return circle
   }

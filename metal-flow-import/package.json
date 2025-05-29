@@ -1,12 +1,12 @@
 {
-  "name": "metalflow-import",
+  "name": "metal-flow-import",
   "version": "1.0.0",
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "node --test --experimental-transform-types",
     "build": "tsc -p tsconfig.json",
-    "start": "node --experimental-transform-types ./main.ts"
+    "start": "node --experimental-transform-types ./main.ts",
+    "test": "node --test --experimental-transform-types"
   },
   "dependencies": {
     "class-transformer": "^0.5.1",

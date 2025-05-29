@@ -20,7 +20,9 @@ export class DetailSyncer {
 
   async sync() {
     const analysisResult = await this.parseTable()
-    const materialsToInsert = analysisResult.scopes.map(scope => scope.material)
+    const materialsToInsert = analysisResult.materialScopes.map(
+      scope => scope.material
+    )
 
     if (materialsToInsert.length > 0) {
       await this.repo.insertMaterials(materialsToInsert)
@@ -35,7 +37,7 @@ export class DetailSyncer {
   }
 
   async parseTable(): Promise<AnalysisContext> {
-    const table = await CsvIO.read(detailsCsvPath)
+    const table = await CsvIO.read(detailsCsvPath, { stripHeading: true })
     const ctx = new AnalysisContext()
     for (const row of table) {
       this.parseRow(row, ctx).catch(e => {
@@ -60,10 +62,19 @@ export class DetailSyncer {
         if (!material) {
           throw Error(`failed to parse material name: ${name}`)
         }
+
+        // validate that matirla derived labed dose not conitanse undefined word
+        if (material.deriveLabel().includes('undefined')) {
+          throw Error(
+            `material derived label contains undefined word: ${material.deriveLabel()}, row: ${row}`
+          )
+        }
+
         ctx.openNewScope(material)
       }
     } else {
       const detailName = row[1]
+      if (!detailName) return
       const length = parseNumberOrDefault(parseExcelNumber(row[3]))
       const weight = parseNumberOrDefault(parseExcelNumber(row[4]))
       const detail = new Detail(DetailSequence.next(), detailName).madeOf(
