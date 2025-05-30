@@ -2,10 +2,9 @@
   "name": "metal-flow-import",
   "version": "1.0.0",
   "main": "index.js",
-  "type": "module",
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "start": "node --experimental-transform-types ./main.ts",
+    "start": "npm run build && node ./dist/main.js",
     "test": "node --test --experimental-transform-types"
   },
   "dependencies": {
@@ -21,6 +20,7 @@
   "license": "ISC",
   "description": "",
   "devDependencies": {
-    "@types/node": "^22.15.21"
+    "@types/node": "^22.15.21",
+    "dotenv": "^16.5.0"
   }
 }

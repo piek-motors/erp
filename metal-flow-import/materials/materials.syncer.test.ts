@@ -1,6 +1,6 @@
 import assert from 'node:assert'
 import { beforeEach, describe, it } from 'node:test'
-import { MaterialsSyncer } from './materials.syncer.ts'
+import { MaterialsSyncer } from './materials.syncer'
 
 describe('MaterialsSyncer', () => {
   let instance: MaterialsSyncer

@@ -1,9 +1,9 @@
 import { Detail, Material } from 'domain-model'
 import { log } from 'node:console'
 import path from 'node:path'
-import { CsvIO } from './adapters/csv-io.ts'
-import { MaterialParser } from './materials/materials.syncer.ts'
-import { parseExcelNumber } from './utils.ts'
+import { CsvIO } from './adapters/csv-io'
+import { MaterialParser } from './materials/materials.syncer'
+import { parseExcelNumber } from './utils'
 
 const detailsCsvPath = path.resolve('data', 'details.csv')
 

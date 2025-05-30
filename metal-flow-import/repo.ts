@@ -13,28 +13,30 @@ export class Repo {
   }
 
   async insertMaterials(materials: Material[]) {
-    const lastId = await this.db
-      .selectFrom('metal_flow.materials')
-      .select('id')
-      .orderBy('id', 'desc')
-      .limit(1)
-      .executeTakeFirstOrThrow()
-
     const insertables: Insertable<DB.MaterialTable>[] = []
 
-    for (const [idx, m] of materials.entries()) {
+    for (const [_, m] of materials.entries()) {
       const shapeData = this.materialMapper.toPersistence(m).shape_data
       insertables.push({
-        id: m.id ?? lastId.id + idx + 1,
         unit: m.unit,
         shape: m.shape,
-        shape_data: shapeData
+        shape_data: shapeData,
+        label: m.label
       })
     }
 
     await this.db
       .insertInto('metal_flow.materials')
       .values(insertables)
+      .onConflict(e => e.doNothing())
+      .execute()
+  }
+
+  async insertDetails(details: Detail[]) {
+    await this.db
+      .insertInto('metal_flow.details')
+      .values(details)
+      .onConflict(e => e.doNothing())
       .execute()
   }
 
@@ -50,7 +52,8 @@ export class Repo {
         id: m.id,
         unit: m.unit,
         shape: m.shape as EnMaterialShape,
-        shape_data: m.shape_data
+        shape_data: m.shape_data,
+        label: m.label
       })
     })
   }

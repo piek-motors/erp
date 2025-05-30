@@ -1,5 +1,5 @@
 import { before, beforeEach, describe, it } from 'node:test'
-import { DetailSyncer } from './details.syncer.ts'
+import { DetailSyncer } from './details.syncer'
 
 describe('DetailsSyncer', () => {
   let instance: DetailSyncer

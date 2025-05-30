@@ -277,6 +277,9 @@ importers:
       '@types/node':
         specifier: ^22.15.21
         version: 22.15.21
+      dotenv:
+        specifier: ^16.5.0
+        version: 16.5.0
 
   server:
     dependencies:

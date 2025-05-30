@@ -9,7 +9,7 @@ interface ReadOpts {
 export class CsvIO {
   static read(csvPath: string, opts: ReadOpts = {}): Promise<string[][]> {
     const file = fs.readFileSync(csvPath)
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, _) => {
       parse(file, { delimiter: ',' }, async (err, table: string[][]) => {
         if (err) {
           throw new Error(`Error parsing CSV: ${err}`)

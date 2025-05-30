@@ -1,9 +1,9 @@
 import { assert } from 'console'
 import { List, Material, Pipe, RoundBar, SquareBar } from 'domain-model'
 import path from 'node:path'
-import { CsvIO } from '../adapters/csv-io.ts'
-import { parseExcelNumber } from '../utils.ts'
-import { MaterialSequence } from './sequence.ts'
+import { CsvIO } from '../adapters/csv-io'
+import { parseExcelNumber } from '../utils'
+import { MaterialSequence } from './sequence'
 
 const materialsCsvPath = path.resolve(path.join('data', 'materials.csv'))
 
@@ -67,7 +67,7 @@ export class MaterialParser {
   }
 
   parseSquare(name: string) {
-    const [_, size, alloy, alloySecond] = name.split(' ')
+    const [_, size, alloy] = name.split(' ')
     const sideSize = Number(size.split(/[хx]/)[1])
     const square = new SquareBar(MaterialSequence.next())
     square.length = sideSize

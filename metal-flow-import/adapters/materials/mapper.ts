@@ -2,7 +2,7 @@ import { plainToInstance } from 'class-transformer'
 import { DB } from 'db'
 import * as dm from 'domain-model'
 import type { Generated } from 'kysely'
-import { extractShapeData } from './guards.js'
+import { extractShapeData } from './guards'
 
 export class MaterialMapper {
   toPersistence(material: dm.Material): DB.MaterialTable {
@@ -12,7 +12,8 @@ export class MaterialMapper {
       shape: material.shape,
       shape_data: extractShapeData(
         material
-      ) as unknown as DB.MaterialTable['shape_data']
+      ) as unknown as DB.MaterialTable['shape_data'],
+      label: material.label
     }
   }
 
