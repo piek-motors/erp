@@ -7,10 +7,10 @@ import { useAppContext } from 'hooks'
 import { observer } from 'mobx-react-lite'
 import * as React from 'react'
 import { useEffect } from 'react'
-import { Inp, Row } from 'shortcuts'
+import { DeleteResourceButton, Inp, Row } from 'shortcuts'
 import { GetOrderPaymentsQuery } from 'types/graphql-shema'
 import * as formatter from 'utils/formatting'
-import { orderStore as os } from '../stores/order.store'
+import { orderStore, orderStore as os } from '../stores/order.store'
 
 export const Paymnets = observer(({ order }: { order: Order }) => {
   const { store }: any = useAppContext()
@@ -92,13 +92,20 @@ const PaymentsTable = observer(
                 <td>{formatter.percentage(payment.amount, totalAmount)}</td>
                 <td>{formatter.money(payment.amount)}</td>
                 <td>{formatter.formatOnlyDate(payment.date)}</td>
+                {orderStore.editMode && (
+                  <td>
+                    <DeleteResourceButton
+                      onClick={() => props?.onDelete?.(payment.id)}
+                    />
+                  </td>
+                )}
               </tr>
             ))}
           </tbody>
           <tfoot>
             <tr>
               <td> {totalPaidPercent}</td>
-              <td>{formatter.money(totalPaid)}</td>
+              <td>{!!totalPaid && formatter.money(totalPaid)}</td>
               {props.footerComponent && <td>{props.footerComponent}</td>}
             </tr>
           </tfoot>

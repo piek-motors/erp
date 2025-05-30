@@ -11,7 +11,7 @@ interface BaseAutocompleteProps<T extends BaseOption> {
   label?: string
   options: T[]
   value: T | T[] | null
-  onChange: (value: T | T[] | null) => void
+  onChange: (value: T | null) => void
   multiple?: boolean
   freeSolo?: boolean
   loading?: boolean
@@ -67,7 +67,7 @@ export function BaseAutocomplete<T extends BaseOption>({
             } as T
             onChange(newOption)
           } else {
-            onChange(newValue as T | T[] | null)
+            onChange(newValue as T)
           }
         }}
         getOptionLabel={getOptionLabel}

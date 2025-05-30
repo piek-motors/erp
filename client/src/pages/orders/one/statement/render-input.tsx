@@ -108,11 +108,7 @@ export const RenderInput = (props: {
           value={value ? { label: value, value } : null}
           freeSolo
           onChange={newValue => {
-            if (Array.isArray(newValue)) {
-              orderStore.statment.setContractor(newValue[0]?.label ?? '')
-            } else {
-              orderStore.statment.setContractor(newValue?.label ?? '')
-            }
+            orderStore.statment.setContractor(newValue?.value)
           }}
         />
       )
@@ -125,11 +121,7 @@ export const RenderInput = (props: {
           value={value ? { label: value, value } : null}
           freeSolo
           onChange={newValue => {
-            if (Array.isArray(newValue)) {
-              orderStore.statment.setCity(newValue[0]?.label ?? '')
-            } else {
-              orderStore.statment.setCity(newValue?.label ?? '')
-            }
+            orderStore.statment.setCity(newValue?.value)
           }}
         />
       )

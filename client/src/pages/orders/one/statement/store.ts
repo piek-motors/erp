@@ -79,11 +79,11 @@ export class StatementStore {
   setManagerId(value: string) {
     this.managerId = value
   }
-  setContractor(value: string) {
-    this.contractor = value
+  setContractor(value?: string) {
+    this.contractor = value || ''
   }
-  setCity(value: string) {
-    this.city = value
+  setCity(value?: string) {
+    this.city = value || ''
   }
   setTotalAmount(value: string) {
     this.totalAmount = value
@@ -116,17 +116,19 @@ export class StatementStore {
   }
   prepareForUpdate(orderId: number): gql.UpdateOrderInfoMutationVariables {
     const fields: gql.UpdateOrderInfoMutationVariables['fields'] = {}
-    if (this.invoiceNumber) fields.invoice_number = this.invoiceNumber
-    if (this.shippingDate)
+    if (this.invoiceNumber != null) fields.invoice_number = this.invoiceNumber
+    if (this.shippingDate != null)
       fields.shipping_date = moment(this.shippingDate, 'DD.MM.YY').format(
         'YYYY-MM-DD'
       )
-    if (this.orderNumber) fields.order_number = this.orderNumber
-    if (this.managerId) fields.manager_id = parseInt(this.managerId, 10)
-    if (this.contractor) fields.contractor = this.contractor
-    if (this.city) fields.city = this.city
-    if (this.totalAmount) fields.total_amount = parseFloat(this.totalAmount)
-    if (this.comment) fields.comment = this.comment
+    if (this.orderNumber != null) fields.order_number = this.orderNumber
+    if (this.managerId != null) fields.manager_id = parseInt(this.managerId, 10)
+    if (this.contractor != null) fields.contractor = this.contractor
+    if (this.city != null) fields.city = this.city
+    if (this.totalAmount != null)
+      fields.total_amount = parseFloat(this.totalAmount)
+    if (this.comment != null) fields.comment = this.comment
+
     return {
       id: orderId,
       fields

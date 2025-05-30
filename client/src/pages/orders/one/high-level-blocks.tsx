@@ -31,7 +31,7 @@ export const OrderMetadata = observer(() => {
   return (
     <Row gap={1}>
       <Typography level="h4">
-        {orderStore.order?.contractor} __ {orderStore.order?.city}
+        {orderStore.statment?.contractor} __ {orderStore.statment?.city}
       </Typography>
       <Chip
         chipProps={{
