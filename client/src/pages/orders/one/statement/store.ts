@@ -21,7 +21,7 @@ export type ColumnDefinition = {
   label: string
   placeholder?: string
   inputType?: InputTypes
-  value?: string
+  value?: string | null
   onChange?: (value: string) => void
   view?: string
   layout?: Layout
@@ -33,7 +33,7 @@ export class StatementStore {
   order?: Order | null
   status: OrderStatus = OrderStatus.PreOrder
   invoiceNumber = ''
-  shippingDate = ''
+  shippingDate: string | null = null
   orderNumber = ''
   managerId = ''
   contractor = ''
@@ -117,10 +117,16 @@ export class StatementStore {
   prepareForUpdate(orderId: number): gql.UpdateOrderInfoMutationVariables {
     const fields: gql.UpdateOrderInfoMutationVariables['fields'] = {}
     if (this.invoiceNumber != null) fields.invoice_number = this.invoiceNumber
-    if (this.shippingDate != null)
-      fields.shipping_date = moment(this.shippingDate, 'DD.MM.YY').format(
-        'YYYY-MM-DD'
-      )
+    if (this.shippingDate) {
+      try {
+        fields.shipping_date = moment(this.shippingDate, 'DD.MM.YY').format(
+          'YYYY-MM-DD'
+        )
+      } catch (e) {
+        this.shippingDate = null
+      }
+    }
+
     if (this.orderNumber != null) fields.order_number = this.orderNumber
     if (this.managerId != null) fields.manager_id = parseInt(this.managerId, 10)
     if (this.contractor != null) fields.contractor = this.contractor

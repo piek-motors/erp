@@ -49,7 +49,7 @@ export const RenderInput = (props: {
           type="text"
           label={label}
           placeholder={placeholder}
-          value={value}
+          value={value ?? ''}
           onChange={handleMyInputChange}
         />
       )
@@ -60,7 +60,7 @@ export const RenderInput = (props: {
           type="number"
           label={label}
           placeholder={placeholder}
-          value={value}
+          value={value ?? ''}
           onChange={handleMyInputChange}
         />
       )
@@ -71,7 +71,7 @@ export const RenderInput = (props: {
           type="number"
           label={label}
           placeholder={placeholder}
-          value={value}
+          value={value ?? ''}
           onChange={handleMyInputChange}
         />
       )
@@ -81,7 +81,7 @@ export const RenderInput = (props: {
           key={key}
           label={label}
           placeholder={placeholder}
-          value={value}
+          value={value ?? ''}
           onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
             onChange(e.target.value)
           }
@@ -131,7 +131,7 @@ export const RenderInput = (props: {
         <Inp
           key={key}
           label={label}
-          value={value}
+          value={value ?? ''}
           onChange={handleMyInputChange}
         />
       )
