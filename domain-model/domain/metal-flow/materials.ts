@@ -237,8 +237,6 @@ export class Pipe extends Material<PipeShapeData> {
 export class SquareBar extends Material<SquareBarShapeData> {
   unit = EnUnit.Kg
   shape = EnMaterialShape.SquareBar
-  @IsString()
-  name = 'Квадрат'
   /**
    * Side length of the square bar in millimeters (mm).
    * This is the primary dimension used for identification and calculations.
@@ -256,11 +254,11 @@ export class SquareBar extends Material<SquareBarShapeData> {
     if (!this.length) {
       throw new Error('length is not specified')
     }
-    return `${this.name} ${this.length} ${this.alloy || ''}`
+    return `${this.shapeUI} ${this.length} ${this.alloy || ''}`
   }
   getLabelProps(): ResourceNameProps {
     return {
-      name: this.name,
+      name: this.deriveLabel(),
       caption: this.alloy
     }
   }

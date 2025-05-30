@@ -1,5 +1,5 @@
 import { apolloClient } from 'api'
-import { Material } from 'domain-model'
+import { EnMaterialShape, Material } from 'domain-model'
 import { makeAutoObservable } from 'mobx'
 import {
   GetMaterialsDocument,
@@ -15,13 +15,27 @@ export class MaterialListStore {
   materials: Material[] = []
   searchResult: number[] = []
   filterKeyword: string = ''
+  filterShape?: EnMaterialShape | null
 
   constructor() {
     makeAutoObservable(this)
   }
 
+  get filteredMaterials(): Material[] {
+    if (this.filterShape == null) {
+      return this.materials
+    }
+    return this.materials.filter(
+      material => material.shape === this.filterShape
+    )
+  }
+
   search(keyword: string) {
     this.filterKeyword = keyword
+  }
+
+  setFilterShape(shape?: EnMaterialShape) {
+    this.filterShape = shape
   }
 
   setMaterials(materials: Material[]) {
@@ -45,7 +59,7 @@ export class MaterialListStore {
 
   async fetchAll() {
     try {
-      this.loading = true
+      this.setLoading(true)
       const res = await apolloClient.query<
         GetMaterialsQuery,
         GetMaterialsQueryVariables
@@ -56,9 +70,17 @@ export class MaterialListStore {
       const materials = res.data?.metal_flow_materials.map(map.material.fromDto)
       this.setMaterials(materials)
     } catch (error) {
-      this.error = error as Error
+      this.setError(error as Error)
     } finally {
-      this.loading = false
+      this.setLoading(false)
     }
+  }
+
+  private setError(error: Error) {
+    this.error = error
+  }
+
+  private setLoading(loading: boolean) {
+    this.loading = loading
   }
 }

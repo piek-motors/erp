@@ -1,4 +1,3 @@
-import { apolloClient } from 'api'
 import {
   EnMaterialShape,
   EnUnit,
@@ -10,8 +9,7 @@ import {
   RoundBarShapeData
 } from 'domain-model'
 import { makeAutoObservable } from 'mobx'
-import * as gql from 'types/graphql-shema'
-import { map } from '../mappers'
+import { getMaterial, insertMaterial, updateMaterial } from './material.api'
 
 export class MaterialStore {
   constructor() {
@@ -57,86 +55,54 @@ export class MaterialStore {
     this.shapeData = shapeData
   }
 
-  async load(id: number) {
+  private async withStateManagement<T>(
+    operation: () => Promise<T>
+  ): Promise<T> {
     this.loading = true
     this.error = null
     try {
-      const res = await apolloClient.query<
-        gql.GetMaterialByPkQuery,
-        gql.GetMaterialByPkQueryVariables
-      >({
-        query: gql.GetMaterialByPkDocument,
-        variables: { id }
-      })
-      const d = res.data?.metal_flow_materials_by_pk
-      if (!d) throw new Error('Material not found')
-
-      const material = map.material.fromDto(d)
-      this.syncState(material)
-      return material
+      return await operation()
     } catch (e) {
       this.error = e as Error
       throw e
     } finally {
       this.loading = false
     }
+  }
+
+  async load(id: number) {
+    return this.withStateManagement(async () => {
+      const material = await getMaterial(id)
+      this.syncState(material)
+      return material
+    })
   }
 
   async insert() {
-    this.loading = true
-    this.error = null
-    try {
+    return this.withStateManagement(async () => {
       const MaterialConstructor = getMaterialConstructor(this.shape)
       const m = new MaterialConstructor(0).load(null, this.shapeData as any)
-      const res = await apolloClient.mutate<
-        gql.InsertMaterialMutation,
-        gql.InsertMaterialMutationVariables
-      >({
-        mutation: gql.InsertMaterialDocument,
-        variables: {
-          object: {
-            unit: this.unit,
-            shape: this.shape,
-            label: m.deriveLabel(),
-            shape_data: this.shapeData
-          }
+      const id = await insertMaterial({
+        object: {
+          unit: this.unit,
+          shape: this.shape,
+          label: m.deriveLabel(),
+          shape_data: this.shapeData
         }
       })
-      const id = res.data?.insert_metal_flow_materials_one?.id
-      if (id) {
-        this.insertedMaterialId = id
-        this.clear()
-      }
+      this.insertedMaterialId = id
+      this.clear()
       return id
-    } catch (e) {
-      this.error = e as Error
-      throw e
-    } finally {
-      this.loading = false
-    }
+    })
   }
 
   async update() {
-    if (!this.id) throw new Error('Material id is not set')
-
-    this.loading = true
-    this.error = null
-    try {
-      const res = await apolloClient.mutate<
-        gql.UpdateMaterialMutation,
-        gql.UpdateMaterialMutationVariables
-      >({
-        mutation: gql.UpdateMaterialDocument,
-        variables: {
-          id: this.id,
-          _set: { shape: this.shape, shape_data: this.shapeData }
-        }
+    return this.withStateManagement(async () => {
+      if (!this.id) throw new Error('Material id is not set')
+      await updateMaterial({
+        id: this.id,
+        _set: { shape: this.shape, shape_data: this.shapeData }
       })
-    } catch (e) {
-      this.error = e as Error
-      throw e
-    } finally {
-      this.loading = false
-    }
+    })
   }
 }

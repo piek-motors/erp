@@ -37,8 +37,8 @@ function SquareMaterialInputBase({
   return (
     <InputStack>
       <Inp
-        label={t.Width}
-        value={shapeData.width}
+        label={t.Length}
+        value={shapeData.length}
         onChange={e => {
           const newData = { ...shapeData, width: Number(e.target.value) }
           materialStore.setShapeData(

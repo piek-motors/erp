@@ -1,6 +1,6 @@
+import { ClassConstructor } from 'class-transformer'
 import { IsBoolean, IsNumber, IsOptional, IsString } from 'class-validator'
 import { EnMaterialShape } from './enums'
-import { ClassConstructor } from 'class-transformer'
 
 class Common {
   @IsString()
@@ -41,10 +41,6 @@ export class PipeShapeData extends Common {
 export class SquareBarShapeData extends Common {
   @IsNumber()
   length!: number
-
-  @IsNumber()
-  @IsOptional()
-  width?: number
 }
 
 const ShapeDataConstructorMap = {

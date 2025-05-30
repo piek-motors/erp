@@ -2,12 +2,15 @@
 import { css } from '@emotion/react'
 import { UilArrowDown, UilArrowUp } from '@iconscout/react-unicons'
 import { Table as MuiTable, Sheet, Stack, Typography } from '@mui/joy'
+import { SxProps } from '@mui/joy/styles/types'
 import { Row, TableOptions, useSortBy, useTable } from 'react-table'
 
 type Props<T extends object> = TableOptions<T> & {
   onRowClick?: (row: T) => void
   onDoubleRowClick?: (row: T) => void
   trStyleCallback?: (row: Row<T>) => React.CSSProperties
+  small?: boolean
+  sx?: SxProps
 }
 /**
  * Generic table implementation for metal-flow subsystem
@@ -26,7 +29,12 @@ export function Table<T extends object>(props: Props<T>) {
   if (data.length === 0) return
   return (
     <Sheet>
-      <MuiTable {...getTableProps()} style={{ tableLayout: 'auto' }}>
+      <MuiTable
+        {...getTableProps()}
+        style={{ tableLayout: 'auto' }}
+        size={props.small ? 'sm' : 'md'}
+        sx={props.sx}
+      >
         <thead>
           {headerGroups.map((headerGroup, i) => (
             <tr {...headerGroup.getHeaderGroupProps()} key={i}>

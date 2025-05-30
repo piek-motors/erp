@@ -3,6 +3,12 @@ import { Detail, Material } from 'domain-model'
 import { makeAutoObservable } from 'mobx'
 import * as gql from 'types/graphql-shema'
 import { map } from '../mappers'
+import {
+  getDetail,
+  insertDetail,
+  updateDetail,
+  updateDetailMaterialRelationData
+} from './detail.api'
 
 type MaterialRelationData = {
   length: string
@@ -95,21 +101,15 @@ export class DetailStore {
 
   async insert() {
     const materialRelations = this.getMaterialRelations()
-    const res = await apolloClient.mutate<
-      gql.InsertDetailMutation,
-      gql.InsertDetailMutationVariables
-    >({
-      mutation: gql.InsertDetailDocument,
-      variables: {
-        object: {
-          name: this.name,
-          detail_materials: {
-            data: materialRelations
-          }
+    const id = await insertDetail({
+      object: {
+        name: this.name,
+        detail_materials: {
+          data: materialRelations
         }
       }
     })
-    const detail = res.data?.insert_metal_flow_details_one
+    const detail = await getDetail(id)
     if (detail) {
       this.recentlyAdded = this.createDetailFromResponse(detail)
     }
@@ -118,19 +118,13 @@ export class DetailStore {
 
   async update() {
     if (!this.id) throw new Error('Detail id is not set')
-    const res = await apolloClient.mutate<
-      gql.UpdateDetailMutation,
-      gql.UpdateDetailMutationVariables
-    >({
-      mutation: gql.UpdateDetailDocument,
-      variables: {
-        id: this.id,
-        _set: {
-          name: this.name
-        }
+    const id = await updateDetail({
+      id: this.id,
+      _set: {
+        name: this.name
       }
     })
-    const detail = res.data?.update_metal_flow_details_by_pk
+    const detail = await getDetail(id)
     if (detail) {
       this.recentlyUpdated = this.createDetailFromResponse(detail)
     }
@@ -138,9 +132,10 @@ export class DetailStore {
   }
 
   syncState(detail: Detail) {
+    const map = new Map<number, MaterialRelationData>()
     this.id = detail.id
     this.name = detail.name
-    const map = new Map<number, MaterialRelationData>()
+
     for (const [material, relationData] of detail.materials.entries()) {
       if (material.id) {
         map.set(material.id, {
@@ -153,32 +148,19 @@ export class DetailStore {
   }
 
   async handleUpdateDetail(detail: Detail) {
-    await apolloClient.mutate<
-      gql.UpdateDetailMutation,
-      gql.UpdateDetailMutationVariables
-    >({
-      mutation: gql.UpdateDetailDocument,
-      variables: {
-        id: detail.id,
-        _set: {
-          name: detail.name
-        }
+    await updateDetail({
+      id: detail.id,
+      _set: {
+        name: detail.name
       }
     })
 
     for (const [material, relationData] of detail.materials.entries()) {
       if (!material.id) throw Error('Material id is null')
-
-      await apolloClient.mutate<
-        gql.UpdateDetailMaterialRelationDataMutation,
-        gql.UpdateDetailMaterialRelationDataMutationVariables
-      >({
-        mutation: gql.UpdateDetailMaterialRelationDataDocument,
-        variables: {
-          data: relationData,
-          detail_id: detail.id,
-          material_id: material.id
-        }
+      await updateDetailMaterialRelationData({
+        data: relationData,
+        detail_id: detail.id,
+        material_id: material.id
       })
     }
   }
@@ -191,23 +173,14 @@ export class DetailStore {
         data: relationData
       })
     }
-    const res = await apolloClient.mutate<
-      gql.InsertDetailMutation,
-      gql.InsertDetailMutationVariables
-    >({
-      mutation: gql.InsertDetailDocument,
-      variables: {
-        object: {
-          name: state.name,
-          detail_materials: {
-            data: payload
-          }
+    const id = await insertDetail({
+      object: {
+        name: state.name,
+        detail_materials: {
+          data: payload
         }
       }
     })
-    if (res.errors?.length) {
-      throw Error(res.errors.join('\n'))
-    }
-    return res.data?.insert_metal_flow_details_one?.id
+    return id
   }
 }

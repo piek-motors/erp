@@ -32,6 +32,7 @@ import {
   RoundBarInput,
   SquareMaterialInput
 } from './shape-data'
+import { MaterialShapeFilter } from './shape-filter'
 
 const tabs: Record<EnMaterialShape, JSX.Element> = {
   [EnMaterialShape.RoundBar]: <RoundBarInput />,
@@ -90,14 +91,21 @@ export function ListMaterials() {
             }}
             value={materialListStore.filterKeyword}
           />
+          <MaterialShapeFilter />
           <LoadingHint show={materialListStore.loading} />
           <ErrorHint e={materialListStore.error} />
 
           <Sheet>
             {materialListStore.materials && (
               <Table
+                sx={{
+                  '& td': {
+                    padding: 0
+                  }
+                }}
+                small
                 columns={columnList}
-                data={materialListStore.materials.filter(each => {
+                data={materialListStore.filteredMaterials.filter(each => {
                   if (!each.id) return false
                   if (!materialListStore.filterKeyword) return true
                   if (materialListStore.searchResult) {
@@ -106,7 +114,7 @@ export function ListMaterials() {
 
                   return true
                 })}
-                onDoubleRowClick={row => {
+                onRowClick={row => {
                   if (!row.id) throw Error('Material id is null')
                   navigate(
                     openMetalFlowPage(MetalFlowRoutes.material_update, row.id)
