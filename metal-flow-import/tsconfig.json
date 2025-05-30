@@ -9,7 +9,6 @@
     "allowSyntheticDefaultImports": true,
     "useDefineForClassFields": false,
     "target": "ESNext",
-    "sourceMap": true,
     "baseUrl": ".",
     "outDir": "./dist",
     "resolveJsonModule": true,
@@ -20,12 +19,7 @@
     "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noImplicitOverride": true,
-    "allowUnreachableCode": false,
-    "allowUnusedLabels": false,
-    "forceConsistentCasingInFileNames": true,
+    "declarationMap": true,
     "plugins": [
       {
         "transform": "typia/lib/transform"

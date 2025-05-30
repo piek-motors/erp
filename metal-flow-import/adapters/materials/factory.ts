@@ -34,6 +34,7 @@ export class ListFactory implements IMaterialFactory {
 
   createFromDB(data: DB.Material): dm.Material {
     const m = new dm.List(data.id)
+    m.label = data.label
     m.thickness = data.shape_data.thickness
     if (data.shape_data.alloy) m.alloy = data.shape_data.alloy
     if (data.shape_data.width) m.width = data.shape_data.width
@@ -52,6 +53,7 @@ export class PipeFactory implements IMaterialFactory {
 
   createFromDB(data: DB.Material): dm.Material {
     const material = new dm.Pipe(data.id)
+    material.label = data.label
     material.diameter = data.shape_data.diameter
     material.alloy = data.shape_data.alloy
     material.thickness = data.shape_data.thickness
@@ -72,6 +74,7 @@ export class RoundBarFactory implements IMaterialFactory {
 
   createFromDB(data: DB.Material): dm.Material {
     const material = new dm.RoundBar(data.id)
+    material.label = data.label
     material.diameter = data.shape_data.diameter
     material.alloy = data.shape_data.alloy
     material.calibrated = data.shape_data.calibrated
@@ -92,6 +95,7 @@ export class SquareBarFactory implements IMaterialFactory {
 
   createFromDB(data: DB.Material): dm.Material {
     const m = new dm.SquareBar(data.id)
+    m.label = data.label
     m.length = data.shape_data.length
     m.alloy = data.shape_data.alloy
     return m

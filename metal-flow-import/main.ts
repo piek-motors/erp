@@ -2,7 +2,9 @@ import { log } from 'console'
 import { connect } from 'db'
 import dotenv from 'dotenv'
 import { DetailSyncer } from './details/details.syncer'
+import { DetailSequence } from './details/sequence'
 import { MaterialsSyncer } from './materials/materials.syncer'
+import { MaterialSequence } from './materials/sequence'
 import { Repo } from './repo'
 
 dotenv.config({
@@ -26,7 +28,15 @@ async function main() {
     log('finished syncing materials.csv')
 
     log('start syncing details.csv')
+    MaterialSequence.reset()
+    DetailSequence.reset()
     await detailSyncer.sync()
+
+    log('detail insert error count', repo.detailInsertErrCount)
+    log(
+      'detail material relation insert error count',
+      repo.detailMaterialRelationInsertErrCount
+    )
     log('finished syncing details.csv')
   } catch (e) {
     console.error(e)

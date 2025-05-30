@@ -3,4 +3,7 @@ export class DetailSequence {
   static next() {
     return ++this.id
   }
+  static reset() {
+    this.id = 0
+  }
 }

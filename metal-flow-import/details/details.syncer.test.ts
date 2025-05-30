@@ -13,7 +13,8 @@ describe('DetailsSyncer', () => {
     instance = new DetailSyncer({
       getAllMaterials: async () => [],
       insertMaterials: async () => {},
-      saveDetailsAndRelations: async () => {}
+      saveDetailsAndRelations: async () => {},
+      loadMaterials: async () => {}
     })
   })
 
@@ -29,14 +30,26 @@ describe('DetailsSyncer', () => {
     const data = Array.from(materialLabels).sort((a, b) => a.localeCompare(b))
     await fs.writeFile('./out/material-labels.txt', data.join('\n'))
 
-    const details = new Set<string>()
+    // Collect unique detail names
+    const uniqueDetails = new Map<string, Set<string>>()
     for (const scope of analysisContext.materialScopes) {
       for (const detail of scope.details) {
-        details.add(detail.name)
+        if (!uniqueDetails.has(detail.name)) {
+          uniqueDetails.set(detail.name, new Set())
+        }
+        // Add material label to the set of materials for this detail
+        uniqueDetails.get(detail.name)?.add(scope.material.deriveLabel())
       }
     }
 
-    const dataDetails = Array.from(details).sort((a, b) => a.localeCompare(b))
+    // Convert to array and sort
+    const dataDetails = Array.from(uniqueDetails.entries())
+      .sort(([a], [b]) => a.localeCompare(b))
+      .map(
+        ([name, materials]) =>
+          `${name} (${Array.from(materials).sort().join(', ')})`
+      )
+
     await fs.writeFile('./out/details.txt', dataDetails.join('\n'))
   })
 })

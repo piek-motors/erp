@@ -1,18 +1,19 @@
 import { Detail, Material } from 'domain-model'
 import { log } from 'node:console'
 import path from 'node:path'
-import { CsvIO } from '../adapters/csv-io.ts'
-import { MaterialParser } from '../materials/materials.syncer.ts'
-import { parseExcelNumber } from '../utils.ts'
-import { AnalysisContext } from './details.analysis-context.ts'
-import { DetailSequence } from './sequence.ts'
+import { CsvIO } from '../adapters/csv-io'
+import { MaterialParser } from '../materials/materials.syncer'
+import { parseExcelNumber } from '../utils'
+import { AnalysisContext } from './details.analysis-context'
+import { DetailSequence } from './sequence'
 
 const detailsCsvPath = path.resolve('data', 'details.csv')
 
 interface IRepo {
   getAllMaterials(): Promise<Material[]>
   insertMaterials(materials: Material[]): Promise<void>
-  saveDetailsAndRelations(material: Material, details: Detail[]): Promise<void>
+  saveDetailsAndRelations(details: Detail[]): Promise<void>
+  loadMaterials(): Promise<void>
 }
 
 export class DetailSyncer {
@@ -33,7 +34,29 @@ export class DetailSyncer {
       log('No new materials to insert into the database.')
     }
 
-    // await this.processMaterialDetails(analysisResult, dbMaterials)
+    // await this.repo.saveDetailsAndRelations(
+    //   materialsToInsert,
+    //   analysisResult.details
+    // )
+    await this.repo.loadMaterials()
+
+    const added = new Set<string>()
+
+    for (const [, scope] of analysisResult.materialScopes.entries()) {
+      const detailsToAdd: Detail[] = []
+
+      for (const detail of scope.details) {
+        if (added.has(detail.name)) {
+          continue
+        }
+        detailsToAdd.push(detail)
+        added.add(detail.name)
+      }
+
+      await this.repo.saveDetailsAndRelations(detailsToAdd).catch(e => {
+        console.error(e.message)
+      })
+    }
   }
 
   async parseTable(): Promise<AnalysisContext> {

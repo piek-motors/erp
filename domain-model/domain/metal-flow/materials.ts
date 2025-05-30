@@ -91,7 +91,7 @@ export class RoundBar extends Material<RoundBarShapeData> {
       throw new Error('diameter is NaN')
     }
 
-    return `${this.shapeUI} ${this.diameter} ${this.alloy}`
+    return `${this.shapeUI} ${this.diameter} ${this.alloy}`.trim()
   }
   getLabelProps(): ResourceNameProps {
     return {
