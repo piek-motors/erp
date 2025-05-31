@@ -1,12 +1,6 @@
-import { apolloClient } from 'api'
 import { EnMaterialShape, Material } from 'domain-model'
 import { makeAutoObservable } from 'mobx'
-import {
-  GetMaterialsDocument,
-  GetMaterialsQuery,
-  GetMaterialsQueryVariables
-} from 'types/graphql-shema'
-import { map } from '../mappers'
+import { getMaterials } from './material.api'
 
 export class MaterialListStore {
   loading: boolean = false
@@ -21,17 +15,29 @@ export class MaterialListStore {
     makeAutoObservable(this)
   }
 
-  get filteredMaterials(): Material[] {
-    if (this.filterShape == null) {
-      return this.materials
+  getFilteredMaterials(): Material[] {
+    let filtered = this.materials
+
+    if (this.filterShape != null) {
+      filtered = filtered.filter(
+        material => material.shape === this.filterShape
+      )
     }
-    return this.materials.filter(
-      material => material.shape === this.filterShape
-    )
+
+    if (this.filterKeyword) {
+      console.log('filterKeyword', this.filterKeyword)
+      filtered = filtered.filter(material => {
+        if (!material.label) {
+          throw new Error('material.label is not specified')
+        }
+        return material.label.toLowerCase().includes(this.filterKeyword)
+      })
+    }
+    return filtered
   }
 
   search(keyword: string) {
-    this.filterKeyword = keyword
+    this.filterKeyword = keyword.toLowerCase()
   }
 
   setFilterShape(shape?: EnMaterialShape) {
@@ -60,15 +66,8 @@ export class MaterialListStore {
   async fetchAll() {
     try {
       this.setLoading(true)
-      const res = await apolloClient.query<
-        GetMaterialsQuery,
-        GetMaterialsQueryVariables
-      >({
-        query: GetMaterialsDocument,
-        fetchPolicy: 'cache-first'
-      })
-      const materials = res.data?.metal_flow_materials.map(map.material.fromDto)
-      this.setMaterials(materials)
+      const materials = await getMaterials()
+      this.setMaterials(materials || [])
     } catch (error) {
       this.setError(error as Error)
     } finally {

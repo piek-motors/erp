@@ -206,15 +206,14 @@ export class Pipe extends Material<PipeShapeData> {
   @Min(0)
   thickness!: number
   deriveLabel(): string {
-    if (Number.isNaN(this.diameter)) {
-      throw new Error('diameter is not specified')
+    if (isNaN(this.diameter)) {
+      throw new Error('diameter is NaN')
     }
     return `${this.shapeUI} ${this.diameter} ${this.alloy}`.trim()
   }
   getLabelProps(): ResourceNameProps {
     return {
-      name: this.deriveLabel(),
-      caption: this.alloy
+      name: this.deriveLabel()
     }
   }
   load(id: number | null, shapeData: PipeShapeData): this {
@@ -258,8 +257,7 @@ export class SquareBar extends Material<SquareBarShapeData> {
   }
   getLabelProps(): ResourceNameProps {
     return {
-      name: this.deriveLabel(),
-      caption: this.alloy
+      name: this.deriveLabel()
     }
   }
   load(id: number | null, shapeData: SquareBarShapeData): this {

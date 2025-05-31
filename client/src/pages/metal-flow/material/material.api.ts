@@ -44,3 +44,16 @@ export async function getMaterial(id: number) {
       throw new Error('Material not found')
     })
 }
+
+export async function getMaterials() {
+  return await apolloClient
+    .query<gql.GetMaterialsQuery, gql.GetMaterialsQueryVariables>({
+      query: gql.GetMaterialsDocument,
+      fetchPolicy: 'cache-first'
+    })
+    .then(res => {
+      return res.data?.metal_flow_materials
+        .map(map.material.fromDto)
+        .sort((a, b) => a.id - b.id)
+    })
+}

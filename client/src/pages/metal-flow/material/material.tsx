@@ -5,7 +5,7 @@ import { Search } from 'components/search-input'
 import { Table } from 'components/table.impl'
 import { EnMaterialShape, Material, UiMaterialShape } from 'domain-model'
 import { MetalFlowRoutes, openMetalFlowPage } from 'lib/routes'
-import { Observer } from 'mobx-react-lite'
+import { observer } from 'mobx-react-lite'
 import { JSX, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Column } from 'react-table'
@@ -70,66 +70,55 @@ const columnList: Column<Material>[] = [
   }
 ]
 
-export function ListMaterials() {
+export const ListMaterials = observer(() => {
   const navigate = useNavigate()
   useEffect(() => {
     materialListStore.fetchAll()
   }, [])
+  console.log('ren der')
   return (
-    <Observer
-      render={() => (
-        <>
-          <PageTitle title={t.MaterialsList} hideIcon>
-            <AddResourceButton
-              navigateTo={openMetalFlowPage(MetalFlowRoutes.material_add)}
-            />
-          </PageTitle>
+    <>
+      <PageTitle title={t.MaterialsList} hideIcon>
+        <AddResourceButton
+          navigateTo={openMetalFlowPage(MetalFlowRoutes.material_add)}
+        />
+      </PageTitle>
 
-          <Search
-            onChange={e => {
-              materialListStore.search(e.target.value)
+      <Search
+        onChange={e => {
+          materialListStore.search(e.target.value)
+        }}
+        value={materialListStore.filterKeyword}
+      />
+      <MaterialShapeFilter />
+      <LoadingHint show={materialListStore.loading} />
+      <ErrorHint e={materialListStore.error} />
+
+      <Sheet>
+        {materialListStore.materials && (
+          <Table
+            sx={{
+              '& td': {
+                padding: 0
+              }
             }}
-            value={materialListStore.filterKeyword}
+            small
+            columns={columnList}
+            data={materialListStore.getFilteredMaterials()}
+            onRowClick={row => {
+              if (!row.id) throw Error('Material id is null')
+              navigate(
+                openMetalFlowPage(MetalFlowRoutes.material_update, row.id)
+              )
+            }}
           />
-          <MaterialShapeFilter />
-          <LoadingHint show={materialListStore.loading} />
-          <ErrorHint e={materialListStore.error} />
-
-          <Sheet>
-            {materialListStore.materials && (
-              <Table
-                sx={{
-                  '& td': {
-                    padding: 0
-                  }
-                }}
-                small
-                columns={columnList}
-                data={materialListStore.filteredMaterials.filter(each => {
-                  if (!each.id) return false
-                  if (!materialListStore.filterKeyword) return true
-                  if (materialListStore.searchResult) {
-                    return materialListStore.searchResult.includes(each.id)
-                  }
-
-                  return true
-                })}
-                onRowClick={row => {
-                  if (!row.id) throw Error('Material id is null')
-                  navigate(
-                    openMetalFlowPage(MetalFlowRoutes.material_update, row.id)
-                  )
-                }}
-              />
-            )}
-          </Sheet>
-        </>
-      )}
-    />
+        )}
+      </Sheet>
+    </>
   )
-}
+})
 
-export function AddMaterial() {
+export const AddMaterial = observer(() => {
   const uiTabs: Record<string, JSX.Element> = {}
   for (const [key, val] of Object.entries(tabs)) {
     uiTabs[UiMaterialShape[key]] = val
@@ -138,37 +127,33 @@ export function AddMaterial() {
     materialStore.clear()
   }, [])
   return (
-    <Observer
-      render={() => (
-        <SmallInputForm
-          header={t.AddMaterial}
-          last={
-            <>
-              <SendMutation onClick={() => materialStore.insert()} />
-              {materialStore.insertedMaterialId && (
-                <TakeLookHint
-                  text={t.RecentlyNewMaterialAdded}
-                  link={openMetalFlowPage(
-                    MetalFlowRoutes.material_update,
-                    materialStore.insertedMaterialId
-                  )}
-                />
+    <SmallInputForm
+      header={t.AddMaterial}
+      last={
+        <>
+          <SendMutation onClick={() => materialStore.insert()} />
+          {materialStore.insertedMaterialId && (
+            <TakeLookHint
+              text={t.RecentlyNewMaterialAdded}
+              link={openMetalFlowPage(
+                MetalFlowRoutes.material_update,
+                materialStore.insertedMaterialId
               )}
-            </>
-          }
-        >
-          <MyTabs tabs={uiTabs} handleChange={materialStore.setShape} />
-          <MaterialUnitSelect
-            value={materialStore.unit}
-            onChange={v => materialStore.setUnit(v)}
-          />
-        </SmallInputForm>
-      )}
-    />
+            />
+          )}
+        </>
+      }
+    >
+      <MyTabs tabs={uiTabs} handleChange={materialStore.setShape} />
+      <MaterialUnitSelect
+        value={materialStore.unit}
+        onChange={v => materialStore.setUnit(v)}
+      />
+    </SmallInputForm>
   )
-}
+})
 
-export function UpdateMaterial() {
+export const UpdateMaterial = observer(() => {
   const id = Number(new URLSearchParams(useLocation().search).get('id'))
   if (!id) {
     return <>No id</>
@@ -178,35 +163,31 @@ export function UpdateMaterial() {
   }, [])
 
   return (
-    <Observer
-      render={() => (
-        <SmallInputForm
-          header={t.EditMaterial}
-          name={
-            map.material.convertable(materialStore.material) ? (
-              <>
-                <Box>
-                  <Typography level="h4">
-                    <ResourceName
-                      resource={materialStore.material?.getLabelProps()}
-                    />
-                  </Typography>
-                  {t.Unit} {materialStore.unit}
-                </Box>
-                <UpdateMaterialUpdateStockLinks id={id} />
-              </>
-            ) : (
-              <></>
-            )
-          }
-          last={<SendMutation onClick={() => materialStore.update()} />}
-        >
-          <InputStack>{tabs[materialStore.shape]}</InputStack>
-        </SmallInputForm>
-      )}
-    />
+    <SmallInputForm
+      header={t.EditMaterial}
+      name={
+        map.material.convertable(materialStore.material) ? (
+          <>
+            <Box>
+              <Typography level="h4">
+                <ResourceName
+                  resource={materialStore.material?.getLabelProps()}
+                />
+              </Typography>
+              {t.Unit} {materialStore.unit}
+            </Box>
+            <UpdateMaterialUpdateStockLinks id={id} />
+          </>
+        ) : (
+          <></>
+        )
+      }
+      last={<SendMutation onClick={() => materialStore.update()} />}
+    >
+      <InputStack>{tabs[materialStore.shape]}</InputStack>
+    </SmallInputForm>
   )
-}
+})
 
 function UpdateMaterialUpdateStockLinks(props: { id: number }) {
   const navigate = useNavigate()
