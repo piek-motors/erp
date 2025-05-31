@@ -1,9 +1,9 @@
 import { Sheet, Stack, Typography } from '@mui/joy'
-import { PageTitle } from 'components'
+import { PageTitle, Search } from 'components'
 import { Table } from 'components/table.impl'
 import { Detail, EnUnit, Material } from 'domain-model'
 import { MetalFlowRoutes, openMetalFlowPage } from 'lib/routes'
-import { Observer } from 'mobx-react-lite'
+import { observer, Observer } from 'mobx-react-lite'
 import { useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Column } from 'react-table'
@@ -20,7 +20,7 @@ import { map } from '../mappers'
 import { QtyInputWithUnit, SmallInputForm } from '../shared'
 import { MaterialAutocompleteMulti } from '../shared/material-autocomplete'
 import { ResourceName } from '../shared/material-name'
-import { detailStore, materialListStore } from '../store'
+import { detailListStore, detailStore, materialListStore } from '../store'
 import { t } from '../text'
 
 const columnList: Column<Detail>[] = [
@@ -96,7 +96,7 @@ function DetailMaterialRelationForm() {
   )
 }
 
-export function ListDetails() {
+export const ListDetails = observer(() => {
   const navigate = useNavigate()
   const { data } = gql.useGetDetailsQuery()
   const details = data?.metal_flow_details
@@ -106,37 +106,43 @@ export function ListDetails() {
     })
 
   return (
-    <Observer
-      render={() => (
-        <>
-          <PageTitle title={t.DetailsList} hideIcon>
-            <AddResourceButton
-              navigateTo={openMetalFlowPage(MetalFlowRoutes.detail_add)}
-            />
-          </PageTitle>
-          <Sheet>
-            <Table
-              columns={columnList}
-              data={details || []}
-              onDoubleRowClick={row =>
-                navigate(
-                  openMetalFlowPage(MetalFlowRoutes.detail_update, row.id)
-                )
-              }
-            />
-          </Sheet>
-        </>
-      )}
-    />
+    <>
+      <PageTitle title={t.DetailsList} hideIcon>
+        <AddResourceButton
+          navigateTo={openMetalFlowPage(MetalFlowRoutes.detail_add)}
+        />
+      </PageTitle>
+      <Search
+        onChange={e => {
+          detailListStore.search(e.target.value)
+        }}
+        value={detailListStore.searchKeyword || ''}
+      />
+      <Sheet>
+        <Table
+          sx={{
+            '& td, th': {
+              padding: '0 10px'
+            }
+          }}
+          small
+          columns={columnList}
+          data={details || []}
+          onDoubleRowClick={row =>
+            navigate(openMetalFlowPage(MetalFlowRoutes.detail_update, row.id))
+          }
+        />
+      </Sheet>
+    </>
   )
-}
+})
 
 export function UpdateDetail() {
   const id = Number(new URLSearchParams(useLocation().search).get('id'))
   if (!id) return <>No id</>
 
   useEffect(() => {
-    detailStore.load(id)
+    detailStore.loadDetailById(id)
   }, [])
 
   return (

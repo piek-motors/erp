@@ -108,6 +108,7 @@ export class RoundBar extends Material<RoundBarShapeData> {
   load(id: number | null, shapeData: RoundBarShapeData): this {
     return plainToInstance(RoundBar, {
       id,
+      label: this.label,
       alloy: shapeData.alloy,
       calibrated: shapeData.calibrated || false,
       diameter: shapeData.diameter,
@@ -168,6 +169,7 @@ export class List extends Material<ListShapeData> {
   load(id: number | null, shapeData: ListShapeData): this {
     return plainToInstance(List, {
       id,
+      label: this.label,
       alloy: shapeData.alloy,
       thickness: shapeData.thickness,
       width: shapeData.width
@@ -219,6 +221,7 @@ export class Pipe extends Material<PipeShapeData> {
   load(id: number | null, shapeData: PipeShapeData): this {
     return plainToInstance(Pipe, {
       id,
+      label: this.label,
       alloy: shapeData.alloy,
       diameter: shapeData.diameter,
       thickness: shapeData.thickness
@@ -263,6 +266,7 @@ export class SquareBar extends Material<SquareBarShapeData> {
   load(id: number | null, shapeData: SquareBarShapeData): this {
     return plainToInstance(SquareBar, {
       id,
+      label: this.label,
       alloy: shapeData.alloy,
       length: shapeData.length
     }) as this

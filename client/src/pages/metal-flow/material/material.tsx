@@ -75,7 +75,6 @@ export const ListMaterials = observer(() => {
   useEffect(() => {
     materialListStore.fetchAll()
   }, [])
-  console.log('ren der')
   return (
     <>
       <PageTitle title={t.MaterialsList} hideIcon>
@@ -98,8 +97,8 @@ export const ListMaterials = observer(() => {
         {materialListStore.materials && (
           <Table
             sx={{
-              '& td': {
-                padding: 0
+              '& td, th': {
+                padding: '0 10px'
               }
             }}
             small

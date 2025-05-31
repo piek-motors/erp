@@ -9,7 +9,7 @@ import {
   RoundBarShapeData
 } from 'domain-model'
 import { makeAutoObservable } from 'mobx'
-import { getMaterial, insertMaterial, updateMaterial } from './material.api'
+import * as api from './material.api'
 
 export class MaterialStore {
   constructor() {
@@ -72,7 +72,7 @@ export class MaterialStore {
 
   async load(id: number) {
     return this.withStateManagement(async () => {
-      const material = await getMaterial(id)
+      const material = await api.getMaterial(id)
       this.syncState(material)
       return material
     })
@@ -82,7 +82,7 @@ export class MaterialStore {
     return this.withStateManagement(async () => {
       const MaterialConstructor = getMaterialConstructor(this.shape)
       const m = new MaterialConstructor(0).load(null, this.shapeData as any)
-      const id = await insertMaterial({
+      const id = await api.insertMaterial({
         object: {
           unit: this.unit,
           shape: this.shape,
@@ -99,7 +99,7 @@ export class MaterialStore {
   async update() {
     return this.withStateManagement(async () => {
       if (!this.id) throw new Error('Material id is not set')
-      await updateMaterial({
+      await api.updateMaterial({
         id: this.id,
         _set: { shape: this.shape, shape_data: this.shapeData }
       })

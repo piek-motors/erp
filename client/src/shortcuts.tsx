@@ -302,10 +302,10 @@ export const IconSettings = {
   fill: 'black'
 }
 
-export function UseIcon(props: { icon: Icon }) {
+export function UseIcon(props: { icon: Icon; small?: boolean }) {
   return (
     <props.icon
-      width={IconSettings.width}
+      width={props.small ? IconSettings.width / 1.5 : IconSettings.width}
       opacity={IconSettings.opacity}
       fill={IconSettings.fill}
     />

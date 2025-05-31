@@ -1,7 +1,6 @@
-import { apolloClient } from 'api/apollo-client'
 import { Order, OrderStatus } from 'domain-model'
 import { makeAutoObservable } from 'mobx'
-import { map } from 'pages/orders/mappers'
+import { ordersApi } from 'pages/orders/orders.api'
 import * as gql from 'types/graphql-shema'
 import { AttachmentsStore } from '../attachments/store'
 import { PaymentStore } from '../payments/store'
@@ -15,6 +14,7 @@ export class OrderStore {
   positions = new PositionsStore()
   payments = new PaymentStore()
   editMode = false
+  error: Error | null = null
 
   constructor() {
     makeAutoObservable(this)
@@ -48,27 +48,14 @@ export class OrderStore {
   }
 
   async loadOrder(orderId: number) {
-    const res = await apolloClient.query<
-      gql.GetOrderByPkQuery,
-      gql.GetOrderByPkQueryVariables
-    >({
-      query: gql.GetOrderByPkDocument,
-      variables: { id: orderId }
-    })
-    this.setOrder(map.order.fromDto(res.data?.orders_orders[0]))
+    const order = await ordersApi.getOrder(orderId)
+    this.setOrder(order)
   }
 
   async updateOrder(orderId: number) {
-    return this.executeMutation(
-      apolloClient.mutate<
-        gql.UpdateOrderInfoMutation,
-        gql.UpdateOrderInfoMutationVariables
-      >({
-        mutation: gql.UpdateOrderInfoDocument,
-        variables: this.statment.prepareForUpdate(orderId),
-        refetchQueries: [gql.GetOrderByPkDocument]
-      })
-    )
+    const payload = this.statment.prepareForUpdate(orderId)
+    await this.try(() => ordersApi.updateOrder(payload))
+    await this.loadOrder(orderId)
   }
 
   async insertOrder(status: OrderStatus): Promise<number> {
@@ -76,121 +63,62 @@ export class OrderStore {
     if (!data.fields) {
       throw new Error('No data to insert')
     }
-
-    const res = await this.executeMutation(
-      apolloClient.mutate<
-        gql.InsertOrderMutation,
-        gql.InsertOrderMutationVariables
-      >({
-        mutation: gql.InsertOrderDocument,
-        variables: {
-          object: {
-            ...data.fields,
-            status
-          }
-        }
-      })
-    )
-
-    const orderId = res.data?.insert_orders_orders_one?.id
-    if (!orderId) {
-      throw new Error(`Failed to insert order: ${res.errors?.toString()}`)
+    const payload: gql.InsertOrderMutationVariables = {
+      object: {
+        ...data.fields,
+        status
+      }
     }
-    return orderId
+    const id = await this.try(() => ordersApi.insertOrder(payload))
+    return id
   }
 
   async deleteOrder() {
     this.assertOrderExists()
-    return this.executeMutation(
-      apolloClient.mutate<
-        gql.DeleteOrderMutation,
-        gql.DeleteOrderMutationVariables
-      >({
-        mutation: gql.DeleteOrderDocument,
-        variables: { id: this.order.id }
-      })
-    )
+    return this.try(() => ordersApi.deleteOrder({ id: this.order.id }))
   }
 
   async moveToArchive(
     status: OrderStatus.Archived | OrderStatus.ReclamationArchived
   ) {
     this.assertOrderExists()
-    const res = await this.executeMutation(
-      apolloClient.mutate<
-        gql.MoveOrderToArchiveMutation,
-        gql.MoveOrderToArchiveMutationVariables
-      >({
-        mutation: gql.MoveOrderToArchiveDocument,
-        variables: {
-          id: this.order.id,
-          actual_shipping_date: new Date(),
-          status: OrderStatus.Archived
-        },
-        refetchQueries: [gql.GetOrderByPkDocument]
-      })
-    )
-
+    const payload: gql.MoveOrderToArchiveMutationVariables = {
+      id: this.order.id,
+      actual_shipping_date: new Date(),
+      status
+    }
+    await this.try(() => ordersApi.moveToArchive(payload))
     await this.loadOrder(this.order.id)
-    return res
   }
 
   async moveToPriority() {
     this.assertOrderExists()
-    const res = await this.executeMutation(
-      apolloClient.mutate<
-        gql.MoveOrderToPriorityMutation,
-        gql.MoveOrderToPriorityMutationVariables
-      >({
-        mutation: gql.MoveOrderToPriorityDocument,
-        variables: {
-          id: this.order.id,
-          acceptance_date: new Date()
-        },
-        refetchQueries: [gql.GetOrderByPkDocument]
-      })
-    )
-
+    const payload: gql.MoveOrderToPriorityMutationVariables = {
+      id: this.order.id,
+      acceptance_date: new Date()
+    }
+    await this.try(() => ordersApi.moveToPriority(payload))
     await this.loadOrder(this.order.id)
-    return res
   }
 
   async updateAwaitingDispatch() {
     this.assertOrderExists()
-    const res = await this.executeMutation(
-      apolloClient.mutate<
-        gql.UpdateAwaitingDispatchMutation,
-        gql.UpdateAwaitingDispatchMutationVariables
-      >({
-        mutation: gql.UpdateAwaitingDispatchDocument,
-        variables: {
-          id: this.order.id,
-          awaiting_dispatch: !this.order.awatingDispatch
-        }
-      })
-    )
-
+    const payload: gql.UpdateAwaitingDispatchMutationVariables = {
+      id: this.order.id,
+      awaiting_dispatch: !this.order.awatingDispatch
+    }
+    await this.try(() => ordersApi.updateAwaitingDispatch(payload))
     await this.loadOrder(this.order.id)
-    return res
   }
 
   async updateNeedAttention() {
     this.assertOrderExists()
-    const res = await this.executeMutation(
-      apolloClient.mutate<
-        gql.UpdateNeedAttentionMutation,
-        gql.UpdateNeedAttentionMutationVariables
-      >({
-        mutation: gql.UpdateNeedAttentionDocument,
-        variables: {
-          id: this.order.id,
-          need_attention: this.order.needAttention ? 'false' : 'true'
-        }
-      })
-    )
-
+    const payload: gql.UpdateNeedAttentionMutationVariables = {
+      id: this.order.id,
+      need_attention: this.order.needAttention ? 'false' : 'true'
+    }
+    await this.try(() => ordersApi.updateNeedAttention(payload))
     await this.loadOrder(this.order.id)
-    return res
   }
 
   private assertOrderExists(): asserts this is { order: Order } {
@@ -199,14 +127,18 @@ export class OrderStore {
     }
   }
 
-  private async executeMutation<T extends { errors?: any }>(
-    mutation: Promise<T>
-  ): Promise<T> {
-    const res = await mutation
-    if (res.errors) {
-      throw new Error(res.errors.toString())
+  private async try<T extends any>(mutation: () => Promise<T>): Promise<T> {
+    try {
+      const res = await mutation()
+      return res
+    } catch (e) {
+      if (e instanceof Error) {
+        this.error = e
+      } else {
+        this.error = new Error(String(e))
+      }
+      throw e
     }
-    return res
   }
 
   clear() {
@@ -214,6 +146,7 @@ export class OrderStore {
     this.positions.clear()
     this.payments.clear()
     this.order = null
+    this.error = null
   }
 }
 

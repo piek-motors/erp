@@ -1,17 +1,17 @@
-import { makeAutoObservable } from 'mobx'
 import { Detail } from 'domain-model'
+import { makeAutoObservable } from 'mobx'
 
 export class DetailListStore {
   details: Detail[] = []
   searchResult: number[] = []
-  filterKeyword: string = ''
+  searchKeyword: string = ''
 
   constructor() {
     makeAutoObservable(this)
   }
 
   search(keyword: string) {
-    this.filterKeyword = keyword
+    this.searchKeyword = keyword
   }
 
   setDetails(details: Detail[]) {
@@ -24,6 +24,6 @@ export class DetailListStore {
 
   clear() {
     this.details = []
-    this.filterKeyword = ''
+    this.searchKeyword = ''
   }
 }

@@ -1,8 +1,6 @@
-import { apolloClient } from 'api'
 import { OrderItem } from 'domain-model'
 import { makeAutoObservable } from 'mobx'
-import { map } from 'pages/orders/mappers'
-import * as gql from 'types/graphql-shema'
+import { ordersApi } from 'pages/orders/orders.api'
 
 export class PositionsStore {
   items: OrderItem[] = []
@@ -54,15 +52,8 @@ export class PositionsStore {
   }
 
   async load(orderId: number) {
-    const res = await apolloClient.query<
-      gql.GetOrderPositionsQuery,
-      gql.GetOrderPositionsQueryVariables
-    >({
-      query: gql.GetOrderPositionsDocument,
-      variables: { order_id: orderId },
-      fetchPolicy: 'network-only'
-    })
-    this.setItems(res.data.orders_order_items.map(map.orderItem.fromDto))
+    const positions = await ordersApi.loadOrderItems(orderId)
+    this.setItems(positions)
   }
 
   async save(orderId: number) {
@@ -82,53 +73,29 @@ export class PositionsStore {
       throw new Error('No order item to update')
     }
 
-    const res = await apolloClient.mutate<
-      gql.UpdateOrderItemByPkMutation,
-      gql.UpdateOrderItemByPkMutationVariables
-    >({
-      mutation: gql.UpdateOrderItemByPkDocument,
-      variables: {
-        id: positionId,
-        _set: {
-          name: this.name,
-          quantity: this.quantity!,
-          description: this.description
-        }
-      }
-    })
-    if (res.errors) {
-      throw new Error(res.errors.toString())
-    }
-    await this.load(orderId)
-  }
-
-  private async insertOrderItem(orderId: number) {
-    const res = await apolloClient.mutate<
-      gql.InsertOrderItemMutation,
-      gql.InsertOrderItemMutationVariables
-    >({
-      mutation: gql.InsertOrderItemDocument,
-      variables: {
-        order_id: orderId,
+    await ordersApi.updateOrderItem({
+      id: positionId,
+      _set: {
         name: this.name,
         quantity: this.quantity!,
         description: this.description
       }
     })
-    if (res.errors) {
-      throw new Error(res.errors.toString())
-    }
+    await this.load(orderId)
+  }
+
+  private async insertOrderItem(orderId: number) {
+    await ordersApi.insertOrderItem({
+      order_id: orderId,
+      name: this.name,
+      quantity: this.quantity!,
+      description: this.description
+    })
     await this.load(orderId)
   }
 
   async delete(orderItemId: number, orderId: number) {
-    await apolloClient.mutate<
-      gql.DeleteOrderItemByPkMutation,
-      gql.DeleteOrderItemByPkMutationVariables
-    >({
-      mutation: gql.DeleteOrderItemByPkDocument,
-      variables: { id: orderItemId }
-    })
+    await ordersApi.deleteOrderItem(orderItemId)
     this.setItems(this.items.filter(item => item.id !== orderItemId))
   }
 }

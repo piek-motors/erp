@@ -1,6 +1,6 @@
 import { EnMaterialShape, Material } from 'domain-model'
 import { makeAutoObservable } from 'mobx'
-import { getMaterials } from './material.api'
+import * as api from './material.api'
 
 export class MaterialListStore {
   loading: boolean = false
@@ -25,7 +25,6 @@ export class MaterialListStore {
     }
 
     if (this.filterKeyword) {
-      console.log('filterKeyword', this.filterKeyword)
       filtered = filtered.filter(material => {
         if (!material.label) {
           throw new Error('material.label is not specified')
@@ -66,7 +65,7 @@ export class MaterialListStore {
   async fetchAll() {
     try {
       this.setLoading(true)
-      const materials = await getMaterials()
+      const materials = await api.getMaterials()
       this.setMaterials(materials || [])
     } catch (error) {
       this.setError(error as Error)

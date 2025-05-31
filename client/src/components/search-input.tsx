@@ -1,5 +1,5 @@
 import { UilSearch } from '@iconscout/react-unicons'
-import { Box, Input } from '@mui/joy'
+import { Input } from '@mui/joy'
 import React, { ReactNode } from 'react'
 import { Row, UseIcon } from '../shortcuts'
 
@@ -17,17 +17,16 @@ export function Search({
   children
 }: ISearchInputWithFiltersProps) {
   return (
-    <Row gap={1} sx={{ position: 'sticky' }}>
-      <Box sx={{ opacity: 0.5 }}>
-        <UseIcon icon={UilSearch} />
-      </Box>
+    <Row gap={1} sx={{ position: 'sticky', px: 1 }}>
       <Input
+        size="sm"
         type="text"
         variant="soft"
         placeholder={placeholder || 'Найти'}
         autoFocus={value !== ''}
         onChange={onChange}
         value={value}
+        startDecorator={<UseIcon icon={UilSearch} small />}
       />
       {children}
     </Row>
