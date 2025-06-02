@@ -2,6 +2,7 @@ import { Icon, UilPen, UilTrashAlt } from '@iconscout/react-unicons'
 import {
   Box,
   Button,
+  ButtonProps,
   ChipProps,
   CircularProgress,
   FormControl,
@@ -249,6 +250,8 @@ export function SendMutation(props: {
   onClick: () => Promise<any>
   title?: string
   additionals?: (error?: Error, mutationResult?: any) => JSX.Element
+  buttonProps?: ButtonProps
+  stackProps?: StackProps
 }) {
   const [loading, setLoading] = React.useState(false)
   const [error, setError] = React.useState<Error>()
@@ -266,10 +269,14 @@ export function SendMutation(props: {
     }
   }
   return (
-    <Stack gap={1}>
+    <Stack gap={1} {...props.stackProps}>
       <ErrorHint e={error} />
       <SavedHint show={mutationResult} />
-      <Button onClick={async () => handleSubmit()} disabled={loading}>
+      <Button
+        onClick={async () => handleSubmit()}
+        disabled={loading}
+        {...props.buttonProps}
+      >
         {props.title ?? 'Сохранить'}
       </Button>
       {(mutationResult || error) && props.additionals?.(error, mutationResult)}

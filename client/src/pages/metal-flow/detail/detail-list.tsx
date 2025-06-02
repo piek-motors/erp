@@ -31,21 +31,21 @@ const columnList: Column<Detail>[] = [
     )
   },
   {
-    Header: 'Масса',
+    Header: 'Масса гр.',
     accessor: r => {
       const m = r.materials[0]
       const weight = m?.weight?.toString()
       if (!weight) return '-'
-      return `${weight} ${m.material.unitUI}`
+      return weight
     }
   },
   {
-    Header: 'Длина',
+    Header: 'Длина мм.',
     accessor: r => {
       const m = r.materials[0]
       const length = m?.length?.toString()
       if (!length) return '-'
-      return `${m.length} мм`
+      return m.length
     }
   }
 ]

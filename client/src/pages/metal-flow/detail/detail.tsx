@@ -1,50 +1,56 @@
-import { Sheet, Stack, Typography } from '@mui/joy'
-import { EnUnit, Material } from 'domain-model'
+import { Container, Sheet, Stack, Typography } from '@mui/joy'
+import { PageTitle } from 'components/page-title'
+import { EnUnit } from 'domain-model'
 import { MetalFlowRoutes, openMetalFlowPage } from 'lib/routes'
-import { Observer } from 'mobx-react-lite'
+import { observer, Observer } from 'mobx-react-lite'
 import { useEffect } from 'react'
-import { useLocation } from 'react-router-dom'
-import { Inp, Row, SendMutation, TakeLookHint } from 'shortcuts'
+import { useLocation, useNavigate } from 'react-router-dom'
+import {
+  DeleteResourceButton,
+  Inp,
+  Row,
+  SendMutation,
+  TakeLookHint
+} from 'shortcuts'
 import { useGetMaterialsQuery } from 'types/graphql-shema'
 import { QtyInputWithUnit, SmallInputForm } from '../shared'
 import { MaterialAutocompleteMulti } from '../shared/material-autocomplete'
 import { ResourceName } from '../shared/material-name'
 import { detailStore, materialListStore } from '../store'
 import { t } from '../text'
+import { MaterialRelation } from './detail.store'
 
-function MaterialWeightInput(props: { material: Material }) {
-  const relationData = detailStore.materials.get(props.material)
-  return (
-    <>
-      <QtyInputWithUnit
-        label="Вес заготовки"
-        unitId={EnUnit.Gram}
-        setValue={v => {
-          detailStore.updateMaterialRelationData(props.material, {
-            weight: v
-          })
-        }}
-        value={relationData ? relationData.weight : ''}
-      />
-      <QtyInputWithUnit
-        label="Длина заготовки"
-        unitId={EnUnit.MilliMeter}
-        setValue={v => {
-          detailStore.updateMaterialRelationData(props.material, {
-            length: v
-          })
-        }}
-        value={relationData ? relationData.length : ''}
-      />
-    </>
-  )
-}
+const MaterialWeightInput = observer(
+  (props: { materialRelation: MaterialRelation }) => {
+    return (
+      <>
+        <QtyInputWithUnit
+          label="Вес заготовки"
+          unitId={EnUnit.Gram}
+          setValue={v => {
+            props.materialRelation.setWeight(v)
+          }}
+          value={props.materialRelation.weight}
+        />
+        <QtyInputWithUnit
+          label="Длина заготовки"
+          unitId={EnUnit.MilliMeter}
+          setValue={v => {
+            props.materialRelation.setLength(v)
+          }}
+          value={props.materialRelation.length}
+        />
+      </>
+    )
+  }
+)
 
 function DetailMaterialRelationForm() {
   return (
     <Sheet>
       <Stack my={1} gap={2}>
-        {Array.from(detailStore.materials.keys()).map(material => {
+        {detailStore.materials.map(materialRelation => {
+          const { material } = materialRelation
           return (
             <Stack sx={{ width: 'max-content' }} key={material.id}>
               <Row sx={{ fontWeight: 'bold' }}>
@@ -52,7 +58,7 @@ function DetailMaterialRelationForm() {
                 <ResourceName resource={material?.getLabelProps()} />
               </Row>
               <Stack p={1}>
-                <MaterialWeightInput material={material} />
+                <MaterialWeightInput materialRelation={materialRelation} />
               </Stack>
             </Stack>
           )
@@ -62,42 +68,53 @@ function DetailMaterialRelationForm() {
   )
 }
 
-export function UpdateDetail() {
+export const UpdateDetail = observer(() => {
   const id = Number(new URLSearchParams(useLocation().search).get('id'))
-  if (!id) return <>No id</>
-
+  if (!id) throw new Error('No id in url')
+  const navigate = useNavigate()
   useEffect(() => {
-    detailStore.loadDetailById(id)
+    detailStore.load(id)
   }, [])
-
   return (
-    <Observer
-      render={() => (
-        <SmallInputForm
-          header={t.EditDetail}
-          last={<SendMutation onClick={detailStore.update} />}
-        >
-          <Stack gap={1}>
-            <Typography>
-              <b>ID</b> {detailStore.id}
-            </Typography>
-            <Inp
-              fullWidth
-              label={t.DetailName}
-              onChange={v => {
-                detailStore.setName(v)
-              }}
-              value={detailStore.name}
-            />
-            <DetailMaterialRelationForm />
-          </Stack>
-        </SmallInputForm>
-      )}
-    />
+    <Container maxWidth="sm" sx={{ margin: 0, p: 1 }}>
+      <PageTitle title={t.EditDetail} hideIcon />
+      <Stack gap={1}>
+        <Typography>
+          <b>ID</b> {detailStore.id}
+        </Typography>
+        <Inp
+          fullWidth
+          label={t.DetailName}
+          onChange={v => {
+            detailStore.setName(v)
+          }}
+          value={detailStore.name}
+        />
+        <DetailMaterialRelationForm />
+        {/* buttons */}
+        <Row alignItems={'end'}>
+          <SendMutation
+            onClick={() => detailStore.update()}
+            stackProps={{ sx: { flexGrow: 1 } }}
+            buttonProps={{
+              variant: 'soft',
+              fullWidth: true
+            }}
+          />
+          <DeleteResourceButton
+            onClick={() =>
+              detailStore.delete().then(() => {
+                navigate(openMetalFlowPage(MetalFlowRoutes.details))
+              })
+            }
+          />
+        </Row>
+      </Stack>
+    </Container>
   )
-}
+})
 
-export function AddDetail() {
+export const AddDetail = observer(() => {
   const { data: materials } = useGetMaterialsQuery()
   return (
     <Observer
@@ -127,7 +144,15 @@ export function AddDetail() {
             data={materials}
             value={Array.from(materialListStore.materials)}
             onChange={m => {
-              detailStore.setMaterials(m)
+              detailStore.setMaterialRelations(
+                m.map(
+                  m =>
+                    new MaterialRelation(m, {
+                      length: '',
+                      weight: ''
+                    })
+                )
+              )
             }}
           />
           <DetailMaterialRelationForm />
@@ -135,4 +160,4 @@ export function AddDetail() {
       )}
     />
   )
-}
+})

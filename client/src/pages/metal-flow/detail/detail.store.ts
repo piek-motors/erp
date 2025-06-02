@@ -1,7 +1,5 @@
 import { Detail, Material } from 'domain-model'
 import { makeAutoObservable } from 'mobx'
-import * as gql from 'types/graphql-shema'
-import { map } from '../mappers'
 import * as api from './detail.api'
 
 type MaterialRelationData = {
@@ -9,13 +7,42 @@ type MaterialRelationData = {
   weight: string
 }
 
+export class MaterialRelation {
+  material!: Material
+  weight!: string
+  length!: string
+
+  constructor(material: Material, data: MaterialRelationData) {
+    this.material = material
+    this.weight = data.weight
+    this.length = data.length
+    makeAutoObservable(this)
+  }
+
+  setWeight(weight: string) {
+    this.weight = weight
+  }
+  setLength(length: string) {
+    this.length = length
+  }
+}
+
 export class DetailStore {
   id?: number
   name: string = ''
-  materials: Map<Material, MaterialRelationData | null> = new Map()
+  materials: MaterialRelation[] = []
 
   recentlyAdded?: Detail
   recentlyUpdated?: Detail
+
+  setRecentlyAdded(detail: Detail) {
+    this.recentlyAdded = detail
+  }
+  setRecentlyUpdated(detail: Detail) {
+    this.recentlyUpdated = detail
+  }
+
+  error?: Error
 
   constructor() {
     makeAutoObservable(this)
@@ -25,73 +52,52 @@ export class DetailStore {
     material_id: number
     data: MaterialRelationData
   }[] {
-    return Array.from(this.materials.entries()).map(([material, data]) => ({
+    return this.materials.map(({ material, weight, length }) => ({
       material_id: material.id,
       data: {
-        length: data?.length || '',
-        weight: data?.weight || ''
+        length: length || '',
+        weight: weight || ''
       }
     }))
-  }
-
-  private createDetailFromResponse(response: any): Detail {
-    const detail = map.detail.fromDto(response)
-    if (!detail)
-      throw new Error('createDetailFromResponse: detail is not defined')
-    return detail
   }
 
   clear() {
     this.id = undefined
     this.name = ''
-    this.materials = new Map()
+    this.materials = []
     this.recentlyAdded = undefined
     this.recentlyUpdated = undefined
   }
-
+  setId(id: number) {
+    this.id = id
+  }
   setName(name: string) {
     this.name = name
   }
 
-  setMaterials(materials: Material[]) {
-    this.materials = new Map(materials.map(m => [m, null]))
+  addMaterial(material: Material, data: MaterialRelationData) {
+    this.materials.push(new MaterialRelation(material, data))
   }
 
-  setMaterialRelationData(material: Material, data: MaterialRelationData) {
-    this.materials.set(material, data)
+  setMaterialRelations(materials: MaterialRelation[]) {
+    this.materials = materials
   }
 
-  updateMaterialRelationData(
-    material: Material,
-    data: Partial<MaterialRelationData>
-  ) {
-    const currentData = this.materials.get(material)
-    if (!currentData) throw Error('Material not found')
+  async load(detailId: number) {
+    const detail = await api.getDetail(detailId)
+    if (!detail) {
+      throw Error(`Detail with id ${detailId} not found`)
+    }
 
-    this.materials.set(material, {
-      ...currentData,
-      ...data
-    })
-  }
-
-  async loadDetailById(id: number) {
-    const detail = await api.getDetail(id)
-    if (!detail) return
-
-    this.id = detail.id
-    this.name = detail.name
-
-    const materialsMap = new Map<Material, MaterialRelationData>()
+    this.setId(detail.id)
+    this.setName(detail.name)
 
     for (const { material, length, weight } of detail.materials) {
-      if (material) {
-        materialsMap.set(material, {
-          weight: weight.toString(),
-          length: length.toString()
-        })
-      }
+      this.addMaterial(material, {
+        length: length.toString(),
+        weight: weight.toString()
+      })
     }
-    this.materials = materialsMap
   }
 
   async insert() {
@@ -106,82 +112,43 @@ export class DetailStore {
     })
     const detail = await api.getDetail(id)
     if (detail) {
-      this.recentlyAdded = this.createDetailFromResponse(detail)
+      this.setRecentlyAdded(detail)
     }
     return detail
   }
 
   async update() {
     if (!this.id) throw new Error('Detail id is not set')
-    const id = await api.updateDetail({
+    await api.updateDetail({
       id: this.id,
       _set: {
         name: this.name
       }
     })
-    const detail = await api.getDetail(id)
-    if (detail) {
-      this.recentlyUpdated = this.createDetailFromResponse(detail)
-    }
-    return detail
-  }
 
-  syncState(detail: Detail) {
-    const map = new Map<Material, MaterialRelationData>()
-    this.id = detail.id
-    this.name = detail.name
-
-    for (const { material, length, weight } of detail.materials) {
-      if (material.id) {
-        map.set(material, {
-          weight: weight.toString(),
-          length: length.toString()
-        })
-      }
-    }
-    this.materials = map
-  }
-
-  async handleUpdateDetail(detail: Detail) {
-    await api.updateDetail({
-      id: detail.id,
-      _set: {
-        name: detail.name
-      }
-    })
-
-    for (const { material, length, weight } of detail.materials) {
+    for (const { material, length, weight } of this.materials) {
       if (!material.id) throw Error('Material id is null')
       await api.updateDetailMaterialRelationData({
+        material_id: material.id,
+        detail_id: this.id,
         data: {
           length: length.toString(),
           weight: weight.toString()
-        },
-        detail_id: detail.id,
-        material_id: material.id
+        }
       })
     }
+
+    const getDetailRes = await api.getDetail(this.id)
+    if (getDetailRes) {
+      this.setRecentlyUpdated(getDetailRes)
+    }
+
+    return this.recentlyUpdated
   }
 
-  async handleInsertDetail(state: Detail) {
-    const payload: gql.Metal_Flow_Detail_Materials_Insert_Input[] = []
-    for (const { material, length, weight } of state.materials) {
-      payload.push({
-        material_id: material.id,
-        data: {
-          length: length.toString(),
-          weight: weight.toString()
-        }
-      })
-    }
-    const id = await api.insertDetail({
-      object: {
-        name: state.name,
-        detail_materials: {
-          data: payload
-        }
-      }
-    })
-    return id
+  async delete() {
+    if (!this.id) throw new Error('Detail id is not set')
+    await api.deleteDetail(this.id)
+    this.clear()
   }
 }

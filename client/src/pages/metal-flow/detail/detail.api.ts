@@ -67,13 +67,19 @@ export async function updateDetail(
 export async function updateDetailMaterialRelationData(
   variables: gql.UpdateDetailMaterialRelationDataMutationVariables
 ) {
-  return await apolloClient.mutate<
-    gql.UpdateDetailMaterialRelationDataMutation,
-    gql.UpdateDetailMaterialRelationDataMutationVariables
-  >({
-    mutation: gql.UpdateDetailMaterialRelationDataDocument,
-    variables
-  })
+  return await apolloClient
+    .mutate<
+      gql.UpdateDetailMaterialRelationDataMutation,
+      gql.UpdateDetailMaterialRelationDataMutationVariables
+    >({
+      mutation: gql.UpdateDetailMaterialRelationDataDocument,
+      variables
+    })
+    .then(res => {
+      if (res.errors) {
+        throw new Error(res.errors.join('\n'))
+      }
+    })
 }
 
 export async function deleteDetail(id: number) {

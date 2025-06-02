@@ -48,7 +48,7 @@ class DetailMapper {
 
     for (const each of raw.detail_materials) {
       const material = this.materialMapper.fromDto(each.material)
-      detail.madeOf(material, each?.data?.length, each?.data?.weight)
+      detail.madeOf(material, each.data?.length, each.data?.weight)
     }
 
     return detail
