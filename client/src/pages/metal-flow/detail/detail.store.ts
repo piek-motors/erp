@@ -84,6 +84,8 @@ export class DetailStore {
   }
 
   async load(detailId: number) {
+    this.clear()
+    
     const detail = await api.getDetail(detailId)
     if (!detail) {
       throw Error(`Detail with id ${detailId} not found`)
