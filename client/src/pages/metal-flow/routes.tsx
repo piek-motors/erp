@@ -1,7 +1,9 @@
 import { MetalFlowRoutes } from 'lib/routes'
 import { RouteConfig } from 'types/global'
-import { AddDetail, ListDetails, UpdateDetail } from './detail/detail'
-import { AddMaterial, ListMaterials, UpdateMaterial } from './material/material'
+import { AddDetail, UpdateDetail } from './detail/detail'
+import { DetailsListPage } from './detail/detail-list'
+import { AddMaterial, UpdateMaterial } from './material/material'
+import { MaterialsListPage } from './material/material-list'
 import { MetalFlowSubSystem } from './spa'
 import { AddSuply, ListSupplies } from './supply/components'
 import { AddWriteOff, ListWriteoffs } from './writeoff/components'
@@ -12,7 +14,7 @@ const routes = [
     path: MetalFlowRoutes.root
   },
   {
-    element: <ListMaterials />,
+    element: <MaterialsListPage />,
     path: MetalFlowRoutes.materials
   },
   {
@@ -32,7 +34,7 @@ const routes = [
     path: MetalFlowRoutes.writeoff_add
   },
   {
-    element: <ListDetails />,
+    element: <DetailsListPage />,
     path: MetalFlowRoutes.details
   },
   {

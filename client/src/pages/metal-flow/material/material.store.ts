@@ -48,7 +48,7 @@ export class MaterialStore {
     this.id = material.id || undefined
     this.unit = material.unit
     this.setShape(material.shape)
-    this.shapeData = material.shapeData()
+    this.shapeData = material.exportShapeData()
   }
 
   setShapeData(shapeData: GenericShapeData) {
@@ -81,7 +81,7 @@ export class MaterialStore {
   async insert() {
     return this.withStateManagement(async () => {
       const MaterialConstructor = getMaterialConstructor(this.shape)
-      const m = new MaterialConstructor(0).load(null, this.shapeData as any)
+      const m = new MaterialConstructor(0).init(null, '', this.shapeData as any)
       const id = await api.insertMaterial({
         object: {
           unit: this.unit,

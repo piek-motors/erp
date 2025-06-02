@@ -26,7 +26,7 @@ import { useNavigate } from 'react-router-dom'
 
 export const Btn = Button
 
-type MyInputProps = InputProps & {
+type MyInputProps = {
   label?: string
   helperText?: string
   value?: string | number | null
@@ -34,6 +34,11 @@ type MyInputProps = InputProps & {
   customInput?: React.ComponentType<any>
   unit?: string
   enableAutoComplete?: boolean
+  name?: string
+  type?: InputProps['type']
+  placeholder?: string
+  fullWidth?: boolean
+  autoFocus?: boolean
 }
 
 export function Inp(props: MyInputProps) {
@@ -49,7 +54,8 @@ export function Inp(props: MyInputProps) {
             value={props.value?.toString() || ''}
             autoComplete={props.enableAutoComplete ? 'on' : 'off'}
             onChange={e => {
-              props.onChange?.(e.target.value ?? '')
+              const value = e.target.value ?? ''
+              props.onChange?.(value.trim())
             }}
           />
           {props.unit && <Typography>{props.unit}</Typography>}

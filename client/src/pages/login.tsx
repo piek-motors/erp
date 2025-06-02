@@ -37,16 +37,12 @@ export const LoginForm = () => {
         <Typography level="h4" color="primary">
           Piek Factory
         </Typography>
-        <Inp
-          value={email}
-          placeholder="Email"
-          onChange={v => setEmail(v.trim())}
-        />
+        <Inp value={email} placeholder="Email" onChange={v => setEmail(v)} />
         <Inp
           value={password}
           placeholder="Password"
           type="password"
-          onChange={v => setPassword(v.trim())}
+          onChange={v => setPassword(v)}
         />
         <Box>
           {error && (

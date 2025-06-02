@@ -12,7 +12,7 @@ type MaterialRelationData = {
 export class DetailStore {
   id?: number
   name: string = ''
-  materials: Map<number, MaterialRelationData | null> = new Map()
+  materials: Map<Material, MaterialRelationData | null> = new Map()
 
   recentlyAdded?: Detail
   recentlyUpdated?: Detail
@@ -25,8 +25,8 @@ export class DetailStore {
     material_id: number
     data: MaterialRelationData
   }[] {
-    return Array.from(this.materials.entries()).map(([materialId, data]) => ({
-      material_id: materialId,
+    return Array.from(this.materials.entries()).map(([material, data]) => ({
+      material_id: material.id,
       data: {
         length: data?.length || '',
         weight: data?.weight || ''
@@ -54,11 +54,24 @@ export class DetailStore {
   }
 
   setMaterials(materials: Material[]) {
-    this.materials = new Map(materials.map(m => [m.id!, null]))
+    this.materials = new Map(materials.map(m => [m, null]))
   }
 
-  setMaterialRelationData(materialId: number, data: MaterialRelationData) {
-    this.materials.set(materialId, data)
+  setMaterialRelationData(material: Material, data: MaterialRelationData) {
+    this.materials.set(material, data)
+  }
+
+  updateMaterialRelationData(
+    material: Material,
+    data: Partial<MaterialRelationData>
+  ) {
+    const currentData = this.materials.get(material)
+    if (!currentData) throw Error('Material not found')
+
+    this.materials.set(material, {
+      ...currentData,
+      ...data
+    })
   }
 
   async loadDetailById(id: number) {
@@ -68,12 +81,13 @@ export class DetailStore {
     this.id = detail.id
     this.name = detail.name
 
-    const materialsMap = new Map<number, MaterialRelationData>()
-    for (const [material, relationData] of detail.materials.entries()) {
-      if (material.id) {
-        materialsMap.set(material.id, {
-          weight: relationData?.weight?.toString() || '',
-          length: relationData?.length?.toString() || ''
+    const materialsMap = new Map<Material, MaterialRelationData>()
+
+    for (const { material, length, weight } of detail.materials) {
+      if (material) {
+        materialsMap.set(material, {
+          weight: weight.toString(),
+          length: length.toString()
         })
       }
     }
@@ -113,15 +127,15 @@ export class DetailStore {
   }
 
   syncState(detail: Detail) {
-    const map = new Map<number, MaterialRelationData>()
+    const map = new Map<Material, MaterialRelationData>()
     this.id = detail.id
     this.name = detail.name
 
-    for (const [material, relationData] of detail.materials.entries()) {
+    for (const { material, length, weight } of detail.materials) {
       if (material.id) {
-        map.set(material.id, {
-          weight: relationData?.weight?.toString() || '',
-          length: relationData?.length?.toString() || ''
+        map.set(material, {
+          weight: weight.toString(),
+          length: length.toString()
         })
       }
     }
@@ -136,10 +150,13 @@ export class DetailStore {
       }
     })
 
-    for (const [material, relationData] of detail.materials.entries()) {
+    for (const { material, length, weight } of detail.materials) {
       if (!material.id) throw Error('Material id is null')
       await api.updateDetailMaterialRelationData({
-        data: relationData,
+        data: {
+          length: length.toString(),
+          weight: weight.toString()
+        },
         detail_id: detail.id,
         material_id: material.id
       })
@@ -148,10 +165,13 @@ export class DetailStore {
 
   async handleInsertDetail(state: Detail) {
     const payload: gql.Metal_Flow_Detail_Materials_Insert_Input[] = []
-    for (const [material, relationData] of state.materials.entries()) {
+    for (const { material, length, weight } of state.materials) {
       payload.push({
         material_id: material.id,
-        data: relationData
+        data: {
+          length: length.toString(),
+          weight: weight.toString()
+        }
       })
     }
     const id = await api.insertDetail({

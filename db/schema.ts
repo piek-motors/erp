@@ -53,10 +53,19 @@ export namespace DB {
     name: string
   }
 
+  export interface DetailMaterialJsonData {
+    weight: number
+    length: number
+  }
+
   export interface DetailMaterialsTable {
     material_id: number
     detail_id: number
-    data: JSONColumnType<any, any, any>
+    data: JSONColumnType<
+      DetailMaterialJsonData,
+      DetailMaterialJsonData,
+      DetailMaterialJsonData
+    >
   }
 
   export interface SuppliesTable {

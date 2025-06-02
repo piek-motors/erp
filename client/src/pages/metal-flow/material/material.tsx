@@ -1,30 +1,16 @@
 /** @jsxImportSource @emotion/react */
-import { Box, Button, Divider, Sheet, Typography } from '@mui/joy'
-import { PageTitle } from 'components'
-import { Search } from 'components/search-input'
-import { Table } from 'components/table.impl'
-import { EnMaterialShape, Material, UiMaterialShape } from 'domain-model'
+import { Box, Button, Divider, Typography } from '@mui/joy'
+import { EnMaterialShape, UiMaterialShape } from 'domain-model'
 import { MetalFlowRoutes, openMetalFlowPage } from 'lib/routes'
 import { observer } from 'mobx-react-lite'
 import { JSX, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { Column } from 'react-table'
-import {
-  AddResourceButton,
-  ErrorHint,
-  InputStack,
-  LoadingHint,
-  MyTabs,
-  Row,
-  SendMutation,
-  TakeLookHint
-} from 'shortcuts'
+import { InputStack, MyTabs, Row, SendMutation, TakeLookHint } from 'shortcuts'
 import { map } from '../mappers'
 import { SmallInputForm } from '../shared'
 import { MaterialUnitSelect } from '../shared/basic'
 import { ResourceName } from '../shared/material-name'
-import { useStockStore } from '../stock'
-import { materialListStore, materialStore } from '../store'
+import { materialStore } from '../store'
 import { t } from '../text'
 import {
   ListMaterialInput,
@@ -32,7 +18,6 @@ import {
   RoundBarInput,
   SquareMaterialInput
 } from './shape-data'
-import { MaterialShapeFilter } from './shape-filter'
 
 const tabs: Record<EnMaterialShape, JSX.Element> = {
   [EnMaterialShape.RoundBar]: <RoundBarInput />,
@@ -40,82 +25,6 @@ const tabs: Record<EnMaterialShape, JSX.Element> = {
   [EnMaterialShape.List]: <ListMaterialInput />,
   [EnMaterialShape.Pipe]: <PipeMaterialInput />
 }
-
-function StockAmount(props: { materialId: number | null }) {
-  const stockStore = useStockStore()
-  if (!props.materialId) return '-'
-  return stockStore.getByIdRounded(props.materialId)
-}
-
-const columnList: Column<Material>[] = [
-  {
-    Header: 'ID',
-    accessor: 'id'
-  },
-  {
-    Header: t.Material,
-    id: 'name',
-    accessor: m => {
-      return <ResourceName resource={m.getLabelProps()} />
-    },
-    width: '95%'
-  },
-  {
-    Header: t.Remaining,
-    accessor: m => <StockAmount materialId={m.id} />
-  },
-  {
-    Header: t.Unit,
-    accessor: m => m.unitUI
-  }
-]
-
-export const ListMaterials = observer(() => {
-  const navigate = useNavigate()
-  useEffect(() => {
-    materialListStore.fetchAll()
-  }, [])
-  return (
-    <>
-      <PageTitle title={t.MaterialsList} hideIcon>
-        <AddResourceButton
-          navigateTo={openMetalFlowPage(MetalFlowRoutes.material_add)}
-        />
-      </PageTitle>
-
-      <Search
-        onChange={e => {
-          materialListStore.search(e.target.value)
-        }}
-        value={materialListStore.filterKeyword}
-      />
-      <MaterialShapeFilter />
-      <LoadingHint show={materialListStore.loading} />
-      <ErrorHint e={materialListStore.error} />
-
-      <Sheet>
-        {materialListStore.materials && (
-          <Table
-            sx={{
-              '& td, th': {
-                padding: '0 10px'
-              }
-            }}
-            small
-            columns={columnList}
-            data={materialListStore.getFilteredMaterials()}
-            onRowClick={row => {
-              if (!row.id) throw Error('Material id is null')
-              navigate(
-                openMetalFlowPage(MetalFlowRoutes.material_update, row.id)
-              )
-            }}
-          />
-        )}
-      </Sheet>
-    </>
-  )
-})
 
 export const AddMaterial = observer(() => {
   const uiTabs: Record<string, JSX.Element> = {}

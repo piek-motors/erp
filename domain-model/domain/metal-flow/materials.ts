@@ -42,8 +42,8 @@ export abstract class Material<
   }
   abstract deriveLabel(): string
   abstract getLabelProps(): ResourceNameProps
-  abstract load(id: number | null, shapeData: ShapeData): this
-  abstract shapeData(): ShapeData
+  abstract init(id: number | null, label: string, shapeData: ShapeData): this
+  abstract exportShapeData(): ShapeData
 }
 
 export class RoundBar extends Material<RoundBarShapeData> {
@@ -105,10 +105,10 @@ export class RoundBar extends Material<RoundBarShapeData> {
       ]
     }
   }
-  load(id: number | null, shapeData: RoundBarShapeData): this {
+  init(id: number | null, label: string, shapeData: RoundBarShapeData): this {
     return plainToInstance(RoundBar, {
       id,
-      label: this.label,
+      label,
       alloy: shapeData.alloy,
       calibrated: shapeData.calibrated || false,
       diameter: shapeData.diameter,
@@ -116,7 +116,7 @@ export class RoundBar extends Material<RoundBarShapeData> {
       linearMass: shapeData.linearMass || 0
     }) as this
   }
-  shapeData(): RoundBarShapeData {
+  exportShapeData(): RoundBarShapeData {
     return {
       alloy: this.alloy,
       calibrated: this.calibrated || false,
@@ -166,16 +166,16 @@ export class List extends Material<ListShapeData> {
       }`
     }
   }
-  load(id: number | null, shapeData: ListShapeData): this {
+  init(id: number | null, label: string, shapeData: ListShapeData): this {
     return plainToInstance(List, {
       id,
-      label: this.label,
+      label,
       alloy: shapeData.alloy,
       thickness: shapeData.thickness,
       width: shapeData.width
     }) as this
   }
-  shapeData(): ListShapeData {
+  exportShapeData(): ListShapeData {
     return {
       alloy: this.alloy || '',
       thickness: this.thickness,
@@ -218,16 +218,16 @@ export class Pipe extends Material<PipeShapeData> {
       name: this.deriveLabel()
     }
   }
-  load(id: number | null, shapeData: PipeShapeData): this {
+  init(id: number | null, label: string, shapeData: PipeShapeData): this {
     return plainToInstance(Pipe, {
       id,
-      label: this.label,
+      label,
       alloy: shapeData.alloy,
       diameter: shapeData.diameter,
       thickness: shapeData.thickness
     }) as this
   }
-  shapeData(): PipeShapeData {
+  exportShapeData(): PipeShapeData {
     return {
       alloy: this.alloy,
       diameter: this.diameter,
@@ -263,15 +263,15 @@ export class SquareBar extends Material<SquareBarShapeData> {
       name: this.deriveLabel()
     }
   }
-  load(id: number | null, shapeData: SquareBarShapeData): this {
+  init(id: number | null, label: string, shapeData: SquareBarShapeData): this {
     return plainToInstance(SquareBar, {
       id,
-      label: this.label,
+      label,
       alloy: shapeData.alloy,
       length: shapeData.length
     }) as this
   }
-  shapeData(): SquareBarShapeData {
+  exportShapeData(): SquareBarShapeData {
     return {
       alloy: this.alloy,
       length: this.length

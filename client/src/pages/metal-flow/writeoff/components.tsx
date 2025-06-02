@@ -118,10 +118,10 @@ export function WriteoffThroughDetail() {
         label={t.Qty}
         type="number"
         value={typeData.qty || ''}
-        onChange={e => {
-          const isNumber = Number.isFinite(Number(e.target.value))
+        onChange={v => {
+          const isNumber = Number.isFinite(Number(v))
           state.addTypeDataProprty({
-            qty: isNumber ? Number(e.target.value) : 0
+            qty: isNumber ? Number(v) : 0
           })
         }}
       />

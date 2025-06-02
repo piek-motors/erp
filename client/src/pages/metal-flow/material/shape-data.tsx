@@ -39,8 +39,11 @@ function SquareMaterialInputBase({
       <Inp
         label={t.Length}
         value={shapeData.length}
-        onChange={e => {
-          const newData = { ...shapeData, width: Number(e.target.value) }
+        onChange={v => {
+          const newData: SquareBarShapeData = {
+            ...shapeData,
+            length: Number(v)
+          }
           materialStore.setShapeData(
             plainToInstance(SquareBarShapeData, newData)
           )
@@ -65,8 +68,8 @@ function ListMaterialInputBase({ shapeData }: { shapeData: ListShapeData }) {
       <Inp
         label={t.Thickness}
         value={shapeData.thickness}
-        onChange={e => {
-          const newData = { ...shapeData, thickness: Number(e.target.value) }
+        onChange={v => {
+          const newData = { ...shapeData, thickness: Number(v) }
           materialStore.setShapeData(plainToInstance(ListShapeData, newData))
         }}
       />
@@ -81,8 +84,8 @@ function PipeMaterialInputBase({ shapeData }: { shapeData: PipeShapeData }) {
         label={t.Diameter}
         type="number"
         value={shapeData.diameter}
-        onChange={e => {
-          const newData = { ...shapeData, diameter: Number(e.target.value) }
+        onChange={v => {
+          const newData = { ...shapeData, diameter: Number(v) }
           materialStore.setShapeData(plainToInstance(PipeShapeData, newData))
         }}
       />
@@ -97,8 +100,8 @@ function PipeMaterialInputBase({ shapeData }: { shapeData: PipeShapeData }) {
         label={t.Thickness}
         value={shapeData.thickness}
         type="number"
-        onChange={e => {
-          const newData = { ...shapeData, thickness: Number(e.target.value) }
+        onChange={v => {
+          const newData = { ...shapeData, thickness: Number(v) }
           materialStore.setShapeData(plainToInstance(PipeShapeData, newData))
         }}
       />
@@ -134,8 +137,8 @@ function RoundBarInputBase({ shapeData }: { shapeData: RoundBarShapeData }) {
         label={t.LinearMass}
         value={shapeData.linearMass}
         type="number"
-        onChange={e => {
-          const newData = { ...shapeData, linearMass: Number(e.target.value) }
+        onChange={v => {
+          const newData = { ...shapeData, linearMass: Number(v) }
           materialStore.setShapeData(
             plainToInstance(RoundBarShapeData, newData)
           )
@@ -146,8 +149,8 @@ function RoundBarInputBase({ shapeData }: { shapeData: RoundBarShapeData }) {
         label={t.Density}
         value={shapeData.density}
         type="number"
-        onChange={e => {
-          const newData = { ...shapeData, density: Number(e.target.value) }
+        onChange={v => {
+          const newData = { ...shapeData, density: Number(v) }
           materialStore.setShapeData(
             plainToInstance(RoundBarShapeData, newData)
           )

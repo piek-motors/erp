@@ -144,11 +144,13 @@ export class Repo {
     return material.id
   }
 
-  private buildDetailMaterialRelation(detail: Detail) {
-    if (detail.materials?.size === 0) {
+  private buildDetailMaterialRelation(
+    detail: Detail
+  ): Insertable<DB.DetailMaterialsTable> {
+    if (detail.materials?.length === 0) {
       throw new Error(`no materials for detail ${detail.id}`)
     }
-    const relationData = Array.from(detail.materials.values())[0]
+    const relationData = detail.materials[0]
     if (relationData == null) {
       throw new Error(
         `no detail material relation data for detail ${detail.name}`
@@ -160,20 +162,21 @@ export class Repo {
       throw new Error(`no made of for detail ${detail.id}`)
     }
 
-    const materialId = this.getMaterialIdByLabel(madeOf[0].label)
+    const materialId = this.getMaterialIdByLabel(relationData.material.label)
     if (materialId == null) {
       throw new Error(
-        `no material id for detail ${detail.id} ${detail.name} -${madeOf[0].label}-`
+        `no material id for detail ${detail.id} ${detail.name} -${relationData.material.label}-`
       )
     }
 
+    const data: DB.DetailMaterialJsonData = {
+      weight: relationData?.weight,
+      length: relationData?.length
+    }
     return {
       detail_id: detail.id,
       material_id: materialId,
-      data: {
-        width: relationData?.weight,
-        length: relationData?.length
-      }
+      data
     }
   }
 }

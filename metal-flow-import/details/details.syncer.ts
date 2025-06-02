@@ -34,10 +34,6 @@ export class DetailSyncer {
       log('No new materials to insert into the database.')
     }
 
-    // await this.repo.saveDetailsAndRelations(
-    //   materialsToInsert,
-    //   analysisResult.details
-    // )
     await this.repo.loadMaterials()
 
     const added = new Set<string>()

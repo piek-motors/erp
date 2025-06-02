@@ -23,8 +23,8 @@ class MaterialMapper {
       throw new Error('material mapper: material constructor not found')
     }
 
-    const material = new MaterialConstructor(dto.id)
-    return material.load(dto.id, shapeData)
+    const emptyMaterial = new MaterialConstructor(dto.id, dto.label)
+    return emptyMaterial.init(dto.id, dto.label, shapeData)
   }
 
   convertable(

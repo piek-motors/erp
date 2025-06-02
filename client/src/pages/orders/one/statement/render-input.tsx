@@ -16,14 +16,8 @@ export const RenderInput = (props: {
   const onChange = column.onChange ?? (() => {})
   const key = `${label}-${idx}`
 
-  const handleMyInputChange = (
-    e: React.ChangeEvent<HTMLInputElement> | string | number
-  ) => {
-    if (typeof e === 'string' || typeof e === 'number') {
-      onChange(e?.toString())
-    } else {
-      onChange(e.target.value)
-    }
+  const handleMyInputChange = (v: string) => {
+    onChange(v)
   }
 
   const citySuggestions = suggestionsStore.cities.map(cityName => ({

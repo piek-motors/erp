@@ -69,15 +69,12 @@ export const QtyInputWithUnit = (props: {
   return (
     <Stack direction="row" alignItems="end" gap={1}>
       <Inp
-        autoComplete="off"
         label={props.label}
         value={qty}
-        defaultValue={props.defaultValue}
-        onChange={e => {
-          setQty(e.target.value)
+        onChange={v => {
+          setQty(v)
         }}
         type="number"
-        fullWidth
       />
       <Typography pb={1}>{uiUnit(unitId)}</Typography>
     </Stack>

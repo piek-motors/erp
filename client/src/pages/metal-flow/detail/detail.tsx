@@ -1,54 +1,27 @@
 import { Sheet, Stack, Typography } from '@mui/joy'
-import { PageTitle, Search } from 'components'
-import { Table } from 'components/table.impl'
-import { Detail, EnUnit, Material } from 'domain-model'
+import { EnUnit, Material } from 'domain-model'
 import { MetalFlowRoutes, openMetalFlowPage } from 'lib/routes'
-import { observer, Observer } from 'mobx-react-lite'
+import { Observer } from 'mobx-react-lite'
 import { useEffect } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
-import { Column } from 'react-table'
-import {
-  AddResourceButton,
-  Inp,
-  Row,
-  SendMutation,
-  TakeLookHint
-} from 'shortcuts'
-import * as gql from 'types/graphql-shema'
+import { useLocation } from 'react-router-dom'
+import { Inp, Row, SendMutation, TakeLookHint } from 'shortcuts'
 import { useGetMaterialsQuery } from 'types/graphql-shema'
-import { map } from '../mappers'
 import { QtyInputWithUnit, SmallInputForm } from '../shared'
 import { MaterialAutocompleteMulti } from '../shared/material-autocomplete'
 import { ResourceName } from '../shared/material-name'
-import { detailListStore, detailStore, materialListStore } from '../store'
+import { detailStore, materialListStore } from '../store'
 import { t } from '../text'
 
-const columnList: Column<Detail>[] = [
-  {
-    Header: 'Id',
-    accessor: 'id'
-  },
-  {
-    Header: t.DetailName,
-    id: 'name',
-    accessor: 'name'
-  }
-]
-
 function MaterialWeightInput(props: { material: Material }) {
-  const id = props.material.id
-  const relationData = detailStore.materials.get(id)
+  const relationData = detailStore.materials.get(props.material)
   return (
     <>
       <QtyInputWithUnit
         label="Вес заготовки"
         unitId={EnUnit.Gram}
         setValue={v => {
-          const relationData = detailStore.materials.get(id)
-          if (!relationData) throw Error('Relation data not found')
-          detailStore.setMaterialRelationData(id, {
-            weight: v,
-            length: relationData.length
+          detailStore.updateMaterialRelationData(props.material, {
+            weight: v
           })
         }}
         value={relationData ? relationData.weight : ''}
@@ -57,10 +30,7 @@ function MaterialWeightInput(props: { material: Material }) {
         label="Длина заготовки"
         unitId={EnUnit.MilliMeter}
         setValue={v => {
-          const relationData = detailStore.materials.get(id)
-          if (!relationData) throw Error('Relation data not found')
-          detailStore.setMaterialRelationData(id, {
-            weight: relationData.weight,
+          detailStore.updateMaterialRelationData(props.material, {
             length: v
           })
         }}
@@ -74,68 +44,23 @@ function DetailMaterialRelationForm() {
   return (
     <Sheet>
       <Stack my={1} gap={2}>
-        {detailStore.materials
-          .entries()
-          .map(([k, v]) => k)
-          .map(id => {
-            const material = materialListStore.get(id)
-            return (
-              <Stack sx={{ width: 'max-content' }} key={id}>
-                <Row sx={{ fontWeight: 'bold' }}>
-                  <Typography>Материал</Typography>
-                  <ResourceName resource={material?.getLabelProps()} />
-                </Row>
-                <Stack p={1}>
-                  <MaterialWeightInput material={material} />
-                </Stack>
+        {Array.from(detailStore.materials.keys()).map(material => {
+          return (
+            <Stack sx={{ width: 'max-content' }} key={material.id}>
+              <Row sx={{ fontWeight: 'bold' }}>
+                <Typography>Материал</Typography>
+                <ResourceName resource={material?.getLabelProps()} />
+              </Row>
+              <Stack p={1}>
+                <MaterialWeightInput material={material} />
               </Stack>
-            )
-          })}
+            </Stack>
+          )
+        })}
       </Stack>
     </Sheet>
   )
 }
-
-export const ListDetails = observer(() => {
-  const navigate = useNavigate()
-  const { data } = gql.useGetDetailsQuery()
-  const details = data?.metal_flow_details
-    ?.map(d => map.detail.fromDto(d))
-    .filter(each => {
-      return !!each
-    })
-
-  return (
-    <>
-      <PageTitle title={t.DetailsList} hideIcon>
-        <AddResourceButton
-          navigateTo={openMetalFlowPage(MetalFlowRoutes.detail_add)}
-        />
-      </PageTitle>
-      <Search
-        onChange={e => {
-          detailListStore.search(e.target.value)
-        }}
-        value={detailListStore.searchKeyword || ''}
-      />
-      <Sheet>
-        <Table
-          sx={{
-            '& td, th': {
-              padding: '0 10px'
-            }
-          }}
-          small
-          columns={columnList}
-          data={details || []}
-          onDoubleRowClick={row =>
-            navigate(openMetalFlowPage(MetalFlowRoutes.detail_update, row.id))
-          }
-        />
-      </Sheet>
-    </>
-  )
-})
 
 export function UpdateDetail() {
   const id = Number(new URLSearchParams(useLocation().search).get('id'))
@@ -153,14 +78,16 @@ export function UpdateDetail() {
           last={<SendMutation onClick={detailStore.update} />}
         >
           <Stack gap={1}>
-            <Typography>ID {detailStore.id}</Typography>
+            <Typography>
+              <b>ID</b> {detailStore.id}
+            </Typography>
             <Inp
+              fullWidth
               label={t.DetailName}
-              onChange={(event: any) => {
-                detailStore.setName(event.target.value)
+              onChange={v => {
+                detailStore.setName(v)
               }}
               value={detailStore.name}
-              autoComplete="off"
             />
             <DetailMaterialRelationForm />
           </Stack>
@@ -191,8 +118,8 @@ export function AddDetail() {
         >
           <Inp
             label={t.DetailName}
-            onChange={(event: any) => {
-              detailStore.setName(event.target.value)
+            onChange={v => {
+              detailStore.setName(v)
             }}
             value={detailStore.name}
           />

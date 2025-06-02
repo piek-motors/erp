@@ -29,6 +29,25 @@ export async function getDetail(id: number) {
     })
 }
 
+export async function getDetails() {
+  return await apolloClient
+    .query<gql.GetDetailsQuery, gql.GetDetailsQueryVariables>({
+      query: gql.GetDetailsDocument
+    })
+    .then(res => {
+      if (!res.data.metal_flow_details) return []
+
+      return res.data.metal_flow_details.map(d => {
+        const mapped = map.detail.fromDto(d)
+        if (!mapped) {
+          throw new Error('Failed to map detail')
+        }
+
+        return mapped
+      })
+    })
+}
+
 export async function updateDetail(
   variables: gql.UpdateDetailMutationVariables
 ) {
@@ -55,4 +74,18 @@ export async function updateDetailMaterialRelationData(
     mutation: gql.UpdateDetailMaterialRelationDataDocument,
     variables
   })
+}
+
+export async function deleteDetail(id: number) {
+  return await apolloClient
+    .mutate<gql.DeleteDetailMutation, gql.DeleteDetailMutationVariables>({
+      mutation: gql.DeleteDetailDocument,
+      variables: { id }
+    })
+    .then(res => {
+      if (res.data?.delete_metal_flow_details_by_pk?.id) {
+        return res.data.delete_metal_flow_details_by_pk.id
+      }
+      throw new Error('Failed to delete detail')
+    })
 }
