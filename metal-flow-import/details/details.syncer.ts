@@ -99,7 +99,8 @@ export class DetailSyncer {
       const detail = new Detail(DetailSequence.next(), detailName).madeOf(
         ctx.getCurrentMaterial(),
         length,
-        weight
+        // convert grams to kilograms
+        weight * 1000
       )
       ctx.addDetailToCurrentScope(detail)
     }
