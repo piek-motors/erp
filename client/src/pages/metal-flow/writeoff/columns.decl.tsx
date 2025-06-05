@@ -1,9 +1,9 @@
+import { Typography } from '@mui/joy'
 import { EnWriteoffType, uiUnit, uiWriteoffReason } from 'domain-model'
 import { Column } from 'react-table'
 import { GetWrietOffsQuery } from 'types/graphql-shema'
 import { formatDateWithTime } from 'utils/formatting'
 import { map } from '../mappers'
-import { ResourceName } from '../shared/material-name'
 import { t } from '../text'
 import { DeleteWrireOff } from './components'
 export type SupplyDto = GetWrietOffsQuery['metal_flow_writeoffs'][number]
@@ -23,7 +23,7 @@ export function getColumns(props: {
       id: 'name',
       accessor: data => {
         const ma = map.material.fromDto(data.material)
-        return <ResourceName resource={ma.getLabelProps()} />
+        return <Typography>{ma.label}</Typography>
       }
     },
     {

@@ -53,14 +53,8 @@ const columnList: Column<Detail>[] = [
 const DetailsTable = observer(() => {
   const navigate = useNavigate()
   return (
-    <Box sx={{ overflow: 'scroll', flexGrow: 2 }}>
+    <Box sx={{ overflow: 'scroll', flexGrow: 2, pb: 2 }}>
       <Table
-        sx={{
-          '& td, th': {
-            padding: '0 10px'
-          }
-        }}
-        small
         columns={columnList}
         data={detailListStore.searchResult}
         onRowClick={row =>

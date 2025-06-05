@@ -9,7 +9,6 @@ import { InputStack, MyTabs, Row, SendMutation, TakeLookHint } from 'shortcuts'
 import { map } from '../mappers'
 import { SmallInputForm } from '../shared'
 import { MaterialUnitSelect } from '../shared/basic'
-import { ResourceName } from '../shared/material-name'
 import { materialStore } from '../store'
 import { t } from '../text'
 import {
@@ -78,9 +77,7 @@ export const UpdateMaterial = observer(() => {
           <>
             <Box>
               <Typography level="h4">
-                <ResourceName
-                  resource={materialStore.material?.getLabelProps()}
-                />
+                <Typography>{materialStore.material?.label}</Typography>
               </Typography>
               {t.Unit} {materialStore.unit}
             </Box>

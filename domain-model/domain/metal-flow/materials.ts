@@ -41,7 +41,6 @@ export abstract class Material<
     return uiMaterialShape(this.shape)
   }
   abstract deriveLabel(): string
-  abstract getLabelProps(): ResourceNameProps
   abstract init(id: number | null, label: string, shapeData: ShapeData): this
   abstract exportShapeData(): ShapeData
 }
@@ -92,18 +91,6 @@ export class RoundBar extends Material<RoundBarShapeData> {
     }
 
     return `${this.shapeUI} ${this.diameter} ${this.alloy}`.trim()
-  }
-  getLabelProps(): ResourceNameProps {
-    return {
-      name: `${this.shapeUI} ${this.diameter}`,
-      caption: this.alloy,
-      flags: [
-        {
-          color: 1,
-          text: this.calibrated ? 'Калиброван' : ''
-        }
-      ]
-    }
   }
   init(id: number | null, label: string, shapeData: RoundBarShapeData): this {
     return plainToInstance(RoundBar, {
@@ -159,13 +146,6 @@ export class List extends Material<ListShapeData> {
       this.width ? `x${this.width}` : ''
     }`
   }
-  getLabelProps(): ResourceNameProps {
-    return {
-      name: `${this.shapeUI} ${this.thickness}${
-        this.width ? `x${this.width}` : ''
-      }`
-    }
-  }
   init(id: number | null, label: string, shapeData: ListShapeData): this {
     return plainToInstance(List, {
       id,
@@ -213,11 +193,6 @@ export class Pipe extends Material<PipeShapeData> {
     }
     return `${this.shapeUI} ${this.diameter} ${this.alloy}`.trim()
   }
-  getLabelProps(): ResourceNameProps {
-    return {
-      name: this.deriveLabel()
-    }
-  }
   init(id: number | null, label: string, shapeData: PipeShapeData): this {
     return plainToInstance(Pipe, {
       id,
@@ -257,11 +232,6 @@ export class SquareBar extends Material<SquareBarShapeData> {
       throw new Error('length is not specified')
     }
     return `${this.shapeUI} ${this.length} ${this.alloy || ''}`
-  }
-  getLabelProps(): ResourceNameProps {
-    return {
-      name: this.deriveLabel()
-    }
   }
   init(id: number | null, label: string, shapeData: SquareBarShapeData): this {
     return plainToInstance(SquareBar, {

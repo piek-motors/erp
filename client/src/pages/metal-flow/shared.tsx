@@ -1,5 +1,5 @@
 import { UilArrowLeft } from '@iconscout/react-unicons'
-import { Box, IconButton, Sheet, Stack, Typography } from '@mui/joy'
+import { Box, IconButton, Stack, Typography } from '@mui/joy'
 import { uiUnit } from 'domain-model'
 import { JSX } from 'react'
 import { NavigateOptions, To, useNavigate } from 'react-router-dom'
@@ -39,21 +39,19 @@ interface FormProps {
 
 export function SmallInputForm(props: FormProps) {
   return (
-    <Box maxWidth="sm" p={2}>
+    <Box maxWidth="sm" p={1}>
       <PageTitle title={props.header} hideIcon />
-      <Sheet sx={{ p: 2 }}>
-        <Stack>
-          {props.name}
-          {props.beforemain}
-          {props.children}
-        </Stack>
+      <Stack gap={1}>
+        {props.name}
+        {props.beforemain}
+        {props.children}
+      </Stack>
 
-        {props.last && (
-          <Stack pt={2} gap={2}>
-            {props.last}
-          </Stack>
-        )}
-      </Sheet>
+      {props.last && (
+        <Stack pt={2} gap={2}>
+          {props.last}
+        </Stack>
+      )}
     </Box>
   )
 }

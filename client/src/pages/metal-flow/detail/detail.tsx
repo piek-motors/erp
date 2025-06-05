@@ -15,7 +15,6 @@ import {
 import { useGetMaterialsQuery } from 'types/graphql-shema'
 import { QtyInputWithUnit, SmallInputForm } from '../shared'
 import { MaterialAutocompleteMulti } from '../shared/material-autocomplete'
-import { ResourceName } from '../shared/material-name'
 import { detailStore, materialListStore } from '../store'
 import { t } from '../text'
 import { MaterialRelation } from './detail.store'
@@ -55,7 +54,7 @@ function DetailMaterialRelationForm() {
             <Stack sx={{ width: 'max-content' }} key={material.id}>
               <Row sx={{ fontWeight: 'bold' }}>
                 <Typography>Материал</Typography>
-                <ResourceName resource={material?.getLabelProps()} />
+                <Typography>{material?.label}</Typography>
               </Row>
               <Stack p={1}>
                 <MaterialWeightInput materialRelation={materialRelation} />

@@ -1,27 +1,20 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
-import { UilTrash } from '@iconscout/react-unicons'
-import { Box, IconButton, Sheet, Stack } from '@mui/joy'
+import { Box, Sheet, Typography } from '@mui/joy'
 import { PageTitle } from 'components'
 import { Table } from 'components/table.impl'
 import { Material } from 'domain-model'
 import { MetalFlowRoutes, openMetalFlowPage } from 'lib/routes'
+import { observer } from 'mobx-react-lite'
 import { useState } from 'react'
 import { AddResourceButton, SendMutation } from 'shortcuts'
-import { useNotifier } from 'store/notifier.store'
-import {
-  useDeleteSupplyMutation,
-  useGetSuppliesQuery,
-  useInsertMaterialSupplyMutation
-} from 'types/graphql-shema'
 import { QtyInputWithUnit, SmallInputForm } from '../shared'
 import { MaterialSelect } from '../shared/material-select'
-import { useStockStore } from '../stock'
 import { t } from '../text'
 import { getColumns } from './columns.decl'
+import { supplyStore } from './supply.store'
 
-export function ListSupplies() {
-  const { data, refetch } = useGetSuppliesQuery()
+export const ListSupplies = observer(() => {
   const [key, setKey] = useState(0)
 
   return (
@@ -31,6 +24,9 @@ export function ListSupplies() {
           navigateTo={openMetalFlowPage(MetalFlowRoutes.supply_add)}
         />
       </PageTitle>
+      {supplyStore.supplies.length === 0 && (
+        <Typography>Нет поставок</Typography>
+      )}
       <Sheet sx={{ gap: 2 }}>
         <Box
           css={css`
@@ -48,38 +44,27 @@ export function ListSupplies() {
           `}
         >
           <Table
-            columns={getColumns({ key, setKey, refetch })}
-            data={data?.metal_flow_supplies || []}
+            columns={getColumns({ key, setKey })}
+            data={supplyStore.supplies}
           />
         </Box>
       </Sheet>
     </>
   )
-}
+})
 
 export function AddSuply() {
   const [qty, setQty] = useState<string>('')
-  const [key, setKey] = useState(0)
   const [material, setMaterial] = useState<Material>()
-  const stockStore = useStockStore()
-  const [mut, { data, loading, error, reset }] =
-    useInsertMaterialSupplyMutation()
 
   const save = async () => {
-    await mut({
-      variables: {
-        object: {
-          material_id: material?.id,
-          qty,
-          supplied_at: new Date(),
-          supplier_name: ''
-        }
-      }
-    })
-    setQty('')
-    setKey(key + 1)
-    setTimeout(reset, 5000)
-    stockStore.load()
+    if (!material) throw Error('Material is not selected')
+    if (!qty) throw Error('Qty is not set')
+    const id = await supplyStore.insertSupply(material.id, Number(qty))
+    // TODO: optimize this
+    supplyStore.reset()
+    supplyStore.load()
+    return id
   }
 
   return (
@@ -87,8 +72,7 @@ export function AddSuply() {
       <MaterialSelect
         setMaterial={setMaterial}
         material={material}
-        key={key}
-        currentQty={stockStore.getPrecise(material)}
+        currentQty={supplyStore.qty.toString()}
       />
       <QtyInputWithUnit
         unitId={material?.unit}
@@ -98,36 +82,5 @@ export function AddSuply() {
       />
       <SendMutation onClick={save} />
     </SmallInputForm>
-  )
-}
-
-export function DeleteSupply(props: { supplyId: number; refetch: () => void }) {
-  const notifier = useNotifier()
-  const [mut] = useDeleteSupplyMutation({
-    variables: {
-      id: props.supplyId
-    },
-    onCompleted() {
-      notifier.notify('info', 'Событие поствки удалено')
-    },
-    onError(e) {
-      notifier.notify('err', e.message)
-    }
-  })
-
-  return (
-    <Stack direction="row-reverse" gap={1} className="delete-btn">
-      <IconButton
-        sx={{
-          opacity: 0.8
-        }}
-        onClick={async () => {
-          await mut()
-          props.refetch()
-        }}
-      >
-        <UilTrash width={16} height={16} />
-      </IconButton>
-    </Stack>
   )
 }

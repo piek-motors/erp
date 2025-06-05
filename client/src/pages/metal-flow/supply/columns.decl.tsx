@@ -1,17 +1,17 @@
+import { Typography } from '@mui/joy'
 import { Column } from 'react-table'
+import { DeleteResourceButton } from 'shortcuts'
 import { GetSuppliesQuery } from 'types/graphql-shema'
 import { formatDateWithTime } from 'utils/formatting'
 import { map } from '../mappers'
-import { ResourceName } from '../shared/material-name'
 import { t } from '../text'
-import { DeleteSupply } from './components'
+import { supplyStore } from './supply.store'
 
 export type SupplyDto = GetSuppliesQuery['metal_flow_supplies'][number]
 
 export function getColumns(props: {
   key: number
   setKey: (n: number) => void
-  refetch: () => void
 }): Column<SupplyDto>[] {
   return [
     {
@@ -24,12 +24,12 @@ export function getColumns(props: {
       accessor: data => {
         if (!data.material) return '-'
         const ma = map.material.fromDto(data.material)
-        return <ResourceName resource={ma.getLabelProps()} />
+        return <Typography>{ma.label}</Typography>
       }
     },
     {
-      Header: 'Кол-во'
-      // accessor: data => `${data.qty} ${data.material.}`
+      Header: 'Кол-во',
+      accessor: data => `${data.qty}`
     },
     {
       Header: 'Дата поставки',
@@ -42,7 +42,11 @@ export function getColumns(props: {
     {
       Header: 'Действие',
       accessor: data => (
-        <DeleteSupply refetch={props.refetch} supplyId={data.id} />
+        <DeleteResourceButton
+          onClick={() => {
+            supplyStore.deleteSupply(data.id)
+          }}
+        />
       )
     }
   ]

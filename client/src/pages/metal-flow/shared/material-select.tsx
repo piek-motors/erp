@@ -7,7 +7,6 @@ import { map } from '../mappers'
 import { useStockStore } from '../stock'
 import { t } from '../text'
 import { MaterialAutocomplete } from './material-autocomplete'
-import { ResourceName } from './material-name'
 
 export function MaterialSelect(props: {
   setMaterial: (m: Material) => void
@@ -36,7 +35,7 @@ export function MaterialSelect(props: {
     return (
       <Box>
         <Typography>{t.Material}:</Typography>
-        <ResourceName resource={props.material?.getLabelProps()} />
+        <Typography>{props.material?.label}</Typography>
         <Typography>
           {t.Remaining}: {stockStore.getPrecise(material)}
         </Typography>

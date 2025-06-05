@@ -19,6 +19,7 @@ export function MaterialAutocomplete(props: {
 
   return (
     <BaseAutocomplete
+      sx={{ minWidth: '400px' }}
       options={options}
       value={value ? { label: value.deriveLabel(), value: value } : null}
       onChange={newValue => {

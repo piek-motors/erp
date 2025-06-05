@@ -259,6 +259,9 @@ export function SendMutation(props: {
 
   const handleSubmit = async () => {
     setLoading(true)
+    setError(undefined)
+    setMutationResult(undefined)
+
     try {
       const result = await props.onClick()
       setMutationResult(result)

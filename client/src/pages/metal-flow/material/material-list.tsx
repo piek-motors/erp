@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { Box } from '@mui/joy'
+import { Box, Typography } from '@mui/joy'
 import { PageTitle } from 'components'
 import { Search } from 'components/search-input'
 import { Table } from 'components/table.impl'
@@ -10,7 +10,6 @@ import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Column } from 'react-table'
 import { AddResourceButton, ErrorHint, LoadingHint } from 'shortcuts'
-import { ResourceName } from '../shared/material-name'
 import { useStockStore } from '../stock'
 import { materialListStore } from '../store'
 import { t } from '../text'
@@ -28,10 +27,10 @@ const columnList: Column<Material>[] = [
     accessor: 'id'
   },
   {
-    Header: t.Material,
+    Header: 'Наименование',
     id: 'name',
     accessor: m => {
-      return <ResourceName resource={m.getLabelProps()} />
+      return <Typography>{m.label}</Typography>
     },
     width: '95%'
   },
@@ -48,14 +47,8 @@ const columnList: Column<Material>[] = [
 const MaterialsTable = observer(() => {
   const navigate = useNavigate()
   return (
-    <Box sx={{ overflow: 'scroll', flexGrow: 2 }}>
+    <Box sx={{ overflow: 'scroll', flexGrow: 2, pb: 2 }}>
       <Table
-        sx={{
-          '& td, th': {
-            padding: '0 10px'
-          }
-        }}
-        small
         columns={columnList}
         data={materialListStore.getFilteredMaterials()}
         onRowClick={row => {
