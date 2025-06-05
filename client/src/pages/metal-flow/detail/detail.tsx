@@ -24,7 +24,7 @@ const MaterialWeightInput = observer(
     return (
       <>
         <QtyInputWithUnit
-          label="Вес заготовки"
+          label="Вес материала"
           unitId={EnUnit.Gram}
           setValue={v => {
             props.materialRelation.setWeight(v)
@@ -32,7 +32,7 @@ const MaterialWeightInput = observer(
           value={props.materialRelation.weight}
         />
         <QtyInputWithUnit
-          label="Длина заготовки"
+          label="Длина материала"
           unitId={EnUnit.MilliMeter}
           setValue={v => {
             props.materialRelation.setLength(v)
