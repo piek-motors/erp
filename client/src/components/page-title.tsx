@@ -1,4 +1,3 @@
-import { __DEV__ } from '@apollo/client/utilities/globals'
 import { Box, IconButton, Stack, Typography } from '@mui/joy'
 import { SxProperty } from 'lib/constants'
 import React from 'react'
@@ -15,13 +14,17 @@ export interface Props {
 }
 
 export function PageTitle(props: Props) {
+  const isDev = process.env.REACT_APP_NODE_ENV === 'development'
+
   return (
     <Stack direction="row" gap={1} pb={1}>
       {!props.hideIcon && (
         <Link to="/help">
           <IconButton
             variant="outlined"
-            sx={{ background: __DEV__ ? 'red' : 'transparent' }}
+            sx={{
+              background: isDev ? 'red' : 'transparent'
+            }}
           >
             <img src={'/favicon.ico'} width={20} height={20} />
           </IconButton>
