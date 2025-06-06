@@ -41,7 +41,7 @@ export const CreateOrder = observer(() => {
         <Row>
           <PageTitle title={'Новый заказ'} />
         </Row>
-        <OrderStatementInput orderId={0} mutation={handleCreateOrder} />
+        <OrderStatementInput mutation={() => handleCreateOrder()} />
       </Box>
     </CenteredContainer>
   )

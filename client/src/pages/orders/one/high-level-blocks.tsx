@@ -66,10 +66,7 @@ export const OrderInfoSection = observer(() => {
   return (
     <Box>
       {orderStore.editMode ? (
-        <OrderStatementInput
-          orderId={orderStore.order.id}
-          mutation={() => orderStore.updateOrder(orderStore.order!.id)}
-        />
+        <OrderStatementInput mutation={() => orderStore.update()} />
       ) : (
         <Stack css={orderInfoPrintStyle}>
           <StatementView />

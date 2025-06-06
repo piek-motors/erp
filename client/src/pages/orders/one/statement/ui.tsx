@@ -6,13 +6,7 @@ import { orderStore } from '../stores/order.store'
 import { RenderInput } from './render-input'
 
 export const OrderStatementInput = observer(
-  ({
-    orderId,
-    mutation
-  }: {
-    orderId: number
-    mutation: () => Promise<any>
-  }) => {
+  ({ mutation }: { mutation: () => Promise<any> }) => {
     const columns = orderStore.statment.getcolumns()
     return (
       <form>

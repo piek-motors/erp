@@ -20,9 +20,9 @@ export class OrderStore {
     makeAutoObservable(this)
   }
 
-  async load(orderId: number) {
+  openOrder(orderId: number) {
     this.clear()
-    await Promise.all([
+    Promise.all([
       this.statment.init(orderId),
       this.loadOrder(orderId),
       this.payments.init(orderId),
@@ -52,10 +52,13 @@ export class OrderStore {
     this.setOrder(order)
   }
 
-  async updateOrder(orderId: number) {
-    const payload = this.statment.prepareForUpdate(orderId)
-    await this.try(() => ordersApi.updateOrder(payload))
-    await this.loadOrder(orderId)
+  async update() {
+    this.assertOrderExists()
+
+    const payload = this.statment.prepareForUpdate(this.order.id)
+    const res = await this.try(() => ordersApi.updateOrder(payload))
+    await this.loadOrder(this.order.id)
+    return res
   }
 
   async insertOrder(status: OrderStatus): Promise<number> {

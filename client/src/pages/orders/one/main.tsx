@@ -19,7 +19,7 @@ const OrderDetail = observer(() => {
   }
 
   useEffect(() => {
-    orderStore.load(orderId)
+    orderStore.openOrder(orderId)
     suggestionsStore.init()
   }, [])
 

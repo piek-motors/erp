@@ -1,7 +1,8 @@
-import { apolloClient } from 'api'
+import { Payment } from 'domain-model'
 import { makeAutoObservable } from 'mobx'
 import moment from 'moment'
 import * as gql from 'types/graphql-shema'
+import { PaymentsApi } from './api'
 
 export class PaymentStore {
   modalOpen = false
@@ -19,7 +20,9 @@ export class PaymentStore {
   init(orderId: number) {
     this.orderId = orderId
     this.loadPayments()
+    this.setDate(moment().local().format('DD.MM.YY'))
   }
+
   setDate(date: string | null) {
     this.date = date
   }
@@ -43,34 +46,24 @@ export class PaymentStore {
     this.clear()
   }
   clear() {
+    this.orderId = null
+    this.date = null
     this.amount = null
     this.error = null
   }
+
   async loadPayments() {
     this.assertOrderId()
-    this.setLoading(true)
-    try {
-      const res = await apolloClient.query<
-        gql.GetOrderPaymentsQuery,
-        gql.GetOrderPaymentsQueryVariables
-      >({
-        query: gql.GetOrderPaymentsDocument,
-        variables: { _eq: this.orderId },
-        fetchPolicy: 'network-only'
-      })
-
-      this.setPayments(res.data?.orders_order_payments || [])
-    } catch (error) {
-      this.setError(error as Error)
-    } finally {
-      this.setLoading(false)
-    }
+    return this.withStateManagement(async () => {
+      const payments = await PaymentsApi.load(this.orderId)
+      this.setPayments(payments)
+    })
   }
 
   async insertPayment() {
     this.assertOrderId()
-    this.setLoading(true)
-    try {
+
+    return this.withStateManagement(async () => {
       if (!this.date || !this.amount) {
         throw new Error('Invalid input: date, and amount are required')
       }
@@ -80,57 +73,31 @@ export class PaymentStore {
         throw new Error('Invalid date format or future date not allowed')
       }
 
-      const res = await apolloClient.mutate<
-        gql.InsertPaymentMutation,
-        gql.InsertPaymentMutationVariables
-      >({
-        mutation: gql.InsertPaymentDocument,
-        variables: {
-          order_id: this.orderId,
-          date: paymentDate.toISOString(),
-          amount: this.amount
-        }
+      const paymentId = await PaymentsApi.insert({
+        order_id: this.orderId,
+        date: paymentDate.toISOString(),
+        amount: this.amount
       })
-      const paymentId = res.data?.insert_orders_order_payments_one?.id
-      if (!paymentId) {
-        throw new Error('Failed to insert payment')
-      }
 
-      // Reload payments to get updated list
-      await this.loadPayments()
+      this.payments.push(
+        new Payment({
+          id: paymentId,
+          amount: this.amount,
+          date: paymentDate.toDate()
+        })
+      )
+
       this.closeModal()
 
       return paymentId
-    } catch (error) {
-      this.setError(error as Error)
-      throw error
-    } finally {
-      this.setLoading(false)
-    }
+    })
   }
 
   async deletePayment(paymentId: number) {
-    this.setLoading(true)
-    try {
-      const res = await apolloClient.mutate<
-        gql.DeletePaymentMutation,
-        gql.DeletePaymentMutationVariables
-      >({
-        mutation: gql.DeletePaymentDocument,
-        variables: { id: paymentId }
-      })
-
-      if (res.errors) {
-        throw new Error(res.errors.toString())
-      }
-
+    return this.withStateManagement(async () => {
+      await PaymentsApi.delete(paymentId)
       this.setPayments(this.payments.filter(p => p.id !== paymentId))
-    } catch (error) {
-      this.setError(error as Error)
-      throw error
-    } finally {
-      this.setLoading(false)
-    }
+    })
   }
 
   get totalPaid() {
@@ -145,6 +112,18 @@ export class PaymentStore {
   private assertOrderId(): asserts this is { orderId: number } {
     if (!this.orderId) {
       throw new Error('Order ID is not set')
+    }
+  }
+
+  private async withStateManagement<T>(fn: () => Promise<T>) {
+    this.setLoading(true)
+    try {
+      return await fn()
+    } catch (error) {
+      this.setError(error as Error)
+      throw error
+    } finally {
+      this.setLoading(false)
     }
   }
 }

@@ -6,7 +6,6 @@ import { Order, Roles } from 'domain-model'
 import { useAppContext } from 'hooks'
 import { observer } from 'mobx-react-lite'
 import * as React from 'react'
-import { useEffect } from 'react'
 import { DeleteResourceButton, Inp, Row } from 'shortcuts'
 import { GetOrderPaymentsQuery } from 'types/graphql-shema'
 import * as formatter from 'utils/formatting'
@@ -14,9 +13,6 @@ import { orderStore, orderStore as os } from '../stores/order.store'
 
 export const Paymnets = observer(({ order }: { order: Order }) => {
   const { store }: any = useAppContext()
-  useEffect(() => {
-    os.payments.init(order.id)
-  }, [order.id])
 
   const isHaveFullRight = [
     Roles.general,
