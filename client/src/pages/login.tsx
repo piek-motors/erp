@@ -7,7 +7,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ServerErrorResponse } from 'types/global'
 import { CenteredContainer } from '../components/centered-container'
-import { Inp } from '../shortcuts'
+import { Inp } from '../lib/shortcuts'
 
 export const LoginForm = () => {
   const [email, setEmail] = useState('')

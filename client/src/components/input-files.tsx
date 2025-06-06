@@ -1,7 +1,7 @@
 import { styled } from '@mui/joy'
 import Button, { ButtonProps } from '@mui/joy/Button'
 import SvgIcon from '@mui/joy/SvgIcon'
-import { text } from 'shortcuts'
+import { text } from 'lib/shortcuts'
 
 const VisuallyHiddenInput = styled('input')`
   clip: rect(0 0 0 0);

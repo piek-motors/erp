@@ -1,11 +1,21 @@
 import { ApolloProvider } from '@apollo/client'
+import { loadDevMessages, loadErrorMessages } from '@apollo/client/dev'
+import { __DEV__ } from '@apollo/client/utilities/globals'
 import '@fontsource/inter'
+import { observer } from 'mobx-react-lite'
 import { createContext } from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
-import App from './app'
+import { NetworkStatusMessage } from './components/network-status-hint'
+import { NotifierOverlay } from './components/notifier'
 import { apolloClient } from './lib/api/apollo-client'
+import { AppRouter } from './lib/routers/Router'
 import { GlobalStore } from './store/global.store'
+
+if (__DEV__) {
+  loadDevMessages()
+  loadErrorMessages()
+}
 
 const store = new GlobalStore()
 
@@ -20,6 +30,16 @@ export function getInMemoryToken() {
 export async function getNewInMemoryToken() {
   return await store.getNewToken()
 }
+
+const App = observer(() => {
+  return (
+    <>
+      <NotifierOverlay />
+      <NetworkStatusMessage />
+      <AppRouter />
+    </>
+  )
+})
 
 const container =
   document.getElementById('app') || document.createElement('div')

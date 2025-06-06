@@ -1,7 +1,7 @@
 import { UilSearch } from '@iconscout/react-unicons'
 import { Input } from '@mui/joy'
 import React, { ReactNode } from 'react'
-import { Row, UseIcon } from '../shortcuts'
+import { Row, UseIcon } from '../lib/shortcuts'
 
 interface ISearchInputWithFiltersProps {
   value?: string

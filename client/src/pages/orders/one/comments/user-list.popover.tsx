@@ -1,6 +1,6 @@
 import { Menu, MenuItem } from '@mui/joy'
+import placeCaretAtEnd from 'lib/utils/placeCaretAtEnd'
 import { TUser } from 'types/global'
-import placeCaretAtEnd from 'utils/placeCaretAtEnd'
 
 interface IUserListPopoverProps {
   anchorEl: Element | null

@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { Box, Stack, Typography } from '@mui/joy'
+import { DeleteResourceButton, Row, UpdateResourceButton } from 'lib/shortcuts'
 import { observer } from 'mobx-react-lite'
-import { DeleteResourceButton, Row, UpdateResourceButton } from 'shortcuts'
 import { orderPositionsItemStyle } from '../prints.styles'
 import { orderStore } from '../stores/order.store'
 

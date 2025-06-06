@@ -2,10 +2,16 @@
 import { Box, Button, Divider, Typography } from '@mui/joy'
 import { EnMaterialShape, UiMaterialShape } from 'domain-model'
 import { MetalFlowRoutes, openMetalFlowPage } from 'lib/routes'
+import {
+  InputStack,
+  MyTabs,
+  Row,
+  SendMutation,
+  TakeLookHint
+} from 'lib/shortcuts'
 import { observer } from 'mobx-react-lite'
 import { JSX, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { InputStack, MyTabs, Row, SendMutation, TakeLookHint } from 'shortcuts'
 import { map } from '../mappers'
 import { SmallInputForm } from '../shared'
 import { MaterialUnitSelect } from '../shared/basic'

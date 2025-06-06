@@ -1,10 +1,10 @@
 import { Box, Divider, Grid, Stack, Typography } from '@mui/joy'
 import { PrintOnly } from 'components/conditional-display'
+import { formatOnlyDate } from 'lib/utils/formatting'
 import { observer } from 'mobx-react-lite'
 import { Attachments } from 'pages/orders/one/attachments/ui'
 import { PositionsList } from 'pages/orders/one/positions/ui'
 import { StatementView } from 'pages/orders/one/statement/ui'
-import { formatOnlyDate } from 'utils/formatting'
 import { orderStore } from '../stores/order.store'
 
 export const PrintLayout = observer(() => {

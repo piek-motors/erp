@@ -1,8 +1,8 @@
 /** @jsxImportSource @emotion/react */
 import { Container, IconButton, Stack, Typography } from '@mui/joy'
 import { AppRoutes, ListOrdersRoutes } from 'lib/routes'
+import { Row, UseIcon } from 'lib/shortcuts'
 import { useNavigate } from 'react-router-dom'
-import { Row, UseIcon } from 'shortcuts'
 import { RouteConfig } from 'types/global'
 
 import {

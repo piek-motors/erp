@@ -1,8 +1,8 @@
 import { Box, IconButton, Stack, Tooltip, Typography } from '@mui/joy'
+import { SxProperty } from 'lib/constants'
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { SxProperty } from 'lib/constants'
-import { Row } from '../shortcuts'
+import { Row } from '../lib/shortcuts'
 
 export interface Props {
   title: string

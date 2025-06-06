@@ -2,7 +2,10 @@
 import styled from '@emotion/styled'
 import { UilArrowRight } from '@iconscout/react-unicons'
 import { Box, Button, Container, Sheet, Stack, Typography } from '@mui/joy'
+import { PageTitle } from 'components/page-title'
+import { Context } from 'index'
 import { openOrderDetailPage } from 'lib/routes'
+import { Row, UseIcon } from 'lib/shortcuts'
 import moment from 'moment'
 import { useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -11,9 +14,6 @@ import {
   useGetNotificationsSubscription,
   useUpdateNotificationSeenMutation
 } from 'types/graphql-shema'
-import { Context } from '..'
-import { PageTitle } from '../components'
-import { Row, UseIcon } from '../shortcuts'
 
 interface INotificationProps {
   data: any
@@ -93,7 +93,6 @@ export function MentionList() {
     unviewed: TNotification[]
     viewed: TNotification[]
   }>({ unviewed: [], viewed: [] })
-  const [state, setState] = useState(false)
 
   const { data, loading } = useGetNotificationsSubscription({
     onData(options) {
@@ -111,14 +110,6 @@ export function MentionList() {
       limit: 100
     }
   })
-
-  const toggleDrawer = (open: boolean) => {
-    setState(open)
-  }
-
-  function closeNotificationCenter() {
-    setState(false)
-  }
 
   return (
     <Container>

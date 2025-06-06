@@ -1,7 +1,7 @@
 import * as joy from '@mui/joy'
+import { CancelButton, Inp, MultilineInput, Row } from 'lib/shortcuts'
 import { observer } from 'mobx-react-lite'
 import { useEffect } from 'react'
-import { CancelButton, Inp, MultilineInput, Row } from 'shortcuts'
 import { orderStore } from '../stores/order.store'
 
 export const InputPositionModal = observer(() => {

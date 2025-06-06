@@ -1,9 +1,9 @@
 import { UilFile, UilFileAlt, UilImage } from '@iconscout/react-unicons'
 import { Box, Button, Stack, Typography } from '@mui/joy'
 import { OrderAttachment } from 'domain-model'
+import { DeleteResourceButton, Row, text, UseIcon } from 'lib/shortcuts'
 import { observer } from 'mobx-react-lite'
 import { useEffect } from 'react'
-import { DeleteResourceButton, Row, text, UseIcon } from 'shortcuts'
 import { orderStore } from '../stores/order.store'
 import { attachmentsStore } from './store'
 

@@ -4,11 +4,11 @@ import { JSX } from '@emotion/react/jsx-runtime'
 import * as joy from '@mui/joy'
 import { Order, Roles } from 'domain-model'
 import { useAppContext } from 'hooks'
+import { DeleteResourceButton, Inp, Row } from 'lib/shortcuts'
+import * as formatter from 'lib/utils/formatting'
 import { observer } from 'mobx-react-lite'
 import * as React from 'react'
-import { DeleteResourceButton, Inp, Row } from 'shortcuts'
 import { GetOrderPaymentsQuery } from 'types/graphql-shema'
-import * as formatter from 'utils/formatting'
 import { orderStore, orderStore as os } from '../stores/order.store'
 
 export const Paymnets = observer(({ order }: { order: Order }) => {

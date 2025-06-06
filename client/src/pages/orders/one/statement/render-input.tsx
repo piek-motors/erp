@@ -1,6 +1,6 @@
 import { BaseAutocomplete } from 'components/base-autocomplete'
 import { Select } from 'components/select'
-import { Inp, MultilineInput } from 'shortcuts'
+import { Inp, MultilineInput } from 'lib/shortcuts'
 import { orderStore } from '../stores/order.store'
 import { suggestionsStore } from '../stores/suggestions.store'
 import { ColumnDefinition, InputTypes } from './store'

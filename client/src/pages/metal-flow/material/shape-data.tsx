@@ -8,8 +8,8 @@ import {
   SquareBarShapeData,
   uiUnit
 } from 'domain-model'
+import { Inp, InputStack } from 'lib/shortcuts'
 import { Observer } from 'mobx-react-lite'
-import { Inp, InputStack } from 'shortcuts'
 import { AlloyAutocomplete } from '../shared/basic'
 import { materialStore } from '../store'
 import { t } from '../text'

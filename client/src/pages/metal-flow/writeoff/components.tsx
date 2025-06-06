@@ -12,8 +12,8 @@ import {
   WriteoffTroughDetail
 } from 'domain-model'
 import { MetalFlowRoutes, openMetalFlowPage } from 'lib/routes'
+import { AddResourceButton, Inp, MyTabs, SendMutation } from 'lib/shortcuts'
 import { useEffect, useState } from 'react'
-import { AddResourceButton, Inp, MyTabs, SendMutation } from 'shortcuts'
 import { useNotifier } from 'store/notifier.store'
 import {
   useDeleteWriteOffMutation,

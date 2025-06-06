@@ -40,7 +40,7 @@ export function MaterialUnitSelect(props: {
 }
 
 import { BaseAutocomplete, BaseOption } from 'components/base-autocomplete'
-import { ErrorHint } from 'shortcuts'
+import { ErrorHint } from 'lib/shortcuts'
 import { useGetPossibleAlloysQuery } from 'types/graphql-shema'
 import { t } from '../text'
 

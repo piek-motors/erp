@@ -3,7 +3,7 @@ import { Button, Checkbox, Input, Stack, Typography } from '@mui/joy'
 import { monthAdd } from 'lib/date'
 import { ReactNode } from 'react'
 import { useUpdateTimeDeductionMutation } from 'types/graphql-shema'
-import { Row } from '../../shortcuts'
+import { Row } from '../../lib/shortcuts'
 import { State } from './main'
 
 const months = [

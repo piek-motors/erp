@@ -2,16 +2,16 @@ import { Container, Sheet, Stack, Typography } from '@mui/joy'
 import { PageTitle } from 'components/page-title'
 import { EnUnit } from 'domain-model'
 import { MetalFlowRoutes, openMetalFlowPage } from 'lib/routes'
-import { observer, Observer } from 'mobx-react-lite'
-import { useEffect } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
 import {
   DeleteResourceButton,
   Inp,
   Row,
   SendMutation,
   TakeLookHint
-} from 'shortcuts'
+} from 'lib/shortcuts'
+import { observer, Observer } from 'mobx-react-lite'
+import { useEffect } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { useGetMaterialsQuery } from 'types/graphql-shema'
 import { QtyInputWithUnit, SmallInputForm } from '../shared'
 import { MaterialAutocompleteMulti } from '../shared/material-autocomplete'

@@ -12,7 +12,7 @@ import {
   type MigrationResultSet
 } from 'kysely'
 import { promises as fs } from 'node:fs'
-import { connect } from './connect'
+import { connect } from '../connect'
 
 const program = new Command()
   .option('-r, --revert', 'Revert migrations')

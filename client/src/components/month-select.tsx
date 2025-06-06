@@ -1,8 +1,8 @@
 import { UilSearch } from '@iconscout/react-unicons'
 import { IconButton } from '@mui/joy'
+import { Row, UseIcon } from 'lib/shortcuts'
 import { makeAutoObservable } from 'mobx'
 import { observer } from 'mobx-react-lite'
-import { Row, UseIcon } from 'shortcuts'
 import { Select } from './select'
 
 const months = [
