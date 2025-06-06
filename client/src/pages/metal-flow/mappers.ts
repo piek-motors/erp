@@ -1,30 +1,24 @@
-import { plainToInstance } from 'class-transformer'
 import {
   Detail,
   getMaterialConstructor,
-  getShapeDataConstructor,
-  Material
+  Material,
+  MaterialShapeAbstractionLayer
 } from 'domain-model'
 import { GetDetailByPkQuery, GetMaterialByPkQuery } from 'types/graphql-shema'
-
 class MaterialMapper {
   fromDto(dto: GetMaterialByPkQuery['metal_flow_materials_by_pk']): Material {
-    if (dto == null) {
-      throw new Error('material mapper: empty dto passed')
-    }
-    if (dto.shape == null) {
+    if (dto == null) throw new Error('material mapper: empty dto passed')
+    if (dto.shape == null)
       throw new Error('material mapper: shape is not specified')
-    }
 
-    const shapeDataConstructor = getShapeDataConstructor(dto.shape)
-    const shapeData = plainToInstance(shapeDataConstructor, dto.shape_data)
     const MaterialConstructor = getMaterialConstructor<any>(dto.shape)
-    if (!MaterialConstructor) {
+    if (!MaterialConstructor)
       throw new Error('material mapper: material constructor not found')
-    }
 
     const emptyMaterial = new MaterialConstructor(dto.id, dto.label)
-    return emptyMaterial.init(dto.id, dto.label, shapeData)
+    MaterialShapeAbstractionLayer.importShapeData(emptyMaterial, dto.shape_data)
+
+    return emptyMaterial
   }
 
   convertable(

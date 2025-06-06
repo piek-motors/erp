@@ -1,6 +1,5 @@
-import { ClassConstructor } from 'class-transformer'
 import { IsBoolean, IsNumber, IsOptional, IsString } from 'class-validator'
-import { EnMaterialShape } from './enums'
+import { EnMaterialShape } from '../metal-flow/enums'
 
 class Common {
   @IsString()
@@ -12,10 +11,8 @@ export type GenericShapeData = Common
 export class RoundBarShapeData extends Common {
   @IsNumber()
   diameter!: number
-
   @IsBoolean()
   calibrated!: boolean
-
   @IsNumber()
   density?: number
   linearMass?: number
@@ -24,7 +21,6 @@ export class RoundBarShapeData extends Common {
 export class ListShapeData extends Common {
   @IsNumber()
   thickness!: number
-
   @IsNumber()
   @IsOptional()
   width?: number
@@ -33,7 +29,6 @@ export class ListShapeData extends Common {
 export class PipeShapeData extends Common {
   @IsNumber()
   diameter!: number
-
   @IsNumber()
   thickness!: number
 }
@@ -43,25 +38,23 @@ export class SquareBarShapeData extends Common {
   length!: number
 }
 
-const ShapeDataConstructorMap = {
-  [EnMaterialShape.RoundBar]: RoundBarShapeData,
-  [EnMaterialShape.List]: ListShapeData,
-  [EnMaterialShape.Pipe]: PipeShapeData,
-  [EnMaterialShape.SquareBar]: SquareBarShapeData
-}
+type ShapeDataFactory =
+  | typeof RoundBarShapeData
+  | typeof ListShapeData
+  | typeof PipeShapeData
+  | typeof SquareBarShapeData
 
-export type ShapeDataUnion =
-  | RoundBarShapeData
-  | SquareBarShapeData
-  | ListShapeData
-  | PipeShapeData
-
-export function getShapeDataConstructor(
-  shape: EnMaterialShape
-): ClassConstructor<ShapeDataUnion> {
-  const c = ShapeDataConstructorMap[shape]
-  if (!c) {
-    throw new Error(`Shape data constructor for shape ${shape} not found`)
+export function getShapeDataFactory(shape: EnMaterialShape): ShapeDataFactory {
+  switch (shape) {
+    case EnMaterialShape.RoundBar:
+      return RoundBarShapeData
+    case EnMaterialShape.List:
+      return ListShapeData
+    case EnMaterialShape.Pipe:
+      return PipeShapeData
+    case EnMaterialShape.SquareBar:
+      return SquareBarShapeData
+    default:
+      throw new Error(`Unknown shape: ${shape}`)
   }
-  return c
 }

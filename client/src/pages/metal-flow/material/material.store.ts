@@ -3,8 +3,9 @@ import {
   EnUnit,
   GenericShapeData,
   getMaterialConstructor,
-  getShapeDataConstructor,
+  getShapeDataFactory,
   Material,
+  MaterialShapeAbstractionLayer,
   RoundBar,
   RoundBarShapeData
 } from 'domain-model'
@@ -36,8 +37,8 @@ export class MaterialStore {
 
   setShape(shape: EnMaterialShape) {
     this.shape = shape
-    const Shape = getShapeDataConstructor(shape)
-    this.shapeData = new Shape(0)
+    const Shape = getShapeDataFactory(shape)
+    this.shapeData = new Shape()
   }
 
   setUnit(unit: EnUnit) {
@@ -48,7 +49,7 @@ export class MaterialStore {
     this.id = material.id || undefined
     this.unit = material.unit
     this.setShape(material.shape)
-    this.shapeData = material.exportShapeData()
+    this.shapeData = MaterialShapeAbstractionLayer.exportShapeData(material)
   }
 
   setShapeData(shapeData: GenericShapeData) {
@@ -81,12 +82,13 @@ export class MaterialStore {
   async insert() {
     return this.withStateManagement(async () => {
       const MaterialConstructor = getMaterialConstructor(this.shape)
-      const m = new MaterialConstructor(0).init(null, '', this.shapeData as any)
+      const material = new MaterialConstructor(0)
+      MaterialShapeAbstractionLayer.importShapeData(material, this.shapeData)
       const id = await api.insertMaterial({
         object: {
           unit: this.unit,
           shape: this.shape,
-          label: m.deriveLabel(),
+          label: material.deriveLabel(),
           shape_data: this.shapeData
         }
       })

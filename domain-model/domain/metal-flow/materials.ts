@@ -1,25 +1,13 @@
-import { plainToInstance } from 'class-transformer'
 import { IsBoolean, IsNumber, IsOptional, IsString, Min } from 'class-validator'
-import { EnMaterialShape, EnUnit } from './enums'
 import {
   GenericShapeData,
   ListShapeData,
   PipeShapeData,
   RoundBarShapeData,
   SquareBarShapeData
-} from './material-shape'
+} from '../data-maper/material-shape'
+import { EnMaterialShape, EnUnit } from './enums'
 import { uiMaterialShape, uiUnit } from './ui.translators'
-
-interface ResourceNameProps {
-  name: string
-  caption?: string
-  flags?: Flag[]
-}
-
-interface Flag {
-  color: number
-  text: string
-}
 
 export abstract class Material<
   ShapeData extends GenericShapeData = GenericShapeData
@@ -41,8 +29,6 @@ export abstract class Material<
     return uiMaterialShape(this.shape)
   }
   abstract deriveLabel(): string
-  abstract init(id: number | null, label: string, shapeData: ShapeData): this
-  abstract exportShapeData(): ShapeData
 }
 
 export class RoundBar extends Material<RoundBarShapeData> {
@@ -92,25 +78,6 @@ export class RoundBar extends Material<RoundBarShapeData> {
 
     return `${this.shapeUI} ${this.diameter} ${this.alloy}`.trim()
   }
-  init(id: number | null, label: string, shapeData: RoundBarShapeData): this {
-    return plainToInstance(RoundBar, {
-      id,
-      label,
-      alloy: shapeData.alloy,
-      calibrated: shapeData.calibrated || false,
-      diameter: shapeData.diameter,
-      density: shapeData.density || 0,
-      linearMass: shapeData.linearMass || 0
-    }) as this
-  }
-  exportShapeData(): RoundBarShapeData {
-    return {
-      alloy: this.alloy,
-      calibrated: this.calibrated || false,
-      density: this.density,
-      diameter: this.diameter
-    }
-  }
 }
 
 export class List extends Material<ListShapeData> {
@@ -146,22 +113,6 @@ export class List extends Material<ListShapeData> {
       this.width ? `x${this.width}` : ''
     }`
   }
-  init(id: number | null, label: string, shapeData: ListShapeData): this {
-    return plainToInstance(List, {
-      id,
-      label,
-      alloy: shapeData.alloy,
-      thickness: shapeData.thickness,
-      width: shapeData.width
-    }) as this
-  }
-  exportShapeData(): ListShapeData {
-    return {
-      alloy: this.alloy || '',
-      thickness: this.thickness,
-      width: this.width
-    }
-  }
 }
 
 export class Pipe extends Material<PipeShapeData> {
@@ -193,22 +144,6 @@ export class Pipe extends Material<PipeShapeData> {
     }
     return `${this.shapeUI} ${this.diameter} ${this.alloy}`.trim()
   }
-  init(id: number | null, label: string, shapeData: PipeShapeData): this {
-    return plainToInstance(Pipe, {
-      id,
-      label,
-      alloy: shapeData.alloy,
-      diameter: shapeData.diameter,
-      thickness: shapeData.thickness
-    }) as this
-  }
-  exportShapeData(): PipeShapeData {
-    return {
-      alloy: this.alloy,
-      diameter: this.diameter,
-      thickness: this.thickness
-    }
-  }
 }
 
 export class SquareBar extends Material<SquareBarShapeData> {
@@ -232,20 +167,6 @@ export class SquareBar extends Material<SquareBarShapeData> {
       throw new Error('length is not specified')
     }
     return `${this.shapeUI} ${this.length} ${this.alloy || ''}`
-  }
-  init(id: number | null, label: string, shapeData: SquareBarShapeData): this {
-    return plainToInstance(SquareBar, {
-      id,
-      label,
-      alloy: shapeData.alloy,
-      length: shapeData.length
-    }) as this
-  }
-  exportShapeData(): SquareBarShapeData {
-    return {
-      alloy: this.alloy,
-      length: this.length
-    }
   }
 }
 
