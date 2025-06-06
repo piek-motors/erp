@@ -8,7 +8,7 @@
   },
   "scripts": {
     "build": "pnpm run -r build",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "deploy": "sh ./infra/deploy.sh"
   },
   "repository": {
     "type": "git",
