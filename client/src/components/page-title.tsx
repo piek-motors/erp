@@ -1,4 +1,5 @@
-import { Box, IconButton, Stack, Tooltip, Typography } from '@mui/joy'
+import { __DEV__ } from '@apollo/client/utilities/globals'
+import { Box, IconButton, Stack, Typography } from '@mui/joy'
 import { SxProperty } from 'lib/constants'
 import React from 'react'
 import { Link } from 'react-router-dom'
@@ -17,13 +18,14 @@ export function PageTitle(props: Props) {
   return (
     <Stack direction="row" gap={1} pb={1}>
       {!props.hideIcon && (
-        <Tooltip title="Перейти на главную страницу">
-          <Link to="/help">
-            <IconButton variant="outlined">
-              <img src={'/favicon.ico'} width={20} height={20} />
-            </IconButton>
-          </Link>
-        </Tooltip>
+        <Link to="/help">
+          <IconButton
+            variant="outlined"
+            sx={{ background: __DEV__ ? 'red' : 'transparent' }}
+          >
+            <img src={'/favicon.ico'} width={20} height={20} />
+          </IconButton>
+        </Link>
       )}
 
       <Row gap={2} sx={props.sx}>
