@@ -3,8 +3,8 @@ import '@fontsource/inter'
 import { createContext } from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
-import { apolloClient } from './api/apollo-client'
 import App from './app'
+import { apolloClient } from './lib/api/apollo-client'
 import { GlobalStore } from './store/global.store'
 
 const store = new GlobalStore()

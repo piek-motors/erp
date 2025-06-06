@@ -1,9 +1,7 @@
-import { apolloClient } from 'api'
 import { OrderAttachment } from 'domain-model'
+import { FileService } from 'lib/services/file.service'
 import { makeAutoObservable } from 'mobx'
-import { map } from 'pages/orders/mappers'
-import { FileService } from 'services/file.service'
-import * as gql from 'types/graphql-shema'
+import { AttachmentsApi } from './api'
 
 interface UploadFileResp {
   filename: string
@@ -29,17 +27,10 @@ export class AttachmentsStore {
     this.files = files
   }
   async load(orderId: number) {
-    const res = await apolloClient.query<
-      gql.GetOrderAttachmentsQuery,
-      gql.GetOrderAttachmentsQueryVariables
-    >({
-      query: gql.GetOrderAttachmentsDocument,
-      variables: {
-        order_id: orderId
-      }
-    })
-    this.setFiles(res.data.orders_attachments.map(map.order.docsFromDto))
+    const attachments = await AttachmentsApi.load(orderId)
+    this.setFiles(attachments)
   }
+
   async onDrop(files: File[], orderId: number) {
     this.setUploadingFiles(files)
     const res = await FileService.uploadFiles(files, orderId)

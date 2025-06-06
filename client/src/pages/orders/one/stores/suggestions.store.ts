@@ -1,5 +1,5 @@
-import { apolloClient } from 'api/apollo-client'
 import { User } from 'domain-model'
+import { apolloClient } from 'lib/api/apollo-client'
 import { makeAutoObservable } from 'mobx'
 import * as gql from 'types/graphql-shema'
 import { map } from '../../mappers'

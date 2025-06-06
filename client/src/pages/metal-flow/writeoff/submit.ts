@@ -1,5 +1,5 @@
-import { apolloClient } from 'api'
 import { EnWriteoffType, WriteoffTroughDetail } from 'domain-model'
+import { apolloClient } from 'lib/api'
 import {
   GetDetailByPkDocument,
   GetDetailByPkQuery,

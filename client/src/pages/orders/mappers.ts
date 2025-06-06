@@ -44,17 +44,6 @@ class OrderMapper {
       status: dto.status
     })
   }
-
-  docsFromDto(
-    doc: gql.GetOrderAttachmentsQuery['orders_attachments'][number]
-  ): OrderAttachment {
-    return new OrderAttachment({
-      id: doc.id,
-      name: doc.filename ?? '',
-      key: doc.key ?? '',
-      size: doc.size
-    })
-  }
 }
 
 class UserMapper {
@@ -81,8 +70,22 @@ class OrderItemMapper {
   }
 }
 
+class AttachmentMapper {
+  fromDto(
+    doc: gql.GetOrderAttachmentsQuery['orders_attachments'][number]
+  ): OrderAttachment {
+    return new OrderAttachment({
+      id: doc.id,
+      name: doc.filename ?? '',
+      key: doc.key ?? '',
+      size: doc.size
+    })
+  }
+}
+
 export const map = {
   order: new OrderMapper(),
   user: new UserMapper(),
-  orderItem: new OrderItemMapper()
+  orderItem: new OrderItemMapper(),
+  attachment: new AttachmentMapper()
 }

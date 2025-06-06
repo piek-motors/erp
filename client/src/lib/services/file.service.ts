@@ -1,4 +1,4 @@
-import { $api } from 'api'
+import { $api } from 'lib/api'
 
 export class FileService {
   static s3_url = '/s3/'

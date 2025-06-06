@@ -1,6 +1,6 @@
-import { apolloClient } from 'api'
 import { Layout, PrintOnly, WebOnly } from 'components/conditional-display'
 import { Order, OrderStatus } from 'domain-model'
+import { apolloClient } from 'lib/api'
 import { makeAutoObservable } from 'mobx'
 import moment from 'moment'
 import { map } from 'pages/orders/mappers'

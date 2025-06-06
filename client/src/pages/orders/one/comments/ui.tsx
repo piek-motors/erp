@@ -1,7 +1,7 @@
 import { UilListUl, UilMessage, UilUser } from '@iconscout/react-unicons'
 import * as joy from '@mui/joy'
-import { apolloClient } from 'api'
 import { User } from 'domain-model'
+import { apolloClient } from 'lib/api'
 import { observer } from 'mobx-react-lite'
 import moment from 'moment'
 import React, { useRef, useState } from 'react'

@@ -1,4 +1,4 @@
-import { $api } from 'api'
+import { $api } from 'lib/api'
 
 export class AuthService {
   static async login(email: string, password: string) {

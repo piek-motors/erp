@@ -1,5 +1,5 @@
-import { apolloClient } from 'api'
 import { Payment } from 'domain-model'
+import { apolloClient } from 'lib/api'
 import * as gql from 'types/graphql-shema'
 
 export class PaymentsApi {

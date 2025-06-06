@@ -1,4 +1,4 @@
-import { apolloClient } from 'api'
+import { apolloClient } from 'lib/api'
 import * as gql from 'types/graphql-shema'
 import { map } from '../mappers'
 

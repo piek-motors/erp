@@ -1,8 +1,8 @@
 import axios from 'axios'
 import { makeAutoObservable } from 'mobx'
 import { TUser } from 'types/global'
-import { API_URL } from '../api/axios'
-import { AuthService } from '../services/auth.service'
+import { API_URL } from '../lib/api/axios'
+import { AuthService } from '../lib/services/auth.service'
 
 export class GlobalStore {
   user: TUser | null = null
