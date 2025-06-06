@@ -1,7 +1,6 @@
 import { Box, Typography } from '@mui/joy'
 import { PrintOnly, WebOnly } from 'components/conditional-display'
 import { observer } from 'mobx-react-lite'
-import { useEffect } from 'react'
 import { InputStack, SendMutation } from 'shortcuts'
 import { orderStore } from '../stores/order.store'
 import { RenderInput } from './render-input'
@@ -14,12 +13,6 @@ export const OrderStatementInput = observer(
     orderId: number
     mutation: () => Promise<any>
   }) => {
-    useEffect(() => {
-      return () => {
-        orderStore.updateOrder(orderId)
-      }
-    }, [orderId])
-
     const columns = orderStore.statment.getcolumns()
     return (
       <form>
