@@ -1,17 +1,8 @@
 import { IsBoolean, IsNumber, IsOptional, IsString, Min } from 'class-validator'
-import {
-  GenericShapeData,
-  ListShapeData,
-  PipeShapeData,
-  RoundBarShapeData,
-  SquareBarShapeData
-} from '../data-maper/material-shape'
 import { EnMaterialShape, EnUnit } from './enums'
 import { uiMaterialShape, uiUnit } from './ui.translators'
 
-export abstract class Material<
-  ShapeData extends GenericShapeData = GenericShapeData
-> {
+export abstract class Material {
   @IsNumber()
   readonly id: number
   @IsString()
@@ -31,7 +22,7 @@ export abstract class Material<
   abstract deriveLabel(): string
 }
 
-export class RoundBar extends Material<RoundBarShapeData> {
+export class RoundBar extends Material {
   unit = EnUnit.Kg
   shape = EnMaterialShape.RoundBar
   /**
@@ -75,12 +66,12 @@ export class RoundBar extends Material<RoundBarShapeData> {
     if (Number.isNaN(this.diameter)) {
       throw new Error('diameter is NaN')
     }
-
-    return `${this.shapeUI} ${this.diameter} ${this.alloy}`.trim()
+    const calibrationSuffix = this.calibrated ? 'К' : ''
+    return `${this.shapeUI} ${this.diameter} ${this.alloy} ${calibrationSuffix}`.trim()
   }
 }
 
-export class List extends Material<ListShapeData> {
+export class List extends Material {
   unit = EnUnit.Kg
   shape = EnMaterialShape.List
   /**
@@ -115,7 +106,7 @@ export class List extends Material<ListShapeData> {
   }
 }
 
-export class Pipe extends Material<PipeShapeData> {
+export class Pipe extends Material {
   unit = EnUnit.Kg
   shape = EnMaterialShape.Pipe
   /**
@@ -146,7 +137,7 @@ export class Pipe extends Material<PipeShapeData> {
   }
 }
 
-export class SquareBar extends Material<SquareBarShapeData> {
+export class SquareBar extends Material {
   unit = EnUnit.Kg
   shape = EnMaterialShape.SquareBar
   /**
@@ -166,7 +157,7 @@ export class SquareBar extends Material<SquareBarShapeData> {
     if (!this.length) {
       throw new Error('length is not specified')
     }
-    return `${this.shapeUI} ${this.length} ${this.alloy || ''}`
+    return `${this.shapeUI} ${this.length} ${this.alloy || ''}`.trim()
   }
 }
 
