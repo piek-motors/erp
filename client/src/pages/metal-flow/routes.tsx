@@ -1,18 +1,27 @@
+import { Box } from '@mui/joy'
 import { routeMap } from 'lib/routes'
 import { RouteConfig } from 'types/global'
 import { AddDetail, UpdateDetail } from './detail/detail'
 import { DetailsListPage } from './detail/detail-list'
-import { AddMaterial, UpdateMaterial } from './material/material'
+import { AddMaterialPage, UpdateMaterialPage } from './material/material'
 import { MaterialsListPage } from './material/material-list'
-import { MetalFlowSubSystem } from './spa'
+import { Narrow } from './shared/basic'
+import { MetalFlowLayout } from './spa'
 import { AddSuply, ListSupplies } from './supply/components'
 import { AddWriteOff, ListWriteoffs } from './writeoff/components'
 
 const { metalflow } = routeMap
 
+function wrapEachRoute(route: RouteConfig) {
+  return {
+    ...route,
+    element: <MetalFlowLayout>{route.element}</MetalFlowLayout>
+  }
+}
+
 const innerRoutes = [
   {
-    element: <MetalFlowSubSystem />,
+    element: <Box p={1}>(*_*)</Box>,
     path: metalflow.index
   },
   {
@@ -20,19 +29,35 @@ const innerRoutes = [
     path: metalflow.materials
   },
   {
-    element: <AddMaterial />,
+    element: (
+      <Narrow>
+        <AddMaterialPage />
+      </Narrow>
+    ),
     path: metalflow.material.new
   },
   {
-    element: <UpdateMaterial />,
+    element: (
+      <Narrow>
+        <UpdateMaterialPage />
+      </Narrow>
+    ),
     path: metalflow.material.edit
   },
   {
-    element: <AddSuply />,
+    element: (
+      <Narrow>
+        <AddSuply />
+      </Narrow>
+    ),
     path: metalflow.supply.new
   },
   {
-    element: <AddWriteOff />,
+    element: (
+      <Narrow>
+        <AddWriteOff />
+      </Narrow>
+    ),
     path: metalflow.writeoff.new
   },
   {
@@ -40,11 +65,19 @@ const innerRoutes = [
     path: metalflow.details
   },
   {
-    element: <AddDetail />,
+    element: (
+      <Narrow>
+        <AddDetail />
+      </Narrow>
+    ),
     path: metalflow.detail.new
   },
   {
-    element: <UpdateDetail />,
+    element: (
+      <Narrow>
+        <UpdateDetail />
+      </Narrow>
+    ),
     path: metalflow.detail.edit
   },
   {
@@ -57,7 +90,7 @@ const innerRoutes = [
   }
 ] as RouteConfig[]
 
-export default innerRoutes
+export default innerRoutes.map(wrapEachRoute)
 
 export function getComponentByCurrentPath(path: string) {
   return innerRoutes.find(r => r.path === path)?.element || <></>

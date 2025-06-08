@@ -1,10 +1,4 @@
 /** @jsxImportSource @emotion/react */
-import { Container, IconButton, Stack } from '@mui/joy'
-import { routeMap } from 'lib/routes'
-import { P, Row, UseIcon } from 'lib/shortcuts'
-import { useNavigate } from 'react-router-dom'
-import { RouteConfig } from 'types/global'
-
 import {
   UilBell,
   UilCalculatorAlt,
@@ -13,6 +7,10 @@ import {
   UilSetting,
   UilWrench
 } from '@iconscout/react-unicons'
+import { Container, IconButton, Stack } from '@mui/joy'
+import { routeMap } from 'lib/routes'
+import { P, Row, UseIcon } from 'lib/shortcuts'
+import { useNavigate } from 'react-router-dom'
 
 export const links = [
   {
@@ -43,9 +41,8 @@ export const links = [
   }
 ]
 
-function Help() {
+export function IndexPage() {
   const navigate = useNavigate()
-
   return (
     <Container maxWidth="xs">
       <Stack py={3} gap={2}>
@@ -67,5 +64,3 @@ function Help() {
     </Container>
   )
 }
-
-export default [{ element: <Help />, path: routeMap.index }] as RouteConfig[]

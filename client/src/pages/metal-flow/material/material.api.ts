@@ -5,7 +5,7 @@ import { map } from '../mappers'
 export async function updateMaterial(
   variables: gql.UpdateMaterialMutationVariables
 ) {
-  return apolloClient
+  return await apolloClient
     .mutate<gql.UpdateMaterialMutation, gql.UpdateMaterialMutationVariables>({
       mutation: gql.UpdateMaterialDocument,
       variables
@@ -38,7 +38,8 @@ export async function getMaterial(id: number) {
   return await apolloClient
     .query<gql.GetMaterialByPkQuery, gql.GetMaterialByPkQueryVariables>({
       query: gql.GetMaterialByPkDocument,
-      variables: { id }
+      variables: { id },
+      fetchPolicy: 'network-only'
     })
     .then(res => {
       if (res.data?.metal_flow_materials_by_pk) {

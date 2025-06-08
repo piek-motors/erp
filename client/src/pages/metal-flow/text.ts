@@ -7,7 +7,7 @@ export const t = {
   AddMaterial: 'Добавить материал',
   AddSupply: 'Добавить поставку', // Align with "События поставок"
   AddWriteoff: 'Добавить расход',
-  Alloy: 'Сплав / Марка стали',
+  Alloy: 'Сплав',
   Calibrated: 'Калиброванный', // Adjective form
   Delete: 'Удалить',
   Density: 'Плотность',

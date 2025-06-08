@@ -52,6 +52,7 @@ export class MaterialStore {
     this.unit = material.unit
     this.setShape(material.shape)
     this.shapeData = MaterialShapeAbstractionLayer.exportShapeData(material)
+    this.material = material
   }
 
   setShapeData(shapeData: GenericShapeData) {
@@ -103,10 +104,25 @@ export class MaterialStore {
   async update() {
     return this.withStateManagement(async () => {
       if (!this.id) throw new Error('Material id is not set')
-      return api.updateMaterial({
+      if (!this.material) throw new Error('Material is not set')
+
+      MaterialShapeAbstractionLayer.importShapeData(
+        this.material,
+        this.shapeData
+      )
+
+      return await api.updateMaterial({
         id: this.id,
-        _set: { shape: this.shape, shape_data: this.shapeData }
+        _set: {
+          shape: this.shape,
+          shape_data: this.shapeData,
+          label: this.material?.deriveLabel()
+        }
       })
+    }).then(res => {
+      if (!this.id) throw new Error('Material id is not set')
+      this.load(this.id)
+      return res
     })
   }
 }

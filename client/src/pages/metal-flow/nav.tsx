@@ -50,7 +50,7 @@ function MenuButton(props: {
   small?: boolean
 }) {
   return (
-    <Link to={`?path=${props.href}`} key={props.href}>
+    <Link to={props.href} key={props.href}>
       <Button variant="plain" color="neutral" sx={{ whiteSpace: 'nowrap' }}>
         {props.name}
       </Button>
@@ -60,7 +60,7 @@ function MenuButton(props: {
 
 function LinkableIcon(props: { href: string; icon?: any; small?: boolean }) {
   return (
-    <Link to={`?path=${props.href}`} key={props.href}>
+    <Link to={props.href} key={props.href}>
       <IconButton>{props.icon}</IconButton>
     </Link>
   )

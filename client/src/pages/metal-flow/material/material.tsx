@@ -1,6 +1,5 @@
 /** @jsxImportSource @emotion/react */
 import { Button, Stack } from '@mui/joy'
-import { PageTitle } from 'components/page-title'
 import { EnMaterialShape, UiMaterialShape } from 'domain-model'
 import { open, routeMap } from 'lib/routes'
 import {
@@ -13,7 +12,7 @@ import {
 } from 'lib/shortcuts'
 import { observer } from 'mobx-react-lite'
 import { JSX, useEffect } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { SmallInputForm } from '../shared'
 import { MaterialUnitSelect } from '../shared/basic'
 import { materialStore } from '../store'
@@ -23,7 +22,7 @@ import {
   PipeMaterialInput,
   RoundBarInput,
   SquareMaterialInput
-} from './shape-data'
+} from './material-shape.input'
 
 const tabs: Record<EnMaterialShape, JSX.Element> = {
   [EnMaterialShape.RoundBar]: <RoundBarInput />,
@@ -32,7 +31,7 @@ const tabs: Record<EnMaterialShape, JSX.Element> = {
   [EnMaterialShape.Pipe]: <PipeMaterialInput />
 }
 
-export const AddMaterial = observer(() => {
+export const AddMaterialPage = observer(() => {
   const uiTabs: Record<string, JSX.Element> = {}
   for (const [key, val] of Object.entries(tabs)) {
     uiTabs[UiMaterialShape[key]] = val
@@ -67,24 +66,27 @@ export const AddMaterial = observer(() => {
   )
 })
 
-export const UpdateMaterial = observer(() => {
-  const id = Number(new URLSearchParams(useLocation().search).get('id'))
-  if (!id) {
-    return <>No id</>
-  }
+export const UpdateMaterialPage = observer(() => {
+  const { id } = useParams<{ id: string }>()
+  if (!id) throw new Error('No id')
+  const materialId = Number(id)
+
   useEffect(() => {
-    materialStore.load(id)
+    materialStore.load(materialId)
   }, [])
 
   return (
     <Stack gap={1} p={1}>
-      <PageTitle title="Изменить материал" hideIcon />
       <Row>
         <P level="h4">{materialStore.label}</P>
-        <WareHouseOperationLinks id={id} />
+        <WareHouseOperationLinks id={materialId} />
       </Row>
+      <P level="body-sm">ID: {materialId}</P>
       <InputStack>{tabs[materialStore.shape]}</InputStack>
-      <SendMutation onClick={() => materialStore.update()} />
+      <SendMutation
+        onClick={() => materialStore.update()}
+        buttonProps={{ color: 'success' }}
+      />
     </Stack>
   )
 })
@@ -96,6 +98,7 @@ function WareHouseOperationLinks(props: { id: number }) {
     <>
       <Button
         variant="soft"
+        color="success"
         onClick={() =>
           navigate(
             open(routeMap.metalflow.supply.new, id, {
@@ -107,6 +110,7 @@ function WareHouseOperationLinks(props: { id: number }) {
         Приход
       </Button>
       <Button
+        color="warning"
         variant="soft"
         onClick={() =>
           navigate(

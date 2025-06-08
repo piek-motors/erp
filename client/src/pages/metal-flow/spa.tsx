@@ -1,10 +1,7 @@
 import { Box, Stack } from '@mui/joy'
-import { useLocation } from 'react-router-dom'
 import { NavigationSideBar } from './nav'
-import { getComponentByCurrentPath } from './routes'
 
-export function MetalFlowSubSystem() {
-  const path = new URLSearchParams(useLocation().search).get('path')
+export function MetalFlowLayout(props: { children?: React.ReactNode }) {
   return (
     <Box
       sx={{
@@ -21,10 +18,8 @@ export function MetalFlowSubSystem() {
       <Box p={1}>
         <NavigationSideBar />
       </Box>
-      {path && (
-        <Stack sx={{ flexGrow: 1, gap: 1, p: 1 }}>
-          {path ? getComponentByCurrentPath(path) : null}
-        </Stack>
+      {props.children && (
+        <Stack sx={{ flexGrow: 1, gap: 0, p: 1 }}>{props.children}</Stack>
       )}
     </Box>
   )

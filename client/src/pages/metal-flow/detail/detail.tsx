@@ -12,7 +12,7 @@ import {
 } from 'lib/shortcuts'
 import { observer, Observer } from 'mobx-react-lite'
 import { useEffect } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useGetMaterialsQuery } from 'types/graphql-shema'
 import { QtyInputWithUnit, SmallInputForm } from '../shared'
 import { MaterialAutocompleteMulti } from '../shared/material-autocomplete'
@@ -69,11 +69,13 @@ function DetailMaterialRelationForm() {
 }
 
 export const UpdateDetail = observer(() => {
-  const id = Number(new URLSearchParams(useLocation().search).get('id'))
-  if (!id) throw new Error('No id in url')
+  const { id } = useParams<{ id: string }>()
+  if (!id) throw new Error('No id')
+  const detailId = Number(id)
+
   const navigate = useNavigate()
   useEffect(() => {
-    detailStore.load(id)
+    detailStore.load(detailId)
   }, [])
   return (
     <Container maxWidth="sm" sx={{ margin: 0, p: 1 }}>

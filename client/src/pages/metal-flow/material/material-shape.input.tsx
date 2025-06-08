@@ -8,7 +8,7 @@ import {
   SquareBarShapeData,
   uiUnit
 } from 'domain-model'
-import { Inp, InputStack } from 'lib/shortcuts'
+import { Inp, InputStack, P, Row } from 'lib/shortcuts'
 import { Observer } from 'mobx-react-lite'
 import { AlloyAutocomplete } from '../shared/basic'
 import { materialStore } from '../store'
@@ -157,7 +157,7 @@ function RoundBarInputBase({ shapeData }: { shapeData: RoundBarShapeData }) {
         }}
         unit="кг/м3"
       />
-      <ToggleButtonGroup
+      {/* <ToggleButtonGroup
         sx={{ pt: 1 }}
         value={shapeData.calibrated ? 'true' : 'false'}
         onChange={(e, v) => {
@@ -169,8 +169,40 @@ function RoundBarInputBase({ shapeData }: { shapeData: RoundBarShapeData }) {
       >
         <Button value={'false'}>{t.NotCalibrated}</Button>
         <Button value={'true'}>{t.Calibrated}</Button>
-      </ToggleButtonGroup>
+      </ToggleButtonGroup> */}
+      <MaterialCalibration
+        value={shapeData.calibrated}
+        setValue={v => {
+          const newData = { ...shapeData, calibrated: v }
+          materialStore.setShapeData(
+            plainToInstance(RoundBarShapeData, newData)
+          )
+
+          console.log(newData)
+        }}
+      />
     </InputStack>
+  )
+}
+
+function MaterialCalibration(props: {
+  value: boolean
+  setValue: (v: boolean) => void
+}) {
+  return (
+    <Row>
+      <P>(К) - Калиброванный</P>
+      <ToggleButtonGroup
+        sx={{ pt: 1 }}
+        value={props.value ? '1' : '0'}
+        onChange={(e, v) => {
+          props.setValue(v === '1')
+        }}
+      >
+        <Button value={'1'}>Да</Button>
+        <Button value={'0'}>Нет</Button>
+      </ToggleButtonGroup>
+    </Row>
   )
 }
 

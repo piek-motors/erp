@@ -111,3 +111,12 @@ export function DetailSelect(props: {
     />
   )
 }
+
+/** Narrow container */
+export function Narrow(props: ContainerProps) {
+  return (
+    <Container {...props} maxWidth="xs" sx={{ m: 0, p: 0, overflow: 'scroll' }}>
+      {props.children}
+    </Container>
+  )
+}

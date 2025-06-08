@@ -1,5 +1,5 @@
 import { routeMap } from 'lib/routes'
-import help from 'pages/attendance/help'
+import { IndexPage } from 'pages/attendance'
 import Attendance from 'pages/attendance/main'
 import { MentionList } from 'pages/mention/mentions'
 import { RouteConfig } from '../src/types/global'
@@ -11,14 +11,14 @@ import settings from './pages/settings'
 
 export const protectedRoutes: RouteConfig[] = [
   ...orders,
-  {
-    element: <MentionList />,
-    path: routeMap.mentions
-  },
   ...Attendance,
   ...order_detail,
   ...reclamations,
   ...settings,
   ...metalflow,
-  ...help
+  {
+    element: <MentionList />,
+    path: routeMap.mentions
+  },
+  { element: <IndexPage />, path: routeMap.index }
 ]

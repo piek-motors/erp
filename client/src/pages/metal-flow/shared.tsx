@@ -1,33 +1,8 @@
-import { UilArrowLeft } from '@iconscout/react-unicons'
-import { Box, IconButton, Stack } from '@mui/joy'
+import { Box, Stack } from '@mui/joy'
 import { PageTitle } from 'components'
 import { uiUnit } from 'domain-model'
 import { Inp, P } from 'lib/shortcuts'
 import { JSX } from 'react'
-import { NavigateOptions, To, useNavigate } from 'react-router-dom'
-
-type GoBackBtnProps = { to?: To; options?: NavigateOptions; delta?: number }
-export const GoBackBtn = (props: GoBackBtnProps) => {
-  const navigate = useNavigate()
-  return (
-    <Box>
-      <IconButton
-        onClick={() => {
-          if (props.delta) {
-            navigate(props.delta!)
-          } else {
-            if (!props.to) {
-              throw Error('GoBackBtn props "to" were not passed')
-            }
-            navigate(props.to!, props.options)
-          }
-        }}
-      >
-        <UilArrowLeft />
-      </IconButton>
-    </Box>
-  )
-}
 
 interface FormProps {
   header: string
