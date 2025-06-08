@@ -1,5 +1,5 @@
 import { Box, Sheet } from '@mui/joy'
-import { AppRoutes } from 'lib/routes'
+import { routeMap } from 'lib/routes'
 import { useMemo, useState } from 'react'
 import { Employee, RouteConfig } from 'types/global'
 import { useGetEmployeeListQuery } from 'types/graphql-shema'
@@ -94,6 +94,6 @@ function Attendance() {
 export default [
   {
     element: <Attendance />,
-    path: AppRoutes.attendance
+    path: routeMap.attendance
   }
 ] as RouteConfig[]

@@ -1,4 +1,4 @@
-import { MetalFlowRoutes } from 'lib/routes'
+import { routeMap } from 'lib/routes'
 import { RouteConfig } from 'types/global'
 import { AddDetail, UpdateDetail } from './detail/detail'
 import { DetailsListPage } from './detail/detail-list'
@@ -8,55 +8,57 @@ import { MetalFlowSubSystem } from './spa'
 import { AddSuply, ListSupplies } from './supply/components'
 import { AddWriteOff, ListWriteoffs } from './writeoff/components'
 
-const routes = [
+const { metalflow } = routeMap
+
+const innerRoutes = [
   {
     element: <MetalFlowSubSystem />,
-    path: MetalFlowRoutes.root
+    path: metalflow.index
   },
   {
     element: <MaterialsListPage />,
-    path: MetalFlowRoutes.materials
+    path: metalflow.materials
   },
   {
     element: <AddMaterial />,
-    path: MetalFlowRoutes.material_add
+    path: metalflow.material.new
   },
   {
     element: <UpdateMaterial />,
-    path: MetalFlowRoutes.material_update
+    path: metalflow.material.edit
   },
   {
     element: <AddSuply />,
-    path: MetalFlowRoutes.supply_add
+    path: metalflow.supply.new
   },
   {
     element: <AddWriteOff />,
-    path: MetalFlowRoutes.writeoff_add
+    path: metalflow.writeoff.new
   },
   {
     element: <DetailsListPage />,
-    path: MetalFlowRoutes.details
+    path: metalflow.details
   },
   {
     element: <AddDetail />,
-    path: MetalFlowRoutes.detail_add
+    path: metalflow.detail.new
   },
   {
     element: <UpdateDetail />,
-    path: MetalFlowRoutes.detail_update
+    path: metalflow.detail.edit
   },
   {
     element: <ListSupplies />,
-    path: MetalFlowRoutes.supplies
+    path: metalflow.supplies
   },
   {
     element: <ListWriteoffs />,
-    path: MetalFlowRoutes.writeoffs
+    path: metalflow.writeoffs
   }
 ] as RouteConfig[]
 
-export default routes
+export default innerRoutes
 
 export function getComponentByCurrentPath(path: string) {
-  return routes.find(r => r.path === path)?.element || <></>
+  return innerRoutes.find(r => r.path === path)?.element || <></>
 }

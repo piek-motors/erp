@@ -1,4 +1,4 @@
-import { AppRoutes } from 'lib/routes'
+import { routeMap } from 'lib/routes'
 import { LoadingHint } from 'lib/shortcuts'
 import { observer } from 'mobx-react-lite'
 import { PrintLayout } from 'pages/orders/one/layouts/print'
@@ -44,10 +44,10 @@ const OrderDetail = observer(() => {
 export default [
   {
     element: <OrderDetail />,
-    path: AppRoutes.order_detail
+    path: routeMap.order.view
   },
   {
     element: <CreateOrder />,
-    path: AppRoutes.new_order
+    path: routeMap.order.new
   }
 ] as RouteConfig[]

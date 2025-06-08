@@ -11,7 +11,7 @@ import {
   UiWriteoffReason,
   WriteoffTroughDetail
 } from 'domain-model'
-import { MetalFlowRoutes, openMetalFlowPage } from 'lib/routes'
+import { open, routeMap } from 'lib/routes'
 import { AddResourceButton, Inp, MyTabs, SendMutation } from 'lib/shortcuts'
 import { useEffect, useState } from 'react'
 import { useNotifier } from 'store/notifier.store'
@@ -174,9 +174,7 @@ export function ListWriteoffs() {
   return (
     <>
       <PageTitle title={t.WriteoffsList} hideIcon>
-        <AddResourceButton
-          navigateTo={openMetalFlowPage(MetalFlowRoutes.writeoff_add)}
-        />
+        <AddResourceButton navigateTo={open(routeMap.metalflow.writeoff.new)} />
       </PageTitle>
 
       <Sheet sx={{ gap: 2 }}>

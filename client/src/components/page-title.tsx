@@ -1,5 +1,6 @@
 import { Box, IconButton, Stack } from '@mui/joy'
 import { SxProperty } from 'lib/constants'
+import { routeMap } from 'lib/routes'
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { P, Row } from '../lib/shortcuts'
@@ -19,7 +20,7 @@ export function PageTitle(props: Props) {
   return (
     <Stack direction="row" gap={1} pb={1}>
       {!props.hideIcon && (
-        <Link to="/help">
+        <Link to={routeMap.index}>
           <IconButton
             variant="outlined"
             sx={{

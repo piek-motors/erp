@@ -4,7 +4,7 @@ import { Box, Sheet } from '@mui/joy'
 import { PageTitle } from 'components'
 import { Table } from 'components/table.impl'
 import { Material } from 'domain-model'
-import { MetalFlowRoutes, openMetalFlowPage } from 'lib/routes'
+import { open, routeMap } from 'lib/routes'
 import { AddResourceButton, P, SendMutation } from 'lib/shortcuts'
 import { observer } from 'mobx-react-lite'
 import { useState } from 'react'
@@ -20,9 +20,7 @@ export const ListSupplies = observer(() => {
   return (
     <>
       <PageTitle title={t.SuppliesList} hideIcon>
-        <AddResourceButton
-          navigateTo={openMetalFlowPage(MetalFlowRoutes.supply_add)}
-        />
+        <AddResourceButton navigateTo={open(routeMap.metalflow.supply.new)} />
       </PageTitle>
       {supplyStore.supplies.length === 0 && <P>Нет поставок</P>}
       <Sheet sx={{ gap: 2 }}>

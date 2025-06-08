@@ -1,5 +1,5 @@
 import { Icon, UilPlusCircle } from '@iconscout/react-unicons'
-import { MetalFlowRoutes } from 'lib/routes'
+import { routeMap } from 'lib/routes'
 import { t } from './text'
 
 export type Action = {
@@ -13,41 +13,41 @@ export type Action = {
 export const actions: Action[] = [
   {
     name: t.MaterialsList,
-    href: MetalFlowRoutes.materials,
+    href: routeMap.metalflow.materials,
     endBlock: [
       {
         icon: UilPlusCircle,
-        href: MetalFlowRoutes.material_add
+        href: routeMap.metalflow.material.new
       }
     ]
   },
   {
     name: t.DetailsList,
-    href: MetalFlowRoutes.details,
+    href: routeMap.metalflow.details,
     endBlock: [
       {
         icon: UilPlusCircle,
-        href: MetalFlowRoutes.detail_add
+        href: routeMap.metalflow.detail.new
       }
     ]
   },
   {
     name: t.SuppliesList,
-    href: MetalFlowRoutes.supplies,
+    href: routeMap.metalflow.supplies,
     endBlock: [
       {
         icon: UilPlusCircle,
-        href: MetalFlowRoutes.supply_add
+        href: routeMap.metalflow.supply.new
       }
     ]
   },
   {
     name: t.WriteoffsList,
-    href: MetalFlowRoutes.writeoffs,
+    href: routeMap.metalflow.writeoffs,
     endBlock: [
       {
         icon: UilPlusCircle,
-        href: MetalFlowRoutes.writeoff_add
+        href: routeMap.metalflow.writeoff.new
       }
     ]
   }

@@ -6,7 +6,7 @@ import { TableName } from 'components/table-name'
 import { EnOrderStatus } from 'domain-model'
 import { useFilter } from 'hooks'
 import { SxProperty } from 'lib/constants'
-import { ListOrdersRoutes } from 'lib/routes'
+import { routeMap } from 'lib/routes'
 import { AddResourceButton, MyTabs } from 'lib/shortcuts'
 import { formatOnlyDate } from 'lib/utils/formatting'
 import { observer } from 'mobx-react-lite'
@@ -168,6 +168,8 @@ const Archive = observer(() => {
   )
 })
 
+const { orders } = routeMap
+
 const Wrapper = observer(
   (props: { children: React.ReactNode; sx?: SxProperty }) => {
     const navigate = useNavigate()
@@ -177,11 +179,11 @@ const Wrapper = observer(
     }
 
     const tabs = {
-      [t.preOrders]: ListOrdersRoutes.pre_orders,
-      [t.priorityList]: ListOrdersRoutes.priority_list,
-      [t.recentlyPaidOrders]: ListOrdersRoutes.recent_paid_orders,
-      [t.report]: ListOrdersRoutes.report,
-      [t.searchInArchive]: ListOrdersRoutes.search_in_archive
+      [t.preOrders]: orders.preOrders,
+      [t.priorityList]: orders.priorityList,
+      [t.recentlyPaidOrders]: orders.recentlyPaid,
+      [t.report]: orders.report,
+      [t.searchInArchive]: orders.archiveSearch
     }
     return (
       <Stack p={1}>
@@ -201,35 +203,35 @@ const Wrapper = observer(
   }
 )
 
-const routes = [
-  {
-    path: ListOrdersRoutes.pre_orders,
-    title: t.preOrders,
-    element: <RegistrationList />
-  },
-  {
-    path: ListOrdersRoutes.priority_list,
-    title: t.priorityList,
-    element: <PriorityList />
-  },
-  {
-    path: ListOrdersRoutes.recent_paid_orders,
-    title: t.recentlyPaidOrders,
-    element: <NewOrderList />
-  },
-  {
-    path: ListOrdersRoutes.report,
-    title: t.report,
-    element: <RequestReportPage />
-  },
-  {
-    path: ListOrdersRoutes.search_in_archive,
-    title: t.searchInArchive,
-    element: <Archive />
-  }
-] as const
-
-const exportRoutes = routes.map(({ path, element }) => ({
+const exportRoutes = (
+  [
+    {
+      path: orders.preOrders,
+      title: t.preOrders,
+      element: <RegistrationList />
+    },
+    {
+      path: orders.priorityList,
+      title: t.priorityList,
+      element: <PriorityList />
+    },
+    {
+      path: orders.recentlyPaid,
+      title: t.recentlyPaidOrders,
+      element: <NewOrderList />
+    },
+    {
+      path: orders.report,
+      title: t.report,
+      element: <RequestReportPage />
+    },
+    {
+      path: orders.archiveSearch,
+      title: t.searchInArchive,
+      element: <Archive />
+    }
+  ] as const
+).map(({ path, element }) => ({
   path,
   element: <Wrapper sx={{ p: 1 }}>{element}</Wrapper>
 })) as RouteConfig[]

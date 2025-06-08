@@ -2,7 +2,7 @@
 import { Box, Card, Stack } from '@mui/joy'
 import { PageTitle } from 'components'
 import { Order } from 'domain-model'
-import { AppRoutes } from 'lib/routes'
+import { openOrderDetailPage, routeMap } from 'lib/routes'
 import { AddResourceButton, LoadingHint, P, Pre } from 'lib/shortcuts'
 import { observer } from 'mobx-react-lite'
 import { useEffect } from 'react'
@@ -11,18 +11,17 @@ import { useNavigate } from 'react-router-dom'
 import { RouteConfig } from 'types/global'
 import { ColocatedStateKey, reclamationStore } from './store'
 
-export interface IReclamationItemProps {
+interface Props {
   order: Order
 }
 
-function ReclamationItem({ order }: IReclamationItemProps) {
-  const link = AppRoutes.order_detail.replace(':id', order.id.toString())
+function ReclamationItem({ order }: Props) {
   const navigate = useNavigate()
   return (
     <Card
       sx={{ my: 1, backgroundColor: order.getBackgroundColor() }}
       variant="soft"
-      onDoubleClick={() => navigate(link)}
+      onDoubleClick={() => navigate(openOrderDetailPage(order.id))}
     >
       <P color="primary">
         {order.contractor}__{order.city}
@@ -163,7 +162,7 @@ const ReclamationPage = observer(() => {
       <PageTitle title="Рекламация">
         <AddResourceButton
           onClick={() => {
-            navigate(AppRoutes.new_order, { state: { reclamation: true } })
+            navigate(routeMap.order.new, { state: { reclamation: true } })
           }}
         />
       </PageTitle>
@@ -179,6 +178,6 @@ const ReclamationPage = observer(() => {
 export default [
   {
     element: <ReclamationPage />,
-    path: AppRoutes.reclamation
+    path: routeMap.reclamation
   }
 ] as RouteConfig[]

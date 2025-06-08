@@ -3,7 +3,7 @@ import { PageTitle, Search } from 'components'
 import { HighlightText } from 'components/highlight-text'
 import { Table } from 'components/table.impl'
 import { Detail } from 'domain-model'
-import { MetalFlowRoutes, openMetalFlowPage } from 'lib/routes'
+import { open, routeMap } from 'lib/routes'
 import { AddResourceButton, P } from 'lib/shortcuts'
 import { observer } from 'mobx-react-lite'
 import { AlphabetIndex } from 'pages/metal-flow/detail/alphabet-index'
@@ -58,7 +58,7 @@ const DetailsTable = observer(() => {
         columns={columnList}
         data={detailListStore.searchResult}
         onRowClick={row =>
-          navigate(openMetalFlowPage(MetalFlowRoutes.detail_update, row.id))
+          navigate(open(routeMap.metalflow.detail.edit, row.id))
         }
       />
     </Box>
@@ -73,9 +73,7 @@ export const DetailsListPage = observer(() => {
   return (
     <>
       <PageTitle title={t.DetailsList} hideIcon>
-        <AddResourceButton
-          navigateTo={openMetalFlowPage(MetalFlowRoutes.detail_add)}
-        />
+        <AddResourceButton navigateTo={open(routeMap.metalflow.detail.new)} />
       </PageTitle>
       <AlphabetIndex />
       <Search

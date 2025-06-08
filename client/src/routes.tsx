@@ -1,8 +1,8 @@
+import { routeMap } from 'lib/routes'
 import help from 'pages/attendance/help'
 import Attendance from 'pages/attendance/main'
 import { MentionList } from 'pages/mention/mentions'
 import { RouteConfig } from '../src/types/global'
-import { AppRoutes } from './lib/routes'
 import metalflow from './pages/metal-flow/routes'
 import orders from './pages/orders/main'
 import order_detail from './pages/orders/one/main'
@@ -13,7 +13,7 @@ export const protectedRoutes: RouteConfig[] = [
   ...orders,
   {
     element: <MentionList />,
-    path: AppRoutes.mentions
+    path: routeMap.mentions
   },
   ...Attendance,
   ...order_detail,

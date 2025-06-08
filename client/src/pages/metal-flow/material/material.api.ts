@@ -5,13 +5,17 @@ import { map } from '../mappers'
 export async function updateMaterial(
   variables: gql.UpdateMaterialMutationVariables
 ) {
-  return await apolloClient.mutate<
-    gql.UpdateMaterialMutation,
-    gql.UpdateMaterialMutationVariables
-  >({
-    mutation: gql.UpdateMaterialDocument,
-    variables
-  })
+  return apolloClient
+    .mutate<gql.UpdateMaterialMutation, gql.UpdateMaterialMutationVariables>({
+      mutation: gql.UpdateMaterialDocument,
+      variables
+    })
+    .then(res => {
+      const id = res.data?.update_metal_flow_materials_by_pk?.id
+      if (id) return id
+      if (res.errors) throw new Error(JSON.stringify(res.errors))
+      throw new Error('Failed to update material')
+    })
 }
 
 export async function insertMaterial(

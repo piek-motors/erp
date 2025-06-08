@@ -4,7 +4,7 @@ import { PageTitle } from 'components'
 import { Search } from 'components/search-input'
 import { Table } from 'components/table.impl'
 import { Material } from 'domain-model'
-import { MetalFlowRoutes, openMetalFlowPage } from 'lib/routes'
+import { open, routeMap } from 'lib/routes'
 import { AddResourceButton, ErrorHint, LoadingHint, P } from 'lib/shortcuts'
 import { observer } from 'mobx-react-lite'
 import { useEffect } from 'react'
@@ -53,7 +53,7 @@ const MaterialsTable = observer(() => {
         data={materialListStore.getFilteredMaterials()}
         onRowClick={row => {
           if (!row.id) throw Error('Material id is null')
-          navigate(openMetalFlowPage(MetalFlowRoutes.material_update, row.id))
+          navigate(open(routeMap.metalflow.material.edit, row.id))
         }}
       />
     </Box>
@@ -68,9 +68,7 @@ export const MaterialsListPage = observer(() => {
   return (
     <>
       <PageTitle title={t.MaterialsList} hideIcon>
-        <AddResourceButton
-          navigateTo={openMetalFlowPage(MetalFlowRoutes.material_add)}
-        />
+        <AddResourceButton navigateTo={open(routeMap.metalflow.material.new)} />
       </PageTitle>
 
       <Search

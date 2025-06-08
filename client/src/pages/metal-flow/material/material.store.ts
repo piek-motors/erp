@@ -18,6 +18,7 @@ export class MaterialStore {
   }
 
   id?: number
+  label?: string
   unit: EnUnit = EnUnit.Kg
   shape: EnMaterialShape = EnMaterialShape.RoundBar
   shapeData: GenericShapeData = new RoundBarShapeData()
@@ -47,6 +48,7 @@ export class MaterialStore {
 
   syncState(material: Material) {
     this.id = material.id || undefined
+    this.label = material.label
     this.unit = material.unit
     this.setShape(material.shape)
     this.shapeData = MaterialShapeAbstractionLayer.exportShapeData(material)
@@ -101,7 +103,7 @@ export class MaterialStore {
   async update() {
     return this.withStateManagement(async () => {
       if (!this.id) throw new Error('Material id is not set')
-      await api.updateMaterial({
+      return api.updateMaterial({
         id: this.id,
         _set: { shape: this.shape, shape_data: this.shapeData }
       })

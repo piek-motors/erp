@@ -1,7 +1,8 @@
 /** @jsxImportSource @emotion/react */
-import { Box, Button, Divider } from '@mui/joy'
+import { Button, Stack } from '@mui/joy'
+import { PageTitle } from 'components/page-title'
 import { EnMaterialShape, UiMaterialShape } from 'domain-model'
-import { MetalFlowRoutes, openMetalFlowPage } from 'lib/routes'
+import { open, routeMap } from 'lib/routes'
 import {
   InputStack,
   MyTabs,
@@ -13,7 +14,6 @@ import {
 import { observer } from 'mobx-react-lite'
 import { JSX, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { map } from '../mappers'
 import { SmallInputForm } from '../shared'
 import { MaterialUnitSelect } from '../shared/basic'
 import { materialStore } from '../store'
@@ -49,8 +49,8 @@ export const AddMaterial = observer(() => {
           {materialStore.insertedMaterialId && (
             <TakeLookHint
               text={t.RecentlyNewMaterialAdded}
-              link={openMetalFlowPage(
-                MetalFlowRoutes.material_update,
+              link={open(
+                routeMap.metalflow.material.edit,
                 materialStore.insertedMaterialId
               )}
             />
@@ -77,64 +77,47 @@ export const UpdateMaterial = observer(() => {
   }, [])
 
   return (
-    <SmallInputForm
-      header={t.EditMaterial}
-      name={
-        map.material.convertable(materialStore.material) ? (
-          <>
-            <Box>
-              <P level="h4">
-                <P>{materialStore.material?.label}</P>
-              </P>
-              {t.Unit} {materialStore.unit}
-            </Box>
-            <UpdateMaterialUpdateStockLinks id={id} />
-          </>
-        ) : (
-          <></>
-        )
-      }
-      last={<SendMutation onClick={() => materialStore.update()} />}
-    >
+    <Stack gap={1} p={1}>
+      <PageTitle title="Изменить материал" hideIcon />
+      <Row>
+        <P level="h4">{materialStore.label}</P>
+        <WareHouseOperationLinks id={id} />
+      </Row>
       <InputStack>{tabs[materialStore.shape]}</InputStack>
-    </SmallInputForm>
+      <SendMutation onClick={() => materialStore.update()} />
+    </Stack>
   )
 })
 
-function UpdateMaterialUpdateStockLinks(props: { id: number }) {
+function WareHouseOperationLinks(props: { id: number }) {
   const navigate = useNavigate()
   const { id } = props
-
   return (
-    <Row mt={2}>
-      <Divider />
+    <>
       <Button
-        variant="outlined"
-        color="warning"
+        variant="soft"
         onClick={() =>
           navigate(
-            openMetalFlowPage(MetalFlowRoutes.supply_add, id, {
+            open(routeMap.metalflow.supply.new, id, {
               material_id: id
             })
           )
         }
       >
-        {t.AddSupply}
+        Приход
       </Button>
       <Button
-        variant="outlined"
-        color="warning"
+        variant="soft"
         onClick={() =>
           navigate(
-            openMetalFlowPage(MetalFlowRoutes.writeoff_add, id, {
+            open(routeMap.metalflow.writeoff.new, id, {
               material_id: id
             })
           )
         }
       >
-        {t.AddWriteoff}
+        Расход
       </Button>
-      <Divider />
-    </Row>
+    </>
   )
 }

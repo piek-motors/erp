@@ -1,7 +1,7 @@
-import { Navigate, Route, Routes } from 'react-router-dom'
+import { routeMap } from 'lib/routes'
 import { LoginForm } from 'pages/login'
+import { Navigate, Route, Routes } from 'react-router-dom'
 import { protectedRoutes } from 'routes'
-import { AppRoutes } from '../routes'
 import RequireAuth from './PrivateRoute'
 
 export function AppRouter() {
@@ -9,8 +9,7 @@ export function AppRouter() {
     <Routes>
       {/* Public route for login */}
       <Route path="/login" element={<LoginForm />} />
-      // Default route: redirects to orders/production
-      <Route path="/" element={<Navigate to={AppRoutes.help} />} />
+      <Route path="/help" element={<Navigate to={routeMap.index} />} />
       {/* Protected routes requiring authentication */}
       {protectedRoutes.map(route => (
         <Route

@@ -1,53 +1,65 @@
-// Define route paths using an enum for consistency
-export enum AppRoutes {
-  help = '/help',
-  mentions = '/mentions',
-  order_detail = '/order/:id',
-  new_order = '/orders/new',
-  settings = '/settings',
-  reclamation = '/reclamation',
-  attendance = '/attendance'
-}
+export const routeMap = {
+  index: '/',
+  mentions: '/mentions',
+  settings: '/settings',
+  reclamation: '/reclamation',
+  attendance: '/attendance',
 
-// Helper function to generate order detail URL
-export function openOrderDetailPage(orderId: string | number) {
-  return `/order/${orderId}`
-}
+  order: {
+    new: '/orders/new',
+    view: '/orders/:id'
+  },
 
-export enum MetalFlowRoutes {
-  root = `/metalflow/`,
-  nav = `/metalflow/nav`,
-  materials = `materials`,
-  material_add = `material/add`,
-  material_update = `material/update`,
-  details = `details`,
-  detail_add = `detail/add`,
-  detail_update = `details/update/`,
-  supplies = `supplies`,
-  supply_add = `supply/add`,
-  writeoffs = `writeoffs`,
-  writeoff_add = `writeoff/add`
-}
+  orders: {
+    preOrders: '/orders/pending',
+    priorityList: '/orders/priority',
+    recentlyPaid: '/orders/recently-paid',
+    report: '/orders/report',
+    archiveSearch: '/orders/archive'
+  },
 
-export function openMetalFlowPage(
-  page: MetalFlowRoutes,
+  metalflow: {
+    index: '/metalflow',
+
+    materials: '/metalflow/materials',
+    material: {
+      new: '/metalflow/materials/new',
+      edit: '/metalflow/materials/:id/edit'
+    },
+
+    details: '/metalflow/details',
+    detail: {
+      new: '/metalflow/details/new',
+      edit: '/metalflow/details/:id/edit'
+    },
+
+    supplies: '/metalflow/supplies',
+    supply: {
+      new: '/metalflow/supplies/new'
+    },
+
+    writeoffs: '/metalflow/writeoffs',
+    writeoff: {
+      new: '/metalflow/writeoffs/new'
+    }
+  }
+} as const
+
+export function open(
+  page: string,
   id?: string | number,
   params: Record<string, any> = {}
 ) {
-  let s = `?path=${page}`
-  if (id) {
-    s = s.concat(`&id=${id}`)
+  let path = page
+
+  if (id && path.includes(':id')) {
+    path = path.replace(':id', String(id))
   }
-  if (Object.keys(params).length > 0) {
-    s = s.concat(`&${new URLSearchParams(params).toString()}`)
-  }
-  return s
+
+  const query = new URLSearchParams(params).toString()
+  return query ? `${path}?${query}` : path
 }
 
-export enum ListOrdersRoutes {
-  pre_orders = '/orders/pending',
-  priority_list = '/orders/priority',
-  recent_paid_orders = '/orders/recently-paid',
-  report = '/orders/report',
-  search_in_archive = '/orders/archive'
+export function openOrderDetailPage(orderId: string | number) {
+  return `/orders/${orderId}`
 }

@@ -1,7 +1,7 @@
 import { Container, Sheet, Stack } from '@mui/joy'
 import { PageTitle } from 'components/page-title'
 import { EnUnit } from 'domain-model'
-import { MetalFlowRoutes, openMetalFlowPage } from 'lib/routes'
+import { open, routeMap } from 'lib/routes'
 import {
   DeleteResourceButton,
   Inp,
@@ -104,7 +104,7 @@ export const UpdateDetail = observer(() => {
           <DeleteResourceButton
             onClick={() =>
               detailStore.delete().then(() => {
-                navigate(openMetalFlowPage(MetalFlowRoutes.details))
+                navigate(open(routeMap.metalflow.details))
               })
             }
           />
@@ -127,7 +127,7 @@ export const AddDetail = observer(() => {
               additionals={(err, res) => (
                 <TakeLookHint
                   text={t.RecentlyNewDetailAdded}
-                  link={openMetalFlowPage(MetalFlowRoutes.detail_update, res)}
+                  link={open(routeMap.metalflow.detail.edit, res)}
                 />
               )}
             />

@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { Button, Container } from '@mui/joy'
 import { useAppContext } from 'hooks'
-import { AppRoutes } from 'lib/routes'
+import { routeMap } from 'lib/routes'
 import { P } from 'lib/shortcuts'
 import { useNavigate } from 'react-router-dom'
 import { RouteConfig } from 'types/global'
@@ -37,6 +37,6 @@ function Settings() {
 export default [
   {
     element: <Settings />,
-    path: AppRoutes.settings
+    path: routeMap.settings
   }
 ] as RouteConfig[]

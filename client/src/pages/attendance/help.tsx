@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { Container, IconButton, Stack } from '@mui/joy'
-import { AppRoutes, ListOrdersRoutes } from 'lib/routes'
+import { routeMap } from 'lib/routes'
 import { P, Row, UseIcon } from 'lib/shortcuts'
 import { useNavigate } from 'react-router-dom'
 import { RouteConfig } from 'types/global'
@@ -13,32 +13,31 @@ import {
   UilSetting,
   UilWrench
 } from '@iconscout/react-unicons'
-import { MetalFlowRoutes } from 'lib/routes'
 
 export const links = [
   {
-    href: ListOrdersRoutes.priority_list,
+    href: routeMap.orders.priorityList,
     icon: UilListOl,
     name: 'Очередность выполнения'
   },
-  { href: AppRoutes.reclamation, icon: UilWrench, name: 'Рекламации' },
+  { href: routeMap.reclamation, icon: UilWrench, name: 'Рекламации' },
   {
-    href: MetalFlowRoutes.root,
+    href: routeMap.metalflow.index,
     icon: UilCalculatorAlt,
     name: 'Материаловедение'
   },
   {
-    href: AppRoutes.attendance,
+    href: routeMap.attendance,
     icon: UilConstructor,
     name: 'Рабочее время'
   },
   {
-    href: AppRoutes.mentions,
+    href: routeMap.mentions,
     icon: UilBell,
     name: 'Упоминания'
   },
   {
-    href: AppRoutes.settings,
+    href: routeMap.settings,
     icon: UilSetting,
     name: 'Настройки'
   }
@@ -69,4 +68,4 @@ function Help() {
   )
 }
 
-export default [{ element: <Help />, path: AppRoutes.help }] as RouteConfig[]
+export default [{ element: <Help />, path: routeMap.index }] as RouteConfig[]
