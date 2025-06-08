@@ -1,11 +1,11 @@
 /** @jsxImportSource @emotion/react */
 import styled from '@emotion/styled'
 import { UilArrowRight } from '@iconscout/react-unicons'
-import { Box, Button, Container, Sheet, Stack, Typography } from '@mui/joy'
+import { Box, Button, Container, Sheet, Stack } from '@mui/joy'
 import { PageTitle } from 'components/page-title'
 import { Context } from 'index'
 import { openOrderDetailPage } from 'lib/routes'
-import { Row, UseIcon } from 'lib/shortcuts'
+import { P, Row, UseIcon } from 'lib/shortcuts'
 import moment from 'moment'
 import { useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -48,19 +48,19 @@ function Mention({ data, readed }: INotificationProps) {
       >
         <Box sx={{ display: 'grid' }}>
           <Stack direction={'row'} gap={1}>
-            <Typography fontWeight={500} color="neutral">
+            <P fontWeight={500} color="neutral">
               {data.Comment.User.FirstName} {data.Comment.User.LastName}
-            </Typography>
-            <Typography>
+            </P>
+            <P>
               упомянул вас{' '}
               {moment(data.Comment.Timestamp).format('DD MMM H:mm')}{' '}
-            </Typography>
+            </P>
           </Stack>
 
           <Row>
-            <Typography color="primary" fontWeight={600}>
+            <P color="primary" fontWeight={600}>
               {data.Order.Entity}__{data.Order.City}
-            </Typography>
+            </P>
 
             <Box>
               <Button
@@ -69,9 +69,7 @@ function Mention({ data, readed }: INotificationProps) {
                 color="neutral"
               >
                 <Row>
-                  <Typography sx={{ whiteSpace: 'nowrap' }}>
-                    К заказу
-                  </Typography>
+                  <P sx={{ whiteSpace: 'nowrap' }}>К заказу</P>
                   <UseIcon icon={UilArrowRight} />
                 </Row>
               </Button>
@@ -118,7 +116,7 @@ export function MentionList() {
         {/* unreaderd notifs */}
         {notifications.unviewed.length ? (
           <Box>
-            <Typography level="h2">Непросмотренные </Typography>
+            <P level="h2">Непросмотренные </P>
             {!loading &&
               notifications?.unviewed.map((e, index) => (
                 <Mention key={index} data={e} />

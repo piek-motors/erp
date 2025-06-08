@@ -1,7 +1,7 @@
 import { UilFile, UilFileAlt, UilImage } from '@iconscout/react-unicons'
-import { Box, Button, Stack, Typography } from '@mui/joy'
+import { Box, Button, Stack } from '@mui/joy'
 import { OrderAttachment } from 'domain-model'
-import { DeleteResourceButton, Row, text, UseIcon } from 'lib/shortcuts'
+import { DeleteResourceButton, P, Row, text, UseIcon } from 'lib/shortcuts'
 import { observer } from 'mobx-react-lite'
 import { useEffect } from 'react'
 import { orderStore } from '../stores/order.store'
@@ -30,10 +30,10 @@ const File = observer((props: { file: OrderAttachment }) => {
             size="sm"
             startDecorator={getformatAssociatedIcon(file.name)}
           >
-            <Typography level="body-sm">{file.name}</Typography>
+            <P level="body-sm">{file.name}</P>
           </Button>
           {attachmentsStore.uploading && (
-            <Typography level="body-sm">Файл выгружается...</Typography>
+            <P level="body-sm">Файл выгружается...</P>
           )}
         </a>
       </Box>
@@ -53,15 +53,15 @@ export const Attachments = observer((props: { orderId: number }) => {
 
   if (!attachmentsStore.files?.length) {
     return (
-      <Typography p={1} color="neutral">
+      <P p={1} color="neutral">
         Нет документов
-      </Typography>
+      </P>
     )
   }
   return (
     <>
       <Row gap={2}>
-        <Typography>Документы [{attachmentsStore.files.length}]</Typography>
+        <P>Документы [{attachmentsStore.files.length}]</P>
       </Row>
       <Stack gap={1} py={2}>
         {attachmentsStore.files.map(file => (
@@ -71,7 +71,7 @@ export const Attachments = observer((props: { orderId: number }) => {
         {Boolean(attachmentsStore.uploadingFiles.length) &&
           attachmentsStore.uploadingFiles.map(file => (
             <Box>
-              <Typography level="body-sm">{text.loading}</Typography>
+              <P level="body-sm">{text.loading}</P>
               <File
                 file={
                   new OrderAttachment({

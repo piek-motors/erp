@@ -1,8 +1,8 @@
-import { Stack, Typography } from '@mui/joy'
+import { Stack } from '@mui/joy'
 import { Table } from 'components/table.impl'
 import { Order } from 'domain-model'
 import { openOrderDetailPage } from 'lib/routes'
-import { Pre } from 'lib/shortcuts'
+import { P, Pre } from 'lib/shortcuts'
 import { observer } from 'mobx-react-lite'
 import { useMemo } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
@@ -22,7 +22,7 @@ export const columnsList: Column<Order>[] = [
       if (o.items.length === 0)
         return (
           <Link to={openOrderDetailPage(o.id)}>
-            <Typography>{t.noContent}</Typography>
+            <P>{t.noContent}</P>
           </Link>
         )
       else {

@@ -1,15 +1,15 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import { JSX } from '@emotion/react/jsx-runtime'
-import * as joy from '@mui/joy'
+import { Box, Button, Dropdown, Menu, MenuButton, Stack, Table } from '@mui/joy'
 import { DateInput } from 'components/date.input'
 import { MoneyInput } from 'components/money-input'
 import { Order, Roles } from 'domain-model'
 import { useAppContext } from 'hooks'
-import { DeleteResourceButton, Row } from 'lib/shortcuts'
-import * as formatter from 'lib/utils/formatting'
+import { DeleteResourceButton, P, Row } from 'lib/shortcuts'
+import { formatMoney, formatOnlyDate, percentage } from 'lib/utils/formatting'
 import { observer } from 'mobx-react-lite'
-import * as React from 'react'
+import { useState } from 'react'
 import { GetOrderPaymentsQuery } from 'types/graphql-shema'
 import { orderStore, orderStore as os } from '../stores/order.store'
 
@@ -29,22 +29,20 @@ export const Paymnets = observer(({ order }: { order: Order }) => {
       totalAmount={order.totalAmount}
       loading={os.payments.loading}
       footerComponent={
-        <joy.Box>
-          {isHaveFullRight && <NewPaymentInput order={order} />}
-        </joy.Box>
+        <Box>{isHaveFullRight && <NewPaymentInput order={order} />}</Box>
       }
     />
   ) : (
-    <joy.Typography level="body-xs" color="danger">
+    <P level="body-xs" color="danger">
       Не задана сумма заказа
-    </joy.Typography>
+    </P>
   )
 
   return (
-    <joy.Box my={1}>
-      <joy.Typography>Платежи</joy.Typography>
+    <Box my={1}>
+      <P>Платежи</P>
       {paymentHistoryContent}
-    </joy.Box>
+    </Box>
   )
 })
 
@@ -62,15 +60,15 @@ const PaymentsTable = observer(
       return acc + payment.amount
     }, 0)
 
-    const totalPaidPercent = formatter.percentage(totalPaid, totalAmount)
+    const totalPaidPercent = percentage(totalPaid, totalAmount)
 
     if (props.loading) {
-      return <joy.Typography>Загрузка платежей...</joy.Typography>
+      return <P>Загрузка платежей...</P>
     }
 
     return (
-      <joy.Box>
-        <joy.Table
+      <Box>
+        <Table
           css={css`
             td {
               padding: 5px 10px;
@@ -87,9 +85,9 @@ const PaymentsTable = observer(
           <tbody>
             {props.data.map(payment => (
               <tr key={payment.id}>
-                <td>{formatter.percentage(payment.amount, totalAmount)}</td>
-                <td>{formatter.formatMoney(payment.amount)}</td>
-                <td>{formatter.formatOnlyDate(payment.date)}</td>
+                <td>{percentage(payment.amount, totalAmount)}</td>
+                <td>{formatMoney(payment.amount)}</td>
+                <td>{formatOnlyDate(payment.date)}</td>
                 {orderStore.editMode && (
                   <td>
                     <DeleteResourceButton
@@ -103,12 +101,12 @@ const PaymentsTable = observer(
           <tfoot>
             <tr>
               <td> {totalPaidPercent}</td>
-              <td>{!!totalPaid && formatter.formatMoney(totalPaid)}</td>
+              <td>{!!totalPaid && formatMoney(totalPaid)}</td>
               {props.footerComponent && <td>{props.footerComponent}</td>}
             </tr>
           </tfoot>
-        </joy.Table>
-      </joy.Box>
+        </Table>
+      </Box>
     )
   }
 )
@@ -118,7 +116,7 @@ interface NewPaymentInputProps {
 }
 
 const NewPaymentInput = observer((props: NewPaymentInputProps) => {
-  const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null)
+  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
 
   const handleClose = () => {
     setAnchorEl(null)
@@ -142,7 +140,7 @@ const NewPaymentInput = observer((props: NewPaymentInputProps) => {
   }
 
   return (
-    <joy.Dropdown
+    <Dropdown
       open={open}
       onOpenChange={(e, open) => {
         if (open === false) {
@@ -154,14 +152,10 @@ const NewPaymentInput = observer((props: NewPaymentInputProps) => {
         }
       }}
     >
-      <joy.MenuButton
-        variant="outlined"
-        size="sm"
-        disabled={os.payments.loading}
-      >
+      <MenuButton variant="outlined" size="sm" disabled={os.payments.loading}>
         Добавить
-      </joy.MenuButton>
-      <joy.Menu
+      </MenuButton>
+      <Menu
         open={open}
         anchorEl={anchorEl}
         onClose={handleClose}
@@ -171,7 +165,7 @@ const NewPaymentInput = observer((props: NewPaymentInputProps) => {
           }
         }}
       >
-        <joy.Stack gap={1} p={1}>
+        <Stack gap={1} p={1}>
           <DateInput
             label="Дата платежа"
             value={os.payments.date || ''}
@@ -184,20 +178,18 @@ const NewPaymentInput = observer((props: NewPaymentInputProps) => {
               value={os.payments.amount}
               autoFocus
             />
-            <joy.Typography>
-              из {formatter.formatMoney(props.order.totalAmount)}
-            </joy.Typography>
+            <P>из {formatMoney(props.order.totalAmount)}</P>
           </Row>
           {os.payments.error && (
-            <joy.Typography color="danger" level="body-sm">
+            <P color="danger" level="body-sm">
               {os.payments.error.message}
-            </joy.Typography>
+            </P>
           )}
-          <joy.Button onClick={handleSave} loading={os.payments.loading}>
+          <Button onClick={handleSave} loading={os.payments.loading}>
             Сохранить
-          </joy.Button>
-        </joy.Stack>
-      </joy.Menu>
-    </joy.Dropdown>
+          </Button>
+        </Stack>
+      </Menu>
+    </Dropdown>
   )
 })

@@ -1,5 +1,6 @@
-import { Box, Divider, Grid, Stack, Typography } from '@mui/joy'
+import { Box, Divider, Grid, Stack } from '@mui/joy'
 import { PrintOnly } from 'components/conditional-display'
+import { P } from 'lib/shortcuts'
 import { formatOnlyDate } from 'lib/utils/formatting'
 import { observer } from 'mobx-react-lite'
 import { Attachments } from 'pages/orders/one/attachments/ui'
@@ -14,9 +15,9 @@ export const PrintLayout = observer(() => {
     <PrintOnly>
       <Stack gap={1}>
         <Box sx={{ mb: 3 }}>
-          <Typography level="h3" sx={{ mb: 1 }}>
+          <P level="h3" sx={{ mb: 1 }}>
             {order.contractor} - {order.city}
-          </Typography>
+          </P>
         </Box>
 
         <Box sx={{ mb: 4 }}>
@@ -35,9 +36,9 @@ export const PrintLayout = observer(() => {
         </Grid>
 
         <Box sx={{ mt: 4, mb: 2 }}>
-          <Typography level="body-sm" sx={{ fontStyle: 'italic' }}>
+          <P level="body-sm" sx={{ fontStyle: 'italic' }}>
             Распечатано {formatOnlyDate(new Date().toISOString())}
-          </Typography>
+          </P>
         </Box>
       </Stack>
     </PrintOnly>

@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
-import { Container, IconButton, Stack, Typography } from '@mui/joy'
+import { Container, IconButton, Stack } from '@mui/joy'
 import { AppRoutes, ListOrdersRoutes } from 'lib/routes'
-import { Row, UseIcon } from 'lib/shortcuts'
+import { P, Row, UseIcon } from 'lib/shortcuts'
 import { useNavigate } from 'react-router-dom'
 import { RouteConfig } from 'types/global'
 
@@ -59,7 +59,7 @@ function Help() {
             >
               <Row gap={2}>
                 <UseIcon icon={each.icon} />
-                <Typography>{each.name}</Typography>
+                <P>{each.name}</P>
               </Row>
             </IconButton>
           </Stack>

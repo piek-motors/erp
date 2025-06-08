@@ -1,11 +1,11 @@
 /** @jsxImportSource @emotion/react */
-import { Box, Typography } from '@mui/joy'
+import { Box } from '@mui/joy'
 import { PageTitle } from 'components'
 import { Search } from 'components/search-input'
 import { Table } from 'components/table.impl'
 import { Material } from 'domain-model'
 import { MetalFlowRoutes, openMetalFlowPage } from 'lib/routes'
-import { AddResourceButton, ErrorHint, LoadingHint } from 'lib/shortcuts'
+import { AddResourceButton, ErrorHint, LoadingHint, P } from 'lib/shortcuts'
 import { observer } from 'mobx-react-lite'
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -30,7 +30,7 @@ const columnList: Column<Material>[] = [
     Header: 'Наименование',
     id: 'name',
     accessor: m => {
-      return <Typography>{m.label}</Typography>
+      return <P>{m.label}</P>
     },
     width: '95%'
   },

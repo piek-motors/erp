@@ -1,5 +1,5 @@
-import * as joy from '@mui/joy'
-import { CancelButton, Inp, MultilineInput, Row } from 'lib/shortcuts'
+import { Box, Button, Modal, ModalClose, ModalDialog } from '@mui/joy'
+import { CancelButton, Inp, MultilineInput, P, Row } from 'lib/shortcuts'
 import { observer } from 'mobx-react-lite'
 import { useEffect } from 'react'
 import { orderStore } from '../stores/order.store'
@@ -12,20 +12,20 @@ export const InputPositionModal = observer(() => {
   }, [orderStore.positions.editedOrderItem])
 
   return (
-    <joy.Modal
+    <Modal
       open={orderStore.positions.isOpen}
       onClose={() => {
         orderStore.positions.closeDialog()
       }}
     >
-      <joy.ModalDialog minWidth={600}>
-        <joy.ModalClose />
-        <joy.Typography level="h4" pb={2}>
+      <ModalDialog minWidth={600}>
+        <ModalClose />
+        <P level="h4" pb={2}>
           {orderStore.positions.editedOrderItem ? 'Изменить' : 'Добавить'}{' '}
           позицию
-        </joy.Typography>
+        </P>
 
-        <joy.Box display="flex" flexDirection="column">
+        <Box display="flex" flexDirection="column">
           <Inp
             fullWidth
             label="Наименование"
@@ -43,21 +43,21 @@ export const InputPositionModal = observer(() => {
             value={orderStore.positions.quantity?.toString() ?? ''}
             onChange={v => orderStore.positions.setQuantity(v)}
           />
-        </joy.Box>
+        </Box>
         <Row gap={2}>
           {!orderStore.positions.editedOrderItem?.id ? (
-            <joy.Button
+            <Button
               onClick={() => orderStore.positions.save(orderStore.order!.id)}
               disabled={!orderStore.positions.canSave}
             >
               Добавить
-            </joy.Button>
+            </Button>
           ) : (
-            <joy.Button
+            <Button
               onClick={() => orderStore.positions.save(orderStore.order!.id)}
             >
               Сохранить
-            </joy.Button>
+            </Button>
           )}
           <CancelButton
             onClick={() => {
@@ -65,7 +65,7 @@ export const InputPositionModal = observer(() => {
             }}
           />
         </Row>
-      </joy.ModalDialog>
-    </joy.Modal>
+      </ModalDialog>
+    </Modal>
   )
 })

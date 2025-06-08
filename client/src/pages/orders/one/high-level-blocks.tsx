@@ -1,11 +1,11 @@
 /** @jsxImportSource @emotion/react */
-import { Box, Divider, Stack, Typography } from '@mui/joy'
+import { Box, Divider, Stack } from '@mui/joy'
 import Grid from '@mui/joy/Grid'
 import { PageTitle } from 'components'
 import { InputFiles } from 'components/input-files'
 import { User } from 'domain-model'
 import { useAppContext } from 'hooks'
-import { bgcolors, Chip, Row, text } from 'lib/shortcuts'
+import { bgcolors, Chip, P, Row, text } from 'lib/shortcuts'
 import { orderStatus } from 'lib/utils/orderColorIndication'
 import { observer } from 'mobx-react-lite'
 import { Attachments } from 'pages/orders/one/attachments/ui'
@@ -30,9 +30,9 @@ export const OrderMetadata = observer(() => {
   }
   return (
     <Row gap={1}>
-      <Typography level="h4">
+      <P level="h4">
         {orderStore.statment?.contractor} __ {orderStore.statment?.city}
-      </Typography>
+      </P>
       <Chip
         chipProps={{
           color: 'primary'

@@ -1,5 +1,5 @@
-import { Typography } from '@mui/joy'
+import { P } from 'lib/shortcuts'
 
 export function TableName({ name }: { name: string }) {
-  return <Typography>{name}</Typography>
+  return <P>{name}</P>
 }

@@ -1,10 +1,10 @@
-import { Box, Stack, Typography } from '@mui/joy'
+import { Box, Stack } from '@mui/joy'
 import { PageTitle, Search } from 'components'
 import { HighlightText } from 'components/highlight-text'
 import { Table } from 'components/table.impl'
 import { Detail } from 'domain-model'
 import { MetalFlowRoutes, openMetalFlowPage } from 'lib/routes'
-import { AddResourceButton } from 'lib/shortcuts'
+import { AddResourceButton, P } from 'lib/shortcuts'
 import { observer } from 'mobx-react-lite'
 import { AlphabetIndex } from 'pages/metal-flow/detail/alphabet-index'
 import { useEffect } from 'react'
@@ -87,9 +87,9 @@ export const DetailsListPage = observer(() => {
       {detailListStore.searchResult.length > 0 ? (
         <DetailsTable />
       ) : (
-        <Typography textAlign={'center'} level="body-sm">
+        <P textAlign={'center'} level="body-sm">
           Ничего не найдено
-        </Typography>
+        </P>
       )}
     </>
   )

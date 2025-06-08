@@ -1,5 +1,5 @@
-import { Typography } from '@mui/joy'
 import { EnWriteoffType, uiUnit, uiWriteoffReason } from 'domain-model'
+import { P } from 'lib/shortcuts'
 import { formatDateWithTime } from 'lib/utils/formatting'
 import { Column } from 'react-table'
 import { GetWrietOffsQuery } from 'types/graphql-shema'
@@ -23,7 +23,7 @@ export function getColumns(props: {
       id: 'name',
       accessor: data => {
         const ma = map.material.fromDto(data.material)
-        return <Typography>{ma.label}</Typography>
+        return <P>{ma.label}</P>
       }
     },
     {

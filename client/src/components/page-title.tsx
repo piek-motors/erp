@@ -1,8 +1,8 @@
-import { Box, IconButton, Stack, Typography } from '@mui/joy'
+import { Box, IconButton, Stack } from '@mui/joy'
 import { SxProperty } from 'lib/constants'
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { Row } from '../lib/shortcuts'
+import { P, Row } from '../lib/shortcuts'
 
 export interface Props {
   title: string
@@ -32,16 +32,10 @@ export function PageTitle(props: Props) {
       )}
 
       <Row gap={2} sx={props.sx}>
-        <Typography
-          color="primary"
-          fontWeight={600}
-          sx={{ whiteSpace: 'nowrap' }}
-        >
+        <P color="primary" fontWeight={600} sx={{ whiteSpace: 'nowrap' }}>
           {props.title}
-        </Typography>
-        {props.subTitle && (
-          <Typography level="body-md">{props.subTitle}</Typography>
-        )}
+        </P>
+        {props.subTitle && <P level="body-md">{props.subTitle}</P>}
       </Row>
       {props.spaceBetween && <Box sx={{ width: '100%' }} />}
       <Box>{props.children}</Box>

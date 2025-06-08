@@ -1,5 +1,6 @@
-import { Box, Typography } from '@mui/joy'
+import { Box } from '@mui/joy'
 import { Material } from 'domain-model'
+import { P } from 'lib/shortcuts'
 import { useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { useGetMaterialsQuery } from 'types/graphql-shema'
@@ -34,11 +35,11 @@ export function MaterialSelect(props: {
   if (materialid) {
     return (
       <Box>
-        <Typography>{t.Material}:</Typography>
-        <Typography>{props.material?.label}</Typography>
-        <Typography>
+        <P>{t.Material}:</P>
+        <P>{props.material?.label}</P>
+        <P>
           {t.Remaining}: {stockStore.getPrecise(material)}
-        </Typography>
+        </P>
       </Box>
     )
   }

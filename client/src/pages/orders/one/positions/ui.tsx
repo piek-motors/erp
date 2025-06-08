@@ -1,6 +1,11 @@
 /** @jsxImportSource @emotion/react */
-import { Box, Stack, Typography } from '@mui/joy'
-import { DeleteResourceButton, Row, UpdateResourceButton } from 'lib/shortcuts'
+import { Box, Stack } from '@mui/joy'
+import {
+  DeleteResourceButton,
+  P,
+  Row,
+  UpdateResourceButton
+} from 'lib/shortcuts'
 import { observer } from 'mobx-react-lite'
 import { orderPositionsItemStyle } from '../prints.styles'
 import { orderStore } from '../stores/order.store'
@@ -19,18 +24,18 @@ export const PositionsList = observer(() => {
       {orderStore.positions.items.map((position, index) => (
         <Box key={index}>
           <Row justifyContent="space-between" css={orderPositionsItemStyle}>
-            <Typography fontFamily={'monospace'} fontSize={'1.2rem'}>
+            <P fontFamily={'monospace'} fontSize={'1.2rem'}>
               {position.name}
-            </Typography>
+            </P>
 
             <Row>
-              <Typography
+              <P
                 fontFamily={'monospace'}
                 fontSize={'1.2rem'}
                 sx={{ whiteSpace: 'nowrap' }}
               >
                 {position.quantity} шт
-              </Typography>
+              </P>
               {orderStore.editMode && (
                 <Row gap={1}>
                   <UpdateResourceButton
@@ -48,7 +53,7 @@ export const PositionsList = observer(() => {
               )}
             </Row>
           </Row>
-          <Typography>{position.description}</Typography>
+          <P>{position.description}</P>
         </Box>
       ))}
     </Stack>

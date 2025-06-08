@@ -1,8 +1,9 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import { UilArrowDown, UilArrowUp } from '@iconscout/react-unicons'
-import { Table as MuiTable, Sheet, Stack, Typography } from '@mui/joy'
+import { Table as MuiTable, Sheet, Stack } from '@mui/joy'
 import { SxProps } from '@mui/joy/styles/types'
+import { P } from 'lib/shortcuts'
 import { Row, TableOptions, useSortBy, useTable } from 'react-table'
 
 type Props<T extends object> = TableOptions<T> & {
@@ -49,7 +50,7 @@ export function Table<T extends object>(props: Props<T>) {
                     key={i}
                   >
                     <Stack direction={'row'} alignItems={'center'}>
-                      <Typography>{column.render('Header')}</Typography>
+                      <P>{column.render('Header')}</P>
                       <SortingState
                         isSorted={col.isSorted}
                         isSortedDesc={col.isSortedDesc}

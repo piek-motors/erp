@@ -1,9 +1,9 @@
 /** @jsxImportSource @emotion/react */
-import { Button, Checkbox, Input, Stack, Typography } from '@mui/joy'
+import { Button, Checkbox, Input, Stack } from '@mui/joy'
 import { monthAdd } from 'lib/date'
+import { P, Row } from 'lib/shortcuts'
 import { ReactNode } from 'react'
 import { useUpdateTimeDeductionMutation } from 'types/graphql-shema'
-import { Row } from '../../lib/shortcuts'
 import { State } from './main'
 
 const months = [
@@ -88,7 +88,7 @@ export default function ReportConfigurator({
       </Row>
 
       <Row alignItems={'center'} gap={1}>
-        <Typography>Норма вычета времени</Typography>
+        <P>Норма вычета времени</P>
         <Row gap={1}>
           <Input
             size="sm"
@@ -97,7 +97,7 @@ export default function ReportConfigurator({
             value={state.timeRetention ?? ''}
             onChange={handleTimeRetentionInput}
           />
-          <Typography>мин</Typography>
+          <P>мин</P>
         </Row>
 
         <Button onClick={handleOnRetentionSave} size="sm">

@@ -1,4 +1,5 @@
-import { Box, Button, Modal, ModalDialog, Sheet, Typography } from '@mui/joy'
+import { Box, Button, Modal, ModalDialog, Sheet } from '@mui/joy'
+import { P } from 'lib/shortcuts'
 import { ReactNode, useState } from 'react'
 // extrnalСomponent is the whichever component which will be go out
 // like as icon or textButton or something else
@@ -36,11 +37,11 @@ export function ConfirmDialog({
         <ModalDialog>
           <Sheet>
             {title && (
-              <Typography level="h4" pb={2}>
+              <P level="h4" pb={2}>
                 {title}
-              </Typography>
+              </P>
             )}
-            {body && <Typography>{body}</Typography>}
+            {body && <P>{body}</P>}
             <Box mt={2}>
               <Button
                 onClick={() => handleClose()}

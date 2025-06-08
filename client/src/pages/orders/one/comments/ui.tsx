@@ -1,8 +1,19 @@
 import { UilListUl, UilMessage, UilUser } from '@iconscout/react-unicons'
-import * as joy from '@mui/joy'
+import {
+  Box,
+  Button,
+  Card,
+  Divider,
+  IconButton,
+  Menu,
+  MenuItem,
+  Stack,
+  Textarea,
+  Tooltip
+} from '@mui/joy'
 import { User } from 'domain-model'
 import { apolloClient } from 'lib/api'
-import { DeleteResourceButton, Row, text, UseIcon } from 'lib/shortcuts'
+import { DeleteResourceButton, P, Row, text, UseIcon } from 'lib/shortcuts'
 import { observer } from 'mobx-react-lite'
 import moment from 'moment'
 import React, { useRef, useState } from 'react'
@@ -95,8 +106,8 @@ const InputForm = observer(({ insertComment, inputRef }: InputFormProps) => {
         users={users?.users || []}
         inputRef={inputRef}
       />
-      <joy.Stack flexGrow={1}>
-        <joy.Textarea
+      <Stack flexGrow={1}>
+        <Textarea
           size="sm"
           variant="soft"
           color="neutral"
@@ -104,8 +115,8 @@ const InputForm = observer(({ insertComment, inputRef }: InputFormProps) => {
           value={value}
           placeholder="Комментарий к заказу"
         />
-      </joy.Stack>
-      <joy.Box>
+      </Stack>
+      <Box>
         <InsertCommentButton
           onClick={() => {
             const temp = value
@@ -113,18 +124,18 @@ const InputForm = observer(({ insertComment, inputRef }: InputFormProps) => {
             insertComment(temp)
           }}
         />
-      </joy.Box>
+      </Box>
     </Row>
   )
 })
 
 function InsertCommentButton(props: { onClick: () => void }) {
   return (
-    <joy.Tooltip title="Прикрепить комментарий">
-      <joy.IconButton onClick={props.onClick}>
+    <Tooltip title="Прикрепить комментарий">
+      <IconButton onClick={props.onClick}>
         <UseIcon icon={UilMessage} />
-      </joy.IconButton>
-    </joy.Tooltip>
+      </IconButton>
+    </Tooltip>
   )
 }
 
@@ -156,14 +167,14 @@ export default function СommandListPopover({
   }
 
   return (
-    <joy.Menu
+    <Menu
       anchorEl={anchorEl}
       open={open}
       onClose={handleClose}
       placement="bottom-start"
       sx={{ p: 1 }}
     >
-      <joy.MenuItem
+      <MenuItem
         onClick={() => {
           handleClose()
           insertTodoinDOM()
@@ -171,12 +182,12 @@ export default function СommandListPopover({
       >
         <UilListUl />
         Чеклист
-      </joy.MenuItem>
-      <joy.MenuItem onClick={mentionHandler}>
+      </MenuItem>
+      <MenuItem onClick={mentionHandler}>
         <UilUser />
         Упомянуть
-      </joy.MenuItem>
-    </joy.Menu>
+      </MenuItem>
+    </Menu>
   )
 }
 
@@ -237,19 +248,19 @@ export function Comment({ data, userID }: ICommentProps) {
   }
 
   return (
-    <joy.Card sx={{ my: 0.5, p: 1, gap: 0.5 }} variant="outlined">
+    <Card sx={{ my: 0.5, p: 1, gap: 0.5 }} variant="outlined">
       <Row sx={{ justifyContent: 'space-between' }}>
-        <joy.Typography level="body-xs">
+        <P level="body-xs">
           <b>{sender()} </b>
-        </joy.Typography>
+        </P>
         <Row>
-          <joy.Typography level="body-xs"> {timestamp()} </joy.Typography>
+          <P level="body-xs"> {timestamp()} </P>
           <div>{actions()}</div>
         </Row>
       </Row>
-      <joy.Divider />
+      <Divider />
       {getCommentContent()}
-    </joy.Card>
+    </Card>
   )
 }
 
@@ -283,37 +294,37 @@ export function CommentListViewPort({ user, orderId }: ICommentsListProps) {
   }
 
   return (
-    <joy.Box>
-      <joy.Box sx={{ overflow: 'scroll' }}>
+    <Box>
+      <Box sx={{ overflow: 'scroll' }}>
         {sortedComments.length > visibleComments && (
-          <joy.Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
-            <joy.Button variant="soft" onClick={handleShowMore} size="sm">
+          <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
+            <Button variant="soft" onClick={handleShowMore} size="sm">
               {text.showMore}
-            </joy.Button>
-          </joy.Box>
+            </Button>
+          </Box>
         )}
 
         {!loading &&
           commentsToShow.map(comment => (
             <Comment data={comment} key={comment.id} userID={user.id} />
           ))}
-      </joy.Box>
-    </joy.Box>
+      </Box>
+    </Box>
   )
 }
 
 export function CommentInputViewPort({ user, orderId }: ICommentsListProps) {
   const inputRef = useRef<any>(null)
   return (
-    <joy.Box>
-      <joy.Box sx={{ overflow: 'scroll', py: 2 }}>
+    <Box>
+      <Box sx={{ overflow: 'scroll', py: 2 }}>
         <InputForm
           insertComment={async comment => {
             insertComment(comment, orderId, user.id)
           }}
           inputRef={inputRef}
         />
-      </joy.Box>
-    </joy.Box>
+      </Box>
+    </Box>
   )
 }

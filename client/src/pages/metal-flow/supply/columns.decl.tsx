@@ -1,5 +1,4 @@
-import { Typography } from '@mui/joy'
-import { DeleteResourceButton } from 'lib/shortcuts'
+import { DeleteResourceButton, P } from 'lib/shortcuts'
 import { formatDateWithTime } from 'lib/utils/formatting'
 import { Column } from 'react-table'
 import { GetSuppliesQuery } from 'types/graphql-shema'
@@ -24,7 +23,7 @@ export function getColumns(props: {
       accessor: data => {
         if (!data.material) return '-'
         const ma = map.material.fromDto(data.material)
-        return <Typography>{ma.label}</Typography>
+        return <P>{ma.label}</P>
       }
     },
     {

@@ -1,5 +1,5 @@
-import { Stack, Typography } from '@mui/joy'
-import { Inp } from 'lib/shortcuts'
+import { Stack } from '@mui/joy'
+import { Inp, P } from 'lib/shortcuts'
 import { useCallback, useMemo } from 'react'
 
 interface Props {
@@ -46,9 +46,9 @@ export function DateInput({ value = '', onChange, label }: Props) {
         label={label}
       />
       {isComplete && !valid && (
-        <Typography color="danger" level="body-xs">
+        <P color="danger" level="body-xs">
           Неверный формат даты
-        </Typography>
+        </P>
       )}
     </Stack>
   )

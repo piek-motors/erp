@@ -1,10 +1,11 @@
-import { Container, Sheet, Stack, Typography } from '@mui/joy'
+import { Container, Sheet, Stack } from '@mui/joy'
 import { PageTitle } from 'components/page-title'
 import { EnUnit } from 'domain-model'
 import { MetalFlowRoutes, openMetalFlowPage } from 'lib/routes'
 import {
   DeleteResourceButton,
   Inp,
+  P,
   Row,
   SendMutation,
   TakeLookHint
@@ -53,8 +54,8 @@ function DetailMaterialRelationForm() {
           return (
             <Stack sx={{ width: 'max-content' }} key={material.id}>
               <Row sx={{ fontWeight: 'bold' }}>
-                <Typography>Материал</Typography>
-                <Typography>{material?.label}</Typography>
+                <P>Материал</P>
+                <P>{material?.label}</P>
               </Row>
               <Stack p={1}>
                 <MaterialWeightInput materialRelation={materialRelation} />
@@ -78,9 +79,9 @@ export const UpdateDetail = observer(() => {
     <Container maxWidth="sm" sx={{ margin: 0, p: 1 }}>
       <PageTitle title={t.EditDetail} hideIcon />
       <Stack gap={1}>
-        <Typography>
+        <P>
           <b>ID</b> {detailStore.id}
-        </Typography>
+        </P>
         <Inp
           fullWidth
           label={t.DetailName}

@@ -1,5 +1,5 @@
-import { Typography } from '@mui/joy'
 import { sec2hours } from 'lib/date'
+import { P } from 'lib/shortcuts'
 import { CellProps, Column } from 'react-table'
 import { PreparedEmployeeDto } from 'types/global'
 import { State } from './main'
@@ -20,9 +20,9 @@ export const genColumns = (state: State) => {
       Cell: (props: CellProps<PreparedEmployeeDto>) => (
         <>
           <div>{sec2hours(props.row.original.monthlyWithRetention)}</div>
-          <Typography fontWeight={700}>
+          <P fontWeight={700}>
             {sec2hours(props.row.original.monthlyWithRetentionResolved)}
-          </Typography>
+          </P>
         </>
       )
     },

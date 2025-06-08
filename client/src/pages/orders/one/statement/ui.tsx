@@ -1,6 +1,6 @@
-import { Box, Typography } from '@mui/joy'
+import { Box } from '@mui/joy'
 import { PrintOnly, WebOnly } from 'components/conditional-display'
-import { InputStack, SendMutation } from 'lib/shortcuts'
+import { InputStack, P, SendMutation } from 'lib/shortcuts'
 import { observer } from 'mobx-react-lite'
 import { orderStore } from '../stores/order.store'
 import { RenderInput } from './render-input'
@@ -37,9 +37,7 @@ export const StatementView = observer(() => {
           }}
           sx={{ gap: 1 }}
         >
-          <Typography style={{ whiteSpace: 'nowrap' }}>
-            {column.label}
-          </Typography>
+          <P style={{ whiteSpace: 'nowrap' }}>{column.label}</P>
           <div
             style={{
               flex: 1,
@@ -47,7 +45,7 @@ export const StatementView = observer(() => {
               height: 1
             }}
           />
-          <Typography style={{ whiteSpace: 'normal' }}>{v}</Typography>
+          <P style={{ whiteSpace: 'normal' }}>{v}</P>
         </Box>
       )
 

@@ -1,4 +1,4 @@
-import { Typography } from '@mui/joy'
+import { P } from 'lib/shortcuts'
 
 interface HighlightTextProps {
   text: string
@@ -14,14 +14,14 @@ export function HighlightText({
   caseSensitive = false
 }: HighlightTextProps) {
   if (!highlight) {
-    return <Typography>{text}</Typography>
+    return <P>{text}</P>
   }
 
   const flags = caseSensitive ? 'g' : 'gi'
   const parts = text.split(new RegExp(`(${highlight})`, flags))
 
   return (
-    <Typography>
+    <P>
       {parts.map((part, i) =>
         part.toLowerCase() === highlight.toLowerCase() ? (
           <span key={i} style={{ backgroundColor: highlightColor }}>
@@ -31,6 +31,6 @@ export function HighlightText({
           part
         )
       )}
-    </Typography>
+    </P>
   )
 }

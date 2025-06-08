@@ -1,9 +1,9 @@
 /** @jsxImportSource @emotion/react */
-import { Box, Card, Stack, Typography } from '@mui/joy'
+import { Box, Card, Stack } from '@mui/joy'
 import { PageTitle } from 'components'
 import { Order } from 'domain-model'
 import { AppRoutes } from 'lib/routes'
-import { AddResourceButton, LoadingHint, Pre } from 'lib/shortcuts'
+import { AddResourceButton, LoadingHint, P, Pre } from 'lib/shortcuts'
 import { observer } from 'mobx-react-lite'
 import { useEffect } from 'react'
 import * as dnd from 'react-beautiful-dnd'
@@ -24,9 +24,9 @@ function ReclamationItem({ order }: IReclamationItemProps) {
       variant="soft"
       onDoubleClick={() => navigate(link)}
     >
-      <Typography color="primary">
+      <P color="primary">
         {order.contractor}__{order.city}
-      </Typography>
+      </P>
       <div>
         {order.items.length ? (
           order.items.map(item => (
@@ -55,9 +55,9 @@ function DroppableContainer({
 }: IDroppableContainerProps) {
   return (
     <Box key={droppableId} sx={{ height: '100%', width: '100%' }}>
-      <Typography color="neutral" level="h4">
+      <P color="neutral" level="h4">
         {columnName}
-      </Typography>
+      </P>
       <dnd.Droppable
         droppableId={droppableId.toString()}
         isDropDisabled={false}

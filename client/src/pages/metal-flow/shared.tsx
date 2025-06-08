@@ -1,10 +1,10 @@
 import { UilArrowLeft } from '@iconscout/react-unicons'
-import { Box, IconButton, Stack, Typography } from '@mui/joy'
+import { Box, IconButton, Stack } from '@mui/joy'
+import { PageTitle } from 'components'
 import { uiUnit } from 'domain-model'
-import { Inp } from 'lib/shortcuts'
+import { Inp, P } from 'lib/shortcuts'
 import { JSX } from 'react'
 import { NavigateOptions, To, useNavigate } from 'react-router-dom'
-import { PageTitle } from '../../components'
 
 type GoBackBtnProps = { to?: To; options?: NavigateOptions; delta?: number }
 export const GoBackBtn = (props: GoBackBtnProps) => {
@@ -74,7 +74,7 @@ export const QtyInputWithUnit = (props: {
         }}
         type="number"
       />
-      <Typography pb={1}>{uiUnit(unitId)}</Typography>
+      <P pb={1}>{uiUnit(unitId)}</P>
     </Stack>
   )
 }

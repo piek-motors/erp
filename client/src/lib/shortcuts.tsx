@@ -20,12 +20,14 @@ import {
   Tabs,
   Textarea,
   TextareaProps,
-  Typography
+  Typography,
+  TypographyProps
 } from '@mui/joy'
 import React, { JSX, ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 export const Btn = Button
+export const P = (props: TypographyProps) => <Typography {...props} />
 
 type MyInputProps = {
   label?: string
@@ -59,7 +61,7 @@ export function Inp(props: MyInputProps) {
               props.onChange?.(value.trim())
             }}
           />
-          {props.unit && <Typography>{props.unit}</Typography>}
+          {props.unit && <P>{props.unit}</P>}
         </Row>
       )}
       {props.helperText && <FormHelperText>{props.helperText}</FormHelperText>}
@@ -198,15 +200,15 @@ export function MyTabs(props: {
 }
 
 export function SavedHint(props: { show: any }) {
-  return props.show && <Typography color="success">Сохранено</Typography>
+  return props.show && <P color="success">Сохранено</P>
 }
 
 export function ErrorHint(props: { e?: Error | any }) {
   return (
     props.e && (
       <Box>
-        <Typography color="danger">{props.e['message']}</Typography>
-        <Typography color="danger">{JSON.stringify(props.e)}</Typography>
+        <P color="danger">{props.e['message']}</P>
+        <P color="danger">{JSON.stringify(props.e)}</P>
       </Box>
     )
   )
@@ -216,7 +218,7 @@ export function LoadingHint(props: { show: boolean }) {
   return (
     props.show && (
       <Row p={2} gap={1}>
-        <Typography>Загрузка...</Typography>
+        <P>Загрузка...</P>
         <CircularProgress size="sm" color="neutral" />
       </Row>
     )
@@ -228,13 +230,13 @@ export function TakeLookHint(props: { text: string; link: string }) {
 
   return (
     <Stack direction={'row'} alignItems={'center'} gap={2} pt={2}>
-      <Typography
+      <P
         sx={{
           p: 0
         }}
       >
         {props.text}
-      </Typography>
+      </P>
       <Btn
         onClick={() => navigate(props.link)}
         variant="outlined"

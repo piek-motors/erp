@@ -1,10 +1,11 @@
 /** @jsxImportSource @emotion/react */
-import { Box, Button, Divider, Typography } from '@mui/joy'
+import { Box, Button, Divider } from '@mui/joy'
 import { EnMaterialShape, UiMaterialShape } from 'domain-model'
 import { MetalFlowRoutes, openMetalFlowPage } from 'lib/routes'
 import {
   InputStack,
   MyTabs,
+  P,
   Row,
   SendMutation,
   TakeLookHint
@@ -82,9 +83,9 @@ export const UpdateMaterial = observer(() => {
         map.material.convertable(materialStore.material) ? (
           <>
             <Box>
-              <Typography level="h4">
-                <Typography>{materialStore.material?.label}</Typography>
-              </Typography>
+              <P level="h4">
+                <P>{materialStore.material?.label}</P>
+              </P>
               {t.Unit} {materialStore.unit}
             </Box>
             <UpdateMaterialUpdateStockLinks id={id} />

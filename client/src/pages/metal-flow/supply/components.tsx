@@ -1,11 +1,11 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
-import { Box, Sheet, Typography } from '@mui/joy'
+import { Box, Sheet } from '@mui/joy'
 import { PageTitle } from 'components'
 import { Table } from 'components/table.impl'
 import { Material } from 'domain-model'
 import { MetalFlowRoutes, openMetalFlowPage } from 'lib/routes'
-import { AddResourceButton, SendMutation } from 'lib/shortcuts'
+import { AddResourceButton, P, SendMutation } from 'lib/shortcuts'
 import { observer } from 'mobx-react-lite'
 import { useState } from 'react'
 import { QtyInputWithUnit, SmallInputForm } from '../shared'
@@ -24,9 +24,7 @@ export const ListSupplies = observer(() => {
           navigateTo={openMetalFlowPage(MetalFlowRoutes.supply_add)}
         />
       </PageTitle>
-      {supplyStore.supplies.length === 0 && (
-        <Typography>Нет поставок</Typography>
-      )}
+      {supplyStore.supplies.length === 0 && <P>Нет поставок</P>}
       <Sheet sx={{ gap: 2 }}>
         <Box
           css={css`

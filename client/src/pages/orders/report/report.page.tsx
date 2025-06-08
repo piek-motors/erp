@@ -1,6 +1,7 @@
-import { Box, Typography } from '@mui/joy'
+import { Box } from '@mui/joy'
 import { MonthSelect } from 'components/month-select'
 import { TableName } from 'components/table-name'
+import { P } from 'lib/shortcuts'
 import { observer } from 'mobx-react-lite'
 import { useEffect } from 'react'
 import { OrdersTable } from '../columns'
@@ -23,7 +24,7 @@ export const RequestReportPage = observer(() => {
       />
       {isEmpty && (
         <Box>
-          <Typography level="body-sm">Нет данных</Typography>
+          <P level="body-sm">Нет данных</P>
         </Box>
       )}
       {Array.isArray(report.data) && report.data.length > 0 && (
