@@ -2,14 +2,10 @@ import moment from 'moment'
 import 'moment/locale/ru'
 moment.locale('ru')
 
-export function money(value: number) {
-  if (!value) return 0
-  return value.toLocaleString('en-US', {
-    style: 'currency',
-    currency: 'RUB',
-    maximumFractionDigits: 0,
-    minimumFractionDigits: 0,
-    currencyDisplay: 'narrowSymbol'
+export function formatMoney(value: number): string {
+  if (!value) return ''
+  return value.toLocaleString('ru-RU', {
+    style: 'decimal'
   })
 }
 

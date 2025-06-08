@@ -2,6 +2,7 @@
 import { css } from '@emotion/react'
 import { JSX } from '@emotion/react/jsx-runtime'
 import * as joy from '@mui/joy'
+import { MoneyInput } from 'components/money-input'
 import { Order, Roles } from 'domain-model'
 import { useAppContext } from 'hooks'
 import { DeleteResourceButton, Inp, Row } from 'lib/shortcuts'
@@ -86,7 +87,7 @@ const PaymentsTable = observer(
             {props.data.map(payment => (
               <tr key={payment.id}>
                 <td>{formatter.percentage(payment.amount, totalAmount)}</td>
-                <td>{formatter.money(payment.amount)}</td>
+                <td>{formatter.formatMoney(payment.amount)}</td>
                 <td>{formatter.formatOnlyDate(payment.date)}</td>
                 {orderStore.editMode && (
                   <td>
@@ -101,7 +102,7 @@ const PaymentsTable = observer(
           <tfoot>
             <tr>
               <td> {totalPaidPercent}</td>
-              <td>{!!totalPaid && formatter.money(totalPaid)}</td>
+              <td>{!!totalPaid && formatter.formatMoney(totalPaid)}</td>
               {props.footerComponent && <td>{props.footerComponent}</td>}
             </tr>
           </tfoot>
@@ -130,14 +131,13 @@ const NewPaymentInput = observer((props: NewPaymentInputProps) => {
       await os.payments.insertPayment()
       handleClose()
     } catch (error) {
-      console.error('Failed to save payment:', error)
+      const msg = error instanceof Error ? error.message : String(error)
+      alert(`Не удалось сохранить платеж: ${msg}`)
     }
   }
 
-  function handleAmountChange(v: string) {
-    const parsedValue = v.replace(',', '').replace('.', '')
-    const amount = parseInt(parsedValue)
-    os.payments.setAmount(amount)
+  function handleAmountChange(v: number) {
+    os.payments.setAmount(v)
   }
 
   return (
@@ -180,17 +180,14 @@ const NewPaymentInput = observer((props: NewPaymentInputProps) => {
             value={os.payments.date || ''}
           />
           <Row gap={1}>
-            <Inp
+            <MoneyInput
               label="Сумма платежа"
-              type="number"
-              onChange={v => {
-                handleAmountChange(v)
-              }}
-              value={os.payments.amount?.toString() || ''}
+              onChange={handleAmountChange}
+              value={os.payments.amount}
               autoFocus
             />
             <joy.Typography>
-              из {formatter.money(props.order.totalAmount)}
+              из {formatter.formatMoney(props.order.totalAmount)}
             </joy.Typography>
           </Row>
           {os.payments.error && (

@@ -7,7 +7,7 @@ import { PaymentsApi } from './api'
 export class PaymentStore {
   modalOpen = false
   orderId: number | null = null
-  date: string | null = moment().local().format('DD.MM.YY')
+  date: string | null = null
   amount: number | null = null
   payments: gql.GetOrderPaymentsQuery['orders_order_payments'] = []
   loading = false
@@ -40,10 +40,11 @@ export class PaymentStore {
   }
   openModal() {
     this.modalOpen = true
+    this.date = moment().local().format('DD.MM.YY')
   }
   closeModal() {
     this.modalOpen = false
-    this.clear()
+    this.amount = null
   }
   clear() {
     this.orderId = null
@@ -79,16 +80,16 @@ export class PaymentStore {
         amount: this.amount
       })
 
-      this.payments.push(
+      this.setPayments([
+        ...this.payments,
         new Payment({
           id: paymentId,
           amount: this.amount,
           date: paymentDate.toDate()
         })
-      )
+      ])
 
       this.closeModal()
-
       return paymentId
     })
   }

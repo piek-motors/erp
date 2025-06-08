@@ -1,4 +1,5 @@
 import { BaseAutocomplete } from 'components/base-autocomplete'
+import { MoneyInput } from 'components/money-input'
 import { Select } from 'components/select'
 import { Inp, MultilineInput } from 'lib/shortcuts'
 import { orderStore } from '../stores/order.store'
@@ -60,13 +61,14 @@ export const RenderInput = (props: {
       )
     case InputTypes.Money:
       return (
-        <Inp
+        <MoneyInput
           key={key}
-          type="number"
           label={label}
           placeholder={placeholder}
-          value={value ?? ''}
-          onChange={handleMyInputChange}
+          value={value ? parseInt(value) : null}
+          onChange={v => {
+            onChange(v.toString())
+          }}
         />
       )
     case InputTypes.Multiline:
