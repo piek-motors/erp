@@ -1,10 +1,5 @@
-import {
-  Box,
-  FormControl,
-  FormLabel,
-  Select as MuiSelect,
-  Option
-} from '@mui/joy'
+import { Box, FormControl, Select as MuiSelect, Option } from '@mui/joy'
+import { Label } from 'lib/shortcuts'
 
 export function Select(props: {
   value?: any
@@ -19,9 +14,7 @@ export function Select(props: {
   return (
     <Box>
       <FormControl sx={{ width: 'min-content', minWidth: '207px' }}>
-        {props.label && (
-          <FormLabel sx={{ margin: 0, padding: 0 }}>{props.label}</FormLabel>
-        )}
+        <Label label={props.label} />
         <MuiSelect
           size={props.size}
           placeholder={props.placeholder}

@@ -1,6 +1,6 @@
 import { DB } from 'db'
 import { Detail, EnMaterialShape, Material } from 'domain-model'
-import type { Insertable, Kysely } from 'kysely'
+import { sql, type Insertable, type Kysely } from 'kysely'
 import { log } from 'node:console'
 import { MaterialFactory } from './adapters/materials/factory'
 import { MaterialMapper } from './adapters/materials/mapper'
@@ -178,5 +178,35 @@ export class Repo {
       material_id: materialId,
       data
     }
+  }
+
+  async updateSequences() {
+    const db = this.db
+    const materialsMaxId = await db
+      .selectFrom('metal_flow.materials')
+      .select('id')
+      .orderBy('id', 'desc')
+      .limit(1)
+      .executeTakeFirstOrThrow()
+
+    const detailsMaxId = await db
+      .selectFrom('metal_flow.details')
+      .select('id')
+      .orderBy('id', 'desc')
+      .limit(1)
+      .executeTakeFirstOrThrow()
+
+    const materialNextId = materialsMaxId.id + 1
+    const detailNextId = detailsMaxId.id + 1
+
+    const q = sql`
+      ALTER SEQUENCE metal_flow.materials_id_seq RESTART WITH ${sql.raw(
+        materialNextId.toString()
+      )};
+      ALTER SEQUENCE metal_flow.details_id_seq RESTART WITH ${sql.raw(
+        detailNextId.toString()
+      )};
+    `.compile(db)
+    await db.executeQuery(q)
   }
 }

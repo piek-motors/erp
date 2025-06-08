@@ -17,7 +17,7 @@ export function isSquareBar(material: dm.Material): material is dm.SquareBar {
   return material.shape === dm.EnMaterialShape.SquareBar
 }
 
-export function extractShapeData(material: dm.Material): dm.ShapeDataUnion {
+export function extractShapeData(material: dm.Material): dm.GenericShapeData {
   if (isRoundBar(material)) {
     return plainToInstance(dm.RoundBarShapeData, {
       diameter: material.diameter,

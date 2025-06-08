@@ -1,5 +1,6 @@
-import { Autocomplete, Box, createFilterOptions, FormLabel } from '@mui/joy'
+import { Autocomplete, Box, createFilterOptions } from '@mui/joy'
 import { SxProps } from '@mui/joy/styles/types'
+import { Label } from 'lib/shortcuts'
 import { ReactNode } from 'react'
 
 export interface BaseOption {
@@ -46,7 +47,7 @@ export function BaseAutocomplete<T extends BaseOption>({
 
   return (
     <Box width={width}>
-      {label && <FormLabel>{label}</FormLabel>}
+      <Label label={label} />
       {error}
       <Autocomplete
         sx={sx}

@@ -4,6 +4,7 @@ import { UilTrash } from '@iconscout/react-unicons'
 import { Autocomplete, Box, IconButton, Sheet, Stack } from '@mui/joy'
 import { PageTitle } from 'components'
 import { Table } from 'components/table.impl'
+import { TabConfig, Tabs } from 'components/tabs'
 import {
   Detail,
   EnWriteoffType,
@@ -12,7 +13,7 @@ import {
   WriteoffTroughDetail
 } from 'domain-model'
 import { open, routeMap } from 'lib/routes'
-import { AddResourceButton, Inp, MyTabs, SendMutation } from 'lib/shortcuts'
+import { AddResourceButton, Inp, SendMutation } from 'lib/shortcuts'
 import { useEffect, useState } from 'react'
 import { useNotifier } from 'store/notifier.store'
 import {
@@ -27,19 +28,25 @@ import { getColumns } from './columns.decl'
 import { useWriteOffStore } from './state'
 import { handleSubmit } from './submit'
 
+const tabs: TabConfig = [
+  {
+    value: EnWriteoffType.ThroughDetail,
+    label: t.WriteoffThroughDetail,
+    component: <WriteoffThroughDetail />
+  },
+  {
+    value: EnWriteoffType.DirectUnit,
+    label: t.WriteoffThroughMaterial,
+    component: <WriteOffThroughMaterial />
+  }
+]
+
 export function AddWriteOff() {
   const state = useWriteOffStore()
   const { reason, setReason } = state
   return (
     <SmallInputForm header={t.WriteOffAdd}>
-      {
-        <MyTabs
-          tabs={{
-            [t.WriteoffThroughDetail]: <WriteoffThroughDetail />,
-            [t.WriteoffThroughMaterial]: <WriteOffThroughMaterial />
-          }}
-        />
-      }
+      <Tabs tabs={tabs} />
       <Autocomplete
         options={Object.entries(UiWriteoffReason).map(([k, v]) => ({
           label: v,

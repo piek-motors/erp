@@ -7,27 +7,28 @@ import {
   CircularProgress,
   FormControl,
   FormHelperText,
-  FormLabel,
   IconButton,
   Input,
   InputProps,
   Chip as MuiChip,
   Stack,
   StackProps,
-  Tab,
-  TabList,
-  TabPanel,
-  Tabs,
   Textarea,
   TextareaProps,
   Typography,
   TypographyProps
 } from '@mui/joy'
-import React, { JSX, ReactNode } from 'react'
+import React, { JSX } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 export const Btn = Button
 export const P = (props: TypographyProps) => <Typography {...props} />
+export const Label = (props: TypographyProps & { label?: string }) =>
+  Boolean(props.label || props.children) && (
+    <Typography {...props} level="body-sm" sx={{ p: 0, m: 0 }}>
+      {props.label || props.children}
+    </Typography>
+  )
 
 type MyInputProps = {
   label?: string
@@ -47,7 +48,7 @@ type MyInputProps = {
 export function Inp(props: MyInputProps) {
   return (
     <FormControl>
-      {props.label && <FormLabel sx={{ margin: 0 }}>{props.label}</FormLabel>}
+      <Label label={props.label} />
       {props.customInput ? (
         <props.customInput onChange={props.onChange} name={props.name} />
       ) : (
@@ -58,7 +59,7 @@ export function Inp(props: MyInputProps) {
             autoComplete={props.enableAutoComplete ? 'on' : 'off'}
             onChange={e => {
               const value = e.target.value ?? ''
-              props.onChange?.(value.trim())
+              props.onChange?.(value)
             }}
           />
           {props.unit && <P>{props.unit}</P>}
@@ -158,44 +159,9 @@ export function MultilineInput(
 ) {
   return (
     <FormControl>
-      <FormLabel sx={{ margin: 0 }}>{props.label}</FormLabel>
+      <Label label={props.label} />
       <Textarea placeholder={props.label} {...props} />
     </FormControl>
-  )
-}
-
-export function MyTabs(props: {
-  tabs: Record<string, ReactNode>
-  handleChange?: (newVal: any) => void
-  value?: string
-}) {
-  return (
-    <Tabs
-      value={props.value}
-      onChange={(e, v) => {
-        if (v == null) return
-        if (props.handleChange) {
-          props.handleChange(Object.values(props.tabs)[v])
-        }
-      }}
-    >
-      <TabList>
-        {Object.entries(props.tabs).map(([key, value], idx) => (
-          <Tab
-            key={key}
-            color={props.value == value ? 'primary' : 'neutral'}
-            variant={props.value == value ? 'soft' : 'plain'}
-          >
-            {key}
-          </Tab>
-        ))}
-      </TabList>
-      {Object.values(props.tabs).map((component, idx) => (
-        <TabPanel key={idx} value={idx}>
-          {component}
-        </TabPanel>
-      ))}
-    </Tabs>
   )
 }
 
@@ -269,6 +235,7 @@ export function SendMutation(props: {
       setMutationResult(result)
     } catch (e: any) {
       setError(e)
+      throw e
     } finally {
       setLoading(false)
     }

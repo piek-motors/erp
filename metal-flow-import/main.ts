@@ -37,6 +37,7 @@ async function main() {
       'detail material relation insert error count',
       repo.detailMaterialRelationInsertErrCount
     )
+    await repo.updateSequences()
     log('finished syncing details.csv')
   } catch (e) {
     console.error(e)

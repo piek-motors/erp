@@ -157,19 +157,6 @@ function RoundBarInputBase({ shapeData }: { shapeData: RoundBarShapeData }) {
         }}
         unit="кг/м3"
       />
-      {/* <ToggleButtonGroup
-        sx={{ pt: 1 }}
-        value={shapeData.calibrated ? 'true' : 'false'}
-        onChange={(e, v) => {
-          const newData = { ...shapeData, calibrated: v === 'true' }
-          materialStore.setShapeData(
-            plainToInstance(RoundBarShapeData, newData)
-          )
-        }}
-      >
-        <Button value={'false'}>{t.NotCalibrated}</Button>
-        <Button value={'true'}>{t.Calibrated}</Button>
-      </ToggleButtonGroup> */}
       <MaterialCalibration
         value={shapeData.calibrated}
         setValue={v => {
@@ -177,8 +164,6 @@ function RoundBarInputBase({ shapeData }: { shapeData: RoundBarShapeData }) {
           materialStore.setShapeData(
             plainToInstance(RoundBarShapeData, newData)
           )
-
-          console.log(newData)
         }}
       />
     </InputStack>
@@ -190,10 +175,11 @@ function MaterialCalibration(props: {
   setValue: (v: boolean) => void
 }) {
   return (
-    <Row>
+    <Row gap={2}>
       <P>(К) - Калиброванный</P>
       <ToggleButtonGroup
-        sx={{ pt: 1 }}
+        variant="plain"
+        color="primary"
         value={props.value ? '1' : '0'}
         onChange={(e, v) => {
           props.setValue(v === '1')

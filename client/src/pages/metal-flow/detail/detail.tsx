@@ -1,4 +1,4 @@
-import { Container, Sheet, Stack } from '@mui/joy'
+import { Box, Container, Sheet, Stack } from '@mui/joy'
 import { PageTitle } from 'components/page-title'
 import { EnUnit } from 'domain-model'
 import { open, routeMap } from 'lib/routes'
@@ -10,13 +10,12 @@ import {
   SendMutation,
   TakeLookHint
 } from 'lib/shortcuts'
-import { observer, Observer } from 'mobx-react-lite'
+import { observer } from 'mobx-react-lite'
 import { useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { useGetMaterialsQuery } from 'types/graphql-shema'
-import { QtyInputWithUnit, SmallInputForm } from '../shared'
+import { QtyInputWithUnit } from '../shared'
 import { MaterialAutocompleteMulti } from '../shared/material-autocomplete'
-import { detailStore, materialListStore } from '../store'
+import { detailStore } from '../store'
 import { t } from '../text'
 import { MaterialRelation } from './detail.store'
 
@@ -25,7 +24,7 @@ const MaterialWeightInput = observer(
     return (
       <>
         <QtyInputWithUnit
-          label="Вес материала"
+          label="Вес"
           unitId={EnUnit.Gram}
           setValue={v => {
             props.materialRelation.setWeight(v)
@@ -33,7 +32,7 @@ const MaterialWeightInput = observer(
           value={props.materialRelation.weight}
         />
         <QtyInputWithUnit
-          label="Длина материала"
+          label="Длина"
           unitId={EnUnit.MilliMeter}
           setValue={v => {
             props.materialRelation.setLength(v)
@@ -45,16 +44,16 @@ const MaterialWeightInput = observer(
   }
 )
 
-function DetailMaterialRelationForm() {
+const DetailMaterialRelationForm = observer(() => {
   return (
     <Sheet>
       <Stack my={1} gap={2}>
-        {detailStore.materials.map(materialRelation => {
+        {detailStore.usedMaterials.map(materialRelation => {
           const { material } = materialRelation
           return (
             <Stack sx={{ width: 'max-content' }} key={material.id}>
               <Row sx={{ fontWeight: 'bold' }}>
-                <P>Материал</P>
+                <P>Расход для материала</P>
                 <P>{material?.label}</P>
               </Row>
               <Stack p={1}>
@@ -66,7 +65,7 @@ function DetailMaterialRelationForm() {
       </Stack>
     </Sheet>
   )
-}
+})
 
 export const UpdateDetail = observer(() => {
   const { id } = useParams<{ id: string }>()
@@ -117,49 +116,45 @@ export const UpdateDetail = observer(() => {
 })
 
 export const AddDetail = observer(() => {
-  const { data: materials } = useGetMaterialsQuery()
+  useEffect(() => {
+    detailStore.loadMaterials()
+  }, [])
+
   return (
-    <Observer
-      render={() => (
-        <SmallInputForm
-          header={t.AddDetail}
-          last={
-            <SendMutation
-              onClick={detailStore.insert}
-              additionals={(err, res) => (
-                <TakeLookHint
-                  text={t.RecentlyNewDetailAdded}
-                  link={open(routeMap.metalflow.detail.edit, res)}
-                />
-              )}
-            />
-          }
-        >
-          <Inp
-            label={t.DetailName}
-            onChange={v => {
-              detailStore.setName(v)
-            }}
-            value={detailStore.name}
+    <Box>
+      <PageTitle title={t.AddDetail} hideIcon />
+      <Inp
+        label={t.DetailName}
+        onChange={v => {
+          detailStore.setName(v)
+        }}
+        value={detailStore.name}
+      />
+      <MaterialAutocompleteMulti
+        data={detailStore.materialsSuggestions}
+        value={detailStore.usedMaterials.map(m => m.material)}
+        onChange={m => {
+          detailStore.setMaterialRelations(
+            m.map(
+              m =>
+                new MaterialRelation(m, {
+                  length: '',
+                  weight: ''
+                })
+            )
+          )
+        }}
+      />
+      <DetailMaterialRelationForm />
+      <SendMutation
+        onClick={() => detailStore.insert()}
+        additionals={(err, mutationResult) => (
+          <TakeLookHint
+            text={t.RecentlyNewDetailAdded}
+            link={open(routeMap.metalflow.detail.edit, mutationResult.id)}
           />
-          <MaterialAutocompleteMulti
-            data={materials}
-            value={Array.from(materialListStore.materials)}
-            onChange={m => {
-              detailStore.setMaterialRelations(
-                m.map(
-                  m =>
-                    new MaterialRelation(m, {
-                      length: '',
-                      weight: ''
-                    })
-                )
-              )
-            }}
-          />
-          <DetailMaterialRelationForm />
-        </SmallInputForm>
-      )}
-    />
+        )}
+      />
+    </Box>
   )
 })

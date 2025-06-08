@@ -1,7 +1,8 @@
 import { Box, Button, IconButton, Stack } from '@mui/joy'
 import { PageTitle } from 'components'
+import { ReactNode } from 'react'
 import { Link } from 'react-router-dom'
-import { Action, actions } from './module.actions'
+import { Action, actions } from './nav.links'
 import { t } from './text'
 
 export function NavigationSideBar() {
@@ -31,10 +32,7 @@ function RenderAction(props: { action: Action }) {
         <Stack>
           {action.endBlock?.map(e => (
             <Box key={e.href}>
-              <LinkableIcon
-                href={e.href}
-                icon={e.icon && <e.icon width={16} height={16} />}
-              />
+              <LinkableIcon href={e.href} icon={e.icon} />
             </Box>
           ))}
         </Stack>
@@ -46,7 +44,7 @@ function RenderAction(props: { action: Action }) {
 function MenuButton(props: {
   href: string
   name?: string
-  icon?: any
+  icon?: ReactNode
   small?: boolean
 }) {
   return (
@@ -58,10 +56,16 @@ function MenuButton(props: {
   )
 }
 
-function LinkableIcon(props: { href: string; icon?: any; small?: boolean }) {
+function LinkableIcon(props: {
+  href: string
+  icon?: ReactNode
+  small?: boolean
+}) {
   return (
     <Link to={props.href} key={props.href}>
-      <IconButton>{props.icon}</IconButton>
+      <IconButton size="sm" variant="soft" sx={{ p: 0.1 }}>
+        {props.icon}
+      </IconButton>
     </Link>
   )
 }

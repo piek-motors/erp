@@ -1,4 +1,10 @@
-import { Button, Container, ContainerProps, ToggleButtonGroup } from '@mui/joy'
+import {
+  Button,
+  Container,
+  ContainerProps,
+  Stack,
+  ToggleButtonGroup
+} from '@mui/joy'
 import { EnUnit, UiUnit } from 'domain-model'
 
 export function WorkPage(props: ContainerProps) {
@@ -22,25 +28,30 @@ export function MaterialUnitSelect(props: {
   onChange: (e: EnUnit) => void
 }) {
   return (
-    <ToggleButtonGroup
-      value={props.value.toString()}
-      onChange={(e, v) => {
-        props.onChange(parseInt(v as any))
-      }}
-    >
-      {Object.entries(UiUnit).map(([key, value]) => {
-        return (
-          <Button value={key} key={key}>
-            {value}
-          </Button>
-        )
-      })}
-    </ToggleButtonGroup>
+    <Stack gap={1}>
+      <Label label="Единицы измерения" />
+      <ToggleButtonGroup
+        variant="plain"
+        color="primary"
+        value={props.value.toString()}
+        onChange={(e, v) => {
+          props.onChange(parseInt(v as any))
+        }}
+      >
+        {Object.entries(UiUnit).map(([key, value]) => {
+          return (
+            <Button value={key} key={key}>
+              {value}
+            </Button>
+          )
+        })}
+      </ToggleButtonGroup>
+    </Stack>
   )
 }
 
 import { BaseAutocomplete, BaseOption } from 'components/base-autocomplete'
-import { ErrorHint } from 'lib/shortcuts'
+import { ErrorHint, Label } from 'lib/shortcuts'
 import { useGetPossibleAlloysQuery } from 'types/graphql-shema'
 import { t } from '../text'
 
@@ -115,7 +126,7 @@ export function DetailSelect(props: {
 /** Narrow container */
 export function Narrow(props: ContainerProps) {
   return (
-    <Container {...props} maxWidth="xs" sx={{ m: 0, p: 0, overflow: 'scroll' }}>
+    <Container {...props} maxWidth="xs" sx={{ m: 0, p: 0 }}>
       {props.children}
     </Container>
   )

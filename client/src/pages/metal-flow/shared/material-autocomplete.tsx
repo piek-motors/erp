@@ -38,14 +38,14 @@ export function MaterialAutocomplete(props: {
 }
 
 export function MaterialAutocompleteMulti(props: {
-  data?: ReturnType<typeof useGetMaterialsQuery>['data']
+  data?: Material[]
   value?: Material[]
   onChange: (m: Material[]) => void
   disabledInput?: boolean
 }) {
   const { data, value, onChange } = props
   const options: BaseOption[] =
-    data?.metal_flow_materials.map(map.material.fromDto).map(material => ({
+    data?.map(material => ({
       label: material.deriveLabel(),
       value: material
     })) || []
@@ -53,22 +53,22 @@ export function MaterialAutocompleteMulti(props: {
   return (
     <FormControl>
       <BaseAutocomplete
-        label="Выберите материалы"
+        label="Изговлена из материалов"
         multiple
         options={options}
-        value={value?.map(m => ({ label: m.deriveLabel(), value: m })) || []}
+        value={value?.map(m => ({ label: m.label, value: m })) || []}
         onChange={newValue => {
           if (Array.isArray(newValue)) {
             onChange(newValue.map(v => v.value))
-          }
+          } else throw new Error('Invalid value')
         }}
         disabled={props.disabledInput}
         getOptionLabel={option =>
           typeof option === 'string' ? option : option.label
         }
-        isOptionEqualToValue={(option, value) =>
-          option.value.id === value.value.id
-        }
+        isOptionEqualToValue={(option, value) => {
+          return option.value.id === value.value.id
+        }}
       />
     </FormControl>
   )

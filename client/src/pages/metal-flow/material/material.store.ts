@@ -37,8 +37,8 @@ export class MaterialStore {
   insertedMaterialId?: number
 
   setShape(shape: EnMaterialShape) {
-    this.shape = shape
     const Shape = getShapeDataFactory(shape)
+    this.shape = shape
     this.shapeData = new Shape()
   }
 

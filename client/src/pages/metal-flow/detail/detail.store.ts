@@ -1,5 +1,6 @@
 import { Detail, Material } from 'domain-model'
 import { makeAutoObservable } from 'mobx'
+import * as materialApi from '../material/material.api'
 import * as api from './detail.api'
 
 type MaterialRelationData = {
@@ -30,10 +31,15 @@ export class MaterialRelation {
 export class DetailStore {
   id?: number
   name: string = ''
-  materials: MaterialRelation[] = []
+  usedMaterials: MaterialRelation[] = []
 
   recentlyAdded?: Detail
   recentlyUpdated?: Detail
+  materialsSuggestions: Material[] = []
+
+  constructor() {
+    makeAutoObservable(this)
+  }
 
   setRecentlyAdded(detail: Detail) {
     this.recentlyAdded = detail
@@ -44,27 +50,10 @@ export class DetailStore {
 
   error?: Error
 
-  constructor() {
-    makeAutoObservable(this)
-  }
-
-  private getMaterialRelations(): {
-    material_id: number
-    data: MaterialRelationData
-  }[] {
-    return this.materials.map(({ material, weight, length }) => ({
-      material_id: material.id,
-      data: {
-        length: length || '',
-        weight: weight || ''
-      }
-    }))
-  }
-
   clear() {
     this.id = undefined
     this.name = ''
-    this.materials = []
+    this.usedMaterials = []
     this.recentlyAdded = undefined
     this.recentlyUpdated = undefined
   }
@@ -76,16 +65,15 @@ export class DetailStore {
   }
 
   addMaterial(material: Material, data: MaterialRelationData) {
-    this.materials.push(new MaterialRelation(material, data))
+    this.usedMaterials.push(new MaterialRelation(material, data))
   }
 
   setMaterialRelations(materials: MaterialRelation[]) {
-    this.materials = materials
+    this.usedMaterials = materials
   }
 
   async load(detailId: number) {
     this.clear()
-    
     const detail = await api.getDetail(detailId)
     if (!detail) {
       throw Error(`Detail with id ${detailId} not found`)
@@ -103,7 +91,16 @@ export class DetailStore {
   }
 
   async insert() {
-    const materialRelations = this.getMaterialRelations()
+    const materialRelations = this.usedMaterials.map(
+      ({ material, weight, length }) => ({
+        material_id: material.id,
+        data: {
+          length: length || '',
+          weight: weight || ''
+        }
+      })
+    )
+
     const id = await api.insertDetail({
       object: {
         name: this.name,
@@ -128,7 +125,7 @@ export class DetailStore {
       }
     })
 
-    for (const { material, length, weight } of this.materials) {
+    for (const { material, length, weight } of this.usedMaterials) {
       if (!material.id) throw Error('Material id is null')
       await api.updateDetailMaterialRelationData({
         material_id: material.id,
@@ -152,5 +149,15 @@ export class DetailStore {
     if (!this.id) throw new Error('Detail id is not set')
     await api.deleteDetail(this.id)
     this.clear()
+  }
+
+  async loadMaterials() {
+    // TODO: optimize this
+    const materials = await materialApi.getMaterials()
+    this.setMaterilsSuggestions(materials)
+  }
+
+  setMaterilsSuggestions(suggestions: Material[]) {
+    this.materialsSuggestions = suggestions
   }
 }

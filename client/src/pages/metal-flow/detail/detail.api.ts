@@ -11,9 +11,9 @@ export async function insertDetail(
       variables
     })
     .then(res => {
-      if (res.data?.insert_metal_flow_details_one?.id) {
-        return res.data.insert_metal_flow_details_one.id
-      }
+      const id = res.data?.insert_metal_flow_details_one?.id
+      if (id) return id
+      if (res.errors) throw new Error(res.errors.toString())
       throw new Error('Failed to insert detail')
     })
 }

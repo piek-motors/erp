@@ -1,13 +1,14 @@
 /** @jsxImportSource @emotion/react */
-import { Box, Sheet, Stack } from '@mui/joy'
+import { Sheet, Stack } from '@mui/joy'
 import { ManagerFilter, PageTitle, Search } from 'components'
 import { OrderTypeFilter } from 'components/order-type-filter'
 import { TableName } from 'components/table-name'
+import { TabConfig, Tabs } from 'components/tabs'
 import { EnOrderStatus } from 'domain-model'
 import { useFilter } from 'hooks'
 import { SxProperty } from 'lib/constants'
 import { routeMap } from 'lib/routes'
-import { AddResourceButton, MyTabs } from 'lib/shortcuts'
+import { AddResourceButton } from 'lib/shortcuts'
 import { formatOnlyDate } from 'lib/utils/formatting'
 import { observer } from 'mobx-react-lite'
 import moment from 'moment'
@@ -170,6 +171,34 @@ const Archive = observer(() => {
 
 const { orders } = routeMap
 
+const tabs: TabConfig = [
+  {
+    value: routeMap.orders.preOrders,
+    label: t.preOrders,
+    component: <RegistrationList />
+  },
+  {
+    value: routeMap.orders.priorityList,
+    label: t.priorityList,
+    component: <PriorityList />
+  },
+  {
+    value: routeMap.orders.recentlyPaid,
+    label: t.recentlyPaidOrders,
+    component: <NewOrderList />
+  },
+  {
+    value: routeMap.orders.report,
+    label: t.report,
+    component: <RequestReportPage />
+  },
+  {
+    value: routeMap.orders.archiveSearch,
+    label: t.searchInArchive,
+    component: <Archive />
+  }
+]
+
 const Wrapper = observer(
   (props: { children: React.ReactNode; sx?: SxProperty }) => {
     const navigate = useNavigate()
@@ -178,26 +207,19 @@ const Wrapper = observer(
       navigate(`/orders/new`)
     }
 
-    const tabs = {
-      [t.preOrders]: orders.preOrders,
-      [t.priorityList]: orders.priorityList,
-      [t.recentlyPaidOrders]: orders.recentlyPaid,
-      [t.report]: orders.report,
-      [t.searchInArchive]: orders.archiveSearch
-    }
     return (
       <Stack p={1}>
         <PageTitle title={t.ordersTitle}>
           <AddResourceButton onClick={() => insertNewOrder()} />
         </PageTitle>
-        <MyTabs
-          value={currentTab}
+        <Tabs
           tabs={tabs}
-          handleChange={v => {
-            navigate(v)
+          value={currentTab}
+          handleChange={(v: number) => {
+            const url = tabs[v].value as any
+            navigate(url)
           }}
         />
-        <Box sx={props.sx}>{props.children}</Box>
       </Stack>
     )
   }

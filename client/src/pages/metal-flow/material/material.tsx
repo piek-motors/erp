@@ -1,17 +1,11 @@
 /** @jsxImportSource @emotion/react */
 import { Button, Stack } from '@mui/joy'
+import { TabConfig, Tabs } from 'components/tabs'
 import { EnMaterialShape, UiMaterialShape } from 'domain-model'
 import { open, routeMap } from 'lib/routes'
-import {
-  InputStack,
-  MyTabs,
-  P,
-  Row,
-  SendMutation,
-  TakeLookHint
-} from 'lib/shortcuts'
+import { InputStack, P, Row, SendMutation, TakeLookHint } from 'lib/shortcuts'
 import { observer } from 'mobx-react-lite'
-import { JSX, useEffect } from 'react'
+import { useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { SmallInputForm } from '../shared'
 import { MaterialUnitSelect } from '../shared/basic'
@@ -24,21 +18,34 @@ import {
   SquareMaterialInput
 } from './material-shape.input'
 
-const tabs: Record<EnMaterialShape, JSX.Element> = {
-  [EnMaterialShape.RoundBar]: <RoundBarInput />,
-  [EnMaterialShape.SquareBar]: <SquareMaterialInput />,
-  [EnMaterialShape.List]: <ListMaterialInput />,
-  [EnMaterialShape.Pipe]: <PipeMaterialInput />
-}
+const tabList: TabConfig = [
+  {
+    value: EnMaterialShape.RoundBar,
+    label: UiMaterialShape[EnMaterialShape.RoundBar],
+    component: <RoundBarInput />
+  },
+  {
+    value: EnMaterialShape.SquareBar,
+    label: UiMaterialShape[EnMaterialShape.SquareBar],
+    component: <SquareMaterialInput />
+  },
+  {
+    value: EnMaterialShape.List,
+    label: UiMaterialShape[EnMaterialShape.List],
+    component: <ListMaterialInput />
+  },
+  {
+    value: EnMaterialShape.Pipe,
+    label: UiMaterialShape[EnMaterialShape.Pipe],
+    component: <PipeMaterialInput />
+  }
+]
 
 export const AddMaterialPage = observer(() => {
-  const uiTabs: Record<string, JSX.Element> = {}
-  for (const [key, val] of Object.entries(tabs)) {
-    uiTabs[UiMaterialShape[key]] = val
-  }
   useEffect(() => {
     materialStore.clear()
   }, [])
+
   return (
     <SmallInputForm
       header={t.AddMaterial}
@@ -57,7 +64,7 @@ export const AddMaterialPage = observer(() => {
         </>
       }
     >
-      <MyTabs tabs={uiTabs} handleChange={materialStore.setShape} />
+      <Tabs tabs={tabList} handleChange={v => materialStore.setShape(v)} />
       <MaterialUnitSelect
         value={materialStore.unit}
         onChange={v => materialStore.setUnit(v)}
@@ -82,7 +89,9 @@ export const UpdateMaterialPage = observer(() => {
         <WareHouseOperationLinks id={materialId} />
       </Row>
       <P level="body-sm">ID: {materialId}</P>
-      <InputStack>{tabs[materialStore.shape]}</InputStack>
+      <InputStack>
+        {tabList.find(t => t.value === materialStore.shape)?.component}
+      </InputStack>
       <SendMutation
         onClick={() => materialStore.update()}
         buttonProps={{ color: 'success' }}
