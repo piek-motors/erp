@@ -1,4 +1,5 @@
 import { BaseAutocomplete } from 'components/base-autocomplete'
+import { DateInput } from 'components/date.input'
 import { MoneyInput } from 'components/money-input'
 import { Select } from 'components/select'
 import { Inp, MultilineInput } from 'lib/shortcuts'
@@ -37,6 +38,15 @@ export const RenderInput = (props: {
   }))
 
   switch (column.inputType) {
+    case InputTypes.Date:
+      return (
+        <DateInput
+          key={key}
+          label={label}
+          value={value ?? ''}
+          onChange={handleMyInputChange}
+        />
+      )
     case InputTypes.Text:
       return (
         <Inp

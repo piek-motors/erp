@@ -1,4 +1,4 @@
-import { Payment } from 'domain-model'
+import { Order, Payment } from 'domain-model'
 import { makeAutoObservable } from 'mobx'
 import moment from 'moment'
 import * as gql from 'types/graphql-shema'
@@ -61,17 +61,21 @@ export class PaymentStore {
     })
   }
 
-  async insertPayment() {
+  async insertPayment(order: Order) {
     this.assertOrderId()
 
     return this.withStateManagement(async () => {
       if (!this.date || !this.amount) {
-        throw new Error('Invalid input: date, and amount are required')
+        throw Error('Invalid input: date, and amount are required')
+      }
+
+      if (this.amount > order.totalAmount) {
+        throw Error('Amount is greater than total amount')
       }
 
       const paymentDate = moment(this.date, 'DD.MM.YY').utc(true)
       if (!paymentDate.isValid() || paymentDate.isAfter()) {
-        throw new Error('Invalid date format or future date not allowed')
+        throw Error('Invalid date format or future date not allowed')
       }
 
       const paymentId = await PaymentsApi.insert({

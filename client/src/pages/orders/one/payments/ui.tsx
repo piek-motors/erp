@@ -2,10 +2,11 @@
 import { css } from '@emotion/react'
 import { JSX } from '@emotion/react/jsx-runtime'
 import * as joy from '@mui/joy'
+import { DateInput } from 'components/date.input'
 import { MoneyInput } from 'components/money-input'
 import { Order, Roles } from 'domain-model'
 import { useAppContext } from 'hooks'
-import { DeleteResourceButton, Inp, Row } from 'lib/shortcuts'
+import { DeleteResourceButton, Row } from 'lib/shortcuts'
 import * as formatter from 'lib/utils/formatting'
 import { observer } from 'mobx-react-lite'
 import * as React from 'react'
@@ -128,7 +129,7 @@ const NewPaymentInput = observer((props: NewPaymentInputProps) => {
 
   async function handleSave() {
     try {
-      await os.payments.insertPayment()
+      await os.payments.insertPayment(props.order)
       handleClose()
     } catch (error) {
       const msg = error instanceof Error ? error.message : String(error)
@@ -171,13 +172,10 @@ const NewPaymentInput = observer((props: NewPaymentInputProps) => {
         }}
       >
         <joy.Stack gap={1} p={1}>
-          <Inp
+          <DateInput
             label="Дата платежа"
-            placeholder="ДД.ММ.ГГ"
-            onChange={v => {
-              os.payments.setDate(v)
-            }}
             value={os.payments.date || ''}
+            onChange={v => os.payments.setDate(v)}
           />
           <Row gap={1}>
             <MoneyInput

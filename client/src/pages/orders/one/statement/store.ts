@@ -8,6 +8,7 @@ import * as gql from 'types/graphql-shema'
 import { SuggestionsStore } from '../stores/suggestions.store'
 
 export enum InputTypes {
+  Date = 'date',
   Text = 'text',
   Number = 'number',
   Money = 'money',
@@ -140,7 +141,7 @@ export class StatementStore {
     return [
       {
         label: 'План. отгрузка',
-        inputType: InputTypes.Text,
+        inputType: InputTypes.Date,
         placeholder: 'ДД.ММ.ГГ',
         value: this.shippingDate,
         onChange: (v: string) => {
