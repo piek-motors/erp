@@ -27,7 +27,7 @@ export const Btn = Button
 export const P = (props: TypographyProps) => <Typography {...props} />
 export const Label = (props: TypographyProps & { label?: string }) =>
   Boolean(props.label || props.children) && (
-    <Typography {...props} level="body-sm" sx={{ p: 0, m: 0 }}>
+    <Typography level="body-sm" sx={{ p: 0, m: 0 }} {...props}>
       {props.label || props.children}
     </Typography>
   )

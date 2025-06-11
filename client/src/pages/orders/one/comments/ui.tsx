@@ -11,6 +11,7 @@ import {
   Textarea,
   Tooltip
 } from '@mui/joy'
+import { TextEditor } from 'components/text-editor'
 import { User } from 'domain-model'
 import { apolloClient } from 'lib/api'
 import { DeleteResourceButton, P, Row, text, UseIcon } from 'lib/shortcuts'
@@ -223,9 +224,6 @@ export function Comment({ data, userID }: ICommentProps) {
     const isYourComment = userID === data.user.id
     return isYourComment ? (
       <div
-        style={{
-          fontSize: '0.8rem'
-        }}
         contentEditable="true"
         key={data.id}
         suppressContentEditableWarning={true}
@@ -314,15 +312,13 @@ export function CommentListViewPort({ user, orderId }: ICommentsListProps) {
 }
 
 export function CommentInputViewPort({ user, orderId }: ICommentsListProps) {
-  const inputRef = useRef<any>(null)
   return (
     <Box>
       <Box sx={{ overflow: 'scroll', py: 2 }}>
-        <InputForm
-          insertComment={async comment => {
-            insertComment(comment, orderId, user.id)
+        <TextEditor
+          onSubmit={content => {
+            return insertComment(content, orderId, user.id)
           }}
-          inputRef={inputRef}
         />
       </Box>
     </Box>
