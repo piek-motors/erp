@@ -1,5 +1,8 @@
 subscription Comments($OrderID: Int!) {
-  orders_comments(where: { order_id: { _eq: $OrderID } }, order_by: { id: desc }) {
+  orders_comments(
+    where: { order_id: { _eq: $OrderID } }
+    order_by: { id: desc }
+  ) {
     id
     text
     created_at
@@ -12,7 +15,9 @@ subscription Comments($OrderID: Int!) {
 }
 
 mutation InsertComment($OrderID: Int!, $Text: String!, $UserID: Int!) {
-  insert_orders_comments_one(object: { order_id: $OrderID, text: $Text, user_id: $UserID }) {
+  insert_orders_comments_one(
+    object: { order_id: $OrderID, text: $Text, user_id: $UserID }
+  ) {
     id
     order_id
     text
@@ -28,7 +33,10 @@ mutation DeleteComment($CommentID: Int!) {
 }
 
 mutation UpdateComment($CommentID: Int!, $Text: String!) {
-  update_orders_comments_by_pk(pk_columns: { id: $CommentID }, _set: { text: $Text }) {
+  update_orders_comments_by_pk(
+    pk_columns: { id: $CommentID }
+    _set: { text: $Text }
+  ) {
     id
     order_id
     text

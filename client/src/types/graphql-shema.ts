@@ -8634,6 +8634,13 @@ export type UpdateNotificationSeenMutationVariables = Exact<{
 
 export type UpdateNotificationSeenMutation = { __typename?: 'mutation_root', update_orders_notifications_by_pk?: { __typename?: 'orders_notifications', id: number, seen: boolean } | null };
 
+export type CountUnresolvedNotificationsQueryVariables = Exact<{
+  userId: Scalars['Int']['input'];
+}>;
+
+
+export type CountUnresolvedNotificationsQuery = { __typename?: 'query_root', orders_notifications_aggregate: { __typename?: 'orders_notifications_aggregate', aggregate?: { __typename?: 'orders_notifications_aggregate_fields', count: number } | null } };
+
 export type GetDetailsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -9237,6 +9244,50 @@ export function useUpdateNotificationSeenMutation(baseOptions?: Apollo.MutationH
 export type UpdateNotificationSeenMutationHookResult = ReturnType<typeof useUpdateNotificationSeenMutation>;
 export type UpdateNotificationSeenMutationResult = Apollo.MutationResult<UpdateNotificationSeenMutation>;
 export type UpdateNotificationSeenMutationOptions = Apollo.BaseMutationOptions<UpdateNotificationSeenMutation, UpdateNotificationSeenMutationVariables>;
+export const CountUnresolvedNotificationsDocument = gql`
+    query CountUnresolvedNotifications($userId: Int!) {
+  orders_notifications_aggregate(
+    where: {seen: {_eq: false}, user_id: {_eq: $userId}}
+  ) {
+    aggregate {
+      count(columns: id)
+    }
+  }
+}
+    `;
+
+/**
+ * __useCountUnresolvedNotificationsQuery__
+ *
+ * To run a query within a React component, call `useCountUnresolvedNotificationsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCountUnresolvedNotificationsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCountUnresolvedNotificationsQuery({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useCountUnresolvedNotificationsQuery(baseOptions: Apollo.QueryHookOptions<CountUnresolvedNotificationsQuery, CountUnresolvedNotificationsQueryVariables> & ({ variables: CountUnresolvedNotificationsQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<CountUnresolvedNotificationsQuery, CountUnresolvedNotificationsQueryVariables>(CountUnresolvedNotificationsDocument, options);
+      }
+export function useCountUnresolvedNotificationsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<CountUnresolvedNotificationsQuery, CountUnresolvedNotificationsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<CountUnresolvedNotificationsQuery, CountUnresolvedNotificationsQueryVariables>(CountUnresolvedNotificationsDocument, options);
+        }
+export function useCountUnresolvedNotificationsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<CountUnresolvedNotificationsQuery, CountUnresolvedNotificationsQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<CountUnresolvedNotificationsQuery, CountUnresolvedNotificationsQueryVariables>(CountUnresolvedNotificationsDocument, options);
+        }
+export type CountUnresolvedNotificationsQueryHookResult = ReturnType<typeof useCountUnresolvedNotificationsQuery>;
+export type CountUnresolvedNotificationsLazyQueryHookResult = ReturnType<typeof useCountUnresolvedNotificationsLazyQuery>;
+export type CountUnresolvedNotificationsSuspenseQueryHookResult = ReturnType<typeof useCountUnresolvedNotificationsSuspenseQuery>;
+export type CountUnresolvedNotificationsQueryResult = Apollo.QueryResult<CountUnresolvedNotificationsQuery, CountUnresolvedNotificationsQueryVariables>;
 export const GetDetailsDocument = gql`
     query GetDetails {
   metal_flow_details {

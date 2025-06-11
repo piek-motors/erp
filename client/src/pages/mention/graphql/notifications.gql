@@ -33,3 +33,13 @@ mutation UpdateNotificationSeen($ID: Int!, $Seen: Boolean!) {
     seen
   }
 }
+
+query CountUnresolvedNotifications($userId: Int!) {
+  orders_notifications_aggregate(
+    where: { seen: { _eq: false }, user_id: { _eq: $userId } }
+  ) {
+    aggregate {
+      count(columns: id)
+    }
+  }
+}

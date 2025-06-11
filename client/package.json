@@ -33,6 +33,8 @@
     "@mui/joy": "5.0.0-beta.52",
     "@tiptap/extension-bold": "^2.14.0",
     "@tiptap/extension-highlight": "^2.14.0",
+    "@tiptap/extension-mention": "^2.14.0",
+    "@tiptap/extension-placeholder": "^2.14.0",
     "@tiptap/pm": "^2.14.0",
     "@tiptap/react": "^2.14.0",
     "@tiptap/starter-kit": "^2.14.0",
@@ -58,6 +60,7 @@
     "react-scripts": "^5.0.1",
     "react-table": "^7.8.0",
     "subscriptions-transport-ws": "^0.11.0",
+    "tippy.js": "^6.3.7",
     "zustand": "5.0.4"
   },
   "devDependencies": {

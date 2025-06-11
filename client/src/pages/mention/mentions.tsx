@@ -16,50 +16,49 @@ import {
 } from 'types/graphql-shema'
 
 interface INotificationProps {
-  data: any
-  readed?: boolean
+  data: TNotification
 }
 
-function Mention({ data, readed }: INotificationProps) {
+function Mention({ data }: INotificationProps) {
   const navigate = useNavigate()
   const [updateViewedMutration] = useUpdateNotificationSeenMutation()
 
-  const Body = styled.div`
+  const CommentContentWrapper = styled.div`
     a,
     p,
     div,
     span {
       font-size: 1rem !important;
-      color: var(--highContrast) !important;
     }
   `
 
   function toOrderDetailPageHandler() {
-    navigate(openOrderDetailPage(data.Order.OrderID))
-    updateViewedMutration({ variables: { ID: data.ID, Seen: true } })
+    navigate(openOrderDetailPage(data.order?.id ?? 0))
+    updateViewedMutration({ variables: { ID: data.id, Seen: true } })
   }
+
+  if (!data.order) return <>Не удалось найти заказ</>
 
   return (
     <Stack>
       <Sheet
-        sx={{ p: 2 }}
-        variant={readed ? 'soft' : 'plain'}
-        color={readed ? 'neutral' : 'primary'}
+        sx={{ p: 1, borderRadius: 'lg' }}
+        variant={!data.seen ? 'soft' : 'plain'}
       >
         <Box sx={{ display: 'grid' }}>
           <Stack direction={'row'} gap={1}>
             <P fontWeight={500} color="neutral">
-              {data.Comment.User.FirstName} {data.Comment.User.LastName}
+              {data.comment.user.first_name} {data.comment.user.last_name}
             </P>
             <P>
               упомянул вас{' '}
-              {moment(data.Comment.Timestamp).format('DD MMM H:mm')}{' '}
+              {moment(data.comment.created_at).format('DD MMM H:mm')}{' '}
             </P>
           </Stack>
 
           <Row>
-            <P color="primary" fontWeight={600}>
-              {data.Order.Entity}__{data.Order.City}
+            <P fontWeight={600}>
+              {data.order.contractor}__{data.order.city}
             </P>
 
             <Box>
@@ -78,7 +77,9 @@ function Mention({ data, readed }: INotificationProps) {
         </Box>
 
         <Box p={1}>
-          <Body dangerouslySetInnerHTML={{ __html: data.Comment.Text }}></Body>
+          <CommentContentWrapper
+            dangerouslySetInnerHTML={{ __html: data.comment.text }}
+          ></CommentContentWrapper>
         </Box>
       </Sheet>
     </Stack>
@@ -87,12 +88,13 @@ function Mention({ data, readed }: INotificationProps) {
 
 export function MentionList() {
   const { store }: any = useContext(Context)
+
   const [notifications, setNotifications] = useState<{
     unviewed: TNotification[]
     viewed: TNotification[]
   }>({ unviewed: [], viewed: [] })
 
-  const { data, loading } = useGetNotificationsSubscription({
+  const { loading } = useGetNotificationsSubscription({
     onData(options) {
       if (!options.data.data) throw Error(options.data.error?.stack)
 
@@ -104,32 +106,43 @@ export function MentionList() {
       })
     },
     variables: {
-      _eq: store.user.UserID,
+      _eq: store?.user?.id,
       limit: 100
     }
   })
 
   return (
-    <Container>
+    <Container sx={{ p: 1 }}>
       <PageTitle title="Упоминания" />
       <Stack direction={'column'} gap={2}>
         {/* unreaderd notifs */}
         {notifications.unviewed.length ? (
-          <Box>
-            <P level="h2">Непросмотренные </P>
+          <Stack gap={1}>
+            <SectionTitle title="Новые" />
             {!loading &&
               notifications?.unviewed.map((e, index) => (
                 <Mention key={index} data={e} />
               ))}
-          </Box>
+          </Stack>
         ) : null}
 
         {/* viewed notifs */}
-        {!loading &&
-          notifications?.viewed.map((e, index) => (
-            <Mention data={e} key={index} />
-          ))}
+        <Stack gap={1}>
+          <SectionTitle title="Просмотренные" />
+          {!loading &&
+            notifications?.viewed.map((mention, index) => (
+              <Mention data={mention} key={index} />
+            ))}
+        </Stack>
       </Stack>
     </Container>
+  )
+}
+
+function SectionTitle({ title }: { title: string }) {
+  return (
+    <P level="title-md" color="primary">
+      {title}
+    </P>
   )
 }

@@ -1,26 +1,64 @@
+/** @jsxImportSource @emotion/react */
+import { css } from '@emotion/react'
 import { Box, Button, ButtonProps, Sheet, Stack } from '@mui/joy'
 import Bold from '@tiptap/extension-bold'
 import Highlight from '@tiptap/extension-highlight'
+import Mention from '@tiptap/extension-mention'
+import Placeholder from '@tiptap/extension-placeholder'
 import { Editor, EditorContent, useEditor } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
-import { Label, Row } from 'lib/shortcuts'
+import { Row } from 'lib/shortcuts'
 import { useState } from 'react'
+import { suggestion } from './mention-suggestion'
 
 export const TextEditor = (props: {
   onSubmit: (content: string) => Promise<void>
 }) => {
   const [key, setKey] = useState(0)
   const editor = useEditor({
-    extensions: [StarterKit, Bold, Highlight],
+    extensions: [
+      StarterKit,
+      Placeholder.configure({
+        placeholder: 'Введите комментарий'
+      }),
+      Bold,
+      Highlight,
+      Mention.configure({
+        HTMLAttributes: {
+          class: 'mention'
+        },
+        renderText: mention => {
+          console.log(mention)
+          return `<span class="mention" data-mention="${mention.node.attrs.id}">${mention.node.attrs.label}</span>`
+        },
+        suggestion
+      })
+    ],
     content: '',
     shouldRerenderOnTransaction: false
   })
 
+  const styles = css`
+    .mention {
+      background-color: #308ef860;
+      border-radius: 1rem;
+      padding: 0rem 0.3rem;
+      color: #212529;
+      display: inline-block;
+    }
+
+    .tiptap p.is-editor-empty:first-of-type::before {
+      color: #adb5bd;
+      content: attr(data-placeholder);
+      float: left;
+      height: 0;
+      pointer-events: none;
+    }
+  `
   if (!editor) return null
   return (
-    <Stack gap={1} key={key}>
+    <Stack gap={1} key={key} css={styles} sx={{ position: 'relative' }}>
       <Sheet sx={{ borderRadius: 'md', p: 1 }}>
-        <Label p={2}>Добавить комментарий</Label>
         <Row>
           <TextFormatButton
             editor={editor}
