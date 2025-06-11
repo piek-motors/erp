@@ -1,6 +1,7 @@
+import { Detail, Material } from 'domain-model'
 import { apolloClient } from 'lib/api'
 import * as gql from 'types/graphql-shema'
-import { map } from '../mappers'
+import { map } from '../../mappers'
 
 export async function updateMaterial(
   variables: gql.UpdateMaterialMutationVariables
@@ -60,5 +61,30 @@ export async function getMaterials() {
       return res.data?.metal_flow_materials
         .map(map.material.fromDto)
         .sort((a, b) => a.id - b.id)
+    })
+}
+
+export async function getDetailsMadeOfMaterial(
+  material: Material
+): Promise<Detail[]> {
+  return await apolloClient
+    .query<
+      gql.GetDetailsMadeOfMaterialQuery,
+      gql.GetDetailsMadeOfMaterialQueryVariables
+    >({
+      query: gql.GetDetailsMadeOfMaterialDocument,
+      variables: { material_id: material.id },
+      fetchPolicy: 'cache-first'
+    })
+    .then(res => {
+      return res.data?.metal_flow_details
+        .flatMap(each =>
+          each.detail_materials.map(each => {
+            const detail = new Detail(each.detail.id, each.detail.name)
+            detail.madeOf(material, each.data?.length, each.data?.weight)
+            return detail
+          })
+        )
+        .filter(Boolean) as Detail[]
     })
 }

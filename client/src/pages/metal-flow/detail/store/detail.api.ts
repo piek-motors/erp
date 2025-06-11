@@ -1,6 +1,6 @@
 import { apolloClient } from 'lib/api'
 import * as gql from 'types/graphql-shema'
-import { map } from '../mappers'
+import { map } from '../../mappers'
 
 export async function insertDetail(
   variables: gql.InsertDetailMutationVariables

@@ -6361,33 +6361,6 @@ export type Orders_Orders_Aggregate = {
   nodes: Array<Orders_Orders>;
 };
 
-export type Orders_Orders_Aggregate_Bool_Exp = {
-  bool_and?: InputMaybe<Orders_Orders_Aggregate_Bool_Exp_Bool_And>;
-  bool_or?: InputMaybe<Orders_Orders_Aggregate_Bool_Exp_Bool_Or>;
-  count?: InputMaybe<Orders_Orders_Aggregate_Bool_Exp_Count>;
-};
-
-export type Orders_Orders_Aggregate_Bool_Exp_Bool_And = {
-  arguments: Orders_Orders_Select_Column_Orders_Orders_Aggregate_Bool_Exp_Bool_And_Arguments_Columns;
-  distinct?: InputMaybe<Scalars['Boolean']['input']>;
-  filter?: InputMaybe<Orders_Orders_Bool_Exp>;
-  predicate: Boolean_Comparison_Exp;
-};
-
-export type Orders_Orders_Aggregate_Bool_Exp_Bool_Or = {
-  arguments: Orders_Orders_Select_Column_Orders_Orders_Aggregate_Bool_Exp_Bool_Or_Arguments_Columns;
-  distinct?: InputMaybe<Scalars['Boolean']['input']>;
-  filter?: InputMaybe<Orders_Orders_Bool_Exp>;
-  predicate: Boolean_Comparison_Exp;
-};
-
-export type Orders_Orders_Aggregate_Bool_Exp_Count = {
-  arguments?: InputMaybe<Array<Orders_Orders_Select_Column>>;
-  distinct?: InputMaybe<Scalars['Boolean']['input']>;
-  filter?: InputMaybe<Orders_Orders_Bool_Exp>;
-  predicate: Int_Comparison_Exp;
-};
-
 /** aggregate fields of "orders.orders" */
 export type Orders_Orders_Aggregate_Fields = {
   __typename?: 'orders_orders_aggregate_fields';
@@ -6411,28 +6384,6 @@ export type Orders_Orders_Aggregate_FieldsCountArgs = {
   distinct?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
-/** order by aggregate values of table "orders.orders" */
-export type Orders_Orders_Aggregate_Order_By = {
-  avg?: InputMaybe<Orders_Orders_Avg_Order_By>;
-  count?: InputMaybe<Order_By>;
-  max?: InputMaybe<Orders_Orders_Max_Order_By>;
-  min?: InputMaybe<Orders_Orders_Min_Order_By>;
-  stddev?: InputMaybe<Orders_Orders_Stddev_Order_By>;
-  stddev_pop?: InputMaybe<Orders_Orders_Stddev_Pop_Order_By>;
-  stddev_samp?: InputMaybe<Orders_Orders_Stddev_Samp_Order_By>;
-  sum?: InputMaybe<Orders_Orders_Sum_Order_By>;
-  var_pop?: InputMaybe<Orders_Orders_Var_Pop_Order_By>;
-  var_samp?: InputMaybe<Orders_Orders_Var_Samp_Order_By>;
-  variance?: InputMaybe<Orders_Orders_Variance_Order_By>;
-};
-
-/** input type for inserting array relation for remote table "orders.orders" */
-export type Orders_Orders_Arr_Rel_Insert_Input = {
-  data: Array<Orders_Orders_Insert_Input>;
-  /** upsert condition */
-  on_conflict?: InputMaybe<Orders_Orders_On_Conflict>;
-};
-
 /** aggregate avg on columns */
 export type Orders_Orders_Avg_Fields = {
   __typename?: 'orders_orders_avg_fields';
@@ -6440,14 +6391,6 @@ export type Orders_Orders_Avg_Fields = {
   manager_id?: Maybe<Scalars['Float']['output']>;
   status?: Maybe<Scalars['Float']['output']>;
   total_amount?: Maybe<Scalars['Float']['output']>;
-};
-
-/** order by avg() on columns of table "orders.orders" */
-export type Orders_Orders_Avg_Order_By = {
-  id?: InputMaybe<Order_By>;
-  manager_id?: InputMaybe<Order_By>;
-  status?: InputMaybe<Order_By>;
-  total_amount?: InputMaybe<Order_By>;
 };
 
 /** Boolean expression to filter rows from the table "orders.orders". All fields are combined with a logical 'AND'. */
@@ -6543,24 +6486,6 @@ export type Orders_Orders_Max_Fields = {
   total_amount?: Maybe<Scalars['numeric']['output']>;
 };
 
-/** order by max() on columns of table "orders.orders" */
-export type Orders_Orders_Max_Order_By = {
-  acceptance_date?: InputMaybe<Order_By>;
-  actual_shipping_date?: InputMaybe<Order_By>;
-  city?: InputMaybe<Order_By>;
-  comment?: InputMaybe<Order_By>;
-  contractor?: InputMaybe<Order_By>;
-  created_at?: InputMaybe<Order_By>;
-  id?: InputMaybe<Order_By>;
-  invoice_number?: InputMaybe<Order_By>;
-  manager_id?: InputMaybe<Order_By>;
-  need_attention?: InputMaybe<Order_By>;
-  order_number?: InputMaybe<Order_By>;
-  shipping_date?: InputMaybe<Order_By>;
-  status?: InputMaybe<Order_By>;
-  total_amount?: InputMaybe<Order_By>;
-};
-
 /** aggregate min on columns */
 export type Orders_Orders_Min_Fields = {
   __typename?: 'orders_orders_min_fields';
@@ -6578,24 +6503,6 @@ export type Orders_Orders_Min_Fields = {
   shipping_date?: Maybe<Scalars['date']['output']>;
   status?: Maybe<Scalars['Int']['output']>;
   total_amount?: Maybe<Scalars['numeric']['output']>;
-};
-
-/** order by min() on columns of table "orders.orders" */
-export type Orders_Orders_Min_Order_By = {
-  acceptance_date?: InputMaybe<Order_By>;
-  actual_shipping_date?: InputMaybe<Order_By>;
-  city?: InputMaybe<Order_By>;
-  comment?: InputMaybe<Order_By>;
-  contractor?: InputMaybe<Order_By>;
-  created_at?: InputMaybe<Order_By>;
-  id?: InputMaybe<Order_By>;
-  invoice_number?: InputMaybe<Order_By>;
-  manager_id?: InputMaybe<Order_By>;
-  need_attention?: InputMaybe<Order_By>;
-  order_number?: InputMaybe<Order_By>;
-  shipping_date?: InputMaybe<Order_By>;
-  status?: InputMaybe<Order_By>;
-  total_amount?: InputMaybe<Order_By>;
 };
 
 /** response of any mutation on the table "orders.orders" */
@@ -6688,22 +6595,6 @@ export enum Orders_Orders_Select_Column {
   TotalAmount = 'total_amount'
 }
 
-/** select "orders_orders_aggregate_bool_exp_bool_and_arguments_columns" columns of table "orders.orders" */
-export enum Orders_Orders_Select_Column_Orders_Orders_Aggregate_Bool_Exp_Bool_And_Arguments_Columns {
-  /** column name */
-  AwaitingDispatch = 'awaiting_dispatch',
-  /** column name */
-  IsReclamation = 'is_reclamation'
-}
-
-/** select "orders_orders_aggregate_bool_exp_bool_or_arguments_columns" columns of table "orders.orders" */
-export enum Orders_Orders_Select_Column_Orders_Orders_Aggregate_Bool_Exp_Bool_Or_Arguments_Columns {
-  /** column name */
-  AwaitingDispatch = 'awaiting_dispatch',
-  /** column name */
-  IsReclamation = 'is_reclamation'
-}
-
 /** input type for updating data in table "orders.orders" */
 export type Orders_Orders_Set_Input = {
   acceptance_date?: InputMaybe<Scalars['timestamp']['input']>;
@@ -6733,14 +6624,6 @@ export type Orders_Orders_Stddev_Fields = {
   total_amount?: Maybe<Scalars['Float']['output']>;
 };
 
-/** order by stddev() on columns of table "orders.orders" */
-export type Orders_Orders_Stddev_Order_By = {
-  id?: InputMaybe<Order_By>;
-  manager_id?: InputMaybe<Order_By>;
-  status?: InputMaybe<Order_By>;
-  total_amount?: InputMaybe<Order_By>;
-};
-
 /** aggregate stddev_pop on columns */
 export type Orders_Orders_Stddev_Pop_Fields = {
   __typename?: 'orders_orders_stddev_pop_fields';
@@ -6750,14 +6633,6 @@ export type Orders_Orders_Stddev_Pop_Fields = {
   total_amount?: Maybe<Scalars['Float']['output']>;
 };
 
-/** order by stddev_pop() on columns of table "orders.orders" */
-export type Orders_Orders_Stddev_Pop_Order_By = {
-  id?: InputMaybe<Order_By>;
-  manager_id?: InputMaybe<Order_By>;
-  status?: InputMaybe<Order_By>;
-  total_amount?: InputMaybe<Order_By>;
-};
-
 /** aggregate stddev_samp on columns */
 export type Orders_Orders_Stddev_Samp_Fields = {
   __typename?: 'orders_orders_stddev_samp_fields';
@@ -6765,14 +6640,6 @@ export type Orders_Orders_Stddev_Samp_Fields = {
   manager_id?: Maybe<Scalars['Float']['output']>;
   status?: Maybe<Scalars['Float']['output']>;
   total_amount?: Maybe<Scalars['Float']['output']>;
-};
-
-/** order by stddev_samp() on columns of table "orders.orders" */
-export type Orders_Orders_Stddev_Samp_Order_By = {
-  id?: InputMaybe<Order_By>;
-  manager_id?: InputMaybe<Order_By>;
-  status?: InputMaybe<Order_By>;
-  total_amount?: InputMaybe<Order_By>;
 };
 
 /** Streaming cursor of the table "orders_orders" */
@@ -6810,14 +6677,6 @@ export type Orders_Orders_Sum_Fields = {
   manager_id?: Maybe<Scalars['Int']['output']>;
   status?: Maybe<Scalars['Int']['output']>;
   total_amount?: Maybe<Scalars['numeric']['output']>;
-};
-
-/** order by sum() on columns of table "orders.orders" */
-export type Orders_Orders_Sum_Order_By = {
-  id?: InputMaybe<Order_By>;
-  manager_id?: InputMaybe<Order_By>;
-  status?: InputMaybe<Order_By>;
-  total_amount?: InputMaybe<Order_By>;
 };
 
 /** update columns of table "orders.orders" */
@@ -6874,14 +6733,6 @@ export type Orders_Orders_Var_Pop_Fields = {
   total_amount?: Maybe<Scalars['Float']['output']>;
 };
 
-/** order by var_pop() on columns of table "orders.orders" */
-export type Orders_Orders_Var_Pop_Order_By = {
-  id?: InputMaybe<Order_By>;
-  manager_id?: InputMaybe<Order_By>;
-  status?: InputMaybe<Order_By>;
-  total_amount?: InputMaybe<Order_By>;
-};
-
 /** aggregate var_samp on columns */
 export type Orders_Orders_Var_Samp_Fields = {
   __typename?: 'orders_orders_var_samp_fields';
@@ -6891,14 +6742,6 @@ export type Orders_Orders_Var_Samp_Fields = {
   total_amount?: Maybe<Scalars['Float']['output']>;
 };
 
-/** order by var_samp() on columns of table "orders.orders" */
-export type Orders_Orders_Var_Samp_Order_By = {
-  id?: InputMaybe<Order_By>;
-  manager_id?: InputMaybe<Order_By>;
-  status?: InputMaybe<Order_By>;
-  total_amount?: InputMaybe<Order_By>;
-};
-
 /** aggregate variance on columns */
 export type Orders_Orders_Variance_Fields = {
   __typename?: 'orders_orders_variance_fields';
@@ -6906,14 +6749,6 @@ export type Orders_Orders_Variance_Fields = {
   manager_id?: Maybe<Scalars['Float']['output']>;
   status?: Maybe<Scalars['Float']['output']>;
   total_amount?: Maybe<Scalars['Float']['output']>;
-};
-
-/** order by variance() on columns of table "orders.orders" */
-export type Orders_Orders_Variance_Order_By = {
-  id?: InputMaybe<Order_By>;
-  manager_id?: InputMaybe<Order_By>;
-  status?: InputMaybe<Order_By>;
-  total_amount?: InputMaybe<Order_By>;
 };
 
 export type Query_Root = {
@@ -8481,88 +8316,16 @@ export type Timestamptz_Comparison_Exp = {
 /** columns and relationships of "users" */
 export type Users = {
   __typename?: 'users';
-  /** An array relationship */
-  comments: Array<Orders_Comments>;
-  /** An aggregate relationship */
-  comments_aggregate: Orders_Comments_Aggregate;
   email?: Maybe<Scalars['String']['output']>;
   first_name?: Maybe<Scalars['String']['output']>;
   id: Scalars['Int']['output'];
   last_name?: Maybe<Scalars['String']['output']>;
-  /** An array relationship */
-  notifications: Array<Orders_Notifications>;
-  /** An aggregate relationship */
-  notifications_aggregate: Orders_Notifications_Aggregate;
-  /** An array relationship */
-  orders: Array<Orders_Orders>;
-  /** An aggregate relationship */
-  orders_aggregate: Orders_Orders_Aggregate;
   password?: Maybe<Scalars['String']['output']>;
   /** An array relationship */
   refresh_tokens: Array<Refresh_Tokens>;
   /** An aggregate relationship */
   refresh_tokens_aggregate: Refresh_Tokens_Aggregate;
   role: Scalars['Int']['output'];
-};
-
-
-/** columns and relationships of "users" */
-export type UsersCommentsArgs = {
-  distinct_on?: InputMaybe<Array<Orders_Comments_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  order_by?: InputMaybe<Array<Orders_Comments_Order_By>>;
-  where?: InputMaybe<Orders_Comments_Bool_Exp>;
-};
-
-
-/** columns and relationships of "users" */
-export type UsersComments_AggregateArgs = {
-  distinct_on?: InputMaybe<Array<Orders_Comments_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  order_by?: InputMaybe<Array<Orders_Comments_Order_By>>;
-  where?: InputMaybe<Orders_Comments_Bool_Exp>;
-};
-
-
-/** columns and relationships of "users" */
-export type UsersNotificationsArgs = {
-  distinct_on?: InputMaybe<Array<Orders_Notifications_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  order_by?: InputMaybe<Array<Orders_Notifications_Order_By>>;
-  where?: InputMaybe<Orders_Notifications_Bool_Exp>;
-};
-
-
-/** columns and relationships of "users" */
-export type UsersNotifications_AggregateArgs = {
-  distinct_on?: InputMaybe<Array<Orders_Notifications_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  order_by?: InputMaybe<Array<Orders_Notifications_Order_By>>;
-  where?: InputMaybe<Orders_Notifications_Bool_Exp>;
-};
-
-
-/** columns and relationships of "users" */
-export type UsersOrdersArgs = {
-  distinct_on?: InputMaybe<Array<Orders_Orders_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  order_by?: InputMaybe<Array<Orders_Orders_Order_By>>;
-  where?: InputMaybe<Orders_Orders_Bool_Exp>;
-};
-
-
-/** columns and relationships of "users" */
-export type UsersOrders_AggregateArgs = {
-  distinct_on?: InputMaybe<Array<Orders_Orders_Select_Column>>;
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
-  order_by?: InputMaybe<Array<Orders_Orders_Order_By>>;
-  where?: InputMaybe<Orders_Orders_Bool_Exp>;
 };
 
 
@@ -8627,16 +8390,10 @@ export type Users_Bool_Exp = {
   _and?: InputMaybe<Array<Users_Bool_Exp>>;
   _not?: InputMaybe<Users_Bool_Exp>;
   _or?: InputMaybe<Array<Users_Bool_Exp>>;
-  comments?: InputMaybe<Orders_Comments_Bool_Exp>;
-  comments_aggregate?: InputMaybe<Orders_Comments_Aggregate_Bool_Exp>;
   email?: InputMaybe<String_Comparison_Exp>;
   first_name?: InputMaybe<String_Comparison_Exp>;
   id?: InputMaybe<Int_Comparison_Exp>;
   last_name?: InputMaybe<String_Comparison_Exp>;
-  notifications?: InputMaybe<Orders_Notifications_Bool_Exp>;
-  notifications_aggregate?: InputMaybe<Orders_Notifications_Aggregate_Bool_Exp>;
-  orders?: InputMaybe<Orders_Orders_Bool_Exp>;
-  orders_aggregate?: InputMaybe<Orders_Orders_Aggregate_Bool_Exp>;
   password?: InputMaybe<String_Comparison_Exp>;
   refresh_tokens?: InputMaybe<Refresh_Tokens_Bool_Exp>;
   refresh_tokens_aggregate?: InputMaybe<Refresh_Tokens_Aggregate_Bool_Exp>;
@@ -8657,13 +8414,10 @@ export type Users_Inc_Input = {
 
 /** input type for inserting data into table "users" */
 export type Users_Insert_Input = {
-  comments?: InputMaybe<Orders_Comments_Arr_Rel_Insert_Input>;
   email?: InputMaybe<Scalars['String']['input']>;
   first_name?: InputMaybe<Scalars['String']['input']>;
   id?: InputMaybe<Scalars['Int']['input']>;
   last_name?: InputMaybe<Scalars['String']['input']>;
-  notifications?: InputMaybe<Orders_Notifications_Arr_Rel_Insert_Input>;
-  orders?: InputMaybe<Orders_Orders_Arr_Rel_Insert_Input>;
   password?: InputMaybe<Scalars['String']['input']>;
   refresh_tokens?: InputMaybe<Refresh_Tokens_Arr_Rel_Insert_Input>;
   role?: InputMaybe<Scalars['Int']['input']>;
@@ -8716,13 +8470,10 @@ export type Users_On_Conflict = {
 
 /** Ordering options when selecting data from "users". */
 export type Users_Order_By = {
-  comments_aggregate?: InputMaybe<Orders_Comments_Aggregate_Order_By>;
   email?: InputMaybe<Order_By>;
   first_name?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   last_name?: InputMaybe<Order_By>;
-  notifications_aggregate?: InputMaybe<Orders_Notifications_Aggregate_Order_By>;
-  orders_aggregate?: InputMaybe<Orders_Orders_Aggregate_Order_By>;
   password?: InputMaybe<Order_By>;
   refresh_tokens_aggregate?: InputMaybe<Refresh_Tokens_Aggregate_Order_By>;
   role?: InputMaybe<Order_By>;
@@ -8851,22 +8602,6 @@ export type Users_Variance_Fields = {
   role?: Maybe<Scalars['Float']['output']>;
 };
 
-export type GetNotificationsSubscriptionVariables = Exact<{
-  _eq: Scalars['Int']['input'];
-  limit?: InputMaybe<Scalars['Int']['input']>;
-}>;
-
-
-export type GetNotificationsSubscription = { __typename?: 'subscription_root', orders_notifications: Array<{ __typename?: 'orders_notifications', id: number, seen: boolean, comment: { __typename?: 'orders_comments', id: number, text: string, created_at: any, user: { __typename?: 'users', id: number, first_name?: string | null, last_name?: string | null } }, order?: { __typename?: 'orders_orders', id: number, city?: string | null, contractor?: string | null } | null }> };
-
-export type UpdateNotificationSeenMutationVariables = Exact<{
-  ID: Scalars['Int']['input'];
-  Seen: Scalars['Boolean']['input'];
-}>;
-
-
-export type UpdateNotificationSeenMutation = { __typename?: 'mutation_root', update_orders_notifications_by_pk?: { __typename?: 'orders_notifications', id: number, seen: boolean } | null };
-
 export type GetEmployeeListQueryVariables = Exact<{
   gte: Scalars['timestamp']['input'];
   lte: Scalars['timestamp']['input'];
@@ -8882,6 +8617,22 @@ export type UpdateTimeDeductionMutationVariables = Exact<{
 
 
 export type UpdateTimeDeductionMutation = { __typename?: 'mutation_root', update_attendance_config_by_pk?: { __typename?: 'attendance_config', TimeDeduction: any, ID: number } | null };
+
+export type GetNotificationsSubscriptionVariables = Exact<{
+  _eq: Scalars['Int']['input'];
+  limit?: InputMaybe<Scalars['Int']['input']>;
+}>;
+
+
+export type GetNotificationsSubscription = { __typename?: 'subscription_root', orders_notifications: Array<{ __typename?: 'orders_notifications', id: number, seen: boolean, comment: { __typename?: 'orders_comments', id: number, text: string, created_at: any, user: { __typename?: 'users', id: number, first_name?: string | null, last_name?: string | null } }, order?: { __typename?: 'orders_orders', id: number, city?: string | null, contractor?: string | null } | null }> };
+
+export type UpdateNotificationSeenMutationVariables = Exact<{
+  ID: Scalars['Int']['input'];
+  Seen: Scalars['Boolean']['input'];
+}>;
+
+
+export type UpdateNotificationSeenMutation = { __typename?: 'mutation_root', update_orders_notifications_by_pk?: { __typename?: 'orders_notifications', id: number, seen: boolean } | null };
 
 export type GetDetailsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -8946,6 +8697,13 @@ export type InsertDetailMaterialsMutationVariables = Exact<{
 
 
 export type InsertDetailMaterialsMutation = { __typename?: 'mutation_root', insert_metal_flow_detail_materials?: { __typename?: 'metal_flow_detail_materials_mutation_response', affected_rows: number, returning: Array<{ __typename?: 'metal_flow_detail_materials', detail_id: number, material_id: number }> } | null };
+
+export type GetDetailsMadeOfMaterialQueryVariables = Exact<{
+  material_id: Scalars['Int']['input'];
+}>;
+
+
+export type GetDetailsMadeOfMaterialQuery = { __typename?: 'query_root', metal_flow_details: Array<{ __typename?: 'metal_flow_details', detail_materials: Array<{ __typename?: 'metal_flow_detail_materials', data?: any | null, detail: { __typename?: 'metal_flow_details', id: number, name: string } }> }> };
 
 export type MaterialFragmentFragment = { __typename?: 'metal_flow_materials', id: number, unit: number, shape: number, shape_data?: any | null, label: string };
 
@@ -9301,92 +9059,6 @@ export const OrderFragmentDoc = gql`
   }
 }
     `;
-export const GetNotificationsDocument = gql`
-    subscription GetNotifications($_eq: Int!, $limit: Int) {
-  orders_notifications(
-    where: {user_id: {_eq: $_eq}}
-    limit: $limit
-    order_by: {id: desc}
-  ) {
-    id
-    seen
-    comment {
-      id
-      text
-      created_at
-      user {
-        id
-        first_name
-        last_name
-      }
-    }
-    order {
-      id
-      city
-      contractor
-    }
-  }
-}
-    `;
-
-/**
- * __useGetNotificationsSubscription__
- *
- * To run a query within a React component, call `useGetNotificationsSubscription` and pass it any options that fit your needs.
- * When your component renders, `useGetNotificationsSubscription` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetNotificationsSubscription({
- *   variables: {
- *      _eq: // value for '_eq'
- *      limit: // value for 'limit'
- *   },
- * });
- */
-export function useGetNotificationsSubscription(baseOptions: Apollo.SubscriptionHookOptions<GetNotificationsSubscription, GetNotificationsSubscriptionVariables> & ({ variables: GetNotificationsSubscriptionVariables; skip?: boolean; } | { skip: boolean; }) ) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useSubscription<GetNotificationsSubscription, GetNotificationsSubscriptionVariables>(GetNotificationsDocument, options);
-      }
-export type GetNotificationsSubscriptionHookResult = ReturnType<typeof useGetNotificationsSubscription>;
-export type GetNotificationsSubscriptionResult = Apollo.SubscriptionResult<GetNotificationsSubscription>;
-export const UpdateNotificationSeenDocument = gql`
-    mutation UpdateNotificationSeen($ID: Int!, $Seen: Boolean!) {
-  update_orders_notifications_by_pk(pk_columns: {id: $ID}, _set: {seen: $Seen}) {
-    id
-    seen
-  }
-}
-    `;
-export type UpdateNotificationSeenMutationFn = Apollo.MutationFunction<UpdateNotificationSeenMutation, UpdateNotificationSeenMutationVariables>;
-
-/**
- * __useUpdateNotificationSeenMutation__
- *
- * To run a mutation, you first call `useUpdateNotificationSeenMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateNotificationSeenMutation` returns a tuple that includes:
- * - A mutate function that you can call at any time to execute the mutation
- * - An object with fields that represent the current status of the mutation's execution
- *
- * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
- *
- * @example
- * const [updateNotificationSeenMutation, { data, loading, error }] = useUpdateNotificationSeenMutation({
- *   variables: {
- *      ID: // value for 'ID'
- *      Seen: // value for 'Seen'
- *   },
- * });
- */
-export function useUpdateNotificationSeenMutation(baseOptions?: Apollo.MutationHookOptions<UpdateNotificationSeenMutation, UpdateNotificationSeenMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UpdateNotificationSeenMutation, UpdateNotificationSeenMutationVariables>(UpdateNotificationSeenDocument, options);
-      }
-export type UpdateNotificationSeenMutationHookResult = ReturnType<typeof useUpdateNotificationSeenMutation>;
-export type UpdateNotificationSeenMutationResult = Apollo.MutationResult<UpdateNotificationSeenMutation>;
-export type UpdateNotificationSeenMutationOptions = Apollo.BaseMutationOptions<UpdateNotificationSeenMutation, UpdateNotificationSeenMutationVariables>;
 export const GetEmployeeListDocument = gql`
     query GetEmployeeList($gte: timestamp!, $lte: timestamp!) {
   attendance_users_aggregate(order_by: {lastname: asc}) {
@@ -9479,6 +9151,92 @@ export function useUpdateTimeDeductionMutation(baseOptions?: Apollo.MutationHook
 export type UpdateTimeDeductionMutationHookResult = ReturnType<typeof useUpdateTimeDeductionMutation>;
 export type UpdateTimeDeductionMutationResult = Apollo.MutationResult<UpdateTimeDeductionMutation>;
 export type UpdateTimeDeductionMutationOptions = Apollo.BaseMutationOptions<UpdateTimeDeductionMutation, UpdateTimeDeductionMutationVariables>;
+export const GetNotificationsDocument = gql`
+    subscription GetNotifications($_eq: Int!, $limit: Int) {
+  orders_notifications(
+    where: {user_id: {_eq: $_eq}}
+    limit: $limit
+    order_by: {id: desc}
+  ) {
+    id
+    seen
+    comment {
+      id
+      text
+      created_at
+      user {
+        id
+        first_name
+        last_name
+      }
+    }
+    order {
+      id
+      city
+      contractor
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetNotificationsSubscription__
+ *
+ * To run a query within a React component, call `useGetNotificationsSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useGetNotificationsSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetNotificationsSubscription({
+ *   variables: {
+ *      _eq: // value for '_eq'
+ *      limit: // value for 'limit'
+ *   },
+ * });
+ */
+export function useGetNotificationsSubscription(baseOptions: Apollo.SubscriptionHookOptions<GetNotificationsSubscription, GetNotificationsSubscriptionVariables> & ({ variables: GetNotificationsSubscriptionVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<GetNotificationsSubscription, GetNotificationsSubscriptionVariables>(GetNotificationsDocument, options);
+      }
+export type GetNotificationsSubscriptionHookResult = ReturnType<typeof useGetNotificationsSubscription>;
+export type GetNotificationsSubscriptionResult = Apollo.SubscriptionResult<GetNotificationsSubscription>;
+export const UpdateNotificationSeenDocument = gql`
+    mutation UpdateNotificationSeen($ID: Int!, $Seen: Boolean!) {
+  update_orders_notifications_by_pk(pk_columns: {id: $ID}, _set: {seen: $Seen}) {
+    id
+    seen
+  }
+}
+    `;
+export type UpdateNotificationSeenMutationFn = Apollo.MutationFunction<UpdateNotificationSeenMutation, UpdateNotificationSeenMutationVariables>;
+
+/**
+ * __useUpdateNotificationSeenMutation__
+ *
+ * To run a mutation, you first call `useUpdateNotificationSeenMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateNotificationSeenMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateNotificationSeenMutation, { data, loading, error }] = useUpdateNotificationSeenMutation({
+ *   variables: {
+ *      ID: // value for 'ID'
+ *      Seen: // value for 'Seen'
+ *   },
+ * });
+ */
+export function useUpdateNotificationSeenMutation(baseOptions?: Apollo.MutationHookOptions<UpdateNotificationSeenMutation, UpdateNotificationSeenMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateNotificationSeenMutation, UpdateNotificationSeenMutationVariables>(UpdateNotificationSeenDocument, options);
+      }
+export type UpdateNotificationSeenMutationHookResult = ReturnType<typeof useUpdateNotificationSeenMutation>;
+export type UpdateNotificationSeenMutationResult = Apollo.MutationResult<UpdateNotificationSeenMutation>;
+export type UpdateNotificationSeenMutationOptions = Apollo.BaseMutationOptions<UpdateNotificationSeenMutation, UpdateNotificationSeenMutationVariables>;
 export const GetDetailsDocument = gql`
     query GetDetails {
   metal_flow_details {
@@ -9836,6 +9594,54 @@ export function useInsertDetailMaterialsMutation(baseOptions?: Apollo.MutationHo
 export type InsertDetailMaterialsMutationHookResult = ReturnType<typeof useInsertDetailMaterialsMutation>;
 export type InsertDetailMaterialsMutationResult = Apollo.MutationResult<InsertDetailMaterialsMutation>;
 export type InsertDetailMaterialsMutationOptions = Apollo.BaseMutationOptions<InsertDetailMaterialsMutation, InsertDetailMaterialsMutationVariables>;
+export const GetDetailsMadeOfMaterialDocument = gql`
+    query GetDetailsMadeOfMaterial($material_id: Int!) {
+  metal_flow_details(
+    where: {detail_materials: {material_id: {_eq: $material_id}}}
+  ) {
+    detail_materials {
+      data
+      detail {
+        id
+        name
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetDetailsMadeOfMaterialQuery__
+ *
+ * To run a query within a React component, call `useGetDetailsMadeOfMaterialQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetDetailsMadeOfMaterialQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetDetailsMadeOfMaterialQuery({
+ *   variables: {
+ *      material_id: // value for 'material_id'
+ *   },
+ * });
+ */
+export function useGetDetailsMadeOfMaterialQuery(baseOptions: Apollo.QueryHookOptions<GetDetailsMadeOfMaterialQuery, GetDetailsMadeOfMaterialQueryVariables> & ({ variables: GetDetailsMadeOfMaterialQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetDetailsMadeOfMaterialQuery, GetDetailsMadeOfMaterialQueryVariables>(GetDetailsMadeOfMaterialDocument, options);
+      }
+export function useGetDetailsMadeOfMaterialLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetDetailsMadeOfMaterialQuery, GetDetailsMadeOfMaterialQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetDetailsMadeOfMaterialQuery, GetDetailsMadeOfMaterialQueryVariables>(GetDetailsMadeOfMaterialDocument, options);
+        }
+export function useGetDetailsMadeOfMaterialSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetDetailsMadeOfMaterialQuery, GetDetailsMadeOfMaterialQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetDetailsMadeOfMaterialQuery, GetDetailsMadeOfMaterialQueryVariables>(GetDetailsMadeOfMaterialDocument, options);
+        }
+export type GetDetailsMadeOfMaterialQueryHookResult = ReturnType<typeof useGetDetailsMadeOfMaterialQuery>;
+export type GetDetailsMadeOfMaterialLazyQueryHookResult = ReturnType<typeof useGetDetailsMadeOfMaterialLazyQuery>;
+export type GetDetailsMadeOfMaterialSuspenseQueryHookResult = ReturnType<typeof useGetDetailsMadeOfMaterialSuspenseQuery>;
+export type GetDetailsMadeOfMaterialQueryResult = Apollo.QueryResult<GetDetailsMadeOfMaterialQuery, GetDetailsMadeOfMaterialQueryVariables>;
 export const GetMaterialsDocument = gql`
     query GetMaterials {
   metal_flow_materials {

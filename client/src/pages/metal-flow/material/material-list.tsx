@@ -62,7 +62,7 @@ const MaterialsTable = observer(() => {
 
 export const MaterialsListPage = observer(() => {
   useEffect(() => {
-    materialListStore.fetchAll()
+    materialListStore.init()
   }, [])
 
   return (
@@ -78,8 +78,8 @@ export const MaterialsListPage = observer(() => {
         value={materialListStore.filterKeyword}
       />
       <MaterialShapeFilter />
-      <LoadingHint show={materialListStore.loading} />
-      <ErrorHint e={materialListStore.error} />
+      <LoadingHint show={materialListStore.async.loading} />
+      <ErrorHint e={materialListStore.async.error} />
       <MaterialsTable />
     </>
   )

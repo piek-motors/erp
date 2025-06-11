@@ -1,3 +1,5 @@
+/** @jsxImportSource @emotion/react */
+import { css } from '@emotion/react'
 import { Icon, UilPen, UilTrashAlt } from '@iconscout/react-unicons'
 import {
   Box,
@@ -19,7 +21,7 @@ import {
   TypographyProps
 } from '@mui/joy'
 import React, { JSX } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link as ReactLink, useNavigate } from 'react-router-dom'
 
 export const Btn = Button
 export const P = (props: TypographyProps) => <Typography {...props} />
@@ -74,6 +76,21 @@ export function Row(props: { children: React.ReactNode } & StackProps) {
   return <Stack direction="row" gap={1} alignItems="center" {...props} />
 }
 
+export function Link(props: { to: string; children: React.ReactNode }) {
+  const style = css`
+    text-decoration: none;
+    color: inherit;
+    &:hover {
+      text-decoration: underline;
+    }
+  `
+  return (
+    <ReactLink to={props.to} css={style}>
+      {props.children}
+    </ReactLink>
+  )
+}
+
 export function RowButColumsAtSm(
   props: {
     children: React.ReactNode
@@ -81,10 +98,9 @@ export function RowButColumsAtSm(
 ) {
   return (
     <Stack
-      direction="row"
       gap={1}
       alignItems="center"
-      sx={{ display: { xs: 'none', md: 'flex' } }}
+      direction={{ xs: 'column', md: 'row' }}
       {...props}
     />
   )

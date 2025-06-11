@@ -1,4 +1,5 @@
 import {
+  Detail,
   EnMaterialShape,
   EnUnit,
   GenericShapeData,
@@ -9,10 +10,12 @@ import {
   RoundBar,
   RoundBarShapeData
 } from 'domain-model'
+import { AsyncStoreController } from 'lib/async-store.controller'
 import { makeAutoObservable } from 'mobx'
 import * as api from './material.api'
 
 export class MaterialStore {
+  readonly async = new AsyncStoreController()
   constructor() {
     makeAutoObservable(this)
   }
@@ -23,15 +26,19 @@ export class MaterialStore {
   shape: EnMaterialShape = EnMaterialShape.RoundBar
   shapeData: GenericShapeData = new RoundBarShapeData()
 
-  loading = false
-  error: Error | null = null
   material?: Material
+  detailsMadeOfMaterial: Detail[] = []
+
+  setDetailsMadeOfMaterial(details: Detail[]) {
+    this.detailsMadeOfMaterial = details
+  }
 
   clear() {
     this.id = undefined
     this.unit = EnUnit.Kg
     this.shape = EnMaterialShape.RoundBar
     this.shapeData = new RoundBar(0)
+    this.detailsMadeOfMaterial = []
   }
 
   insertedMaterialId?: number
@@ -59,23 +66,8 @@ export class MaterialStore {
     this.shapeData = shapeData
   }
 
-  private async withStateManagement<T>(
-    operation: () => Promise<T>
-  ): Promise<T> {
-    this.loading = true
-    this.error = null
-    try {
-      return await operation()
-    } catch (e) {
-      this.error = e as Error
-      throw e
-    } finally {
-      this.loading = false
-    }
-  }
-
   async load(id: number) {
-    return this.withStateManagement(async () => {
+    return this.async.run(async () => {
       const material = await api.getMaterial(id)
       this.syncState(material)
       return material
@@ -83,7 +75,7 @@ export class MaterialStore {
   }
 
   async insert() {
-    return this.withStateManagement(async () => {
+    return this.async.run(async () => {
       const MaterialConstructor = getMaterialConstructor(this.shape)
       const material = new MaterialConstructor(0)
       MaterialShapeAbstractionLayer.importShapeData(material, this.shapeData)
@@ -102,27 +94,36 @@ export class MaterialStore {
   }
 
   async update() {
-    return this.withStateManagement(async () => {
-      if (!this.id) throw new Error('Material id is not set')
-      if (!this.material) throw new Error('Material is not set')
+    return this.async
+      .run(async () => {
+        if (!this.id) throw new Error('Material id is not set')
+        if (!this.material) throw new Error('Material is not set')
 
-      MaterialShapeAbstractionLayer.importShapeData(
-        this.material,
-        this.shapeData
-      )
+        MaterialShapeAbstractionLayer.importShapeData(
+          this.material,
+          this.shapeData
+        )
 
-      return await api.updateMaterial({
-        id: this.id,
-        _set: {
-          shape: this.shape,
-          shape_data: this.shapeData,
-          label: this.material?.deriveLabel()
-        }
+        return await api.updateMaterial({
+          id: this.id,
+          _set: {
+            shape: this.shape,
+            shape_data: this.shapeData,
+            label: this.material?.deriveLabel()
+          }
+        })
       })
-    }).then(res => {
-      if (!this.id) throw new Error('Material id is not set')
-      this.load(this.id)
-      return res
-    })
+      .then(res => {
+        if (!this.id) throw new Error('Material id is not set')
+        this.load(this.id)
+        return res
+      })
+  }
+
+  async loadDetailsMadeOfMaterial() {
+    if (!this.material) return
+
+    const details = await api.getDetailsMadeOfMaterial(this.material)
+    this.setDetailsMadeOfMaterial(details)
   }
 }

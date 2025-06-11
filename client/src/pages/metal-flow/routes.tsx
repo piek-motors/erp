@@ -37,11 +37,7 @@ const innerRoutes = [
     path: metalflow.material.new
   },
   {
-    element: (
-      <Narrow>
-        <UpdateMaterialPage />
-      </Narrow>
-    ),
+    element: <UpdateMaterialPage />,
     path: metalflow.material.edit
   },
   {

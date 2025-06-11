@@ -4,7 +4,7 @@ import { HighlightText } from 'components/highlight-text'
 import { Table } from 'components/table.impl'
 import { Detail } from 'domain-model'
 import { open, routeMap } from 'lib/routes'
-import { AddResourceButton, P } from 'lib/shortcuts'
+import { AddResourceButton, ErrorHint, LoadingHint } from 'lib/shortcuts'
 import { observer } from 'mobx-react-lite'
 import { AlphabetIndex } from 'pages/metal-flow/detail/alphabet-index'
 import { useEffect } from 'react'
@@ -82,13 +82,9 @@ export const DetailsListPage = observer(() => {
         }}
         value={detailListStore.searchKeyword || ''}
       />
-      {detailListStore.searchResult.length > 0 ? (
-        <DetailsTable />
-      ) : (
-        <P textAlign={'center'} level="body-sm">
-          Ничего не найдено
-        </P>
-      )}
+      <ErrorHint e={detailListStore.async.error} />
+      <LoadingHint show={detailListStore.async.loading} />
+      <DetailsTable />
     </>
   )
 })

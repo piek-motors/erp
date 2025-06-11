@@ -1,10 +1,10 @@
 import { EnMaterialShape, Material } from 'domain-model'
+import { AsyncStoreController } from 'lib/async-store.controller'
 import { makeAutoObservable } from 'mobx'
 import * as api from './material.api'
 
 export class MaterialListStore {
-  loading: boolean = false
-  error: Error | null = null
+  readonly async = new AsyncStoreController()
 
   materials: Material[] = []
   searchResult: number[] = []
@@ -29,7 +29,9 @@ export class MaterialListStore {
         if (!material.label) {
           throw new Error('material.label is not specified')
         }
-        return material.label.toLowerCase().includes(this.filterKeyword)
+        return material.label
+          .toLowerCase()
+          .includes(this.filterKeyword.toLowerCase().trim())
       })
     }
     return filtered
@@ -54,25 +56,13 @@ export class MaterialListStore {
   clear() {
     this.materials = []
     this.filterKeyword = ''
+    this.async.reset()
   }
 
-  async fetchAll() {
-    try {
-      this.setLoading(true)
+  async init() {
+    return this.async.run(async () => {
       const materials = await api.getMaterials()
       this.setMaterials(materials || [])
-    } catch (error) {
-      this.setError(error as Error)
-    } finally {
-      this.setLoading(false)
-    }
-  }
-
-  private setError(error: Error) {
-    this.error = error
-  }
-
-  private setLoading(loading: boolean) {
-    this.loading = loading
+    })
   }
 }

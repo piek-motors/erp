@@ -87,3 +87,17 @@ mutation InsertDetailMaterials(
     }
   }
 }
+
+query GetDetailsMadeOfMaterial($material_id: Int!) {
+  metal_flow_details(
+    where: { detail_materials: { material_id: { _eq: $material_id } } }
+  ) {
+    detail_materials {
+      data
+      detail {
+        id
+        name
+      }
+    }
+  }
+}

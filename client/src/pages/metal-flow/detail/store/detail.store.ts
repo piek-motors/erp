@@ -1,6 +1,6 @@
 import { Detail, Material } from 'domain-model'
 import { makeAutoObservable } from 'mobx'
-import * as materialApi from '../material/material.api'
+import * as materialApi from '../../material/store/material.api'
 import * as api from './detail.api'
 
 type MaterialRelationData = {

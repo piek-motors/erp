@@ -17,7 +17,7 @@ import { QtyInputWithUnit } from '../shared'
 import { MaterialAutocompleteMulti } from '../shared/material-autocomplete'
 import { detailStore } from '../store'
 import { t } from '../text'
-import { MaterialRelation } from './detail.store'
+import { MaterialRelation } from './store/detail.store'
 
 const MaterialWeightInput = observer(
   (props: { materialRelation: MaterialRelation }) => {

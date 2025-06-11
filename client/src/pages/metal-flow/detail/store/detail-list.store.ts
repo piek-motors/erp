@@ -1,10 +1,13 @@
 import { Detail } from 'domain-model'
+import { AsyncStoreController } from 'lib/async-store.controller'
 import { makeAutoObservable, reaction } from 'mobx'
 import * as api from './detail.api'
 
 export const alphabet = 'АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ'.split('')
 
 export class DetailListStore {
+  readonly async = new AsyncStoreController()
+
   details: Detail[] = []
   searchKeyword: string = ''
   searchResult: Detail[] = []
@@ -76,11 +79,14 @@ export class DetailListStore {
       clearTimeout(this.searchTimeout)
       this.searchTimeout = null
     }
+    this.async.reset()
   }
 
   async init() {
-    const details = await api.getDetails()
-    this.setDetails(details)
+    return this.async.run(async () => {
+      const details = await api.getDetails()
+      this.setDetails(details)
+    })
   }
 
   sort(filterResult: Detail[]) {
