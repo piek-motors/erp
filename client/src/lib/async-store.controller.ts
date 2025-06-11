@@ -1,5 +1,4 @@
 import { makeAutoObservable } from 'mobx'
-
 export class AsyncStoreController {
   loading: boolean = false
   error: Error | null = null
