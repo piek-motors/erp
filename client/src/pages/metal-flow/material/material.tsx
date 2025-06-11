@@ -87,6 +87,7 @@ export const UpdateMaterialPage = observer(() => {
   const materialId = Number(id)
 
   useEffect(() => {
+    materialStore.clear()
     materialStore.load(materialId)
   }, [])
 
