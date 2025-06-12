@@ -10,9 +10,9 @@ ERP is a full-stack application built with Node.js, Hasura, PostgreSQL, and Reac
 
 In Development
 
-`docker compose -p piekerp up`
+`docker compose -p erp up`
 
 In Production
 (The main difference that in production mode also starts backup service in the background)
 
-`docker compose -p piekerp --profile production up -d`
+`docker compose -p erp --profile production up -d`
