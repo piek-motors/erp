@@ -5,6 +5,7 @@
   "scripts": {
     "start": "react-scripts start",
     "dev": "react-scripts start",
+    "compile-worker": "tsc -p tsconfig.sw.json",
     "build": "react-scripts build",
     "build:release": "env-cmd -f ./.env.production npm run build",
     "gen": "graphql-codegen --config codegen.config.ts"
