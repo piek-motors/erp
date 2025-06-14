@@ -75,6 +75,9 @@ export const UpdateDetail = observer(() => {
   const navigate = useNavigate()
   useEffect(() => {
     detailStore.load(detailId)
+    return () => {
+      detailStore.clear()
+    }
   }, [])
   return (
     <Container maxWidth="sm" sx={{ margin: 0, p: 1 }}>
@@ -118,6 +121,9 @@ export const UpdateDetail = observer(() => {
 export const AddDetail = observer(() => {
   useEffect(() => {
     detailStore.loadMaterials()
+    return () => {
+      detailStore.clear()
+    }
   }, [])
 
   return (

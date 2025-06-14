@@ -51,7 +51,9 @@ const tabList: TabConfig = [
 
 export const AddMaterialPage = observer(() => {
   useEffect(() => {
-    materialStore.clear()
+    return () => {
+      materialStore.clear()
+    }
   }, [])
 
   return (
@@ -87,8 +89,10 @@ export const UpdateMaterialPage = observer(() => {
   const materialId = Number(id)
 
   useEffect(() => {
-    materialStore.clear()
     materialStore.load(materialId)
+    return () => {
+      materialStore.clear()
+    }
   }, [])
 
   return (
