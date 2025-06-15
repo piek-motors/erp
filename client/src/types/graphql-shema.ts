@@ -8777,7 +8777,7 @@ export type InsertMaterialWriteoffMutationVariables = Exact<{
 }>;
 
 
-export type InsertMaterialWriteoffMutation = { __typename?: 'mutation_root', insert_metal_flow_writeoffs?: { __typename?: 'metal_flow_writeoffs_mutation_response', affected_rows: number } | null };
+export type InsertMaterialWriteoffMutation = { __typename?: 'mutation_root', insert_metal_flow_writeoffs?: { __typename?: 'metal_flow_writeoffs_mutation_response', returning: Array<{ __typename?: 'metal_flow_writeoffs', id: number }> } | null };
 
 export type GetWrietOffsQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -10026,7 +10026,9 @@ export type DeleteSupplyMutationOptions = Apollo.BaseMutationOptions<DeleteSuppl
 export const InsertMaterialWriteoffDocument = gql`
     mutation InsertMaterialWriteoff($objects: [metal_flow_writeoffs_insert_input!]!) {
   insert_metal_flow_writeoffs(objects: $objects) {
-    affected_rows
+    returning {
+      id
+    }
   }
 }
     `;

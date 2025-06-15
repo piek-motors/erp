@@ -1,7 +1,7 @@
 import { Box, Button, IconButton, Stack } from '@mui/joy'
 import { PageTitle } from 'components'
 import { ReactNode } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { Action, actions } from './nav.links'
 import { t } from './text'
 
@@ -47,9 +47,15 @@ function MenuButton(props: {
   icon?: ReactNode
   small?: boolean
 }) {
+  const location = useLocation()
+  const path = location.pathname
   return (
     <Link to={props.href} key={props.href}>
-      <Button variant="plain" color="neutral" sx={{ whiteSpace: 'nowrap' }}>
+      <Button
+        variant={path === props.href ? 'soft' : 'plain'}
+        sx={{ whiteSpace: 'nowrap' }}
+        color={path === props.href ? 'primary' : 'neutral'}
+      >
         {props.name}
       </Button>
     </Link>
@@ -63,7 +69,7 @@ function LinkableIcon(props: {
 }) {
   return (
     <Link to={props.href} key={props.href}>
-      <IconButton size="sm" variant="soft" sx={{ p: 0.1 }}>
+      <IconButton size="sm" variant="plain" sx={{ p: 0.1 }}>
         {props.icon}
       </IconButton>
     </Link>

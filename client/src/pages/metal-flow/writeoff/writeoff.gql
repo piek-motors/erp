@@ -2,7 +2,9 @@ mutation InsertMaterialWriteoff(
   $objects: [metal_flow_writeoffs_insert_input!]!
 ) {
   insert_metal_flow_writeoffs(objects: $objects) {
-    affected_rows
+    returning {
+      id
+    }
   }
 }
 

@@ -40,9 +40,8 @@ export const t = {
   Thickness: 'Толщина, мм',
   Unit: 'Ед.',
   Width: 'Ширина',
-  WriteOffAdd: 'Добавить расход',
-  WriteOffReason: 'Причина списания',
+  WriteOffAdd: 'Добавить списание',
   WriteoffsList: 'История списаний', // More precise
-  WriteoffThroughDetail: 'Расход через деталь',
-  WriteoffThroughMaterial: 'Расход через материал'
+  WriteoffThroughDetail: 'Списание через деталь',
+  WriteoffThroughMaterial: 'Списание через материал'
 } as const

@@ -1,4 +1,4 @@
-import { Box, Container, Sheet, Stack } from '@mui/joy'
+import { Container, Sheet, Stack } from '@mui/joy'
 import { PageTitle } from 'components/page-title'
 import { EnUnit } from 'domain-model'
 import { open, routeMap } from 'lib/routes'
@@ -45,14 +45,17 @@ const MaterialWeightInput = observer(
 )
 
 const DetailMaterialRelationForm = observer(() => {
+  if (!detailStore.usedMaterials.length) {
+    return null
+  }
   return (
-    <Sheet>
-      <Stack my={1} gap={2}>
+    <Sheet sx={{ borderRadius: 'sm' }}>
+      <Stack my={1} gap={1}>
         {detailStore.usedMaterials.map(materialRelation => {
           const { material } = materialRelation
           return (
             <Stack sx={{ width: 'max-content' }} key={material.id}>
-              <Row sx={{ fontWeight: 'bold' }}>
+              <Row sx={{ fontWeight: 'bold', px: 1 }}>
                 <P>Расход для материала</P>
                 <P>{material?.label}</P>
               </Row>
@@ -82,7 +85,7 @@ export const UpdateDetail = observer(() => {
   return (
     <Container maxWidth="sm" sx={{ margin: 0, p: 1 }}>
       <PageTitle title={t.EditDetail} hideIcon />
-      <Stack gap={1}>
+      <Stack gap={2}>
         <P>
           <b>ID</b> {detailStore.id}
         </P>
@@ -101,7 +104,6 @@ export const UpdateDetail = observer(() => {
             onClick={() => detailStore.update()}
             stackProps={{ sx: { flexGrow: 1 } }}
             buttonProps={{
-              variant: 'soft',
               fullWidth: true
             }}
           />
@@ -127,7 +129,7 @@ export const AddDetail = observer(() => {
   }, [])
 
   return (
-    <Box>
+    <Stack gap={2}>
       <PageTitle title={t.AddDetail} hideIcon />
       <Inp
         label={t.DetailName}
@@ -161,6 +163,6 @@ export const AddDetail = observer(() => {
           />
         )}
       />
-    </Box>
+    </Stack>
   )
 })

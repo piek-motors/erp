@@ -126,7 +126,7 @@ export function DetailSelect(props: {
 /** Narrow container */
 export function Narrow(props: ContainerProps) {
   return (
-    <Container {...props} maxWidth="xs" sx={{ m: 0, p: 0 }}>
+    <Container maxWidth="xs" sx={{ m: 0, p: 0 }} {...props}>
       {props.children}
     </Container>
   )

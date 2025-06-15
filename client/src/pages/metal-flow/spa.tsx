@@ -19,7 +19,7 @@ export function MetalFlowLayout(props: { children?: React.ReactNode }) {
         <NavigationSideBar />
       </Box>
       {props.children && (
-        <Stack sx={{ flexGrow: 1, gap: 0, p: 1 }}>{props.children}</Stack>
+        <Stack sx={{ flexGrow: 1, gap: 1, p: 0 }}>{props.children}</Stack>
       )}
     </Box>
   )

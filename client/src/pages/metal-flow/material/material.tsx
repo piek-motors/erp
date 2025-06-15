@@ -162,13 +162,11 @@ const DetailsMadeOfMaterial = observer(() => {
 
   return (
     <Stack gap={2}>
-      <P color="primary">Детали, изготовленные из этого материала</P>
+      <P fontWeight={600}>Детали, изготовленные из этого материала</P>
       <Stack gap={1}>
         {materialStore.detailsMadeOfMaterial.map(each => (
           <Link to={open(routeMap.metalflow.detail.edit, each.id)}>
-            <P level="body-sm" key={each.id}>
-              {each.name}{' '}
-            </P>
+            <P key={each.id}>{each.name} </P>
           </Link>
         ))}
       </Stack>

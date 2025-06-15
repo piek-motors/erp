@@ -1,48 +1,50 @@
-import { EnWriteoffType, uiUnit, uiWriteoffReason } from 'domain-model'
-import { P } from 'lib/shortcuts'
-import { formatDateWithTime } from 'lib/utils/formatting'
+import {
+  EnWriteoffType,
+  uiWriteoffReason,
+  Writeoff,
+  WriteoffTroughDetail
+} from 'domain-model'
+import { DeleteResourceButton, P } from 'lib/shortcuts'
+import { formatOnlyDate } from 'lib/utils/formatting'
 import { Column } from 'react-table'
 import { GetWrietOffsQuery } from 'types/graphql-shema'
-import { map } from '../mappers'
 import { t } from '../text'
-import { DeleteWrireOff } from './components'
 export type SupplyDto = GetWrietOffsQuery['metal_flow_writeoffs'][number]
 
 export function getColumns(props: {
   key: number
   setKey: (n: number) => void
   refetch: () => void
-}): Column<SupplyDto>[] {
+}): Column<Writeoff>[] {
   return [
     {
-      Header: 'Id',
+      Header: 'ID',
       accessor: 'id'
     },
     {
-      Header: t.Material,
       id: 'name',
+      Header: t.Material,
       accessor: data => {
-        const ma = map.material.fromDto(data.material)
-        return <P>{ma.label}</P>
+        return <P>{data.material.label}</P>
       }
     },
     {
       Header: t.Qty,
-      accessor: data => `${data.qty} ${uiUnit(data.material?.unit)}`
+      accessor: data => `${data.qty} ${data.material.unitUI}`
     },
     {
       Header: t.Date,
-      accessor: data => formatDateWithTime(data.date)
+      accessor: data => formatOnlyDate(data.date.toISOString())
     },
     {
-      Header: t.WriteOffReason,
+      Header: 'Причина',
       accessor: data => uiWriteoffReason(data.reason)
     },
     {
       Header: 'ID детали',
       accessor: data => {
         if (data.type == EnWriteoffType.ThroughDetail) {
-          return data.type_data.detailId
+          return (data.typeData as WriteoffTroughDetail).detailId
         }
 
         return ''
@@ -51,7 +53,11 @@ export function getColumns(props: {
     {
       Header: t.Action,
       accessor: data => (
-        <DeleteWrireOff refetch={props.refetch} supplyId={data.id} />
+        <DeleteResourceButton
+          onClick={() => {
+            console.log('delete', data.id)
+          }}
+        />
       )
     }
   ]

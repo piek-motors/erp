@@ -17,7 +17,7 @@ export function Search({
   children
 }: ISearchInputWithFiltersProps) {
   return (
-    <Row gap={1} sx={{ position: 'sticky', px: 1 }}>
+    <Row gap={1} sx={{ position: 'sticky' }}>
       <Input
         size="sm"
         type="text"

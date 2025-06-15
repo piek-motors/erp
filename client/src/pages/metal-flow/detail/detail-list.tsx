@@ -1,6 +1,7 @@
-import { Box, Stack } from '@mui/joy'
+import { Stack } from '@mui/joy'
 import { PageTitle, Search } from 'components'
 import { HighlightText } from 'components/highlight-text'
+import { ScrollPreserv } from 'components/scroll-preserve'
 import { Table } from 'components/table.impl'
 import { Detail } from 'domain-model'
 import { open, routeMap } from 'lib/routes'
@@ -50,18 +51,34 @@ const columnList: Column<Detail>[] = [
   }
 ]
 
-const DetailsTable = observer(() => {
+interface DetailsTableProps {
+  onRowClick?: (row: Detail) => void
+  highlight?: (row: Detail) => boolean
+  highlightColor?: string
+}
+
+const DetailsTable = observer((props: DetailsTableProps) => {
   const navigate = useNavigate()
   return (
-    <Box sx={{ overflow: 'scroll', flexGrow: 2, pb: 2 }}>
-      <Table
-        columns={columnList}
-        data={detailListStore.searchResult}
-        onRowClick={row =>
+    <Table
+      columns={columnList}
+      data={detailListStore.searchResult}
+      trStyleCallback={row => {
+        if (props.highlight) {
+          return props.highlight(row.original)
+            ? { backgroundColor: props.highlightColor }
+            : {}
+        }
+        return {}
+      }}
+      onRowClick={row => {
+        if (props.onRowClick) {
+          props.onRowClick(row)
+        } else {
           navigate(open(routeMap.metalflow.detail.edit, row.id))
         }
-      />
-    </Box>
+      }}
+    />
   )
 })
 
@@ -75,6 +92,18 @@ export const DetailsListPage = observer(() => {
       <PageTitle title={t.DetailsList} hideIcon>
         <AddResourceButton navigateTo={open(routeMap.metalflow.detail.new)} />
       </PageTitle>
+      <DetailsList />
+    </>
+  )
+})
+
+export const DetailsList = observer((props: DetailsTableProps) => {
+  useEffect(() => {
+    detailListStore.init()
+  }, [])
+
+  return (
+    <Stack gap={1} sx={{ maxHeight: '100vh' }}>
       <AlphabetIndex />
       <Search
         onChange={e => {
@@ -84,7 +113,13 @@ export const DetailsListPage = observer(() => {
       />
       <ErrorHint e={detailListStore.async.error} />
       <LoadingHint show={detailListStore.async.loading} />
-      <DetailsTable />
-    </>
+      <ScrollPreserv refreshTrigger={detailListStore.async.loading}>
+        <DetailsTable
+          highlight={props.highlight}
+          highlightColor={props.highlightColor}
+          onRowClick={props.onRowClick}
+        />
+      </ScrollPreserv>
+    </Stack>
   )
 })

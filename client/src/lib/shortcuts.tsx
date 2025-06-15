@@ -231,6 +231,7 @@ export function TakeLookHint(props: { text: string; link: string }) {
 }
 
 export function SendMutation(props: {
+  disabled?: boolean
   onClick: () => Promise<any>
   title?: string
   additionals?: (error?: Error, mutationResult?: any) => JSX.Element
@@ -262,7 +263,7 @@ export function SendMutation(props: {
       <SavedHint show={mutationResult} />
       <Button
         onClick={async () => handleSubmit()}
-        disabled={loading}
+        disabled={loading || props.disabled}
         {...props.buttonProps}
       >
         {props.title ?? 'Сохранить'}

@@ -1,4 +1,3 @@
-import { Box } from '@mui/joy'
 import { routeMap } from 'lib/routes'
 import { RouteConfig } from 'types/global'
 import { AddDetail, UpdateDetail } from './detail/detail'
@@ -8,7 +7,8 @@ import { MaterialsListPage } from './material/material-list'
 import { Narrow } from './shared/basic'
 import { MetalFlowLayout } from './spa'
 import { AddSuply, ListSupplies } from './supply/components'
-import { AddWriteOff, ListWriteoffs } from './writeoff/components'
+import { WriteoffList } from './writeoff/list/ui'
+import { WriteoffCreatePage } from './writeoff/writeoff-create'
 
 const { metalflow } = routeMap
 
@@ -21,7 +21,7 @@ function wrapEachRoute(route: RouteConfig) {
 
 const innerRoutes = [
   {
-    element: <Box p={1}>(*_*)</Box>,
+    element: <MaterialsListPage />,
     path: metalflow.index
   },
   {
@@ -49,11 +49,7 @@ const innerRoutes = [
     path: metalflow.supply.new
   },
   {
-    element: (
-      <Narrow>
-        <AddWriteOff />
-      </Narrow>
-    ),
+    element: <WriteoffCreatePage />,
     path: metalflow.writeoff.new
   },
   {
@@ -81,7 +77,7 @@ const innerRoutes = [
     path: metalflow.supplies
   },
   {
-    element: <ListWriteoffs />,
+    element: <WriteoffList />,
     path: metalflow.writeoffs
   }
 ] as RouteConfig[]

@@ -13,10 +13,11 @@ export class Writeoff {
   ) {}
 }
 
-export interface WriteoffTroughDetail {
+export type WriteoffTroughDetail = {
   detailId: number
   qty: number
-  totalCost: number
 }
 
-export interface WriteoffDirectUnit {}
+export type WriteoffDirectUnit = {}
+
+export type WriteoffTypeDataUnion = WriteoffTroughDetail | WriteoffDirectUnit

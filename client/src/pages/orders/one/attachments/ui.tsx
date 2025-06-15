@@ -30,7 +30,7 @@ const File = observer((props: { file: OrderAttachment }) => {
             size="sm"
             startDecorator={getformatAssociatedIcon(file.name)}
           >
-            <P level="body-sm">{file.name}</P>
+            <P>{file.name}</P>
           </Button>
           {attachmentsStore.uploading && (
             <P level="body-sm">Файл выгружается...</P>

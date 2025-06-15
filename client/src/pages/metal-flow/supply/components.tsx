@@ -1,22 +1,20 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
-import { Box, Sheet } from '@mui/joy'
+import { Box, Sheet, Stack } from '@mui/joy'
 import { PageTitle } from 'components'
 import { Table } from 'components/table.impl'
 import { Material } from 'domain-model'
 import { open, routeMap } from 'lib/routes'
-import { AddResourceButton, P, SendMutation } from 'lib/shortcuts'
+import { AddResourceButton, P, Row, SendMutation } from 'lib/shortcuts'
 import { observer } from 'mobx-react-lite'
 import { useState } from 'react'
-import { QtyInputWithUnit, SmallInputForm } from '../shared'
-import { MaterialSelect } from '../shared/material-select'
+import { QtyInputWithUnit } from '../shared'
 import { t } from '../text'
 import { getColumns } from './columns.decl'
 import { supplyStore } from './supply.store'
 
 export const ListSupplies = observer(() => {
   const [key, setKey] = useState(0)
-
   return (
     <>
       <PageTitle title={t.SuppliesList} hideIcon>
@@ -64,12 +62,12 @@ export function AddSuply() {
   }
 
   return (
-    <SmallInputForm header={t.SupplyAdd}>
-      <MaterialSelect
-        setMaterial={setMaterial}
-        material={material}
-        currentQty={supplyStore.qty.toString()}
-      />
+    <Stack gap={2}>
+      <PageTitle title={t.AddSupply} hideIcon />
+      <Row>
+        <P>Материал</P>
+        <P>{material?.label}</P>
+      </Row>
       <QtyInputWithUnit
         unitId={material?.unit}
         value={qty}
@@ -77,6 +75,6 @@ export function AddSuply() {
         label={t.Qty}
       />
       <SendMutation onClick={save} />
-    </SmallInputForm>
+    </Stack>
   )
 }

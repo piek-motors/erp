@@ -1,4 +1,4 @@
-import { Box, Button, ToggleButtonGroup } from '@mui/joy'
+import { Button, Sheet, ToggleButtonGroup } from '@mui/joy'
 import { UiMaterialShape } from 'domain-model'
 import { observer } from 'mobx-react-lite'
 import { materialListStore } from '../store'
@@ -7,12 +7,13 @@ export const MaterialShapeFilter = observer(() => {
   const shapes = Object.entries(UiMaterialShape)
   const value = materialListStore.filterShape?.toString()
   return (
-    <Box m={1}>
+    <Sheet sx={{ width: 'min-content', borderRadius: 'sm' }}>
       <ToggleButtonGroup
         size="sm"
         variant="outlined"
         color="warning"
         value={value}
+        sx={{ overflow: 'hidden' }}
         onChange={(_, value) => {
           if (value == null) {
             materialListStore.setFilterShape()
@@ -31,6 +32,6 @@ export const MaterialShapeFilter = observer(() => {
           </Button>
         ))}
       </ToggleButtonGroup>
-    </Box>
+    </Sheet>
   )
 })
