@@ -1,4 +1,4 @@
-import { Container, Sheet, Stack } from '@mui/joy'
+import { Sheet, Stack } from '@mui/joy'
 import { PageTitle } from 'components/page-title'
 import { EnUnit } from 'domain-model'
 import { open, routeMap } from 'lib/routes'
@@ -83,8 +83,8 @@ export const UpdateDetail = observer(() => {
     }
   }, [])
   return (
-    <Container maxWidth="sm" sx={{ margin: 0, p: 1 }}>
-      <PageTitle title={t.EditDetail} hideIcon />
+    <Stack gap={2} py={2}>
+      <PageTitle subTitle={t.EditDetail} hideIcon />
       <Stack gap={2}>
         <P>
           <b>ID</b> {detailStore.id}
@@ -116,7 +116,7 @@ export const UpdateDetail = observer(() => {
           />
         </Row>
       </Stack>
-    </Container>
+    </Stack>
   )
 })
 
@@ -129,8 +129,8 @@ export const AddDetail = observer(() => {
   }, [])
 
   return (
-    <Stack gap={2}>
-      <PageTitle title={t.AddDetail} hideIcon />
+    <Stack gap={2} py={2}>
+      <PageTitle subTitle={t.AddDetail} hideIcon />
       <Inp
         label={t.DetailName}
         onChange={v => {

@@ -16,8 +16,8 @@ import { supplyStore } from './supply.store'
 export const ListSupplies = observer(() => {
   const [key, setKey] = useState(0)
   return (
-    <>
-      <PageTitle title={t.SuppliesList} hideIcon>
+    <Stack py={1}>
+      <PageTitle subTitle={t.SuppliesList} hideIcon>
         <AddResourceButton navigateTo={open(routeMap.metalflow.supply.new)} />
       </PageTitle>
       {supplyStore.supplies.length === 0 && <P>Нет поставок</P>}
@@ -43,7 +43,7 @@ export const ListSupplies = observer(() => {
           />
         </Box>
       </Sheet>
-    </>
+    </Stack>
   )
 })
 
@@ -62,8 +62,8 @@ export function AddSuply() {
   }
 
   return (
-    <Stack gap={2}>
-      <PageTitle title={t.AddSupply} hideIcon />
+    <Stack gap={2} py={2}>
+      <PageTitle subTitle={t.AddSupply} hideIcon />
       <Row>
         <P>Материал</P>
         <P>{material?.label}</P>

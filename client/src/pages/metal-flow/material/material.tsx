@@ -1,5 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { Button, Stack } from '@mui/joy'
+import { PageTitle } from 'components/page-title'
 import { TabConfig, Tabs } from 'components/tabs'
 import { EnMaterialShape, UiMaterialShape } from 'domain-model'
 import { open, routeMap } from 'lib/routes'
@@ -15,7 +16,6 @@ import {
 import { observer } from 'mobx-react-lite'
 import { useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { SmallInputForm } from '../shared'
 import { MaterialUnitSelect } from '../shared/basic'
 import { materialStore } from '../store'
 import { t } from '../text'
@@ -57,29 +57,24 @@ export const AddMaterialPage = observer(() => {
   }, [])
 
   return (
-    <SmallInputForm
-      header={t.AddMaterial}
-      last={
-        <>
-          <SendMutation onClick={() => materialStore.insert()} />
-          {materialStore.insertedMaterialId && (
-            <TakeLookHint
-              text={t.RecentlyNewMaterialAdded}
-              link={open(
-                routeMap.metalflow.material.edit,
-                materialStore.insertedMaterialId
-              )}
-            />
-          )}
-        </>
-      }
-    >
+    <Stack gap={1} py={2}>
+      <PageTitle subTitle={t.AddMaterial} hideIcon />
       <Tabs tabs={tabList} handleChange={v => materialStore.setShape(v)} />
       <MaterialUnitSelect
         value={materialStore.unit}
         onChange={v => materialStore.setUnit(v)}
       />
-    </SmallInputForm>
+      <SendMutation onClick={() => materialStore.insert()} />
+      {materialStore.insertedMaterialId && (
+        <TakeLookHint
+          text={t.RecentlyNewMaterialAdded}
+          link={open(
+            routeMap.metalflow.material.edit,
+            materialStore.insertedMaterialId
+          )}
+        />
+      )}
+    </Stack>
   )
 })
 
@@ -96,34 +91,31 @@ export const UpdateMaterialPage = observer(() => {
   }, [])
 
   return (
-    <RowButColumsAtSm alignItems={'start'} p={1} gap={5}>
+    <RowButColumsAtSm alignItems={'start'} p={1} gap={2}>
       <Stack gap={1}>
-        <Row>
+        <Row gap={2}>
           <P level="h4">{materialStore.label}</P>
-          <WareHouseOperationLinks id={materialId} />
+          <WarehouseOperations id={materialId} />
         </Row>
         <P level="body-sm">ID: {materialId}</P>
         <InputStack>
           {tabList.find(t => t.value === materialStore.shape)?.component}
         </InputStack>
-        <SendMutation
-          onClick={() => materialStore.update()}
-          buttonProps={{ color: 'success' }}
-        />
+        <SendMutation onClick={() => materialStore.update()} />
       </Stack>
       <DetailsMadeOfMaterial />
     </RowButColumsAtSm>
   )
 })
 
-function WareHouseOperationLinks(props: { id: number }) {
+function WarehouseOperations(props: { id: number }) {
   const navigate = useNavigate()
   const { id } = props
   return (
-    <>
+    <Row gap={1}>
       <Button
+        color="primary"
         variant="soft"
-        color="success"
         onClick={() =>
           navigate(
             open(routeMap.metalflow.supply.new, id, {
@@ -132,10 +124,10 @@ function WareHouseOperationLinks(props: { id: number }) {
           )
         }
       >
-        Приход
+        Поставка
       </Button>
       <Button
-        color="warning"
+        color="danger"
         variant="soft"
         onClick={() =>
           navigate(
@@ -145,9 +137,9 @@ function WareHouseOperationLinks(props: { id: number }) {
           )
         }
       >
-        Расход
+        Списание
       </Button>
-    </>
+    </Row>
   )
 }
 
@@ -161,12 +153,14 @@ const DetailsMadeOfMaterial = observer(() => {
   }
 
   return (
-    <Stack gap={2}>
-      <P fontWeight={600}>Детали, изготовленные из этого материала</P>
-      <Stack gap={1}>
+    <Stack gap={2} sx={{ overflowY: 'scroll', maxHeight: '100vh' }}>
+      <P fontWeight={600}>Детали из этого материала</P>
+      <Stack gap={0.5}>
         {materialStore.detailsMadeOfMaterial.map(each => (
           <Link to={open(routeMap.metalflow.detail.edit, each.id)}>
-            <P key={each.id}>{each.name} </P>
+            <P key={each.id} level="body-sm">
+              {each.name}
+            </P>
           </Link>
         ))}
       </Stack>

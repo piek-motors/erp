@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom'
 import { P, Row } from '../lib/shortcuts'
 
 export interface Props {
-  title: string
+  title?: string
   subTitle?: string | null
   sx?: SxProperty
   children?: React.ReactNode
@@ -33,10 +33,16 @@ export function PageTitle(props: Props) {
       )}
 
       <Row gap={2} sx={props.sx}>
-        <P color="primary" fontWeight={600} sx={{ whiteSpace: 'nowrap' }}>
-          {props.title}
-        </P>
-        {props.subTitle && <P level="body-md">{props.subTitle}</P>}
+        {props.title && (
+          <P color="primary" fontWeight={600} sx={{ whiteSpace: 'nowrap' }}>
+            {props.title}
+          </P>
+        )}
+        {props.subTitle && (
+          <P level="body-sm" fontWeight={500}>
+            {props.subTitle}
+          </P>
+        )}
       </Row>
       {props.spaceBetween && <Box sx={{ width: '100%' }} />}
       <Box>{props.children}</Box>

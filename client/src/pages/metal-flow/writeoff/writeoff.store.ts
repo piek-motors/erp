@@ -11,6 +11,7 @@ class WriteoffStore {
   private async = new AsyncStoreController()
 
   listStore = new WriteoffListStore()
+
   throughDetail = new WriteoffTroughDetailStore()
   throughMaterial = new WriteoffThroughMaterialStore()
 
@@ -31,17 +32,10 @@ class WriteoffStore {
 
   validate() {
     if (this.type === EnWriteoffType.ThroughDetail) {
-      const detail = this.throughDetail.detail
-      if (!detail?.id) return false
-      if (detail.materials.length === 0) return false
-      if (this.throughDetail.qty === 0) return false
+      return this.throughDetail.validate()
     } else if (this.type === EnWriteoffType.DirectUnit) {
-      const material = this.throughMaterial.material?.id
-      if (!material) return false
-      if (this.throughMaterial.qty === 0) return false
+      return this.throughMaterial.validate()
     }
-
-    return true
   }
 
   async insert() {
@@ -79,7 +73,7 @@ class WriteoffStore {
       const w = new Writeoff(
         0,
         new Date(),
-        this.throughMaterial.qty,
+        parseFloat(this.throughMaterial.weight),
         this.reason,
         material,
         this.type,

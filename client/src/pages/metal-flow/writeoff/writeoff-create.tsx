@@ -7,7 +7,7 @@ import {
   UiWriteoffReason
 } from 'domain-model'
 import { observer } from 'lib/deps'
-import { Label, SendMutation } from 'lib/shortcuts'
+import { Label, P, SendMutation } from 'lib/shortcuts'
 import React from 'react'
 import { t } from '../text'
 import {
@@ -21,25 +21,37 @@ import {
 import { writeoffStore } from './writeoff.store'
 
 export const WriteoffCreatePage = observer(() => {
+  const creationForrbidden = writeoffStore.validate() !== undefined
+  const error = () => {
+    if (creationForrbidden) {
+      return (
+        <P color="danger" level="body-sm">
+          {writeoffStore.validate()?.message}
+        </P>
+      )
+    }
+  }
   return (
     <Grid container spacing={0} p={0}>
       <Grid xs={12} md={4} p={0} px={2}>
-        <Stack gap={2}>
-          <PageTitle title={t.WriteOffAdd} hideIcon />
+        <Stack gap={2} py={2}>
+          <PageTitle subTitle={t.WriteOffAdd} hideIcon />
           <WriteoffInputStrategySelect />
           <WriteoffReasonSelect />
           {React.createElement(
             writeoffTypeToComponent[writeoffStore.type].left
           )}
+
           <SendMutation
-            disabled={!writeoffStore.validate()}
+            disabled={creationForrbidden}
             onClick={async () => {
               return await writeoffStore.insert()
             }}
           />
+          {error()}
         </Stack>
       </Grid>
-      <Grid xs={12} md={8} sx={{ overflow: 'hidden', p: 0, px: 2 }}>
+      <Grid xs={12} md={8} sx={{ overflow: 'hidden', p: 0 }}>
         {React.createElement(writeoffTypeToComponent[writeoffStore.type].right)}
       </Grid>
     </Grid>

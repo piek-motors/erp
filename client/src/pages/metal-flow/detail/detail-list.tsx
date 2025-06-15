@@ -88,12 +88,12 @@ export const DetailsListPage = observer(() => {
   }, [])
 
   return (
-    <>
-      <PageTitle title={t.DetailsList} hideIcon>
+    <Stack py={1}>
+      <PageTitle subTitle={t.DetailsList} hideIcon>
         <AddResourceButton navigateTo={open(routeMap.metalflow.detail.new)} />
       </PageTitle>
       <DetailsList />
-    </>
+    </Stack>
   )
 })
 
@@ -103,7 +103,7 @@ export const DetailsList = observer((props: DetailsTableProps) => {
   }, [])
 
   return (
-    <Stack gap={1} sx={{ maxHeight: '100vh' }}>
+    <Stack gap={1}>
       <AlphabetIndex />
       <Search
         onChange={e => {

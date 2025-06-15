@@ -94,14 +94,14 @@ export const MaterialList = observer((props: MaterialsTableProps) => {
 
 export const MaterialsListPage = observer(() => {
   return (
-    <>
-      <PageTitle title={t.MaterialsList} hideIcon>
+    <Stack py={1}>
+      <PageTitle subTitle={t.MaterialsList} hideIcon>
         <AddResourceButton navigateTo={open(routeMap.metalflow.material.new)} />
       </PageTitle>
 
       <LoadingHint show={materialListStore.async.loading} />
       <ErrorHint e={materialListStore.async.error} />
       <MaterialList />
-    </>
+    </Stack>
   )
 })

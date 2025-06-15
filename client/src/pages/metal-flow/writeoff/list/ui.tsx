@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
-import { Box, Sheet } from '@mui/joy'
+import { Box, Sheet, Stack } from '@mui/joy'
 import { PageTitle } from 'components'
 import { Table } from 'components/table.impl'
 import { open, routeMap } from 'lib/routes'
@@ -31,8 +31,8 @@ export const WriteoffList = observer(() => {
   }, [])
 
   return (
-    <>
-      <PageTitle title={t.WriteoffsList} hideIcon>
+    <Stack py={1}>
+      <PageTitle subTitle={t.WriteoffsList} hideIcon>
         <AddResourceButton navigateTo={open(routeMap.metalflow.writeoff.new)} />
       </PageTitle>
       <Sheet sx={{ gap: 2 }}>
@@ -40,7 +40,7 @@ export const WriteoffList = observer(() => {
           <Table columns={columns} data={writeoffStore.listStore.writeoffs} />
         </Box>
       </Sheet>
-    </>
+    </Stack>
   )
 })
 
