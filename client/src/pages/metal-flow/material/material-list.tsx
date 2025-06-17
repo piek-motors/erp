@@ -1,12 +1,18 @@
 /** @jsxImportSource @emotion/react */
 import { Stack } from '@mui/joy'
 import { PageTitle } from 'components'
-import { ScrollPreserv } from 'components/scroll-preserve'
 import { Search } from 'components/search-input'
 import { Table } from 'components/table.impl'
+import { ScrollableWindow } from 'components/window'
 import { Material } from 'domain-model'
 import { open, routeMap } from 'lib/routes'
-import { AddResourceButton, ErrorHint, LoadingHint, P } from 'lib/shortcuts'
+import {
+  AddResourceButton,
+  ErrorHint,
+  LoadingHint,
+  P,
+  RowButColumsAtSm
+} from 'lib/shortcuts'
 import { observer } from 'mobx-react-lite'
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -57,51 +63,59 @@ export const MaterialList = observer((props: MaterialsTableProps) => {
     materialListStore.init()
   }, [])
   return (
-    <Stack gap={1} sx={{ maxHeight: '100vh', p: 0 }}>
-      <Search
-        onChange={e => {
-          materialListStore.search(e.target.value)
-        }}
-        value={materialListStore.filterKeyword}
-      />
-      <MaterialShapeFilter />
-      <ScrollPreserv refreshTrigger={materialListStore.async.loading}>
-        <Table
-          columns={columnList}
-          data={materialListStore.getFilteredMaterials()}
-          onRowClick={row => {
-            if (props.onRowClick) {
-              props.onRowClick(row)
-              return
-            } else {
-              if (!row.id) throw Error('Material id is null')
-              navigate(open(routeMap.metalflow.material.edit, row.id))
-            }
-          }}
-          trStyleCallback={row => {
-            if (props.highlight) {
-              return props.highlight(row.original)
-                ? { backgroundColor: props.highlightColor }
-                : {}
-            }
-            return {}
-          }}
-        />
-      </ScrollPreserv>
-    </Stack>
+    <Table
+      columns={columnList}
+      data={materialListStore.getFilteredMaterials()}
+      onRowClick={row => {
+        if (props.onRowClick) {
+          props.onRowClick(row)
+          return
+        } else {
+          if (!row.id) throw Error('Material id is null')
+          navigate(open(routeMap.metalflow.material.edit, row.id))
+        }
+      }}
+      trStyleCallback={row => {
+        if (props.highlight) {
+          return props.highlight(row.original)
+            ? { backgroundColor: props.highlightColor }
+            : {}
+        }
+        return {}
+      }}
+    />
   )
 })
 
 export const MaterialsListPage = observer(() => {
   return (
-    <Stack py={1}>
-      <PageTitle subTitle={t.MaterialsList} hideIcon>
-        <AddResourceButton navigateTo={open(routeMap.metalflow.material.new)} />
-      </PageTitle>
-
-      <LoadingHint show={materialListStore.async.loading} />
-      <ErrorHint e={materialListStore.async.error} />
-      <MaterialList />
-    </Stack>
+    <ScrollableWindow
+      refreshTrigger={materialListStore.async.loading}
+      staticContent={
+        <Stack gap={0}>
+          <PageTitle subTitle={t.MaterialsList} hideIcon>
+            <AddResourceButton
+              navigateTo={open(routeMap.metalflow.material.new)}
+            />
+          </PageTitle>
+          <RowButColumsAtSm gap={1}>
+            <Search
+              onChange={e => {
+                materialListStore.search(e.target.value)
+              }}
+              value={materialListStore.filterKeyword}
+            />
+            <MaterialShapeFilter />
+          </RowButColumsAtSm>
+        </Stack>
+      }
+      scrollableContent={
+        <Stack>
+          <LoadingHint show={materialListStore.async.loading} />
+          <ErrorHint e={materialListStore.async.error} />
+          <MaterialList />
+        </Stack>
+      }
+    />
   )
 })

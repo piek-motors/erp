@@ -1,4 +1,4 @@
-import { Box, Stack } from 'lib/shortcuts'
+import { Box, Sheet, Stack } from 'lib/shortcuts'
 import { ScrollPreserv } from './scroll-preserve'
 
 export const ScrollableWindow = ({
@@ -12,13 +12,17 @@ export const ScrollableWindow = ({
 }) => {
   return (
     <Stack sx={{ maxHeight: '100vh' }}>
-      <Box p={1}></Box>
-      <Stack>{staticContent}</Stack>
-      <Box p={1}></Box>
+      {staticContent ? (
+        <>
+          <Box p={0.6}></Box>
+          <Stack>{staticContent}</Stack>
+          <Box p={1}></Box>
+        </>
+      ) : null}
       <ScrollPreserv refreshTrigger={refreshTrigger}>
-        {scrollableContent}
+        <Sheet>{scrollableContent}</Sheet>
       </ScrollPreserv>
-      <Box p={1}></Box>
+      <Box p={0.5}></Box>
     </Stack>
   )
 }

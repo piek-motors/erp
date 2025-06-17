@@ -1,7 +1,6 @@
 import { Stack } from '@mui/joy'
 import { PageTitle, Search } from 'components'
 import { HighlightText } from 'components/highlight-text'
-import { ScrollPreserv } from 'components/scroll-preserve'
 import { Table } from 'components/table.impl'
 import { ScrollableWindow } from 'components/window'
 import { Detail } from 'domain-model'
@@ -64,7 +63,7 @@ interface DetailsTableProps {
   highlightColor?: string
 }
 
-const DetailsTable = observer((props: DetailsTableProps) => {
+const DetailList = observer((props: DetailsTableProps) => {
   const navigate = useNavigate()
   return (
     <Table
@@ -93,14 +92,21 @@ export const DetailsListPage = observer(() => {
   useEffect(() => {
     detailListStore.init()
   }, [])
-
   return (
-    <Stack py={1}>
-      <PageTitle subTitle={t.DetailsList} hideIcon>
-        <AddResourceButton navigateTo={open(routeMap.metalflow.detail.new)} />
-      </PageTitle>
-      <DetailsList />
-    </Stack>
+    <ScrollableWindow
+      refreshTrigger={detailListStore.async.loading}
+      staticContent={
+        <Stack>
+          <PageTitle subTitle={t.DetailsList} hideIcon>
+            <AddResourceButton
+              navigateTo={open(routeMap.metalflow.detail.new)}
+            />
+          </PageTitle>
+          <DetailSearchArguments />
+        </Stack>
+      }
+      scrollableContent={<DetailsList />}
+    />
   )
 })
 
@@ -138,13 +144,11 @@ export const DetailsList = observer((props: DetailsTableProps) => {
     <Stack gap={1}>
       <ErrorHint e={detailListStore.async.error} />
       <LoadingHint show={detailListStore.async.loading} />
-      <ScrollPreserv refreshTrigger={detailListStore.async.loading}>
-        <DetailsTable
-          highlight={props.highlight}
-          highlightColor={props.highlightColor}
-          onRowClick={props.onRowClick}
-        />
-      </ScrollPreserv>
+      <DetailList
+        highlight={props.highlight}
+        highlightColor={props.highlightColor}
+        onRowClick={props.onRowClick}
+      />
     </Stack>
   )
 })
