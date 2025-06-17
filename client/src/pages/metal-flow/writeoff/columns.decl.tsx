@@ -9,6 +9,7 @@ import { formatOnlyDate } from 'lib/utils/formatting'
 import { Column } from 'react-table'
 import { GetWrietOffsQuery } from 'types/graphql-shema'
 import { t } from '../text'
+import { writeoffStore } from './writeoff.store'
 export type SupplyDto = GetWrietOffsQuery['metal_flow_writeoffs'][number]
 
 export function getColumns(props: {
@@ -53,11 +54,7 @@ export function getColumns(props: {
     {
       Header: t.Action,
       accessor: data => (
-        <DeleteResourceButton
-          onClick={() => {
-            console.log('delete', data.id)
-          }}
-        />
+        <DeleteResourceButton onClick={() => writeoffStore.delete(data.id)} />
       )
     }
   ]

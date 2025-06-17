@@ -48,7 +48,8 @@ export async function deleteSupply(id: number) {
 
 export async function getSupplies() {
   const res = await apolloClient.query<GetSuppliesQuery>({
-    query: GetSuppliesDocument
+    query: GetSuppliesDocument,
+    fetchPolicy: 'network-only'
   })
   if (res.errors) {
     throw new Error(res.errors.map(e => e.message).join('\n'))

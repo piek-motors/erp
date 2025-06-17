@@ -27,7 +27,7 @@ export const WriteoffList = observer(() => {
   )
 
   useEffect(() => {
-    writeoffStore.listStore.load()
+    writeoffStore.init()
   }, [])
 
   return (
@@ -37,7 +37,7 @@ export const WriteoffList = observer(() => {
       </PageTitle>
       <Sheet sx={{ gap: 2 }}>
         <Box css={styles}>
-          <Table columns={columns} data={writeoffStore.listStore.writeoffs} />
+          <Table columns={columns} data={writeoffStore.writeoffs} />
         </Box>
       </Sheet>
     </Stack>

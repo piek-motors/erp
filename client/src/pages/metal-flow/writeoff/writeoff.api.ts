@@ -1,6 +1,9 @@
 import { Writeoff } from 'domain-model'
 import { apolloClient } from 'lib/api'
 import {
+  DeleteWriteOffDocument,
+  DeleteWriteOffMutation,
+  DeleteWriteOffMutationVariables,
   GetWrietOffsDocument,
   GetWrietOffsQuery,
   GetWrietOffsQueryVariables,
@@ -44,5 +47,24 @@ export class WriteoffApi {
 
   async createMany(writeoffs: Writeoff[]): Promise<number[]> {
     return await Promise.all(writeoffs.map(w => this.create(w)))
+  }
+
+  async delete(id: number): Promise<number> {
+    const res = await apolloClient.mutate<
+      DeleteWriteOffMutation,
+      DeleteWriteOffMutationVariables
+    >({
+      mutation: DeleteWriteOffDocument,
+      variables: {
+        id
+      }
+    })
+    if (res.errors) {
+      throw new Error(res.errors.map(e => e.message).join('\n'))
+    }
+    if (!res.data?.delete_metal_flow_writeoffs_by_pk?.id) {
+      throw new Error('Writeoff not deleted')
+    }
+    return res.data.delete_metal_flow_writeoffs_by_pk.id
   }
 }

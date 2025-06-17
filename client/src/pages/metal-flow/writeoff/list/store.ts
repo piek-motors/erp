@@ -1,10 +1,7 @@
 import { Writeoff } from 'domain-model'
 import { makeAutoObservable } from 'mobx'
-import { WriteoffApi } from '../writeoff.api'
 
 export class WriteoffListStore {
-  private api = new WriteoffApi()
-
   writeoffs: Writeoff[] = []
   setWriteoffs(writeoffs: Writeoff[]) {
     this.writeoffs = writeoffs
@@ -14,8 +11,11 @@ export class WriteoffListStore {
     makeAutoObservable(this)
   }
 
-  async load() {
-    const writeoffs = await this.api.list()
-    this.setWriteoffs(writeoffs)
+  set(writeoffs: Writeoff[]) {
+    this.writeoffs = writeoffs
+  }
+
+  delete(id: number) {
+    this.writeoffs = this.writeoffs.filter(w => w.id !== id)
   }
 }

@@ -10,7 +10,7 @@ class WriteoffStore {
   private api = new WriteoffApi()
   private async = new AsyncStoreController()
 
-  listStore = new WriteoffListStore()
+  private listStore = new WriteoffListStore()
 
   throughDetail = new WriteoffTroughDetailStore()
   throughMaterial = new WriteoffThroughMaterialStore()
@@ -36,6 +36,11 @@ class WriteoffStore {
     } else if (this.type === EnWriteoffType.DirectUnit) {
       return this.throughMaterial.validate()
     }
+  }
+
+  async init() {
+    const writeoffs = await this.api.list()
+    this.listStore.set(writeoffs)
   }
 
   async insert() {
@@ -81,6 +86,15 @@ class WriteoffStore {
       )
       return await this.api.create(w)
     }
+  }
+
+  async delete(id: number) {
+    await this.api.delete(id)
+    this.listStore.delete(id)
+  }
+
+  get writeoffs() {
+    return this.listStore.writeoffs
   }
 }
 
