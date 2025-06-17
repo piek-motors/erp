@@ -5,7 +5,13 @@ import { ScrollPreserv } from 'components/scroll-preserve'
 import { Table } from 'components/table.impl'
 import { Detail } from 'domain-model'
 import { open, routeMap } from 'lib/routes'
-import { AddResourceButton, ErrorHint, LoadingHint } from 'lib/shortcuts'
+import {
+  AddResourceButton,
+  ErrorHint,
+  Inp,
+  LoadingHint,
+  Row
+} from 'lib/shortcuts'
 import { observer } from 'mobx-react-lite'
 import { AlphabetIndex } from 'pages/metal-flow/detail/alphabet-index'
 import { useEffect } from 'react'
@@ -105,12 +111,22 @@ export const DetailsList = observer((props: DetailsTableProps) => {
   return (
     <Stack gap={1}>
       <AlphabetIndex />
-      <Search
-        onChange={e => {
-          detailListStore.search(e.target.value)
-        }}
-        value={detailListStore.searchKeyword || ''}
-      />
+      <Row>
+        <Inp
+          sx={{ width: '80px' }}
+          placeholder="ID"
+          value={detailListStore.searchId}
+          onChange={v => {
+            detailListStore.setSearchId(v)
+          }}
+        />
+        <Search
+          onChange={e => {
+            detailListStore.search(e.target.value)
+          }}
+          value={detailListStore.searchKeyword || ''}
+        />
+      </Row>
       <ErrorHint e={detailListStore.async.error} />
       <LoadingHint show={detailListStore.async.loading} />
       <ScrollPreserv refreshTrigger={detailListStore.async.loading}>

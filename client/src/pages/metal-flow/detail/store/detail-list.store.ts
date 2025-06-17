@@ -10,9 +10,11 @@ export class DetailListStore {
 
   details: Detail[] = []
   searchKeyword: string = ''
+  searchId: string = ''
   searchResult: Detail[] = []
   indexLetter: string | null = alphabet[0]
   private searchTimeout: NodeJS.Timeout | null = null
+  private searchIdTimeout: NodeJS.Timeout | null = null
 
   constructor() {
     makeAutoObservable(this)
@@ -30,25 +32,50 @@ export class DetailListStore {
         }, 500)
       }
     )
+
+    // Setup reaction for debounced search updates
+    reaction(
+      () => this.searchId,
+      keyword => {
+        if (this.searchIdTimeout) {
+          clearTimeout(this.searchIdTimeout)
+        }
+
+        this.searchIdTimeout = setTimeout(() => {
+          this.updateSearchResult()
+        }, 500)
+      }
+    )
   }
 
   search(keyword: string) {
+    this.clearSearchArguments()
     this.searchKeyword = keyword
-    this.indexLetter = null
+  }
+
+  setSearchId(id: string) {
+    this.clearSearchArguments()
+    this.searchId = id
   }
 
   updateSearchResult() {
     let filtered = this.details
-    if (this.searchKeyword) {
-      filtered = filtered.filter(detail =>
-        detail.name.toLowerCase().includes(this.searchKeyword.toLowerCase())
-      )
-    } else {
-      if (this.indexLetter) {
+    switch (true) {
+      case Boolean(this.searchKeyword):
+        filtered = filtered.filter(detail =>
+          detail.name.toLowerCase().includes(this.searchKeyword.toLowerCase())
+        )
+        break
+      case Boolean(this.searchId):
+        filtered = filtered.filter(detail =>
+          detail.id.toString().startsWith(this.searchId)
+        )
+        break
+      case Boolean(this.indexLetter):
         filtered = filtered.filter(detail =>
           detail.name.toUpperCase().startsWith(this.indexLetter!)
         )
-      }
+        break
     }
 
     this.searchResult = this.sort(filtered)
@@ -60,7 +87,7 @@ export class DetailListStore {
     this.updateSearchResult()
   }
 
-  setDetails(details: Detail[]) {
+  private setDetails(details: Detail[]) {
     this.details = details
     this.updateSearchResult()
   }
@@ -79,7 +106,17 @@ export class DetailListStore {
       clearTimeout(this.searchTimeout)
       this.searchTimeout = null
     }
+    if (this.searchIdTimeout) {
+      clearTimeout(this.searchIdTimeout)
+      this.searchIdTimeout = null
+    }
     this.async.reset()
+  }
+
+  clearSearchArguments() {
+    this.searchKeyword = ''
+    this.searchId = ''
+    this.indexLetter = null
   }
 
   async init() {

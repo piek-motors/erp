@@ -21,11 +21,12 @@ import {
   Typography,
   TypographyProps
 } from '@mui/joy'
+import { SxProps } from '@mui/joy/styles/types'
 import React, { JSX } from 'react'
 import { Link as ReactLink, useNavigate } from 'react-router-dom'
 
 export { observer } from 'mobx-react-lite'
-export { useCallback, useEffect, useMemo, useStat } from 'react'
+export { useCallback, useEffect, useMemo, useState } from 'react'
 export { useLocation, useNavigate } from 'react-router-dom'
 export { Box, Sheet, Stack }
 export const Btn = Button
@@ -50,6 +51,7 @@ type MyInputProps = {
   placeholder?: string
   fullWidth?: boolean
   autoFocus?: boolean
+  sx?: SxProps
 }
 
 export function Inp(props: MyInputProps) {
@@ -68,6 +70,7 @@ export function Inp(props: MyInputProps) {
               const value = e.target.value ?? ''
               props.onChange?.(value)
             }}
+            sx={props.sx}
           />
           {props.unit && <P>{props.unit}</P>}
         </Row>
