@@ -334,3 +334,24 @@ export function Chip(props: {
     </MuiChip>
   )
 }
+
+// create function to show content only on mobile and hide on desktop
+export function MobileOnly(props: { children: React.ReactNode; sx?: SxProps }) {
+  return (
+    <Box sx={{ display: { xs: 'block', sm: 'none' }, ...props.sx }}>
+      {props.children}
+    </Box>
+  )
+}
+
+// create function to show content only on desktop and hide on mobile
+export function DesktopOnly(props: {
+  children: React.ReactNode
+  sx?: SxProps
+}) {
+  return (
+    <Box sx={{ display: { xs: 'none', sm: 'block' }, ...props.sx }}>
+      {props.children}
+    </Box>
+  )
+}

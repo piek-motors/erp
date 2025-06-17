@@ -3,7 +3,7 @@ import { SxProperty } from 'lib/constants'
 import { routeMap } from 'lib/routes'
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { P, Row } from '../lib/shortcuts'
+import { MobileOnly, P, Row } from '../lib/shortcuts'
 
 export interface Props {
   title?: string
@@ -12,6 +12,7 @@ export interface Props {
   children?: React.ReactNode
   hideIcon?: boolean
   spaceBetween?: boolean
+  mobileMenu?: React.ReactNode
 }
 
 export function PageTitle(props: Props) {
@@ -46,6 +47,7 @@ export function PageTitle(props: Props) {
       </Row>
       {props.spaceBetween && <Box sx={{ width: '100%' }} />}
       <Box>{props.children}</Box>
+      <MobileOnly sx={{ ml: 'auto' }}>{props.mobileMenu}</MobileOnly>
     </Stack>
   )
 }

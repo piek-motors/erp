@@ -8,6 +8,7 @@ import { MaterialsListPage } from './material/material-list'
 import { Narrow } from './shared/basic'
 import { MetalFlowLayout } from './spa'
 import { AddSuply, ListSupplies } from './supply/components'
+import { UsageInstruction } from './usage-instuction'
 import { WriteoffList } from './writeoff/list/ui'
 import { WriteoffCreatePage } from './writeoff/writeoff-create'
 
@@ -22,7 +23,7 @@ function wrapEachRoute(route: RouteConfig) {
 
 const innerRoutes = [
   {
-    element: <MaterialsListPage />,
+    element: <UsageInstruction />,
     path: metalflow.index
   },
   {

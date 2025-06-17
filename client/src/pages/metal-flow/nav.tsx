@@ -1,25 +1,40 @@
-import { Box, Button, IconButton, Stack } from '@mui/joy'
+import { UilPlusCircle } from '@iconscout/react-unicons'
+import { Box, Button, ButtonProps, IconButton, Stack } from '@mui/joy'
 import { PageTitle } from 'components'
+import { DesktopOnly, UseIcon } from 'lib/shortcuts'
 import { ReactNode } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { Action, actions } from './nav.links'
+import { MobileMenuButton } from './shared/mobile-menu.button'
 import { t } from './text'
 
 export function NavigationSideBar() {
   return (
     <Stack>
-      <PageTitle title={t.PdoModuleTitle} />
-      <Stack gap={1}>
-        {actions.map(each => (
-          <RenderAction action={each} key={each.href} />
-        ))}
-      </Stack>
+      <PageTitle title={t.PdoModuleTitle} mobileMenu={<MobileMenuButton />} />
+      <DesktopOnly>
+        <Stack gap={1} py={1}>
+          {actions.map(each => (
+            <RenderAction action={each} key={each.href} size="sm" />
+          ))}
+        </Stack>
+      </DesktopOnly>
     </Stack>
   )
 }
 
-function RenderAction(props: { action: Action }) {
-  const { action } = props
+export function MobileNavigationLinks() {
+  return (
+    <Stack gap={1} py={1}>
+      {actions.map(each => (
+        <RenderAction action={each} key={each.href} size="lg" />
+      ))}
+    </Stack>
+  )
+}
+
+function RenderAction(props: { action: Action; size: ButtonProps['size'] }) {
+  const { action, size } = props
   return (
     <Stack
       direction="row"
@@ -27,16 +42,22 @@ function RenderAction(props: { action: Action }) {
       justifyContent="space-between"
       sx={{ cursor: 'pointer' }}
     >
-      <MenuButton href={action.href} name={action.name} />
-      {action.endBlock?.length && (
-        <Stack>
-          {action.endBlock?.map(e => (
-            <Box key={e.href}>
-              <LinkableIcon href={e.href} icon={e.icon} />
-            </Box>
-          ))}
-        </Stack>
-      )}
+      <MenuButton href={action.href} name={action.name} size={size} />
+
+      <Box px={2}>
+        {action.endBlock?.length && (
+          <Stack>
+            {action.endBlock?.map(e => (
+              <Box key={e.href}>
+                <LinkableIcon
+                  href={e.href}
+                  icon={<UseIcon icon={UilPlusCircle} />}
+                />
+              </Box>
+            ))}
+          </Stack>
+        )}
+      </Box>
     </Stack>
   )
 }
@@ -45,16 +66,16 @@ function MenuButton(props: {
   href: string
   name?: string
   icon?: ReactNode
-  small?: boolean
+  size: ButtonProps['size']
 }) {
   const location = useLocation()
   const path = location.pathname
   return (
     <Link to={props.href} key={props.href}>
       <Button
-        variant={path === props.href ? 'soft' : 'plain'}
+        variant={path === props.href ? 'solid' : 'soft'}
+        size={props.size}
         sx={{ whiteSpace: 'nowrap' }}
-        color={path === props.href ? 'primary' : 'neutral'}
       >
         {props.name}
       </Button>
@@ -69,7 +90,7 @@ function LinkableIcon(props: {
 }) {
   return (
     <Link to={props.href} key={props.href}>
-      <IconButton size="sm" variant="plain" sx={{ p: 0.1 }}>
+      <IconButton size="sm" variant="outlined">
         {props.icon}
       </IconButton>
     </Link>
