@@ -1,7 +1,8 @@
 import { routeMap } from 'lib/routes'
 import { RouteConfig } from 'types/global'
-import { AddDetail, UpdateDetail } from './detail/detail'
 import { DetailsListPage } from './detail/detail-list'
+import { CreateDetailPage } from './detail/detail.create'
+import { UpdateDetailPage } from './detail/detail.update'
 import { AddMaterialPage, UpdateMaterialPage } from './material/material'
 import { MaterialsListPage } from './material/material-list'
 import { Narrow } from './shared/basic'
@@ -59,7 +60,7 @@ const innerRoutes = [
   {
     element: (
       <Narrow>
-        <AddDetail />
+        <CreateDetailPage />
       </Narrow>
     ),
     path: metalflow.detail.new
@@ -67,7 +68,7 @@ const innerRoutes = [
   {
     element: (
       <Narrow>
-        <UpdateDetail />
+        <UpdateDetailPage />
       </Narrow>
     ),
     path: metalflow.detail.edit
