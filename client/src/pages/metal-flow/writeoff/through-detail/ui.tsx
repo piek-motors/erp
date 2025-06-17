@@ -1,10 +1,9 @@
 /** @jsxImportSource @emotion/react */
-import { Box, Stack } from '@mui/joy'
-import { ScrollPreserv } from 'components/scroll-preserve'
+import { Box } from '@mui/joy'
 import { Detail } from 'domain-model'
 import { observer } from 'lib/deps'
 import { Inp, Label, P } from 'lib/shortcuts'
-import { DetailsList } from 'pages/metal-flow/detail/detail-list'
+import { DetailSelectWindow } from 'pages/metal-flow/detail/detail-list'
 import { writeoffStore } from '../writeoff.store'
 
 export const WriteoffThroughDetail = observer(() => {
@@ -34,16 +33,13 @@ export const WriteoffThroughDetailSidePanel = observer(() => {
     return detail.id == writeoffStore.throughDetail.detail?.id
   }
   return (
-    <Stack sx={{ maxHeight: '100vh' }}>
-      <Box p={1}></Box>
-      <ScrollPreserv refreshTrigger={writeoffStore.throughDetail.detail?.id}>
-        <DetailsList
-          onRowClick={detail => writeoffStore.throughDetail.setDetail(detail)}
-          highlight={detail => highlight(detail)}
-          highlightColor="#97c3f098"
-        />
-      </ScrollPreserv>
-      <Box p={1}></Box>
-    </Stack>
+    <DetailSelectWindow
+      refreshTrigger={writeoffStore.throughDetail.detail?.id}
+      detailProps={{
+        onRowClick: detail => writeoffStore.throughDetail.setDetail(detail),
+        highlight: detail => highlight(detail),
+        highlightColor: '#97c3f098'
+      }}
+    />
   )
 })

@@ -3,6 +3,7 @@ import { PageTitle, Search } from 'components'
 import { HighlightText } from 'components/highlight-text'
 import { ScrollPreserv } from 'components/scroll-preserve'
 import { Table } from 'components/table.impl'
+import { ScrollableWindow } from 'components/window'
 import { Detail } from 'domain-model'
 import { open, routeMap } from 'lib/routes'
 import {
@@ -103,13 +104,9 @@ export const DetailsListPage = observer(() => {
   )
 })
 
-export const DetailsList = observer((props: DetailsTableProps) => {
-  useEffect(() => {
-    detailListStore.init()
-  }, [])
-
+export const DetailSearchArguments = observer(() => {
   return (
-    <Stack gap={1}>
+    <>
       <AlphabetIndex />
       <Row>
         <Inp
@@ -121,12 +118,24 @@ export const DetailsList = observer((props: DetailsTableProps) => {
           }}
         />
         <Search
+          placeholder="Найти по названию"
           onChange={e => {
             detailListStore.search(e.target.value)
           }}
           value={detailListStore.searchKeyword || ''}
         />
       </Row>
+    </>
+  )
+})
+
+export const DetailsList = observer((props: DetailsTableProps) => {
+  useEffect(() => {
+    detailListStore.init()
+  }, [])
+
+  return (
+    <Stack gap={1}>
       <ErrorHint e={detailListStore.async.error} />
       <LoadingHint show={detailListStore.async.loading} />
       <ScrollPreserv refreshTrigger={detailListStore.async.loading}>
@@ -139,3 +148,15 @@ export const DetailsList = observer((props: DetailsTableProps) => {
     </Stack>
   )
 })
+
+export const DetailSelectWindow = observer(
+  (props: { refreshTrigger?: any; detailProps?: DetailsTableProps }) => {
+    return (
+      <ScrollableWindow
+        refreshTrigger={props.refreshTrigger}
+        staticContent={<DetailSearchArguments />}
+        scrollableContent={<DetailsList {...props.detailProps} />}
+      />
+    )
+  }
+)
