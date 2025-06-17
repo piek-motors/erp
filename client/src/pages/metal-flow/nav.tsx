@@ -49,10 +49,7 @@ function RenderAction(props: { action: Action; size: ButtonProps['size'] }) {
           <Stack>
             {action.endBlock?.map(e => (
               <Box key={e.href}>
-                <LinkableIcon
-                  href={e.href}
-                  icon={<UseIcon icon={UilPlusCircle} />}
-                />
+                <LinkableIcon href={e.href} />
               </Box>
             ))}
           </Stack>
@@ -83,15 +80,14 @@ function MenuButton(props: {
   )
 }
 
-function LinkableIcon(props: {
-  href: string
-  icon?: ReactNode
-  small?: boolean
-}) {
+function LinkableIcon(props: { href: string; small?: boolean }) {
   return (
     <Link to={props.href} key={props.href}>
-      <IconButton size="sm" variant="outlined">
-        {props.icon}
+      <IconButton
+        size="sm"
+        variant={props.href === useLocation().pathname ? 'soft' : 'plain'}
+      >
+        <UseIcon icon={UilPlusCircle} />
       </IconButton>
     </Link>
   )

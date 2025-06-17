@@ -1,13 +1,14 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
-import { Box, Sheet, Stack } from '@mui/joy'
+import { Box, Grid, Sheet, Stack } from '@mui/joy'
 import { PageTitle } from 'components'
 import { Table } from 'components/table.impl'
 import { Material } from 'domain-model'
 import { open, routeMap } from 'lib/routes'
 import { AddResourceButton, P, Row, SendMutation } from 'lib/shortcuts'
 import { observer } from 'mobx-react-lite'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { MaterialsListPage } from '../material/material-list'
 import { QtyInputWithUnit } from '../shared'
 import { t } from '../text'
 import { getColumns } from './columns.decl'
@@ -15,6 +16,9 @@ import { supplyStore } from './supply.store'
 
 export const ListSupplies = observer(() => {
   const [key, setKey] = useState(0)
+  useEffect(() => {
+    supplyStore.load()
+  }, [])
   return (
     <Stack py={1}>
       <PageTitle subTitle={t.SuppliesList} hideIcon>
@@ -47,7 +51,7 @@ export const ListSupplies = observer(() => {
   )
 })
 
-export function AddSuply() {
+export const AddSupplyPage = observer(() => {
   const [qty, setQty] = useState<string>('')
   const [material, setMaterial] = useState<Material>()
 
@@ -62,19 +66,32 @@ export function AddSuply() {
   }
 
   return (
-    <Stack gap={2} py={2}>
-      <PageTitle subTitle={t.AddSupply} hideIcon />
-      <Row>
-        <P>Материал</P>
-        <P>{material?.label}</P>
-      </Row>
-      <QtyInputWithUnit
-        unitId={material?.unit}
-        value={qty}
-        setValue={setQty}
-        label={t.Qty}
-      />
-      <SendMutation onClick={save} />
-    </Stack>
+    <Grid container spacing={2}>
+      <Grid xs={12} md={6}>
+        <MaterialsListPage
+          onRowClick={m => {
+            setMaterial(m)
+          }}
+          highlight={m => m.id == material?.id}
+          highlightColor="#97c3f098"
+        />
+      </Grid>
+      <Grid xs={12} md={6}>
+        <Stack gap={2} py={2}>
+          <PageTitle subTitle={t.AddSupply} hideIcon />
+          <Row>
+            <P>Материал</P>
+            <P>{material?.label}</P>
+          </Row>
+          <QtyInputWithUnit
+            unitId={material?.unit}
+            value={qty}
+            setValue={setQty}
+            label={t.Qty}
+          />
+          <SendMutation onClick={save} />
+        </Stack>
+      </Grid>
+    </Grid>
   )
-}
+})

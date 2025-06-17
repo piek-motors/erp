@@ -87,7 +87,7 @@ export const MaterialList = observer((props: MaterialsTableProps) => {
   )
 })
 
-export const MaterialsListPage = observer(() => {
+export const MaterialsListPage = observer((props: MaterialsTableProps) => {
   return (
     <ScrollableWindow
       refreshTrigger={materialListStore.async.loading}
@@ -113,7 +113,7 @@ export const MaterialsListPage = observer(() => {
         <Stack>
           <LoadingHint show={materialListStore.async.loading} />
           <ErrorHint e={materialListStore.async.error} />
-          <MaterialList />
+          <MaterialList {...props} />
         </Stack>
       }
     />

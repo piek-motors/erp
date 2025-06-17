@@ -33,7 +33,10 @@ export const WriteoffCreatePage = observer(() => {
   }
   return (
     <Grid container spacing={0} p={0}>
-      <Grid xs={12} md={4} p={0} px={2}>
+      <Grid xs={12} md={5} sx={{ overflow: 'hidden', p: 0 }}>
+        {React.createElement(writeoffTypeToComponent[writeoffStore.type].right)}
+      </Grid>
+      <Grid xs={12} md={7} p={0} px={2}>
         <Stack gap={2} py={2}>
           <PageTitle subTitle={t.WriteOffAdd} hideIcon />
           <WriteoffInputStrategySelect />
@@ -50,9 +53,6 @@ export const WriteoffCreatePage = observer(() => {
           />
           {error()}
         </Stack>
-      </Grid>
-      <Grid xs={12} md={8} sx={{ overflow: 'hidden', p: 0 }}>
-        {React.createElement(writeoffTypeToComponent[writeoffStore.type].right)}
       </Grid>
     </Grid>
   )
