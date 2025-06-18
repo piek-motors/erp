@@ -104,14 +104,7 @@ export function RowButColumsAtSm(
     children: React.ReactNode
   } & StackProps
 ) {
-  return (
-    <Stack
-      gap={1}
-      alignItems="center"
-      direction={{ xs: 'column', md: 'row' }}
-      {...props}
-    />
-  )
+  return <Stack gap={1} direction={{ xs: 'column', md: 'row' }} {...props} />
 }
 
 export function CancelButton(props: { onClick: () => void }) {

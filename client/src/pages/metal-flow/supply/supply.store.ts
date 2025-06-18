@@ -7,7 +7,13 @@ class SupplyStore {
   supplies: SupplyDto[] = []
 
   material: Material | null = null
-  qty: number = 0
+  qty: string = ''
+
+  selectMaterialDialogOpen = false
+
+  setSelectMaterialDialogOpen(open: boolean) {
+    this.selectMaterialDialogOpen = open
+  }
 
   constructor() {
     makeAutoObservable(this)
@@ -17,7 +23,7 @@ class SupplyStore {
     this.material = material
   }
 
-  setQty(qty: number) {
+  setQty(qty: string) {
     this.qty = qty
   }
 
@@ -30,7 +36,7 @@ class SupplyStore {
 
   reset() {
     this.material = null
-    this.qty = 0
+    this.qty = ''
   }
 
   async load() {
@@ -38,7 +44,11 @@ class SupplyStore {
     this.supplies = res
   }
 
-  async insertSupply(materialId: number, qty: number) {
+  async insertSupply() {
+    const materialId = this.material?.id
+    const qty = this.qty
+    if (!materialId) throw Error('Материал не выбран')
+    if (!qty) throw Error('Количество не указано')
     this.reset()
 
     return await api.insertSupply({

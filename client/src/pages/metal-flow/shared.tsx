@@ -47,6 +47,7 @@ export const QtyInputWithUnit = (props: {
         onChange={v => {
           setQty(v)
         }}
+        sx={{ width: 150 }}
         type="number"
       />
       <P pb={1}>{uiUnit(unitId)}</P>
