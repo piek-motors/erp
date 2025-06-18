@@ -1,15 +1,35 @@
+import { FullscreenDialog } from 'components/fullscreen.dialog'
 import { observer } from 'lib/deps'
-import { P, Row } from 'lib/shortcuts'
+import { Label, P, Row } from 'lib/shortcuts'
 import { MaterialsListPage } from 'pages/metal-flow/material/material-list'
 import { QtyInputWithUnit } from '../../shared'
+import { WriteoffOpenListButton } from '../writeoff.shared'
 import { writeoffStore as store } from '../writeoff.store'
 
 export const WriteOffThroughMaterial = observer(() => {
   return (
     <>
-      <Row>
-        <P>Материал</P>
-        <P>{store.throughMaterial.material?.label}</P>
+      <Row gap={3}>
+        <Row sx={{ fontSize: 20 }}>
+          <Label>Материал: </Label>
+          <P fontWeight={600} color="primary" sx={{ whiteSpace: 'nowrap' }}>
+            {store.throughMaterial.material?.label}
+          </P>
+        </Row>
+        <FullscreenDialog
+          openButton={<WriteoffOpenListButton />}
+          open={store.throughMaterial.dialogOpen}
+          setOpen={v => store.throughMaterial.setDialogOpen(v)}
+        >
+          <MaterialsListPage
+            onRowClick={m => {
+              store.throughMaterial.setMaterial(m)
+              store.throughMaterial.setDialogOpen(false)
+            }}
+            highlight={m => m.id == store.throughMaterial.material?.id}
+            highlightColor="#97c3f098"
+          />
+        </FullscreenDialog>
       </Row>
       <QtyInputWithUnit
         label="Вес"
@@ -18,17 +38,5 @@ export const WriteOffThroughMaterial = observer(() => {
         value={store.throughMaterial.weight.toString()}
       />
     </>
-  )
-})
-
-export const WriteOffThroughMaterialSidePanel = observer(() => {
-  return (
-    <MaterialsListPage
-      onRowClick={m => {
-        store.throughMaterial.setMaterial(m)
-      }}
-      highlight={m => m.id == store.throughMaterial.material?.id}
-      highlightColor="#97c3f098"
-    />
   )
 })

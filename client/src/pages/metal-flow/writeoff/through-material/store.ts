@@ -13,6 +13,11 @@ export class WriteoffThroughMaterialStore implements IWriteoffType {
     this.weight = weight
   }
 
+  dialogOpen = false
+  setDialogOpen(v: boolean) {
+    this.dialogOpen = v
+  }
+
   constructor() {
     makeAutoObservable(this)
   }

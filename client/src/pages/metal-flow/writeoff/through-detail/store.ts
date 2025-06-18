@@ -7,6 +7,11 @@ export class WriteoffTroughDetailStore implements IWriteoffType {
     makeAutoObservable(this)
   }
 
+  dialogOpen = false
+  setDialogOpen(v: boolean) {
+    this.dialogOpen = v
+  }
+
   detail?: Detail
   setDetail(v: Detail) {
     this.detail = v

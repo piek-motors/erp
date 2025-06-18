@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { Autocomplete, Button, Grid, Stack, ToggleButtonGroup } from '@mui/joy'
+import { Autocomplete, Button, Stack, ToggleButtonGroup } from '@mui/joy'
 import { PageTitle } from 'components'
 import {
   EnWriteoffType,
@@ -10,14 +10,8 @@ import { observer } from 'lib/deps'
 import { Label, P, SendMutation } from 'lib/shortcuts'
 import React from 'react'
 import { t } from '../text'
-import {
-  WriteoffThroughDetail,
-  WriteoffThroughDetailSidePanel
-} from './through-detail/ui'
-import {
-  WriteOffThroughMaterial,
-  WriteOffThroughMaterialSidePanel
-} from './through-material/ui'
+import { WriteoffThroughDetail } from './through-detail/ui'
+import { WriteOffThroughMaterial } from './through-material/ui'
 import { writeoffStore } from './writeoff.store'
 
 export const WriteoffCreatePage = observer(() => {
@@ -32,40 +26,30 @@ export const WriteoffCreatePage = observer(() => {
     }
   }
   return (
-    <Grid container spacing={0} p={0}>
-      <Grid xs={12} md={5} sx={{ overflow: 'hidden', p: 0 }}>
-        {React.createElement(writeoffTypeToComponent[writeoffStore.type].right)}
-      </Grid>
-      <Grid xs={12} md={7} p={0} px={2}>
-        <Stack gap={2} py={2}>
-          <PageTitle subTitle={t.WriteOffAdd} hideIcon />
-          <WriteoffInputStrategySelect />
-          <WriteoffReasonSelect />
-          {React.createElement(
-            writeoffTypeToComponent[writeoffStore.type].left
-          )}
-
-          <SendMutation
-            disabled={creationForrbidden}
-            onClick={async () => {
-              return await writeoffStore.insert()
-            }}
-          />
-          {error()}
-        </Stack>
-      </Grid>
-    </Grid>
+    <Stack p={0} px={2}>
+      <Stack gap={2} py={2}>
+        <PageTitle subTitle={t.WriteOffAdd} hideIcon />
+        <WriteoffInputStrategySelect />
+        {React.createElement(writeoffTypeToComponent[writeoffStore.type].left)}
+        <WriteoffReasonSelect />
+        <SendMutation
+          disabled={creationForrbidden}
+          onClick={async () => {
+            return await writeoffStore.insert()
+          }}
+        />
+        {error()}
+      </Stack>
+    </Stack>
   )
 })
 
 const writeoffTypeToComponent = {
   [EnWriteoffType.ThroughDetail]: {
-    left: WriteoffThroughDetail,
-    right: WriteoffThroughDetailSidePanel
+    left: WriteoffThroughDetail
   },
   [EnWriteoffType.DirectUnit]: {
-    left: WriteOffThroughMaterial,
-    right: WriteOffThroughMaterialSidePanel
+    left: WriteOffThroughMaterial
   }
 }
 

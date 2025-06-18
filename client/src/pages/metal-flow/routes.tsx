@@ -52,7 +52,11 @@ const innerRoutes = [
     path: metalflow.supply.new
   },
   {
-    element: <WriteoffCreatePage />,
+    element: (
+      <Narrow>
+        <WriteoffCreatePage />
+      </Narrow>
+    ),
     path: metalflow.writeoff.new
   },
   {
