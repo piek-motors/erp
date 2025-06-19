@@ -11,7 +11,7 @@ import { NetworkStatusMessage } from './components/network-status-hint'
 import { NotifierOverlay } from './components/notifier'
 import { apolloClient } from './lib/api/apollo-client'
 import { AppRouter } from './lib/routers/Router'
-import { GlobalStore } from './store/global.store'
+import { GlobalStore } from './lib/store/global.store'
 import theme from './theme'
 
 if (__DEV__) {

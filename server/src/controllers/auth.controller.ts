@@ -1,7 +1,7 @@
 import type { NextFunction, Request, Response } from 'express'
 import { validationResult } from 'express-validator'
-import ApiError from '../exceptions/api.error.ts'
-import { StaticStringKeys } from '../lib/constants.ts'
+import ApiError from '../lib/api.error.ts'
+import { StaticStringKeys } from '../lib/error-codes.ts'
 import AuthService from '../service/auth.service.ts'
 
 class _UserController {

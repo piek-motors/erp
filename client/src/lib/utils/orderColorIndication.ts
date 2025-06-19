@@ -1,5 +1,5 @@
 import { Order, OrderStatus } from 'domain-model'
-import { TOrder, TReclamationOrder } from 'types/global'
+import { TOrder, TReclamationOrder } from 'lib/types/global'
 
 export function orderStatus(order: Order) {
   // add a note to the title if this is a pre-order

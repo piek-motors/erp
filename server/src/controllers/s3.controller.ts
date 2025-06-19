@@ -1,7 +1,7 @@
 import type { NextFunction, Request, Response } from 'express'
 import { config } from '../config.ts'
-import ApiError from '../exceptions/api.error.ts'
-import { StaticStringKeys } from '../lib/constants.ts'
+import ApiError from '../lib/api.error.ts'
+import { StaticStringKeys } from '../lib/error-codes.ts'
 import { database } from '../lib/graphql-client.ts'
 import { s3 } from '../lib/s3-clients.ts'
 

@@ -1,5 +1,5 @@
 import { Alert, Box, Stack } from '@mui/joy'
-import { useNotifier } from '../store/notifier.store'
+import { useNotifier } from '../lib/store/notifier.store'
 
 export function NotifierOverlay() {
   const notifier = useNotifier()

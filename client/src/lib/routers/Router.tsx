@@ -1,7 +1,7 @@
 import { routeMap } from 'lib/routes'
-import { LoginForm } from 'pages/login'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { protectedRoutes } from 'routes'
+import { LoginForm } from '../../login'
 import RequireAuth from './PrivateRoute'
 
 export function AppRouter() {

@@ -2,7 +2,7 @@ import { type DocumentNode, print as stringifyGraphqlNode } from 'graphql'
 import fetch from 'node-fetch'
 import { getSdk, type Requester } from '../../generated/schema-typedefs.ts'
 import { config } from '../config.ts'
-import ApiError from '../exceptions/api.error.ts'
+import ApiError from './api.error.ts'
 
 type GraphQLErrorResult = {
   errors: {

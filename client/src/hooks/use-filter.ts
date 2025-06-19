@@ -1,4 +1,4 @@
-import { TOrderColumnData } from 'types/global'
+import { TOrderColumnData } from 'lib/types/global'
 import { OrderStatus } from '../../../domain-model/dist'
 import keywordComparator from '../lib/utils/comparators'
 

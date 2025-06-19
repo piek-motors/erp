@@ -1,5 +1,5 @@
-import ApiError from '../exceptions/api.error.ts'
-import { StaticStringKeys } from '../lib/constants.ts'
+import ApiError from '../lib/api.error.ts'
+import { StaticStringKeys } from '../lib/error-codes.ts'
 import { database } from '../lib/graphql-client.ts'
 import tokenService from './token.service.ts'
 
