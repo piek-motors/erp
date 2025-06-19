@@ -1,6 +1,6 @@
 import { Autocomplete, Box, createFilterOptions } from '@mui/joy'
 import { SxProps } from '@mui/joy/styles/types'
-import { Label } from 'lib/shortcuts'
+import { Label } from 'lib/index'
 import { ReactNode } from 'react'
 
 export interface BaseOption {

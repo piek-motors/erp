@@ -1,5 +1,5 @@
 import { Box, Button, Modal, ModalClose, ModalDialog } from '@mui/joy'
-import { CancelButton, Inp, MultilineInput, P, Row } from 'lib/shortcuts'
+import { CancelButton, Inp, MultilineInput, P, Row } from 'lib/index'
 import { observer } from 'mobx-react-lite'
 import { useEffect } from 'react'
 import { orderStore } from '../stores/order.store'

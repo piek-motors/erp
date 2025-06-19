@@ -1,7 +1,7 @@
 import { Box } from '@mui/joy'
 import { MonthSelect } from 'components/month-select'
 import { TableName } from 'components/table-name'
-import { P } from 'lib/shortcuts'
+import { P } from 'lib/index'
 import { observer } from 'mobx-react-lite'
 import { useEffect } from 'react'
 import { OrdersTable } from '../columns'

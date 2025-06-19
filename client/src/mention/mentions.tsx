@@ -1,19 +1,28 @@
 /** @jsxImportSource @emotion/react */
 import styled from '@emotion/styled'
 import { UilArrowRight } from '@iconscout/react-unicons'
-import { Box, Button, Container, Sheet, Stack } from '@mui/joy'
+import { Container } from '@mui/joy'
 import { PageTitle } from 'components/page-title'
 import { Context } from 'index'
+import {
+  Box,
+  Button,
+  P,
+  Row,
+  Sheet,
+  Stack,
+  UseIcon,
+  useNavigate,
+  useState
+} from 'lib/index'
 import { openOrderDetailPage } from 'lib/routes'
-import { P, Row, UseIcon } from 'lib/shortcuts'
 import { TNotification } from 'lib/types/global'
 import {
   useGetNotificationsSubscription,
   useUpdateNotificationSeenMutation
 } from 'lib/types/graphql-shema'
 import moment from 'moment'
-import { useContext, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useContext } from 'react'
 
 interface INotificationProps {
   data: TNotification

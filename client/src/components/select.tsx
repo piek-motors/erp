@@ -1,5 +1,5 @@
 import { Box, FormControl, Select as MuiSelect, Option } from '@mui/joy'
-import { Label } from 'lib/shortcuts'
+import { Label } from 'lib/index'
 
 export function Select(props: {
   value?: any

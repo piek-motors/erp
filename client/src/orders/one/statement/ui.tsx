@@ -1,6 +1,6 @@
 import { Box } from '@mui/joy'
 import { PrintOnly, WebOnly } from 'components/conditional-display'
-import { InputStack, P, SendMutation } from 'lib/shortcuts'
+import { InputStack, P, SendMutation } from 'lib/index'
 import { observer } from 'mobx-react-lite'
 import { orderStore } from '../stores/order.store'
 import { RenderInput } from './render-input'

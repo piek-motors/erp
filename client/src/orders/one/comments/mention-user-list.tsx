@@ -1,5 +1,5 @@
 import { Sheet, Stack } from '@mui/joy'
-import { P } from 'lib/shortcuts'
+import { P } from 'lib/index'
 import { useEffect, useImperativeHandle, useState } from 'react'
 import { SuggestionItem } from './mention-suggestion'
 

@@ -1,10 +1,10 @@
 /** @jsxImportSource @emotion/react */
 import { Box, Button, Stack } from '@mui/joy'
 import axios from 'axios'
-import { CenteredContainer } from 'components/centered-container'
+import { CenteredContainer } from 'components/utilities/centered-container'
 import { useAppContext } from 'hooks'
+import { Inp, P } from 'lib/index'
 import { AuthService } from 'lib/services/auth.service'
-import { Inp, P } from 'lib/shortcuts'
 import { ServerErrorResponse } from 'lib/types/global'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'

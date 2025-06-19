@@ -3,7 +3,7 @@ import { css } from '@emotion/react'
 import { UilArrowDown, UilArrowUp } from '@iconscout/react-unicons'
 import { Table as MuiTable, Sheet, Stack } from '@mui/joy'
 import { SxProps } from '@mui/joy/styles/types'
-import { P } from 'lib/shortcuts'
+import { P } from 'lib/index'
 import { Row, TableOptions, useSortBy, useTable } from 'react-table'
 
 type Props<T extends object> = TableOptions<T> & {

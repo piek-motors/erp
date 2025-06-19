@@ -1,5 +1,5 @@
+import { P } from 'lib'
 import { sec2hours } from 'lib/date'
-import { P } from 'lib/shortcuts'
 import { PreparedEmployeeDto } from 'lib/types/global'
 import { CellProps, Column } from 'react-table'
 import { State } from './main'

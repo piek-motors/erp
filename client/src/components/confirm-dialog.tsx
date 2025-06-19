@@ -1,5 +1,5 @@
 import { Box, Button, Modal, ModalDialog, Sheet } from '@mui/joy'
-import { P } from 'lib/shortcuts'
+import { P } from 'lib/index'
 import { ReactNode, useState } from 'react'
 // extrnalСomponent is the whichever component which will be go out
 // like as icon or textButton or something else

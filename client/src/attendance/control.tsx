@@ -1,9 +1,7 @@
 /** @jsxImportSource @emotion/react */
-import { Button, Checkbox, Input, Stack } from '@mui/joy'
+import { Button, Checkbox, Input, P, ReactNode, Row, Stack } from 'lib'
 import { monthAdd } from 'lib/date'
-import { P, Row } from 'lib/shortcuts'
 import { useUpdateTimeDeductionMutation } from 'lib/types/graphql-shema'
-import { ReactNode } from 'react'
 import { State } from './main'
 
 const months = [

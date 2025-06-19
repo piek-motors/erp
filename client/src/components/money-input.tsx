@@ -1,4 +1,4 @@
-import { Inp } from 'lib/shortcuts'
+import { Inp } from 'lib/index'
 import { formatMoney } from 'lib/utils/formatting'
 import { useCallback, useMemo } from 'react'
 

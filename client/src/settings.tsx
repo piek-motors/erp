@@ -1,8 +1,8 @@
 /** @jsxImportSource @emotion/react */
 import { Button, Container } from '@mui/joy'
 import { useAppContext } from 'hooks'
+import { P } from 'lib/index'
 import { routeMap } from 'lib/routes'
-import { P } from 'lib/shortcuts'
 import { RouteConfig } from 'lib/types/global'
 import { useNavigate } from 'react-router-dom'
 import { PageTitle } from './components'

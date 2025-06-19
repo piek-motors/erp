@@ -1,5 +1,5 @@
+import { LoadingHint } from 'lib/index'
 import { routeMap } from 'lib/routes'
-import { LoadingHint } from 'lib/shortcuts'
 import { RouteConfig } from 'lib/types/global'
 import { observer } from 'mobx-react-lite'
 import { useEffect } from 'react'

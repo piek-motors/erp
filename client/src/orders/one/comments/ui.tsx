@@ -1,6 +1,6 @@
 import { Box, Button, Card, Divider } from '@mui/joy'
 import { User } from 'domain-model'
-import { DeleteResourceButton, P, Row, text } from 'lib/shortcuts'
+import { DeleteResourceButton, P, Row, text } from 'lib/index'
 import { TComment } from 'lib/types/global'
 import * as gql from 'lib/types/graphql-shema'
 import { observer } from 'mobx-react-lite'

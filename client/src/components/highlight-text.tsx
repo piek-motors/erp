@@ -1,4 +1,4 @@
-import { P } from 'lib/shortcuts'
+import { P } from 'lib/index'
 
 interface HighlightTextProps {
   text: string

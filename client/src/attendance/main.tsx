@@ -1,14 +1,10 @@
-import { Box, Sheet } from '@mui/joy'
-import { routeMap } from 'lib/routes'
 import { Employee, RouteConfig } from 'lib/types/global'
 import { useGetEmployeeListQuery } from 'lib/types/graphql-shema'
-import { useMemo, useState } from 'react'
 import { PageTitle } from '../components'
-import { LoadingHint } from '../lib/shortcuts'
+import { Box, LoadingHint, routeMap, Sheet, useMemo, useState } from '../lib'
 import { genColumns } from './columns'
 import ReportConfigurator from './control'
 import { Table } from './table'
-import { t } from './text'
 import { prepareEmployeeData, queryVariables } from './utils'
 
 type FullYear = number
@@ -62,11 +58,9 @@ function Attendance() {
     }
   }
 
-  // const filtredColumns = columns.filter(each => )
-
   return (
     <Box p={1} mb={5}>
-      <PageTitle title={t.pageTitle} />
+      <PageTitle title={'Рабочее время'} />
       <Box p={2} width={'min-content'} borderRadius={20}>
         <ReportConfigurator state={state} setState={setState} />
       </Box>

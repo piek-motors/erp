@@ -3,7 +3,7 @@ import { SxProperty } from 'lib/constants'
 import { routeMap } from 'lib/routes'
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { MobileOnly, P, Row } from '../lib/shortcuts'
+import { MobileOnly, P, Row } from '../lib'
 
 export interface Props {
   title?: string

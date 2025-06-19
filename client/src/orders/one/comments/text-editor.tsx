@@ -7,7 +7,7 @@ import Mention from '@tiptap/extension-mention'
 import Placeholder from '@tiptap/extension-placeholder'
 import { Editor, EditorContent, useEditor } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
-import { Row } from 'lib/shortcuts'
+import { Row } from 'lib/index'
 import { useState } from 'react'
 import { suggestion } from './mention-suggestion'
 

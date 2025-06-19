@@ -1,6 +1,6 @@
 import { Box, Stack } from '@mui/joy'
 import { Attachment } from 'domain-model'
-import { P, Row, text } from 'lib/shortcuts'
+import { P, Row, text } from 'lib/index'
 import { InputFiles } from '../input-files'
 import { AttachmentComponent } from './attachment'
 

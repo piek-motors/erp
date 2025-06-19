@@ -1,7 +1,7 @@
 import { UilFile, UilFileAlt, UilImage } from '@iconscout/react-unicons'
 import { Box, Button } from '@mui/joy'
 import { Attachment } from 'domain-model'
-import { DeleteResourceButton, P, Row, UseIcon } from 'lib/shortcuts'
+import { DeleteResourceButton, P, Row, UseIcon } from 'lib/index'
 
 export const AttachmentComponent = (props: {
   attachment: Attachment

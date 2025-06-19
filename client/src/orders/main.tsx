@@ -1,14 +1,15 @@
 /** @jsxImportSource @emotion/react */
 import { Sheet, Stack } from '@mui/joy'
-import { ManagerFilter, PageTitle, Search } from 'components'
+import { ManagerFilter, PageTitle } from 'components'
+import { Search } from 'components/inputs'
 import { OrderTypeFilter } from 'components/order-type-filter'
 import { TableName } from 'components/table-name'
 import { TabConfig, Tabs } from 'components/tabs'
 import { EnOrderStatus } from 'domain-model'
 import { useFilter } from 'hooks'
 import { SxProperty } from 'lib/constants'
+import { AddResourceButton } from 'lib/index'
 import { routeMap } from 'lib/routes'
-import { AddResourceButton } from 'lib/shortcuts'
 import { RouteConfig } from 'lib/types/global'
 import {
   useGetOrdersArchivedBySearchKeywordQuery,

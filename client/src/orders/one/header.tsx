@@ -1,7 +1,7 @@
 import * as icons from '@iconscout/react-unicons'
 import { IconButton, Tooltip } from '@mui/joy'
 import { OrderStatus } from 'domain-model'
-import { Row, text, UseIcon } from 'lib/shortcuts'
+import { Row, text, UseIcon } from 'lib/index'
 import { observer } from 'mobx-react-lite'
 import React from 'react'
 import { useNavigate } from 'react-router-dom'

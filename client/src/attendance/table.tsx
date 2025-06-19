@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { Sheet } from '@mui/joy'
+import { Sheet } from 'lib'
 import { PreparedEmployeeDto } from 'lib/types/global'
 import { useTable } from 'react-table'
 
