@@ -2,7 +2,7 @@ import dotenv from 'dotenv'
 dotenv.config({ path: '../.env' })
 
 function validate<T>(config: T): T {
-  for (const [key, value] of Object.entries(config)) {
+  for (const [key, value] of Object.entries(config as any)) {
     if (!value) {
       throw new Error(`Missing key ${key} in .env`)
     }

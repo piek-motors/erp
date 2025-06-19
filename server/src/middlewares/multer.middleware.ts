@@ -3,11 +3,11 @@ import multerS3, { AUTO_CONTENT_TYPE } from 'multer-s3'
 // @ts-ignore
 import { randomUUID } from 'node:crypto'
 import { config } from '../config.ts'
-import { mainS3Client } from '../lib/s3-clients.ts'
+import { s3 } from '../lib/s3-clients.ts'
 
 const multerMiddleware = multer({
   storage: multerS3({
-    s3: mainS3Client,
+    s3: s3,
     bucket: config.S3_BUCKET,
     storageClass: 'COLD',
     contentType: AUTO_CONTENT_TYPE,

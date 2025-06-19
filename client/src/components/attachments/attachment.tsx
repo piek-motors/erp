@@ -6,7 +6,6 @@ import { DeleteResourceButton, P, Row, UseIcon } from 'lib/shortcuts'
 export const AttachmentComponent = (props: {
   attachment: Attachment
   handleDelete?: (attachment: Attachment) => void
-  uploadingInProgress?: boolean
 }) => {
   return (
     <Row justifyContent={'space-between'}>
@@ -31,9 +30,6 @@ export const AttachmentComponent = (props: {
           >
             <P>{props.attachment.name}</P>
           </Button>
-          {props.uploadingInProgress && (
-            <P level="body-sm">Файл выгружается...</P>
-          )}
         </a>
       </Box>
 

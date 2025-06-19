@@ -64,7 +64,6 @@ export const AttachmentList = ({
                     file.name
                   )
                 }
-                uploadingInProgress={true}
               />
             </Box>
           ))}

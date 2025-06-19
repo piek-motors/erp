@@ -3,33 +3,9 @@ import { config } from '../config.ts'
 import ApiError from '../exceptions/api.error.ts'
 import { StaticStringKeys } from '../lib/constants.ts'
 import { database } from '../lib/graphql-client.ts'
-import S3Service from '../service/s3.service.ts'
+import { s3 } from '../lib/s3-clients.ts'
 
 class _S3Controller {
-  async removeSingleFile(req: Request, res: Response, next: NextFunction) {
-    /**
-     * Incoming request must contain a 'orderid'(integer) parameter in request headers.
-     * The `Request` object will be populated with a `files` object containing
-     * information about the processed file.
-     *
-     * hasuraUpload method adds file metadata into database using graphql server.
-     */
-    try {
-      const key = req.params.key
-
-      const data = await S3Service.deleteObject(key, config.S3_BUCKET).then(
-        async s3_responce => {
-          // TODO: delete from doc fron junkction table
-          return await database.DeleteDocsMutation({ key })
-        }
-      )
-
-      res.json(data)
-    } catch (error) {
-      next(error)
-    }
-  }
-
   async uploadBinaryFiles(
     req: Request & { files: any[]; headers: { order_id: string } },
     res: Response,
@@ -42,7 +18,6 @@ class _S3Controller {
      *
      * hasuraUpload method adds file metadata into database using graphql server.
      */
-
     const detailId = req.headers.detail_id as string
     const orderId = req.headers.order_id as string
 
@@ -60,7 +35,11 @@ class _S3Controller {
             uploaded_at: new Date().toISOString()
           }))
         })
-      ).insert_attachments.returning
+      )?.insert_attachments?.returning
+
+      if (!data) {
+        throw ApiError.BadRequest(StaticStringKeys.MISSING_ORDERID_HEADER)
+      }
 
       if (orderId) {
         await database.InsertOrderAttachemnts({
@@ -86,8 +65,13 @@ class _S3Controller {
 
   async getBinaryFile(req: Request, res: Response, next: NextFunction) {
     try {
-      const data = await S3Service.getObject(req.params.key)
-      const fileName = encodeURI(data.Metadata.originalname)
+      const data = await s3
+        .getObject({
+          Bucket: config.S3_BUCKET,
+          Key: req.params.key
+        })
+        .promise()
+      const fileName = encodeURI(data.Metadata?.originalname ?? '')
       res.set('Content-Type', data.ContentType)
       res.set('Content-Disposition', `inline;filename*=utf-8''${fileName}`)
       res.send(data.Body)

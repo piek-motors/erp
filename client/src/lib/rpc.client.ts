@@ -1,4 +1,4 @@
-import { createTRPCClient, httpBatchLink } from '@trpc/client'
+import { createTRPCClient, httpLink } from '@trpc/client'
 import { getInMemoryToken } from 'index'
 // @ts-ignore
 import type { AppRouter } from '../../../server/src/trpc'
@@ -11,7 +11,7 @@ if (!url) {
 export const rpc: ReturnType<typeof createTRPCClient<AppRouter>> =
   createTRPCClient<AppRouter>({
     links: [
-      httpBatchLink({
+      httpLink({
         url,
         headers: () => {
           return {

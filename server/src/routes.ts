@@ -8,7 +8,7 @@ import multerMiddleware from './middlewares/multer.middleware.ts'
 export const router: Router = Router()
 
 router.post('/login', body('email').isEmail(), (req, res, next) => {
-  UserController.login(req, res, next)
+  UserController.login(req as any, res, next)
 })
 router.post('/logout', (req, res, next) => {
   UserController.logout(req, res, next)
@@ -21,5 +21,4 @@ router.put('/s3', [
   multerMiddleware,
   S3Controller.uploadBinaryFiles
 ])
-router.get('/s3/:key', authMiddleware, S3Controller.getBinaryFile)
-router.delete('/s3/:key', authMiddleware, S3Controller.removeSingleFile)
+router.get('/s3/:key', S3Controller.getBinaryFile)

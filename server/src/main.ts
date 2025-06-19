@@ -1,11 +1,13 @@
+import * as trpcExpress from '@trpc/server/adapters/express'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import express from 'express'
 import { config } from './config.ts'
+import { createContext } from './lib/trpc/context.ts'
+import './lib/trpc/index.ts'
 import errorMiddleware from './middlewares/error.middleware.ts'
 import { router } from './routes.ts'
-import './trpc/index.ts'
-
+import { rpcRouter } from './rpc-router.ts'
 const clientBuild = config.BUILD_PATH
 
 export const app = express() as express.Express
@@ -26,6 +28,14 @@ app.use(
   })
 )
 app.use('/api', router)
+app.use(
+  '/trpc',
+  trpcExpress.createExpressMiddleware({
+    router: rpcRouter,
+    createContext
+  })
+)
+
 app.use((err, req, res, next) => {
   errorMiddleware(err, req, res, next)
 })

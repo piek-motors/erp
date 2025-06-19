@@ -1,6 +1,6 @@
 import { Attachment } from 'domain-model'
+import { rpc } from 'lib/rpc.client'
 import { FileService } from 'lib/services/file.service'
-import { rpc } from 'lib/trpc.client'
 import { makeAutoObservable } from 'mobx'
 import { loadDetailAttachments } from './detail.api'
 
