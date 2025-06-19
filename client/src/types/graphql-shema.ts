@@ -81,6 +81,311 @@ export type String_Comparison_Exp = {
   _similar?: InputMaybe<Scalars['String']['input']>;
 };
 
+/** columns and relationships of "attachments" */
+export type Attachments = {
+  __typename?: 'attachments';
+  /** An array relationship */
+  detail_attachments: Array<Metal_Flow_Detail_Attachments>;
+  /** An aggregate relationship */
+  detail_attachments_aggregate: Metal_Flow_Detail_Attachments_Aggregate;
+  filename: Scalars['String']['output'];
+  id: Scalars['Int']['output'];
+  key: Scalars['String']['output'];
+  /** An array relationship */
+  order_attachments: Array<Orders_Order_Attachments>;
+  /** An aggregate relationship */
+  order_attachments_aggregate: Orders_Order_Attachments_Aggregate;
+  size: Scalars['Int']['output'];
+  uploaded_at: Scalars['timestamp']['output'];
+};
+
+
+/** columns and relationships of "attachments" */
+export type AttachmentsDetail_AttachmentsArgs = {
+  distinct_on?: InputMaybe<Array<Metal_Flow_Detail_Attachments_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Metal_Flow_Detail_Attachments_Order_By>>;
+  where?: InputMaybe<Metal_Flow_Detail_Attachments_Bool_Exp>;
+};
+
+
+/** columns and relationships of "attachments" */
+export type AttachmentsDetail_Attachments_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Metal_Flow_Detail_Attachments_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Metal_Flow_Detail_Attachments_Order_By>>;
+  where?: InputMaybe<Metal_Flow_Detail_Attachments_Bool_Exp>;
+};
+
+
+/** columns and relationships of "attachments" */
+export type AttachmentsOrder_AttachmentsArgs = {
+  distinct_on?: InputMaybe<Array<Orders_Order_Attachments_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Orders_Order_Attachments_Order_By>>;
+  where?: InputMaybe<Orders_Order_Attachments_Bool_Exp>;
+};
+
+
+/** columns and relationships of "attachments" */
+export type AttachmentsOrder_Attachments_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Orders_Order_Attachments_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Orders_Order_Attachments_Order_By>>;
+  where?: InputMaybe<Orders_Order_Attachments_Bool_Exp>;
+};
+
+/** aggregated selection of "attachments" */
+export type Attachments_Aggregate = {
+  __typename?: 'attachments_aggregate';
+  aggregate?: Maybe<Attachments_Aggregate_Fields>;
+  nodes: Array<Attachments>;
+};
+
+/** aggregate fields of "attachments" */
+export type Attachments_Aggregate_Fields = {
+  __typename?: 'attachments_aggregate_fields';
+  avg?: Maybe<Attachments_Avg_Fields>;
+  count: Scalars['Int']['output'];
+  max?: Maybe<Attachments_Max_Fields>;
+  min?: Maybe<Attachments_Min_Fields>;
+  stddev?: Maybe<Attachments_Stddev_Fields>;
+  stddev_pop?: Maybe<Attachments_Stddev_Pop_Fields>;
+  stddev_samp?: Maybe<Attachments_Stddev_Samp_Fields>;
+  sum?: Maybe<Attachments_Sum_Fields>;
+  var_pop?: Maybe<Attachments_Var_Pop_Fields>;
+  var_samp?: Maybe<Attachments_Var_Samp_Fields>;
+  variance?: Maybe<Attachments_Variance_Fields>;
+};
+
+
+/** aggregate fields of "attachments" */
+export type Attachments_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Attachments_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+/** aggregate avg on columns */
+export type Attachments_Avg_Fields = {
+  __typename?: 'attachments_avg_fields';
+  id?: Maybe<Scalars['Float']['output']>;
+  size?: Maybe<Scalars['Float']['output']>;
+};
+
+/** Boolean expression to filter rows from the table "attachments". All fields are combined with a logical 'AND'. */
+export type Attachments_Bool_Exp = {
+  _and?: InputMaybe<Array<Attachments_Bool_Exp>>;
+  _not?: InputMaybe<Attachments_Bool_Exp>;
+  _or?: InputMaybe<Array<Attachments_Bool_Exp>>;
+  detail_attachments?: InputMaybe<Metal_Flow_Detail_Attachments_Bool_Exp>;
+  detail_attachments_aggregate?: InputMaybe<Metal_Flow_Detail_Attachments_Aggregate_Bool_Exp>;
+  filename?: InputMaybe<String_Comparison_Exp>;
+  id?: InputMaybe<Int_Comparison_Exp>;
+  key?: InputMaybe<String_Comparison_Exp>;
+  order_attachments?: InputMaybe<Orders_Order_Attachments_Bool_Exp>;
+  order_attachments_aggregate?: InputMaybe<Orders_Order_Attachments_Aggregate_Bool_Exp>;
+  size?: InputMaybe<Int_Comparison_Exp>;
+  uploaded_at?: InputMaybe<Timestamp_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "attachments" */
+export enum Attachments_Constraint {
+  /** unique or primary key constraint on columns "id" */
+  AttachmentsPkey = 'attachments_pkey'
+}
+
+/** input type for incrementing numeric columns in table "attachments" */
+export type Attachments_Inc_Input = {
+  id?: InputMaybe<Scalars['Int']['input']>;
+  size?: InputMaybe<Scalars['Int']['input']>;
+};
+
+/** input type for inserting data into table "attachments" */
+export type Attachments_Insert_Input = {
+  detail_attachments?: InputMaybe<Metal_Flow_Detail_Attachments_Arr_Rel_Insert_Input>;
+  filename?: InputMaybe<Scalars['String']['input']>;
+  id?: InputMaybe<Scalars['Int']['input']>;
+  key?: InputMaybe<Scalars['String']['input']>;
+  order_attachments?: InputMaybe<Orders_Order_Attachments_Arr_Rel_Insert_Input>;
+  size?: InputMaybe<Scalars['Int']['input']>;
+  uploaded_at?: InputMaybe<Scalars['timestamp']['input']>;
+};
+
+/** aggregate max on columns */
+export type Attachments_Max_Fields = {
+  __typename?: 'attachments_max_fields';
+  filename?: Maybe<Scalars['String']['output']>;
+  id?: Maybe<Scalars['Int']['output']>;
+  key?: Maybe<Scalars['String']['output']>;
+  size?: Maybe<Scalars['Int']['output']>;
+  uploaded_at?: Maybe<Scalars['timestamp']['output']>;
+};
+
+/** aggregate min on columns */
+export type Attachments_Min_Fields = {
+  __typename?: 'attachments_min_fields';
+  filename?: Maybe<Scalars['String']['output']>;
+  id?: Maybe<Scalars['Int']['output']>;
+  key?: Maybe<Scalars['String']['output']>;
+  size?: Maybe<Scalars['Int']['output']>;
+  uploaded_at?: Maybe<Scalars['timestamp']['output']>;
+};
+
+/** response of any mutation on the table "attachments" */
+export type Attachments_Mutation_Response = {
+  __typename?: 'attachments_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int']['output'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Attachments>;
+};
+
+/** input type for inserting object relation for remote table "attachments" */
+export type Attachments_Obj_Rel_Insert_Input = {
+  data: Attachments_Insert_Input;
+  /** upsert condition */
+  on_conflict?: InputMaybe<Attachments_On_Conflict>;
+};
+
+/** on_conflict condition type for table "attachments" */
+export type Attachments_On_Conflict = {
+  constraint: Attachments_Constraint;
+  update_columns?: Array<Attachments_Update_Column>;
+  where?: InputMaybe<Attachments_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "attachments". */
+export type Attachments_Order_By = {
+  detail_attachments_aggregate?: InputMaybe<Metal_Flow_Detail_Attachments_Aggregate_Order_By>;
+  filename?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  key?: InputMaybe<Order_By>;
+  order_attachments_aggregate?: InputMaybe<Orders_Order_Attachments_Aggregate_Order_By>;
+  size?: InputMaybe<Order_By>;
+  uploaded_at?: InputMaybe<Order_By>;
+};
+
+/** primary key columns input for table: attachments */
+export type Attachments_Pk_Columns_Input = {
+  id: Scalars['Int']['input'];
+};
+
+/** select columns of table "attachments" */
+export enum Attachments_Select_Column {
+  /** column name */
+  Filename = 'filename',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  Key = 'key',
+  /** column name */
+  Size = 'size',
+  /** column name */
+  UploadedAt = 'uploaded_at'
+}
+
+/** input type for updating data in table "attachments" */
+export type Attachments_Set_Input = {
+  filename?: InputMaybe<Scalars['String']['input']>;
+  id?: InputMaybe<Scalars['Int']['input']>;
+  key?: InputMaybe<Scalars['String']['input']>;
+  size?: InputMaybe<Scalars['Int']['input']>;
+  uploaded_at?: InputMaybe<Scalars['timestamp']['input']>;
+};
+
+/** aggregate stddev on columns */
+export type Attachments_Stddev_Fields = {
+  __typename?: 'attachments_stddev_fields';
+  id?: Maybe<Scalars['Float']['output']>;
+  size?: Maybe<Scalars['Float']['output']>;
+};
+
+/** aggregate stddev_pop on columns */
+export type Attachments_Stddev_Pop_Fields = {
+  __typename?: 'attachments_stddev_pop_fields';
+  id?: Maybe<Scalars['Float']['output']>;
+  size?: Maybe<Scalars['Float']['output']>;
+};
+
+/** aggregate stddev_samp on columns */
+export type Attachments_Stddev_Samp_Fields = {
+  __typename?: 'attachments_stddev_samp_fields';
+  id?: Maybe<Scalars['Float']['output']>;
+  size?: Maybe<Scalars['Float']['output']>;
+};
+
+/** Streaming cursor of the table "attachments" */
+export type Attachments_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Attachments_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Attachments_Stream_Cursor_Value_Input = {
+  filename?: InputMaybe<Scalars['String']['input']>;
+  id?: InputMaybe<Scalars['Int']['input']>;
+  key?: InputMaybe<Scalars['String']['input']>;
+  size?: InputMaybe<Scalars['Int']['input']>;
+  uploaded_at?: InputMaybe<Scalars['timestamp']['input']>;
+};
+
+/** aggregate sum on columns */
+export type Attachments_Sum_Fields = {
+  __typename?: 'attachments_sum_fields';
+  id?: Maybe<Scalars['Int']['output']>;
+  size?: Maybe<Scalars['Int']['output']>;
+};
+
+/** update columns of table "attachments" */
+export enum Attachments_Update_Column {
+  /** column name */
+  Filename = 'filename',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  Key = 'key',
+  /** column name */
+  Size = 'size',
+  /** column name */
+  UploadedAt = 'uploaded_at'
+}
+
+export type Attachments_Updates = {
+  /** increments the numeric columns with given value of the filtered values */
+  _inc?: InputMaybe<Attachments_Inc_Input>;
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Attachments_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Attachments_Bool_Exp;
+};
+
+/** aggregate var_pop on columns */
+export type Attachments_Var_Pop_Fields = {
+  __typename?: 'attachments_var_pop_fields';
+  id?: Maybe<Scalars['Float']['output']>;
+  size?: Maybe<Scalars['Float']['output']>;
+};
+
+/** aggregate var_samp on columns */
+export type Attachments_Var_Samp_Fields = {
+  __typename?: 'attachments_var_samp_fields';
+  id?: Maybe<Scalars['Float']['output']>;
+  size?: Maybe<Scalars['Float']['output']>;
+};
+
+/** aggregate variance on columns */
+export type Attachments_Variance_Fields = {
+  __typename?: 'attachments_variance_fields';
+  id?: Maybe<Scalars['Float']['output']>;
+  size?: Maybe<Scalars['Float']['output']>;
+};
+
 /** columns and relationships of "attendance.config" */
 export type Attendance_Config = {
   __typename?: 'attendance_config';
@@ -1302,6 +1607,316 @@ export type Kysely_Migration_Updates = {
   where: Kysely_Migration_Bool_Exp;
 };
 
+/** columns and relationships of "metal_flow.detail_attachments" */
+export type Metal_Flow_Detail_Attachments = {
+  __typename?: 'metal_flow_detail_attachments';
+  /** An object relationship */
+  attachment: Attachments;
+  attachment_id: Scalars['Int']['output'];
+  /** An object relationship */
+  detail: Metal_Flow_Details;
+  detail_id: Scalars['Int']['output'];
+};
+
+/** aggregated selection of "metal_flow.detail_attachments" */
+export type Metal_Flow_Detail_Attachments_Aggregate = {
+  __typename?: 'metal_flow_detail_attachments_aggregate';
+  aggregate?: Maybe<Metal_Flow_Detail_Attachments_Aggregate_Fields>;
+  nodes: Array<Metal_Flow_Detail_Attachments>;
+};
+
+export type Metal_Flow_Detail_Attachments_Aggregate_Bool_Exp = {
+  count?: InputMaybe<Metal_Flow_Detail_Attachments_Aggregate_Bool_Exp_Count>;
+};
+
+export type Metal_Flow_Detail_Attachments_Aggregate_Bool_Exp_Count = {
+  arguments?: InputMaybe<Array<Metal_Flow_Detail_Attachments_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']['input']>;
+  filter?: InputMaybe<Metal_Flow_Detail_Attachments_Bool_Exp>;
+  predicate: Int_Comparison_Exp;
+};
+
+/** aggregate fields of "metal_flow.detail_attachments" */
+export type Metal_Flow_Detail_Attachments_Aggregate_Fields = {
+  __typename?: 'metal_flow_detail_attachments_aggregate_fields';
+  avg?: Maybe<Metal_Flow_Detail_Attachments_Avg_Fields>;
+  count: Scalars['Int']['output'];
+  max?: Maybe<Metal_Flow_Detail_Attachments_Max_Fields>;
+  min?: Maybe<Metal_Flow_Detail_Attachments_Min_Fields>;
+  stddev?: Maybe<Metal_Flow_Detail_Attachments_Stddev_Fields>;
+  stddev_pop?: Maybe<Metal_Flow_Detail_Attachments_Stddev_Pop_Fields>;
+  stddev_samp?: Maybe<Metal_Flow_Detail_Attachments_Stddev_Samp_Fields>;
+  sum?: Maybe<Metal_Flow_Detail_Attachments_Sum_Fields>;
+  var_pop?: Maybe<Metal_Flow_Detail_Attachments_Var_Pop_Fields>;
+  var_samp?: Maybe<Metal_Flow_Detail_Attachments_Var_Samp_Fields>;
+  variance?: Maybe<Metal_Flow_Detail_Attachments_Variance_Fields>;
+};
+
+
+/** aggregate fields of "metal_flow.detail_attachments" */
+export type Metal_Flow_Detail_Attachments_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Metal_Flow_Detail_Attachments_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+/** order by aggregate values of table "metal_flow.detail_attachments" */
+export type Metal_Flow_Detail_Attachments_Aggregate_Order_By = {
+  avg?: InputMaybe<Metal_Flow_Detail_Attachments_Avg_Order_By>;
+  count?: InputMaybe<Order_By>;
+  max?: InputMaybe<Metal_Flow_Detail_Attachments_Max_Order_By>;
+  min?: InputMaybe<Metal_Flow_Detail_Attachments_Min_Order_By>;
+  stddev?: InputMaybe<Metal_Flow_Detail_Attachments_Stddev_Order_By>;
+  stddev_pop?: InputMaybe<Metal_Flow_Detail_Attachments_Stddev_Pop_Order_By>;
+  stddev_samp?: InputMaybe<Metal_Flow_Detail_Attachments_Stddev_Samp_Order_By>;
+  sum?: InputMaybe<Metal_Flow_Detail_Attachments_Sum_Order_By>;
+  var_pop?: InputMaybe<Metal_Flow_Detail_Attachments_Var_Pop_Order_By>;
+  var_samp?: InputMaybe<Metal_Flow_Detail_Attachments_Var_Samp_Order_By>;
+  variance?: InputMaybe<Metal_Flow_Detail_Attachments_Variance_Order_By>;
+};
+
+/** input type for inserting array relation for remote table "metal_flow.detail_attachments" */
+export type Metal_Flow_Detail_Attachments_Arr_Rel_Insert_Input = {
+  data: Array<Metal_Flow_Detail_Attachments_Insert_Input>;
+  /** upsert condition */
+  on_conflict?: InputMaybe<Metal_Flow_Detail_Attachments_On_Conflict>;
+};
+
+/** aggregate avg on columns */
+export type Metal_Flow_Detail_Attachments_Avg_Fields = {
+  __typename?: 'metal_flow_detail_attachments_avg_fields';
+  attachment_id?: Maybe<Scalars['Float']['output']>;
+  detail_id?: Maybe<Scalars['Float']['output']>;
+};
+
+/** order by avg() on columns of table "metal_flow.detail_attachments" */
+export type Metal_Flow_Detail_Attachments_Avg_Order_By = {
+  attachment_id?: InputMaybe<Order_By>;
+  detail_id?: InputMaybe<Order_By>;
+};
+
+/** Boolean expression to filter rows from the table "metal_flow.detail_attachments". All fields are combined with a logical 'AND'. */
+export type Metal_Flow_Detail_Attachments_Bool_Exp = {
+  _and?: InputMaybe<Array<Metal_Flow_Detail_Attachments_Bool_Exp>>;
+  _not?: InputMaybe<Metal_Flow_Detail_Attachments_Bool_Exp>;
+  _or?: InputMaybe<Array<Metal_Flow_Detail_Attachments_Bool_Exp>>;
+  attachment?: InputMaybe<Attachments_Bool_Exp>;
+  attachment_id?: InputMaybe<Int_Comparison_Exp>;
+  detail?: InputMaybe<Metal_Flow_Details_Bool_Exp>;
+  detail_id?: InputMaybe<Int_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "metal_flow.detail_attachments" */
+export enum Metal_Flow_Detail_Attachments_Constraint {
+  /** unique or primary key constraint on columns "attachment_id", "detail_id" */
+  DetailAttachmentsPkey = 'detail_attachments_pkey'
+}
+
+/** input type for incrementing numeric columns in table "metal_flow.detail_attachments" */
+export type Metal_Flow_Detail_Attachments_Inc_Input = {
+  attachment_id?: InputMaybe<Scalars['Int']['input']>;
+  detail_id?: InputMaybe<Scalars['Int']['input']>;
+};
+
+/** input type for inserting data into table "metal_flow.detail_attachments" */
+export type Metal_Flow_Detail_Attachments_Insert_Input = {
+  attachment?: InputMaybe<Attachments_Obj_Rel_Insert_Input>;
+  attachment_id?: InputMaybe<Scalars['Int']['input']>;
+  detail?: InputMaybe<Metal_Flow_Details_Obj_Rel_Insert_Input>;
+  detail_id?: InputMaybe<Scalars['Int']['input']>;
+};
+
+/** aggregate max on columns */
+export type Metal_Flow_Detail_Attachments_Max_Fields = {
+  __typename?: 'metal_flow_detail_attachments_max_fields';
+  attachment_id?: Maybe<Scalars['Int']['output']>;
+  detail_id?: Maybe<Scalars['Int']['output']>;
+};
+
+/** order by max() on columns of table "metal_flow.detail_attachments" */
+export type Metal_Flow_Detail_Attachments_Max_Order_By = {
+  attachment_id?: InputMaybe<Order_By>;
+  detail_id?: InputMaybe<Order_By>;
+};
+
+/** aggregate min on columns */
+export type Metal_Flow_Detail_Attachments_Min_Fields = {
+  __typename?: 'metal_flow_detail_attachments_min_fields';
+  attachment_id?: Maybe<Scalars['Int']['output']>;
+  detail_id?: Maybe<Scalars['Int']['output']>;
+};
+
+/** order by min() on columns of table "metal_flow.detail_attachments" */
+export type Metal_Flow_Detail_Attachments_Min_Order_By = {
+  attachment_id?: InputMaybe<Order_By>;
+  detail_id?: InputMaybe<Order_By>;
+};
+
+/** response of any mutation on the table "metal_flow.detail_attachments" */
+export type Metal_Flow_Detail_Attachments_Mutation_Response = {
+  __typename?: 'metal_flow_detail_attachments_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int']['output'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Metal_Flow_Detail_Attachments>;
+};
+
+/** on_conflict condition type for table "metal_flow.detail_attachments" */
+export type Metal_Flow_Detail_Attachments_On_Conflict = {
+  constraint: Metal_Flow_Detail_Attachments_Constraint;
+  update_columns?: Array<Metal_Flow_Detail_Attachments_Update_Column>;
+  where?: InputMaybe<Metal_Flow_Detail_Attachments_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "metal_flow.detail_attachments". */
+export type Metal_Flow_Detail_Attachments_Order_By = {
+  attachment?: InputMaybe<Attachments_Order_By>;
+  attachment_id?: InputMaybe<Order_By>;
+  detail?: InputMaybe<Metal_Flow_Details_Order_By>;
+  detail_id?: InputMaybe<Order_By>;
+};
+
+/** primary key columns input for table: metal_flow.detail_attachments */
+export type Metal_Flow_Detail_Attachments_Pk_Columns_Input = {
+  attachment_id: Scalars['Int']['input'];
+  detail_id: Scalars['Int']['input'];
+};
+
+/** select columns of table "metal_flow.detail_attachments" */
+export enum Metal_Flow_Detail_Attachments_Select_Column {
+  /** column name */
+  AttachmentId = 'attachment_id',
+  /** column name */
+  DetailId = 'detail_id'
+}
+
+/** input type for updating data in table "metal_flow.detail_attachments" */
+export type Metal_Flow_Detail_Attachments_Set_Input = {
+  attachment_id?: InputMaybe<Scalars['Int']['input']>;
+  detail_id?: InputMaybe<Scalars['Int']['input']>;
+};
+
+/** aggregate stddev on columns */
+export type Metal_Flow_Detail_Attachments_Stddev_Fields = {
+  __typename?: 'metal_flow_detail_attachments_stddev_fields';
+  attachment_id?: Maybe<Scalars['Float']['output']>;
+  detail_id?: Maybe<Scalars['Float']['output']>;
+};
+
+/** order by stddev() on columns of table "metal_flow.detail_attachments" */
+export type Metal_Flow_Detail_Attachments_Stddev_Order_By = {
+  attachment_id?: InputMaybe<Order_By>;
+  detail_id?: InputMaybe<Order_By>;
+};
+
+/** aggregate stddev_pop on columns */
+export type Metal_Flow_Detail_Attachments_Stddev_Pop_Fields = {
+  __typename?: 'metal_flow_detail_attachments_stddev_pop_fields';
+  attachment_id?: Maybe<Scalars['Float']['output']>;
+  detail_id?: Maybe<Scalars['Float']['output']>;
+};
+
+/** order by stddev_pop() on columns of table "metal_flow.detail_attachments" */
+export type Metal_Flow_Detail_Attachments_Stddev_Pop_Order_By = {
+  attachment_id?: InputMaybe<Order_By>;
+  detail_id?: InputMaybe<Order_By>;
+};
+
+/** aggregate stddev_samp on columns */
+export type Metal_Flow_Detail_Attachments_Stddev_Samp_Fields = {
+  __typename?: 'metal_flow_detail_attachments_stddev_samp_fields';
+  attachment_id?: Maybe<Scalars['Float']['output']>;
+  detail_id?: Maybe<Scalars['Float']['output']>;
+};
+
+/** order by stddev_samp() on columns of table "metal_flow.detail_attachments" */
+export type Metal_Flow_Detail_Attachments_Stddev_Samp_Order_By = {
+  attachment_id?: InputMaybe<Order_By>;
+  detail_id?: InputMaybe<Order_By>;
+};
+
+/** Streaming cursor of the table "metal_flow_detail_attachments" */
+export type Metal_Flow_Detail_Attachments_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Metal_Flow_Detail_Attachments_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Metal_Flow_Detail_Attachments_Stream_Cursor_Value_Input = {
+  attachment_id?: InputMaybe<Scalars['Int']['input']>;
+  detail_id?: InputMaybe<Scalars['Int']['input']>;
+};
+
+/** aggregate sum on columns */
+export type Metal_Flow_Detail_Attachments_Sum_Fields = {
+  __typename?: 'metal_flow_detail_attachments_sum_fields';
+  attachment_id?: Maybe<Scalars['Int']['output']>;
+  detail_id?: Maybe<Scalars['Int']['output']>;
+};
+
+/** order by sum() on columns of table "metal_flow.detail_attachments" */
+export type Metal_Flow_Detail_Attachments_Sum_Order_By = {
+  attachment_id?: InputMaybe<Order_By>;
+  detail_id?: InputMaybe<Order_By>;
+};
+
+/** update columns of table "metal_flow.detail_attachments" */
+export enum Metal_Flow_Detail_Attachments_Update_Column {
+  /** column name */
+  AttachmentId = 'attachment_id',
+  /** column name */
+  DetailId = 'detail_id'
+}
+
+export type Metal_Flow_Detail_Attachments_Updates = {
+  /** increments the numeric columns with given value of the filtered values */
+  _inc?: InputMaybe<Metal_Flow_Detail_Attachments_Inc_Input>;
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Metal_Flow_Detail_Attachments_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Metal_Flow_Detail_Attachments_Bool_Exp;
+};
+
+/** aggregate var_pop on columns */
+export type Metal_Flow_Detail_Attachments_Var_Pop_Fields = {
+  __typename?: 'metal_flow_detail_attachments_var_pop_fields';
+  attachment_id?: Maybe<Scalars['Float']['output']>;
+  detail_id?: Maybe<Scalars['Float']['output']>;
+};
+
+/** order by var_pop() on columns of table "metal_flow.detail_attachments" */
+export type Metal_Flow_Detail_Attachments_Var_Pop_Order_By = {
+  attachment_id?: InputMaybe<Order_By>;
+  detail_id?: InputMaybe<Order_By>;
+};
+
+/** aggregate var_samp on columns */
+export type Metal_Flow_Detail_Attachments_Var_Samp_Fields = {
+  __typename?: 'metal_flow_detail_attachments_var_samp_fields';
+  attachment_id?: Maybe<Scalars['Float']['output']>;
+  detail_id?: Maybe<Scalars['Float']['output']>;
+};
+
+/** order by var_samp() on columns of table "metal_flow.detail_attachments" */
+export type Metal_Flow_Detail_Attachments_Var_Samp_Order_By = {
+  attachment_id?: InputMaybe<Order_By>;
+  detail_id?: InputMaybe<Order_By>;
+};
+
+/** aggregate variance on columns */
+export type Metal_Flow_Detail_Attachments_Variance_Fields = {
+  __typename?: 'metal_flow_detail_attachments_variance_fields';
+  attachment_id?: Maybe<Scalars['Float']['output']>;
+  detail_id?: Maybe<Scalars['Float']['output']>;
+};
+
+/** order by variance() on columns of table "metal_flow.detail_attachments" */
+export type Metal_Flow_Detail_Attachments_Variance_Order_By = {
+  attachment_id?: InputMaybe<Order_By>;
+  detail_id?: InputMaybe<Order_By>;
+};
+
 /** columns and relationships of "metal_flow.detail_materials" */
 export type Metal_Flow_Detail_Materials = {
   __typename?: 'metal_flow_detail_materials';
@@ -1667,11 +2282,36 @@ export type Metal_Flow_Detail_Materials_Variance_Order_By = {
 export type Metal_Flow_Details = {
   __typename?: 'metal_flow_details';
   /** An array relationship */
+  detail_attachments: Array<Metal_Flow_Detail_Attachments>;
+  /** An aggregate relationship */
+  detail_attachments_aggregate: Metal_Flow_Detail_Attachments_Aggregate;
+  /** An array relationship */
   detail_materials: Array<Metal_Flow_Detail_Materials>;
   /** An aggregate relationship */
   detail_materials_aggregate: Metal_Flow_Detail_Materials_Aggregate;
   id: Scalars['Int']['output'];
   name: Scalars['String']['output'];
+  part_code?: Maybe<Scalars['String']['output']>;
+};
+
+
+/** columns and relationships of "metal_flow.details" */
+export type Metal_Flow_DetailsDetail_AttachmentsArgs = {
+  distinct_on?: InputMaybe<Array<Metal_Flow_Detail_Attachments_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Metal_Flow_Detail_Attachments_Order_By>>;
+  where?: InputMaybe<Metal_Flow_Detail_Attachments_Bool_Exp>;
+};
+
+
+/** columns and relationships of "metal_flow.details" */
+export type Metal_Flow_DetailsDetail_Attachments_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Metal_Flow_Detail_Attachments_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Metal_Flow_Detail_Attachments_Order_By>>;
+  where?: InputMaybe<Metal_Flow_Detail_Attachments_Bool_Exp>;
 };
 
 
@@ -1735,16 +2375,21 @@ export type Metal_Flow_Details_Bool_Exp = {
   _and?: InputMaybe<Array<Metal_Flow_Details_Bool_Exp>>;
   _not?: InputMaybe<Metal_Flow_Details_Bool_Exp>;
   _or?: InputMaybe<Array<Metal_Flow_Details_Bool_Exp>>;
+  detail_attachments?: InputMaybe<Metal_Flow_Detail_Attachments_Bool_Exp>;
+  detail_attachments_aggregate?: InputMaybe<Metal_Flow_Detail_Attachments_Aggregate_Bool_Exp>;
   detail_materials?: InputMaybe<Metal_Flow_Detail_Materials_Bool_Exp>;
   detail_materials_aggregate?: InputMaybe<Metal_Flow_Detail_Materials_Aggregate_Bool_Exp>;
   id?: InputMaybe<Int_Comparison_Exp>;
   name?: InputMaybe<String_Comparison_Exp>;
+  part_code?: InputMaybe<String_Comparison_Exp>;
 };
 
 /** unique or primary key constraints on table "metal_flow.details" */
 export enum Metal_Flow_Details_Constraint {
   /** unique or primary key constraint on columns "name" */
   DetailNameUniqueIdx = 'detail_name_unique_idx',
+  /** unique or primary key constraint on columns "part_code" */
+  DetailsPartCodeKey = 'details_part_code_key',
   /** unique or primary key constraint on columns "id" */
   DetailsPkey = 'details_pkey'
 }
@@ -1756,9 +2401,11 @@ export type Metal_Flow_Details_Inc_Input = {
 
 /** input type for inserting data into table "metal_flow.details" */
 export type Metal_Flow_Details_Insert_Input = {
+  detail_attachments?: InputMaybe<Metal_Flow_Detail_Attachments_Arr_Rel_Insert_Input>;
   detail_materials?: InputMaybe<Metal_Flow_Detail_Materials_Arr_Rel_Insert_Input>;
   id?: InputMaybe<Scalars['Int']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
+  part_code?: InputMaybe<Scalars['String']['input']>;
 };
 
 /** aggregate max on columns */
@@ -1766,6 +2413,7 @@ export type Metal_Flow_Details_Max_Fields = {
   __typename?: 'metal_flow_details_max_fields';
   id?: Maybe<Scalars['Int']['output']>;
   name?: Maybe<Scalars['String']['output']>;
+  part_code?: Maybe<Scalars['String']['output']>;
 };
 
 /** aggregate min on columns */
@@ -1773,6 +2421,7 @@ export type Metal_Flow_Details_Min_Fields = {
   __typename?: 'metal_flow_details_min_fields';
   id?: Maybe<Scalars['Int']['output']>;
   name?: Maybe<Scalars['String']['output']>;
+  part_code?: Maybe<Scalars['String']['output']>;
 };
 
 /** response of any mutation on the table "metal_flow.details" */
@@ -1800,9 +2449,11 @@ export type Metal_Flow_Details_On_Conflict = {
 
 /** Ordering options when selecting data from "metal_flow.details". */
 export type Metal_Flow_Details_Order_By = {
+  detail_attachments_aggregate?: InputMaybe<Metal_Flow_Detail_Attachments_Aggregate_Order_By>;
   detail_materials_aggregate?: InputMaybe<Metal_Flow_Detail_Materials_Aggregate_Order_By>;
   id?: InputMaybe<Order_By>;
   name?: InputMaybe<Order_By>;
+  part_code?: InputMaybe<Order_By>;
 };
 
 /** primary key columns input for table: metal_flow.details */
@@ -1815,13 +2466,16 @@ export enum Metal_Flow_Details_Select_Column {
   /** column name */
   Id = 'id',
   /** column name */
-  Name = 'name'
+  Name = 'name',
+  /** column name */
+  PartCode = 'part_code'
 }
 
 /** input type for updating data in table "metal_flow.details" */
 export type Metal_Flow_Details_Set_Input = {
   id?: InputMaybe<Scalars['Int']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
+  part_code?: InputMaybe<Scalars['String']['input']>;
 };
 
 /** aggregate stddev on columns */
@@ -1854,6 +2508,7 @@ export type Metal_Flow_Details_Stream_Cursor_Input = {
 export type Metal_Flow_Details_Stream_Cursor_Value_Input = {
   id?: InputMaybe<Scalars['Int']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
+  part_code?: InputMaybe<Scalars['String']['input']>;
 };
 
 /** aggregate sum on columns */
@@ -1867,7 +2522,9 @@ export enum Metal_Flow_Details_Update_Column {
   /** column name */
   Id = 'id',
   /** column name */
-  Name = 'name'
+  Name = 'name',
+  /** column name */
+  PartCode = 'part_code'
 }
 
 export type Metal_Flow_Details_Updates = {
@@ -3108,6 +3765,10 @@ export type Metal_Flow_Writeoffs_Variance_Order_By = {
 /** mutation root */
 export type Mutation_Root = {
   __typename?: 'mutation_root';
+  /** delete data from the table: "attachments" */
+  delete_attachments?: Maybe<Attachments_Mutation_Response>;
+  /** delete single row from the table: "attachments" */
+  delete_attachments_by_pk?: Maybe<Attachments>;
   /** delete data from the table: "attendance.config" */
   delete_attendance_config?: Maybe<Attendance_Config_Mutation_Response>;
   /** delete single row from the table: "attendance.config" */
@@ -3128,6 +3789,10 @@ export type Mutation_Root = {
   delete_kysely_migration_lock?: Maybe<Kysely_Migration_Lock_Mutation_Response>;
   /** delete single row from the table: "kysely_migration_lock" */
   delete_kysely_migration_lock_by_pk?: Maybe<Kysely_Migration_Lock>;
+  /** delete data from the table: "metal_flow.detail_attachments" */
+  delete_metal_flow_detail_attachments?: Maybe<Metal_Flow_Detail_Attachments_Mutation_Response>;
+  /** delete single row from the table: "metal_flow.detail_attachments" */
+  delete_metal_flow_detail_attachments_by_pk?: Maybe<Metal_Flow_Detail_Attachments>;
   /** delete data from the table: "metal_flow.detail_materials" */
   delete_metal_flow_detail_materials?: Maybe<Metal_Flow_Detail_Materials_Mutation_Response>;
   /** delete single row from the table: "metal_flow.detail_materials" */
@@ -3160,6 +3825,10 @@ export type Mutation_Root = {
   delete_orders_notifications?: Maybe<Orders_Notifications_Mutation_Response>;
   /** delete single row from the table: "orders.notifications" */
   delete_orders_notifications_by_pk?: Maybe<Orders_Notifications>;
+  /** delete data from the table: "orders.order_attachments" */
+  delete_orders_order_attachments?: Maybe<Orders_Order_Attachments_Mutation_Response>;
+  /** delete single row from the table: "orders.order_attachments" */
+  delete_orders_order_attachments_by_pk?: Maybe<Orders_Order_Attachments>;
   /** delete data from the table: "orders.order_items" */
   delete_orders_order_items?: Maybe<Orders_Order_Items_Mutation_Response>;
   /** delete single row from the table: "orders.order_items" */
@@ -3180,6 +3849,10 @@ export type Mutation_Root = {
   delete_users?: Maybe<Users_Mutation_Response>;
   /** delete single row from the table: "users" */
   delete_users_by_pk?: Maybe<Users>;
+  /** insert data into the table: "attachments" */
+  insert_attachments?: Maybe<Attachments_Mutation_Response>;
+  /** insert a single row into the table: "attachments" */
+  insert_attachments_one?: Maybe<Attachments>;
   /** insert data into the table: "attendance.config" */
   insert_attendance_config?: Maybe<Attendance_Config_Mutation_Response>;
   /** insert a single row into the table: "attendance.config" */
@@ -3200,6 +3873,10 @@ export type Mutation_Root = {
   insert_kysely_migration_lock_one?: Maybe<Kysely_Migration_Lock>;
   /** insert a single row into the table: "kysely_migration" */
   insert_kysely_migration_one?: Maybe<Kysely_Migration>;
+  /** insert data into the table: "metal_flow.detail_attachments" */
+  insert_metal_flow_detail_attachments?: Maybe<Metal_Flow_Detail_Attachments_Mutation_Response>;
+  /** insert a single row into the table: "metal_flow.detail_attachments" */
+  insert_metal_flow_detail_attachments_one?: Maybe<Metal_Flow_Detail_Attachments>;
   /** insert data into the table: "metal_flow.detail_materials" */
   insert_metal_flow_detail_materials?: Maybe<Metal_Flow_Detail_Materials_Mutation_Response>;
   /** insert a single row into the table: "metal_flow.detail_materials" */
@@ -3232,6 +3909,10 @@ export type Mutation_Root = {
   insert_orders_notifications?: Maybe<Orders_Notifications_Mutation_Response>;
   /** insert a single row into the table: "orders.notifications" */
   insert_orders_notifications_one?: Maybe<Orders_Notifications>;
+  /** insert data into the table: "orders.order_attachments" */
+  insert_orders_order_attachments?: Maybe<Orders_Order_Attachments_Mutation_Response>;
+  /** insert a single row into the table: "orders.order_attachments" */
+  insert_orders_order_attachments_one?: Maybe<Orders_Order_Attachments>;
   /** insert data into the table: "orders.order_items" */
   insert_orders_order_items?: Maybe<Orders_Order_Items_Mutation_Response>;
   /** insert a single row into the table: "orders.order_items" */
@@ -3252,6 +3933,12 @@ export type Mutation_Root = {
   insert_users?: Maybe<Users_Mutation_Response>;
   /** insert a single row into the table: "users" */
   insert_users_one?: Maybe<Users>;
+  /** update data of the table: "attachments" */
+  update_attachments?: Maybe<Attachments_Mutation_Response>;
+  /** update single row of the table: "attachments" */
+  update_attachments_by_pk?: Maybe<Attachments>;
+  /** update multiples rows of table: "attachments" */
+  update_attachments_many?: Maybe<Array<Maybe<Attachments_Mutation_Response>>>;
   /** update data of the table: "attendance.config" */
   update_attendance_config?: Maybe<Attendance_Config_Mutation_Response>;
   /** update single row of the table: "attendance.config" */
@@ -3282,6 +3969,12 @@ export type Mutation_Root = {
   update_kysely_migration_lock_many?: Maybe<Array<Maybe<Kysely_Migration_Lock_Mutation_Response>>>;
   /** update multiples rows of table: "kysely_migration" */
   update_kysely_migration_many?: Maybe<Array<Maybe<Kysely_Migration_Mutation_Response>>>;
+  /** update data of the table: "metal_flow.detail_attachments" */
+  update_metal_flow_detail_attachments?: Maybe<Metal_Flow_Detail_Attachments_Mutation_Response>;
+  /** update single row of the table: "metal_flow.detail_attachments" */
+  update_metal_flow_detail_attachments_by_pk?: Maybe<Metal_Flow_Detail_Attachments>;
+  /** update multiples rows of table: "metal_flow.detail_attachments" */
+  update_metal_flow_detail_attachments_many?: Maybe<Array<Maybe<Metal_Flow_Detail_Attachments_Mutation_Response>>>;
   /** update data of the table: "metal_flow.detail_materials" */
   update_metal_flow_detail_materials?: Maybe<Metal_Flow_Detail_Materials_Mutation_Response>;
   /** update single row of the table: "metal_flow.detail_materials" */
@@ -3330,6 +4023,12 @@ export type Mutation_Root = {
   update_orders_notifications_by_pk?: Maybe<Orders_Notifications>;
   /** update multiples rows of table: "orders.notifications" */
   update_orders_notifications_many?: Maybe<Array<Maybe<Orders_Notifications_Mutation_Response>>>;
+  /** update data of the table: "orders.order_attachments" */
+  update_orders_order_attachments?: Maybe<Orders_Order_Attachments_Mutation_Response>;
+  /** update single row of the table: "orders.order_attachments" */
+  update_orders_order_attachments_by_pk?: Maybe<Orders_Order_Attachments>;
+  /** update multiples rows of table: "orders.order_attachments" */
+  update_orders_order_attachments_many?: Maybe<Array<Maybe<Orders_Order_Attachments_Mutation_Response>>>;
   /** update data of the table: "orders.order_items" */
   update_orders_order_items?: Maybe<Orders_Order_Items_Mutation_Response>;
   /** update single row of the table: "orders.order_items" */
@@ -3360,6 +4059,18 @@ export type Mutation_Root = {
   update_users_by_pk?: Maybe<Users>;
   /** update multiples rows of table: "users" */
   update_users_many?: Maybe<Array<Maybe<Users_Mutation_Response>>>;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_AttachmentsArgs = {
+  where: Attachments_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Attachments_By_PkArgs = {
+  id: Scalars['Int']['input'];
 };
 
 
@@ -3421,6 +4132,19 @@ export type Mutation_RootDelete_Kysely_Migration_LockArgs = {
 /** mutation root */
 export type Mutation_RootDelete_Kysely_Migration_Lock_By_PkArgs = {
   id: Scalars['String']['input'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Metal_Flow_Detail_AttachmentsArgs = {
+  where: Metal_Flow_Detail_Attachments_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Metal_Flow_Detail_Attachments_By_PkArgs = {
+  attachment_id: Scalars['Int']['input'];
+  detail_id: Scalars['Int']['input'];
 };
 
 
@@ -3522,6 +4246,19 @@ export type Mutation_RootDelete_Orders_Notifications_By_PkArgs = {
 
 
 /** mutation root */
+export type Mutation_RootDelete_Orders_Order_AttachmentsArgs = {
+  where: Orders_Order_Attachments_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Orders_Order_Attachments_By_PkArgs = {
+  attachment_id: Scalars['Int']['input'];
+  order_id: Scalars['Int']['input'];
+};
+
+
+/** mutation root */
 export type Mutation_RootDelete_Orders_Order_ItemsArgs = {
   where: Orders_Order_Items_Bool_Exp;
 };
@@ -3578,6 +4315,20 @@ export type Mutation_RootDelete_UsersArgs = {
 /** mutation root */
 export type Mutation_RootDelete_Users_By_PkArgs = {
   id: Scalars['Int']['input'];
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_AttachmentsArgs = {
+  objects: Array<Attachments_Insert_Input>;
+  on_conflict?: InputMaybe<Attachments_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Attachments_OneArgs = {
+  object: Attachments_Insert_Input;
+  on_conflict?: InputMaybe<Attachments_On_Conflict>;
 };
 
 
@@ -3648,6 +4399,20 @@ export type Mutation_RootInsert_Kysely_Migration_Lock_OneArgs = {
 export type Mutation_RootInsert_Kysely_Migration_OneArgs = {
   object: Kysely_Migration_Insert_Input;
   on_conflict?: InputMaybe<Kysely_Migration_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Metal_Flow_Detail_AttachmentsArgs = {
+  objects: Array<Metal_Flow_Detail_Attachments_Insert_Input>;
+  on_conflict?: InputMaybe<Metal_Flow_Detail_Attachments_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Metal_Flow_Detail_Attachments_OneArgs = {
+  object: Metal_Flow_Detail_Attachments_Insert_Input;
+  on_conflict?: InputMaybe<Metal_Flow_Detail_Attachments_On_Conflict>;
 };
 
 
@@ -3764,6 +4529,20 @@ export type Mutation_RootInsert_Orders_Notifications_OneArgs = {
 
 
 /** mutation root */
+export type Mutation_RootInsert_Orders_Order_AttachmentsArgs = {
+  objects: Array<Orders_Order_Attachments_Insert_Input>;
+  on_conflict?: InputMaybe<Orders_Order_Attachments_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Orders_Order_Attachments_OneArgs = {
+  object: Orders_Order_Attachments_Insert_Input;
+  on_conflict?: InputMaybe<Orders_Order_Attachments_On_Conflict>;
+};
+
+
+/** mutation root */
 export type Mutation_RootInsert_Orders_Order_ItemsArgs = {
   objects: Array<Orders_Order_Items_Insert_Input>;
   on_conflict?: InputMaybe<Orders_Order_Items_On_Conflict>;
@@ -3830,6 +4609,28 @@ export type Mutation_RootInsert_UsersArgs = {
 export type Mutation_RootInsert_Users_OneArgs = {
   object: Users_Insert_Input;
   on_conflict?: InputMaybe<Users_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_AttachmentsArgs = {
+  _inc?: InputMaybe<Attachments_Inc_Input>;
+  _set?: InputMaybe<Attachments_Set_Input>;
+  where: Attachments_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Attachments_By_PkArgs = {
+  _inc?: InputMaybe<Attachments_Inc_Input>;
+  _set?: InputMaybe<Attachments_Set_Input>;
+  pk_columns: Attachments_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Attachments_ManyArgs = {
+  updates: Array<Attachments_Updates>;
 };
 
 
@@ -3938,6 +4739,28 @@ export type Mutation_RootUpdate_Kysely_Migration_Lock_ManyArgs = {
 /** mutation root */
 export type Mutation_RootUpdate_Kysely_Migration_ManyArgs = {
   updates: Array<Kysely_Migration_Updates>;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Metal_Flow_Detail_AttachmentsArgs = {
+  _inc?: InputMaybe<Metal_Flow_Detail_Attachments_Inc_Input>;
+  _set?: InputMaybe<Metal_Flow_Detail_Attachments_Set_Input>;
+  where: Metal_Flow_Detail_Attachments_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Metal_Flow_Detail_Attachments_By_PkArgs = {
+  _inc?: InputMaybe<Metal_Flow_Detail_Attachments_Inc_Input>;
+  _set?: InputMaybe<Metal_Flow_Detail_Attachments_Set_Input>;
+  pk_columns: Metal_Flow_Detail_Attachments_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Metal_Flow_Detail_Attachments_ManyArgs = {
+  updates: Array<Metal_Flow_Detail_Attachments_Updates>;
 };
 
 
@@ -4144,6 +4967,28 @@ export type Mutation_RootUpdate_Orders_Notifications_By_PkArgs = {
 /** mutation root */
 export type Mutation_RootUpdate_Orders_Notifications_ManyArgs = {
   updates: Array<Orders_Notifications_Updates>;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Orders_Order_AttachmentsArgs = {
+  _inc?: InputMaybe<Orders_Order_Attachments_Inc_Input>;
+  _set?: InputMaybe<Orders_Order_Attachments_Set_Input>;
+  where: Orders_Order_Attachments_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Orders_Order_Attachments_By_PkArgs = {
+  _inc?: InputMaybe<Orders_Order_Attachments_Inc_Input>;
+  _set?: InputMaybe<Orders_Order_Attachments_Set_Input>;
+  pk_columns: Orders_Order_Attachments_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Orders_Order_Attachments_ManyArgs = {
+  updates: Array<Orders_Order_Attachments_Updates>;
 };
 
 
@@ -5483,6 +6328,316 @@ export type Orders_Notifications_Variance_Order_By = {
   user_id?: InputMaybe<Order_By>;
 };
 
+/** columns and relationships of "orders.order_attachments" */
+export type Orders_Order_Attachments = {
+  __typename?: 'orders_order_attachments';
+  /** An object relationship */
+  attachment: Attachments;
+  attachment_id: Scalars['Int']['output'];
+  /** An object relationship */
+  order: Orders_Orders;
+  order_id: Scalars['Int']['output'];
+};
+
+/** aggregated selection of "orders.order_attachments" */
+export type Orders_Order_Attachments_Aggregate = {
+  __typename?: 'orders_order_attachments_aggregate';
+  aggregate?: Maybe<Orders_Order_Attachments_Aggregate_Fields>;
+  nodes: Array<Orders_Order_Attachments>;
+};
+
+export type Orders_Order_Attachments_Aggregate_Bool_Exp = {
+  count?: InputMaybe<Orders_Order_Attachments_Aggregate_Bool_Exp_Count>;
+};
+
+export type Orders_Order_Attachments_Aggregate_Bool_Exp_Count = {
+  arguments?: InputMaybe<Array<Orders_Order_Attachments_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']['input']>;
+  filter?: InputMaybe<Orders_Order_Attachments_Bool_Exp>;
+  predicate: Int_Comparison_Exp;
+};
+
+/** aggregate fields of "orders.order_attachments" */
+export type Orders_Order_Attachments_Aggregate_Fields = {
+  __typename?: 'orders_order_attachments_aggregate_fields';
+  avg?: Maybe<Orders_Order_Attachments_Avg_Fields>;
+  count: Scalars['Int']['output'];
+  max?: Maybe<Orders_Order_Attachments_Max_Fields>;
+  min?: Maybe<Orders_Order_Attachments_Min_Fields>;
+  stddev?: Maybe<Orders_Order_Attachments_Stddev_Fields>;
+  stddev_pop?: Maybe<Orders_Order_Attachments_Stddev_Pop_Fields>;
+  stddev_samp?: Maybe<Orders_Order_Attachments_Stddev_Samp_Fields>;
+  sum?: Maybe<Orders_Order_Attachments_Sum_Fields>;
+  var_pop?: Maybe<Orders_Order_Attachments_Var_Pop_Fields>;
+  var_samp?: Maybe<Orders_Order_Attachments_Var_Samp_Fields>;
+  variance?: Maybe<Orders_Order_Attachments_Variance_Fields>;
+};
+
+
+/** aggregate fields of "orders.order_attachments" */
+export type Orders_Order_Attachments_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Orders_Order_Attachments_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+/** order by aggregate values of table "orders.order_attachments" */
+export type Orders_Order_Attachments_Aggregate_Order_By = {
+  avg?: InputMaybe<Orders_Order_Attachments_Avg_Order_By>;
+  count?: InputMaybe<Order_By>;
+  max?: InputMaybe<Orders_Order_Attachments_Max_Order_By>;
+  min?: InputMaybe<Orders_Order_Attachments_Min_Order_By>;
+  stddev?: InputMaybe<Orders_Order_Attachments_Stddev_Order_By>;
+  stddev_pop?: InputMaybe<Orders_Order_Attachments_Stddev_Pop_Order_By>;
+  stddev_samp?: InputMaybe<Orders_Order_Attachments_Stddev_Samp_Order_By>;
+  sum?: InputMaybe<Orders_Order_Attachments_Sum_Order_By>;
+  var_pop?: InputMaybe<Orders_Order_Attachments_Var_Pop_Order_By>;
+  var_samp?: InputMaybe<Orders_Order_Attachments_Var_Samp_Order_By>;
+  variance?: InputMaybe<Orders_Order_Attachments_Variance_Order_By>;
+};
+
+/** input type for inserting array relation for remote table "orders.order_attachments" */
+export type Orders_Order_Attachments_Arr_Rel_Insert_Input = {
+  data: Array<Orders_Order_Attachments_Insert_Input>;
+  /** upsert condition */
+  on_conflict?: InputMaybe<Orders_Order_Attachments_On_Conflict>;
+};
+
+/** aggregate avg on columns */
+export type Orders_Order_Attachments_Avg_Fields = {
+  __typename?: 'orders_order_attachments_avg_fields';
+  attachment_id?: Maybe<Scalars['Float']['output']>;
+  order_id?: Maybe<Scalars['Float']['output']>;
+};
+
+/** order by avg() on columns of table "orders.order_attachments" */
+export type Orders_Order_Attachments_Avg_Order_By = {
+  attachment_id?: InputMaybe<Order_By>;
+  order_id?: InputMaybe<Order_By>;
+};
+
+/** Boolean expression to filter rows from the table "orders.order_attachments". All fields are combined with a logical 'AND'. */
+export type Orders_Order_Attachments_Bool_Exp = {
+  _and?: InputMaybe<Array<Orders_Order_Attachments_Bool_Exp>>;
+  _not?: InputMaybe<Orders_Order_Attachments_Bool_Exp>;
+  _or?: InputMaybe<Array<Orders_Order_Attachments_Bool_Exp>>;
+  attachment?: InputMaybe<Attachments_Bool_Exp>;
+  attachment_id?: InputMaybe<Int_Comparison_Exp>;
+  order?: InputMaybe<Orders_Orders_Bool_Exp>;
+  order_id?: InputMaybe<Int_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "orders.order_attachments" */
+export enum Orders_Order_Attachments_Constraint {
+  /** unique or primary key constraint on columns "attachment_id", "order_id" */
+  OrdersAttachmentsPkey = 'orders_attachments_pkey'
+}
+
+/** input type for incrementing numeric columns in table "orders.order_attachments" */
+export type Orders_Order_Attachments_Inc_Input = {
+  attachment_id?: InputMaybe<Scalars['Int']['input']>;
+  order_id?: InputMaybe<Scalars['Int']['input']>;
+};
+
+/** input type for inserting data into table "orders.order_attachments" */
+export type Orders_Order_Attachments_Insert_Input = {
+  attachment?: InputMaybe<Attachments_Obj_Rel_Insert_Input>;
+  attachment_id?: InputMaybe<Scalars['Int']['input']>;
+  order?: InputMaybe<Orders_Orders_Obj_Rel_Insert_Input>;
+  order_id?: InputMaybe<Scalars['Int']['input']>;
+};
+
+/** aggregate max on columns */
+export type Orders_Order_Attachments_Max_Fields = {
+  __typename?: 'orders_order_attachments_max_fields';
+  attachment_id?: Maybe<Scalars['Int']['output']>;
+  order_id?: Maybe<Scalars['Int']['output']>;
+};
+
+/** order by max() on columns of table "orders.order_attachments" */
+export type Orders_Order_Attachments_Max_Order_By = {
+  attachment_id?: InputMaybe<Order_By>;
+  order_id?: InputMaybe<Order_By>;
+};
+
+/** aggregate min on columns */
+export type Orders_Order_Attachments_Min_Fields = {
+  __typename?: 'orders_order_attachments_min_fields';
+  attachment_id?: Maybe<Scalars['Int']['output']>;
+  order_id?: Maybe<Scalars['Int']['output']>;
+};
+
+/** order by min() on columns of table "orders.order_attachments" */
+export type Orders_Order_Attachments_Min_Order_By = {
+  attachment_id?: InputMaybe<Order_By>;
+  order_id?: InputMaybe<Order_By>;
+};
+
+/** response of any mutation on the table "orders.order_attachments" */
+export type Orders_Order_Attachments_Mutation_Response = {
+  __typename?: 'orders_order_attachments_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int']['output'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Orders_Order_Attachments>;
+};
+
+/** on_conflict condition type for table "orders.order_attachments" */
+export type Orders_Order_Attachments_On_Conflict = {
+  constraint: Orders_Order_Attachments_Constraint;
+  update_columns?: Array<Orders_Order_Attachments_Update_Column>;
+  where?: InputMaybe<Orders_Order_Attachments_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "orders.order_attachments". */
+export type Orders_Order_Attachments_Order_By = {
+  attachment?: InputMaybe<Attachments_Order_By>;
+  attachment_id?: InputMaybe<Order_By>;
+  order?: InputMaybe<Orders_Orders_Order_By>;
+  order_id?: InputMaybe<Order_By>;
+};
+
+/** primary key columns input for table: orders.order_attachments */
+export type Orders_Order_Attachments_Pk_Columns_Input = {
+  attachment_id: Scalars['Int']['input'];
+  order_id: Scalars['Int']['input'];
+};
+
+/** select columns of table "orders.order_attachments" */
+export enum Orders_Order_Attachments_Select_Column {
+  /** column name */
+  AttachmentId = 'attachment_id',
+  /** column name */
+  OrderId = 'order_id'
+}
+
+/** input type for updating data in table "orders.order_attachments" */
+export type Orders_Order_Attachments_Set_Input = {
+  attachment_id?: InputMaybe<Scalars['Int']['input']>;
+  order_id?: InputMaybe<Scalars['Int']['input']>;
+};
+
+/** aggregate stddev on columns */
+export type Orders_Order_Attachments_Stddev_Fields = {
+  __typename?: 'orders_order_attachments_stddev_fields';
+  attachment_id?: Maybe<Scalars['Float']['output']>;
+  order_id?: Maybe<Scalars['Float']['output']>;
+};
+
+/** order by stddev() on columns of table "orders.order_attachments" */
+export type Orders_Order_Attachments_Stddev_Order_By = {
+  attachment_id?: InputMaybe<Order_By>;
+  order_id?: InputMaybe<Order_By>;
+};
+
+/** aggregate stddev_pop on columns */
+export type Orders_Order_Attachments_Stddev_Pop_Fields = {
+  __typename?: 'orders_order_attachments_stddev_pop_fields';
+  attachment_id?: Maybe<Scalars['Float']['output']>;
+  order_id?: Maybe<Scalars['Float']['output']>;
+};
+
+/** order by stddev_pop() on columns of table "orders.order_attachments" */
+export type Orders_Order_Attachments_Stddev_Pop_Order_By = {
+  attachment_id?: InputMaybe<Order_By>;
+  order_id?: InputMaybe<Order_By>;
+};
+
+/** aggregate stddev_samp on columns */
+export type Orders_Order_Attachments_Stddev_Samp_Fields = {
+  __typename?: 'orders_order_attachments_stddev_samp_fields';
+  attachment_id?: Maybe<Scalars['Float']['output']>;
+  order_id?: Maybe<Scalars['Float']['output']>;
+};
+
+/** order by stddev_samp() on columns of table "orders.order_attachments" */
+export type Orders_Order_Attachments_Stddev_Samp_Order_By = {
+  attachment_id?: InputMaybe<Order_By>;
+  order_id?: InputMaybe<Order_By>;
+};
+
+/** Streaming cursor of the table "orders_order_attachments" */
+export type Orders_Order_Attachments_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Orders_Order_Attachments_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Orders_Order_Attachments_Stream_Cursor_Value_Input = {
+  attachment_id?: InputMaybe<Scalars['Int']['input']>;
+  order_id?: InputMaybe<Scalars['Int']['input']>;
+};
+
+/** aggregate sum on columns */
+export type Orders_Order_Attachments_Sum_Fields = {
+  __typename?: 'orders_order_attachments_sum_fields';
+  attachment_id?: Maybe<Scalars['Int']['output']>;
+  order_id?: Maybe<Scalars['Int']['output']>;
+};
+
+/** order by sum() on columns of table "orders.order_attachments" */
+export type Orders_Order_Attachments_Sum_Order_By = {
+  attachment_id?: InputMaybe<Order_By>;
+  order_id?: InputMaybe<Order_By>;
+};
+
+/** update columns of table "orders.order_attachments" */
+export enum Orders_Order_Attachments_Update_Column {
+  /** column name */
+  AttachmentId = 'attachment_id',
+  /** column name */
+  OrderId = 'order_id'
+}
+
+export type Orders_Order_Attachments_Updates = {
+  /** increments the numeric columns with given value of the filtered values */
+  _inc?: InputMaybe<Orders_Order_Attachments_Inc_Input>;
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Orders_Order_Attachments_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Orders_Order_Attachments_Bool_Exp;
+};
+
+/** aggregate var_pop on columns */
+export type Orders_Order_Attachments_Var_Pop_Fields = {
+  __typename?: 'orders_order_attachments_var_pop_fields';
+  attachment_id?: Maybe<Scalars['Float']['output']>;
+  order_id?: Maybe<Scalars['Float']['output']>;
+};
+
+/** order by var_pop() on columns of table "orders.order_attachments" */
+export type Orders_Order_Attachments_Var_Pop_Order_By = {
+  attachment_id?: InputMaybe<Order_By>;
+  order_id?: InputMaybe<Order_By>;
+};
+
+/** aggregate var_samp on columns */
+export type Orders_Order_Attachments_Var_Samp_Fields = {
+  __typename?: 'orders_order_attachments_var_samp_fields';
+  attachment_id?: Maybe<Scalars['Float']['output']>;
+  order_id?: Maybe<Scalars['Float']['output']>;
+};
+
+/** order by var_samp() on columns of table "orders.order_attachments" */
+export type Orders_Order_Attachments_Var_Samp_Order_By = {
+  attachment_id?: InputMaybe<Order_By>;
+  order_id?: InputMaybe<Order_By>;
+};
+
+/** aggregate variance on columns */
+export type Orders_Order_Attachments_Variance_Fields = {
+  __typename?: 'orders_order_attachments_variance_fields';
+  attachment_id?: Maybe<Scalars['Float']['output']>;
+  order_id?: Maybe<Scalars['Float']['output']>;
+};
+
+/** order by variance() on columns of table "orders.order_attachments" */
+export type Orders_Order_Attachments_Variance_Order_By = {
+  attachment_id?: InputMaybe<Order_By>;
+  order_id?: InputMaybe<Order_By>;
+};
+
 /** columns and relationships of "orders.order_items" */
 export type Orders_Order_Items = {
   __typename?: 'orders_order_items';
@@ -6239,6 +7394,10 @@ export type Orders_Orders = {
   /** An aggregate relationship */
   notifications_aggregate: Orders_Notifications_Aggregate;
   /** An array relationship */
+  order_attachments: Array<Orders_Order_Attachments>;
+  /** An aggregate relationship */
+  order_attachments_aggregate: Orders_Order_Attachments_Aggregate;
+  /** An array relationship */
   order_items: Array<Orders_Order_Items>;
   /** An aggregate relationship */
   order_items_aggregate: Orders_Order_Items_Aggregate;
@@ -6316,6 +7475,26 @@ export type Orders_OrdersNotifications_AggregateArgs = {
 
 
 /** columns and relationships of "orders.orders" */
+export type Orders_OrdersOrder_AttachmentsArgs = {
+  distinct_on?: InputMaybe<Array<Orders_Order_Attachments_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Orders_Order_Attachments_Order_By>>;
+  where?: InputMaybe<Orders_Order_Attachments_Bool_Exp>;
+};
+
+
+/** columns and relationships of "orders.orders" */
+export type Orders_OrdersOrder_Attachments_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Orders_Order_Attachments_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Orders_Order_Attachments_Order_By>>;
+  where?: InputMaybe<Orders_Order_Attachments_Bool_Exp>;
+};
+
+
+/** columns and relationships of "orders.orders" */
 export type Orders_OrdersOrder_ItemsArgs = {
   distinct_on?: InputMaybe<Array<Orders_Order_Items_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']['input']>;
@@ -6361,6 +7540,33 @@ export type Orders_Orders_Aggregate = {
   nodes: Array<Orders_Orders>;
 };
 
+export type Orders_Orders_Aggregate_Bool_Exp = {
+  bool_and?: InputMaybe<Orders_Orders_Aggregate_Bool_Exp_Bool_And>;
+  bool_or?: InputMaybe<Orders_Orders_Aggregate_Bool_Exp_Bool_Or>;
+  count?: InputMaybe<Orders_Orders_Aggregate_Bool_Exp_Count>;
+};
+
+export type Orders_Orders_Aggregate_Bool_Exp_Bool_And = {
+  arguments: Orders_Orders_Select_Column_Orders_Orders_Aggregate_Bool_Exp_Bool_And_Arguments_Columns;
+  distinct?: InputMaybe<Scalars['Boolean']['input']>;
+  filter?: InputMaybe<Orders_Orders_Bool_Exp>;
+  predicate: Boolean_Comparison_Exp;
+};
+
+export type Orders_Orders_Aggregate_Bool_Exp_Bool_Or = {
+  arguments: Orders_Orders_Select_Column_Orders_Orders_Aggregate_Bool_Exp_Bool_Or_Arguments_Columns;
+  distinct?: InputMaybe<Scalars['Boolean']['input']>;
+  filter?: InputMaybe<Orders_Orders_Bool_Exp>;
+  predicate: Boolean_Comparison_Exp;
+};
+
+export type Orders_Orders_Aggregate_Bool_Exp_Count = {
+  arguments?: InputMaybe<Array<Orders_Orders_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']['input']>;
+  filter?: InputMaybe<Orders_Orders_Bool_Exp>;
+  predicate: Int_Comparison_Exp;
+};
+
 /** aggregate fields of "orders.orders" */
 export type Orders_Orders_Aggregate_Fields = {
   __typename?: 'orders_orders_aggregate_fields';
@@ -6384,6 +7590,28 @@ export type Orders_Orders_Aggregate_FieldsCountArgs = {
   distinct?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
+/** order by aggregate values of table "orders.orders" */
+export type Orders_Orders_Aggregate_Order_By = {
+  avg?: InputMaybe<Orders_Orders_Avg_Order_By>;
+  count?: InputMaybe<Order_By>;
+  max?: InputMaybe<Orders_Orders_Max_Order_By>;
+  min?: InputMaybe<Orders_Orders_Min_Order_By>;
+  stddev?: InputMaybe<Orders_Orders_Stddev_Order_By>;
+  stddev_pop?: InputMaybe<Orders_Orders_Stddev_Pop_Order_By>;
+  stddev_samp?: InputMaybe<Orders_Orders_Stddev_Samp_Order_By>;
+  sum?: InputMaybe<Orders_Orders_Sum_Order_By>;
+  var_pop?: InputMaybe<Orders_Orders_Var_Pop_Order_By>;
+  var_samp?: InputMaybe<Orders_Orders_Var_Samp_Order_By>;
+  variance?: InputMaybe<Orders_Orders_Variance_Order_By>;
+};
+
+/** input type for inserting array relation for remote table "orders.orders" */
+export type Orders_Orders_Arr_Rel_Insert_Input = {
+  data: Array<Orders_Orders_Insert_Input>;
+  /** upsert condition */
+  on_conflict?: InputMaybe<Orders_Orders_On_Conflict>;
+};
+
 /** aggregate avg on columns */
 export type Orders_Orders_Avg_Fields = {
   __typename?: 'orders_orders_avg_fields';
@@ -6391,6 +7619,14 @@ export type Orders_Orders_Avg_Fields = {
   manager_id?: Maybe<Scalars['Float']['output']>;
   status?: Maybe<Scalars['Float']['output']>;
   total_amount?: Maybe<Scalars['Float']['output']>;
+};
+
+/** order by avg() on columns of table "orders.orders" */
+export type Orders_Orders_Avg_Order_By = {
+  id?: InputMaybe<Order_By>;
+  manager_id?: InputMaybe<Order_By>;
+  status?: InputMaybe<Order_By>;
+  total_amount?: InputMaybe<Order_By>;
 };
 
 /** Boolean expression to filter rows from the table "orders.orders". All fields are combined with a logical 'AND'. */
@@ -6416,6 +7652,8 @@ export type Orders_Orders_Bool_Exp = {
   need_attention?: InputMaybe<String_Comparison_Exp>;
   notifications?: InputMaybe<Orders_Notifications_Bool_Exp>;
   notifications_aggregate?: InputMaybe<Orders_Notifications_Aggregate_Bool_Exp>;
+  order_attachments?: InputMaybe<Orders_Order_Attachments_Bool_Exp>;
+  order_attachments_aggregate?: InputMaybe<Orders_Order_Attachments_Aggregate_Bool_Exp>;
   order_items?: InputMaybe<Orders_Order_Items_Bool_Exp>;
   order_items_aggregate?: InputMaybe<Orders_Order_Items_Aggregate_Bool_Exp>;
   order_number?: InputMaybe<String_Comparison_Exp>;
@@ -6458,6 +7696,7 @@ export type Orders_Orders_Insert_Input = {
   manager_id?: InputMaybe<Scalars['Int']['input']>;
   need_attention?: InputMaybe<Scalars['String']['input']>;
   notifications?: InputMaybe<Orders_Notifications_Arr_Rel_Insert_Input>;
+  order_attachments?: InputMaybe<Orders_Order_Attachments_Arr_Rel_Insert_Input>;
   order_items?: InputMaybe<Orders_Order_Items_Arr_Rel_Insert_Input>;
   order_number?: InputMaybe<Scalars['String']['input']>;
   order_payments?: InputMaybe<Orders_Order_Payments_Arr_Rel_Insert_Input>;
@@ -6486,6 +7725,24 @@ export type Orders_Orders_Max_Fields = {
   total_amount?: Maybe<Scalars['numeric']['output']>;
 };
 
+/** order by max() on columns of table "orders.orders" */
+export type Orders_Orders_Max_Order_By = {
+  acceptance_date?: InputMaybe<Order_By>;
+  actual_shipping_date?: InputMaybe<Order_By>;
+  city?: InputMaybe<Order_By>;
+  comment?: InputMaybe<Order_By>;
+  contractor?: InputMaybe<Order_By>;
+  created_at?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  invoice_number?: InputMaybe<Order_By>;
+  manager_id?: InputMaybe<Order_By>;
+  need_attention?: InputMaybe<Order_By>;
+  order_number?: InputMaybe<Order_By>;
+  shipping_date?: InputMaybe<Order_By>;
+  status?: InputMaybe<Order_By>;
+  total_amount?: InputMaybe<Order_By>;
+};
+
 /** aggregate min on columns */
 export type Orders_Orders_Min_Fields = {
   __typename?: 'orders_orders_min_fields';
@@ -6503,6 +7760,24 @@ export type Orders_Orders_Min_Fields = {
   shipping_date?: Maybe<Scalars['date']['output']>;
   status?: Maybe<Scalars['Int']['output']>;
   total_amount?: Maybe<Scalars['numeric']['output']>;
+};
+
+/** order by min() on columns of table "orders.orders" */
+export type Orders_Orders_Min_Order_By = {
+  acceptance_date?: InputMaybe<Order_By>;
+  actual_shipping_date?: InputMaybe<Order_By>;
+  city?: InputMaybe<Order_By>;
+  comment?: InputMaybe<Order_By>;
+  contractor?: InputMaybe<Order_By>;
+  created_at?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  invoice_number?: InputMaybe<Order_By>;
+  manager_id?: InputMaybe<Order_By>;
+  need_attention?: InputMaybe<Order_By>;
+  order_number?: InputMaybe<Order_By>;
+  shipping_date?: InputMaybe<Order_By>;
+  status?: InputMaybe<Order_By>;
+  total_amount?: InputMaybe<Order_By>;
 };
 
 /** response of any mutation on the table "orders.orders" */
@@ -6545,6 +7820,7 @@ export type Orders_Orders_Order_By = {
   manager_id?: InputMaybe<Order_By>;
   need_attention?: InputMaybe<Order_By>;
   notifications_aggregate?: InputMaybe<Orders_Notifications_Aggregate_Order_By>;
+  order_attachments_aggregate?: InputMaybe<Orders_Order_Attachments_Aggregate_Order_By>;
   order_items_aggregate?: InputMaybe<Orders_Order_Items_Aggregate_Order_By>;
   order_number?: InputMaybe<Order_By>;
   order_payments_aggregate?: InputMaybe<Orders_Order_Payments_Aggregate_Order_By>;
@@ -6595,6 +7871,22 @@ export enum Orders_Orders_Select_Column {
   TotalAmount = 'total_amount'
 }
 
+/** select "orders_orders_aggregate_bool_exp_bool_and_arguments_columns" columns of table "orders.orders" */
+export enum Orders_Orders_Select_Column_Orders_Orders_Aggregate_Bool_Exp_Bool_And_Arguments_Columns {
+  /** column name */
+  AwaitingDispatch = 'awaiting_dispatch',
+  /** column name */
+  IsReclamation = 'is_reclamation'
+}
+
+/** select "orders_orders_aggregate_bool_exp_bool_or_arguments_columns" columns of table "orders.orders" */
+export enum Orders_Orders_Select_Column_Orders_Orders_Aggregate_Bool_Exp_Bool_Or_Arguments_Columns {
+  /** column name */
+  AwaitingDispatch = 'awaiting_dispatch',
+  /** column name */
+  IsReclamation = 'is_reclamation'
+}
+
 /** input type for updating data in table "orders.orders" */
 export type Orders_Orders_Set_Input = {
   acceptance_date?: InputMaybe<Scalars['timestamp']['input']>;
@@ -6624,6 +7916,14 @@ export type Orders_Orders_Stddev_Fields = {
   total_amount?: Maybe<Scalars['Float']['output']>;
 };
 
+/** order by stddev() on columns of table "orders.orders" */
+export type Orders_Orders_Stddev_Order_By = {
+  id?: InputMaybe<Order_By>;
+  manager_id?: InputMaybe<Order_By>;
+  status?: InputMaybe<Order_By>;
+  total_amount?: InputMaybe<Order_By>;
+};
+
 /** aggregate stddev_pop on columns */
 export type Orders_Orders_Stddev_Pop_Fields = {
   __typename?: 'orders_orders_stddev_pop_fields';
@@ -6633,6 +7933,14 @@ export type Orders_Orders_Stddev_Pop_Fields = {
   total_amount?: Maybe<Scalars['Float']['output']>;
 };
 
+/** order by stddev_pop() on columns of table "orders.orders" */
+export type Orders_Orders_Stddev_Pop_Order_By = {
+  id?: InputMaybe<Order_By>;
+  manager_id?: InputMaybe<Order_By>;
+  status?: InputMaybe<Order_By>;
+  total_amount?: InputMaybe<Order_By>;
+};
+
 /** aggregate stddev_samp on columns */
 export type Orders_Orders_Stddev_Samp_Fields = {
   __typename?: 'orders_orders_stddev_samp_fields';
@@ -6640,6 +7948,14 @@ export type Orders_Orders_Stddev_Samp_Fields = {
   manager_id?: Maybe<Scalars['Float']['output']>;
   status?: Maybe<Scalars['Float']['output']>;
   total_amount?: Maybe<Scalars['Float']['output']>;
+};
+
+/** order by stddev_samp() on columns of table "orders.orders" */
+export type Orders_Orders_Stddev_Samp_Order_By = {
+  id?: InputMaybe<Order_By>;
+  manager_id?: InputMaybe<Order_By>;
+  status?: InputMaybe<Order_By>;
+  total_amount?: InputMaybe<Order_By>;
 };
 
 /** Streaming cursor of the table "orders_orders" */
@@ -6677,6 +7993,14 @@ export type Orders_Orders_Sum_Fields = {
   manager_id?: Maybe<Scalars['Int']['output']>;
   status?: Maybe<Scalars['Int']['output']>;
   total_amount?: Maybe<Scalars['numeric']['output']>;
+};
+
+/** order by sum() on columns of table "orders.orders" */
+export type Orders_Orders_Sum_Order_By = {
+  id?: InputMaybe<Order_By>;
+  manager_id?: InputMaybe<Order_By>;
+  status?: InputMaybe<Order_By>;
+  total_amount?: InputMaybe<Order_By>;
 };
 
 /** update columns of table "orders.orders" */
@@ -6733,6 +8057,14 @@ export type Orders_Orders_Var_Pop_Fields = {
   total_amount?: Maybe<Scalars['Float']['output']>;
 };
 
+/** order by var_pop() on columns of table "orders.orders" */
+export type Orders_Orders_Var_Pop_Order_By = {
+  id?: InputMaybe<Order_By>;
+  manager_id?: InputMaybe<Order_By>;
+  status?: InputMaybe<Order_By>;
+  total_amount?: InputMaybe<Order_By>;
+};
+
 /** aggregate var_samp on columns */
 export type Orders_Orders_Var_Samp_Fields = {
   __typename?: 'orders_orders_var_samp_fields';
@@ -6740,6 +8072,14 @@ export type Orders_Orders_Var_Samp_Fields = {
   manager_id?: Maybe<Scalars['Float']['output']>;
   status?: Maybe<Scalars['Float']['output']>;
   total_amount?: Maybe<Scalars['Float']['output']>;
+};
+
+/** order by var_samp() on columns of table "orders.orders" */
+export type Orders_Orders_Var_Samp_Order_By = {
+  id?: InputMaybe<Order_By>;
+  manager_id?: InputMaybe<Order_By>;
+  status?: InputMaybe<Order_By>;
+  total_amount?: InputMaybe<Order_By>;
 };
 
 /** aggregate variance on columns */
@@ -6751,8 +8091,22 @@ export type Orders_Orders_Variance_Fields = {
   total_amount?: Maybe<Scalars['Float']['output']>;
 };
 
+/** order by variance() on columns of table "orders.orders" */
+export type Orders_Orders_Variance_Order_By = {
+  id?: InputMaybe<Order_By>;
+  manager_id?: InputMaybe<Order_By>;
+  status?: InputMaybe<Order_By>;
+  total_amount?: InputMaybe<Order_By>;
+};
+
 export type Query_Root = {
   __typename?: 'query_root';
+  /** fetch data from the table: "attachments" */
+  attachments: Array<Attachments>;
+  /** fetch aggregated fields from the table: "attachments" */
+  attachments_aggregate: Attachments_Aggregate;
+  /** fetch data from the table: "attachments" using primary key columns */
+  attachments_by_pk?: Maybe<Attachments>;
   /** fetch data from the table: "attendance.config" */
   attendance_config: Array<Attendance_Config>;
   /** fetch aggregated fields from the table: "attendance.config" */
@@ -6783,6 +8137,12 @@ export type Query_Root = {
   kysely_migration_lock_aggregate: Kysely_Migration_Lock_Aggregate;
   /** fetch data from the table: "kysely_migration_lock" using primary key columns */
   kysely_migration_lock_by_pk?: Maybe<Kysely_Migration_Lock>;
+  /** fetch data from the table: "metal_flow.detail_attachments" */
+  metal_flow_detail_attachments: Array<Metal_Flow_Detail_Attachments>;
+  /** fetch aggregated fields from the table: "metal_flow.detail_attachments" */
+  metal_flow_detail_attachments_aggregate: Metal_Flow_Detail_Attachments_Aggregate;
+  /** fetch data from the table: "metal_flow.detail_attachments" using primary key columns */
+  metal_flow_detail_attachments_by_pk?: Maybe<Metal_Flow_Detail_Attachments>;
   /** fetch data from the table: "metal_flow.detail_materials" */
   metal_flow_detail_materials: Array<Metal_Flow_Detail_Materials>;
   /** fetch aggregated fields from the table: "metal_flow.detail_materials" */
@@ -6831,6 +8191,12 @@ export type Query_Root = {
   orders_notifications_aggregate: Orders_Notifications_Aggregate;
   /** fetch data from the table: "orders.notifications" using primary key columns */
   orders_notifications_by_pk?: Maybe<Orders_Notifications>;
+  /** fetch data from the table: "orders.order_attachments" */
+  orders_order_attachments: Array<Orders_Order_Attachments>;
+  /** fetch aggregated fields from the table: "orders.order_attachments" */
+  orders_order_attachments_aggregate: Orders_Order_Attachments_Aggregate;
+  /** fetch data from the table: "orders.order_attachments" using primary key columns */
+  orders_order_attachments_by_pk?: Maybe<Orders_Order_Attachments>;
   /** fetch data from the table: "orders.order_items" */
   orders_order_items: Array<Orders_Order_Items>;
   /** fetch aggregated fields from the table: "orders.order_items" */
@@ -6861,6 +8227,29 @@ export type Query_Root = {
   users_aggregate: Users_Aggregate;
   /** fetch data from the table: "users" using primary key columns */
   users_by_pk?: Maybe<Users>;
+};
+
+
+export type Query_RootAttachmentsArgs = {
+  distinct_on?: InputMaybe<Array<Attachments_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Attachments_Order_By>>;
+  where?: InputMaybe<Attachments_Bool_Exp>;
+};
+
+
+export type Query_RootAttachments_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Attachments_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Attachments_Order_By>>;
+  where?: InputMaybe<Attachments_Bool_Exp>;
+};
+
+
+export type Query_RootAttachments_By_PkArgs = {
+  id: Scalars['Int']['input'];
 };
 
 
@@ -6977,6 +8366,30 @@ export type Query_RootKysely_Migration_Lock_AggregateArgs = {
 
 export type Query_RootKysely_Migration_Lock_By_PkArgs = {
   id: Scalars['String']['input'];
+};
+
+
+export type Query_RootMetal_Flow_Detail_AttachmentsArgs = {
+  distinct_on?: InputMaybe<Array<Metal_Flow_Detail_Attachments_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Metal_Flow_Detail_Attachments_Order_By>>;
+  where?: InputMaybe<Metal_Flow_Detail_Attachments_Bool_Exp>;
+};
+
+
+export type Query_RootMetal_Flow_Detail_Attachments_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Metal_Flow_Detail_Attachments_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Metal_Flow_Detail_Attachments_Order_By>>;
+  where?: InputMaybe<Metal_Flow_Detail_Attachments_Bool_Exp>;
+};
+
+
+export type Query_RootMetal_Flow_Detail_Attachments_By_PkArgs = {
+  attachment_id: Scalars['Int']['input'];
+  detail_id: Scalars['Int']['input'];
 };
 
 
@@ -7162,6 +8575,30 @@ export type Query_RootOrders_Notifications_AggregateArgs = {
 
 export type Query_RootOrders_Notifications_By_PkArgs = {
   id: Scalars['Int']['input'];
+};
+
+
+export type Query_RootOrders_Order_AttachmentsArgs = {
+  distinct_on?: InputMaybe<Array<Orders_Order_Attachments_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Orders_Order_Attachments_Order_By>>;
+  where?: InputMaybe<Orders_Order_Attachments_Bool_Exp>;
+};
+
+
+export type Query_RootOrders_Order_Attachments_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Orders_Order_Attachments_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Orders_Order_Attachments_Order_By>>;
+  where?: InputMaybe<Orders_Order_Attachments_Bool_Exp>;
+};
+
+
+export type Query_RootOrders_Order_Attachments_By_PkArgs = {
+  attachment_id: Scalars['Int']['input'];
+  order_id: Scalars['Int']['input'];
 };
 
 
@@ -7599,6 +9036,14 @@ export type Refresh_Tokens_Variance_Order_By = {
 
 export type Subscription_Root = {
   __typename?: 'subscription_root';
+  /** fetch data from the table: "attachments" */
+  attachments: Array<Attachments>;
+  /** fetch aggregated fields from the table: "attachments" */
+  attachments_aggregate: Attachments_Aggregate;
+  /** fetch data from the table: "attachments" using primary key columns */
+  attachments_by_pk?: Maybe<Attachments>;
+  /** fetch data from the table in a streaming manner: "attachments" */
+  attachments_stream: Array<Attachments>;
   /** fetch data from the table: "attendance.config" */
   attendance_config: Array<Attendance_Config>;
   /** fetch aggregated fields from the table: "attendance.config" */
@@ -7639,6 +9084,14 @@ export type Subscription_Root = {
   kysely_migration_lock_stream: Array<Kysely_Migration_Lock>;
   /** fetch data from the table in a streaming manner: "kysely_migration" */
   kysely_migration_stream: Array<Kysely_Migration>;
+  /** fetch data from the table: "metal_flow.detail_attachments" */
+  metal_flow_detail_attachments: Array<Metal_Flow_Detail_Attachments>;
+  /** fetch aggregated fields from the table: "metal_flow.detail_attachments" */
+  metal_flow_detail_attachments_aggregate: Metal_Flow_Detail_Attachments_Aggregate;
+  /** fetch data from the table: "metal_flow.detail_attachments" using primary key columns */
+  metal_flow_detail_attachments_by_pk?: Maybe<Metal_Flow_Detail_Attachments>;
+  /** fetch data from the table in a streaming manner: "metal_flow.detail_attachments" */
+  metal_flow_detail_attachments_stream: Array<Metal_Flow_Detail_Attachments>;
   /** fetch data from the table: "metal_flow.detail_materials" */
   metal_flow_detail_materials: Array<Metal_Flow_Detail_Materials>;
   /** fetch aggregated fields from the table: "metal_flow.detail_materials" */
@@ -7703,6 +9156,14 @@ export type Subscription_Root = {
   orders_notifications_by_pk?: Maybe<Orders_Notifications>;
   /** fetch data from the table in a streaming manner: "orders.notifications" */
   orders_notifications_stream: Array<Orders_Notifications>;
+  /** fetch data from the table: "orders.order_attachments" */
+  orders_order_attachments: Array<Orders_Order_Attachments>;
+  /** fetch aggregated fields from the table: "orders.order_attachments" */
+  orders_order_attachments_aggregate: Orders_Order_Attachments_Aggregate;
+  /** fetch data from the table: "orders.order_attachments" using primary key columns */
+  orders_order_attachments_by_pk?: Maybe<Orders_Order_Attachments>;
+  /** fetch data from the table in a streaming manner: "orders.order_attachments" */
+  orders_order_attachments_stream: Array<Orders_Order_Attachments>;
   /** fetch data from the table: "orders.order_items" */
   orders_order_items: Array<Orders_Order_Items>;
   /** fetch aggregated fields from the table: "orders.order_items" */
@@ -7743,6 +9204,36 @@ export type Subscription_Root = {
   users_by_pk?: Maybe<Users>;
   /** fetch data from the table in a streaming manner: "users" */
   users_stream: Array<Users>;
+};
+
+
+export type Subscription_RootAttachmentsArgs = {
+  distinct_on?: InputMaybe<Array<Attachments_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Attachments_Order_By>>;
+  where?: InputMaybe<Attachments_Bool_Exp>;
+};
+
+
+export type Subscription_RootAttachments_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Attachments_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Attachments_Order_By>>;
+  where?: InputMaybe<Attachments_Bool_Exp>;
+};
+
+
+export type Subscription_RootAttachments_By_PkArgs = {
+  id: Scalars['Int']['input'];
+};
+
+
+export type Subscription_RootAttachments_StreamArgs = {
+  batch_size: Scalars['Int']['input'];
+  cursor: Array<InputMaybe<Attachments_Stream_Cursor_Input>>;
+  where?: InputMaybe<Attachments_Bool_Exp>;
 };
 
 
@@ -7894,6 +9385,37 @@ export type Subscription_RootKysely_Migration_StreamArgs = {
   batch_size: Scalars['Int']['input'];
   cursor: Array<InputMaybe<Kysely_Migration_Stream_Cursor_Input>>;
   where?: InputMaybe<Kysely_Migration_Bool_Exp>;
+};
+
+
+export type Subscription_RootMetal_Flow_Detail_AttachmentsArgs = {
+  distinct_on?: InputMaybe<Array<Metal_Flow_Detail_Attachments_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Metal_Flow_Detail_Attachments_Order_By>>;
+  where?: InputMaybe<Metal_Flow_Detail_Attachments_Bool_Exp>;
+};
+
+
+export type Subscription_RootMetal_Flow_Detail_Attachments_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Metal_Flow_Detail_Attachments_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Metal_Flow_Detail_Attachments_Order_By>>;
+  where?: InputMaybe<Metal_Flow_Detail_Attachments_Bool_Exp>;
+};
+
+
+export type Subscription_RootMetal_Flow_Detail_Attachments_By_PkArgs = {
+  attachment_id: Scalars['Int']['input'];
+  detail_id: Scalars['Int']['input'];
+};
+
+
+export type Subscription_RootMetal_Flow_Detail_Attachments_StreamArgs = {
+  batch_size: Scalars['Int']['input'];
+  cursor: Array<InputMaybe<Metal_Flow_Detail_Attachments_Stream_Cursor_Input>>;
+  where?: InputMaybe<Metal_Flow_Detail_Attachments_Bool_Exp>;
 };
 
 
@@ -8138,6 +9660,37 @@ export type Subscription_RootOrders_Notifications_StreamArgs = {
 };
 
 
+export type Subscription_RootOrders_Order_AttachmentsArgs = {
+  distinct_on?: InputMaybe<Array<Orders_Order_Attachments_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Orders_Order_Attachments_Order_By>>;
+  where?: InputMaybe<Orders_Order_Attachments_Bool_Exp>;
+};
+
+
+export type Subscription_RootOrders_Order_Attachments_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Orders_Order_Attachments_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Orders_Order_Attachments_Order_By>>;
+  where?: InputMaybe<Orders_Order_Attachments_Bool_Exp>;
+};
+
+
+export type Subscription_RootOrders_Order_Attachments_By_PkArgs = {
+  attachment_id: Scalars['Int']['input'];
+  order_id: Scalars['Int']['input'];
+};
+
+
+export type Subscription_RootOrders_Order_Attachments_StreamArgs = {
+  batch_size: Scalars['Int']['input'];
+  cursor: Array<InputMaybe<Orders_Order_Attachments_Stream_Cursor_Input>>;
+  where?: InputMaybe<Orders_Order_Attachments_Bool_Exp>;
+};
+
+
 export type Subscription_RootOrders_Order_ItemsArgs = {
   distinct_on?: InputMaybe<Array<Orders_Order_Items_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']['input']>;
@@ -8316,16 +9869,88 @@ export type Timestamptz_Comparison_Exp = {
 /** columns and relationships of "users" */
 export type Users = {
   __typename?: 'users';
+  /** An array relationship */
+  comments: Array<Orders_Comments>;
+  /** An aggregate relationship */
+  comments_aggregate: Orders_Comments_Aggregate;
   email?: Maybe<Scalars['String']['output']>;
   first_name?: Maybe<Scalars['String']['output']>;
   id: Scalars['Int']['output'];
   last_name?: Maybe<Scalars['String']['output']>;
+  /** An array relationship */
+  notifications: Array<Orders_Notifications>;
+  /** An aggregate relationship */
+  notifications_aggregate: Orders_Notifications_Aggregate;
+  /** An array relationship */
+  orders: Array<Orders_Orders>;
+  /** An aggregate relationship */
+  orders_aggregate: Orders_Orders_Aggregate;
   password?: Maybe<Scalars['String']['output']>;
   /** An array relationship */
   refresh_tokens: Array<Refresh_Tokens>;
   /** An aggregate relationship */
   refresh_tokens_aggregate: Refresh_Tokens_Aggregate;
   role: Scalars['Int']['output'];
+};
+
+
+/** columns and relationships of "users" */
+export type UsersCommentsArgs = {
+  distinct_on?: InputMaybe<Array<Orders_Comments_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Orders_Comments_Order_By>>;
+  where?: InputMaybe<Orders_Comments_Bool_Exp>;
+};
+
+
+/** columns and relationships of "users" */
+export type UsersComments_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Orders_Comments_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Orders_Comments_Order_By>>;
+  where?: InputMaybe<Orders_Comments_Bool_Exp>;
+};
+
+
+/** columns and relationships of "users" */
+export type UsersNotificationsArgs = {
+  distinct_on?: InputMaybe<Array<Orders_Notifications_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Orders_Notifications_Order_By>>;
+  where?: InputMaybe<Orders_Notifications_Bool_Exp>;
+};
+
+
+/** columns and relationships of "users" */
+export type UsersNotifications_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Orders_Notifications_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Orders_Notifications_Order_By>>;
+  where?: InputMaybe<Orders_Notifications_Bool_Exp>;
+};
+
+
+/** columns and relationships of "users" */
+export type UsersOrdersArgs = {
+  distinct_on?: InputMaybe<Array<Orders_Orders_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Orders_Orders_Order_By>>;
+  where?: InputMaybe<Orders_Orders_Bool_Exp>;
+};
+
+
+/** columns and relationships of "users" */
+export type UsersOrders_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Orders_Orders_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Orders_Orders_Order_By>>;
+  where?: InputMaybe<Orders_Orders_Bool_Exp>;
 };
 
 
@@ -8390,10 +10015,16 @@ export type Users_Bool_Exp = {
   _and?: InputMaybe<Array<Users_Bool_Exp>>;
   _not?: InputMaybe<Users_Bool_Exp>;
   _or?: InputMaybe<Array<Users_Bool_Exp>>;
+  comments?: InputMaybe<Orders_Comments_Bool_Exp>;
+  comments_aggregate?: InputMaybe<Orders_Comments_Aggregate_Bool_Exp>;
   email?: InputMaybe<String_Comparison_Exp>;
   first_name?: InputMaybe<String_Comparison_Exp>;
   id?: InputMaybe<Int_Comparison_Exp>;
   last_name?: InputMaybe<String_Comparison_Exp>;
+  notifications?: InputMaybe<Orders_Notifications_Bool_Exp>;
+  notifications_aggregate?: InputMaybe<Orders_Notifications_Aggregate_Bool_Exp>;
+  orders?: InputMaybe<Orders_Orders_Bool_Exp>;
+  orders_aggregate?: InputMaybe<Orders_Orders_Aggregate_Bool_Exp>;
   password?: InputMaybe<String_Comparison_Exp>;
   refresh_tokens?: InputMaybe<Refresh_Tokens_Bool_Exp>;
   refresh_tokens_aggregate?: InputMaybe<Refresh_Tokens_Aggregate_Bool_Exp>;
@@ -8414,10 +10045,13 @@ export type Users_Inc_Input = {
 
 /** input type for inserting data into table "users" */
 export type Users_Insert_Input = {
+  comments?: InputMaybe<Orders_Comments_Arr_Rel_Insert_Input>;
   email?: InputMaybe<Scalars['String']['input']>;
   first_name?: InputMaybe<Scalars['String']['input']>;
   id?: InputMaybe<Scalars['Int']['input']>;
   last_name?: InputMaybe<Scalars['String']['input']>;
+  notifications?: InputMaybe<Orders_Notifications_Arr_Rel_Insert_Input>;
+  orders?: InputMaybe<Orders_Orders_Arr_Rel_Insert_Input>;
   password?: InputMaybe<Scalars['String']['input']>;
   refresh_tokens?: InputMaybe<Refresh_Tokens_Arr_Rel_Insert_Input>;
   role?: InputMaybe<Scalars['Int']['input']>;
@@ -8470,10 +10104,13 @@ export type Users_On_Conflict = {
 
 /** Ordering options when selecting data from "users". */
 export type Users_Order_By = {
+  comments_aggregate?: InputMaybe<Orders_Comments_Aggregate_Order_By>;
   email?: InputMaybe<Order_By>;
   first_name?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
   last_name?: InputMaybe<Order_By>;
+  notifications_aggregate?: InputMaybe<Orders_Notifications_Aggregate_Order_By>;
+  orders_aggregate?: InputMaybe<Orders_Orders_Aggregate_Order_By>;
   password?: InputMaybe<Order_By>;
   refresh_tokens_aggregate?: InputMaybe<Refresh_Tokens_Aggregate_Order_By>;
   role?: InputMaybe<Order_By>;
@@ -8641,17 +10278,19 @@ export type CountUnresolvedNotificationsQueryVariables = Exact<{
 
 export type CountUnresolvedNotificationsQuery = { __typename?: 'query_root', orders_notifications_aggregate: { __typename?: 'orders_notifications_aggregate', aggregate?: { __typename?: 'orders_notifications_aggregate_fields', count: number } | null } };
 
+export type DetailFragmentFragment = { __typename?: 'metal_flow_details', id: number, name: string, part_code?: string | null };
+
 export type GetDetailsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetDetailsQuery = { __typename?: 'query_root', metal_flow_details: Array<{ __typename?: 'metal_flow_details', id: number, name: string, detail_materials: Array<{ __typename?: 'metal_flow_detail_materials', data?: any | null, material: { __typename?: 'metal_flow_materials', id: number, unit: number, shape: number, shape_data?: any | null, label: string } }> }> };
+export type GetDetailsQuery = { __typename?: 'query_root', metal_flow_details: Array<{ __typename?: 'metal_flow_details', id: number, name: string, part_code?: string | null, detail_materials: Array<{ __typename?: 'metal_flow_detail_materials', data?: any | null, material: { __typename?: 'metal_flow_materials', id: number, unit: number, shape: number, shape_data?: any | null, label: string } }> }> };
 
 export type GetDetailByPkQueryVariables = Exact<{
   id: Scalars['Int']['input'];
 }>;
 
 
-export type GetDetailByPkQuery = { __typename?: 'query_root', metal_flow_details_by_pk?: { __typename?: 'metal_flow_details', id: number, name: string, detail_materials: Array<{ __typename?: 'metal_flow_detail_materials', data?: any | null, material: { __typename?: 'metal_flow_materials', id: number, unit: number, shape: number, shape_data?: any | null, label: string } }> } | null };
+export type GetDetailByPkQuery = { __typename?: 'query_root', metal_flow_details_by_pk?: { __typename?: 'metal_flow_details', id: number, name: string, part_code?: string | null, detail_materials: Array<{ __typename?: 'metal_flow_detail_materials', data?: any | null, material: { __typename?: 'metal_flow_materials', id: number, unit: number, shape: number, shape_data?: any | null, label: string } }> } | null };
 
 export type InsertDetailMutationVariables = Exact<{
   object: Metal_Flow_Details_Insert_Input;
@@ -8696,7 +10335,7 @@ export type GetDetailsMadeFromThatMaterialQueryVariables = Exact<{
 }>;
 
 
-export type GetDetailsMadeFromThatMaterialQuery = { __typename?: 'query_root', metal_flow_detail_materials: Array<{ __typename?: 'metal_flow_detail_materials', detail: { __typename?: 'metal_flow_details', id: number, name: string } }> };
+export type GetDetailsMadeFromThatMaterialQuery = { __typename?: 'query_root', metal_flow_detail_materials: Array<{ __typename?: 'metal_flow_detail_materials', detail: { __typename?: 'metal_flow_details', id: number, name: string, part_code?: string | null } }> };
 
 export type InsertDetailMaterialsMutationVariables = Exact<{
   objects: Array<Metal_Flow_Detail_Materials_Insert_Input> | Metal_Flow_Detail_Materials_Insert_Input;
@@ -8710,7 +10349,14 @@ export type GetDetailsMadeOfMaterialQueryVariables = Exact<{
 }>;
 
 
-export type GetDetailsMadeOfMaterialQuery = { __typename?: 'query_root', metal_flow_details: Array<{ __typename?: 'metal_flow_details', detail_materials: Array<{ __typename?: 'metal_flow_detail_materials', data?: any | null, detail: { __typename?: 'metal_flow_details', id: number, name: string } }> }> };
+export type GetDetailsMadeOfMaterialQuery = { __typename?: 'query_root', metal_flow_details: Array<{ __typename?: 'metal_flow_details', detail_materials: Array<{ __typename?: 'metal_flow_detail_materials', data?: any | null, detail: { __typename?: 'metal_flow_details', id: number, name: string, part_code?: string | null } }> }> };
+
+export type GetDetailAttachmentsQueryVariables = Exact<{
+  detail_id: Scalars['Int']['input'];
+}>;
+
+
+export type GetDetailAttachmentsQuery = { __typename?: 'query_root', metal_flow_detail_attachments: Array<{ __typename?: 'metal_flow_detail_attachments', attachment: { __typename?: 'attachments', id: number, filename: string, key: string, size: number, uploaded_at: any } }> };
 
 export type MaterialFragmentFragment = { __typename?: 'metal_flow_materials', id: number, unit: number, shape: number, shape_data?: any | null, label: string };
 
@@ -8944,13 +10590,6 @@ export type GetOrderByPkQueryVariables = Exact<{
 
 export type GetOrderByPkQuery = { __typename?: 'query_root', orders_orders: Array<{ __typename?: 'orders_orders', id: number, status: number, city?: string | null, contractor?: string | null, invoice_number?: string | null, total_amount?: any | null, order_number?: string | null, need_attention?: string | null, awaiting_dispatch: boolean, actual_shipping_date?: any | null, acceptance_date?: any | null, shipping_date?: any | null, created_at: any, manager_id?: number | null, comment?: string | null, user?: { __typename?: 'users', id: number, email?: string | null, first_name?: string | null, last_name?: string | null } | null, order_items: Array<{ __typename?: 'orders_order_items', id: number, name: string, description?: string | null, quantity: number }>, order_payments: Array<{ __typename?: 'orders_order_payments', id: number, amount: any, date: any }> }> };
 
-export type GetOrderAttachmentsQueryVariables = Exact<{
-  order_id: Scalars['Int']['input'];
-}>;
-
-
-export type GetOrderAttachmentsQuery = { __typename?: 'query_root', orders_attachments: Array<{ __typename?: 'orders_attachments', filename?: string | null, id: number, key: string, size?: number | null }> };
-
 export type InsertOrderMutationVariables = Exact<{
   object: Orders_Orders_Insert_Input;
 }>;
@@ -8974,6 +10613,13 @@ export type GetOrderPositionsQueryVariables = Exact<{
 
 
 export type GetOrderPositionsQuery = { __typename?: 'query_root', orders_order_items: Array<{ __typename?: 'orders_order_items', id: number, name: string, description?: string | null, quantity: number }> };
+
+export type GetOrderAttachmentsQueryVariables = Exact<{
+  order_id: Scalars['Int']['input'];
+}>;
+
+
+export type GetOrderAttachmentsQuery = { __typename?: 'query_root', orders_order_attachments: Array<{ __typename?: 'orders_order_attachments', attachment: { __typename?: 'attachments', id: number, key: string, filename: string, size: number, uploaded_at: any } }> };
 
 export type OrderFragment = { __typename?: 'orders_orders', id: number, status: number, city?: string | null, contractor?: string | null, invoice_number?: string | null, total_amount?: any | null, order_number?: string | null, need_attention?: string | null, awaiting_dispatch: boolean, actual_shipping_date?: any | null, acceptance_date?: any | null, shipping_date?: any | null, created_at: any, manager_id?: number | null, comment?: string | null, user?: { __typename?: 'users', id: number, email?: string | null, first_name?: string | null, last_name?: string | null } | null, order_items: Array<{ __typename?: 'orders_order_items', id: number, name: string, description?: string | null, quantity: number }>, order_payments: Array<{ __typename?: 'orders_order_payments', id: number, amount: any, date: any }> };
 
@@ -9021,6 +10667,13 @@ export type UpdateCommentMutationVariables = Exact<{
 
 export type UpdateCommentMutation = { __typename?: 'mutation_root', update_orders_comments_by_pk?: { __typename?: 'orders_comments', id: number, order_id: number, text: string, created_at: any, user_id: number } | null };
 
+export const DetailFragmentFragmentDoc = gql`
+    fragment DetailFragment on metal_flow_details {
+  id
+  name
+  part_code
+}
+    `;
 export const MaterialFragmentFragmentDoc = gql`
     fragment MaterialFragment on metal_flow_materials {
   id
@@ -9291,8 +10944,7 @@ export type CountUnresolvedNotificationsQueryResult = Apollo.QueryResult<CountUn
 export const GetDetailsDocument = gql`
     query GetDetails {
   metal_flow_details {
-    id
-    name
+    ...DetailFragment
     detail_materials {
       data
       material {
@@ -9301,7 +10953,8 @@ export const GetDetailsDocument = gql`
     }
   }
 }
-    ${MaterialFragmentFragmentDoc}`;
+    ${DetailFragmentFragmentDoc}
+${MaterialFragmentFragmentDoc}`;
 
 /**
  * __useGetDetailsQuery__
@@ -9337,8 +10990,7 @@ export type GetDetailsQueryResult = Apollo.QueryResult<GetDetailsQuery, GetDetai
 export const GetDetailByPkDocument = gql`
     query GetDetailByPk($id: Int!) {
   metal_flow_details_by_pk(id: $id) {
-    id
-    name
+    ...DetailFragment
     detail_materials {
       data
       material {
@@ -9347,7 +10999,8 @@ export const GetDetailByPkDocument = gql`
     }
   }
 }
-    ${MaterialFragmentFragmentDoc}`;
+    ${DetailFragmentFragmentDoc}
+${MaterialFragmentFragmentDoc}`;
 
 /**
  * __useGetDetailByPkQuery__
@@ -9566,12 +11219,11 @@ export const GetDetailsMadeFromThatMaterialDocument = gql`
     query GetDetailsMadeFromThatMaterial($_eq: Int!) {
   metal_flow_detail_materials(where: {material_id: {_eq: $_eq}}) {
     detail {
-      id
-      name
+      ...DetailFragment
     }
   }
 }
-    `;
+    ${DetailFragmentFragmentDoc}`;
 
 /**
  * __useGetDetailsMadeFromThatMaterialQuery__
@@ -9653,13 +11305,12 @@ export const GetDetailsMadeOfMaterialDocument = gql`
     detail_materials {
       data
       detail {
-        id
-        name
+        ...DetailFragment
       }
     }
   }
 }
-    `;
+    ${DetailFragmentFragmentDoc}`;
 
 /**
  * __useGetDetailsMadeOfMaterialQuery__
@@ -9693,6 +11344,52 @@ export type GetDetailsMadeOfMaterialQueryHookResult = ReturnType<typeof useGetDe
 export type GetDetailsMadeOfMaterialLazyQueryHookResult = ReturnType<typeof useGetDetailsMadeOfMaterialLazyQuery>;
 export type GetDetailsMadeOfMaterialSuspenseQueryHookResult = ReturnType<typeof useGetDetailsMadeOfMaterialSuspenseQuery>;
 export type GetDetailsMadeOfMaterialQueryResult = Apollo.QueryResult<GetDetailsMadeOfMaterialQuery, GetDetailsMadeOfMaterialQueryVariables>;
+export const GetDetailAttachmentsDocument = gql`
+    query GetDetailAttachments($detail_id: Int!) {
+  metal_flow_detail_attachments(where: {detail_id: {_eq: $detail_id}}) {
+    attachment {
+      id
+      filename
+      key
+      size
+      uploaded_at
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetDetailAttachmentsQuery__
+ *
+ * To run a query within a React component, call `useGetDetailAttachmentsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetDetailAttachmentsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetDetailAttachmentsQuery({
+ *   variables: {
+ *      detail_id: // value for 'detail_id'
+ *   },
+ * });
+ */
+export function useGetDetailAttachmentsQuery(baseOptions: Apollo.QueryHookOptions<GetDetailAttachmentsQuery, GetDetailAttachmentsQueryVariables> & ({ variables: GetDetailAttachmentsQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetDetailAttachmentsQuery, GetDetailAttachmentsQueryVariables>(GetDetailAttachmentsDocument, options);
+      }
+export function useGetDetailAttachmentsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetDetailAttachmentsQuery, GetDetailAttachmentsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetDetailAttachmentsQuery, GetDetailAttachmentsQueryVariables>(GetDetailAttachmentsDocument, options);
+        }
+export function useGetDetailAttachmentsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetDetailAttachmentsQuery, GetDetailAttachmentsQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetDetailAttachmentsQuery, GetDetailAttachmentsQueryVariables>(GetDetailAttachmentsDocument, options);
+        }
+export type GetDetailAttachmentsQueryHookResult = ReturnType<typeof useGetDetailAttachmentsQuery>;
+export type GetDetailAttachmentsLazyQueryHookResult = ReturnType<typeof useGetDetailAttachmentsLazyQuery>;
+export type GetDetailAttachmentsSuspenseQueryHookResult = ReturnType<typeof useGetDetailAttachmentsSuspenseQuery>;
+export type GetDetailAttachmentsQueryResult = Apollo.QueryResult<GetDetailAttachmentsQuery, GetDetailAttachmentsQueryVariables>;
 export const GetMaterialsDocument = gql`
     query GetMaterials {
   metal_flow_materials {
@@ -10911,49 +12608,6 @@ export type GetOrderByPkQueryHookResult = ReturnType<typeof useGetOrderByPkQuery
 export type GetOrderByPkLazyQueryHookResult = ReturnType<typeof useGetOrderByPkLazyQuery>;
 export type GetOrderByPkSuspenseQueryHookResult = ReturnType<typeof useGetOrderByPkSuspenseQuery>;
 export type GetOrderByPkQueryResult = Apollo.QueryResult<GetOrderByPkQuery, GetOrderByPkQueryVariables>;
-export const GetOrderAttachmentsDocument = gql`
-    query GetOrderAttachments($order_id: Int!) {
-  orders_attachments(where: {order_id: {_eq: $order_id}}) {
-    filename
-    id
-    key
-    size
-  }
-}
-    `;
-
-/**
- * __useGetOrderAttachmentsQuery__
- *
- * To run a query within a React component, call `useGetOrderAttachmentsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetOrderAttachmentsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetOrderAttachmentsQuery({
- *   variables: {
- *      order_id: // value for 'order_id'
- *   },
- * });
- */
-export function useGetOrderAttachmentsQuery(baseOptions: Apollo.QueryHookOptions<GetOrderAttachmentsQuery, GetOrderAttachmentsQueryVariables> & ({ variables: GetOrderAttachmentsQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetOrderAttachmentsQuery, GetOrderAttachmentsQueryVariables>(GetOrderAttachmentsDocument, options);
-      }
-export function useGetOrderAttachmentsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetOrderAttachmentsQuery, GetOrderAttachmentsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetOrderAttachmentsQuery, GetOrderAttachmentsQueryVariables>(GetOrderAttachmentsDocument, options);
-        }
-export function useGetOrderAttachmentsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetOrderAttachmentsQuery, GetOrderAttachmentsQueryVariables>) {
-          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
-          return Apollo.useSuspenseQuery<GetOrderAttachmentsQuery, GetOrderAttachmentsQueryVariables>(GetOrderAttachmentsDocument, options);
-        }
-export type GetOrderAttachmentsQueryHookResult = ReturnType<typeof useGetOrderAttachmentsQuery>;
-export type GetOrderAttachmentsLazyQueryHookResult = ReturnType<typeof useGetOrderAttachmentsLazyQuery>;
-export type GetOrderAttachmentsSuspenseQueryHookResult = ReturnType<typeof useGetOrderAttachmentsSuspenseQuery>;
-export type GetOrderAttachmentsQueryResult = Apollo.QueryResult<GetOrderAttachmentsQuery, GetOrderAttachmentsQueryVariables>;
 export const InsertOrderDocument = gql`
     mutation InsertOrder($object: orders_orders_insert_input!) {
   insert_orders_orders_one(object: $object) {
@@ -11108,6 +12762,52 @@ export type GetOrderPositionsQueryHookResult = ReturnType<typeof useGetOrderPosi
 export type GetOrderPositionsLazyQueryHookResult = ReturnType<typeof useGetOrderPositionsLazyQuery>;
 export type GetOrderPositionsSuspenseQueryHookResult = ReturnType<typeof useGetOrderPositionsSuspenseQuery>;
 export type GetOrderPositionsQueryResult = Apollo.QueryResult<GetOrderPositionsQuery, GetOrderPositionsQueryVariables>;
+export const GetOrderAttachmentsDocument = gql`
+    query GetOrderAttachments($order_id: Int!) {
+  orders_order_attachments(where: {order_id: {_eq: $order_id}}) {
+    attachment {
+      id
+      key
+      filename
+      size
+      uploaded_at
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetOrderAttachmentsQuery__
+ *
+ * To run a query within a React component, call `useGetOrderAttachmentsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetOrderAttachmentsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetOrderAttachmentsQuery({
+ *   variables: {
+ *      order_id: // value for 'order_id'
+ *   },
+ * });
+ */
+export function useGetOrderAttachmentsQuery(baseOptions: Apollo.QueryHookOptions<GetOrderAttachmentsQuery, GetOrderAttachmentsQueryVariables> & ({ variables: GetOrderAttachmentsQueryVariables; skip?: boolean; } | { skip: boolean; }) ) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetOrderAttachmentsQuery, GetOrderAttachmentsQueryVariables>(GetOrderAttachmentsDocument, options);
+      }
+export function useGetOrderAttachmentsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetOrderAttachmentsQuery, GetOrderAttachmentsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetOrderAttachmentsQuery, GetOrderAttachmentsQueryVariables>(GetOrderAttachmentsDocument, options);
+        }
+export function useGetOrderAttachmentsSuspenseQuery(baseOptions?: Apollo.SkipToken | Apollo.SuspenseQueryHookOptions<GetOrderAttachmentsQuery, GetOrderAttachmentsQueryVariables>) {
+          const options = baseOptions === Apollo.skipToken ? baseOptions : {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<GetOrderAttachmentsQuery, GetOrderAttachmentsQueryVariables>(GetOrderAttachmentsDocument, options);
+        }
+export type GetOrderAttachmentsQueryHookResult = ReturnType<typeof useGetOrderAttachmentsQuery>;
+export type GetOrderAttachmentsLazyQueryHookResult = ReturnType<typeof useGetOrderAttachmentsLazyQuery>;
+export type GetOrderAttachmentsSuspenseQueryHookResult = ReturnType<typeof useGetOrderAttachmentsSuspenseQuery>;
+export type GetOrderAttachmentsQueryResult = Apollo.QueryResult<GetOrderAttachmentsQuery, GetOrderAttachmentsQueryVariables>;
 export const GetReclamationOrdersDocument = gql`
     query GetReclamationOrders {
   orders_orders(where: {status: {_in: [10, 11, 12]}}) {

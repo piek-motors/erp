@@ -1,3 +1,4 @@
+import { Attachment } from 'domain-model'
 import { apolloClient } from 'lib/api'
 import * as gql from 'types/graphql-shema'
 import { map } from '../../mappers'
@@ -94,4 +95,52 @@ export async function deleteDetail(id: number) {
       }
       throw new Error('Failed to delete detail')
     })
+}
+
+export async function getDetailAttachments(detailId: number) {
+  return await apolloClient
+    .query<
+      gql.GetDetailAttachmentsQuery,
+      gql.GetDetailAttachmentsQueryVariables
+    >({
+      query: gql.GetDetailAttachmentsDocument,
+      variables: { detail_id: detailId }
+    })
+    .then(res => {
+      return res.data.metal_flow_detail_attachments.map(a => {
+        return new Attachment(
+          a.attachment.id,
+          a.attachment.filename,
+          a.attachment.size,
+          a.attachment.key
+        )
+      })
+    })
+}
+
+export async function loadDetailAttachments(
+  detailId: number
+): Promise<Attachment[]> {
+  const res = await apolloClient.query<
+    gql.GetDetailAttachmentsQuery,
+    gql.GetDetailAttachmentsQueryVariables
+  >({
+    query: gql.GetDetailAttachmentsDocument,
+    variables: {
+      detail_id: detailId
+    }
+  })
+
+  if (res.errors) {
+    throw new Error(res.errors.toString())
+  }
+
+  return res.data.metal_flow_detail_attachments.map(doc => {
+    return new Attachment(
+      doc.attachment.id,
+      doc.attachment.filename,
+      doc.attachment.size,
+      doc.attachment.key
+    )
+  })
 }

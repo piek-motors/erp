@@ -80,7 +80,11 @@ export async function getDetailsMadeOfMaterial(
       return res.data?.metal_flow_details
         .flatMap(each =>
           each.detail_materials.map(each => {
-            const detail = new Detail(each.detail.id, each.detail.name)
+            const detail = new Detail({
+              id: each.detail.id,
+              name: each.detail.name,
+              partCode: each.detail.part_code ?? null
+            })
             detail.madeOf(material, each.data?.length, each.data?.weight)
             return detail
           })

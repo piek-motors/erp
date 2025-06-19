@@ -10,6 +10,24 @@ function validate<T>(config: T): T {
   return config
 }
 
+type EnvironmentConfig = {
+  NODE_ENV: string
+  PORT: number
+  BUILD_PATH: string
+  CORS_CLIENT_URL: string
+  HASURA_ADMIN_SECRET: string
+  HASURA_ENDPOINT: string
+  JWT_ACCESS_SECRET: string
+  JWT_REFRESH_SECRET: string
+  JWT_ACCESS_SECRET_EXPIRES: string
+  JWT_REFRESH_SECRET_EXPIRES: string
+  S3_ACCESS_KEY_ID: string
+  S3_SECRET_ACCESS_KEY: string
+  S3_BUCKET: string
+  S3_ENDPOINT: string
+  PG_CONN_STR: string
+}
+
 const { env } = process
 export const config = validate({
   NODE_ENV: env.NODE_ENV,
@@ -32,4 +50,4 @@ export const config = validate({
   S3_ENDPOINT: env.S3_ENDPOINT ?? 's3.yandexcloud.net',
 
   PG_CONN_STR: env.PG_CONN_STR
-})
+}) as EnvironmentConfig

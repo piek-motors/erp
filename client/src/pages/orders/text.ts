@@ -19,7 +19,5 @@ export const t = {
   searchInArchive: 'Поиск в архиве',
   shipmentsInTheCurrentMonth: 'Отгрузка в текущем месяце',
   today: 'Сегодня',
-  uploadTheFile: 'Загрузить файл',
   yesterday: 'Вчера'
 } as const
-

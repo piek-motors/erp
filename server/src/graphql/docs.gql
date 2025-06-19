@@ -1,10 +1,9 @@
-mutation InsertDocsArrayMutation($objects: [orders_attachments_insert_input!]!) {
-  insert_orders_attachments(objects: $objects) {
+mutation InsertDocsArrayMutation($objects: [attachments_insert_input!]!) {
+  insert_attachments(objects: $objects) {
     affected_rows
     returning {
       id
       key
-      order_id
       size
       uploaded_at
       filename
@@ -19,5 +18,21 @@ mutation DeleteDocsMutation($key: String!) {
       id
       key
     }
+  }
+}
+
+mutation InsertOrderAttachemnts(
+  $attachments: [orders_order_attachments_insert_input!]!
+) {
+  insert_orders_order_attachments(objects: $attachments) {
+    affected_rows
+  }
+}
+
+mutation InsertDetailAttachemnts(
+  $detailAttachments: [metal_flow_detail_attachments_insert_input!]!
+) {
+  insert_metal_flow_detail_attachments(objects: $detailAttachments) {
+    affected_rows
   }
 }

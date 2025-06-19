@@ -17,9 +17,12 @@ class _S3Controller {
     try {
       const key = req.params.key
 
-      const data = await S3Service.deleteObject(key, config.S3_BUCKET).then(async s3_responce => {
-        return await database.DeleteDocsMutation({ key })
-      })
+      const data = await S3Service.deleteObject(key, config.S3_BUCKET).then(
+        async s3_responce => {
+          // TODO: delete from doc fron junkction table
+          return await database.DeleteDocsMutation({ key })
+        }
+      )
 
       res.json(data)
     } catch (error) {
@@ -28,7 +31,7 @@ class _S3Controller {
   }
 
   async uploadBinaryFiles(
-    req: Request & { files: any[]; headers: { orderid: string } },
+    req: Request & { files: any[]; headers: { order_id: string } },
     res: Response,
     next: NextFunction
   ) {
@@ -40,7 +43,10 @@ class _S3Controller {
      * hasuraUpload method adds file metadata into database using graphql server.
      */
 
-    if (!req.headers.orderid) {
+    const detailId = req.headers.detail_id as string
+    const orderId = req.headers.order_id as string
+
+    if (!orderId && !detailId) {
       throw ApiError.BadRequest(StaticStringKeys.MISSING_ORDERID_HEADER)
     }
 
@@ -49,12 +55,28 @@ class _S3Controller {
         await database.InsertDocsArrayMutation({
           objects: req.files.map(each => ({
             key: each.key,
-            order_id: parseInt(req.headers.orderid),
             filename: each.originalname,
-            size: each.size
+            size: each.size,
+            uploaded_at: new Date().toISOString()
           }))
         })
-      ).insert_orders_attachments.returning
+      ).insert_attachments.returning
+
+      if (orderId) {
+        await database.InsertOrderAttachemnts({
+          attachments: data.map(each => ({
+            order_id: parseInt(orderId),
+            attachment_id: each.id
+          }))
+        })
+      } else if (detailId) {
+        await database.InsertDetailAttachemnts({
+          detailAttachments: data.map(each => ({
+            detail_id: parseInt(detailId),
+            attachment_id: each.id
+          }))
+        })
+      }
 
       res.send(data)
     } catch (error) {

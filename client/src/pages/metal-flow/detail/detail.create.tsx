@@ -1,12 +1,16 @@
 import { Stack } from '@mui/joy'
 import { PageTitle } from 'components/page-title'
 import { open, routeMap } from 'lib/routes'
-import { Inp, SendMutation, TakeLookHint } from 'lib/shortcuts'
+import { SendMutation, TakeLookHint } from 'lib/shortcuts'
 import { observer } from 'mobx-react-lite'
 import { useEffect } from 'react'
 import { detailStore } from '../store'
 import { t } from '../text'
-import { DetailMaterialSelectForm } from './detail.shared'
+import {
+  DetailMaterialSelectForm,
+  DetailNameInput,
+  DetailPartCodeInput
+} from './detail.shared'
 
 export const CreateDetailPage = observer(() => {
   useEffect(() => {
@@ -18,13 +22,8 @@ export const CreateDetailPage = observer(() => {
   return (
     <Stack gap={2} py={2}>
       <PageTitle subTitle={t.AddDetail} hideIcon />
-      <Inp
-        label={t.DetailName}
-        onChange={v => {
-          detailStore.setName(v)
-        }}
-        value={detailStore.name}
-      />
+      <DetailNameInput />
+      <DetailPartCodeInput />
       <DetailMaterialSelectForm />
       <SendMutation
         onClick={() => detailStore.insert()}

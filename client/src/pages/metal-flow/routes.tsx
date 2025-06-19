@@ -73,7 +73,7 @@ const innerRoutes = [
   },
   {
     element: (
-      <Narrow>
+      <Narrow maxWidth="md">
         <UpdateDetailPage />
       </Narrow>
     ),

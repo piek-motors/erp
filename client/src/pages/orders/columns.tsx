@@ -8,7 +8,7 @@ import { useMemo } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Column } from 'react-table'
 import { TOrderColumnData } from 'types/global'
-import { map } from './mappers'
+import { map } from './order.mappers'
 import { t } from './text'
 
 export const columnsList: Column<Order>[] = [

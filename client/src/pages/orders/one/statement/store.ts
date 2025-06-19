@@ -3,7 +3,7 @@ import { Order, OrderStatus } from 'domain-model'
 import { apolloClient } from 'lib/api'
 import { makeAutoObservable } from 'mobx'
 import moment from 'moment'
-import { map } from 'pages/orders/mappers'
+import { map } from 'pages/orders/order.mappers'
 import * as gql from 'types/graphql-shema'
 import { SuggestionsStore } from '../stores/suggestions.store'
 

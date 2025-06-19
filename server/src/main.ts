@@ -4,14 +4,14 @@ import express from 'express'
 import { config } from './config.ts'
 import errorMiddleware from './middlewares/error.middleware.ts'
 import { router } from './routes.ts'
+import './trpc/index.ts'
 
 const clientBuild = config.BUILD_PATH
 
-export const app = express()
+export const app = express() as express.Express
 
 process.on('unhandledRejection', (reason, p) => {
   console.error('Unhandled Rejection at: Promise', p, 'reason:', reason)
-  // application specific logging, throwing an error, or other logic here
 })
 
 // Static files
@@ -22,7 +22,7 @@ app.use(cookieParser())
 app.use(
   cors({
     credentials: true,
-    origin: config.CORS_CLIENT_URL
+    origin: [config.CORS_CLIENT_URL]
   })
 )
 app.use('/api', router)

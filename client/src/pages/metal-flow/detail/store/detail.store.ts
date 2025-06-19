@@ -1,3 +1,4 @@
+import { AttachmentsStore } from 'components/attachments/store'
 import { Detail, Material } from 'domain-model'
 import { makeAutoObservable } from 'mobx'
 import * as materialApi from '../../material/store/material.api'
@@ -31,12 +32,14 @@ export class MaterialRelation {
 export class DetailStore {
   id?: number
   name: string = ''
+  partCode: string = ''
   usedMaterials: MaterialRelation[] = []
 
   recentlyAdded?: Detail
   recentlyUpdated?: Detail
   materialsSuggestions: Material[] = []
 
+  attachments = new AttachmentsStore()
   constructor() {
     makeAutoObservable(this)
   }
@@ -63,6 +66,9 @@ export class DetailStore {
   setName(name: string) {
     this.name = name
   }
+  setPartCode(partCode: string) {
+    this.partCode = partCode
+  }
 
   addMaterial(material: Material, data: MaterialRelationData) {
     this.usedMaterials.push(new MaterialRelation(material, data))
@@ -81,6 +87,7 @@ export class DetailStore {
 
     this.setId(detail.id)
     this.setName(detail.name)
+    this.setPartCode(detail.partCode ?? '')
 
     for (const { material, length, weight } of detail.materials) {
       this.addMaterial(material, {
@@ -104,6 +111,7 @@ export class DetailStore {
     const id = await api.insertDetail({
       object: {
         name: this.name,
+        part_code: this.partCode,
         detail_materials: {
           data: materialRelations
         }
@@ -121,7 +129,8 @@ export class DetailStore {
     await api.updateDetail({
       id: this.id,
       _set: {
-        name: this.name
+        name: this.name,
+        part_code: this.partCode
       }
     })
 

@@ -1,6 +1,6 @@
 import { apolloClient } from 'lib/api'
 import * as gql from 'types/graphql-shema'
-import { map } from './mappers'
+import { map } from './order.mappers'
 
 class _OrdersApi {
   async getOrder(orderId: number) {
@@ -176,6 +176,22 @@ class _OrdersApi {
       throw new Error(res.errors.toString())
     }
     return res.data?.delete_orders_order_items_by_pk?.id
+  }
+
+  async loadAttachments(orderId: number) {
+    const res = await apolloClient.query<
+      gql.GetOrderAttachmentsQuery,
+      gql.GetOrderAttachmentsQueryVariables
+    >({
+      query: gql.GetOrderAttachmentsDocument,
+      variables: {
+        order_id: orderId
+      }
+    })
+    if (res.errors) {
+      throw new Error(res.errors.toString())
+    }
+    return res.data.orders_order_attachments.map(map.attachment.fromDto)
   }
 }
 

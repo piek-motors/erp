@@ -1,7 +1,12 @@
+fragment DetailFragment on metal_flow_details {
+  id
+  name
+  part_code
+}
+
 query GetDetails {
   metal_flow_details {
-    id
-    name
+    ...DetailFragment
     detail_materials {
       data
       material {
@@ -13,8 +18,7 @@ query GetDetails {
 
 query GetDetailByPk($id: Int!) {
   metal_flow_details_by_pk(id: $id) {
-    id
-    name
+    ...DetailFragment
     detail_materials {
       data
       material {
@@ -67,8 +71,7 @@ query GetDetailMaterials($_eq: Int!) {
 query GetDetailsMadeFromThatMaterial($_eq: Int!) {
   metal_flow_detail_materials(where: { material_id: { _eq: $_eq } }) {
     detail {
-      id
-      name
+      ...DetailFragment
     }
   }
 }
@@ -95,9 +98,20 @@ query GetDetailsMadeOfMaterial($material_id: Int!) {
     detail_materials {
       data
       detail {
-        id
-        name
+        ...DetailFragment
       }
+    }
+  }
+}
+
+query GetDetailAttachments($detail_id: Int!) {
+  metal_flow_detail_attachments(where: { detail_id: { _eq: $detail_id } }) {
+    attachment {
+      id
+      filename
+      key
+      size
+      uploaded_at
     }
   }
 }

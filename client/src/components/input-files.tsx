@@ -1,7 +1,6 @@
 import { styled } from '@mui/joy'
 import Button, { ButtonProps } from '@mui/joy/Button'
 import SvgIcon from '@mui/joy/SvgIcon'
-import { text } from 'lib/shortcuts'
 
 const VisuallyHiddenInput = styled('input')`
   clip: rect(0 0 0 0);
@@ -24,7 +23,7 @@ export function InputFiles(
         component="label"
         role={undefined}
         tabIndex={-1}
-        variant="outlined"
+        variant="soft"
         color="neutral"
         startDecorator={
           <SvgIcon>
@@ -44,7 +43,7 @@ export function InputFiles(
           </SvgIcon>
         }
       >
-        {text.uploadFile}
+        Прикрепить
         <VisuallyHiddenInput
           type="file"
           onChange={e => {

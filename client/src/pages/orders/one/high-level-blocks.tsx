@@ -2,15 +2,14 @@
 import { Box, Divider, Stack } from '@mui/joy'
 import Grid from '@mui/joy/Grid'
 import { PageTitle } from 'components'
-import { InputFiles } from 'components/input-files'
 import { User } from 'domain-model'
 import { useAppContext } from 'hooks'
 import { bgcolors, Chip, P, Row, text } from 'lib/shortcuts'
 import { orderStatus } from 'lib/utils/orderColorIndication'
 import { observer } from 'mobx-react-lite'
-import { Attachments } from 'pages/orders/one/attachments/ui'
 import { CommentInputViewPort, CommentListViewPort } from './comments/ui'
 import { OrderActions } from './header'
+import { OrderAttachmentList } from './order-attachment-list'
 import { Paymnets } from './payments/ui'
 import { PositionsList } from './positions/ui'
 import { orderInfoPrintStyle, orderPositionsStyle } from './prints.styles'
@@ -74,26 +73,6 @@ export const OrderInfoSection = observer(() => {
       )}
       <Paymnets order={orderStore.order} />
     </Box>
-  )
-})
-
-// Component for the documents section
-export const OrderDocsSection = observer(() => {
-  if (!orderStore.order) {
-    throw new Error('Order not found')
-  }
-  return (
-    <>
-      <Attachments orderId={orderStore.order.id} />
-      <InputFiles
-        size="sm"
-        variant="outlined"
-        sx={{ fontSize: '.8rem' }}
-        upload={files => {
-          orderStore.attachments.onDrop(Array.from(files), orderStore.order!.id)
-        }}
-      />
-    </>
   )
 })
 
@@ -164,7 +143,7 @@ export const OrderRightPanel = observer(() => (
         }
       }}
     >
-      <OrderDocsSection />
+      <OrderAttachmentList orderId={orderStore.order!.id} />
       <OrderCommentsSection />
     </Grid>
   </Grid>

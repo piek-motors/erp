@@ -290,7 +290,6 @@ export const text = {
   delete: 'Удалить',
   loading: 'Загрузка...',
   moveToPriority: 'Принять заказ в производство',
-  uploadFile: 'Загрузить файл',
   orderDetails: 'Детали заказа',
   orderReadyForDispatch: 'Готов к отгрузке',
   orderRequiresSpectialAttention: 'Требует внимания',

@@ -13,7 +13,9 @@ class S3Service {
 
   async getObject(key: string) {
     try {
-      return await mainS3Client.getObject({ Bucket: config.S3_BUCKET, Key: key }).promise()
+      return await mainS3Client
+        .getObject({ Bucket: config.S3_BUCKET, Key: key })
+        .promise()
     } catch (e) {
       throw new Error(`Could not retrieve file from S3: ${e.message}`)
     }

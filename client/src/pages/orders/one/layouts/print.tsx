@@ -1,11 +1,12 @@
 import { Box, Divider, Grid, Stack } from '@mui/joy'
+
 import { PrintOnly } from 'components/conditional-display'
 import { P } from 'lib/shortcuts'
 import { formatOnlyDate } from 'lib/utils/formatting'
 import { observer } from 'mobx-react-lite'
-import { Attachments } from 'pages/orders/one/attachments/ui'
 import { PositionsList } from 'pages/orders/one/positions/ui'
 import { StatementView } from 'pages/orders/one/statement/ui'
+import { OrderAttachmentList } from '../order-attachment-list'
 import { orderStore } from '../stores/order.store'
 
 export const PrintLayout = observer(() => {
@@ -31,7 +32,7 @@ export const PrintLayout = observer(() => {
             <StatementView />
           </Grid>
           <Grid xs={12} md={6}>
-            <Attachments orderId={order.id} />
+            <OrderAttachmentList orderId={order.id} />
           </Grid>
         </Grid>
 

@@ -24,7 +24,7 @@ const OrderDetail = observer(() => {
   }, [])
 
   const { getRootProps } = useDropzone({
-    onDrop: files => orderStore.attachments.onDrop(files, orderId),
+    onDrop: files => orderStore.attachments.onDrop(files, orderId, 'order'),
     noKeyboard: true,
     noClick: true
   })

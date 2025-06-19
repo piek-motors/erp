@@ -49,22 +49,11 @@ query GetOrderByPK($id: Int!) {
   }
 }
 
-query GetOrderAttachments($order_id: Int!) {
-  orders_attachments(where: { order_id: { _eq: $order_id } }) {
-    filename
-    id
-    key
-    size
-  }
-}
-
 mutation InsertOrder($object: orders_orders_insert_input!) {
   insert_orders_orders_one(object: $object) {
     id
   }
 }
-
-
 
 query GetDistinctCities {
   orders_orders(distinct_on: city) {
@@ -84,5 +73,17 @@ query GetOrderPositions($order_id: Int!) {
     name
     description
     quantity
+  }
+}
+
+query GetOrderAttachments($order_id: Int!) {
+  orders_order_attachments(where: { order_id: { _eq: $order_id } }) {
+    attachment {
+      id
+      key
+      filename
+      size
+      uploaded_at
+    }
   }
 }

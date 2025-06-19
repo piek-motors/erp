@@ -38,7 +38,11 @@ class DetailMapper {
 
   fromDto(raw: GetDetailByPkQuery['metal_flow_details_by_pk']): Detail | null {
     if (!raw) return null
-    const detail = new Detail(raw.id, raw.name)
+    const detail = new Detail({
+      id: raw.id,
+      name: raw.name,
+      partCode: raw.part_code ?? null
+    })
 
     for (const each of raw.detail_materials) {
       const material = this.materialMapper.fromDto(each.material)

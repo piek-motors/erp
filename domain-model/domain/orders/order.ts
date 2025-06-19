@@ -1,3 +1,4 @@
+import { Attachment } from 'domain/attachment'
 import { OrderStatus } from 'domain/orders/enums'
 import * as moment from 'moment'
 import { formatMoney } from '../../shared/format/money'
@@ -31,26 +32,6 @@ export class OrderItem {
   }
 }
 
-export class OrderAttachment {
-  id!: number
-  name!: string
-  size?: number | null
-  key!: string
-  order_id?: number
-  constructor(init: ClassProperties<OrderAttachment>) {
-    Object.assign(this, init)
-  }
-  // converts file size from bytes to human-readable string
-  sizeWithUnit(): string {
-    if (!this.size) return '0 Bytes'
-    var k = 1024,
-      dm = 1,
-      sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
-      i = Math.floor(Math.log(this.size) / Math.log(k))
-    return parseFloat((this.size / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i]
-  }
-}
-
 export class Order {
   id!: number
   totalAmount!: number
@@ -68,7 +49,7 @@ export class Order {
   acceptanceDate!: Date
   actualShippingDate!: Date
   comment?: string | null
-  documents!: OrderAttachment[]
+  attachments!: Attachment[]
   status!: OrderStatus
   constructor(init: ClassProperties<Order>) {
     Object.assign(this, init)

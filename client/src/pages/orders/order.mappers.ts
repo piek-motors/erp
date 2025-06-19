@@ -1,4 +1,4 @@
-import { Order, OrderAttachment, OrderItem, Payment, User } from 'domain-model'
+import { Attachment, Order, OrderItem, Payment, User } from 'domain-model'
 import * as gql from 'types/graphql-shema'
 
 class OrderMapper {
@@ -36,7 +36,7 @@ class OrderMapper {
             description: item.description
           })
       ),
-      documents: [],
+      attachments: [],
       createdAt: dto.created_at,
       acceptanceDate: dto.acceptance_date,
       actualShippingDate: dto.actual_shipping_date,
@@ -72,14 +72,14 @@ class OrderItemMapper {
 
 class AttachmentMapper {
   fromDto(
-    doc: gql.GetOrderAttachmentsQuery['orders_attachments'][number]
-  ): OrderAttachment {
-    return new OrderAttachment({
-      id: doc.id,
-      name: doc.filename ?? '',
-      key: doc.key ?? '',
-      size: doc.size
-    })
+    doc: gql.GetOrderAttachmentsQuery['orders_order_attachments'][number]
+  ): Attachment {
+    return new Attachment(
+      doc.attachment.id,
+      doc.attachment.filename ?? '',
+      doc.attachment.size,
+      doc.attachment.key ?? ''
+    )
   }
 }
 

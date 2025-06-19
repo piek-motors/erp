@@ -1,5 +1,5 @@
 import { EnUnit } from 'domain-model'
-import { P, Row, Sheet, Stack, observer, useEffect } from 'lib/shortcuts'
+import { Inp, P, Row, Sheet, Stack, observer, useEffect } from 'lib/shortcuts'
 import { QtyInputWithUnit } from '../shared'
 import { MaterialAutocompleteMulti } from '../shared/material-autocomplete'
 import { detailStore } from '../store'
@@ -71,5 +71,30 @@ export const DetailMaterialSelectForm = observer(() => {
         </Stack>
       </Sheet>
     </>
+  )
+})
+
+export const DetailNameInput = observer(() => {
+  return (
+    <Inp
+      fullWidth
+      label="Наименование детали"
+      onChange={v => {
+        detailStore.setName(v)
+      }}
+      value={detailStore.name}
+    />
+  )
+})
+
+export const DetailPartCodeInput = observer(() => {
+  return (
+    <Inp
+      label="Конструкторский номер"
+      onChange={v => {
+        detailStore.setPartCode(v)
+      }}
+      value={detailStore.partCode}
+    />
   )
 })

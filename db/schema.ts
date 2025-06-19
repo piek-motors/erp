@@ -20,10 +20,14 @@ export type Updateable<T> = KyselyUpdateable<T>
 export namespace DB {
   export interface Schema {
     ['users']: UserTable
+    ['attachments']: AttachmentTable
     ['orders.orders']: OrderTable
+    ['orders.order_attachments']: OrderAttachmentTable
+    ['orders.attachments']: AttachmentTableOld // TODO: remove this later
     ['orders.order_payments']: OrderPaymentsTable
     ['metal_flow.materials']: MaterialTable
     ['metal_flow.details']: DetailTable
+    ['metal_flow.detail_attachments']: DetailAttachmentTable
     ['metal_flow.detail_materials']: DetailMaterialsTable
     ['metal_flow.supplies']: SuppliesTable
     ['metal_flow.writeoffs']: WriteoffsTable
@@ -51,6 +55,7 @@ export namespace DB {
   export interface DetailTable {
     id: Generated<number>
     name: string
+    part_code: string
   }
 
   export interface DetailMaterialJsonData {
@@ -100,5 +105,32 @@ export namespace DB {
     id: GeneratedAlways<number>
     total_amount: number
     created_at: Date
+  }
+
+  export interface AttachmentTable {
+    id: Generated<number>
+    key: string
+    filename: string
+    size: number
+    uploaded_at: Date
+  }
+
+  export interface OrderAttachmentTable {
+    order_id: number
+    attachment_id: number
+  }
+
+  export interface DetailAttachmentTable {
+    detail_id: number
+    attachment_id: number
+  }
+
+  export interface AttachmentTableOld {
+    id: Generated<number>
+    order_id: number
+    key: string
+    filename: string
+    size: number
+    uploaded_at: Date
   }
 }
