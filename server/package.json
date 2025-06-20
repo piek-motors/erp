@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node --experimental-transform-types ./src/main.ts",
     "dev": "nodemon src/main.ts",
-    "typecheck": "tsc -p tsconfig.json",
+    "compile": "tsc -p tsconfig.json",
     "gen": "graphql-codegen --config codegen.config.ts",
     "migrate": "node --experimental-transform-types ./src/migrate.ts",
     "deploy": "node --experimental-transform-types ./deploy.ts"
