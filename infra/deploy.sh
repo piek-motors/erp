@@ -27,9 +27,6 @@ ssh "$TARGET" <<EOF
   cd ~/erp/domain-model
   npm run build
 
-  cd ~/erp/server
-  npm run typecheck
-
   cd ~/erp/db
   npm run migrate
 
