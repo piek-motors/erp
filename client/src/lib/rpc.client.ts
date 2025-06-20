@@ -1,7 +1,7 @@
 import { createTRPCClient, httpLink } from '@trpc/client'
 import { getInMemoryToken } from 'index'
 // @ts-ignore
-import type { AppRouter } from '../../../server/src/trpc'
+import type { AppRouter } from '../../../server/src/lib/trpc'
 
 const url = process.env.REACT_APP_RPC_URL
 if (!url) {
