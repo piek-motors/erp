@@ -21,6 +21,8 @@ class _S3Controller {
     const detailId = req.headers.detailid as string
     const orderId = req.headers.orderid as string
 
+    console.log(req.headers)
+
     if (!orderId && !detailId) {
       throw ApiError.BadRequest(StaticStringKeys.MISSING_ORDERID_HEADER)
     }
@@ -38,7 +40,7 @@ class _S3Controller {
       )?.insert_attachments?.returning
 
       if (!data) {
-        throw ApiError.BadRequest(StaticStringKeys.MISSING_ORDERID_HEADER)
+        throw Error('Failed to insert attachments')
       }
 
       if (orderId) {
