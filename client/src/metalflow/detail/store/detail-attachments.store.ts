@@ -2,7 +2,6 @@ import { Attachment } from 'domain-model'
 import { rpc } from 'lib/rpc.client'
 import { FileService } from 'lib/services/file.service'
 import { makeAutoObservable } from 'mobx'
-import { loadDetailAttachments } from './detail.api'
 
 interface UploadFileResp {
   filename: string
@@ -29,11 +28,6 @@ export class DetailAttachmentsStore {
 
   setFiles(files: Attachment[]) {
     this.files = files
-  }
-
-  async loadAttachments(detailId: number) {
-    const attachments = await loadDetailAttachments(detailId)
-    this.setFiles(attachments)
   }
 
   async onDrop(files: File[], detailId: number) {

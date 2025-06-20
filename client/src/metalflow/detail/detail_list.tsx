@@ -2,7 +2,6 @@ import { PageTitle } from 'components'
 import { HighlightText } from 'components/highlight-text'
 import { ScrollableWindow, Search } from 'components/inputs'
 import { Table } from 'components/table.impl'
-import { Detail } from 'domain-model'
 import {
   AddResourceButton,
   ErrorHint,
@@ -20,6 +19,7 @@ import { Column } from 'react-table'
 import { detailListStore } from '../store'
 import { t } from '../text'
 import { AlphabetIndex } from './alphabet_index'
+import { Detail } from './store/detail.store'
 
 const columnList: Column<Detail>[] = [
   {
@@ -41,7 +41,7 @@ const columnList: Column<Detail>[] = [
   {
     Header: 'Масса гр.',
     accessor: r => {
-      const m = r.materials[0]
+      const m = r.usedMaterials[0]
       const weight = m?.weight?.toString()
       if (!weight) return '-'
       return weight
@@ -50,7 +50,7 @@ const columnList: Column<Detail>[] = [
   {
     Header: 'Длина мм.',
     accessor: r => {
-      const m = r.materials[0]
+      const m = r.usedMaterials[0]
       const length = m?.length?.toString()
       if (!length) return '-'
       return m.length
@@ -69,7 +69,7 @@ const DetailList = observer((props: DetailsTableProps) => {
   return (
     <Table
       columns={columnList}
-      data={detailListStore.searchResult}
+      data={detailListStore.searchResult as unknown as readonly Detail[]}
       trStyleCallback={row => {
         if (props.highlight) {
           return props.highlight(row.original)

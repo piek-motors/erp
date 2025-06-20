@@ -3,6 +3,7 @@ import { procedure, z } from './deps.ts'
 import { db } from './lib/db.ts'
 import { router } from './lib/trpc/trpc.ts'
 import { deleteFile } from './procedures/attachment/delete-file.rpc.ts'
+import { detailRouter } from './procedures/metalflow/detail/router.ts'
 
 const materialRouter = router({
   get: procedure
@@ -34,7 +35,7 @@ const materialRouter = router({
 
 export const rpcRouter = router({
   material: materialRouter,
-
+  details: detailRouter,
   userList: procedure.query(async () => {
     return await db
       .selectFrom('users')

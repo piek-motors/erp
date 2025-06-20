@@ -3,10 +3,10 @@ import { Inp, P, Row, Sheet, Stack, observer, useEffect } from 'lib/index'
 import { QtyInputWithUnit } from '../shared'
 import { MaterialAutocompleteMulti } from '../shared/material-autocomplete'
 import { detailStore } from '../store'
-import { MaterialRelation } from './store/detail.store'
+import { MaterialCost } from './store/detail.store'
 
 export const MaterialWeightInput = observer(
-  (props: { materialRelation: MaterialRelation }) => {
+  (props: { materialRelation: MaterialCost }) => {
     return (
       <>
         <QtyInputWithUnit
@@ -38,29 +38,40 @@ export const DetailMaterialSelectForm = observer(() => {
   return (
     <>
       <MaterialAutocompleteMulti
-        data={detailStore.materialsSuggestions}
-        value={detailStore.usedMaterials.map(m => m.material)}
+        data={detailStore.materialsSuggestions.map(m => {
+          const mc = new MaterialCost({
+            materialId: m.id,
+            label: m.label,
+            weight: '',
+            length: ''
+          })
+          return mc
+        })}
+        value={detailStore.usedMaterials}
         onChange={m => {
           detailStore.setMaterialRelations(
-            m.map(
-              m =>
-                new MaterialRelation(m, {
-                  length: '',
-                  weight: ''
-                })
-            )
+            m.map(m => {
+              return new MaterialCost({
+                materialId: m.id,
+                label: m.label,
+                weight: '',
+                length: ''
+              })
+            })
           )
         }}
       />
       <Sheet sx={{ borderRadius: 'sm' }}>
         <Stack my={1} gap={1}>
           {detailStore.usedMaterials.map(materialRelation => {
-            const { material } = materialRelation
             return (
-              <Stack sx={{ width: 'max-content' }} key={material.id}>
+              <Stack
+                sx={{ width: 'max-content' }}
+                key={materialRelation.materialId}
+              >
                 <Row sx={{ fontWeight: 'bold', px: 1 }}>
                   <P>Расход для материала</P>
-                  <P>{material?.label}</P>
+                  <P>{materialRelation?.materialLabel}</P>
                 </Row>
                 <Stack p={1}>
                   <MaterialWeightInput materialRelation={materialRelation} />

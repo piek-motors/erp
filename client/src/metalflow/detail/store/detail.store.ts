@@ -1,5 +1,6 @@
 import { AttachmentsStore } from 'components/attachments/store'
-import { Detail, Material } from 'domain-model'
+import { Attachment, Material } from 'domain-model'
+import { rpc } from 'lib/rpc.client'
 import { makeAutoObservable } from 'mobx'
 import * as materialApi from '../../material/store/material.api'
 import * as api from './detail.api'
@@ -9,18 +10,28 @@ type MaterialRelationData = {
   weight: string
 }
 
-export class MaterialRelation {
-  material!: Material
+export class MaterialCost {
+  materialId!: number
+  materialLabel!: string
+
   weight!: string
   length!: string
 
-  constructor(material: Material, data: MaterialRelationData) {
-    this.material = material
-    this.weight = data.weight
-    this.length = data.length
+  constructor(init: {
+    materialId: number
+    label: string
+    weight: string
+    length: string
+  }) {
+    this.materialId = init.materialId
+    this.materialLabel = init.label
+    this.weight = init.weight
+    this.length = init.length
     makeAutoObservable(this)
   }
-
+  setMaterialId(materialId: number) {
+    this.materialId = materialId
+  }
   setWeight(weight: string) {
     this.weight = weight
   }
@@ -29,26 +40,37 @@ export class MaterialRelation {
   }
 }
 
-export class DetailStore {
+export class Detail {
   id?: number
   name: string = ''
   partCode: string = ''
-  usedMaterials: MaterialRelation[] = []
+  usedMaterials: MaterialCost[] = []
 
-  recentlyAdded?: Detail
-  recentlyUpdated?: Detail
+  recentlyAdded?: number
+  recentlyUpdated?: number
   materialsSuggestions: Material[] = []
 
   attachments = new AttachmentsStore()
-  constructor() {
+  constructor(init?: {
+    id?: number
+    name: string
+    partCode: string
+    usedMaterials?: MaterialCost[]
+  }) {
+    if (init) {
+      this.id = init.id
+      this.name = init.name
+      this.partCode = init.partCode
+      this.usedMaterials = init.usedMaterials || []
+    }
     makeAutoObservable(this)
   }
 
-  setRecentlyAdded(detail: Detail) {
-    this.recentlyAdded = detail
+  setRecentlyAdded(id: number) {
+    this.recentlyAdded = id
   }
-  setRecentlyUpdated(detail: Detail) {
-    this.recentlyUpdated = detail
+  setRecentlyUpdated(id: number) {
+    this.recentlyUpdated = id
   }
 
   error?: Error
@@ -70,37 +92,52 @@ export class DetailStore {
     this.partCode = partCode
   }
 
-  addMaterial(material: Material, data: MaterialRelationData) {
-    this.usedMaterials.push(new MaterialRelation(material, data))
+  addMaterial(
+    materialId: number,
+    label: string | null,
+    data: MaterialRelationData
+  ) {
+    const m = new MaterialCost({
+      materialId,
+      label: label || '',
+      weight: data.weight,
+      length: data.length
+    })
+    this.usedMaterials.push(m)
   }
 
-  setMaterialRelations(materials: MaterialRelation[]) {
+  setMaterialRelations(materials: MaterialCost[]) {
     this.usedMaterials = materials
   }
 
   async load(detailId: number) {
     this.clear()
-    const detail = await api.getDetail(detailId)
-    if (!detail) {
-      throw Error(`Detail with id ${detailId} not found`)
-    }
+    const d = await rpc.details.get.query({ id: detailId })
+    this.setId(d.detail.id)
+    this.setName(d.detail.name)
+    this.setPartCode(d.detail.part_code ?? '')
 
-    this.setId(detail.id)
-    this.setName(detail.name)
-    this.setPartCode(detail.partCode ?? '')
-
-    for (const { material, length, weight } of detail.materials) {
-      this.addMaterial(material, {
-        length: length.toString(),
-        weight: weight.toString()
+    for (const dm of d.detail_materials) {
+      if (!dm.material_id) {
+        throw new Error('Material id is null')
+      }
+      this.addMaterial(dm.material_id, dm.label, {
+        length: dm.data.length.toString(),
+        weight: dm.data.weight.toString()
       })
     }
+    this.attachments.setFiles(
+      d.attachments.map(
+        a =>
+          new Attachment(a.id ?? 0, a.filename ?? '', a.size ?? 0, a.key ?? '')
+      )
+    )
   }
 
   async insert() {
     const materialRelations = this.usedMaterials.map(
-      ({ material, weight, length }) => ({
-        material_id: material.id,
+      ({ materialId, weight, length }) => ({
+        material_id: materialId,
         data: {
           length: length || '',
           weight: weight || ''
@@ -119,7 +156,7 @@ export class DetailStore {
     })
     const detail = await api.getDetail(id)
     if (detail) {
-      this.setRecentlyAdded(detail)
+      this.setRecentlyAdded(id)
     }
     return detail
   }
@@ -134,10 +171,11 @@ export class DetailStore {
       }
     })
 
-    for (const { material, length, weight } of this.usedMaterials) {
-      if (!material.id) throw Error('Material id is null')
+    for (const { materialId, length, weight } of this.usedMaterials) {
+      if (!materialId) throw Error('Material id is null')
+
       await api.updateDetailMaterialRelationData({
-        material_id: material.id,
+        material_id: materialId,
         detail_id: this.id,
         data: {
           length: length.toString(),
@@ -148,7 +186,7 @@ export class DetailStore {
 
     const getDetailRes = await api.getDetail(this.id)
     if (getDetailRes) {
-      this.setRecentlyUpdated(getDetailRes)
+      this.setRecentlyUpdated(getDetailRes.id)
     }
 
     return this.recentlyUpdated

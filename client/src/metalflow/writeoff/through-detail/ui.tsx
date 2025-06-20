@@ -1,5 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { FullscreenDialog } from 'components/fullscreen.dialog'
+import { Detail } from 'domain-model'
 import { observer } from 'lib/deps'
 import { Inp, Label, P, Row } from 'lib/index'
 import { DetailSelectWindow } from 'metalflow/detail/detail_list'
@@ -23,7 +24,13 @@ export const WriteoffThroughDetail = observer(() => {
             refreshTrigger={writeoffStore.throughDetail.detail?.id}
             detailProps={{
               onRowClick: detail => {
-                writeoffStore.throughDetail.setDetail(detail)
+                writeoffStore.throughDetail.setDetail(
+                  new Detail({
+                    id: detail.id!,
+                    name: detail.name,
+                    partCode: detail.partCode
+                  })
+                )
                 writeoffStore.throughDetail.setDialogOpen(false)
               },
               highlight: detail =>

@@ -30,25 +30,6 @@ export async function getDetail(id: number) {
     })
 }
 
-export async function getDetails() {
-  return await apolloClient
-    .query<gql.GetDetailsQuery, gql.GetDetailsQueryVariables>({
-      query: gql.GetDetailsDocument
-    })
-    .then(res => {
-      if (!res.data.metal_flow_details) return []
-
-      return res.data.metal_flow_details.map(d => {
-        const mapped = map.detail.fromDto(d)
-        if (!mapped) {
-          throw new Error('Failed to map detail')
-        }
-
-        return mapped
-      })
-    })
-}
-
 export async function updateDetail(
   variables: gql.UpdateDetailMutationVariables
 ) {
@@ -116,31 +97,4 @@ export async function getDetailAttachments(detailId: number) {
         )
       })
     })
-}
-
-export async function loadDetailAttachments(
-  detailId: number
-): Promise<Attachment[]> {
-  const res = await apolloClient.query<
-    gql.GetDetailAttachmentsQuery,
-    gql.GetDetailAttachmentsQueryVariables
-  >({
-    query: gql.GetDetailAttachmentsDocument,
-    variables: {
-      detail_id: detailId
-    }
-  })
-
-  if (res.errors) {
-    throw new Error(res.errors.toString())
-  }
-
-  return res.data.metal_flow_detail_attachments.map(doc => {
-    return new Attachment(
-      doc.attachment.id,
-      doc.attachment.filename,
-      doc.attachment.size,
-      doc.attachment.key
-    )
-  })
 }

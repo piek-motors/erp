@@ -2,11 +2,12 @@ import { FormControl } from '@mui/joy'
 import { BaseAutocomplete, BaseOption } from 'components/base-autocomplete'
 import { Material } from 'domain-model'
 import { useGetMaterialsQuery } from 'lib/types/graphql-shema'
+import { MaterialCost } from 'metalflow/detail/store/detail.store'
 import { map } from '../mappers'
 
 export function MaterialAutocomplete(props: {
   data?: ReturnType<typeof useGetMaterialsQuery>['data']
-  value?: Material
+  value?: Material | null
   onChange: (m: Material) => void
 }) {
   const { data, value, onChange } = props
@@ -38,15 +39,15 @@ export function MaterialAutocomplete(props: {
 }
 
 export function MaterialAutocompleteMulti(props: {
-  data?: Material[]
-  value?: Material[]
+  data?: MaterialCost[]
+  value?: MaterialCost[]
   onChange: (m: Material[]) => void
   disabledInput?: boolean
 }) {
   const { data, value, onChange } = props
   const options: BaseOption[] =
     data?.map(material => ({
-      label: material.deriveLabel(),
+      label: material.materialLabel,
       value: material
     })) || []
 
@@ -56,7 +57,7 @@ export function MaterialAutocompleteMulti(props: {
         label="Изговлена из материалов"
         multiple
         options={options}
-        value={value?.map(m => ({ label: m.label, value: m })) || []}
+        value={value?.map(m => ({ label: m.materialLabel, value: m })) || []}
         onChange={newValue => {
           if (Array.isArray(newValue)) {
             onChange(newValue.map(v => v.value))

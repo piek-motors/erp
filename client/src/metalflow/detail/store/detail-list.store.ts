@@ -1,11 +1,12 @@
-import { Detail } from 'domain-model'
 import { AsyncStoreController } from 'lib/async-store.controller'
+import { rpc } from 'lib/rpc.client'
 import { makeAutoObservable, reaction } from 'mobx'
 import * as api from './detail.api'
+import { Detail, MaterialCost } from './detail.store'
 
 export const alphabet = 'АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ'.split('')
 
-export class DetailListStore {
+export class DetailList {
   readonly async = new AsyncStoreController()
 
   details: Detail[] = []
@@ -68,7 +69,7 @@ export class DetailListStore {
         break
       case Boolean(this.searchId):
         filtered = filtered.filter(detail =>
-          detail.id.toString().startsWith(this.searchId)
+          detail.id?.toString().startsWith(this.searchId)
         )
         break
       case Boolean(this.indexLetter):
@@ -121,8 +122,26 @@ export class DetailListStore {
 
   async init() {
     return this.async.run(async () => {
-      const details = await api.getDetails()
-      this.setDetails(details)
+      const details = await rpc.details.list.query()
+      this.setDetails(
+        details.map(detail => {
+          return new Detail({
+            id: detail[0] as number,
+            name: detail[1] as string,
+            partCode: detail[2] as string,
+            usedMaterials: (
+              detail[3] as [number, string, number, number][]
+            ).map(e => {
+              return new MaterialCost({
+                materialId: e[0],
+                label: e[1],
+                length: e[2].toString(),
+                weight: e[3].toString()
+              })
+            })
+          })
+        })
+      )
     })
   }
 

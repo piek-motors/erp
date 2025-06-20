@@ -1,5 +1,7 @@
 import { EnMaterialShape, Material } from 'domain-model'
 import { AsyncStoreController } from 'lib/async-store.controller'
+import { rpc } from 'lib/rpc.client'
+import { map } from 'metalflow/mappers'
 import { makeAutoObservable } from 'mobx'
 import * as api from './material.api'
 
@@ -57,6 +59,17 @@ export class MaterialListStore {
     this.materials = []
     this.filterKeyword = ''
     this.async.reset()
+  }
+
+  async getById(id: number) {
+    const res = await rpc.material.get.query({ id })
+    return map.material.fromDto({
+      id: res.id,
+      label: res.label,
+      shape: res.shape,
+      unit: res.unit,
+      shape_data: res.shape_data
+    })
   }
 
   async init() {
