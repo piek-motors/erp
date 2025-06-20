@@ -13,11 +13,15 @@ export class FileService {
     const formData = new FormData()
     acceptedFiles.map(file => formData.append('files', file))
 
+    if (!relationId) {
+      throw new Error('Relation ID is required')
+    }
+
     const res = await $api.put(this.s3_url, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
-        order_id: relatedTo === 'order' ? relationId : undefined,
-        detail_id: relatedTo === 'detail' ? relationId : undefined
+        order_id: relatedTo === 'order' ? relationId.toString() : undefined,
+        detail_id: relatedTo === 'detail' ? relationId.toString() : undefined
       }
     })
     return res
