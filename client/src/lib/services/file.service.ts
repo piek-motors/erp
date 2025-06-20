@@ -20,8 +20,8 @@ export class FileService {
     const res = await $api.put(this.s3_url, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
-        order_id: relatedTo === 'order' ? relationId.toString() : undefined,
-        detail_id: relatedTo === 'detail' ? relationId.toString() : undefined
+        orderid: relatedTo === 'order' ? relationId.toString() : undefined,
+        detailid: relatedTo === 'detail' ? relationId.toString() : undefined
       }
     })
     return res
