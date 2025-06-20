@@ -18,10 +18,12 @@ class _S3Controller {
      *
      * hasuraUpload method adds file metadata into database using graphql server.
      */
+    console.log('REQ, HEADERS', req.headers)
     const detailId = req.headers.detailid as string
     const orderId = req.headers.orderid as string
 
-    console.log(req.headers)
+    console.log('ORDERID', orderId)
+    console.log('DETAILID', detailId)
 
     if (!orderId && !detailId) {
       throw ApiError.BadRequest(StaticStringKeys.MISSING_ORDERID_HEADER)
