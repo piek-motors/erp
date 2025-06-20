@@ -10,9 +10,10 @@ import { open, routeMap } from 'lib/routes'
 import { detailStore } from '../store'
 import { t } from '../text'
 import {
-  DetailMaterialSelectForm,
   DetailNameInput,
-  DetailPartCodeInput
+  DetailPartCodeInput,
+  MaterialialsSelect,
+  MaterialRelationDataInputs
 } from './detail_shared'
 
 export const CreateDetailPage = observer(() => {
@@ -27,15 +28,20 @@ export const CreateDetailPage = observer(() => {
       <PageTitle subTitle={t.AddDetail} hideIcon />
       <DetailNameInput />
       <DetailPartCodeInput />
-      <DetailMaterialSelectForm />
+      <MaterialialsSelect />
+      <MaterialRelationDataInputs />
       <SendMutation
         onClick={() => detailStore.insert()}
-        additionals={(err, mutationResult) => (
-          <TakeLookHint
-            text={t.RecentlyNewDetailAdded}
-            link={open(routeMap.metalflow.detail.edit, mutationResult.id)}
-          />
-        )}
+        additionals={(err, res) => {
+          if (!res) return null
+
+          return (
+            <TakeLookHint
+              text={t.RecentlyNewDetailAdded}
+              link={open(routeMap.metalflow.detail.edit, res.id)}
+            />
+          )
+        }}
       />
     </Stack>
   )

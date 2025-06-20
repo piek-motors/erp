@@ -1,7 +1,6 @@
 import { AsyncStoreController } from 'lib/async-store.controller'
 import { rpc } from 'lib/rpc.client'
 import { makeAutoObservable, reaction } from 'mobx'
-import * as api from './detail.api'
 import { Detail, MaterialCost } from './detail.store'
 
 export const alphabet = 'АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ'.split('')
@@ -94,7 +93,7 @@ export class DetailList {
   }
 
   async deleteDetail(id: number) {
-    await api.deleteDetail(id)
+    await rpc.details.delete.mutate({ id })
     this.details = this.details.filter(d => d.id !== id)
     this.updateSearchResult()
   }

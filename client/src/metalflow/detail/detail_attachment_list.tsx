@@ -1,7 +1,6 @@
 import { AttachmentList } from 'components'
-import { observer, useEffect } from 'lib'
+import { observer } from 'lib'
 import { detailStore } from '../store'
-import { getDetailAttachments } from './store/detail.api'
 
 interface DetailAttachmentListProps {
   detailId: number
@@ -10,14 +9,6 @@ interface DetailAttachmentListProps {
 
 export const DetailAttachmentList = observer(
   ({ detailId, onDelete }: DetailAttachmentListProps) => {
-    useEffect(() => {
-      if (detailId) {
-        getDetailAttachments(detailId).then(attachments => {
-          detailStore.attachments.setFiles(attachments)
-        })
-      }
-    }, [detailId])
-
     const handleDelete =
       onDelete ||
       ((attachment: any) => {

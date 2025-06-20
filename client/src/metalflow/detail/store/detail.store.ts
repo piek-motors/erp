@@ -1,9 +1,7 @@
 import { AttachmentsStore } from 'components/attachments/store'
-import { Attachment, Material } from 'domain-model'
+import { Attachment } from 'domain-model'
 import { rpc } from 'lib/rpc.client'
 import { makeAutoObservable } from 'mobx'
-import * as materialApi from '../../material/store/material.api'
-import * as api from './detail.api'
 
 type MaterialRelationData = {
   length: string
@@ -20,13 +18,13 @@ export class MaterialCost {
   constructor(init: {
     materialId: number
     label: string
-    weight: string
-    length: string
+    weight?: string
+    length?: string
   }) {
     this.materialId = init.materialId
     this.materialLabel = init.label
-    this.weight = init.weight
-    this.length = init.length
+    this.weight = init.weight ?? ''
+    this.length = init.length ?? ''
     makeAutoObservable(this)
   }
   setMaterialId(materialId: number) {
@@ -48,7 +46,7 @@ export class Detail {
 
   recentlyAdded?: number
   recentlyUpdated?: number
-  materialsSuggestions: Material[] = []
+  materialsSuggestions: MaterialCost[] = []
 
   attachments = new AttachmentsStore()
   constructor(init?: {
@@ -72,8 +70,6 @@ export class Detail {
   setRecentlyUpdated(id: number) {
     this.recentlyUpdated = id
   }
-
-  error?: Error
 
   clear() {
     this.id = undefined
@@ -135,76 +131,52 @@ export class Detail {
   }
 
   async insert() {
-    const materialRelations = this.usedMaterials.map(
-      ({ materialId, weight, length }) => ({
-        material_id: materialId,
-        data: {
-          length: length || '',
-          weight: weight || ''
-        }
-      })
-    )
+    const materialRelations = this.usedMaterials.map(m => ({
+      materialId: m.materialId,
+      length: m.length,
+      weight: m.weight
+    }))
 
-    const id = await api.insertDetail({
-      object: {
-        name: this.name,
-        part_code: this.partCode,
-        detail_materials: {
-          data: materialRelations
-        }
-      }
+    return await rpc.details.create.mutate({
+      name: this.name,
+      partCode: this.partCode,
+      materialRelations
     })
-    const detail = await api.getDetail(id)
-    if (detail) {
-      this.setRecentlyAdded(id)
-    }
-    return detail
   }
 
   async update() {
-    if (!this.id) throw new Error('Detail id is not set')
-    await api.updateDetail({
+    if (!this.id) {
+      throw new Error('Detail id is not set')
+    }
+    return await rpc.details.update.mutate({
       id: this.id,
-      _set: {
-        name: this.name,
-        part_code: this.partCode
-      }
+      name: this.name,
+      partCode: this.partCode,
+      materialRelations: this.usedMaterials
     })
-
-    for (const { materialId, length, weight } of this.usedMaterials) {
-      if (!materialId) throw Error('Material id is null')
-
-      await api.updateDetailMaterialRelationData({
-        material_id: materialId,
-        detail_id: this.id,
-        data: {
-          length: length.toString(),
-          weight: weight.toString()
-        }
-      })
-    }
-
-    const getDetailRes = await api.getDetail(this.id)
-    if (getDetailRes) {
-      this.setRecentlyUpdated(getDetailRes.id)
-    }
-
-    return this.recentlyUpdated
   }
 
   async delete() {
-    if (!this.id) throw new Error('Detail id is not set')
-    await api.deleteDetail(this.id)
+    if (!this.id) {
+      throw new Error('Detail id is not set')
+    }
+    await rpc.details.delete.mutate({ id: this.id })
     this.clear()
   }
 
   async loadMaterials() {
-    // TODO: optimize this
-    const materials = await materialApi.getMaterials()
-    this.setMaterilsSuggestions(materials)
+    const materials = await rpc.material.list.query()
+    this.setMaterialsSuggestions(
+      materials.map(m => {
+        return new MaterialCost({
+          materialId: m.id,
+          label: m.label
+        })
+      })
+    )
   }
 
-  setMaterilsSuggestions(suggestions: Material[]) {
+  setMaterialsSuggestions(suggestions: MaterialCost[]) {
     this.materialsSuggestions = suggestions
   }
 }

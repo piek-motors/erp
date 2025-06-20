@@ -28,7 +28,7 @@ export const t = {
   MaterialsList: 'Список материалов',
   NotCalibrated: 'Некалиброванный', // Adjective form
   Qty: 'Кол-во',
-  RecentlyNewDetailAdded: 'Недавно добавлена новая деталь',
+  RecentlyNewDetailAdded: 'Добавлена новая деталь',
   RecentlyNewMaterialAdded: 'Недавно добавлен новый материал',
   Remaining: 'Остаток',
   Save: 'Сохранить',

@@ -196,7 +196,14 @@ export function MultilineInput(
 }
 
 export function SavedHint(props: { show: any }) {
-  return props.show && <P color="success">Сохранено</P>
+  return (
+    props.show && (
+      <Stack>
+        <P color="success">Сохранено</P>
+        <P fontFamily={'monospace'}>{JSON.stringify(props.show, null, 2)}</P>
+      </Stack>
+    )
+  )
 }
 
 export function ErrorHint(props: { e?: Error | any }) {
@@ -244,17 +251,17 @@ export function TakeLookHint(props: { text: string; link: string }) {
   )
 }
 
-export function SendMutation(props: {
+export function SendMutation<Result>(props: {
   disabled?: boolean
-  onClick: () => Promise<any>
+  onClick: () => Promise<Result>
   title?: string
-  additionals?: (error?: Error, mutationResult?: any) => JSX.Element
+  additionals?: (error?: Error, mutationResult?: Result) => JSX.Element | null
   buttonProps?: ButtonProps
   stackProps?: StackProps
 }) {
   const [loading, setLoading] = React.useState(false)
   const [error, setError] = React.useState<Error>()
-  const [mutationResult, setMutationResult] = React.useState<unknown>()
+  const [mutationResult, setMutationResult] = React.useState<Result>()
 
   const handleSubmit = async () => {
     setLoading(true)
@@ -265,7 +272,7 @@ export function SendMutation(props: {
       const result = await props.onClick()
       setMutationResult(result)
     } catch (e: any) {
-      setError(e)
+      setError(e.message || e)
       throw e
     } finally {
       setLoading(false)

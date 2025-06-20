@@ -16,9 +16,10 @@ import { detailStore } from '../store'
 import { t } from '../text'
 import { DetailAttachmentList } from './detail_attachment_list'
 import {
-  DetailMaterialSelectForm,
   DetailNameInput,
-  DetailPartCodeInput
+  DetailPartCodeInput,
+  MaterialialsSelect,
+  MaterialRelationDataInputs
 } from './detail_shared'
 
 export const UpdateDetailPage = observer(() => {
@@ -30,6 +31,7 @@ export const UpdateDetailPage = observer(() => {
 
   useEffect(() => {
     detailStore.load(detailId)
+    detailStore.loadMaterials()
     return () => {
       detailStore.clear()
     }
@@ -46,8 +48,8 @@ export const UpdateDetailPage = observer(() => {
           </P>
           <DetailNameInput />
           <DetailPartCodeInput />
-          <DetailMaterialSelectForm />
-
+          <MaterialialsSelect />
+          <MaterialRelationDataInputs />
           <Row alignItems={'end'}>
             <SendMutation
               onClick={() => detailStore.update()}

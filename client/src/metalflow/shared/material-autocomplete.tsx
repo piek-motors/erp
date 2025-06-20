@@ -41,26 +41,26 @@ export function MaterialAutocomplete(props: {
 export function MaterialAutocompleteMulti(props: {
   data?: MaterialCost[]
   value?: MaterialCost[]
-  onChange: (m: Material[]) => void
+  onChange: (m: MaterialCost[]) => void
   disabledInput?: boolean
 }) {
-  const { data, value, onChange } = props
-  const options: BaseOption[] =
-    data?.map(material => ({
-      label: material.materialLabel,
-      value: material
-    })) || []
-
   return (
     <FormControl>
       <BaseAutocomplete
         label="Изговлена из материалов"
         multiple
-        options={options}
-        value={value?.map(m => ({ label: m.materialLabel, value: m })) || []}
+        options={
+          props.data?.map(material => ({
+            label: material.materialLabel,
+            value: material
+          })) || []
+        }
+        value={
+          props.value?.map(m => ({ label: m.materialLabel, value: m })) || []
+        }
         onChange={newValue => {
           if (Array.isArray(newValue)) {
-            onChange(newValue.map(v => v.value))
+            props.onChange(newValue.map(v => v.value))
           } else throw new Error('Invalid value')
         }}
         disabled={props.disabledInput}
@@ -68,7 +68,7 @@ export function MaterialAutocompleteMulti(props: {
           typeof option === 'string' ? option : option.label
         }
         isOptionEqualToValue={(option, value) => {
-          return option.value.id === value.value.id
+          return option.value.materialId === value.value.materialId
         }}
       />
     </FormControl>
