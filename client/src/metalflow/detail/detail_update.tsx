@@ -1,17 +1,16 @@
 import { Stack } from '@mui/joy'
 import { PageTitle } from 'components/page-title'
 import {
-  DeleteResourceButton,
   observer,
+  open,
   P,
-  Row,
+  routeMap,
   RowButColumsAtSm,
-  SendMutation,
   useEffect,
   useNavigate,
   useParams
 } from 'lib/index'
-import { open, routeMap } from 'lib/routes'
+import { SaveAndDelete } from 'metalflow/shared/basic'
 import { detailStore } from '../store'
 import { t } from '../text'
 import { DetailAttachmentList } from './detail_attachment_list'
@@ -50,22 +49,14 @@ export const UpdateDetailPage = observer(() => {
           <DetailPartCodeInput />
           <MaterialialsSelect />
           <MaterialRelationDataInputs />
-          <Row alignItems={'end'}>
-            <SendMutation
-              onClick={() => detailStore.update()}
-              stackProps={{ sx: { flexGrow: 1 } }}
-              buttonProps={{
-                fullWidth: true
-              }}
-            />
-            <DeleteResourceButton
-              onClick={() =>
-                detailStore.delete().then(() => {
-                  navigate(open(routeMap.metalflow.details))
-                })
-              }
-            />
-          </Row>
+          <SaveAndDelete
+            handleDelete={() =>
+              detailStore.delete().then(() => {
+                navigate(open(routeMap.metalflow.details))
+              })
+            }
+            handleSave={() => detailStore.update()}
+          />
         </Stack>
 
         {/* Right Column - Documents */}

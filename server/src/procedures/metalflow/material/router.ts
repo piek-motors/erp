@@ -1,6 +1,7 @@
 import { EnMaterialShape, EnUnit } from 'domain-model'
 import { db, procedure, z } from '../../../deps.ts'
 import { router } from '../../../lib/trpc/trpc.ts'
+import { deleteMaterial } from './delete_material.ts'
 import { listMaterialsProcedure } from './list_materials.ts'
 
 export const materialRouter = router({
@@ -29,5 +30,6 @@ export const materialRouter = router({
         .returningAll()
         .executeTakeFirstOrThrow()
     }),
-  list: listMaterialsProcedure
+  list: listMaterialsProcedure,
+  delete: deleteMaterial
 })

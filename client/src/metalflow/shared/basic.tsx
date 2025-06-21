@@ -51,7 +51,13 @@ export function MaterialUnitSelect(props: {
 }
 
 import { BaseAutocomplete, BaseOption } from 'components/base-autocomplete'
-import { ErrorHint, Label } from 'lib/index'
+import {
+  DeleteResourceButton,
+  ErrorHint,
+  Label,
+  Row,
+  SendMutation
+} from 'lib/index'
 import { useGetPossibleAlloysQuery } from 'lib/types/graphql-shema'
 import { t } from '../text'
 
@@ -129,5 +135,23 @@ export function Narrow(props: ContainerProps) {
     <Container maxWidth="xs" sx={{ m: 0, p: 0 }} {...props}>
       {props.children}
     </Container>
+  )
+}
+
+export const SaveAndDelete = (props: {
+  handleDelete: () => Promise<unknown>
+  handleSave: () => Promise<unknown>
+}) => {
+  return (
+    <Row alignItems={'end'}>
+      <SendMutation
+        onClick={() => props.handleSave()}
+        stackProps={{ sx: { flexGrow: 1 } }}
+        buttonProps={{
+          fullWidth: true
+        }}
+      />
+      <DeleteResourceButton onClick={() => props.handleDelete()} />
+    </Row>
   )
 }

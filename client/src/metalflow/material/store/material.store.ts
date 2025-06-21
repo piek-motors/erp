@@ -2,17 +2,19 @@ import {
   Detail,
   EnMaterialShape,
   EnUnit,
-  GenericShapeData,
   getMaterialConstructor,
-  getShapeDataFactory,
   Material,
-  MaterialShapeAbstractionLayer,
-  RoundBar,
-  RoundBarShapeData
+  MaterialShapeAbstractionLayer
 } from 'domain-model'
 import { AsyncStoreController } from 'lib/async-store.controller'
-import { makeAutoObservable } from 'mobx'
+import { makeAutoObservable } from 'lib/deps'
+import { rpc } from 'lib/rpc.client'
+import { ListState } from '../shape/list_state'
+import { PipeState } from '../shape/pipe_state'
+import { RoundBarState } from '../shape/rounde_bar.state'
+import { SquareState } from '../shape/square_state'
 import * as api from './material.api'
+import { IMaterialShapeState } from './matetial_shape_state.interface'
 
 export class MaterialStore {
   readonly async = new AsyncStoreController()
@@ -20,12 +22,32 @@ export class MaterialStore {
     makeAutoObservable(this)
   }
 
+  list = new ListState()
+  round = new RoundBarState()
+  square = new SquareState()
+  pipe = new PipeState()
+
+  shapeState = {
+    [EnMaterialShape.RoundBar]: this.round,
+    [EnMaterialShape.SquareBar]: this.square,
+    [EnMaterialShape.Pipe]: this.pipe,
+    [EnMaterialShape.List]: this.list
+  } as const
+
+  getShapeState(shape: EnMaterialShape): IMaterialShapeState {
+    return this.shapeState[shape]
+  }
+
   id?: number
   label?: string
   unit: EnUnit = EnUnit.Kg
+  setUnit(unit: EnUnit) {
+    this.unit = unit
+  }
   shape: EnMaterialShape = EnMaterialShape.RoundBar
-  shapeData: GenericShapeData = new RoundBarShapeData()
-
+  setShape(shape: EnMaterialShape) {
+    this.shape = shape
+  }
   material?: Material
   detailsMadeOfMaterial: Detail[] = []
 
@@ -37,33 +59,19 @@ export class MaterialStore {
     this.id = undefined
     this.unit = EnUnit.Kg
     this.shape = EnMaterialShape.RoundBar
-    this.shapeData = new RoundBar(0)
+    this.getShapeState(this.shape).reset()
     this.detailsMadeOfMaterial = []
   }
 
   insertedMaterialId?: number
-
-  setShape(shape: EnMaterialShape) {
-    const Shape = getShapeDataFactory(shape)
-    this.shape = shape
-    this.shapeData = new Shape()
-  }
-
-  setUnit(unit: EnUnit) {
-    this.unit = unit
-  }
 
   syncState(material: Material) {
     this.id = material.id || undefined
     this.label = material.label
     this.unit = material.unit
     this.setShape(material.shape)
-    this.shapeData = MaterialShapeAbstractionLayer.exportShapeData(material)
     this.material = material
-  }
-
-  setShapeData(shapeData: GenericShapeData) {
-    this.shapeData = shapeData
+    this.getShapeState(this.shape).sync(material)
   }
 
   async load(id: number) {
@@ -78,13 +86,17 @@ export class MaterialStore {
     return this.async.run(async () => {
       const MaterialConstructor = getMaterialConstructor(this.shape)
       const material = new MaterialConstructor(0)
-      MaterialShapeAbstractionLayer.importShapeData(material, this.shapeData)
+      MaterialShapeAbstractionLayer.importShapeData(
+        material,
+        this.getShapeState(this.shape).export()
+      )
+
       const id = await api.insertMaterial({
         object: {
           unit: this.unit,
           shape: this.shape,
           label: material.deriveLabel(),
-          shape_data: this.shapeData
+          shape_data: this.getShapeState(this.shape).export()
         }
       })
       this.insertedMaterialId = id
@@ -101,14 +113,14 @@ export class MaterialStore {
 
         MaterialShapeAbstractionLayer.importShapeData(
           this.material,
-          this.shapeData
+          this.getShapeState(this.shape).export()
         )
 
         return await api.updateMaterial({
           id: this.id,
           _set: {
             shape: this.shape,
-            shape_data: this.shapeData,
+            shape_data: this.getShapeState(this.shape).export(),
             label: this.material?.deriveLabel()
           }
         })
@@ -125,5 +137,12 @@ export class MaterialStore {
 
     const details = await api.getDetailsMadeOfMaterial(this.material)
     this.setDetailsMadeOfMaterial(details)
+  }
+
+  async delete() {
+    return this.async.run(async () => {
+      if (!this.id) throw new Error('Material id is not set')
+      await rpc.material.delete.mutate({ id: this.id })
+    })
   }
 }

@@ -18,61 +18,59 @@ import {
   useParams
 } from 'lib/index'
 import { open, routeMap } from 'lib/routes'
-import { MaterialUnitSelect } from '../shared/basic'
-import { materialStore } from '../store'
+import { MaterialUnitSelect, SaveAndDelete } from '../shared/basic'
+import { material } from '../store'
 import { t } from '../text'
-import {
-  ListMaterialInput,
-  PipeMaterialInput,
-  RoundBarInput,
-  SquareMaterialInput
-} from './material_specific_inputs'
+import { ListMaterialInputBase } from './shape/list'
+import { PipeMaterialInputBase } from './shape/pipe'
+import { RoundBarInputBase } from './shape/round_bar'
+import { SquareMaterialInputBase } from './shape/squate'
 
 const tabList: TabConfig = [
   {
     value: EnMaterialShape.RoundBar,
     label: UiMaterialShape[EnMaterialShape.RoundBar],
-    component: <RoundBarInput />
+    component: <RoundBarInputBase />
   },
   {
     value: EnMaterialShape.SquareBar,
     label: UiMaterialShape[EnMaterialShape.SquareBar],
-    component: <SquareMaterialInput />
+    component: <SquareMaterialInputBase />
   },
   {
     value: EnMaterialShape.List,
     label: UiMaterialShape[EnMaterialShape.List],
-    component: <ListMaterialInput />
+    component: <ListMaterialInputBase />
   },
   {
     value: EnMaterialShape.Pipe,
     label: UiMaterialShape[EnMaterialShape.Pipe],
-    component: <PipeMaterialInput />
+    component: <PipeMaterialInputBase />
   }
 ]
 
 export const AddMaterialPage = observer(() => {
   useEffect(() => {
     return () => {
-      materialStore.clear()
+      material.clear()
     }
   }, [])
 
   return (
     <Stack gap={1} py={2}>
       <PageTitle subTitle={t.AddMaterial} hideIcon />
-      <Tabs tabs={tabList} handleChange={v => materialStore.setShape(v)} />
+      <Tabs tabs={tabList} handleChange={v => material.setShape(v)} />
       <MaterialUnitSelect
-        value={materialStore.unit}
-        onChange={v => materialStore.setUnit(v)}
+        value={material.unit}
+        onChange={v => material.setUnit(v)}
       />
-      <SendMutation onClick={() => materialStore.insert()} />
-      {materialStore.insertedMaterialId && (
+      <SendMutation onClick={() => material.insert()} />
+      {material.insertedMaterialId && (
         <TakeLookHint
           text={t.RecentlyNewMaterialAdded}
           link={open(
             routeMap.metalflow.material.edit,
-            materialStore.insertedMaterialId
+            material.insertedMaterialId
           )}
         />
       )}
@@ -84,11 +82,12 @@ export const UpdateMaterialPage = observer(() => {
   const { id } = useParams<{ id: string }>()
   if (!id) throw new Error('No id')
   const materialId = Number(id)
+  const navigate = useNavigate()
 
   useEffect(() => {
-    materialStore.load(materialId)
+    material.load(materialId)
     return () => {
-      materialStore.clear()
+      material.clear()
     }
   }, [])
 
@@ -96,14 +95,21 @@ export const UpdateMaterialPage = observer(() => {
     <RowButColumsAtSm alignItems={'start'} p={1} gap={2}>
       <Stack gap={1}>
         <Row gap={2}>
-          <P level="h4">{materialStore.label}</P>
+          <P level="h4">{material.label}</P>
           <WarehouseOperations id={materialId} />
         </Row>
         <P level="body-sm">ID: {materialId}</P>
         <InputStack>
-          {tabList.find(t => t.value === materialStore.shape)?.component}
+          {tabList.find(t => t.value === material.shape)?.component}
         </InputStack>
-        <SendMutation onClick={() => materialStore.update()} />
+        <SaveAndDelete
+          handleDelete={() =>
+            material.delete().then(() => {
+              navigate(open(routeMap.metalflow.materials))
+            })
+          }
+          handleSave={() => material.update()}
+        />
       </Stack>
       <DetailsMadeOfMaterial />
     </RowButColumsAtSm>
@@ -147,10 +153,10 @@ function WarehouseOperations(props: { id: number }) {
 
 const DetailsMadeOfMaterial = observer(() => {
   useEffect(() => {
-    materialStore.loadDetailsMadeOfMaterial()
-  }, [materialStore.material])
+    material.loadDetailsMadeOfMaterial()
+  }, [material.material])
 
-  if (materialStore.detailsMadeOfMaterial.length === 0) {
+  if (material.detailsMadeOfMaterial.length === 0) {
     return null
   }
 
@@ -158,7 +164,7 @@ const DetailsMadeOfMaterial = observer(() => {
     <Stack gap={2} sx={{ overflowY: 'scroll', maxHeight: '100vh' }}>
       <P fontWeight={600}>Детали из этого материала</P>
       <Stack gap={0.5}>
-        {materialStore.detailsMadeOfMaterial.map(each => (
+        {material.detailsMadeOfMaterial.map(each => (
           <Link to={open(routeMap.metalflow.detail.edit, each.id)}>
             <P key={each.id} level="body-sm">
               {each.name}

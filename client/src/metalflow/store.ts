@@ -7,4 +7,4 @@ export const detailListStore = new DetailList()
 export const detailStore = new Detail()
 
 export const materialListStore = new MaterialListStore()
-export const materialStore = new MaterialStore()
+export const material = new MaterialStore()
