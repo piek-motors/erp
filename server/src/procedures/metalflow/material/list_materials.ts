@@ -1,6 +1,6 @@
 import { db, procedure } from '../../../deps.ts'
 
-export const listMaterialsProcedure = procedure.query(async ({ input }) => {
+export const listMaterials = procedure.query(async ({ input }) => {
   const material = await db
     .selectFrom('metal_flow.materials')
     .selectAll()

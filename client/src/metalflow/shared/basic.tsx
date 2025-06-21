@@ -99,36 +99,34 @@ export function AlloyAutocomplete(props: {
 
 import { Autocomplete } from '@mui/joy'
 import { DeleteConfirmDialog } from 'components/delete_confirm_dialog'
-import { Detail } from 'domain-model'
-import { useGetDetailsQuery } from 'lib/types/graphql-shema'
-import { map } from '../mappers'
+import { Detail } from 'metalflow/detail/store/detail.store'
+import { detailListStore } from 'metalflow/store'
+import { observer } from 'mobx-react-lite'
 
-export function DetailSelect(props: {
-  value?: Detail
-  onChange: (value: Detail) => void
-}) {
-  const details = useGetDetailsQuery()
-  const options =
-    details.data?.metal_flow_details.map(each => ({
-      label: each.name,
-      data: map.detail.fromDto(each)
-    })) || []
+export const DetailSelect = observer(
+  (props: { value?: Detail; onChange: (value: Detail) => void }) => {
+    const options =
+      detailListStore.details.map(detail => ({
+        label: detail.name,
+        data: detail
+      })) || []
 
-  return (
-    <Autocomplete
-      onChange={(_, selected) => {
-        if (selected?.data) {
-          props.onChange(selected.data)
+    return (
+      <Autocomplete
+        onChange={(_, selected) => {
+          if (selected?.data) {
+            props.onChange(selected.data)
+          }
+        }}
+        getOptionLabel={option => option.label}
+        options={options}
+        isOptionEqualToValue={(option, value) =>
+          option.data?.id === value.data?.id
         }
-      }}
-      getOptionLabel={option => option.label}
-      options={options}
-      isOptionEqualToValue={(option, value) =>
-        option.data?.id === value.data?.id
-      }
-    />
-  )
-}
+      />
+    )
+  }
+)
 
 /** Narrow container */
 export function Narrow(props: ContainerProps) {

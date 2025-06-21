@@ -3,7 +3,6 @@ import { AsyncStoreController } from 'lib/async-store.controller'
 import { rpc } from 'lib/rpc.client'
 import { map } from 'metalflow/mappers'
 import { makeAutoObservable } from 'mobx'
-import * as api from './material.api'
 
 export class MaterialListStore {
   readonly async = new AsyncStoreController()
@@ -61,21 +60,10 @@ export class MaterialListStore {
     this.async.reset()
   }
 
-  async getById(id: number) {
-    const res = await rpc.material.get.query({ id })
-    return map.material.fromDto({
-      id: res.id,
-      label: res.label,
-      shape: res.shape,
-      unit: res.unit,
-      shape_data: res.shape_data
-    })
-  }
-
   async init() {
     return this.async.run(async () => {
-      const materials = await api.getMaterials()
-      this.setMaterials(materials || [])
+      const materials = await rpc.material.list.query()
+      this.setMaterials(materials.map(map.material.fromDto))
     })
   }
 }

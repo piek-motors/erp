@@ -4,10 +4,7 @@ import {
   Material,
   MaterialShapeAbstractionLayer
 } from 'domain-model'
-import {
-  GetDetailByPkQuery,
-  GetMaterialByPkQuery
-} from 'lib/types/graphql-shema'
+import { GetMaterialByPkQuery } from 'lib/types/graphql-shema'
 
 class MaterialMapper {
   fromDto(dto: GetMaterialByPkQuery['metal_flow_materials_by_pk']): Material {
@@ -40,7 +37,7 @@ class MaterialMapper {
 class DetailMapper {
   private materialMapper = new MaterialMapper()
 
-  fromDto(raw: GetDetailByPkQuery['metal_flow_details_by_pk']): Detail | null {
+  fromDto(raw: any): Detail | null {
     if (!raw) return null
     const detail = new Detail({
       id: raw.id,

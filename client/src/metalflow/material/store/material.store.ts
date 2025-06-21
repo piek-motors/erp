@@ -1,5 +1,4 @@
 import {
-  Detail,
   EnMaterialShape,
   EnUnit,
   getMaterialConstructor,
@@ -9,12 +8,17 @@ import {
 import { AsyncStoreController } from 'lib/async-store.controller'
 import { makeAutoObservable } from 'lib/deps'
 import { rpc } from 'lib/rpc.client'
+import { map } from 'metalflow/mappers'
 import { ListState } from '../shape/list_state'
 import { PipeState } from '../shape/pipe_state'
 import { RoundBarState } from '../shape/rounde_bar.state'
 import { SquareState } from '../shape/square_state'
-import * as api from './material.api'
 import { IMaterialShapeState } from './matetial_shape_state.interface'
+
+interface IDetail {
+  id: number
+  name: string
+}
 
 export class MaterialStore {
   readonly async = new AsyncStoreController()
@@ -49,9 +53,8 @@ export class MaterialStore {
     this.shape = shape
   }
   material?: Material
-  detailsMadeOfMaterial: Detail[] = []
-
-  setDetailsMadeOfMaterial(details: Detail[]) {
+  detailsMadeOfMaterial: IDetail[] = []
+  setDetailsMadeOfMaterial(details: IDetail[]) {
     this.detailsMadeOfMaterial = details
   }
 
@@ -72,12 +75,20 @@ export class MaterialStore {
     this.setShape(material.shape)
     this.material = material
     this.getShapeState(this.shape).sync(material)
+    // this.detailsMadeOfMaterial = material.de
   }
 
   async load(id: number) {
     return this.async.run(async () => {
-      const material = await api.getMaterial(id)
-      this.syncState(material)
+      const { material, details } = await rpc.material.get.query({ id })
+      this.syncState(map.material.fromDto(material))
+      this.setDetailsMadeOfMaterial(
+        details.map(e => ({
+          id: e.detail_id,
+          name: e.name
+        }))
+      )
+
       return material
     })
   }
@@ -91,17 +102,15 @@ export class MaterialStore {
         this.getShapeState(this.shape).export()
       )
 
-      const id = await api.insertMaterial({
-        object: {
-          unit: this.unit,
-          shape: this.shape,
-          label: material.deriveLabel(),
-          shape_data: this.getShapeState(this.shape).export()
-        }
+      const res = await rpc.material.create.mutate({
+        label: material.deriveLabel(),
+        shape: this.shape,
+        shape_data: this.getShapeState(this.shape).export(),
+        unit: this.unit
       })
-      this.insertedMaterialId = id
+      this.insertedMaterialId = res.id
       this.clear()
-      return id
+      return res.id
     })
   }
 
@@ -116,13 +125,12 @@ export class MaterialStore {
           this.getShapeState(this.shape).export()
         )
 
-        return await api.updateMaterial({
+        return await rpc.material.update.mutate({
           id: this.id,
-          _set: {
-            shape: this.shape,
-            shape_data: this.getShapeState(this.shape).export(),
-            label: this.material?.deriveLabel()
-          }
+          shape: this.shape,
+          shape_data: this.getShapeState(this.shape).export(),
+          label: this.material?.deriveLabel(),
+          unit: this.unit
         })
       })
       .then(res => {
@@ -130,13 +138,6 @@ export class MaterialStore {
         this.load(this.id)
         return res
       })
-  }
-
-  async loadDetailsMadeOfMaterial() {
-    if (!this.material) return
-
-    const details = await api.getDetailsMadeOfMaterial(this.material)
-    this.setDetailsMadeOfMaterial(details)
   }
 
   async delete() {

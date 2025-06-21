@@ -153,10 +153,6 @@ function WarehouseOperations(props: { id: number }) {
 }
 
 const DetailsMadeOfMaterial = observer(() => {
-  useEffect(() => {
-    material.loadDetailsMadeOfMaterial()
-  }, [material.material])
-
   if (material.detailsMadeOfMaterial.length === 0) {
     return null
   }
