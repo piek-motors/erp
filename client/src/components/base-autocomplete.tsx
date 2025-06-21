@@ -1,4 +1,4 @@
-import { Autocomplete, Box, createFilterOptions } from '@mui/joy'
+import { Autocomplete, Box, createFilterOptions, InputProps } from '@mui/joy'
 import { SxProps } from '@mui/joy/styles/types'
 import { Label } from 'lib/index'
 import { ReactNode } from 'react'
@@ -24,6 +24,7 @@ interface BaseAutocompleteProps<T extends BaseOption> {
   createOptionLabel?: (inputValue: string) => string
   getOptionLabel?: (option: T | string) => string
   isOptionEqualToValue?: (option: T, value: T) => boolean
+  size?: InputProps['size']
 }
 
 export function BaseAutocomplete<T extends BaseOption>({
@@ -41,7 +42,8 @@ export function BaseAutocomplete<T extends BaseOption>({
   createOptionLabel = inputValue => `+ ${inputValue}`,
   getOptionLabel = option =>
     typeof option === 'string' ? option : option.label,
-  isOptionEqualToValue = (option, value) => option.value === value.value
+  isOptionEqualToValue = (option, value) => option.value === value.value,
+  size
 }: BaseAutocompleteProps<T>) {
   const filter = createFilterOptions<T>()
 
@@ -50,6 +52,7 @@ export function BaseAutocomplete<T extends BaseOption>({
       <Label label={label} />
       {error}
       <Autocomplete
+        size={size}
         sx={sx}
         multiple={multiple}
         freeSolo={freeSolo}

@@ -10,11 +10,21 @@ type MaterialRelationData = {
 
 export class MaterialCost {
   materialId!: number
+  setMaterialId(materialId: number) {
+    this.materialId = materialId
+  }
   materialLabel!: string
-
+  setMaterialLabel(materialLabel: string) {
+    this.materialLabel = materialLabel
+  }
   weight!: string
+  setWeight(weight: string) {
+    this.weight = weight
+  }
   length!: string
-
+  setLength(length: string) {
+    this.length = length
+  }
   constructor(init: {
     materialId: number
     label: string
@@ -27,26 +37,25 @@ export class MaterialCost {
     this.length = init.length ?? ''
     makeAutoObservable(this)
   }
-  setMaterialId(materialId: number) {
-    this.materialId = materialId
-  }
-  setWeight(weight: string) {
-    this.weight = weight
-  }
-  setLength(length: string) {
-    this.length = length
-  }
 }
 
 export class Detail {
   id?: number
   name: string = ''
   partCode: string = ''
+
   usedMaterials: MaterialCost[] = []
+  setUsedMaterials(materials: MaterialCost[]) {
+    this.usedMaterials = materials
+  }
 
   recentlyAdded?: number
   recentlyUpdated?: number
+
   materialsSuggestions: MaterialCost[] = []
+  setMaterialsSuggestions(suggestions: MaterialCost[]) {
+    this.materialsSuggestions = suggestions
+  }
 
   attachments = new AttachmentsStore()
   constructor(init?: {
@@ -89,22 +98,36 @@ export class Detail {
   }
 
   addMaterial(
-    materialId: number,
-    label: string | null,
+    index: number,
+    material: { id: number; label: string },
     data: MaterialRelationData
   ) {
     const m = new MaterialCost({
-      materialId,
-      label: label || '',
+      materialId: material.id,
+      label: material.label,
       weight: data.weight,
       length: data.length
     })
     this.usedMaterials.push(m)
   }
 
-  setMaterialRelations(materials: MaterialCost[]) {
-    this.usedMaterials = materials
+  updateMaterialRelation(
+    index: number,
+    material: { id: number; label: string },
+    data: MaterialRelationData
+  ) {
+    const m = this.usedMaterials[index]
+    if (!m) {
+      this.addMaterial(index, material, data)
+      return
+    }
+    m.setMaterialLabel(material.label)
+    m.setMaterialId(material.id)
+    m.setWeight(data.weight)
+    m.setLength(data.length)
   }
+
+  deleteMaterialRelation(materialId: number) {}
 
   async load(detailId: number) {
     this.clear()
@@ -113,15 +136,17 @@ export class Detail {
     this.setName(d.detail.name)
     this.setPartCode(d.detail.part_code ?? '')
 
-    for (const dm of d.detail_materials) {
-      if (!dm.material_id) {
-        throw new Error('Material id is null')
-      }
-      this.addMaterial(dm.material_id, dm.label, {
-        length: dm.data.length.toString(),
-        weight: dm.data.weight.toString()
-      })
-    }
+    d.detail_materials.forEach((dm, index) => {
+      this.addMaterial(
+        index,
+        { id: dm.material_id, label: dm.label ?? '' },
+        {
+          length: dm.data.length.toString(),
+          weight: dm.data.weight.toString()
+        }
+      )
+    })
+
     this.attachments.setFiles(
       d.attachments.map(
         a =>
@@ -176,7 +201,14 @@ export class Detail {
     )
   }
 
-  setMaterialsSuggestions(suggestions: MaterialCost[]) {
-    this.materialsSuggestions = suggestions
+  async deleteDetailMaterial(detailId: number, materialId: number) {
+    await rpc.details.deleteDetailMaterial.mutate({
+      detailId,
+      materialId
+    })
+    const newMaterials = this.usedMaterials.filter(
+      m => m.materialId !== materialId
+    )
+    this.setUsedMaterials(newMaterials)
   }
 }

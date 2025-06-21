@@ -65,6 +65,7 @@ type MyInputProps = {
   fullWidth?: boolean
   autoFocus?: boolean
   sx?: InputProps['sx']
+  size?: InputProps['size']
 }
 
 export function Inp(props: MyInputProps) {
@@ -83,6 +84,7 @@ export function Inp(props: MyInputProps) {
               const value = e.target.value ?? ''
               props.onChange?.(value)
             }}
+            size={props.size}
             sx={props.sx}
           />
           {props.unit && <P>{props.unit}</P>}

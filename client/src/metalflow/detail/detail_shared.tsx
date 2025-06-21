@@ -1,15 +1,25 @@
 import { EnUnit } from 'domain-model'
-import { Inp, P, Row, Sheet, Stack, observer } from 'lib/index'
+import {
+  Button,
+  DeleteResourceButton,
+  Inp,
+  Label,
+  Row,
+  Sheet,
+  Stack,
+  observer
+} from 'lib/index'
 import { QtyInputWithUnit } from '../metalflow_shared'
-import { MaterialAutocompleteMulti } from '../shared/material-autocomplete'
+import { MaterialAutocomplete } from '../shared/material-autocomplete'
 import { detailStore } from '../store'
 import { MaterialCost } from './store/detail.store'
 
 export const MaterialWeightInput = observer(
   (props: { materialRelation: MaterialCost }) => {
     return (
-      <>
+      <Row gap={3}>
         <QtyInputWithUnit
+          size="sm"
           label="Вес"
           unitId={EnUnit.Gram}
           setValue={v => {
@@ -18,6 +28,7 @@ export const MaterialWeightInput = observer(
           value={props.materialRelation.weight}
         />
         <QtyInputWithUnit
+          size="sm"
           label="Длина"
           unitId={EnUnit.MilliMeter}
           setValue={v => {
@@ -25,56 +36,89 @@ export const MaterialWeightInput = observer(
           }}
           value={props.materialRelation.length}
         />
-      </>
+      </Row>
     )
   }
 )
 
-export const MaterialialsSelect = observer(() => {
-  return (
-    <MaterialAutocompleteMulti
-      data={detailStore.materialsSuggestions.map(e => {
-        return new MaterialCost({
-          materialId: e.materialId,
-          label: e.materialLabel
-        })
-      })}
-      value={detailStore.usedMaterials.map(m => {
-        return new MaterialCost({
-          materialId: m.materialId,
-          label: m.materialLabel
-        })
-      })}
-      onChange={m => {
-        if (m.length) {
-          detailStore.setMaterialRelations(m.map(m => m))
-        }
-      }}
-    />
-  )
-})
+export const MaterialSelect = observer(
+  (props: { value: MaterialCost; index: number }) => {
+    return (
+      <MaterialAutocomplete
+        size="sm"
+        data={detailStore.materialsSuggestions.map(e => {
+          return new MaterialCost({
+            materialId: e.materialId,
+            label: e.materialLabel
+          })
+        })}
+        value={props.value}
+        onChange={m => {
+          if (m) {
+            detailStore.updateMaterialRelation(
+              props.index,
+              { id: m.materialId, label: m.materialLabel },
+              {
+                length: m.length,
+                weight: m.weight
+              }
+            )
+          }
+        }}
+      />
+    )
+  }
+)
 
 export const MaterialRelationDataInputs = observer(() => {
   return (
     <Sheet sx={{ borderRadius: 'sm' }}>
-      <Stack my={1} gap={1}>
-        {detailStore.usedMaterials.map(materialRelation => {
+      <Stack gap={1}>
+        {detailStore.usedMaterials.map((materialCost, index) => {
           return (
             <Stack
-              sx={{ width: 'max-content' }}
-              key={materialRelation.materialId}
+              sx={{ width: 'max-content', p: 1 }}
+              key={materialCost.materialId}
             >
-              <Row sx={{ fontWeight: 'bold', px: 1 }}>
-                <P>Расход для материала</P>
-                <P>{materialRelation?.materialLabel}</P>
-              </Row>
-              <Stack p={1}>
-                <MaterialWeightInput materialRelation={materialRelation} />
+              <Label>Расход для материала</Label>
+              <Stack>
+                <Row>
+                  <MaterialSelect value={materialCost} index={index} />
+                  <DeleteResourceButton
+                    onClick={() => {
+                      if (!detailStore.id) {
+                        throw new Error('Detail id is not set')
+                      }
+
+                      detailStore.deleteDetailMaterial(
+                        detailStore.id,
+                        materialCost.materialId
+                      )
+                    }}
+                  />
+                </Row>
+                <MaterialWeightInput materialRelation={materialCost} />
               </Stack>
             </Stack>
           )
         })}
       </Stack>
+      <Button
+        sx={{ m: 1 }}
+        variant="soft"
+        onClick={() => {
+          detailStore.addMaterial(
+            detailStore.usedMaterials.length,
+            {
+              id: 0,
+              label: ''
+            },
+            { length: '', weight: '' }
+          )
+        }}
+      >
+        Добавить материал
+      </Button>
     </Sheet>
   )
 })

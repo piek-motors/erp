@@ -143,7 +143,7 @@ export const SaveAndDelete = (props: {
   handleSave: () => Promise<unknown>
 }) => {
   return (
-    <Row alignItems={'end'}>
+    <Row alignItems={'end'} sx={{ py: 1 }}>
       <SendMutation
         onClick={() => props.handleSave()}
         stackProps={{ sx: { flexGrow: 1 } }}

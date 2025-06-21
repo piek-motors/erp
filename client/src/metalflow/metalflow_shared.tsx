@@ -1,4 +1,4 @@
-import { Stack } from '@mui/joy'
+import { InputProps, Stack } from '@mui/joy'
 import { uiUnit } from 'domain-model'
 import { Inp, P } from 'lib/index'
 
@@ -8,6 +8,7 @@ export const QtyInputWithUnit = (props: {
   defaultValue?: string
   setValue: (num: string) => void
   label: string
+  size?: InputProps['size']
 }) => {
   const { unitId, value: qty, setValue: setQty } = props
   return (
@@ -18,6 +19,7 @@ export const QtyInputWithUnit = (props: {
         onChange={v => {
           setQty(v)
         }}
+        size={props.size}
         sx={{ width: 150 }}
         type="number"
       />

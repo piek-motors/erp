@@ -12,7 +12,6 @@ import { t } from '../text'
 import {
   DetailNameInput,
   DetailPartCodeInput,
-  MaterialialsSelect,
   MaterialRelationDataInputs
 } from './detail_shared'
 
@@ -28,7 +27,6 @@ export const CreateDetailPage = observer(() => {
       <PageTitle subTitle={t.AddDetail} hideIcon />
       <DetailNameInput />
       <DetailPartCodeInput />
-      <MaterialialsSelect />
       <MaterialRelationDataInputs />
       <SendMutation
         onClick={() => detailStore.insert()}

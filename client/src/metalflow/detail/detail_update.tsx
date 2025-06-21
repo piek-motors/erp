@@ -17,7 +17,6 @@ import { DetailAttachmentList } from './detail_attachment_list'
 import {
   DetailNameInput,
   DetailPartCodeInput,
-  MaterialialsSelect,
   MaterialRelationDataInputs
 } from './detail_shared'
 
@@ -37,17 +36,16 @@ export const UpdateDetailPage = observer(() => {
   }, [])
 
   return (
-    <Stack gap={2} py={2}>
+    <Stack gap={1} py={2}>
       <PageTitle subTitle={t.EditDetail} hideIcon />
-      <RowButColumsAtSm gap={3}>
+      <RowButColumsAtSm gap={1}>
         {/* Left Column - Detail Info */}
-        <Stack gap={2} sx={{ flex: 1 }}>
+        <Stack gap={0.5} sx={{ flex: 1 }}>
           <P>
             <b>ID</b> {detailStore.id}
           </P>
           <DetailNameInput />
           <DetailPartCodeInput />
-          <MaterialialsSelect />
           <MaterialRelationDataInputs />
           <SaveAndDelete
             itemName={`Деталь (${detailStore.id}) - ${detailStore.name}`}

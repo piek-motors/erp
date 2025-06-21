@@ -1,28 +1,27 @@
-import { FormControl } from '@mui/joy'
+import { FormControl, InputProps } from '@mui/joy'
 import { BaseAutocomplete, BaseOption } from 'components/base-autocomplete'
-import { Material } from 'domain-model'
-import { useGetMaterialsQuery } from 'lib/types/graphql-shema'
 import { MaterialCost } from 'metalflow/detail/store/detail.store'
-import { map } from '../mappers'
 
 export function MaterialAutocomplete(props: {
-  data?: ReturnType<typeof useGetMaterialsQuery>['data']
-  value?: Material | null
-  onChange: (m: Material) => void
+  data?: MaterialCost[]
+  value?: MaterialCost | null
+  onChange: (m: MaterialCost) => void
+  size?: InputProps['size']
 }) {
   const { data, value, onChange } = props
 
   const options: BaseOption[] =
-    data?.metal_flow_materials.map(map.material.fromDto).map(material => ({
-      label: material.deriveLabel(),
+    data?.map(material => ({
+      label: material.materialLabel,
       value: material
     })) || []
 
   return (
     <BaseAutocomplete
+      size={props.size}
       sx={{ minWidth: '400px' }}
       options={options}
-      value={value ? { label: value.deriveLabel(), value: value } : null}
+      value={value ? { label: value.materialLabel, value: value } : null}
       onChange={newValue => {
         if (newValue && !Array.isArray(newValue)) {
           onChange(newValue.value)
