@@ -103,6 +103,7 @@ export const UpdateMaterialPage = observer(() => {
           {tabList.find(t => t.value === material.shape)?.component}
         </InputStack>
         <SaveAndDelete
+          itemName={`Материал (${material.id}) - ${material.label}`}
           handleDelete={() =>
             material.delete().then(() => {
               navigate(open(routeMap.metalflow.materials))

@@ -98,6 +98,7 @@ export function AlloyAutocomplete(props: {
 }
 
 import { Autocomplete } from '@mui/joy'
+import { DeleteConfirmDialog } from 'components/delete_confirm_dialog'
 import { Detail } from 'domain-model'
 import { useGetDetailsQuery } from 'lib/types/graphql-shema'
 import { map } from '../mappers'
@@ -139,6 +140,7 @@ export function Narrow(props: ContainerProps) {
 }
 
 export const SaveAndDelete = (props: {
+  itemName: string
   handleDelete: () => Promise<unknown>
   handleSave: () => Promise<unknown>
 }) => {
@@ -151,7 +153,11 @@ export const SaveAndDelete = (props: {
           fullWidth: true
         }}
       />
-      <DeleteResourceButton onClick={() => props.handleDelete()} />
+      <DeleteConfirmDialog
+        title={props.itemName}
+        handleDelete={() => props.handleDelete()}
+        button={<DeleteResourceButton />}
+      />
     </Row>
   )
 }

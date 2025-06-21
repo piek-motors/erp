@@ -128,7 +128,7 @@ export function CancelButton(props: { onClick: () => void }) {
   )
 }
 
-export function DeleteResourceButton(props: { onClick: () => void }) {
+export function DeleteResourceButton(props: { onClick?: () => void }) {
   return (
     <IconButton variant="soft" color="danger" onClick={props.onClick} size="sm">
       <UseIcon icon={UilTrashAlt} />
