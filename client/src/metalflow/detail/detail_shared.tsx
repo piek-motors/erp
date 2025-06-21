@@ -1,6 +1,6 @@
 import { EnUnit } from 'domain-model'
 import { Inp, P, Row, Sheet, Stack, observer } from 'lib/index'
-import { QtyInputWithUnit } from '../shared'
+import { QtyInputWithUnit } from '../metalflow_shared'
 import { MaterialAutocompleteMulti } from '../shared/material-autocomplete'
 import { detailStore } from '../store'
 import { MaterialCost } from './store/detail.store'

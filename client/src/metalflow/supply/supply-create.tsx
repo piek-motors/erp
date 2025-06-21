@@ -5,7 +5,7 @@ import { FullscreenDialog } from 'components/fullscreen.dialog'
 import { P, Row, SendMutation } from 'lib/index'
 import { observer } from 'mobx-react-lite'
 import { MaterialsListPage } from '../material/material_list'
-import { QtyInputWithUnit } from '../shared'
+import { QtyInputWithUnit } from '../metalflow_shared'
 import { t } from '../text'
 import { supplyStore } from './supply.store'
 

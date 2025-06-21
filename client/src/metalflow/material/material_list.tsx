@@ -16,16 +16,9 @@ import {
 } from 'lib/index'
 import { open, routeMap } from 'lib/routes'
 import { Column } from 'react-table'
-import { useStockStore } from '../stock'
 import { materialListStore } from '../store'
 import { t } from '../text'
 import { MaterialShapeFilter } from './shape_filter'
-
-function StockAmount(props: { materialId: number | null }) {
-  const stockStore = useStockStore()
-  if (!props.materialId) return '-'
-  return stockStore.getByIdRounded(props.materialId)
-}
 
 const columnList: Column<Material>[] = [
   {
@@ -42,7 +35,7 @@ const columnList: Column<Material>[] = [
   },
   {
     Header: t.Remaining,
-    accessor: m => <StockAmount materialId={m.id} />
+    accessor: m => <></>
   },
   {
     Header: t.Unit,

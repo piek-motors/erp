@@ -10,8 +10,8 @@ import { observer } from 'lib/deps'
 import { Label, P, SendMutation } from 'lib/index'
 import React from 'react'
 import { t } from '../text'
-import { WriteoffThroughDetail } from './through-detail/ui'
-import { WriteOffThroughMaterial } from './through-material/ui'
+import { WriteoffThroughDetail } from './through_detail/ui'
+import { WriteOffThroughMaterial } from './through_material/ui'
 import { writeoffStore } from './writeoff.store'
 
 export const WriteoffCreatePage = observer(() => {

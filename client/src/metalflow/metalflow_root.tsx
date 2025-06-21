@@ -1,7 +1,7 @@
 import { Box, Stack } from '@mui/joy'
 import { NavigationSideBar } from './nav'
 
-export function MetalFlowLayout(props: { children?: React.ReactNode }) {
+export function MetalFlowRootLayout(props: { children?: React.ReactNode }) {
   return (
     <Box
       sx={{

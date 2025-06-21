@@ -5,20 +5,20 @@ import { DetailsListPage } from './detail/detail_list'
 import { UpdateDetailPage } from './detail/detail_update'
 import { AddMaterialPage, UpdateMaterialPage } from './material/material'
 import { MaterialsListPage } from './material/material_list'
+import { MetalFlowRootLayout } from './metalflow_root'
 import { Narrow } from './shared/basic'
-import { MetalFlowLayout } from './spa'
 import { AddSupplyPage } from './supply/supply-create'
 import { ListSupplies } from './supply/supply-list'
 import { UsageInstruction } from './usage-instuction'
-import { WriteoffList } from './writeoff/list/ui'
-import { WriteoffCreatePage } from './writeoff/writeoff-create'
+import { WriteoffCreatePage } from './writeoff/create_writeoff'
+import { WriteoffList } from './writeoff/list_writeoff/ui'
 
 const { metalflow } = routeMap
 
 function wrapEachRoute(route: RouteConfig) {
   return {
     ...route,
-    element: <MetalFlowLayout>{route.element}</MetalFlowLayout>
+    element: <MetalFlowRootLayout>{route.element}</MetalFlowRootLayout>
   }
 }
 

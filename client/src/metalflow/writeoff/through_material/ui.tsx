@@ -2,7 +2,7 @@ import { FullscreenDialog } from 'components/fullscreen.dialog'
 import { observer } from 'lib/deps'
 import { Label, P, Row } from 'lib/index'
 import { MaterialsListPage } from '../../material/material_list'
-import { QtyInputWithUnit } from '../../shared'
+import { QtyInputWithUnit } from '../../metalflow_shared'
 import { WriteoffOpenListButton } from '../writeoff.shared'
 import { writeoffStore as store } from '../writeoff.store'
 

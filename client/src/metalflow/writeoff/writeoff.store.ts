@@ -1,9 +1,9 @@
 import { EnWriteoffReason, EnWriteoffType, Writeoff } from 'domain-model'
 import { AsyncStoreController } from 'lib/async-store.controller'
 import { makeAutoObservable } from 'mobx'
-import { WriteoffListStore } from './list/store'
-import { WriteoffTroughDetailStore } from './through-detail/store'
-import { WriteoffThroughMaterialStore } from './through-material/store'
+import { WriteoffListStore } from './list_writeoff/store'
+import { WriteoffTroughDetailStore } from './through_detail/store'
+import { WriteoffThroughMaterialStore } from './through_material/store'
 import { WriteoffApi } from './writeoff.api'
 
 class WriteoffStore {
