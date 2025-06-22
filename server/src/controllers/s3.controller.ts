@@ -1,9 +1,9 @@
+import { config } from '#root/config.js'
+import ApiError from '#root/lib/api.error.js'
+import { StaticStringKeys } from '#root/lib/error-codes.js'
+import { database } from '#root/lib/graphql-client.js'
+import { s3 } from '#root/lib/s3-clients.js'
 import type { NextFunction, Request, Response } from 'express'
-import { config } from '../config.ts'
-import ApiError from '../lib/api.error.ts'
-import { StaticStringKeys } from '../lib/error-codes.ts'
-import { database } from '../lib/graphql-client.ts'
-import { s3 } from '../lib/s3-clients.ts'
 
 class _S3Controller {
   async uploadBinaryFiles(

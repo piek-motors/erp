@@ -1,8 +1,8 @@
+import { config } from '#root/config.js'
+import { getSdk, Requester } from '#root/generated/schema-typedefs.js'
+import ApiError from '#root/lib/api.error.js'
 import { type DocumentNode, print as stringifyGraphqlNode } from 'graphql'
 import fetch from 'node-fetch'
-import { getSdk, type Requester } from '../../generated/schema-typedefs.ts'
-import { config } from '../config.ts'
-import ApiError from './api.error.ts'
 
 type GraphQLErrorResult = {
   errors: {

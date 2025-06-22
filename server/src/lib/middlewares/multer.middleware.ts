@@ -1,9 +1,8 @@
+import { config } from '#root/config.js'
+import { s3 } from '#root/lib/s3-clients.js'
 import multer from 'multer'
 import multerS3, { AUTO_CONTENT_TYPE } from 'multer-s3'
-// @ts-ignore
 import { randomUUID } from 'node:crypto'
-import { config } from '../../config.ts'
-import { s3 } from '../../lib/s3-clients.ts'
 
 const multerMiddleware = multer({
   storage: multerS3({

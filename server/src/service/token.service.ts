@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken'
-import { config } from '../config.ts'
-import { database } from '../lib/graphql-client.ts'
+import { config } from '../config.js'
+import { database } from '../lib/graphql-client.js'
 
 class TokenService {
   generateTokens(payload: any) {

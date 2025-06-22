@@ -1,13 +1,13 @@
+import { config } from '#root/config.js'
+import errorMiddleware from '#root/lib/middlewares/error.middleware.js'
+import { createContext } from '#root/lib/trpc/context.js'
+import { router } from '#root/routes.js'
+import { rpcRouter } from '#root/rpc-router.js'
 import * as trpcExpress from '@trpc/server/adapters/express'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import express from 'express'
-import { config } from './config.ts'
-import errorMiddleware from './lib/middlewares/error.middleware.ts'
-import { createContext } from './lib/trpc/context.ts'
-import './lib/trpc/index.ts'
-import { router } from './routes.ts'
-import { rpcRouter } from './rpc-router.ts'
+import './lib/trpc/index.js'
 const clientBuild = config.BUILD_PATH
 
 export const app = express() as express.Express

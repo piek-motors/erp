@@ -1,10 +1,12 @@
-import { db, procedure, z } from '../../../deps.ts'
+import { db } from '#root/deps.js'
+import { publicProcedure } from '#root/lib/trpc/trpc.js'
 import {
   ErrDetailPartCodeUnique,
   isDetailPertCodeUniqueError
-} from './shared.ts'
+} from '#root/procedures/metalflow/detail/shared.js'
+import { z } from 'zod'
 
-export const createDetailProcedure = procedure
+export const createDetailProcedure = publicProcedure
   .input(
     z.object({
       name: z.string(),

@@ -1,6 +1,8 @@
-import { config, db, procedure, s3, TRPCError, z } from '../../deps.ts'
+import { config, db, s3, TRPCError } from '#root/deps.js'
+import { publicProcedure } from '#root/lib/trpc/trpc.js'
+import { z } from 'zod'
 
-export const deleteFile = procedure
+export const deleteFile = publicProcedure
   .input(
     z.object({
       key: z.string(),

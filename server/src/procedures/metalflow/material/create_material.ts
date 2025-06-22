@@ -1,6 +1,7 @@
+import { db } from '#root/deps.js'
+import { publicProcedure } from '#root/lib/trpc/trpc.js'
 import { EnMaterialShape, EnUnit } from 'domain-model'
-import { db, z } from '../../../deps.ts'
-import { publicProcedure } from '../../../lib/trpc/trpc.ts'
+import { z } from 'zod'
 
 export const createMaterial = publicProcedure
   .input(

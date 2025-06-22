@@ -1,7 +1,7 @@
-import ApiError from '../lib/api.error.ts'
-import { StaticStringKeys } from '../lib/error-codes.ts'
-import { database } from '../lib/graphql-client.ts'
-import tokenService from './token.service.ts'
+import ApiError from '../lib/api.error.js'
+import { StaticStringKeys } from '../lib/error-codes.js'
+import { database } from '../lib/graphql-client.js'
+import tokenService from './token.service.js'
 
 class AuthService {
   formPayload(o) {

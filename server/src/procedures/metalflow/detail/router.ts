@@ -1,10 +1,10 @@
-import { router } from '../../../lib/trpc/trpc.ts'
-import { createDetailProcedure } from './create_detail.ts'
-import { deleteDetailProcedure } from './delete_detail.ts'
-import { deleteDetailMaterial } from './delete_detail_material.ts'
-import { getDetailProcedure } from './get_detail.ts'
-import { getDetailListProcedure } from './list_detail.ts'
-import { updateDetailProcedure } from './update_detail.ts'
+import { router } from '#root/lib/trpc/trpc.js'
+import { createDetailProcedure } from '#root/procedures/metalflow/detail/create_detail.js'
+import { deleteDetailProcedure } from '#root/procedures/metalflow/detail/delete_detail.js'
+import { deleteDetailMaterial } from '#root/procedures/metalflow/detail/delete_detail_material.js'
+import { getDetailProcedure } from '#root/procedures/metalflow/detail/get_detail.js'
+import { getDetailListProcedure } from '#root/procedures/metalflow/detail/list_detail.js'
+import { updateDetailProcedure } from '#root/procedures/metalflow/detail/update_detail.js'
 
 export const detailRouter = router({
   get: getDetailProcedure,

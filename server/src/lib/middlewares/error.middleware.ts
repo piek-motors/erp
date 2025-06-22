@@ -1,7 +1,7 @@
+import ApiError from '#root/lib/api.error.js'
+import { StaticStringKeys } from '#root/lib/error-codes.js'
 import type { NextFunction, Request, Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
-import ApiError from '../../lib/api.error.ts'
-import { StaticStringKeys } from '../../lib/error-codes.ts'
 
 export default function (
   err: ApiError,

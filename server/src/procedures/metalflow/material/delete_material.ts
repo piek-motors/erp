@@ -1,6 +1,8 @@
-import { db, procedure, z } from '../../../deps.ts'
+import { db } from '#root/deps.js'
+import { publicProcedure } from '#root/lib/trpc/trpc.js'
+import { z } from 'zod'
 
-export const deleteMaterial = procedure
+export const deleteMaterial = publicProcedure
   .input(z.object({ id: z.number() }))
   .mutation(async ({ input }) => {
     const { id } = input

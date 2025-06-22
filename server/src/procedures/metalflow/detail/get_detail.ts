@@ -1,7 +1,8 @@
-import { procedure, TRPCError, z } from '../../../deps.ts'
-import { db } from '../../../lib/db.ts'
+import { db, TRPCError } from '#root/deps.js'
+import { publicProcedure } from '#root/lib/trpc/trpc.js'
+import { z } from 'zod'
 
-export const getDetailProcedure = procedure
+export const getDetailProcedure = publicProcedure
   .input(
     z.object({
       id: z.number()

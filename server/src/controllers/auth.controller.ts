@@ -1,8 +1,8 @@
+import ApiError from '#root/lib/api.error.js'
+import { StaticStringKeys } from '#root/lib/error-codes.js'
+import AuthService from '#root/service/auth.service.js'
 import type { NextFunction, Request, Response } from 'express'
 import { validationResult } from 'express-validator'
-import ApiError from '../lib/api.error.ts'
-import { StaticStringKeys } from '../lib/error-codes.ts'
-import AuthService from '../service/auth.service.ts'
 
 class _UserController {
   async login(req: Request, res: Response, next: NextFunction) {

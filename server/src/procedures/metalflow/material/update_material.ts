@@ -1,7 +1,7 @@
+import { db } from '#root/deps.js'
+import { publicProcedure } from '#root/lib/trpc/trpc.js'
 import { EnMaterialShape, EnUnit } from 'domain-model'
 import { z } from 'zod'
-import { db } from '../../../deps.ts'
-import { publicProcedure } from '../../../lib/trpc/trpc.ts'
 
 export const updateMaterial = publicProcedure
   .input(

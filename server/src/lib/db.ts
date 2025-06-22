@@ -1,5 +1,6 @@
+import { config } from '#root/config.js'
 import { connect } from 'db'
-import { config } from '../config.ts'
+
 if (!config.PG_CONN_STR) {
   throw new Error('PG_CONN_STR is not set')
 }

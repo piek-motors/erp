@@ -1,6 +1,7 @@
-import { db, procedure } from '../../../deps.ts'
+import { db } from '#root/deps.js'
+import { publicProcedure } from '#root/lib/trpc/trpc.js'
 
-export const listMaterials = procedure.query(async ({ input }) => {
+export const listMaterials = publicProcedure.query(async ({ input }) => {
   const material = await db
     .selectFrom('metal_flow.materials')
     .selectAll()

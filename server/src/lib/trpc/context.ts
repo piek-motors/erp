@@ -1,6 +1,6 @@
+import tokenService from '#root/service/token.service.js'
 import { TRPCError } from '@trpc/server'
 import * as trpcNext from '@trpc/server/adapters/next'
-import tokenService from '../../service/token.service.ts'
 
 export async function createContext({
   req,

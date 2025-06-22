@@ -1,8 +1,8 @@
+import { UserController } from '#root/controllers/auth.controller.js'
 import { Router } from 'express'
 import { body } from 'express-validator'
-import { UserController } from './controllers/auth.controller.ts'
-import { S3Controller } from './controllers/s3.controller.ts'
-import { multerMiddleware } from './lib/index.ts'
+import { S3Controller } from './controllers/s3.controller.js'
+import { multerMiddleware } from './lib/index.js'
 
 export const router: Router = Router()
   .post('/login', body('email').isEmail(), (req, res, next) => {

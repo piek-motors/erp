@@ -1,7 +1,7 @@
+import ApiError from '#root/lib/api.error.js'
+import { StaticStringKeys } from '#root/lib/error-codes.js'
+import TokenService from '#root/service/token.service.js'
 import type { NextFunction, Request, Response } from 'express'
-import ApiError from '../../lib/api.error.ts'
-import { StaticStringKeys } from '../../lib/error-codes.ts'
-import TokenService from '../../service/token.service.ts'
 
 export default function (req: Request, res: Response, next: NextFunction) {
   try {
