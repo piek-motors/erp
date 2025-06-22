@@ -2,7 +2,7 @@ module.exports = {
   apps: [
     {
       name: 'erp',
-      script: 'server/dist/main.js',
+      script: 'start',
       watch: false,
       env: {
         NODE_ENV: 'development'
@@ -10,7 +10,7 @@ module.exports = {
       env_production: {
         NODE_ENV: 'production'
       },
-      pre_start: 'npm --prefix server run migrate'
+      pre_start: 'pnpm --prefix db migrate'
     }
   ]
 }

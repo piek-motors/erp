@@ -25,13 +25,12 @@ ssh "$TARGET" <<EOF
   pnpm i --frozen-lockfile
 
   cd ~/erp/domain-model
-  npm run build
+  pnpm build
 
   cd ~/erp/db
-  npm run migrate
+  pnpm migrate
 
   cd ~/erp/server
-  npm run compile
   
   if npx pm2 describe "$PM2_PROCESS_NAME" > /dev/null; then
     echo "Process exists. Restarting..."
