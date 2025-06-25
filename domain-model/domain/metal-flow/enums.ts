@@ -23,3 +23,8 @@ export enum EnWriteoffType {
   ThroughDetail = 0,
   ThroughMaterial = 1
 }
+
+export enum EnOperationType {
+  Writeoff = 0,
+  Supply = 1
+}

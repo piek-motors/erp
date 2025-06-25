@@ -1,4 +1,4 @@
-import { EnWriteoffReason, EnWriteoffType, Writeoff } from 'domain-model'
+import { EnWriteoffReason, EnWriteoffType } from 'domain-model'
 import { rpc } from 'lib/rpc.client'
 import { makeAutoObservable } from 'mobx'
 import { WriteoffListStore } from './list_writeoff/store'
@@ -36,24 +36,7 @@ class WriteoffStore {
 
   async init() {
     const writeoffs = await rpc.material.listWriteoff.query()
-
-    this.listStore.set(
-      writeoffs.map(e => {
-        const w = new Writeoff()
-        w.id = e.id
-        w.date = new Date(e.date)
-        w.qty = e.qty
-        w.reason = e.reason
-        w.material = {
-          unit: e.unit,
-          id: e.material_id,
-          label: e.label
-        }
-        w.type = e.type
-        w.typeData = e.type_data
-        return w
-      })
-    )
+    this.listStore.set(writeoffs)
   }
 
   async insert() {

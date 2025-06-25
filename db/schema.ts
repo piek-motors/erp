@@ -1,8 +1,8 @@
 import {
   EnMaterialShape,
+  EnOperationType,
   EnUnit,
-  EnWriteoffReason,
-  EnWriteoffType
+  EnWriteoffReason
 } from 'domain-model'
 import type {
   Generated,
@@ -21,16 +21,16 @@ export namespace DB {
   export interface Schema {
     ['users']: UserTable
     ['attachments']: AttachmentTable
+
     ['orders.orders']: OrderTable
     ['orders.order_attachments']: OrderAttachmentTable
-    ['orders.attachments']: AttachmentTableOld // TODO: remove this later
     ['orders.order_payments']: OrderPaymentsTable
+
     ['metal_flow.materials']: MaterialTable
     ['metal_flow.details']: DetailTable
     ['metal_flow.detail_attachments']: DetailAttachmentTable
     ['metal_flow.detail_materials']: DetailMaterialsTable
-    ['metal_flow.supplies']: SuppliesTable
-    ['metal_flow.writeoffs']: WriteoffsTable
+    ['metal_flow.operations']: OperationsTable
   }
 
   export interface UserTable {
@@ -75,22 +75,21 @@ export namespace DB {
     >
   }
 
-  export interface SuppliesTable {
+  export interface OperationsTable {
     id: GeneratedAlways<number>
-    material_id: number
-    qty: number
-    supplied_at: Date
-    supplier_name: string
+    operation_type: EnOperationType
+    user_id: number
+    material_id: number | null
+    qty: number | null
+    detail_id: number | null
+    data: JSONColumnType<any, any, any> | null
+    timestamp?: Generated<Date>
   }
 
-  export interface WriteoffsTable {
-    id: GeneratedAlways<number>
-    material_id: number
-    date: Date
-    qty: number
+  export interface SupplyOperaionData {}
+
+  export interface WrittenOffOperationData {
     reason: EnWriteoffReason
-    type: EnWriteoffType
-    type_data: JSONColumnType<any, any, any>
   }
 
   export interface OrderPaymentsTable {
@@ -125,14 +124,5 @@ export namespace DB {
   export interface DetailAttachmentTable {
     detail_id: number
     attachment_id: number
-  }
-
-  export interface AttachmentTableOld {
-    id: Generated<number>
-    order_id: number
-    key: string
-    filename: string
-    size: number
-    uploaded_at: Date
   }
 }

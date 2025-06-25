@@ -1,18 +1,30 @@
-import { Writeoff } from 'domain-model'
+import { EnWriteoffReason } from 'domain-model'
 import { makeAutoObservable } from 'mobx'
+import { RouterOutput } from '../../../../../server/src/lib/trpc'
+
+export type ListWriteoffDto = RouterOutput['material']['listWriteoff'][number]
+
+export interface Writeoff {
+  id: number
+  qty: number
+  timestamp: Date
+  data: {
+    reason: EnWriteoffReason
+  }
+}
 
 export class WriteoffListStore {
-  writeoffs: Writeoff[] = []
+  writeoffs: ListWriteoffDto[] = []
 
   constructor() {
     makeAutoObservable(this)
   }
 
-  setWriteoffs(writeoffs: Writeoff[]) {
+  setWriteoffs(writeoffs: ListWriteoffDto[]) {
     this.writeoffs = writeoffs
   }
 
-  set(writeoffs: Writeoff[]) {
+  set(writeoffs: ListWriteoffDto[]) {
     this.writeoffs = writeoffs
   }
 

@@ -1,18 +1,18 @@
 import { db, z } from '#root/deps.js'
 import { publicProcedure } from '#root/lib/trpc/trpc.js'
-import { EnWriteoffReason, EnWriteoffType } from 'domain-model'
+import { DB } from 'db'
+import { EnOperationType, EnWriteoffReason } from 'domain-model'
 
 export const listWriteoff = publicProcedure.query(async () => {
   const writeoffs = await db
-    .selectFrom('metal_flow.writeoffs as w')
+    .selectFrom('metal_flow.operations as w')
+    .where('w.operation_type', '=', EnOperationType.Writeoff)
     .innerJoin('metal_flow.materials as m', 'm.id', 'w.material_id')
     .select([
       'w.id',
       'w.qty',
-      'w.date',
-      'w.reason',
-      'w.type',
-      'w.type_data',
+      'w.timestamp',
+      'w.data',
       'm.id as material_id',
       'm.label',
       'm.unit'
@@ -43,14 +43,15 @@ export const writeoffThroughMaterial = publicProcedure
     }
 
     const writeoff = await db
-      .insertInto('metal_flow.writeoffs')
+      .insertInto('metal_flow.operations')
       .values({
+        operation_type: EnOperationType.Writeoff,
+        user_id: 0,
         material_id: input.material_id,
         qty: input.qty,
-        date: new Date(),
-        reason: input.reason,
-        type: EnWriteoffType.ThroughMaterial,
-        type_data: input.type_data
+        data: {
+          reason: input.reason
+        } satisfies DB.WrittenOffOperationData
       })
       .execute()
 
@@ -91,17 +92,15 @@ export const writeoffThroughDetail = publicProcedure
       const totalQty = detailMaterial.data.weight * input.qty
       // insert writeoff
       const writeoff = await db
-        .insertInto('metal_flow.writeoffs')
+        .insertInto('metal_flow.operations')
         .values({
+          operation_type: EnOperationType.Writeoff,
+          user_id: 0,
           material_id: detailMaterial.material_id,
           qty: totalQty,
-          date: new Date(),
-          reason: input.reason,
-          type: EnWriteoffType.ThroughDetail,
-          type_data: {
-            detailId: input.detailId,
-            qty: input.qty
-          }
+          data: {
+            reason: input.reason
+          } satisfies DB.WrittenOffOperationData
         })
         .returning(['id'])
         .execute()
@@ -123,7 +122,7 @@ export const deleteWriteoff = publicProcedure
   .input(z.object({ id: z.number() }))
   .mutation(async ({ input }) => {
     await db
-      .deleteFrom('metal_flow.writeoffs')
+      .deleteFrom('metal_flow.operations')
       .where('id', '=', input.id)
       .execute()
   })

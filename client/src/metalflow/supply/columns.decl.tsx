@@ -31,11 +31,7 @@ export function getColumns(props: {
     },
     {
       Header: 'Дата поставки',
-      accessor: data => formatDateWithTime(data.supplied_at)
-    },
-    {
-      Header: 'Поставщик',
-      accessor: 'supplier_name'
+      accessor: data => formatDateWithTime(data.timestamp!)
     },
     {
       Header: 'Действие',

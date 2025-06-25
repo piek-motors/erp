@@ -1,23 +1,16 @@
-import {
-  EnWriteoffType,
-  uiUnit,
-  uiWriteoffReason,
-  Writeoff,
-  WriteoffTroughDetail
-} from 'domain-model'
+import { uiUnit, uiWriteoffReason } from 'domain-model'
 import { DeleteResourceButton, P } from 'lib/index'
-import { GetWrietOffsQuery } from 'lib/types/graphql-shema'
 import { formatOnlyDate } from 'lib/utils/formatting'
 import { Column } from 'react-table'
 import { t } from '../../text'
 import { writeoffStore } from '../writeoff.store'
-export type SupplyDto = GetWrietOffsQuery['metal_flow_writeoffs'][number]
+import { ListWriteoffDto } from './store'
 
 export function getColumns(props: {
   key: number
   setKey: (n: number) => void
   refetch: () => void
-}): Column<Writeoff>[] {
+}): Column<ListWriteoffDto>[] {
   return [
     {
       Header: 'ID',
@@ -29,32 +22,22 @@ export function getColumns(props: {
       accessor: data => {
         return (
           <P>
-            ({data.material.id}) {data.material.label}
+            ({data.id}) {data.label}
           </P>
         )
       }
     },
     {
       Header: t.Qty,
-      accessor: data => `${data.qty} ${uiUnit(data.material.unit)}`
+      accessor: data => `${data.qty} ${uiUnit(data.unit)}`
     },
     {
       Header: t.Date,
-      accessor: data => formatOnlyDate(data.date.toISOString())
+      accessor: data => formatOnlyDate(data.timestamp!)
     },
     {
       Header: 'Причина',
-      accessor: data => uiWriteoffReason(data.reason)
-    },
-    {
-      Header: 'ID детали',
-      accessor: data => {
-        if (data.type == EnWriteoffType.ThroughDetail) {
-          return (data.typeData as WriteoffTroughDetail).detailId
-        }
-
-        return ''
-      }
+      accessor: data => uiWriteoffReason(data.data.reason)
     },
     {
       Header: t.Action,

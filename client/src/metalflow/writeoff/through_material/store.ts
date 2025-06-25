@@ -1,10 +1,11 @@
-import { EnWriteoffReason, Material, WriteoffDirectUnit } from 'domain-model'
+import { EnWriteoffReason, WriteoffDirectUnit } from 'domain-model'
 import { makeAutoObservable, rpc } from 'lib/deps'
+import { MaterialLiseOutput } from 'metalflow/material/store/material-list.store'
 import { IWriteoffMethod } from '../interfaces/writeoff-type'
 
 export class WriteoffThroughMaterialStore implements IWriteoffMethod {
-  material?: Material
-  setMaterial(material: Material) {
+  material?: MaterialLiseOutput
+  setMaterial(material: MaterialLiseOutput) {
     this.material = material
   }
 

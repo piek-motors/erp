@@ -41,6 +41,7 @@ class SupplyStore {
 
   async load() {
     const res = await rpc.material.listSupply.query()
+    console.log(res)
     this.supplies = res
   }
 

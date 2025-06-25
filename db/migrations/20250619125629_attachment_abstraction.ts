@@ -38,11 +38,7 @@ export async function up(db: KDB): Promise<void> {
     ])
     .execute()
 
-  const existingOrderAttachments = await db
-    .selectFrom('orders.attachments')
-    .selectAll()
-    .execute()
-
+  const existingOrderAttachments: any[] = []
   console.log(
     `Found ${existingOrderAttachments.length} existing order attachments to migrate`
   )

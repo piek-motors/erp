@@ -28,7 +28,7 @@ class MaterialMapper {
       emptyMaterial,
       dto.material.shape_data
     )
-    emptyMaterial.remainingStock = dto.stock.qty
+    emptyMaterial.remainingStock = dto.material.stock
 
     return emptyMaterial
   }
