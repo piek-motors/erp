@@ -80,16 +80,16 @@ export class MaterialStore {
 
   async load(id: number) {
     return this.async.run(async () => {
-      const { material, details } = await rpc.material.get.query({ id })
-      this.syncState(map.material.fromDto(material))
+      const res = await rpc.material.get.query({ id })
+      this.syncState(map.material.fromDto(res))
       this.setDetailsMadeOfMaterial(
-        details.map(e => ({
+        res.details.map(e => ({
           id: e.detail_id,
           name: e.name
         }))
       )
 
-      return material
+      return res
     })
   }
 

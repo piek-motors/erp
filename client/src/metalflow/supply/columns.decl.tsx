@@ -1,12 +1,13 @@
 import { DeleteResourceButton, P } from 'lib/index'
-import { GetSuppliesQuery } from 'lib/types/graphql-shema'
 import { formatDateWithTime } from 'lib/utils/formatting'
 import { Column } from 'react-table'
-import { map } from '../mappers'
 import { t } from '../text'
 import { supplyStore } from './supply.store'
 
-export type SupplyDto = GetSuppliesQuery['metal_flow_supplies'][number]
+// @ts-ignore
+import { RouterOutput } from '../../../../server/src/lib/trpc'
+
+export type SupplyDto = RouterOutput['material']['listSupply'][number]
 
 export function getColumns(props: {
   key: number
@@ -21,9 +22,7 @@ export function getColumns(props: {
       Header: t.Material,
       id: 'name',
       accessor: data => {
-        if (!data.material) return '-'
-        const ma = map.material.fromDto(data.material)
-        return <P>{ma.label}</P>
+        return <P>{data.label}</P>
       }
     },
     {

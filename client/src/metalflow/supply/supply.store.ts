@@ -1,12 +1,12 @@
-import { Material } from 'domain-model'
+import { rpc } from 'lib/rpc.client'
+import { MaterialLiseOutput } from 'metalflow/material/store/material-list.store'
 import { makeAutoObservable } from 'mobx'
 import { SupplyDto } from './columns.decl'
-import * as api from './supply.api'
 
 class SupplyStore {
   supplies: SupplyDto[] = []
 
-  material: Material | null = null
+  material: MaterialLiseOutput | null = null
   qty: string = ''
 
   selectMaterialDialogOpen = false
@@ -19,7 +19,7 @@ class SupplyStore {
     makeAutoObservable(this)
   }
 
-  setMaterial(material: Material) {
+  setMaterial(material: MaterialLiseOutput) {
     this.material = material
   }
 
@@ -28,7 +28,7 @@ class SupplyStore {
   }
 
   async deleteSupply(id: number) {
-    await api.deleteSupply(id)
+    await rpc.material.deleteSupply.mutate({ id })
 
     this.supplies = this.supplies.filter(supply => supply.id !== id)
     return id
@@ -40,7 +40,7 @@ class SupplyStore {
   }
 
   async load() {
-    const res = await api.getSupplies()
+    const res = await rpc.material.listSupply.query()
     this.supplies = res
   }
 
@@ -51,13 +51,9 @@ class SupplyStore {
     if (!qty) throw Error('Количество не указано')
     this.reset()
 
-    return await api.insertSupply({
-      object: {
-        material_id: materialId,
-        qty,
-        supplied_at: new Date(),
-        supplier_name: ''
-      }
+    return await rpc.material.supply.mutate({
+      material_id: materialId,
+      qty: Number(qty)
     })
   }
 }

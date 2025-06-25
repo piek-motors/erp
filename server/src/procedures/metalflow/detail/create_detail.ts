@@ -23,7 +23,7 @@ export const createDetailProcedure = publicProcedure
   .mutation(async ({ input }) => {
     const detail = await db
       .insertInto('metal_flow.details')
-      .values({ name: input.name, part_code: input.partCode })
+      .values({ name: input.name, part_code: input.partCode, stock: 0 })
       .returning('id')
       .executeTakeFirstOrThrow()
       .catch(e => {

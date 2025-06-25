@@ -18,5 +18,11 @@ export const getMaterial = publicProcedure
       .selectAll()
       .execute()
 
-    return { material, details }
+    const stock = await db
+      .selectFrom('metal_flow.materials')
+      .where('id', '=', input.id)
+      .selectAll()
+      .executeTakeFirstOrThrow()
+
+    return { material, details, stock }
   })

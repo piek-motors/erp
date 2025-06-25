@@ -21,5 +21,5 @@ export enum EnUnit {
 
 export enum EnWriteoffType {
   ThroughDetail = 0,
-  DirectUnit = 1
+  ThroughMaterial = 1
 }

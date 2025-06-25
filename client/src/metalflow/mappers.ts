@@ -4,10 +4,36 @@ import {
   Material,
   MaterialShapeAbstractionLayer
 } from 'domain-model'
-import { GetMaterialByPkQuery } from 'lib/types/graphql-shema'
+
+// @ts-ignore
+import { RouterOutput } from '../../../server/src/lib/trpc'
+type GetMaterialsOutput = RouterOutput['material']['get']
+type GetMaterialsListOutput = RouterOutput['material']['list'][number]
 
 class MaterialMapper {
-  fromDto(dto: GetMaterialByPkQuery['metal_flow_materials_by_pk']): Material {
+  fromDto(dto: GetMaterialsOutput): Material {
+    if (dto == null) throw new Error('material mapper: empty dto passed')
+    if (dto.material.shape == null)
+      throw new Error('material mapper: shape is not specified')
+
+    const MaterialConstructor = getMaterialConstructor<any>(dto.material.shape)
+    if (!MaterialConstructor)
+      throw new Error('material mapper: material constructor not found')
+
+    const emptyMaterial = new MaterialConstructor(
+      dto.material.id,
+      dto.material.label
+    )
+    MaterialShapeAbstractionLayer.importShapeData(
+      emptyMaterial,
+      dto.material.shape_data
+    )
+    emptyMaterial.remainingStock = dto.stock.qty
+
+    return emptyMaterial
+  }
+
+  listFromDto(dto: GetMaterialsListOutput): Material {
     if (dto == null) throw new Error('material mapper: empty dto passed')
     if (dto.shape == null)
       throw new Error('material mapper: shape is not specified')
@@ -18,19 +44,8 @@ class MaterialMapper {
 
     const emptyMaterial = new MaterialConstructor(dto.id, dto.label)
     MaterialShapeAbstractionLayer.importShapeData(emptyMaterial, dto.shape_data)
-
+    emptyMaterial.remainingStock = dto.stock
     return emptyMaterial
-  }
-
-  convertable(
-    dto: GetMaterialByPkQuery['metal_flow_materials_by_pk']
-  ): boolean {
-    try {
-      this.fromDto(dto)
-      return true
-    } catch (e) {
-      return false
-    }
   }
 }
 

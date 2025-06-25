@@ -2,10 +2,11 @@
 import { PageTitle } from 'components'
 import { ScrollableWindow, Search } from 'components/inputs'
 import { Table } from 'components/table.impl'
-import { Material } from 'domain-model'
+import { uiUnit } from 'domain-model'
 import {
   AddResourceButton,
   ErrorHint,
+  Inp,
   LoadingHint,
   observer,
   P,
@@ -19,8 +20,9 @@ import { Column } from 'react-table'
 import { materialListStore } from '../store'
 import { t } from '../text'
 import { MaterialShapeFilter } from './shape_filter'
+import { MaterialLiseOutput } from './store/material-list.store'
 
-const columnList: Column<Material>[] = [
+const columnList: Column<MaterialLiseOutput>[] = [
   {
     Header: 'ID',
     accessor: 'id'
@@ -35,17 +37,17 @@ const columnList: Column<Material>[] = [
   },
   {
     Header: t.Remaining,
-    accessor: m => <></>
-  },
-  {
-    Header: t.Unit,
-    accessor: m => m.unitUI
+    accessor: m => (
+      <>
+        {m.stock} {uiUnit(m.unit)}
+      </>
+    )
   }
 ]
 
 interface MaterialsTableProps {
-  onRowClick?: (material: Material) => void
-  highlight?: (material: Material) => boolean
+  onRowClick?: (material: MaterialLiseOutput) => void
+  highlight?: (material: MaterialLiseOutput) => boolean
   highlightColor?: string
 }
 
@@ -91,6 +93,14 @@ export const MaterialsListPage = observer((props: MaterialsTableProps) => {
             />
           </PageTitle>
           <RowButColumsAtSm gap={1}>
+            <Inp
+              sx={{ width: '80px' }}
+              placeholder="ID"
+              value={materialListStore.searchId}
+              onChange={v => {
+                materialListStore.setSearchId(v)
+              }}
+            />
             <Search
               onChange={e => {
                 materialListStore.search(e.target.value)

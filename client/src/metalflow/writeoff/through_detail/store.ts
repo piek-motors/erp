@@ -1,8 +1,9 @@
-import { Detail, WriteoffTroughDetail } from 'domain-model'
-import { makeAutoObservable } from 'lib/deps'
-import { IWriteoffType } from '../interfaces/writeoff-type'
+import { EnWriteoffReason, WriteoffTroughDetail } from 'domain-model'
+import { makeAutoObservable, rpc } from 'lib/deps'
+import { Detail } from 'metalflow/detail/store/detail.store'
+import { IWriteoffMethod } from '../interfaces/writeoff-type'
 
-export class WriteoffTroughDetailStore implements IWriteoffType {
+export class WriteoffTroughDetailStore implements IWriteoffMethod {
   constructor() {
     makeAutoObservable(this)
   }
@@ -33,8 +34,8 @@ export class WriteoffTroughDetailStore implements IWriteoffType {
     }
 
     let totalWeight = 0
-    for (const material of this.detail.materials) {
-      totalWeight += material.weight * this.qty
+    for (const material of this.detail.usedMaterials) {
+      totalWeight += Number(material.weight) * this.qty
     }
 
     return totalWeight
@@ -45,7 +46,7 @@ export class WriteoffTroughDetailStore implements IWriteoffType {
     if (!detail) {
       return new Error('Деталь не выбрана')
     }
-    if (!this.detail?.materials || this.detail.materials.length === 0) {
+    if (!this.detail?.usedMaterials || this.detail.usedMaterials.length === 0) {
       return new Error('Не указан материал детали')
     }
 
@@ -55,12 +56,25 @@ export class WriteoffTroughDetailStore implements IWriteoffType {
   }
 
   getTypeData(): WriteoffTroughDetail {
-    if (!this.detail) {
+    if (!this.detail?.id) {
       throw new Error('Detail is not set')
     }
     return {
       detailId: this.detail.id,
       qty: this.qty
     }
+  }
+
+  async save(reason: EnWriteoffReason): Promise<number[]> {
+    const detail = this.detail
+    if (!detail?.id) {
+      throw new Error('Detail is not set')
+    }
+    await rpc.material.writeoffTroughDetail.mutate({
+      detailId: detail.id,
+      qty: this.qty,
+      reason
+    })
+    return []
   }
 }

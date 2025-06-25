@@ -1,4 +1,5 @@
 import { FullscreenDialog } from 'components/fullscreen.dialog'
+import { EnWriteoffType } from 'domain-model'
 import { observer } from 'lib/deps'
 import { Label, P, Row } from 'lib/index'
 import { MaterialsListPage } from '../../material/material_list'
@@ -23,6 +24,7 @@ export const WriteOffThroughMaterial = observer(() => {
         >
           <MaterialsListPage
             onRowClick={m => {
+              store.setType(EnWriteoffType.ThroughMaterial)
               store.throughMaterial.setMaterial(m)
               store.throughMaterial.setDialogOpen(false)
             }}

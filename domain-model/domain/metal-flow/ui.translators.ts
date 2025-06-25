@@ -42,7 +42,7 @@ export function uiUnit(unit?: EnUnit) {
 
 export const UiWriteoffType = {
   [EnWriteoffType.ThroughDetail]: 'Через деталь',
-  [EnWriteoffType.DirectUnit]: 'Прямо в единицу'
+  [EnWriteoffType.ThroughMaterial]: 'Прямо в единицу'
 }
 
 export function uiWriteoffType(type: EnWriteoffType) {

@@ -3,12 +3,13 @@ import { makeAutoObservable } from 'mobx'
 
 export class WriteoffListStore {
   writeoffs: Writeoff[] = []
-  setWriteoffs(writeoffs: Writeoff[]) {
-    this.writeoffs = writeoffs
-  }
 
   constructor() {
     makeAutoObservable(this)
+  }
+
+  setWriteoffs(writeoffs: Writeoff[]) {
+    this.writeoffs = writeoffs
   }
 
   set(writeoffs: Writeoff[]) {

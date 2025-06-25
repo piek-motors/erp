@@ -1,5 +1,6 @@
 import {
   EnWriteoffType,
+  uiUnit,
   uiWriteoffReason,
   Writeoff,
   WriteoffTroughDetail
@@ -8,8 +9,8 @@ import { DeleteResourceButton, P } from 'lib/index'
 import { GetWrietOffsQuery } from 'lib/types/graphql-shema'
 import { formatOnlyDate } from 'lib/utils/formatting'
 import { Column } from 'react-table'
-import { t } from '../text'
-import { writeoffStore } from './writeoff.store'
+import { t } from '../../text'
+import { writeoffStore } from '../writeoff.store'
 export type SupplyDto = GetWrietOffsQuery['metal_flow_writeoffs'][number]
 
 export function getColumns(props: {
@@ -26,12 +27,16 @@ export function getColumns(props: {
       id: 'name',
       Header: t.Material,
       accessor: data => {
-        return <P>{data.material.label}</P>
+        return (
+          <P>
+            ({data.material.id}) {data.material.label}
+          </P>
+        )
       }
     },
     {
       Header: t.Qty,
-      accessor: data => `${data.qty} ${data.material.unitUI}`
+      accessor: data => `${data.qty} ${uiUnit(data.material.unit)}`
     },
     {
       Header: t.Date,

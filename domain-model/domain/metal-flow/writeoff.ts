@@ -1,16 +1,19 @@
-import { EnWriteoffReason, EnWriteoffType } from './enums'
-import { Material } from './materials'
+import { EnUnit, EnWriteoffReason, EnWriteoffType } from './enums'
+
+interface Material {
+  id: number
+  label: string
+  unit: EnUnit
+}
 
 export class Writeoff {
-  constructor(
-    readonly id: number,
-    readonly date: Date,
-    readonly qty: number,
-    readonly reason: EnWriteoffReason,
-    readonly material: Material,
-    readonly type: EnWriteoffType,
-    readonly typeData: WriteoffTroughDetail | WriteoffDirectUnit
-  ) {}
+  id!: number
+  date!: Date
+  qty!: number
+  reason!: EnWriteoffReason
+  material!: Material
+  type!: EnWriteoffType
+  typeData!: WriteoffTroughDetail | WriteoffDirectUnit
 }
 
 export type WriteoffTroughDetail = {

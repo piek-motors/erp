@@ -48,6 +48,7 @@ export namespace DB {
     label: string // unique
     shape: EnMaterialShape
     shape_data: JSONColumnType<any, any, any>
+    stock: number
   }
 
   export type Material = KyselySelectable<MaterialTable>
@@ -56,6 +57,7 @@ export namespace DB {
     id: Generated<number>
     name: string
     part_code: string
+    stock: number
   }
 
   export interface DetailMaterialJsonData {

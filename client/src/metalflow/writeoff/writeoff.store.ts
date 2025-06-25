@@ -1,15 +1,11 @@
 import { EnWriteoffReason, EnWriteoffType, Writeoff } from 'domain-model'
-import { AsyncStoreController } from 'lib/async-store.controller'
+import { rpc } from 'lib/rpc.client'
 import { makeAutoObservable } from 'mobx'
 import { WriteoffListStore } from './list_writeoff/store'
 import { WriteoffTroughDetailStore } from './through_detail/store'
 import { WriteoffThroughMaterialStore } from './through_material/store'
-import { WriteoffApi } from './writeoff.api'
 
 class WriteoffStore {
-  private api = new WriteoffApi()
-  private async = new AsyncStoreController()
-
   private listStore = new WriteoffListStore()
 
   throughDetail = new WriteoffTroughDetailStore()
@@ -33,63 +29,46 @@ class WriteoffStore {
   validate() {
     if (this.type === EnWriteoffType.ThroughDetail) {
       return this.throughDetail.validate()
-    } else if (this.type === EnWriteoffType.DirectUnit) {
+    } else if (this.type === EnWriteoffType.ThroughMaterial) {
       return this.throughMaterial.validate()
     }
   }
 
   async init() {
-    const writeoffs = await this.api.list()
-    this.listStore.set(writeoffs)
+    const writeoffs = await rpc.material.listWriteoff.query()
+
+    this.listStore.set(
+      writeoffs.map(e => {
+        const w = new Writeoff()
+        w.id = e.id
+        w.date = new Date(e.date)
+        w.qty = e.qty
+        w.reason = e.reason
+        w.material = {
+          unit: e.unit,
+          id: e.material_id,
+          label: e.label
+        }
+        w.type = e.type
+        w.typeData = e.type_data
+        return w
+      })
+    )
   }
 
   async insert() {
     this.validate()
-    // TODO: use polymorphism
+
     if (this.type === EnWriteoffType.ThroughDetail) {
-      const detail = this.throughDetail.detail
-      if (!detail) {
-        throw new Error('Detail is not set')
-      }
-
-      const writeoffs: Writeoff[] = []
-      if (detail.materials.length === 0) {
-        throw new Error('Detail has no materials')
-      }
-
-      for (const material of detail.materials) {
-        const w = new Writeoff(
-          0,
-          new Date(),
-          this.throughDetail.totalWeight,
-          this.reason,
-          material.material,
-          this.type,
-          this.throughDetail.getTypeData()
-        )
-        return await this.api.create(w)
-      }
-      return await this.api.createMany(writeoffs)
-    } else if (this.type === EnWriteoffType.DirectUnit) {
-      const material = this.throughMaterial.material
-      if (!material) {
-        throw new Error('Material is not set')
-      }
-      const w = new Writeoff(
-        0,
-        new Date(),
-        parseFloat(this.throughMaterial.weight),
-        this.reason,
-        material,
-        this.type,
-        this.throughMaterial.getTypeData()
-      )
-      return await this.api.create(w)
+      return this.throughDetail.save(this.reason)
+    } else if (this.type === EnWriteoffType.ThroughMaterial) {
+      return this.throughMaterial.save(this.reason)
     }
+    throw new Error(`Unknown type: ${this.type}`)
   }
 
   async delete(id: number) {
-    await this.api.delete(id)
+    await rpc.material.deleteWriteoff.mutate({ id })
     this.listStore.delete(id)
   }
 

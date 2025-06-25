@@ -1,8 +1,8 @@
-import { Material, WriteoffDirectUnit } from 'domain-model'
-import { makeAutoObservable } from 'lib/deps'
-import { IWriteoffType } from '../interfaces/writeoff-type'
+import { EnWriteoffReason, Material, WriteoffDirectUnit } from 'domain-model'
+import { makeAutoObservable, rpc } from 'lib/deps'
+import { IWriteoffMethod } from '../interfaces/writeoff-type'
 
-export class WriteoffThroughMaterialStore implements IWriteoffType {
+export class WriteoffThroughMaterialStore implements IWriteoffMethod {
   material?: Material
   setMaterial(material: Material) {
     this.material = material
@@ -34,5 +34,19 @@ export class WriteoffThroughMaterialStore implements IWriteoffType {
 
   getTypeData(): WriteoffDirectUnit {
     return {}
+  }
+
+  async save(reason: EnWriteoffReason): Promise<number[]> {
+    const material = this.material
+    if (!material) {
+      throw new Error('Material is not set')
+    }
+    await rpc.material.writeoffTroughMaterial.mutate({
+      material_id: material.id,
+      qty: parseFloat(this.weight),
+      reason,
+      type_data: this.getTypeData()
+    })
+    return []
   }
 }

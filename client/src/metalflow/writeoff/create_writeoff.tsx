@@ -48,7 +48,7 @@ const writeoffTypeToComponent = {
   [EnWriteoffType.ThroughDetail]: {
     left: WriteoffThroughDetail
   },
-  [EnWriteoffType.DirectUnit]: {
+  [EnWriteoffType.ThroughMaterial]: {
     left: WriteOffThroughMaterial
   }
 }
@@ -61,7 +61,7 @@ const WriteoffInputStrategySelect = observer(() => {
     },
     {
       label: 'Через материал',
-      value: EnWriteoffType.DirectUnit
+      value: EnWriteoffType.ThroughMaterial
     }
   ]
 

@@ -7,6 +7,7 @@ export abstract class Material {
   readonly id: number
   @IsString()
   label: string
+  remainingStock: number = 0
   abstract readonly unit: EnUnit
   abstract readonly shape: EnMaterialShape
   constructor(id: number, label: string = '') {

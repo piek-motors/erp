@@ -1,6 +1,7 @@
-import { WriteoffTypeDataUnion } from 'domain-model'
+import { EnWriteoffReason, WriteoffTypeDataUnion } from 'domain-model'
 
-export interface IWriteoffType {
+export interface IWriteoffMethod {
   getTypeData(): WriteoffTypeDataUnion
   validate(): Error | undefined
+  save(reason: EnWriteoffReason): Promise<number[]>
 }

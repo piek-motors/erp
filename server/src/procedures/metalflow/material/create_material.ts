@@ -13,9 +13,11 @@ export const createMaterial = publicProcedure
     })
   )
   .mutation(async ({ input }) => {
-    return await db
+    const material = await db
       .insertInto('metal_flow.materials')
-      .values(input)
+      .values({ ...input, stock: 0 })
       .returningAll()
       .executeTakeFirstOrThrow()
+
+    return material
   })
