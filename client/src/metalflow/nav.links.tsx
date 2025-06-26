@@ -27,6 +27,10 @@ export const actions: Action[] = [
     ]
   },
   {
+    name: 'Детали в производстве',
+    href: routeMap.metalflow.manufacturing
+  },
+  {
     name: 'Поставки',
     href: routeMap.metalflow.supplies
   },

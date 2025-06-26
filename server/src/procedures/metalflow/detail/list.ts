@@ -1,6 +1,4 @@
-import { db } from '#root/deps.js'
-import { publicProcedure } from '#root/lib/trpc/trpc.js'
-import { sql } from 'kysely'
+import { db, publicProcedure, sql } from '#root/deps.js'
 
 export const getDetailListProcedure = publicProcedure.query(
   async ({ input }) => {

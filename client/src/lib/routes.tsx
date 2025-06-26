@@ -41,7 +41,9 @@ export const routeMap = {
     writeoffs: '/metalflow/writeoffs',
     writeoff: {
       new: '/metalflow/writeoffs/new'
-    }
+    },
+
+    manufacturing: '/metalflow/manufacturing'
   }
 } as const
 

@@ -5,6 +5,7 @@ import { UpdateDetailPage } from './details/detail_update'
 import { DetailsListPage } from './details/list/list'
 import { DetailSupplyPage } from './details/supply/supply'
 import { DetailWriteoffPage } from './details/writeoff/writeoff'
+import { ManufacturingList } from './manufacturing/list'
 import { MaterialListPage } from './materials/list/list'
 import { MaterialAddPage } from './materials/material_add'
 import { MaterialUpdatePage } from './materials/material_update'
@@ -105,6 +106,10 @@ const innerRoutes = [
   {
     element: <WriteoffList />,
     path: metalflow.writeoffs
+  },
+  {
+    element: <ManufacturingList />,
+    path: metalflow.manufacturing
   }
 ] as RouteConfig[]
 
