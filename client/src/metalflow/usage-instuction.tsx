@@ -1,6 +1,6 @@
 import { Container, Stack } from '@mui/joy'
 import { MobileOnly, P } from 'lib/index'
-import { MobileNavigationLinks } from './nav'
+import { MobileNavigationLinks } from './shared/nav'
 
 export function UsageInstruction() {
   return (

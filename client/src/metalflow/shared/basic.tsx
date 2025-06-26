@@ -99,9 +99,9 @@ export function AlloyAutocomplete(props: {
 
 import { Autocomplete } from '@mui/joy'
 import { DeleteConfirmDialog } from 'components/delete_confirm_dialog'
-import { Detail } from 'metalflow/detail/store/detail.store'
-import { detailListStore } from 'metalflow/store'
 import { observer } from 'mobx-react-lite'
+import { Detail } from '../details/detail.store'
+import { detailListStore } from '../details/list/state'
 
 export const DetailSelect = observer(
   (props: { value?: Detail; onChange: (value: Detail) => void }) => {
@@ -156,6 +156,23 @@ export const SaveAndDelete = (props: {
         handleDelete={() => props.handleDelete()}
         button={<DeleteResourceButton />}
       />
+    </Row>
+  )
+}
+
+export function WarehouseOperationsLinks(props: {
+  onSupplyClick: () => void
+  onWriteoffClick: () => void
+}) {
+  const { onSupplyClick, onWriteoffClick } = props
+  return (
+    <Row gap={1}>
+      <Button color="primary" variant="soft" onClick={onSupplyClick}>
+        Поставка
+      </Button>
+      <Button color="danger" variant="soft" onClick={onWriteoffClick}>
+        Списание
+      </Button>
     </Row>
   )
 }

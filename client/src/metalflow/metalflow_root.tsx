@@ -1,5 +1,5 @@
 import { Box, Container, Stack } from '@mui/joy'
-import { NavigationSideBar } from './nav'
+import { NavigationSideBar } from './shared/nav'
 
 export function MetalFlowRootLayout(props: { children?: React.ReactNode }) {
   return (
