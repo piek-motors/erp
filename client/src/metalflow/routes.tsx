@@ -3,13 +3,10 @@ import { RouteConfig } from 'lib/types/global'
 import { CreateDetailPage } from './details/detail_create'
 import { UpdateDetailPage } from './details/detail_update'
 import { DetailsListPage } from './details/list/list'
-import { DetailSupplyPage } from './details/supply/supply'
-import { DetailWriteoffPage } from './details/writeoff/writeoff'
 import { ManufacturingList } from './manufacturing/list'
 import { MaterialListPage } from './materials/list/list'
 import { MaterialAddPage } from './materials/material_add'
 import { MaterialUpdatePage } from './materials/material_update'
-import { MaterialSupplyPage } from './materials/supply/supply'
 import { MetalFlowRootLayout } from './metalflow_root'
 import { Narrow } from './shared/basic'
 import { SupplyList } from './supplies/list/list'
@@ -46,30 +43,7 @@ const innerRoutes = [
     element: <MaterialUpdatePage />,
     path: metalflow.material.edit
   },
-  {
-    element: (
-      <Narrow>
-        <MaterialSupplyPage />
-      </Narrow>
-    ),
-    path: metalflow.supply.new
-  },
-  {
-    element: (
-      <Narrow>
-        <DetailSupplyPage />
-      </Narrow>
-    ),
-    path: metalflow.supply.new
-  },
-  {
-    element: (
-      <Narrow>
-        <DetailWriteoffPage />
-      </Narrow>
-    ),
-    path: metalflow.writeoff.new
-  },
+
   {
     element: <DetailsListPage />,
     path: metalflow.details
