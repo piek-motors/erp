@@ -1,14 +1,14 @@
 import { EnWriteoffReason, WriteoffDirectUnit } from 'domain-model'
 import { makeAutoObservable, rpc } from 'lib/deps'
-import { MaterialLiseOutput } from '../list/store'
+
 export class MaterialWriteoffState {
-  material?: MaterialLiseOutput
-  setMaterial(material: MaterialLiseOutput) {
-    this.material = material
-  }
   weight = ''
   setWeight(weight: string) {
     this.weight = weight
+  }
+  reason: EnWriteoffReason = EnWriteoffReason.Production
+  setReason(reason: EnWriteoffReason) {
+    this.reason = reason
   }
   dialogOpen = false
   setDialogOpen(v: boolean) {
@@ -18,10 +18,6 @@ export class MaterialWriteoffState {
     makeAutoObservable(this)
   }
   validate(): Error | undefined {
-    const material = this.material?.id
-    if (!material) {
-      return new Error('Материал не выбран')
-    }
     if (parseFloat(this.weight) === 0) {
       return new Error('Вес не указан')
     }
@@ -29,15 +25,14 @@ export class MaterialWriteoffState {
   getTypeData(): WriteoffDirectUnit {
     return {}
   }
-  async save(reason: EnWriteoffReason): Promise<number[]> {
-    const material = this.material
-    if (!material) {
-      throw new Error('Material is not set')
+  async save(materialId?: number): Promise<number[]> {
+    if (!materialId) {
+      throw new Error('Material ID is not set')
     }
     await rpc.material.writeoffTroughMaterial.mutate({
-      material_id: material.id,
+      material_id: materialId,
       qty: parseFloat(this.weight),
-      reason,
+      reason: this.reason,
       type_data: this.getTypeData()
     })
     return []

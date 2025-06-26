@@ -5,11 +5,12 @@ import { makeAutoObservable } from 'mobx'
 import { RouterOutput } from '../../../../../server/src/lib/trpc'
 import { MaterialSupplyStore } from '../supply/state'
 
-export type MaterialLiseOutput = RouterOutput['material']['list'][number]
+export type MaterialListOutput = RouterOutput['material']['list'][number]
+
 export class MaterialListStore {
   readonly async = new AsyncStoreController()
   supply = new MaterialSupplyStore()
-  materials: MaterialLiseOutput[] = []
+  materials: MaterialListOutput[] = []
   searchResult: number[] = []
   searchId: string = ''
   filterKeyword: string = ''
@@ -17,7 +18,7 @@ export class MaterialListStore {
   constructor() {
     makeAutoObservable(this)
   }
-  getFilteredMaterials(): MaterialLiseOutput[] {
+  getFilteredMaterials(): MaterialListOutput[] {
     let filtered = this.materials
     if (this.searchId) {
       filtered = filtered.filter(material =>
@@ -51,10 +52,10 @@ export class MaterialListStore {
   setFilterShape(shape?: EnMaterialShape) {
     this.filterShape = shape
   }
-  setMaterials(materials: MaterialLiseOutput[]) {
+  setMaterials(materials: MaterialListOutput[]) {
     this.materials = materials
   }
-  addMaterial(material: MaterialLiseOutput) {
+  addMaterial(material: MaterialListOutput) {
     this.materials.push(material)
   }
   clear() {

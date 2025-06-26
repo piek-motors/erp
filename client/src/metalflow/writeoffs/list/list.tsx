@@ -3,11 +3,11 @@ import { css } from '@emotion/react'
 import { Box, Sheet, Stack } from '@mui/joy'
 import { PageTitle } from 'components'
 import { Table } from 'components/table.impl'
-import { observer } from 'mobx-react-lite'
+import { observer } from 'lib/deps'
 import { useEffect, useMemo, useState } from 'react'
 import { t } from '../../text'
 import { getColumns } from '../columns.decl'
-import { writeoffStore } from '../writeoff.store'
+import { writeoffStore } from './store'
 
 export const WriteoffList = observer(() => {
   const [key, setKey] = useState(0)

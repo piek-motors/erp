@@ -12,9 +12,11 @@ import {
   useParams
 } from 'lib/index'
 import { open, routeMap } from 'lib/routes'
-import { SaveAndDelete, WarehouseOperationsLinks } from '../shared/basic'
+import { SaveAndDelete } from '../shared/basic'
 import { material } from './material.state'
 import { tabList } from './material_add'
+import { SupplyModal } from './supply/supply'
+import { WriteoffModal } from './writeoff/writeoff'
 
 export const MaterialUpdatePage = observer(() => {
   const { id } = useParams<{ id: string }>()
@@ -34,14 +36,8 @@ export const MaterialUpdatePage = observer(() => {
       <Stack gap={1}>
         <Row gap={2}>
           <P level="h4">{material.label}</P>
-          <WarehouseOperationsLinks
-            onSupplyClick={() => {
-              navigate(open(routeMap.metalflow.supply.new, materialId))
-            }}
-            onWriteoffClick={() => {
-              navigate(open(routeMap.metalflow.writeoff.new, materialId))
-            }}
-          />
+          <SupplyModal />
+          <WriteoffModal />
         </Row>
         <P level="body-sm">ID: {materialId}</P>
         <InputStack>

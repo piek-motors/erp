@@ -1,11 +1,11 @@
 import { rpc } from 'lib/rpc.client'
 import { makeAutoObservable } from 'mobx'
-import { MaterialLiseOutput } from '../../materials/list/store'
+import { MaterialListOutput } from '../../materials/list/store'
 import { SupplyDto } from '../columns.decl'
 
 class SupplyListStore {
   supplies: SupplyDto[] = []
-  material: MaterialLiseOutput | null = null
+  material: MaterialListOutput | null = null
   qty: string = ''
   selectMaterialDialogOpen = false
   setSelectMaterialDialogOpen(open: boolean) {
@@ -14,7 +14,7 @@ class SupplyListStore {
   constructor() {
     makeAutoObservable(this)
   }
-  setMaterial(material: MaterialLiseOutput) {
+  setMaterial(material: MaterialListOutput) {
     this.material = material
   }
   setQty(qty: string) {

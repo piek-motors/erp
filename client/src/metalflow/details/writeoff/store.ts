@@ -14,6 +14,10 @@ export class DetailWriteoffStore {
   setDetail(v: Detail) {
     this.detail = v
   }
+  reason: EnWriteoffReason = EnWriteoffReason.Production
+  setReason(v: EnWriteoffReason) {
+    this.reason = v
+  }
   qty: number = 0
   setQty(v: string) {
     const isNumber = Number.isFinite(parseInt(v))
@@ -54,7 +58,7 @@ export class DetailWriteoffStore {
       qty: this.qty
     }
   }
-  async save(reason: EnWriteoffReason): Promise<number[]> {
+  async save(): Promise<number[]> {
     const detail = this.detail
     if (!detail?.id) {
       throw new Error('Detail is not set')
@@ -62,7 +66,7 @@ export class DetailWriteoffStore {
     await rpc.material.writeoffTroughDetail.mutate({
       detailId: detail.id,
       qty: this.qty,
-      reason
+      reason: this.reason
     })
     return []
   }

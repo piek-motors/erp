@@ -15,6 +15,7 @@ import { PipeState } from './shape/pipe_state'
 import { RoundBarState } from './shape/rounde_bar.state'
 import { SquareState } from './shape/square_state'
 import { MaterialSupplyStore } from './supply/state'
+import { MaterialWriteoffState } from './writeoff/state'
 
 interface IDetail {
   id: number
@@ -24,6 +25,7 @@ interface IDetail {
 export class MaterialStore {
   readonly async = new AsyncStoreController()
   supply = new MaterialSupplyStore()
+  writeoff = new MaterialWriteoffState()
   constructor() {
     makeAutoObservable(this)
   }

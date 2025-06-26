@@ -19,9 +19,9 @@ import { open, routeMap } from 'lib/routes'
 import { Column } from 'react-table'
 import { t } from '../../text'
 import { MaterialShapeFilter } from '../shape_filter'
-import { MaterialLiseOutput, materialListStore } from './store'
+import { MaterialListOutput, materialListStore } from './store'
 
-const columnList: Column<MaterialLiseOutput>[] = [
+const columnList: Column<MaterialListOutput>[] = [
   {
     Header: 'ID',
     accessor: 'id'
@@ -45,8 +45,8 @@ const columnList: Column<MaterialLiseOutput>[] = [
 ]
 
 interface MaterialsTableProps {
-  onRowClick?: (material: MaterialLiseOutput) => void
-  highlight?: (material: MaterialLiseOutput) => boolean
+  onRowClick?: (material: MaterialListOutput) => void
+  highlight?: (material: MaterialListOutput) => boolean
   highlightColor?: string
 }
 

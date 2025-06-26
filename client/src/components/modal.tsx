@@ -1,25 +1,33 @@
-import { Box, Modal, ModalClose, ModalDialog } from '@mui/joy'
+import {
+  Box,
+  ModalClose,
+  ModalDialog,
+  ModalDialogProps,
+  Modal as MuiModal
+} from '@mui/joy'
 
-export function FullscreenDialog(props: {
+export function InModal(props: {
   openButton: React.ReactNode
   children: React.ReactNode
   open: boolean
   setOpen: (open: boolean) => void
+  layout?: 'fullscreen' | 'center'
+  size?: ModalDialogProps['size']
 }) {
   return (
     <>
       <Box onClick={() => props.setOpen(true)}>{props.openButton}</Box>
-      <Modal
+      <MuiModal
         open={props.open}
         onClose={() => {
           props.setOpen(false)
         }}
       >
-        <ModalDialog layout="fullscreen">
+        <ModalDialog layout={props.layout} size="md">
           <ModalClose variant="soft" color="danger" />
           <Box>{props.children}</Box>
         </ModalDialog>
-      </Modal>
+      </MuiModal>
     </>
   )
 }

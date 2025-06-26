@@ -1,7 +1,8 @@
 /** @jsxImportSource @emotion/react */
 import { Stack } from '@mui/joy'
 import { PageTitle } from 'components'
-import { P, Row, SendMutation } from 'lib/index'
+import { InModal } from 'components/modal'
+import { Btn, Label, P, Row, SendMutation, useState } from 'lib/index'
 import { observer } from 'mobx-react-lite'
 import { QtyInputWithUnit } from '../../shared/qty_input_with_unit'
 import { t } from '../../text'
@@ -12,10 +13,10 @@ export const MaterialSupplyPage = observer(() => {
     return <P>Материал не выбран</P>
   }
   return (
-    <Stack spacing={2} p={2}>
-      <PageTitle subTitle={t.AddSupply} hideIcon />
+    <Stack spacing={1} p={2}>
+      <PageTitle title={t.AddSupply} hideIcon />
       <Row sx={{ fontSize: 20 }}>
-        <P color="primary">Материал: </P>
+        <Label>Материал: </Label>
         <P fontWeight={600} color="primary">
           {material.material?.label || <P color="neutral">Не выбран</P>}
         </P>
@@ -30,5 +31,22 @@ export const MaterialSupplyPage = observer(() => {
         onClick={() => material.supply.insertSupply(material.material?.id)}
       />
     </Stack>
+  )
+})
+
+export const SupplyModal = observer(() => {
+  const [open, setOpen] = useState(false)
+  return (
+    <InModal
+      openButton={
+        <Btn variant="soft" color="success">
+          Поставка
+        </Btn>
+      }
+      open={open}
+      setOpen={setOpen}
+    >
+      <MaterialSupplyPage />
+    </InModal>
   )
 })

@@ -3,8 +3,7 @@ import { DeleteResourceButton, P } from 'lib/index'
 import { formatOnlyDate } from 'lib/utils/formatting'
 import { t } from 'metalflow/text'
 import { Column } from 'react-table'
-import { ListWriteoffDto } from './list/store'
-import { writeoffStore } from './writeoff.store'
+import { ListWriteoffDto, writeoffStore } from './list/store'
 
 export function getColumns(props: {
   key: number

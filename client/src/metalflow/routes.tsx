@@ -10,7 +10,6 @@ import { MaterialListPage } from './materials/list/list'
 import { MaterialAddPage } from './materials/material_add'
 import { MaterialUpdatePage } from './materials/material_update'
 import { MaterialSupplyPage } from './materials/supply/supply'
-import { MaterialWriteoffPage } from './materials/writeoff/writeoff'
 import { MetalFlowRootLayout } from './metalflow_root'
 import { Narrow } from './shared/basic'
 import { SupplyList } from './supplies/list/list'
@@ -54,14 +53,6 @@ const innerRoutes = [
       </Narrow>
     ),
     path: metalflow.supply.new
-  },
-  {
-    element: (
-      <Narrow>
-        <MaterialWriteoffPage />
-      </Narrow>
-    ),
-    path: metalflow.writeoff.new
   },
   {
     element: (

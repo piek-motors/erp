@@ -3,10 +3,13 @@ import { Button } from '@mui/joy'
 import { UseIcon } from 'lib/index'
 /** @jsxImportSource @emotion/react */
 import { Autocomplete, Stack } from '@mui/joy'
-import { uiWriteoffReason, UiWriteoffReason } from 'domain-model'
+import {
+  EnWriteoffReason,
+  uiWriteoffReason,
+  UiWriteoffReason
+} from 'domain-model'
 import { observer } from 'lib/deps'
 import { Label } from 'lib/index'
-import { writeoffStore } from './writeoff.store'
 
 export const WriteoffOpenListButton = () => {
   return (
@@ -20,25 +23,30 @@ export const WriteoffOpenListButton = () => {
   )
 }
 
-export const WriteoffReasonSelect = observer(() => {
-  return (
-    <Stack gap={1}>
-      <Label label="Причина списания" />
-      <Autocomplete
-        options={Object.entries(UiWriteoffReason).map(([k, v]) => ({
-          label: v,
-          value: k
-        }))}
-        value={{
-          label: uiWriteoffReason(writeoffStore.reason),
-          value: writeoffStore.reason?.toString() || '0'
-        }}
-        isOptionEqualToValue={(option, value) => option.value === value.value}
-        getOptionLabel={option => option.label}
-        onChange={(_, newValue) =>
-          writeoffStore.setReason(Number(newValue?.value || 0))
-        }
-      />
-    </Stack>
-  )
-})
+export const WriteoffReasonSelect = observer(
+  (props: {
+    reason: EnWriteoffReason
+    setReason: (reason: EnWriteoffReason) => void
+  }) => {
+    return (
+      <Stack gap={1}>
+        <Label label="Причина списания" />
+        <Autocomplete
+          options={Object.entries(UiWriteoffReason).map(([k, v]) => ({
+            label: v,
+            value: k
+          }))}
+          value={{
+            label: uiWriteoffReason(props.reason),
+            value: props.reason?.toString() || '0'
+          }}
+          isOptionEqualToValue={(option, value) => option.value === value.value}
+          getOptionLabel={option => option.label}
+          onChange={(_, newValue) =>
+            props.setReason(Number(newValue?.value || 0))
+          }
+        />
+      </Stack>
+    )
+  }
+)
