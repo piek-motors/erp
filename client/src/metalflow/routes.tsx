@@ -1,17 +1,17 @@
 import { routeMap } from 'lib/routes'
 import { RouteConfig } from 'lib/types/global'
-import { CreateDetailPage } from './detail/detail_create'
-import { DetailsListPage } from './detail/detail_list'
-import { UpdateDetailPage } from './detail/detail_update'
-import { AddMaterialPage, UpdateMaterialPage } from './material/material'
-import { MaterialsListPage } from './material/material_list'
+import { CreateDetailPage } from './details/detail_create'
+import { UpdateDetailPage } from './details/detail_update'
+import { DetailsListPage } from './details/list/list'
+import { ManufacturingList } from './manufacturing/list'
+import { MaterialListPage } from './materials/list/list'
+import { MaterialAddPage } from './materials/material_add'
+import { MaterialUpdatePage } from './materials/material_update'
 import { MetalFlowRootLayout } from './metalflow_root'
 import { Narrow } from './shared/basic'
-import { AddSupplyPage } from './supply/supply-create'
-import { ListSupplies } from './supply/supply-list'
+import { SupplyList } from './supplies/list/list'
 import { UsageInstruction } from './usage-instuction'
-import { WriteoffCreatePage } from './writeoff/create_writeoff'
-import { WriteoffList } from './writeoff/list_writeoff/ui'
+import { WriteoffList } from './writeoffs/list/list'
 
 const { metalflow } = routeMap
 
@@ -28,37 +28,22 @@ const innerRoutes = [
     path: metalflow.index
   },
   {
-    element: <MaterialsListPage />,
+    element: <MaterialListPage />,
     path: metalflow.materials
   },
   {
     element: (
       <Narrow>
-        <AddMaterialPage />
+        <MaterialAddPage />
       </Narrow>
     ),
     path: metalflow.material.new
   },
   {
-    element: <UpdateMaterialPage />,
+    element: <MaterialUpdatePage />,
     path: metalflow.material.edit
   },
-  {
-    element: (
-      <Narrow>
-        <AddSupplyPage />
-      </Narrow>
-    ),
-    path: metalflow.supply.new
-  },
-  {
-    element: (
-      <Narrow>
-        <WriteoffCreatePage />
-      </Narrow>
-    ),
-    path: metalflow.writeoff.new
-  },
+
   {
     element: <DetailsListPage />,
     path: metalflow.details
@@ -80,12 +65,16 @@ const innerRoutes = [
     path: metalflow.detail.edit
   },
   {
-    element: <ListSupplies />,
+    element: <SupplyList />,
     path: metalflow.supplies
   },
   {
     element: <WriteoffList />,
     path: metalflow.writeoffs
+  },
+  {
+    element: <ManufacturingList />,
+    path: metalflow.manufacturing
   }
 ] as RouteConfig[]
 
