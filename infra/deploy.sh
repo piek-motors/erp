@@ -32,12 +32,12 @@ ssh "$TARGET" <<EOF
 
   cd ~/erp/server
   
-  if pm2 describe "$PM2_PROCESS_NAME" > /dev/null; then
+  if npx pm2 describe "$PM2_PROCESS_NAME" > /dev/null; then
     echo "Process exists. Restarting..."
-    pm2 restart "$PM2_PROCESS_NAME"
+    npx pm2 restart "$PM2_PROCESS_NAME"
   else
     echo "Process not found. Starting..."
-    pm2 start npm --name "erp" -- run "start"
+    npx pm2 start npm --name "erp" -- run "start"
   fi
 
 EOF
