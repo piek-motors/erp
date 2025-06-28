@@ -31,14 +31,13 @@ ssh "$TARGET" <<EOF
   pnpm migrate
 
   cd ~/erp/server
-  npm run build
   
   if npx pm2 describe "$PM2_PROCESS_NAME" > /dev/null; then
     echo "Process exists. Restarting..."
     npx pm2 restart "$PM2_PROCESS_NAME"
   else
     echo "Process not found. Starting..."
-    npx pm2 start ./dist/src/main.js --name "$PM2_PROCESS_NAME"
+    npx pm2 start ecosystem.config.js --env production
   fi
 
 EOF
