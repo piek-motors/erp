@@ -34,14 +34,8 @@ export const routeMap = {
     },
 
     supplies: '/metalflow/supplies',
-    supply: {
-      new: '/metalflow/supplies/new'
-    },
-
     writeoffs: '/metalflow/writeoffs',
-    writeoff: {
-      new: '/metalflow/writeoffs/new'
-    }
+    manufacturing: '/metalflow/manufacturing'
   }
 } as const
 

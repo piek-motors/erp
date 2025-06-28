@@ -4,13 +4,13 @@ import {
   EnUnit,
   EnWriteoffReason
 } from 'domain-model'
-import type {
-  Generated,
-  GeneratedAlways,
-  JSONColumnType,
-  Kysely,
-  Selectable as KyselySelectable,
-  Updateable as KyselyUpdateable
+import {
+  type Generated,
+  type GeneratedAlways,
+  type JSONColumnType,
+  type Kysely,
+  type Selectable as KyselySelectable,
+  type Updateable as KyselyUpdateable
 } from 'kysely'
 
 export type KDB = Kysely<DB.Schema>
@@ -31,6 +31,7 @@ export namespace DB {
     ['metal_flow.detail_attachments']: DetailAttachmentTable
     ['metal_flow.detail_materials']: DetailMaterialsTable
     ['metal_flow.operations']: OperationsTable
+    ['metal_flow.manufacturing']: ManufacturingTable
   }
 
   export interface UserTable {
@@ -60,6 +61,14 @@ export namespace DB {
     stock: number
   }
 
+  export interface ManufacturingTable {
+    id: GeneratedAlways<number>
+    detail_id: number
+    qty: number
+    finished_at: Date | null
+    started_at: GeneratedAlways<Date>
+  }
+
   export interface DetailMaterialJsonData {
     weight: number
     length: number
@@ -86,7 +95,9 @@ export namespace DB {
     timestamp?: Generated<Date>
   }
 
-  export interface SupplyOperaionData {}
+  export interface SupplyOperaionData {
+    supplier_name?: string
+  }
 
   export interface WrittenOffOperationData {
     reason: EnWriteoffReason

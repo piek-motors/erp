@@ -1,5 +1,4 @@
 import { routeMap } from 'lib/routes'
-import { t } from './text'
 
 export type Action = {
   name?: string
@@ -10,7 +9,7 @@ export type Action = {
 
 export const actions: Action[] = [
   {
-    name: t.MaterialsList,
+    name: 'Материалы',
     href: routeMap.metalflow.materials,
     endBlock: [
       {
@@ -19,7 +18,7 @@ export const actions: Action[] = [
     ]
   },
   {
-    name: t.DetailsList,
+    name: 'Детали',
     href: routeMap.metalflow.details,
     endBlock: [
       {
@@ -28,21 +27,15 @@ export const actions: Action[] = [
     ]
   },
   {
-    name: t.SuppliesList,
-    href: routeMap.metalflow.supplies,
-    endBlock: [
-      {
-        href: routeMap.metalflow.supply.new
-      }
-    ]
+    name: 'Детали в производстве',
+    href: routeMap.metalflow.manufacturing
   },
   {
-    name: t.WriteoffsList,
-    href: routeMap.metalflow.writeoffs,
-    endBlock: [
-      {
-        href: routeMap.metalflow.writeoff.new
-      }
-    ]
+    name: 'Поставки',
+    href: routeMap.metalflow.supplies
+  },
+  {
+    name: 'Списания',
+    href: routeMap.metalflow.writeoffs
   }
 ]
