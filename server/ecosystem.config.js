@@ -10,7 +10,6 @@ module.exports = {
       env_production: {
         NODE_ENV: 'production'
       },
-      cwd: '/home/prod/erp/server',
       pre_start: 'pnpm --prefix db migrate'
     }
   ]
