@@ -14,7 +14,7 @@ export class DetailWriteoffStore {
   setDetail(v: Detail) {
     this.detail = v
   }
-  reason: EnWriteoffReason = EnWriteoffReason.Production
+  reason: EnWriteoffReason = EnWriteoffReason.UsedInProduction
   setReason(v: EnWriteoffReason) {
     this.reason = v
   }

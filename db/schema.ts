@@ -1,6 +1,7 @@
 import {
   EnMaterialShape,
   EnOperationType,
+  EnSupplyReason,
   EnUnit,
   EnWriteoffReason
 } from 'domain-model'
@@ -87,20 +88,13 @@ export namespace DB {
   export interface OperationsTable {
     id: GeneratedAlways<number>
     operation_type: EnOperationType
+    reason: EnSupplyReason | EnWriteoffReason
     user_id: number
     material_id: number | null
     qty: number | null
     detail_id: number | null
     data: JSONColumnType<any, any, any> | null
     timestamp?: Generated<Date>
-  }
-
-  export interface SupplyOperaionData {
-    supplier_name?: string
-  }
-
-  export interface WrittenOffOperationData {
-    reason: EnWriteoffReason
   }
 
   export interface OrderPaymentsTable {

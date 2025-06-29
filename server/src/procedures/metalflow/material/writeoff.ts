@@ -1,6 +1,5 @@
 import { db, z } from '#root/deps.js'
 import { publicProcedure } from '#root/lib/trpc/trpc.js'
-import { DB } from 'db'
 import { EnOperationType, EnWriteoffReason } from 'domain-model'
 
 export const listWriteoff = publicProcedure.query(async () => {
@@ -49,9 +48,7 @@ export const writeoffThroughMaterial = publicProcedure
         user_id: 0,
         material_id: input.material_id,
         qty: input.qty,
-        data: {
-          reason: input.reason
-        } satisfies DB.WrittenOffOperationData
+        reason: input.reason
       })
       .execute()
 
@@ -98,9 +95,7 @@ export const writeoffThroughDetail = publicProcedure
           user_id: 0,
           material_id: detailMaterial.material_id,
           qty: totalQty,
-          data: {
-            reason: input.reason
-          } satisfies DB.WrittenOffOperationData
+          reason: input.reason
         })
         .returning(['id'])
         .execute()

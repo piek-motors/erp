@@ -6,7 +6,7 @@ export class MaterialWriteoffState {
   setWeight(weight: string) {
     this.weight = weight
   }
-  reason: EnWriteoffReason = EnWriteoffReason.Production
+  reason: EnWriteoffReason = EnWriteoffReason.UsedInProduction
   setReason(reason: EnWriteoffReason) {
     this.reason = reason
   }

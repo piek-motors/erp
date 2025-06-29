@@ -34,16 +34,5 @@ class SupplyListStore {
     console.log(res)
     this.supplies = res
   }
-  async insertSupply() {
-    const materialId = this.material?.id
-    const qty = this.qty
-    if (!materialId) throw Error('Материал не выбран')
-    if (!qty) throw Error('Количество не указано')
-    this.reset()
-    return await rpc.material.supply.mutate({
-      material_id: materialId,
-      qty: Number(qty)
-    })
-  }
 }
 export const supplyStore = new SupplyListStore()

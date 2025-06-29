@@ -1,20 +1,29 @@
 import {
   EnMaterialShape,
+  EnSupplyReason,
   EnUnit,
   EnWriteoffReason,
   EnWriteoffType
 } from './enums'
 
 export const UiWriteoffReason = {
-  [EnWriteoffReason.Production]: 'Производство',
+  [EnWriteoffReason.UsedInProduction]: 'Производство',
   [EnWriteoffReason.Defective]: 'Брак продукта',
-  [EnWriteoffReason.Sale]: 'Продажа',
-  [EnWriteoffReason.Other]: 'Другое'
+  [EnWriteoffReason.InventoryAdjustment]: 'Инвентаризация'
 }
-
-export function uiWriteoffReason(reason?: EnWriteoffReason) {
+export function uiWriteoffReason(reason?: EnWriteoffReason | null) {
   if (reason == null) return '-'
   return UiWriteoffReason[reason]
+}
+
+export const UiSupplyReason = {
+  [EnSupplyReason.FromSupplier]: 'Внешняя поставка',
+  [EnSupplyReason.InternalProduction]: 'Собственное производство',
+  [EnSupplyReason.InventoryAdjustment]: 'Инвентаризация'
+}
+export function uiSupplyReason(reason?: EnSupplyReason | null) {
+  if (reason == null) return '-'
+  return UiSupplyReason[reason]
 }
 
 export const UiMaterialShape = {

@@ -1,8 +1,13 @@
 export enum EnWriteoffReason {
-  Production = 0,
+  UsedInProduction = 0,
   Defective = 1,
-  Sale = 2,
-  Other = 3
+  InventoryAdjustment = 2
+}
+
+export enum EnSupplyReason {
+  FromSupplier = 0,
+  InternalProduction = 1,
+  InventoryAdjustment = 2
 }
 
 export enum EnMaterialShape {

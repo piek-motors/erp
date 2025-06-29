@@ -1,6 +1,6 @@
 import { db, z } from '#root/deps.js'
 import { publicProcedure } from '#root/lib/trpc/trpc.js'
-import { EnOperationType } from 'domain-model'
+import { EnOperationType, EnSupplyReason } from 'domain-model'
 
 export const listSupplies = publicProcedure.query(async () => {
   const supplies = await db
@@ -21,7 +21,8 @@ export const createMaterialSupply = publicProcedure
   .input(
     z.object({
       material_id: z.number(),
-      qty: z.number()
+      qty: z.number(),
+      reason: z.nativeEnum(EnSupplyReason)
     })
   )
   .mutation(async ({ input }) => {
@@ -33,7 +34,8 @@ export const createMaterialSupply = publicProcedure
         material_id: input.material_id,
         detail_id: null,
         user_id: 0,
-        qty: input.qty
+        qty: input.qty,
+        reason: input.reason
       })
       .execute()
 

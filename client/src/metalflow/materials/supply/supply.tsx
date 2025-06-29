@@ -1,7 +1,8 @@
 /** @jsxImportSource @emotion/react */
-import { Stack } from '@mui/joy'
+import { Autocomplete, Stack } from '@mui/joy'
 import { PageTitle } from 'components'
 import { InModal } from 'components/modal'
+import { uiSupplyReason, UiSupplyReason } from 'domain-model'
 import { Btn, Label, P, Row, SendMutation, useState } from 'lib/index'
 import { observer } from 'mobx-react-lite'
 import { QtyInputWithUnit } from '../../shared/qty_input_with_unit'
@@ -25,8 +26,26 @@ export const MaterialSupplyPage = observer(() => {
         unitId={material.material?.unit}
         value={material.supply.qty}
         setValue={value => material.supply.setQty(value)}
-        label={t.Qty}
+        label={'Масса'}
       />
+      <Stack py={0.5}>
+        <Label label="Причина" />
+        <Autocomplete
+          options={Object.entries(UiSupplyReason).map(([k, v]) => ({
+            label: v,
+            value: k
+          }))}
+          value={{
+            label: uiSupplyReason(material.supply.reason),
+            value: material.supply.reason?.toString() || '0'
+          }}
+          isOptionEqualToValue={(option, value) => option.value === value.value}
+          getOptionLabel={option => option.label}
+          onChange={(_, newValue) =>
+            material.supply.setReason(Number(newValue?.value || 0))
+          }
+        />
+      </Stack>
       <SendMutation
         onClick={() => material.supply.insertSupply(material.material?.id)}
       />
