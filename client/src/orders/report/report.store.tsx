@@ -29,6 +29,7 @@ class ReportPageStore {
 
   async onSearch(m: number, y: number) {
     this.monthSelect.isLoading = true
+    this.totalIncome = 0
     try {
       const gte = moment()
         .set('month', m)
