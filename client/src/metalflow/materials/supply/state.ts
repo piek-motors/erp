@@ -18,15 +18,17 @@ export class MaterialSupplyStore {
   }
   async insertSupply(materialId?: number) {
     if (!materialId) throw Error('Материал не выбран')
-    if (!this.reason) throw Error('Причина не указана')
+    if (this.reason == null) throw Error('Причина не указана')
 
     const qty = this.qty
     if (!qty) throw Error('Количество не указано')
-    this.reset()
-    return await rpc.material.supply.mutate({
+
+    const res = await rpc.material.supply.mutate({
       material_id: materialId,
       qty: Number(qty),
       reason: this.reason
     })
+    this.reset()
+    return res
   }
 }

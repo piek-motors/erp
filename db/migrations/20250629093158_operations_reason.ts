@@ -1,6 +1,7 @@
 import { type KDB } from '../schema'
 
 export async function up(db: KDB): Promise<void> {
+  await db.deleteFrom('metal_flow.operations').execute()
   await db.schema
     .alterTable('metal_flow.operations')
     .addColumn('reason', 'integer', eb => eb.notNull())
