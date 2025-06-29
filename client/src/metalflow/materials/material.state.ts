@@ -3,7 +3,8 @@ import {
   EnUnit,
   getMaterialConstructor,
   Material,
-  MaterialShapeAbstractionLayer
+  MaterialShapeAbstractionLayer,
+  uiUnit
 } from 'domain-model'
 import { AsyncStoreController } from 'lib/async-store.controller'
 import { makeAutoObservable } from 'lib/deps'
@@ -24,8 +25,8 @@ interface IDetail {
 
 export class MaterialStore {
   readonly async = new AsyncStoreController()
-  supply = new MaterialSupplyStore()
-  writeoff = new MaterialWriteoffState()
+  readonly supply = new MaterialSupplyStore()
+  readonly writeoff = new MaterialWriteoffState()
   constructor() {
     makeAutoObservable(this)
   }
@@ -47,7 +48,13 @@ export class MaterialStore {
   }
 
   id?: number
+  setId(id: number) {
+    this.id = id
+  }
   label?: string
+  setLabel(label: string) {
+    this.label = label
+  }
   unit: EnUnit = EnUnit.Kg
   setUnit(unit: EnUnit) {
     this.unit = unit
@@ -55,6 +62,10 @@ export class MaterialStore {
   shape: EnMaterialShape = EnMaterialShape.RoundBar
   setShape(shape: EnMaterialShape) {
     this.shape = shape
+  }
+  stock: number = 0
+  setStock(stock: number) {
+    this.stock = stock
   }
   material?: Material
   detailsMadeOfMaterial: IDetail[] = []
@@ -73,16 +84,17 @@ export class MaterialStore {
   insertedMaterialId?: number
 
   syncState(material: Material) {
-    this.id = material.id || undefined
-    this.label = material.label
+    this.setId(material.id)
+    this.setLabel(material.label)
     this.unit = material.unit
     this.setShape(material.shape)
     this.material = material
     this.getShapeState(this.shape).sync(material)
-    // this.detailsMadeOfMaterial = material.de
+    this.setStock(material.stock)
   }
 
-  async load(id: number) {
+  async load(id?: number) {
+    if (!id) throw new Error('Material id is not set')
     return this.async.run(async () => {
       const res = await rpc.material.get.query({ id })
       this.syncState(map.material.fromDto(res))
@@ -148,6 +160,24 @@ export class MaterialStore {
     return this.async.run(async () => {
       if (!this.id) throw new Error('Material id is not set')
       await rpc.material.delete.mutate({ id: this.id })
+    })
+  }
+
+  async insertSupply() {
+    return this.async.run(async () => {
+      const qty = await this.supply.insertSupply(this.id)
+      this.supply.reset()
+      this.setStock(Number(qty))
+      return `Баланс: ${qty} ${uiUnit(this.unit)}`
+    })
+  }
+
+  async insertWriteoff() {
+    return this.async.run(async () => {
+      const stock = await this.writeoff.insertWriteoff(this.id)
+      this.writeoff.reset()
+      await this.load(this.id)
+      return `Баланс: ${stock} ${uiUnit(this.unit)}`
     })
   }
 }

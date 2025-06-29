@@ -47,7 +47,8 @@ export const MaterialSupplyPage = observer(() => {
         />
       </Stack>
       <SendMutation
-        onClick={() => material.supply.insertSupply(material.material?.id)}
+        disabled={material.supply.disabled()}
+        onClick={() => material.insertSupply()}
       />
     </Stack>
   )

@@ -61,7 +61,7 @@ export const writeoffThroughMaterial = publicProcedure
       .where('id', '=', input.material_id)
       .execute()
 
-    return res[0].id
+    return current_stock.stock - input.qty
   })
 
 export const writeoffThroughDetail = publicProcedure

@@ -20,7 +20,6 @@ export const MaterialWriteoff = observer(() => {
       )
     }
   }
-  console.log(material.unit)
   return (
     <Stack gap={1} py={2}>
       <PageTitle title={t.WriteOffAdd} hideIcon />
@@ -41,8 +40,8 @@ export const MaterialWriteoff = observer(() => {
         setReason={v => material.writeoff.setReason(v)}
       />
       <SendMutation
-        disabled={creationForrbidden}
-        onClick={async () => await material.writeoff.save(material.id)}
+        disabled={material.writeoff.disabled()}
+        onClick={() => material.insertWriteoff()}
       />
       {error()}
     </Stack>

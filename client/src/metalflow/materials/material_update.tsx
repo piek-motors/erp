@@ -1,4 +1,5 @@
 /** @jsxImportSource @emotion/react */
+import { uiUnit } from 'domain-model'
 import {
   InputStack,
   Link,
@@ -40,6 +41,9 @@ export const MaterialUpdatePage = observer(() => {
           <WriteoffModal />
         </Row>
         <P level="body-sm">ID: {materialId}</P>
+        <P level="body-sm">
+          Остаток: {material.stock} {uiUnit(material.unit)}
+        </P>
         <InputStack>
           {tabList.find(t => t.value === material.shape)?.component}
         </InputStack>

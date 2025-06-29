@@ -15,8 +15,12 @@ export class MaterialSupplyStore {
   }
   reset() {
     this.qty = ''
+    this.reason = null
   }
-  async insertSupply(materialId?: number) {
+  disabled() {
+    return this.qty === '' || this.reason == null
+  }
+  async insertSupply(materialId?: number): Promise<number> {
     if (!materialId) throw Error('Материал не выбран')
     if (this.reason == null) throw Error('Причина не указана')
 
@@ -29,6 +33,6 @@ export class MaterialSupplyStore {
       reason: this.reason
     })
     this.reset()
-    return res
+    return Number(res.qty)
   }
 }

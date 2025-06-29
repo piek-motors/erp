@@ -22,19 +22,27 @@ export class MaterialWriteoffState {
       return new Error('Вес не указан')
     }
   }
+  reset() {
+    this.weight = ''
+    this.reason = EnWriteoffReason.UsedInProduction
+  }
   getTypeData(): WriteoffDirectUnit {
     return {}
   }
-  async save(materialId?: number): Promise<number[]> {
+  disabled() {
+    return this.weight === '' || this.reason == null
+  }
+  async insertWriteoff(materialId?: number): Promise<number> {
     if (!materialId) {
       throw new Error('Material ID is not set')
     }
-    await rpc.material.writeoffTroughMaterial.mutate({
+    const stock = await rpc.material.writeoffTroughMaterial.mutate({
       material_id: materialId,
       qty: parseFloat(this.weight),
       reason: this.reason,
       type_data: this.getTypeData()
     })
-    return []
+
+    return Number(stock)
   }
 }
