@@ -14,6 +14,8 @@ class ReportPageStore {
   dataLabel = ''
   monthSelect: MonthSelectStore
 
+  totalIncome = 0
+
   constructor() {
     this.monthSelect = new MonthSelectStore()
     makeAutoObservable(this, {
@@ -61,6 +63,10 @@ class ReportPageStore {
       this.data = []
     } finally {
       this.monthSelect.isLoading = false
+    }
+
+    for (const order of this.data) {
+      this.totalIncome += order.total_amount
     }
   }
 }

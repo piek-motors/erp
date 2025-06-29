@@ -2,7 +2,7 @@
 import { Autocomplete, Stack } from '@mui/joy'
 import { PageTitle } from 'components'
 import { InModal } from 'components/modal'
-import { uiSupplyReason, UiSupplyReason } from 'domain-model'
+import { EnSupplyReason, uiSupplyReason, UiSupplyReason } from 'domain-model'
 import { Btn, Label, P, Row, SendMutation, useState } from 'lib/index'
 import { observer } from 'mobx-react-lite'
 import { QtyInputWithUnit } from '../../shared/qty_input_with_unit'
@@ -31,10 +31,14 @@ export const MaterialSupplyPage = observer(() => {
       <Stack py={0.5}>
         <Label label="Причина" />
         <Autocomplete
-          options={Object.entries(UiSupplyReason).map(([k, v]) => ({
-            label: v,
-            value: k
-          }))}
+          options={Object.entries(UiSupplyReason)
+            .map(([k, v]) => ({
+              label: v,
+              value: k
+            }))
+            .filter(
+              e => e.value !== EnSupplyReason.InternalProduction.toString()
+            )}
           value={{
             label: uiSupplyReason(material.supply.reason),
             value: material.supply.reason?.toString() || '0'

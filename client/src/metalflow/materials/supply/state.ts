@@ -6,7 +6,7 @@ export class MaterialSupplyStore {
   setQty(qty: string) {
     this.qty = qty
   }
-  reason: EnSupplyReason | null = null
+  reason: EnSupplyReason = EnSupplyReason.FromSupplier
   setReason(reason: EnSupplyReason) {
     this.reason = reason
   }
@@ -15,7 +15,7 @@ export class MaterialSupplyStore {
   }
   reset() {
     this.qty = ''
-    this.reason = null
+    this.reason = EnSupplyReason.FromSupplier
   }
   disabled() {
     return this.qty === '' || this.reason == null

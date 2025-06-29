@@ -2,10 +2,11 @@ import { Box } from '@mui/joy'
 import { MonthSelect } from 'components/month-select'
 import { TableName } from 'components/table-name'
 import { P } from 'lib/index'
+import { formatMoney } from 'lib/utils/formatting'
 import { observer } from 'mobx-react-lite'
 import { useEffect } from 'react'
 import { OrdersTable } from '../columns'
-import { report } from '../stores/report.store'
+import { report } from './report.store'
 
 export const RequestReportPage = observer(() => {
   const isEmpty = Array.isArray(report.data) && report.data.length === 0
@@ -30,6 +31,9 @@ export const RequestReportPage = observer(() => {
       {Array.isArray(report.data) && report.data.length > 0 && (
         <>
           {report.dataLabel && <TableName name={report.dataLabel} />}
+          <P level="body-sm" py={1}>
+            Общая выручка: {formatMoney(report.totalIncome)}
+          </P>
           <OrdersTable data={report.data} />
         </>
       )}

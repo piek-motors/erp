@@ -10,12 +10,14 @@ export function Select(props: {
   onChange: (value: any) => void
   disabled?: boolean
   size?: 'sm' | 'md' | 'lg'
+  width?: string
 }) {
   return (
     <Box>
       <FormControl sx={{ width: 'min-content', minWidth: '207px' }}>
         <Label label={props.label} />
         <MuiSelect
+          sx={{ width: props.width }}
           size={props.size}
           placeholder={props.placeholder}
           disabled={props.disabled}
