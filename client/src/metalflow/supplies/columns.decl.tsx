@@ -3,6 +3,7 @@ import { formatDateWithTime } from 'lib/utils/formatting'
 import { Column } from 'react-table'
 import { t } from '../text'
 // @ts-ignore
+import { EnSupplyReason, uiSupplyReason } from 'domain-model'
 import { RouterOutput } from '../../../../server/src/lib/trpc'
 import { supplyStore } from './list/store'
 
@@ -30,6 +31,10 @@ export function getColumns(props: {
     {
       Header: 'Дата поставки',
       accessor: data => formatDateWithTime(data.timestamp!)
+    },
+    {
+      Header: 'Причина',
+      accessor: data => uiSupplyReason(data?.reason as EnSupplyReason)
     },
     {
       Header: 'Действие',

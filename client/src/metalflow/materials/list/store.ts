@@ -45,6 +45,7 @@ export class MaterialListStore {
   }
   search(keyword: string) {
     this.filterKeyword = keyword.toLowerCase()
+    this.searchId = ''
   }
   setSearchId(id: string) {
     this.searchId = id

@@ -2,7 +2,9 @@ import { EnWriteoffReason } from 'domain-model'
 import { rpc } from 'lib/deps'
 import { makeAutoObservable } from 'mobx'
 import { RouterOutput } from '../../../../../server/src/lib/trpc'
+
 export type ListWriteoffDto = RouterOutput['material']['listWriteoff'][number]
+
 export interface Writeoff {
   id: number
   qty: number

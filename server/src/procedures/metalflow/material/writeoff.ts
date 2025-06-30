@@ -11,6 +11,7 @@ export const listWriteoff = publicProcedure.query(async () => {
       'w.id',
       'w.qty',
       'w.timestamp',
+      'w.reason',
       'w.data',
       'm.id as material_id',
       'm.label',

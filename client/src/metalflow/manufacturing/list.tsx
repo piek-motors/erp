@@ -44,7 +44,7 @@ export const ManufacturingList = observer(() => {
     <ScrollableWindow
       refreshTrigger={false}
       staticContent={
-        <Stack>
+        <Stack py={1}>
           <PageTitle subTitle={'Изготавливаемые детали'} hideIcon />
         </Stack>
       }

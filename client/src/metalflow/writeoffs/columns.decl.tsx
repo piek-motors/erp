@@ -1,4 +1,4 @@
-import { uiUnit, uiWriteoffReason } from 'domain-model'
+import { EnWriteoffReason, uiUnit, uiWriteoffReason } from 'domain-model'
 import { DeleteResourceButton, P } from 'lib/index'
 import { formatOnlyDate } from 'lib/utils/formatting'
 import { t } from 'metalflow/text'
@@ -36,7 +36,7 @@ export function getColumns(props: {
     },
     {
       Header: 'Причина',
-      accessor: data => uiWriteoffReason(data.data.reason)
+      accessor: data => uiWriteoffReason(data?.reason as EnWriteoffReason)
     },
     {
       Header: t.Action,
