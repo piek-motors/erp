@@ -8,10 +8,9 @@ import { MaterialListPage } from './materials/list/list'
 import { MaterialAddPage } from './materials/material_add'
 import { MaterialUpdatePage } from './materials/material_update'
 import { MetalFlowRootLayout } from './metalflow_root'
+import { OperationsList } from './operatiions/operations'
 import { Narrow } from './shared/basic'
-import { SupplyList } from './supplies/list/list'
 import { UsageInstruction } from './usage-instuction'
-import { WriteoffList } from './writeoffs/list/list'
 
 const { metalflow } = routeMap
 
@@ -65,12 +64,8 @@ const innerRoutes = [
     path: metalflow.detail.edit
   },
   {
-    element: <SupplyList />,
-    path: metalflow.supplies
-  },
-  {
-    element: <WriteoffList />,
-    path: metalflow.writeoffs
+    element: <OperationsList />,
+    path: metalflow.operations
   },
   {
     element: <ManufacturingList />,

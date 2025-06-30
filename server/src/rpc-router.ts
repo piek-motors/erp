@@ -17,15 +17,15 @@ import { finishManufacturing } from './procedures/metalflow/manufacturing/finish
 import { manufacturingList } from './procedures/metalflow/manufacturing/list.js'
 import {
   createMaterialSupply,
-  deleteSupply,
   listSupplies
 } from './procedures/metalflow/material/supply.js'
 import {
-  deleteWriteoff,
   listWriteoff,
   writeoffThroughDetail,
   writeoffThroughMaterial
 } from './procedures/metalflow/material/writeoff.js'
+import { listOperations } from './procedures/metalflow/operations/list.js'
+import { revertOperation } from './procedures/metalflow/operations/revert-operation.js'
 
 export const rpcRouter = router({
   material: router({
@@ -38,9 +38,7 @@ export const rpcRouter = router({
     supply: createMaterialSupply,
     listWriteoff: listWriteoff,
     writeoffTroughMaterial: writeoffThroughMaterial,
-    writeoffTroughDetail: writeoffThroughDetail,
-    deleteSupply: deleteSupply,
-    deleteWriteoff: deleteWriteoff
+    writeoffTroughDetail: writeoffThroughDetail
   }),
   details: router({
     get: getDetailProcedure,
@@ -49,6 +47,10 @@ export const rpcRouter = router({
     update: updateDetailProcedure,
     create: createDetailProcedure,
     deleteDetailMaterial: deleteDetailMaterial
+  }),
+  operations: router({
+    list: listOperations,
+    revert: revertOperation
   }),
   manufacturing: router({
     list: manufacturingList,

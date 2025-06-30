@@ -33,8 +33,7 @@ export const routeMap = {
       edit: '/metalflow/details/:id/edit'
     },
 
-    supplies: '/metalflow/supplies',
-    writeoffs: '/metalflow/writeoffs',
+    operations: '/metalflow/operations',
     manufacturing: '/metalflow/manufacturing'
   }
 } as const

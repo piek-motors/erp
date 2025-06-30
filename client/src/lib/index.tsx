@@ -13,6 +13,7 @@ import {
   FormControl,
   FormHelperText,
   IconButton,
+  IconButtonProps,
   Input,
   InputProps,
   Chip as MuiChip,
@@ -130,10 +131,19 @@ export function CancelButton(props: { onClick: () => void }) {
   )
 }
 
-export function DeleteResourceButton(props: { onClick?: () => void }) {
+export function DeleteResourceButton(props: {
+  variant?: IconButtonProps['variant']
+  onClick?: () => void
+  small?: boolean
+}) {
   return (
-    <IconButton variant="soft" color="danger" onClick={props.onClick} size="sm">
-      <UseIcon icon={UilTrashAlt} />
+    <IconButton
+      variant={props.variant ?? 'soft'}
+      color="danger"
+      onClick={props.onClick}
+      size="sm"
+    >
+      <UseIcon icon={UilTrashAlt} small={props.small} />
     </IconButton>
   )
 }

@@ -1,0 +1,25 @@
+import { rpc } from 'lib/rpc.client'
+import { makeAutoObservable } from 'mobx'
+import { RouterOutput } from '../../../../server/src/lib/trpc'
+
+export type Operation = RouterOutput['operations']['list'][number]
+
+class OperationsStore {
+  operations: Operation[] = []
+  constructor() {
+    makeAutoObservable(this)
+  }
+  setOperations(operations: Operation[]) {
+    this.operations = operations
+  }
+  async revertOperation(id: number) {
+    await rpc.operations.revert.mutate({ id })
+    this.setOperations(this.operations.filter(op => op.operation_id !== id))
+    return true
+  }
+  async load() {
+    const operations = await rpc.operations.list.query({})
+    this.setOperations(operations)
+  }
+}
+export const store = new OperationsStore()
