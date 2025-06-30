@@ -5,6 +5,13 @@ import { createDetailProcedure } from '#root/procedures/metalflow/detail/create.
 import { deleteDetailProcedure } from '#root/procedures/metalflow/detail/delete.js'
 import { deleteDetailMaterial } from '#root/procedures/metalflow/detail/delete_material.js'
 import { getDetailProcedure } from '#root/procedures/metalflow/detail/get.js'
+import { addDetailsToGroup } from '#root/procedures/metalflow/detail/grouping/add-details.js'
+import { createDetailGroup } from '#root/procedures/metalflow/detail/grouping/create.js'
+import { deleteDetailGroup } from '#root/procedures/metalflow/detail/grouping/delete.js'
+import { getDetailGroup } from '#root/procedures/metalflow/detail/grouping/get.js'
+import { listDetailGroups } from '#root/procedures/metalflow/detail/grouping/list.js'
+import { removeDetailsFromGroup } from '#root/procedures/metalflow/detail/grouping/remove-details.js'
+import { updateDetailGroup } from '#root/procedures/metalflow/detail/grouping/update.js'
 import { getDetailListProcedure } from '#root/procedures/metalflow/detail/list.js'
 import { updateDetailProcedure } from '#root/procedures/metalflow/detail/update.js'
 import { createMaterial } from '#root/procedures/metalflow/material/create.js'
@@ -47,6 +54,15 @@ export const rpcRouter = router({
     update: updateDetailProcedure,
     create: createDetailProcedure,
     deleteDetailMaterial: deleteDetailMaterial
+  }),
+  detailGroups: router({
+    get: getDetailGroup,
+    list: listDetailGroups,
+    create: createDetailGroup,
+    update: updateDetailGroup,
+    delete: deleteDetailGroup,
+    addDetails: addDetailsToGroup,
+    removeDetails: removeDetailsFromGroup
   }),
   operations: router({
     list: listOperations,

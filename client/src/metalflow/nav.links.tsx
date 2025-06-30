@@ -27,6 +27,10 @@ export const actions: Action[] = [
     ]
   },
   {
+    name: 'Группы деталей',
+    href: routeMap.metalflow.detailGroups
+  },
+  {
     name: 'Детали в производстве',
     href: routeMap.metalflow.manufacturing
   },

@@ -33,6 +33,18 @@ export namespace DB {
     ['metal_flow.detail_materials']: DetailMaterialsTable
     ['metal_flow.operations']: OperationsTable
     ['metal_flow.manufacturing']: ManufacturingTable
+    ['metal_flow.detail_group']: DetailGroupTable
+    ['metal_flow.detail_group_details']: DetailGroupDetailsTable
+  }
+
+  export interface DetailGroupTable {
+    id: Generated<number>
+    name: string
+  }
+
+  export interface DetailGroupDetailsTable {
+    group_id: number
+    detail_id: number
   }
 
   export interface UserTable {

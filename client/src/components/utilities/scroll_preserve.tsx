@@ -29,7 +29,7 @@ export const ScrollPreserv = ({
   }, [refreshTrigger])
 
   return (
-    <Box sx={{ overflow: 'scroll', flexGrow: 1, ...sx }} ref={containerRef}>
+    <Box sx={{ overflow: 'auto', flexGrow: 1, ...sx }} ref={containerRef}>
       {children}
     </Box>
   )

@@ -20,7 +20,7 @@ export const ScrollableWindow = ({
         </>
       ) : null}
       <ScrollPreserv refreshTrigger={refreshTrigger}>
-        <Sheet>{scrollableContent}</Sheet>
+        <Sheet sx={{ borderRadius: 'sm' }}>{scrollableContent}</Sheet>
       </ScrollPreserv>
       <Box p={0.5}></Box>
     </Stack>
