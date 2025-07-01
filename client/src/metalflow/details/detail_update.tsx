@@ -27,7 +27,6 @@ export const UpdateDetailPage = observer(() => {
   const navigate = useNavigate()
   useEffect(() => {
     detailStore.load(detailId)
-    detailStore.loadMaterials()
     return () => {
       detailStore.clear()
     }

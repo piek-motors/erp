@@ -12,7 +12,6 @@ import {
   observer,
   open,
   routeMap,
-  useEffect,
   useNavigate
 } from 'lib/index'
 import { t } from 'metalflow/text'
@@ -87,9 +86,6 @@ const DetailList = observer((props: DetailsTableProps) => {
 })
 
 export const DetailsListPage = observer(() => {
-  useEffect(() => {
-    state.init()
-  }, [])
   return (
     <ScrollableWindow
       refreshTrigger={state.async.loading}
@@ -134,10 +130,6 @@ const DetailSearchArguments = observer(() => {
 })
 
 const DetailsList = observer((props: DetailsTableProps) => {
-  useEffect(() => {
-    state.init()
-  }, [])
-
   return (
     <Stack gap={1}>
       <ErrorHint e={state.async.error} />

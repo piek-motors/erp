@@ -19,6 +19,7 @@ export const DetailGroupList = observer(() => {
         const isSelected = detailGroupStore.selectedGroup?.group.id === group.id
         return (
           <P
+            key={group.id}
             color={isSelected ? 'primary' : 'neutral'}
             sx={{ flex: 1, py: 0.7, cursor: 'pointer' }}
             onClick={() => handleGroupSelect(group)}

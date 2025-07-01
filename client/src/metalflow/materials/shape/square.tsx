@@ -1,14 +1,13 @@
 import { EnUnit, uiUnit } from 'domain-model'
 import { Inp, InputStack, observer } from 'lib/index'
 import { AlloyAutocomplete } from 'metalflow/shared/basic'
-import { t } from 'metalflow/text'
 import { material } from '../material.state'
 
 export const SquareMaterialInputBase = observer(() => {
   return (
     <InputStack>
       <Inp
-        label={t.Length}
+        label={'Ширина'}
         value={material.square.length}
         onChange={v => {
           material.square.setLength(v)

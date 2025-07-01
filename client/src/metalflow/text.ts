@@ -37,7 +37,7 @@ export const t = {
   SuppliesList: 'История поставок',
   SupplyAdd: 'Добавить поставку',
   TakeLook: 'Посмотреть',
-  Thickness: 'Толщина, мм',
+  Thickness: 'Толщина',
   Unit: 'Ед.',
   Width: 'Ширина',
   WriteOffAdd: 'Добавить списание',

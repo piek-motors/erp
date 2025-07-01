@@ -1,13 +1,14 @@
 import { Button, observer, Stack } from 'lib'
+import { cache } from 'metalflow/cache'
 import { detailListStore } from './list/state'
 
 export const alphabet = 'АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ'.split('')
 
 export const AlphabetIndex = observer(() => {
   const availableLetters = alphabet.filter(letter =>
-    detailListStore.details.some(detail =>
-      detail.name.toUpperCase().startsWith(letter)
-    )
+    cache.details
+      .getDetails()
+      .some(detail => detail.name.toUpperCase().startsWith(letter))
   )
 
   if (availableLetters.length === 0) return null

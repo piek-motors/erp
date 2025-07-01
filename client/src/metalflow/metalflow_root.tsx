@@ -1,7 +1,12 @@
 import { Box, Container, Stack } from '@mui/joy'
+import { useEffect } from 'react'
+import { cache } from './cache'
 import { NavigationSideBar } from './shared/nav'
 
 export function MetalFlowRootLayout(props: { children?: React.ReactNode }) {
+  useEffect(() => {
+    cache.init()
+  }, [])
   return (
     <Container maxWidth="xl">
       <Box

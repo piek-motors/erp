@@ -99,14 +99,14 @@ export function AlloyAutocomplete(props: {
 
 import { Autocomplete } from '@mui/joy'
 import { DeleteConfirmDialog } from 'components/delete_confirm_dialog'
+import { cache } from 'metalflow/cache'
 import { observer } from 'mobx-react-lite'
 import { Detail } from '../details/detail.store'
-import { detailListStore } from '../details/list/state'
 
 export const DetailSelect = observer(
   (props: { value?: Detail; onChange: (value: Detail) => void }) => {
     const options =
-      detailListStore.details.map(detail => ({
+      cache.details.getDetails().map(detail => ({
         label: detail.name,
         data: detail
       })) || []

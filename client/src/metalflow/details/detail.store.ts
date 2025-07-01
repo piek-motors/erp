@@ -1,6 +1,7 @@
 import { AttachmentsStore } from 'components/attachments/store'
 import { Attachment } from 'domain-model'
 import { rpc } from 'lib/rpc.client'
+import { cache } from 'metalflow/cache'
 import { makeAutoObservable } from 'mobx'
 import { DetailWriteoffStore } from './writeoff/store'
 
@@ -163,24 +164,27 @@ export class Detail {
       length: m.length,
       weight: m.weight
     }))
-
-    return await rpc.details.create.mutate({
+    const res = await rpc.details.create.mutate({
       name: this.name,
       partCode: this.partCode,
       materialRelations
     })
+    await cache.details.load()
+    return res
   }
 
   async update() {
     if (!this.id) {
       throw new Error('Detail id is not set')
     }
-    return await rpc.details.update.mutate({
+    const res = await rpc.details.update.mutate({
       id: this.id,
       name: this.name,
       partCode: this.partCode,
       materialRelations: this.usedMaterials
     })
+    await cache.details.load()
+    return res
   }
 
   async delete() {
@@ -188,19 +192,8 @@ export class Detail {
       throw new Error('Detail id is not set')
     }
     await rpc.details.delete.mutate({ id: this.id })
+    cache.details.removeDetail(this.id)
     this.clear()
-  }
-
-  async loadMaterials() {
-    const materials = await rpc.material.list.query()
-    this.setMaterialsSuggestions(
-      materials.map(m => {
-        return new MaterialCost({
-          materialId: m.id,
-          label: m.label
-        })
-      })
-    )
   }
 
   async deleteDetailMaterial(detailId: number, materialId: number) {

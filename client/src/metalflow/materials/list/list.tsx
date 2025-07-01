@@ -12,7 +12,6 @@ import {
   P,
   RowButColumsAtSm,
   Stack,
-  useEffect,
   useNavigate
 } from 'lib/index'
 import { open, routeMap } from 'lib/routes'
@@ -52,9 +51,7 @@ interface MaterialsTableProps {
 
 export const MaterialList = observer((props: MaterialsTableProps) => {
   const navigate = useNavigate()
-  useEffect(() => {
-    materialListStore.init()
-  }, [])
+
   return (
     <Table
       columns={columnList}

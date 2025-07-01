@@ -1,6 +1,6 @@
 import { EnMaterialShape } from 'domain-model'
 import { AsyncStoreController } from 'lib/async-store.controller'
-import { rpc } from 'lib/rpc.client'
+import { cache } from 'metalflow/cache'
 import { makeAutoObservable } from 'mobx'
 import { RouterOutput } from '../../../../../server/src/lib/trpc'
 import { MaterialSupplyStore } from '../supply/state'
@@ -10,7 +10,6 @@ export type MaterialListOutput = RouterOutput['material']['list'][number]
 export class MaterialListStore {
   readonly async = new AsyncStoreController()
   supply = new MaterialSupplyStore()
-  materials: MaterialListOutput[] = []
   searchResult: number[] = []
   searchId: string = ''
   filterKeyword: string = ''
@@ -19,10 +18,10 @@ export class MaterialListStore {
     makeAutoObservable(this)
   }
   getFilteredMaterials(): MaterialListOutput[] {
-    let filtered = this.materials
+    let filtered = cache.materials.getMaterials()
     if (this.searchId) {
-      filtered = filtered.filter(material =>
-        material.id.toString().startsWith(this.searchId)
+      filtered = filtered.filter(
+        material => material.id.toString() === this.searchId
       )
       return filtered
     }
@@ -53,22 +52,9 @@ export class MaterialListStore {
   setFilterShape(shape?: EnMaterialShape) {
     this.filterShape = shape
   }
-  setMaterials(materials: MaterialListOutput[]) {
-    this.materials = materials
-  }
-  addMaterial(material: MaterialListOutput) {
-    this.materials.push(material)
-  }
   clear() {
-    this.materials = []
     this.filterKeyword = ''
     this.async.reset()
-  }
-  async init() {
-    return this.async.run(async () => {
-      const materials = await rpc.material.list.query()
-      this.setMaterials(materials)
-    })
   }
 }
 

@@ -16,7 +16,7 @@ export const PipeMaterialInputBase = observer(() => {
         unit={uiUnit(EnUnit.MilliMeter)}
       />
       <Inp
-        label={t.Thickness}
+        label={'Толщина стенки'}
         value={material.pipe.thickness}
         onChange={v => {
           material.pipe.setThickness(v)

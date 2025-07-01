@@ -21,7 +21,8 @@ export enum EnUnit {
   Kg = 0,
   M = 1,
   MilliMeter = 2,
-  Gram = 3
+  Gram = 3,
+  Countable = 4
 }
 
 export enum EnWriteoffType {

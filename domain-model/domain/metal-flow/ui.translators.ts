@@ -41,7 +41,8 @@ export const UiUnit = {
   [EnUnit.Kg]: 'кг',
   [EnUnit.M]: 'м',
   [EnUnit.MilliMeter]: 'мм',
-  [EnUnit.Gram]: 'гр'
+  [EnUnit.Gram]: 'гр',
+  [EnUnit.Countable]: 'шт'
 }
 
 export function uiUnit(unit?: EnUnit) {
