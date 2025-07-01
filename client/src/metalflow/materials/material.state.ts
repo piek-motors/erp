@@ -9,6 +9,7 @@ import {
 import { AsyncStoreController } from 'lib/async-store.controller'
 import { makeAutoObservable } from 'lib/deps'
 import { rpc } from 'lib/rpc.client'
+import { cache } from 'metalflow/cache'
 import { map } from 'metalflow/mappers'
 import { IMaterialShapeState } from './matetial_shape_state.interface'
 import { ListState } from './shape/list_state'
@@ -126,6 +127,7 @@ export class MaterialStore {
       })
       this.insertedMaterialId = res.id
       this.clear()
+      await cache.materials.load()
       return res.id
     })
   }
@@ -149,9 +151,10 @@ export class MaterialStore {
           unit: this.unit
         })
       })
-      .then(res => {
+      .then(async res => {
         if (!this.id) throw new Error('Material id is not set')
         this.load(this.id)
+        await cache.materials.load()
         return res
       })
   }
@@ -160,6 +163,12 @@ export class MaterialStore {
     return this.async.run(async () => {
       if (!this.id) throw new Error('Material id is not set')
       await rpc.material.delete.mutate({ id: this.id })
+      const materialToRemove = cache.materials
+        .getMaterials()
+        .find(m => m.id === this.id)
+      if (materialToRemove) {
+        cache.materials.removeMaterial(materialToRemove)
+      }
     })
   }
 
@@ -168,6 +177,7 @@ export class MaterialStore {
       const qty = await this.supply.insertSupply(this.id)
       this.supply.reset()
       this.setStock(Number(qty))
+      await cache.materials.load()
       return `Баланс: ${qty} ${uiUnit(this.unit)}`
     })
   }
@@ -177,6 +187,7 @@ export class MaterialStore {
       const stock = await this.writeoff.insertWriteoff(this.id)
       this.writeoff.reset()
       await this.load(this.id)
+      await cache.materials.load()
       return `Баланс: ${stock} ${uiUnit(this.unit)}`
     })
   }

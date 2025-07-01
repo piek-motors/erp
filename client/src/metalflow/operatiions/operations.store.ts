@@ -1,4 +1,5 @@
 import { rpc } from 'lib/rpc.client'
+import { cache } from 'metalflow/cache'
 import { makeAutoObservable } from 'mobx'
 import { RouterOutput } from '../../../../server/src/lib/trpc'
 
@@ -15,6 +16,7 @@ class OperationsStore {
   async revertOperation(id: number) {
     await rpc.operations.revert.mutate({ id })
     this.setOperations(this.operations.filter(op => op.operation_id !== id))
+    await cache.materials.load()
     return true
   }
   async load() {

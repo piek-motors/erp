@@ -1,5 +1,6 @@
 import { EnWriteoffReason, WriteoffTroughDetail } from 'domain-model'
 import { makeAutoObservable, rpc } from 'lib/deps'
+import { cache } from 'metalflow/cache'
 import { Detail } from '../detail.store'
 
 export class DetailWriteoffStore {
@@ -68,6 +69,7 @@ export class DetailWriteoffStore {
       qty: this.qty,
       reason: this.reason
     })
+    await cache.materials.load()
     return []
   }
 }
