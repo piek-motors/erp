@@ -9,7 +9,7 @@ import { z } from 'zod'
 export const createDetailProcedure = publicProcedure
   .input(
     z.object({
-      name: z.string(),
+      name: z.string().min(5, 'Название должно быть не менее 5 символов'),
       partCode: z.string(),
       groupId: z.number().nullable(),
       materialRelations: z.array(

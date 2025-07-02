@@ -5,9 +5,7 @@ import {
   Checkbox,
   IconButton,
   List,
-  ListItem,
-  ListItemButton,
-  Typography
+  ListItemButton
 } from '@mui/joy'
 import { DeleteConfirmDialog } from 'components/delete_confirm_dialog'
 import {
@@ -25,7 +23,7 @@ import { Link } from 'react-router-dom'
 import { DetailName } from '../detail_shared'
 import { DetailSelectionList } from './detail-selection-list'
 import { EditGroupModal } from './edit-group-modal'
-import { detailGroupStore } from './store'
+import { Detail, detailGroupStore } from './store'
 
 export const DetailGroupManager = observer(() => {
   const { selectedGroup } = detailGroupStore
@@ -41,9 +39,7 @@ export const DetailGroupManager = observer(() => {
         justifyContent="center"
         sx={{ height: '400px' }}
       >
-        <Typography level="body-lg" color="neutral">
-          Выберите группу для управления
-        </Typography>
+        <P color="neutral">Выберите группу для управления</P>
       </Stack>
     )
   }
@@ -75,6 +71,7 @@ export const DetailGroupManager = observer(() => {
     }
   }
 
+  const notEmpty = selectedGroup.details.length > 0
   return (
     <Stack gap={2} p={2}>
       <Stack direction="row" justifyContent="space-between" alignItems="center">
@@ -110,7 +107,7 @@ export const DetailGroupManager = observer(() => {
             <P level="title-sm">
               Детали в группе ({selectedGroup.details.length})
             </P>
-            {selectedGroup.details.length > 0 && (
+            {notEmpty && (
               <Button
                 size="sm"
                 variant="soft"
@@ -127,7 +124,7 @@ export const DetailGroupManager = observer(() => {
             )}
           </Stack>
 
-          {selectedGroup.details.length === 0 ? (
+          {!notEmpty ? (
             <P level="body-sm" color="neutral">
               В группе нет деталей
             </P>
@@ -135,7 +132,7 @@ export const DetailGroupManager = observer(() => {
             <Stack sx={{ flex: 1 }}>
               <List sx={{ flex: 1, overflow: 'auto' }}>
                 {selectedGroup.details.map(detail => (
-                  <ListItem
+                  <Row
                     key={detail.id}
                     sx={{
                       p: 0,
@@ -145,42 +142,26 @@ export const DetailGroupManager = observer(() => {
                       }
                     }}
                   >
-                    <Checkbox
-                      size="sm"
-                      variant="outlined"
-                      checked={selectedGroupDetailIds.includes(detail.id)}
-                      onChange={() =>
-                        handleToggleGroupDetailSelection(detail.id)
-                      }
-                      onClick={e => e.stopPropagation()}
+                    <Box>
+                      {detail.group_id == null ? (
+                        <Checkbox
+                          size="sm"
+                          variant="outlined"
+                          checked={selectedGroupDetailIds.includes(detail.id)}
+                          onChange={() =>
+                            handleToggleGroupDetailSelection(detail.id)
+                          }
+                          onClick={e => e.stopPropagation()}
+                        />
+                      ) : (
+                        <Box sx={{ width: '17px' }} />
+                      )}
+                    </Box>
+                    <DetailRow
+                      detail={detail}
+                      onToggle={handleToggleGroupDetailSelection}
                     />
-                    <Row sx={{ flex: 1, ml: 1 }}>
-                      <ListItemButton
-                        sx={{ borderRadius: 1 }}
-                        onClick={() =>
-                          handleToggleGroupDetailSelection(detail.id)
-                        }
-                      >
-                        <DetailName detail={detail} />
-                      </ListItemButton>
-
-                      <Box
-                        className="detail-arrow"
-                        sx={{
-                          opacity: 0,
-                          transition: 'opacity 0.2s ease-in-out'
-                        }}
-                      >
-                        <Link
-                          to={open(routeMap.metalflow.detail.edit, detail!.id)}
-                        >
-                          <IconButton variant="plain" color="neutral" size="sm">
-                            <UseIcon icon={UilLink} small />
-                          </IconButton>
-                        </Link>
-                      </Box>
-                    </Row>
-                  </ListItem>
+                  </Row>
                 ))}
               </List>
             </Stack>
@@ -193,7 +174,6 @@ export const DetailGroupManager = observer(() => {
             Доступные детали ({detailGroupStore.filteredAvailableDetails.length}
             )
           </P>
-
           <DetailSelectionList
             details={detailGroupStore.filteredAvailableDetails}
             selectedIds={detailGroupStore.selectedDetailIds}
@@ -218,3 +198,33 @@ export const DetailGroupManager = observer(() => {
     </Stack>
   )
 })
+
+function DetailRow(props: {
+  detail: Detail
+  onToggle: (detailId: number) => void
+}) {
+  return (
+    <Row sx={{ flex: 1 }}>
+      <ListItemButton
+        onClick={() =>
+          props.detail.group_id === null && props.onToggle(props.detail.id)
+        }
+      >
+        <DetailName detail={props.detail} />
+      </ListItemButton>
+      <Box
+        className="detail-arrow"
+        sx={{
+          opacity: 0,
+          transition: 'opacity 0.2s ease-in-out'
+        }}
+      >
+        <Link to={open(routeMap.metalflow.detail.edit, props.detail.id)}>
+          <IconButton variant="soft" size="sm">
+            <UseIcon icon={UilLink} small />
+          </IconButton>
+        </Link>
+      </Box>
+    </Row>
+  )
+}

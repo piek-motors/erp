@@ -1,4 +1,4 @@
-import { Box, Container, Stack } from '@mui/joy'
+import { Box, Stack } from '@mui/joy'
 import { useEffect } from 'react'
 import { cache } from './metal_flow_cache'
 import { NavigationSideBar } from './shared/nav'
@@ -8,26 +8,24 @@ export function MetalFlowRootLayout(props: { children?: React.ReactNode }) {
     cache.init()
   }, [])
   return (
-    <Container maxWidth="xl">
-      <Box
-        sx={{
-          height: '100vh',
-          display: 'flex',
-          alignItems: 'stretch',
-          justifyContent: 'start',
-          flexDirection: {
-            xs: 'column',
-            sm: 'row'
-          }
-        }}
-      >
-        <Box p={1}>
-          <NavigationSideBar />
-        </Box>
-        {props.children && (
-          <Stack sx={{ flexGrow: 1, gap: 1, p: 0 }}>{props.children}</Stack>
-        )}
+    <Box
+      sx={{
+        height: '100vh',
+        display: 'flex',
+        alignItems: 'stretch',
+        justifyContent: 'start',
+        flexDirection: {
+          xs: 'column',
+          sm: 'row'
+        }
+      }}
+    >
+      <Box p={1}>
+        <NavigationSideBar />
       </Box>
-    </Container>
+      {props.children && (
+        <Stack sx={{ flexGrow: 1, gap: 1, p: 0 }}>{props.children}</Stack>
+      )}
+    </Box>
   )
 }

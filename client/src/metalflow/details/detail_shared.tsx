@@ -160,7 +160,7 @@ export const DetailGroupInput = observer(() => {
 
   return (
     <BaseAutocomplete
-      label="Если деталь используется только в одной группе, укажите здесь группу"
+      label="Относится исключительно к группе"
       options={groupOptions}
       value={selectedGroup}
       onChange={group => {

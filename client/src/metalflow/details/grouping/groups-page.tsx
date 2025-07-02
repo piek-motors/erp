@@ -1,6 +1,6 @@
 import { observer, useEffect } from 'lib/index'
-import { DetailGroupManager } from './detail-group-manager'
 import { DetailGroupsLayout } from './detail-groups-layout'
+import { DetailGroupManager } from './detail_list'
 import { detailGroupStore } from './store'
 
 export const DetailGroupsPage = observer(() => {

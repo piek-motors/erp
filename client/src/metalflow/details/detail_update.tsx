@@ -50,8 +50,8 @@ export const UpdateDetailPage = observer(() => {
               // navigate(open(routeMap.metalflow.writeoff.new, detailId))
             }}
           /> */}
-          <DetailPartCodeInput />
           <DetailGroupInput />
+          <DetailPartCodeInput />
           <MaterialRelationDataInputs />
           <SaveAndDelete
             itemName={`Деталь (${detailStore.id}) - ${detailStore.name}`}

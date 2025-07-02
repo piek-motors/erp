@@ -3,7 +3,7 @@ import { PageTitle } from 'components/page-title'
 import { Box, observer, P, Row, Stack } from 'lib/index'
 import { ReactNode } from 'react'
 import { CreateGroupModal } from './create-group.modal'
-import { DetailGroupList } from './detail-group-list'
+import { DetailGroupList } from './group_list'
 
 interface DetailGroupsLayoutProps {
   children: ReactNode

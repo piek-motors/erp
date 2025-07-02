@@ -18,7 +18,7 @@ export const getDetailInTheGroup = procedure
         .selectFrom('metal_flow.detail_group_details as dgd')
         .innerJoin('metal_flow.details as d', 'd.id', 'dgd.detail_id')
         .where('dgd.group_id', '=', input.id)
-        .select(['d.id', 'd.name', 'd.part_code'])
+        .select(['d.id', 'd.name', 'd.part_code', 'd.logical_group_id'])
         .orderBy('d.name', 'asc')
         .execute()
     ])
@@ -42,7 +42,7 @@ export const getDetailInTheGroup = procedure
         id: d.id,
         name: d.name,
         part_code: d.part_code,
-        group_id: group.id
+        group_id: d.logical_group_id
       }))
     }
   })

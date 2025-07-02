@@ -8,7 +8,7 @@ import {
   UilSetting,
   UilWrench
 } from '@iconscout/react-unicons'
-import { Badge, Container, IconButton, Stack } from '@mui/joy'
+import { Badge, IconButton, Stack } from '@mui/joy'
 import { Context } from 'index'
 import { P, Row, UseIcon } from 'lib/index'
 import { routeMap } from 'lib/routes'
@@ -60,29 +60,27 @@ export function IndexPage() {
   })
 
   return (
-    <Container maxWidth="xs">
-      <Stack py={3} gap={2}>
-        {links.map((each, idx) => {
-          if (each.name === 'Упоминания') {
-            return (
-              <BadgeWrapper
-                content={
-                  data?.orders_notifications_aggregate?.aggregate?.count ?? 1
-                }
-              >
-                <Element
-                  key={idx}
-                  {...each}
-                  count={data?.orders_notifications_aggregate?.aggregate?.count}
-                />
-              </BadgeWrapper>
-            )
-          }
+    <Stack py={3} gap={2} p={2}>
+      {links.map((each, idx) => {
+        if (each.name === 'Упоминания') {
+          return (
+            <BadgeWrapper
+              content={
+                data?.orders_notifications_aggregate?.aggregate?.count ?? 1
+              }
+            >
+              <Element
+                key={idx}
+                {...each}
+                count={data?.orders_notifications_aggregate?.aggregate?.count}
+              />
+            </BadgeWrapper>
+          )
+        }
 
-          return <Element key={idx} {...each} />
-        })}
-      </Stack>
-    </Container>
+        return <Element key={idx} {...each} />
+      })}
+    </Stack>
   )
 }
 

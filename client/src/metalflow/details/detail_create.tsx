@@ -22,11 +22,11 @@ export const CreateDetailPage = observer(() => {
     }
   }, [])
   return (
-    <Stack gap={2} py={2}>
+    <Stack gap={1} py={2}>
       <PageTitle subTitle={t.AddDetail} hideIcon />
       <DetailNameInput />
-      <DetailPartCodeInput />
       <DetailGroupInput />
+      <DetailPartCodeInput />
       <MaterialRelationDataInputs />
       <SendMutation
         onClick={() => detailStore.insert()}
