@@ -8,7 +8,6 @@ import { getDetailProcedure } from '#root/procedures/metalflow/detail/get.js'
 import { addDetailsToGroup } from '#root/procedures/metalflow/detail/grouping/add-details.js'
 import { createDetailGroup } from '#root/procedures/metalflow/detail/grouping/create.js'
 import { deleteDetailGroup } from '#root/procedures/metalflow/detail/grouping/delete.js'
-import { getDetailGroup } from '#root/procedures/metalflow/detail/grouping/get.js'
 import { listDetailGroups } from '#root/procedures/metalflow/detail/grouping/list.js'
 import { removeDetailsFromGroup } from '#root/procedures/metalflow/detail/grouping/remove-details.js'
 import { updateDetailGroup } from '#root/procedures/metalflow/detail/grouping/update.js'
@@ -19,6 +18,7 @@ import { deleteMaterial } from '#root/procedures/metalflow/material/delete.js'
 import { getMaterial } from '#root/procedures/metalflow/material/get.js'
 import { listMaterials } from '#root/procedures/metalflow/material/list.js'
 import { updateMaterial } from '#root/procedures/metalflow/material/update.js'
+import { getDetailInTheGroup } from './procedures/metalflow/detail/grouping/get.js'
 import { addDetailIntoManufacturingList } from './procedures/metalflow/manufacturing/add.js'
 import { finishManufacturing } from './procedures/metalflow/manufacturing/finish.js'
 import { manufacturingList } from './procedures/metalflow/manufacturing/list.js'
@@ -56,7 +56,7 @@ export const rpcRouter = router({
     deleteDetailMaterial: deleteDetailMaterial
   }),
   detailGroups: router({
-    get: getDetailGroup,
+    get: getDetailInTheGroup,
     list: listDetailGroups,
     create: createDetailGroup,
     update: updateDetailGroup,

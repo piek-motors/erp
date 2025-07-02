@@ -10,6 +10,7 @@ import { open, routeMap } from 'lib/routes'
 import { t } from '../text'
 import { detailStore } from './detail.store'
 import {
+  DetailGroupInput,
   DetailNameInput,
   DetailPartCodeInput,
   MaterialRelationDataInputs
@@ -17,7 +18,7 @@ import {
 export const CreateDetailPage = observer(() => {
   useEffect(() => {
     return () => {
-      detailStore.clear()
+      detailStore.reset()
     }
   }, [])
   return (
@@ -25,6 +26,7 @@ export const CreateDetailPage = observer(() => {
       <PageTitle subTitle={t.AddDetail} hideIcon />
       <DetailNameInput />
       <DetailPartCodeInput />
+      <DetailGroupInput />
       <MaterialRelationDataInputs />
       <SendMutation
         onClick={() => detailStore.insert()}

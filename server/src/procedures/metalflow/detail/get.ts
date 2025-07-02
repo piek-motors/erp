@@ -12,16 +12,13 @@ export const getDetailProcedure = publicProcedure
     const [detail, detailMaterials, attachments] = await Promise.all([
       db
         .selectFrom('metal_flow.details')
-        .leftJoin('metal_flow.detail_materials', join =>
-          join.onRef('detail_id', '=', 'id')
-        )
         .where('id', '=', input.id)
         .selectAll()
         .executeTakeFirstOrThrow()
-        .catch(d => {
+        .catch(err => {
           throw new TRPCError({
             code: 'NOT_FOUND',
-            message: 'Detail not found'
+            message: err.message
           })
         }),
       db
@@ -41,5 +38,16 @@ export const getDetailProcedure = publicProcedure
         .selectAll()
         .execute()
     ])
-    return { detail, detail_materials: detailMaterials, attachments }
+    const group = await db
+      .selectFrom('metal_flow.detail_group')
+      .where('id', '=', detail.logical_group_id)
+      .select('name')
+      .executeTakeFirst()
+
+    return {
+      detail,
+      detail_materials: detailMaterials,
+      attachments,
+      groupName: group?.name ?? null
+    }
   })

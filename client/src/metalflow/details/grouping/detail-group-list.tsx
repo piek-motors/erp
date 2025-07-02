@@ -1,11 +1,10 @@
 import { Stack } from '@mui/joy'
 import { observer, P } from 'lib/index'
-import { detailGroupStore, Group } from './store'
+import { open, routeMap } from 'lib/routes'
+import { Link } from 'react-router-dom'
+import { detailGroupStore } from './store'
 
 export const DetailGroupList = observer(() => {
-  const handleGroupSelect = (group: Group) => {
-    detailGroupStore.loadGroupWithDetails(group.id)
-  }
   if (detailGroupStore.groups.length === 0) {
     return (
       <P level="body-sm" color="neutral">
@@ -13,19 +12,24 @@ export const DetailGroupList = observer(() => {
       </P>
     )
   }
+
   return (
     <Stack>
       {detailGroupStore.groups.map(group => {
         const isSelected = detailGroupStore.selectedGroup?.group.id === group.id
         return (
-          <P
+          <Link
             key={group.id}
-            color={isSelected ? 'primary' : 'neutral'}
-            sx={{ flex: 1, py: 0.7, cursor: 'pointer' }}
-            onClick={() => handleGroupSelect(group)}
+            to={open(routeMap.metalflow.detailGroup, group.id)}
+            style={{ textDecoration: 'none' }}
           >
-            {group.name}
-          </P>
+            <P
+              color={isSelected ? 'primary' : 'neutral'}
+              sx={{ flex: 1, py: 0.7, cursor: 'pointer' }}
+            >
+              {group.name}
+            </P>
+          </Link>
         )
       })}
     </Stack>

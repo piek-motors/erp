@@ -6,7 +6,7 @@ export const ScrollableWindow = ({
   scrollableContent,
   refreshTrigger
 }: {
-  staticContent: React.ReactNode
+  staticContent?: React.ReactNode
   scrollableContent: React.ReactNode
   refreshTrigger: any
 }) => {

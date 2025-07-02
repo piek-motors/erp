@@ -11,6 +11,7 @@ export const updateDetailProcedure = publicProcedure
       id: z.number(),
       name: z.string(),
       partCode: z.string(),
+      groupId: z.number().nullable(),
       materialRelations: z.array(
         z.object({
           materialId: z.number(),
@@ -25,7 +26,8 @@ export const updateDetailProcedure = publicProcedure
       .updateTable('metal_flow.details')
       .set({
         name: input.name,
-        part_code: input.partCode
+        part_code: input.partCode,
+        logical_group_id: input.groupId
       })
       .where('id', '=', input.id)
       .execute()

@@ -1,6 +1,6 @@
 import { EnWriteoffReason, WriteoffTroughDetail } from 'domain-model'
 import { makeAutoObservable, rpc } from 'lib/deps'
-import { cache } from 'metalflow/cache'
+import { cache } from 'metalflow/metal_flow_cache'
 import { Detail } from '../detail.store'
 
 export class DetailWriteoffStore {

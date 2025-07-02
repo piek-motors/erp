@@ -10,6 +10,7 @@ export const getDetailListProcedure = publicProcedure.query(
         'd.id',
         'd.name',
         'd.part_code',
+        'd.logical_group_id',
         sql<
           {
             material_id: number
@@ -39,7 +40,8 @@ export const getDetailListProcedure = publicProcedure.query(
           row.materials_labels[idx],
           material.data.length,
           material.data.weight
-        ])
+        ]),
+        row.logical_group_id
       ]
     })
   }

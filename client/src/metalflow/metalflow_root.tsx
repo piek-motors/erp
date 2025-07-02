@@ -1,6 +1,6 @@
 import { Box, Container, Stack } from '@mui/joy'
 import { useEffect } from 'react'
-import { cache } from './cache'
+import { cache } from './metal_flow_cache'
 import { NavigationSideBar } from './shared/nav'
 
 export function MetalFlowRootLayout(props: { children?: React.ReactNode }) {

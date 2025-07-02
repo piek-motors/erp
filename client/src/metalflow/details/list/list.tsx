@@ -1,5 +1,4 @@
 import { PageTitle } from 'components'
-import { HighlightText } from 'components/highlight-text'
 import { ScrollableWindow, Search } from 'components/inputs'
 import { Table } from 'components/table.impl'
 import {
@@ -18,21 +17,18 @@ import { t } from 'metalflow/text'
 import { Column } from 'react-table'
 import { AlphabetIndex } from '../alphabet_index'
 import { Detail } from '../detail.store'
+import { DetailName } from '../detail_shared'
 import { detailListStore as state } from './state'
 
 const columnList: Column<Detail>[] = [
   {
-    Header: 'Id',
+    Header: 'ID',
     accessor: 'id'
   },
   {
     Header: t.DetailName,
     id: 'name',
-    accessor: r => (
-      <Stack>
-        <HighlightText text={r.name} highlight={state.searchKeyword} />
-      </Stack>
-    )
+    accessor: r => <DetailName detail={r} />
   },
   {
     Header: 'Масса гр.',

@@ -10,11 +10,12 @@ import {
   useNavigate,
   useParams
 } from 'lib/index'
-import { SaveAndDelete, WarehouseOperationsLinks } from 'metalflow/shared/basic'
+import { SaveAndDelete } from 'metalflow/shared/basic'
 import { t } from '../text'
 import { DetailAttachmentList } from './attachments/detail_attachment_list'
 import { detailStore } from './detail.store'
 import {
+  DetailGroupInput,
   DetailNameInput,
   DetailPartCodeInput,
   MaterialRelationDataInputs
@@ -28,7 +29,7 @@ export const UpdateDetailPage = observer(() => {
   useEffect(() => {
     detailStore.load(detailId)
     return () => {
-      detailStore.clear()
+      detailStore.reset()
     }
   }, [])
   return (
@@ -41,15 +42,16 @@ export const UpdateDetailPage = observer(() => {
             <b>ID</b> {detailStore.id}
           </P>
           <DetailNameInput />
-          <WarehouseOperationsLinks
+          {/* <WarehouseOperationsLinks
             onSupplyClick={() => {
               // navigate(open(routeMap.metalflow.supply.new, detailId))
             }}
             onWriteoffClick={() => {
               // navigate(open(routeMap.metalflow.writeoff.new, detailId))
             }}
-          />
+          /> */}
           <DetailPartCodeInput />
+          <DetailGroupInput />
           <MaterialRelationDataInputs />
           <SaveAndDelete
             itemName={`Деталь (${detailStore.id}) - ${detailStore.name}`}

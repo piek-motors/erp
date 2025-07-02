@@ -11,6 +11,7 @@ export const createDetailProcedure = publicProcedure
     z.object({
       name: z.string(),
       partCode: z.string(),
+      groupId: z.number().nullable(),
       materialRelations: z.array(
         z.object({
           materialId: z.number(),
@@ -23,7 +24,12 @@ export const createDetailProcedure = publicProcedure
   .mutation(async ({ input }) => {
     const detail = await db
       .insertInto('metal_flow.details')
-      .values({ name: input.name, part_code: input.partCode, stock: 0 })
+      .values({
+        name: input.name,
+        part_code: input.partCode,
+        stock: 0,
+        logical_group_id: input.groupId
+      })
       .returning('id')
       .executeTakeFirstOrThrow()
       .catch(e => {

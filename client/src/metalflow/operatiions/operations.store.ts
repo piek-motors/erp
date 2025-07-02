@@ -1,5 +1,5 @@
 import { rpc } from 'lib/rpc.client'
-import { cache } from 'metalflow/cache'
+import { cache } from 'metalflow/metal_flow_cache'
 import { makeAutoObservable } from 'mobx'
 import { RouterOutput } from '../../../../server/src/lib/trpc'
 

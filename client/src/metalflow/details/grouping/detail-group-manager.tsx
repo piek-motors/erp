@@ -1,13 +1,28 @@
+import { UilLink, UilPen } from '@iconscout/react-unicons'
 import {
+  Box,
   Button,
   Checkbox,
+  IconButton,
   List,
   ListItem,
   ListItemButton,
   Typography
 } from '@mui/joy'
 import { DeleteConfirmDialog } from 'components/delete_confirm_dialog'
-import { DeleteResourceButton, observer, P, Stack, useState } from 'lib/index'
+import {
+  DeleteResourceButton,
+  observer,
+  open,
+  P,
+  routeMap,
+  Row,
+  Stack,
+  UseIcon,
+  useState
+} from 'lib/index'
+import { Link } from 'react-router-dom'
+import { DetailName } from '../detail_shared'
 import { DetailSelectionList } from './detail-selection-list'
 import { EditGroupModal } from './edit-group-modal'
 import { detailGroupStore } from './store'
@@ -63,21 +78,24 @@ export const DetailGroupManager = observer(() => {
   return (
     <Stack gap={2} p={2}>
       <Stack direction="row" justifyContent="space-between" alignItems="center">
-        <Stack direction="row" spacing={1}>
-          <Button
+        <Stack direction="row" spacing={1} alignItems="center">
+          <P level="title-lg" fontWeight={600}>
+            {selectedGroup.group.name}
+          </P>
+          <IconButton
             size="sm"
             variant="soft"
             color="neutral"
             onClick={() => setIsEditingGroup(true)}
           >
-            Изменить название
-          </Button>
-          <DeleteConfirmDialog
-            title={`Группа ${selectedGroup.group.name}`}
-            handleDelete={handleDeleteGroup}
-            button={<DeleteResourceButton />}
-          />
+            <UseIcon icon={UilPen} small />
+          </IconButton>
         </Stack>
+        <DeleteConfirmDialog
+          title={`Группа ${selectedGroup.group.name}`}
+          handleDelete={handleDeleteGroup}
+          button={<DeleteResourceButton />}
+        />
       </Stack>
 
       <Stack direction="row" gap={2} sx={{ height: '100%' }}>
@@ -117,31 +135,51 @@ export const DetailGroupManager = observer(() => {
             <Stack sx={{ flex: 1 }}>
               <List sx={{ flex: 1, overflow: 'auto' }}>
                 {selectedGroup.details.map(detail => (
-                  <ListItem key={detail.id} sx={{ p: 0, mb: 0 }}>
-                    <ListItemButton
-                      sx={{ borderRadius: 1 }}
-                      onClick={() =>
+                  <ListItem
+                    key={detail.id}
+                    sx={{
+                      p: 0,
+                      mb: 0,
+                      '&:hover .detail-arrow': {
+                        opacity: 1
+                      }
+                    }}
+                  >
+                    <Checkbox
+                      size="sm"
+                      variant="outlined"
+                      checked={selectedGroupDetailIds.includes(detail.id)}
+                      onChange={() =>
                         handleToggleGroupDetailSelection(detail.id)
                       }
-                    >
-                      <Checkbox
-                        size="sm"
-                        variant="outlined"
-                        checked={selectedGroupDetailIds.includes(detail.id)}
-                        onChange={() =>
+                      onClick={e => e.stopPropagation()}
+                    />
+                    <Row sx={{ flex: 1, ml: 1 }}>
+                      <ListItemButton
+                        sx={{ borderRadius: 1 }}
+                        onClick={() =>
                           handleToggleGroupDetailSelection(detail.id)
                         }
-                        onClick={e => e.stopPropagation()}
-                      />
-                      <Stack sx={{ flex: 1, ml: 1 }}>
-                        <P level="body-sm">{detail.name}</P>
-                        {detail.part_code && (
-                          <P level="body-xs" color="neutral">
-                            {detail.part_code}
-                          </P>
-                        )}
-                      </Stack>
-                    </ListItemButton>
+                      >
+                        <DetailName detail={detail} />
+                      </ListItemButton>
+
+                      <Box
+                        className="detail-arrow"
+                        sx={{
+                          opacity: 0,
+                          transition: 'opacity 0.2s ease-in-out'
+                        }}
+                      >
+                        <Link
+                          to={open(routeMap.metalflow.detail.edit, detail!.id)}
+                        >
+                          <IconButton variant="plain" color="neutral" size="sm">
+                            <UseIcon icon={UilLink} small />
+                          </IconButton>
+                        </Link>
+                      </Box>
+                    </Row>
                   </ListItem>
                 ))}
               </List>

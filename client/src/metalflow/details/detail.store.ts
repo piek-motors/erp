@@ -1,7 +1,7 @@
 import { AttachmentsStore } from 'components/attachments/store'
 import { Attachment } from 'domain-model'
 import { rpc } from 'lib/rpc.client'
-import { cache } from 'metalflow/cache'
+import { cache } from 'metalflow/metal_flow_cache'
 import { makeAutoObservable } from 'mobx'
 import { DetailWriteoffStore } from './writeoff/store'
 
@@ -66,12 +66,14 @@ export class Detail {
     name: string
     partCode: string
     usedMaterials?: MaterialCost[]
+    groupId: number | null
   }) {
     if (init) {
       this.id = init.id
       this.name = init.name
       this.partCode = init.partCode
       this.usedMaterials = init.usedMaterials || []
+      this.groupId = init.groupId ?? null
     }
     makeAutoObservable(this)
   }
@@ -83,12 +85,14 @@ export class Detail {
     this.recentlyUpdated = id
   }
 
-  clear() {
+  reset() {
     this.id = undefined
     this.name = ''
     this.usedMaterials = []
     this.recentlyAdded = undefined
     this.recentlyUpdated = undefined
+    this.groupId = undefined
+    this.partCode = ''
   }
   setId(id: number) {
     this.id = id
@@ -98,6 +102,10 @@ export class Detail {
   }
   setPartCode(partCode: string) {
     this.partCode = partCode
+  }
+  groupId?: number | null
+  setGroupId(groupId: number | null) {
+    this.groupId = groupId
   }
 
   addMaterial(
@@ -133,11 +141,16 @@ export class Detail {
   deleteMaterialRelation(materialId: number) {}
 
   async load(detailId: number) {
-    this.clear()
+    this.reset()
     const d = await rpc.details.get.query({ id: detailId })
-    this.setId(d.detail.id)
-    this.setName(d.detail.name)
+
+    if (!d.detail) {
+      throw new Error('fdf')
+    }
+    this.setId(d.detail.id!)
+    this.setName(d.detail.name!)
     this.setPartCode(d.detail.part_code ?? '')
+    this.setGroupId(d.detail.logical_group_id ?? null)
 
     d.detail_materials.forEach((dm, index) => {
       this.addMaterial(
@@ -167,7 +180,8 @@ export class Detail {
     const res = await rpc.details.create.mutate({
       name: this.name,
       partCode: this.partCode,
-      materialRelations
+      materialRelations,
+      groupId: this.groupId ?? null
     })
     await cache.details.load()
     return res
@@ -181,6 +195,7 @@ export class Detail {
       id: this.id,
       name: this.name,
       partCode: this.partCode,
+      groupId: this.groupId ?? null,
       materialRelations: this.usedMaterials
     })
     await cache.details.load()
@@ -193,7 +208,7 @@ export class Detail {
     }
     await rpc.details.delete.mutate({ id: this.id })
     cache.details.removeDetail(this.id)
-    this.clear()
+    this.reset()
   }
 
   async deleteDetailMaterial(detailId: number, materialId: number) {

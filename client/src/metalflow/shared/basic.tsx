@@ -99,7 +99,7 @@ export function AlloyAutocomplete(props: {
 
 import { Autocomplete } from '@mui/joy'
 import { DeleteConfirmDialog } from 'components/delete_confirm_dialog'
-import { cache } from 'metalflow/cache'
+import { cache } from 'metalflow/metal_flow_cache'
 import { observer } from 'mobx-react-lite'
 import { Detail } from '../details/detail.store'
 

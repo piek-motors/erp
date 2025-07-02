@@ -5,9 +5,7 @@ import { Table } from 'components/table.impl'
 import { uiUnit } from 'domain-model'
 import {
   AddResourceButton,
-  ErrorHint,
   Inp,
-  LoadingHint,
   observer,
   P,
   RowButColumsAtSm,
@@ -51,7 +49,6 @@ interface MaterialsTableProps {
 
 export const MaterialList = observer((props: MaterialsTableProps) => {
   const navigate = useNavigate()
-
   return (
     <Table
       columns={columnList}
@@ -107,13 +104,7 @@ export const MaterialListPage = observer((props: MaterialsTableProps) => {
           </RowButColumsAtSm>
         </Stack>
       }
-      scrollableContent={
-        <Stack>
-          <LoadingHint show={materialListStore.async.loading} />
-          <ErrorHint e={materialListStore.async.error} />
-          <MaterialList {...props} />
-        </Stack>
-      }
+      scrollableContent={<MaterialList {...props} />}
     />
   )
 })

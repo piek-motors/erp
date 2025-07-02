@@ -1,7 +1,7 @@
 import { db, procedure, TRPCError } from '#root/deps.js'
 import { z } from 'zod'
 
-export const getDetailGroup = procedure
+export const getDetailInTheGroup = procedure
   .input(
     z.object({
       id: z.number()
@@ -30,8 +30,19 @@ export const getDetailGroup = procedure
       })
     }
 
+    const directDetails = await db
+      .selectFrom('metal_flow.details')
+      .selectAll()
+      .where('logical_group_id', '=', group.id)
+      .execute()
+
     return {
       group,
-      details
+      details: [...directDetails, ...details].map(d => ({
+        id: d.id,
+        name: d.name,
+        part_code: d.part_code,
+        group_id: group.id
+      }))
     }
   })

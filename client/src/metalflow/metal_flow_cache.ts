@@ -26,12 +26,15 @@ class DetailCache {
   }
   async load() {
     const details = await rpc.details.list.query()
+
     this.setDetails(
       details.map(detail => {
+        const groupId = detail[4] as number | null
         return new Detail({
           id: detail[0] as number,
           name: detail[1] as string,
           partCode: detail[2] as string,
+          groupId,
           usedMaterials: (detail[3] as [number, string, number, number][]).map(
             e => {
               return new MaterialCost({
@@ -77,17 +80,56 @@ class MaterialCache {
     this.setMaterials(materials)
   }
 }
-class MetalflowCache {
-  details = new DetailCache()
-  materials = new MaterialCache()
+
+export type DetailGroup = RouterOutput['detailGroups']['list'][number]
+class DetailGroupCache {
+  private groups: DetailGroup[] = []
+  setGroups(groups: DetailGroup[]) {
+    this.groups = groups
+  }
+  getGroups() {
+    return this.groups
+  }
+  getGroupName(id: number) {
+    const name = this.groups.find(g => g.id === id)?.name
+    if (!name) {
+      return 'Неизвестная группа'
+    }
+    return name
+  }
+  removeGroup(id: number) {
+    this.setGroups(this.groups.filter(g => g.id !== id))
+  }
+  addGroup(group: DetailGroup) {
+    this.setGroups([...this.groups, group])
+  }
+  updateGroup(group: DetailGroup) {
+    this.setGroups(this.groups.map(g => (g.id === group.id ? group : g)))
+  }
   constructor() {
     makeAutoObservable(this)
   }
+  async load() {
+    const groups = await rpc.detailGroups.list.query()
+    this.setGroups(groups)
+  }
+}
+
+class MetalflowCache {
+  details = new DetailCache()
+  materials = new MaterialCache()
+  detailGroups = new DetailGroupCache()
+
+  constructor() {
+    makeAutoObservable(this)
+  }
+
   async init() {
     await this.details.load()
     detailListStore.updateSearchResult()
 
     await this.materials.load()
+    await this.detailGroups.load()
   }
 }
 

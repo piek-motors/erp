@@ -33,6 +33,7 @@ export const routeMap = {
       edit: '/metalflow/details/:id/edit'
     },
     detailGroups: '/metalflow/details/groups',
+    detailGroup: '/metalflow/details/groups/:id',
 
     operations: '/metalflow/operations',
     manufacturing: '/metalflow/manufacturing'

@@ -1,6 +1,6 @@
 import { AsyncStoreController } from 'lib/async-store.controller'
 import { rpc } from 'lib/rpc.client'
-import { cache } from 'metalflow/cache'
+import { cache } from 'metalflow/metal_flow_cache'
 import { makeAutoObservable, reaction } from 'mobx'
 import { Detail } from '../detail.store'
 export const alphabet = 'АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ'.split('')

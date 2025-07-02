@@ -2,6 +2,7 @@ import { routeMap } from 'lib/routes'
 import { RouteConfig } from 'lib/types/global'
 import { CreateDetailPage } from './details/detail_create'
 import { UpdateDetailPage } from './details/detail_update'
+import { DetailGroupPage } from './details/grouping/detail-group-page'
 import { DetailGroupsPage } from './details/grouping/groups-page'
 import { DetailsListPage } from './details/list/list'
 import { ManufacturingList } from './manufacturing/list'
@@ -67,6 +68,10 @@ const innerRoutes = [
   {
     element: <DetailGroupsPage />,
     path: metalflow.detailGroups
+  },
+  {
+    element: <DetailGroupPage />,
+    path: metalflow.detailGroup
   },
   {
     element: <OperationsList />,

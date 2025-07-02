@@ -1,14 +1,19 @@
+import { BaseAutocomplete, BaseOption } from 'components/base-autocomplete'
 import { EnUnit } from 'domain-model'
 import {
   Button,
   DeleteResourceButton,
   Inp,
   Label,
+  P,
   Row,
   Sheet,
   Stack,
   observer
 } from 'lib/index'
+import { open, routeMap } from 'lib/routes'
+import { cache } from 'metalflow/metal_flow_cache'
+import { Link } from 'react-router-dom'
 import { MaterialAutocomplete } from '../shared/material_autocomplete'
 import { QtyInputWithUnit } from '../shared/qty_input_with_unit'
 import { MaterialCost, detailStore } from './detail.store'
@@ -122,7 +127,7 @@ export const DetailNameInput = observer(() => {
   return (
     <Inp
       fullWidth
-      label="Наименование детали"
+      label="Наименование детали (без группы)"
       onChange={v => {
         detailStore.setName(v)
       }}
@@ -139,5 +144,58 @@ export const DetailPartCodeInput = observer(() => {
       }}
       value={detailStore.partCode}
     />
+  )
+})
+
+export const DetailGroupInput = observer(() => {
+  const groupOptions: BaseOption[] = cache.detailGroups
+    .getGroups()
+    .map(group => ({
+      label: group.name,
+      value: group.id
+    }))
+
+  const selectedGroup =
+    groupOptions.find(option => option.value === detailStore.groupId) || null
+
+  return (
+    <BaseAutocomplete
+      label="Если деталь используется только в одной группе, укажите здесь группу"
+      options={groupOptions}
+      value={selectedGroup}
+      onChange={group => {
+        detailStore.setGroupId(group?.value || null)
+      }}
+    />
+  )
+})
+
+interface DetailNameProps {
+  name: string
+  groupId?: number | null
+}
+export const DetailName = observer((props: { detail: DetailNameProps }) => {
+  return (
+    <Row>
+      <P>{props.detail.name}</P>
+      {props.detail.groupId && (
+        <Button
+          variant="plain"
+          color="primary"
+          size="sm"
+          sx={{ p: '1 0' }}
+          onClick={e => e.stopPropagation()}
+        >
+          <Link
+            to={open(routeMap.metalflow.detailGroup, props.detail.groupId)}
+            style={{ textDecoration: 'none' }}
+          >
+            <P color="primary" sx={{ cursor: 'pointer' }}>
+              {cache.detailGroups.getGroupName(props.detail.groupId)}
+            </P>
+          </Link>
+        </Button>
+      )}
+    </Row>
   )
 })
