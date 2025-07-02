@@ -36,7 +36,6 @@ export const OrderAttachmentList = observer(
         onDelete={handleDelete}
         onUpload={handleUpload}
         title="Документы"
-        emptyMessage="Нет документов"
       />
     )
   }

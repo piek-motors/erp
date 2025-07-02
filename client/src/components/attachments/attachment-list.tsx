@@ -10,7 +10,6 @@ interface AttachmentListProps {
   onDelete?: (attachment: Attachment) => void
   onUpload?: (files: FileList) => void
   title?: string
-  emptyMessage?: string
   uploadInputProps?: {
     size?: 'sm' | 'md' | 'lg'
     variant?: 'outlined' | 'solid' | 'soft' | 'plain'
@@ -24,17 +23,8 @@ export const AttachmentList = ({
   onDelete,
   onUpload,
   title = 'Документы',
-  emptyMessage = 'Нет документов',
   uploadInputProps = {}
 }: AttachmentListProps) => {
-  if (!attachments?.length && !uploadingFiles?.length && !onUpload) {
-    return (
-      <P p={1} color="neutral">
-        {emptyMessage}
-      </P>
-    )
-  }
-
   return (
     <>
       <Row gap={2}>
@@ -42,7 +32,7 @@ export const AttachmentList = ({
           {title} [{attachments.length}]
         </P>
       </Row>
-      <Stack gap={1} py={2}>
+      <Stack>
         {attachments.map(attachment => (
           <AttachmentComponent
             key={attachment.key}
@@ -68,7 +58,6 @@ export const AttachmentList = ({
             </Box>
           ))}
       </Stack>
-
       {onUpload && (
         <InputFiles
           size={uploadInputProps.size || 'sm'}

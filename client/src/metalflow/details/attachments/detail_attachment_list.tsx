@@ -26,7 +26,6 @@ export const DetailAttachmentList = observer(
         onDelete={handleDelete}
         onUpload={handleUpload}
         title="Файлы детали"
-        emptyMessage="Ничего не прикреплено (∪｡∪)｡｡｡zzz"
       />
     )
   }

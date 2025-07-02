@@ -49,10 +49,10 @@ export const MaterialSelect = observer(
     return (
       <MaterialAutocomplete
         size="sm"
-        data={detailStore.materialsSuggestions.map(e => {
+        data={cache.materials.getMaterials().map(e => {
           return new MaterialCost({
-            materialId: e.materialId,
-            label: e.materialLabel
+            materialId: e.id,
+            label: e.label
           })
         })}
         value={props.value}
