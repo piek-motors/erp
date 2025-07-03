@@ -15,10 +15,11 @@ export const updateMaterial = publicProcedure
   )
   .mutation(async ({ input }) => {
     const { id, label, shape, shape_data, unit } = input
-    const material = await db
+    await db
       .updateTable('metal_flow.materials')
       .set({ label, shape, shape_data, unit })
       .where('id', '=', id)
-      .execute()
-    return material
+      .executeTakeFirstOrThrow()
+
+    return 'ok'
   })

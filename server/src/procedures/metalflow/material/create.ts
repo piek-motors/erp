@@ -1,6 +1,12 @@
 import { db } from '#root/deps.js'
 import { publicProcedure } from '#root/lib/trpc/trpc.js'
-import { EnMaterialShape, EnUnit } from 'domain-model'
+import { info } from 'console'
+import {
+  EnMaterialShape,
+  EnUnit,
+  MaterialConstructorMap,
+  MaterialShapeAbstractionLayer
+} from 'domain-model'
 import { z } from 'zod'
 
 export const createMaterial = publicProcedure
@@ -13,11 +19,19 @@ export const createMaterial = publicProcedure
     })
   )
   .mutation(async ({ input }) => {
+    const constructor = MaterialConstructorMap[input.shape]
+    const materialModel = new constructor(input.shape_data)
+    MaterialShapeAbstractionLayer.importShapeData(
+      materialModel,
+      input.shape_data
+    )
+    const label = materialModel.deriveLabel()
     const material = await db
       .insertInto('metal_flow.materials')
-      .values({ ...input, stock: 0 })
+      .values({ ...input, label, stock: 0 })
       .returningAll()
       .executeTakeFirstOrThrow()
 
+    info(`New material created: ${label}`)
     return material
   })

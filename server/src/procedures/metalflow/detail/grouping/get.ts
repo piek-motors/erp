@@ -39,10 +39,10 @@ export const getDetailInTheGroup = procedure
     return {
       group,
       details: [...directDetails, ...details].map(d => ({
-        id: d.id,
-        name: d.name,
-        part_code: d.part_code,
-        group_id: d.logical_group_id
+        id: d.id as number,
+        name: d.name as string,
+        part_code: d.part_code as string | null,
+        group_id: d.logical_group_id as number | null
       }))
     }
   })
