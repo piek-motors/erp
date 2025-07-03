@@ -207,7 +207,14 @@ function DetailRow(props: {
           props.detail.group_id === null && props.onToggle(props.detail.id)
         }
       >
-        <DetailName detail={props.detail} showLinkButton />
+        <DetailName
+          detail={{
+            id: props.detail.id,
+            name: props.detail.name,
+            group_id: props.detail.group_id || null
+          }}
+          showLinkButton
+        />
       </ListItemButton>
     </Row>
   )

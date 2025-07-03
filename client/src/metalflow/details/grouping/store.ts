@@ -65,7 +65,7 @@ export class DetailGroupStore {
 
   async loadGroupWithDetails(groupId: number) {
     return this.async.run(async () => {
-      const groupData = await rpc.detailGroups.get.query({ id: groupId })
+      const groupData = await rpc.detailGroups.get.query({ groupId })
       this.setSelectedGroup(groupData)
     })
   }
