@@ -22,6 +22,7 @@ import { MaterialWriteoffState } from './writeoff/state'
 interface IDetail {
   id: number
   name: string
+  group_id: number | null
 }
 
 export class MaterialStore {
@@ -69,9 +70,9 @@ export class MaterialStore {
     this.stock = stock
   }
   material?: Material
-  detailsMadeOfMaterial: IDetail[] = []
-  setDetailsMadeOfMaterial(details: IDetail[]) {
-    this.detailsMadeOfMaterial = details
+  detailsMadeFromThisMaterial: IDetail[] = []
+  setDetailsMadeFromThisMaterial(details: IDetail[]) {
+    this.detailsMadeFromThisMaterial = details
   }
 
   clear() {
@@ -79,7 +80,7 @@ export class MaterialStore {
     this.unit = EnUnit.Kg
     this.shape = EnMaterialShape.RoundBar
     this.getShapeState(this.shape).reset()
-    this.detailsMadeOfMaterial = []
+    this.detailsMadeFromThisMaterial = []
   }
 
   insertedMaterialId?: number
@@ -99,10 +100,11 @@ export class MaterialStore {
     return this.async.run(async () => {
       const res = await rpc.material.get.query({ id })
       this.syncState(map.material.fromDto(res))
-      this.setDetailsMadeOfMaterial(
+      this.setDetailsMadeFromThisMaterial(
         res.details.map(e => ({
           id: e.detail_id,
-          name: e.name
+          name: e.name,
+          group_id: e.logical_group_id
         }))
       )
 

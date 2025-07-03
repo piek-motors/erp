@@ -1,6 +1,9 @@
+import { UilLink } from '@iconscout/react-unicons'
+import { IconButton as MuiJoyIconButton } from '@mui/joy'
 import { BaseAutocomplete, BaseOption } from 'components/base-autocomplete'
 import { EnUnit } from 'domain-model'
 import {
+  Box,
   Button,
   DeleteResourceButton,
   Inp,
@@ -9,6 +12,7 @@ import {
   Row,
   Sheet,
   Stack,
+  UseIcon,
   observer
 } from 'lib/index'
 import { open, routeMap } from 'lib/routes'
@@ -170,32 +174,50 @@ export const DetailGroupInput = observer(() => {
   )
 })
 
-interface DetailNameProps {
+interface Detail {
+  id: number
   name: string
-  groupId?: number | null
+  group_id: number | null
 }
-export const DetailName = observer((props: { detail: DetailNameProps }) => {
-  return (
-    <Row>
-      <P>{props.detail.name}</P>
-      {props.detail.groupId && (
-        <Button
-          variant="plain"
-          color="primary"
-          size="sm"
-          sx={{ p: '1 0' }}
-          onClick={e => e.stopPropagation()}
-        >
-          <Link
-            to={open(routeMap.metalflow.detailGroup, props.detail.groupId)}
-            style={{ textDecoration: 'none' }}
+export const DetailName = observer(
+  (props: { detail: Detail; showLinkButton?: boolean }) => {
+    return (
+      <Row sx={{ flex: 1, alignItems: 'center' }}>
+        <P sx={{ flex: 1 }}>{props.detail.name}</P>
+        {props.detail.group_id && (
+          <Button
+            variant="plain"
+            color="primary"
+            size="sm"
+            sx={{ p: '.1 0' }}
+            onClick={e => e.stopPropagation()}
           >
-            <P color="primary" sx={{ cursor: 'pointer' }}>
-              {cache.detailGroups.getGroupName(props.detail.groupId)}
-            </P>
-          </Link>
-        </Button>
-      )}
-    </Row>
-  )
-})
+            <Link
+              to={open(routeMap.metalflow.detailGroup, props.detail.group_id)}
+              style={{ textDecoration: 'none' }}
+            >
+              <P color="primary" sx={{ cursor: 'pointer' }}>
+                {cache.detailGroups.getGroupName(props.detail.group_id)}
+              </P>
+            </Link>
+          </Button>
+        )}
+        {props.showLinkButton && props.detail.id && (
+          <Box
+            className="detail-arrow"
+            sx={{
+              opacity: 0,
+              transition: 'opacity 0.2s ease-in-out'
+            }}
+          >
+            <Link to={open(routeMap.metalflow.detail.edit, props.detail.id)}>
+              <MuiJoyIconButton variant="soft" size="sm">
+                <UseIcon icon={UilLink} small />
+              </MuiJoyIconButton>
+            </Link>
+          </Box>
+        )}
+      </Row>
+    )
+  }
+)

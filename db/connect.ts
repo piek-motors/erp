@@ -3,7 +3,7 @@ import pg from 'pg'
 import { DB } from './schema'
 
 export function connect(connectionString: string) {
-  console.log('Connecting to database...', connectionString)
+  console.log('Connecting to database...')
   return new Kysely<DB.Schema>({
     dialect: new PostgresDialect({
       pool: new pg.Pool({

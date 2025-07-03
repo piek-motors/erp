@@ -1,4 +1,4 @@
-import { UilLink, UilPen } from '@iconscout/react-unicons'
+import { UilPen } from '@iconscout/react-unicons'
 import {
   Box,
   Button,
@@ -11,15 +11,12 @@ import { DeleteConfirmDialog } from 'components/delete_confirm_dialog'
 import {
   DeleteResourceButton,
   observer,
-  open,
   P,
-  routeMap,
   Row,
   Stack,
   UseIcon,
   useState
 } from 'lib/index'
-import { Link } from 'react-router-dom'
 import { DetailName } from '../detail_shared'
 import { DetailSelectionList } from './detail-selection-list'
 import { EditGroupModal } from './edit-group-modal'
@@ -210,21 +207,8 @@ function DetailRow(props: {
           props.detail.group_id === null && props.onToggle(props.detail.id)
         }
       >
-        <DetailName detail={props.detail} />
+        <DetailName detail={props.detail} showLinkButton />
       </ListItemButton>
-      <Box
-        className="detail-arrow"
-        sx={{
-          opacity: 0,
-          transition: 'opacity 0.2s ease-in-out'
-        }}
-      >
-        <Link to={open(routeMap.metalflow.detail.edit, props.detail.id)}>
-          <IconButton variant="soft" size="sm">
-            <UseIcon icon={UilLink} small />
-          </IconButton>
-        </Link>
-      </Box>
     </Row>
   )
 }

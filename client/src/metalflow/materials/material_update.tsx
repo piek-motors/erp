@@ -1,4 +1,5 @@
 /** @jsxImportSource @emotion/react */
+import { List } from '@mui/joy'
 import { uiUnit } from 'domain-model'
 import {
   InputStack,
@@ -13,6 +14,7 @@ import {
   useParams
 } from 'lib/index'
 import { open, routeMap } from 'lib/routes'
+import { DetailName } from 'metalflow/details/detail_shared'
 import { SaveAndDelete } from '../shared/basic'
 import { material } from './material.state'
 import { tabList } from './material_add'
@@ -63,21 +65,19 @@ export const MaterialUpdatePage = observer(() => {
 })
 
 const DetailsMadeOfMaterial = observer(() => {
-  if (material.detailsMadeOfMaterial.length === 0) {
+  if (material.detailsMadeFromThisMaterial.length === 0) {
     return null
   }
   return (
     <Stack gap={2} sx={{ overflowY: 'scroll', maxHeight: '100vh' }}>
       <P fontWeight={600}>Детали из этого материала</P>
-      <Stack gap={0.5}>
-        {material.detailsMadeOfMaterial.map(each => (
+      <List>
+        {material.detailsMadeFromThisMaterial.map(each => (
           <Link to={open(routeMap.metalflow.detail.edit, each.id)}>
-            <P key={each.id} level="body-sm">
-              {each.name}
-            </P>
+            <DetailName detail={each} />
           </Link>
         ))}
-      </Stack>
+      </List>
     </Stack>
   )
 })

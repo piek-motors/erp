@@ -28,7 +28,15 @@ const columnList: Column<Detail>[] = [
   {
     Header: t.DetailName,
     id: 'name',
-    accessor: r => <DetailName detail={r} />
+    accessor: r => (
+      <DetailName
+        detail={{
+          id: r.id || 0,
+          name: r.name,
+          group_id: r.groupId || null
+        }}
+      />
+    )
   },
   {
     Header: 'Масса гр.',
