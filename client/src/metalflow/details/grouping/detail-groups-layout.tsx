@@ -1,5 +1,4 @@
 import { ScrollableWindow } from 'components/inputs'
-import { PageTitle } from 'components/page-title'
 import { Box, observer, P, Row, Stack } from 'lib/index'
 import { ReactNode } from 'react'
 import { CreateGroupModal } from './create-group.modal'
@@ -16,11 +15,6 @@ export const DetailGroupsLayout = observer(
       <Row sx={{ height: '100%' }}>
         <Box sx={{ minWidth: '300px', height: '100%' }}>
           <ScrollableWindow
-            staticContent={
-              <Stack pt={1}>
-                <PageTitle subTitle="Группы деталей" hideIcon />
-              </Stack>
-            }
             scrollableContent={
               <>
                 <Stack p={2} gap={1}>

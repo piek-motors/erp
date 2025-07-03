@@ -184,13 +184,17 @@ interface Detail {
 }
 
 export const DetailName = observer(
-  (props: { detail: Detail; showLinkButton?: boolean }) => {
-    const { detail, showLinkButton } = props
+  (props: {
+    detail: Detail
+    showLinkButton?: boolean
+    hideGroupLink?: boolean
+  }) => {
+    const { detail, showLinkButton, hideGroupLink } = props
 
     const name = (
       <Row>
         <P sx={{ whiteSpace: 'nowrap', width: 'min-content' }}>{detail.name}</P>
-        {detail.group_id && (
+        {detail.group_id && !hideGroupLink && (
           <Button
             variant="plain"
             color="primary"
