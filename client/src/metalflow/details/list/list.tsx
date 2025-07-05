@@ -17,7 +17,7 @@ import { t } from 'metalflow/text'
 import { Column } from 'react-table'
 import { AlphabetIndex } from '../alphabet_index'
 import { Detail } from '../detail.store'
-import { DetailName } from '../detail_shared'
+import { DetailName } from '../name'
 import { detailListStore as state } from './state'
 
 const columnList: Column<Detail>[] = [

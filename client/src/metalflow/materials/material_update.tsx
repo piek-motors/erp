@@ -15,7 +15,7 @@ import {
   useParams
 } from 'lib/index'
 import { open, routeMap } from 'lib/routes'
-import { DetailName } from 'metalflow/details/detail_shared'
+import { DetailName } from 'metalflow/details/name'
 import { SaveAndDelete } from '../shared/basic'
 import { material } from './material.state'
 import { tabList } from './material_add'
@@ -45,7 +45,7 @@ export const MaterialUpdatePage = observer(() => {
         </Row>
         <P level="body-sm">ID: {materialId}</P>
         <P level="body-sm">
-          Остаток: {material.stock} {uiUnit(material.unit)}
+          Остаток: {material.stock.toFixed(3)} {uiUnit(material.unit)}
         </P>
         <InputStack>
           {tabList.find(t => t.value === material.shape)?.component}

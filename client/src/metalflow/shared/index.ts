@@ -5,5 +5,7 @@
 export * from './basic'
 export * from './material_autocomplete'
 export * from './mobile_menu.button'
+export * from './name'
 export * from './nav'
+export * from './operation_name'
 export * from './qty_input_with_unit'

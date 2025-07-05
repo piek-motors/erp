@@ -24,7 +24,7 @@ export const WithSmallLinkButton = observer((props: Props) => {
         }
       `}
     >
-      <P sx={{ flex: 1 }}>{children}</P>
+      <P sx={{ whiteSpace: 'nowrap' }}>{children}</P>
       {
         <MuiJoyIconButton
           variant="soft"

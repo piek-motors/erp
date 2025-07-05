@@ -1,7 +1,7 @@
 import { Button, Stack } from '@mui/joy'
 import { BaseAutocomplete, BaseOption } from 'components/base-autocomplete'
 import { DeleteResourceButton, observer, P, useState } from 'lib/index'
-import { DetailName } from '../detail_shared'
+import { DetailName } from '../name'
 
 interface DetailSelectionListProps {
   details: Array<{

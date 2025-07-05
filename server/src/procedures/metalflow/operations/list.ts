@@ -14,6 +14,8 @@ export const listOperations = publicProcedure
         'o.operation_type',
         'o.data',
         'o.reason',
+        'o.material_id',
+        'o.detail_id',
         'm.label as material_label',
         'm.unit as material_unit',
         'd.name as detail_name'

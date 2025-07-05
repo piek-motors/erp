@@ -13,6 +13,7 @@ import {
 } from 'domain-model'
 import { DeleteResourceButton, P } from 'lib/index'
 import { formatDateWithTime } from 'lib/utils/formatting'
+import { OperationName } from 'metalflow/shared/operation_name'
 import { observer } from 'mobx-react-lite'
 import { useEffect, useMemo, useState } from 'react'
 import { Column } from 'react-table'
@@ -37,7 +38,7 @@ function getColumns(props: {
     {
       Header: `Наименование`,
       id: 'name',
-      accessor: data => data.material_label || data.detail_name
+      accessor: data => <OperationName operation={data} showLinkButton={true} />
     },
     {
       Header: 'Количество',

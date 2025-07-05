@@ -17,7 +17,7 @@ import {
   UseIcon,
   useState
 } from 'lib/index'
-import { DetailName } from '../detail_shared'
+import { DetailName } from '../name'
 import { DetailSelectionList } from './detail-selection-list'
 import { EditGroupModal } from './edit-group-modal'
 import { Detail, detailGroupStore } from './store'
