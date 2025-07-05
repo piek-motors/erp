@@ -26,13 +26,13 @@ export const AttachmentList = ({
   uploadInputProps = {}
 }: AttachmentListProps) => {
   return (
-    <>
+    <Stack gap={1}>
       <Row gap={2}>
         <P>
-          {title} [{attachments.length}]
+          {title} <P level="body-xs">[{attachments.length}]</P>
         </P>
       </Row>
-      <Stack>
+      <Stack gap={1}>
         {attachments.map(attachment => (
           <AttachmentComponent
             key={attachment.key}
@@ -66,6 +66,6 @@ export const AttachmentList = ({
           upload={onUpload}
         />
       )}
-    </>
+    </Stack>
   )
 }

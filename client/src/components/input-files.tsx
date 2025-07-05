@@ -23,7 +23,8 @@ export function InputFiles(
         component="label"
         role={undefined}
         tabIndex={-1}
-        variant="soft"
+        size="sm"
+        variant="plain"
         color="neutral"
         startDecorator={
           <SvgIcon>

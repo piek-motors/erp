@@ -40,7 +40,9 @@ export const Paymnets = observer(({ order }: { order: Order }) => {
 
   return (
     <Box my={1}>
-      <P>Платежи</P>
+      <P>
+        Платежи <P level="body-xs">[{os.payments.payments.length}]</P>
+      </P>
       {paymentHistoryContent}
     </Box>
   )
