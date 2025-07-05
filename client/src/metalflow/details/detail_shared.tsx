@@ -143,6 +143,10 @@ export const DetailPartCodeInput = observer(() => {
       label="Конструкторский номер"
       onChange={v => {
         detailStore.setPartCode(v)
+
+        if (v.startsWith('ВЗИС')) {
+          alert('Впишите конструкторский номер без приставки "ВЗИС"')
+        }
       }}
       value={detailStore.partCode}
     />

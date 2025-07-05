@@ -84,8 +84,8 @@ export namespace DB {
   }
 
   export interface DetailMaterialJsonData {
-    weight: number
-    length: number
+    weight: number // grams
+    length: number // mm
   }
 
   export interface DetailMaterialsTable {

@@ -1,6 +1,3 @@
-import { UilSearch } from '@iconscout/react-unicons'
-import { Button } from '@mui/joy'
-import { UseIcon } from 'lib/index'
 /** @jsxImportSource @emotion/react */
 import { Autocomplete, Stack } from '@mui/joy'
 import {
@@ -10,18 +7,6 @@ import {
 } from 'domain-model'
 import { observer } from 'lib/deps'
 import { Label } from 'lib/index'
-
-export const WriteoffOpenListButton = () => {
-  return (
-    <Button
-      variant="soft"
-      color={'warning'}
-      startDecorator={<UseIcon icon={UilSearch} small />}
-    >
-      Список
-    </Button>
-  )
-}
 
 export const WriteoffReasonSelect = observer(
   (props: {

@@ -11,3 +11,4 @@ node_modules
 .early.coverage
 .vscode
 *.env
+.vscode/branch-timer.json

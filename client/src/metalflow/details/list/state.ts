@@ -8,10 +8,14 @@ export class DetailList {
   readonly async = new AsyncStoreController()
   searchKeyword: string = ''
   searchId: string = ''
+  searchPartCode: string = ''
   searchResult: Detail[] = []
   indexLetter: string | null = alphabet[0]
+
   private searchTimeout: NodeJS.Timeout | null = null
   private searchIdTimeout: NodeJS.Timeout | null = null
+  private searchPartCodeTimeout: NodeJS.Timeout | null = null
+
   constructor() {
     makeAutoObservable(this)
     // Setup reaction for debounced search updates
@@ -38,7 +42,20 @@ export class DetailList {
         }, 500)
       }
     )
+    // Setup reaction for debounced part code search updates
+    reaction(
+      () => this.searchPartCode,
+      partCode => {
+        if (this.searchPartCodeTimeout) {
+          clearTimeout(this.searchPartCodeTimeout)
+        }
+        this.searchPartCodeTimeout = setTimeout(() => {
+          this.updateSearchResult()
+        }, 500)
+      }
+    )
   }
+
   search(keyword: string) {
     this.clearSearchArguments()
     this.searchKeyword = keyword
@@ -46,6 +63,10 @@ export class DetailList {
   setSearchId(id: string) {
     this.clearSearchArguments()
     this.searchId = id
+  }
+  setSearchPartCode(partCode: string) {
+    this.clearSearchArguments()
+    this.searchPartCode = partCode
   }
   updateSearchResult() {
     let filtered = cache.details.getDetails()
@@ -58,6 +79,13 @@ export class DetailList {
       case Boolean(this.searchId):
         filtered = filtered.filter(
           detail => detail.id?.toString() === this.searchId
+        )
+        break
+      case Boolean(this.searchPartCode):
+        filtered = filtered.filter(detail =>
+          (detail.partCode || '')
+            .toLowerCase()
+            .startsWith(this.searchPartCode.toLowerCase())
         )
         break
       case Boolean(this.indexLetter):
@@ -80,6 +108,7 @@ export class DetailList {
   }
   clear() {
     this.searchKeyword = ''
+    this.searchPartCode = ''
     this.searchResult = []
     if (this.searchTimeout) {
       clearTimeout(this.searchTimeout)
@@ -89,11 +118,16 @@ export class DetailList {
       clearTimeout(this.searchIdTimeout)
       this.searchIdTimeout = null
     }
+    if (this.searchPartCodeTimeout) {
+      clearTimeout(this.searchPartCodeTimeout)
+      this.searchPartCodeTimeout = null
+    }
     this.async.reset()
   }
   clearSearchArguments() {
     this.searchKeyword = ''
     this.searchId = ''
+    this.searchPartCode = ''
     this.indexLetter = null
   }
   sort(filterResult: Detail[]) {

@@ -115,18 +115,25 @@ const DetailSearchArguments = observer(() => {
       <Row>
         <Inp
           sx={{ width: '80px' }}
-          placeholder="ID"
+          placeholder="По ID"
           value={state.searchId}
           onChange={v => {
             state.setSearchId(v)
           }}
         />
         <Search
-          placeholder="Найти по названию"
+          placeholder="По названию"
           onChange={e => {
             state.search(e.target.value)
           }}
           value={state.searchKeyword || ''}
+        />
+        <Search
+          placeholder="По номеру"
+          onChange={e => {
+            state.setSearchPartCode(e.target.value)
+          }}
+          value={state.searchPartCode || ''}
         />
       </Row>
     </>

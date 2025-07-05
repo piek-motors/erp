@@ -17,11 +17,10 @@ export function Search({
   children
 }: ISearchInputWithFiltersProps) {
   return (
-    <Row gap={1} sx={{ position: 'sticky' }}>
+    <Row gap={1}>
       <Input
         size="sm"
         type="text"
-        variant="soft"
         placeholder={placeholder || 'Найти'}
         autoFocus={value !== ''}
         onChange={onChange}
