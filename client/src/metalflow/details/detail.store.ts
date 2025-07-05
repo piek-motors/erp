@@ -178,8 +178,8 @@ export class Detail {
       weight: m.weight
     }))
     const res = await rpc.details.create.mutate({
-      name: this.name,
-      partCode: this.partCode,
+      name: this.name.trim(),
+      partCode: this.partCode.trim(),
       materialRelations,
       groupId: this.groupId ?? null
     })

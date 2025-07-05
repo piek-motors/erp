@@ -81,13 +81,15 @@ export class DetailList {
           detail => detail.id?.toString() === this.searchId
         )
         break
-      case Boolean(this.searchPartCode):
-        filtered = filtered.filter(detail =>
-          (detail.partCode || '')
-            .toLowerCase()
-            .startsWith(this.searchPartCode.toLowerCase())
-        )
+      case Boolean(this.searchPartCode): {
+        const x = this.searchPartCode.toLowerCase().trim()
+        filtered = filtered.filter(detail => {
+          if (!detail.partCode) return false
+
+          return detail.partCode.toLowerCase().trim().startsWith(x)
+        })
         break
+      }
       case Boolean(this.indexLetter):
         filtered = filtered.filter(detail =>
           detail.name.toUpperCase().startsWith(this.indexLetter!)
