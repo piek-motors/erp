@@ -3,7 +3,7 @@ import { AsyncStoreController } from 'lib/async-store.controller'
 import { cache } from 'metalflow/metal_flow_cache'
 import { makeAutoObservable } from 'mobx'
 import { RouterOutput } from '../../../../../server/src/lib/trpc'
-import { MaterialSupplyStore } from '../supply/state'
+import { MaterialSupplyStore } from '../operations/supply/state'
 
 export type MaterialListOutput = RouterOutput['material']['list'][number]
 

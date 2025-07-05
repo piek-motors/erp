@@ -6,6 +6,11 @@ export class MaterialWriteoffState {
   setWeight(weight: string) {
     this.weight = weight
   }
+  length = ''
+  setLength(length: string, linearMass: string) {
+    this.length = length
+    this.weight = (Number(length) * Number(linearMass)).toFixed(3)
+  }
   reason: EnWriteoffReason = EnWriteoffReason.UsedInProduction
   setReason(reason: EnWriteoffReason) {
     this.reason = reason

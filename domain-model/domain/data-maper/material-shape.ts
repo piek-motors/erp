@@ -15,7 +15,6 @@ export class RoundBarShapeData extends Common {
   calibrated!: boolean
   @IsNumber()
   density?: number
-  linearMass?: number
 }
 
 export class ListShapeData extends Common {

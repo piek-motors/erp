@@ -3,11 +3,15 @@ import { EnMaterialShape, EnUnit } from './enums'
 import { uiMaterialShape, uiUnit } from './ui.translators'
 
 export abstract class Material {
-  @IsNumber()
   readonly id: number
-  @IsString()
   label: string
   stock: number = 0
+  /**
+   * Linear mass in kilograms per meter (kg/m).
+   * Represents the weight of one meter of the material.
+   * Used for quick mass calculations without volume computation.
+   */
+  linearMass: number = 0
   abstract readonly unit: EnUnit
   abstract readonly shape: EnMaterialShape
   constructor(id: number, label: string = '') {
@@ -55,14 +59,6 @@ export class RoundBar extends Material {
   @IsNumber()
   @Min(0)
   density!: number
-  /**
-   * Linear mass in kilograms per meter (kg/m).
-   * Represents the weight of one meter of the material.
-   * Used for quick mass calculations without volume computation.
-   */
-  @IsNumber()
-  @Min(0)
-  linearMass!: number
   deriveLabel(): string {
     if (Number.isNaN(this.diameter)) {
       throw new Error('diameter is NaN')

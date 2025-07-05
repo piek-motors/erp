@@ -1,10 +1,16 @@
 import { EnSupplyReason } from 'domain-model'
 import { rpc } from 'lib/rpc.client'
 import { makeAutoObservable } from 'mobx'
+
 export class MaterialSupplyStore {
   qty: string = ''
   setQty(qty: string) {
     this.qty = qty
+  }
+  length: string = ''
+  setLength(length: string, linearMass: string) {
+    this.length = length
+    this.qty = (Number(length) * Number(linearMass)).toFixed(3)
   }
   reason: EnSupplyReason = EnSupplyReason.FromSupplier
   setReason(reason: EnSupplyReason) {

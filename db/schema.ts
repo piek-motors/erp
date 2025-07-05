@@ -63,6 +63,7 @@ export namespace DB {
     shape: EnMaterialShape
     shape_data: JSONColumnType<any, any, any>
     stock: number
+    linear_mass: number // kg/m
   }
 
   export type Material = KyselySelectable<MaterialTable>

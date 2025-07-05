@@ -11,10 +11,6 @@ export class RoundBarState implements IMaterialShapeState {
   setAlloy(alloy: string) {
     this.alloy = alloy
   }
-  linearMass!: string
-  setLinearMass(linearMass: string) {
-    this.linearMass = linearMass
-  }
   density!: string
   setDensity(density: string) {
     this.density = density
@@ -31,21 +27,18 @@ export class RoundBarState implements IMaterialShapeState {
       diameter: Number(this.diameter),
       alloy: this.alloy,
       calibrated: this.calibrated,
-      density: Number(this.density),
-      linearMass: Number(this.linearMass)
+      density: Number(this.density)
     } satisfies RoundBarShapeData
   }
   sync(material: RoundBar): void {
     this.diameter = material.diameter?.toString() || ''
     this.alloy = material.alloy || ''
-    this.linearMass = material.linearMass?.toString() || ''
     this.density = material.density?.toString() || ''
     this.calibrated = material.calibrated || false
   }
   reset(): void {
     this.diameter = ''
     this.alloy = ''
-    this.linearMass = ''
     this.density = ''
     this.calibrated = false
   }

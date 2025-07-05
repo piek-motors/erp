@@ -24,6 +24,7 @@ class MaterialMapper {
       dto.material.id,
       dto.material.label
     )
+    emptyMaterial.linearMass = dto.material.linear_mass
     MaterialShapeAbstractionLayer.importShapeData(
       emptyMaterial,
       dto.material.shape_data

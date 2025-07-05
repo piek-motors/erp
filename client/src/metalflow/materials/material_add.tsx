@@ -3,6 +3,7 @@ import { PageTitle } from 'components/page-title'
 import { TabConfig, Tabs } from 'components/tabs'
 import { EnMaterialShape, UiMaterialShape } from 'domain-model'
 import {
+  Inp,
   observer,
   SendMutation,
   Stack,
@@ -57,6 +58,14 @@ export const MaterialAddPage = observer(() => {
         handleChange={value => {
           material.setShape(value as unknown as EnMaterialShape)
         }}
+      />
+      <Inp
+        label={'Линейная масса'}
+        value={material.linearMass}
+        onChange={v => {
+          material.setLinearMass(v)
+        }}
+        unit="кг/м"
       />
       <MaterialUnitSelect
         value={material.unit}

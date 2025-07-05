@@ -21,8 +21,7 @@ export class MaterialShapeAbstractionLayer {
         diameter: material.diameter,
         alloy: material.alloy,
         calibrated: material.calibrated,
-        density: material.density,
-        linearMass: material.linearMass
+        density: material.density
       } satisfies RoundBarShapeData
     } else if (material instanceof List) {
       return {
@@ -54,7 +53,6 @@ export class MaterialShapeAbstractionLayer {
       material.alloy = d.alloy
       material.calibrated = d.calibrated
       material.density = d.density || 0
-      material.linearMass = d.linearMass || 0
 
       return material
     } else if (material instanceof List) {

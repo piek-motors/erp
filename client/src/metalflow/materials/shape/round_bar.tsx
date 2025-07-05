@@ -30,14 +30,6 @@ export const RoundBarInputBase = observer(() => {
         alloy={material.round.alloy}
       />
       <Inp
-        label={t.LinearMass}
-        value={material.round.linearMass}
-        onChange={v => {
-          material.round.setLinearMass(v)
-        }}
-        unit="кг/м"
-      />
-      <Inp
         label={t.Density}
         value={material.round.density}
         onChange={v => {

@@ -15,7 +15,8 @@ export const createMaterial = publicProcedure
       unit: z.nativeEnum(EnUnit),
       shape: z.nativeEnum(EnMaterialShape),
       label: z.string().nonempty(),
-      shape_data: z.any()
+      shape_data: z.any(),
+      linear_mass: z.number()
     })
   )
   .mutation(async ({ input }) => {
@@ -28,7 +29,12 @@ export const createMaterial = publicProcedure
     const label = materialModel.deriveLabel()
     const material = await db
       .insertInto('metal_flow.materials')
-      .values({ ...input, label, stock: 0 })
+      .values({
+        ...input,
+        label,
+        stock: 0,
+        linear_mass: input.linear_mass
+      })
       .returningAll()
       .executeTakeFirstOrThrow()
 

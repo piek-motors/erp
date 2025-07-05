@@ -2,6 +2,7 @@
 import { List } from '@mui/joy'
 import { uiUnit } from 'domain-model'
 import {
+  Inp,
   InputStack,
   Link,
   observer,
@@ -18,8 +19,8 @@ import { DetailName } from 'metalflow/details/detail_shared'
 import { SaveAndDelete } from '../shared/basic'
 import { material } from './material.state'
 import { tabList } from './material_add'
-import { SupplyModal } from './supply/supply'
-import { WriteoffModal } from './writeoff/writeoff'
+import { SupplyModal } from './operations/supply/supply'
+import { WriteoffModal } from './operations/writeoff/writeoff'
 
 export const MaterialUpdatePage = observer(() => {
   const { id } = useParams<{ id: string }>()
@@ -48,6 +49,14 @@ export const MaterialUpdatePage = observer(() => {
         </P>
         <InputStack>
           {tabList.find(t => t.value === material.shape)?.component}
+          <Inp
+            label={'Линейная масса'}
+            value={material.linearMass}
+            onChange={v => {
+              material.setLinearMass(v)
+            }}
+            unit="кг/м"
+          />
         </InputStack>
         <SaveAndDelete
           itemName={`Материал (${material.id}) - ${material.label}`}

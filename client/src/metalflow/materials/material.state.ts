@@ -12,12 +12,12 @@ import { rpc } from 'lib/rpc.client'
 import { map } from 'metalflow/mappers'
 import { cache } from 'metalflow/metal_flow_cache'
 import { IMaterialShapeState } from './matetial_shape_state.interface'
+import { MaterialSupplyStore } from './operations/supply/state'
+import { MaterialWriteoffState } from './operations/writeoff/state'
 import { ListState } from './shape/list_state'
 import { PipeState } from './shape/pipe_state'
 import { RoundBarState } from './shape/rounde_bar.state'
 import { SquareState } from './shape/square_state'
-import { MaterialSupplyStore } from './supply/state'
-import { MaterialWriteoffState } from './writeoff/state'
 
 interface IDetail {
   id: number
@@ -69,6 +69,10 @@ export class MaterialStore {
   setStock(stock: number) {
     this.stock = stock
   }
+  linearMass = ''
+  setLinearMass(linearMass: string) {
+    this.linearMass = linearMass
+  }
   material?: Material
   detailsMadeFromThisMaterial: IDetail[] = []
   setDetailsMadeFromThisMaterial(details: IDetail[]) {
@@ -99,6 +103,7 @@ export class MaterialStore {
     if (!id) throw new Error('Material id is not set')
     return this.async.run(async () => {
       const res = await rpc.material.get.query({ id })
+      this.setLinearMass(res.material.linear_mass.toString())
       this.syncState(map.material.fromDto(res))
       this.setDetailsMadeFromThisMaterial(
         res.details.map(e => ({
@@ -120,12 +125,12 @@ export class MaterialStore {
         material,
         this.getShapeState(this.shape).export()
       )
-
       const res = await rpc.material.create.mutate({
         label: material.deriveLabel(),
         shape: this.shape,
         shape_data: this.getShapeState(this.shape).export(),
-        unit: this.unit
+        unit: this.unit,
+        linear_mass: Number(this.linearMass)
       })
       this.insertedMaterialId = res.id
       this.clear()
@@ -150,7 +155,8 @@ export class MaterialStore {
           shape: this.shape,
           shape_data: this.getShapeState(this.shape).export(),
           label: this.material?.deriveLabel(),
-          unit: this.unit
+          unit: this.unit,
+          linear_mass: Number(this.linearMass)
         })
       })
       .then(async res => {
