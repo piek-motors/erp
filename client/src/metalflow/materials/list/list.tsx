@@ -15,7 +15,7 @@ import {
 import { open, routeMap } from 'lib/routes'
 import { Column } from 'react-table'
 import { t } from '../../text'
-import { MaterialShapeFilter } from '../shape_filter'
+import { MaterialShapeFilter } from './shape_filter'
 import { MaterialListOutput, materialListStore } from './store'
 
 const columnList: Column<MaterialListOutput>[] = [

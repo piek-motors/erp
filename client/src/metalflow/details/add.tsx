@@ -14,7 +14,7 @@ import {
   DetailNameInput,
   DetailPartCodeInput,
   MaterialRelationDataInputs
-} from './detail_shared'
+} from './shared'
 export const CreateDetailPage = observer(() => {
   useEffect(() => {
     return () => {

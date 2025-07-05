@@ -17,8 +17,8 @@ import {
 import { open, routeMap } from 'lib/routes'
 import { DetailName } from 'metalflow/details/name'
 import { AlloyAutocomplete, SaveAndDelete } from '../shared/basic'
+import { tabList } from './add'
 import { material } from './material.state'
-import { tabList } from './material_add'
 import { SupplyModal } from './operations/supply/supply'
 import { WriteoffModal } from './operations/writeoff/writeoff'
 

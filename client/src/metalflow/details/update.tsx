@@ -19,7 +19,7 @@ import {
   DetailNameInput,
   DetailPartCodeInput,
   MaterialRelationDataInputs
-} from './detail_shared'
+} from './shared'
 
 export const UpdateDetailPage = observer(() => {
   const { id } = useParams<{ id: string }>()

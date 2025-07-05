@@ -11,13 +11,13 @@ import { makeAutoObservable } from 'lib/deps'
 import { rpc } from 'lib/rpc.client'
 import { map } from 'metalflow/mappers'
 import { cache } from 'metalflow/metal_flow_cache'
-import { IMaterialShapeState } from './matetial_shape_state.interface'
 import { MaterialSupplyStore } from './operations/supply/state'
 import { MaterialWriteoffState } from './operations/writeoff/state'
 import { ListState } from './shape/list_state'
 import { PipeState } from './shape/pipe_state'
 import { RoundBarState } from './shape/rounde_bar.state'
 import { SquareState } from './shape/square_state'
+import { IMaterialShapeState } from './shape_state.interface'
 
 interface IDetail {
   id: number

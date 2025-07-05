@@ -1,6 +1,6 @@
 import { SquareBar, SquareBarShapeData } from 'domain-model'
 import { makeAutoObservable } from 'mobx'
-import { IMaterialShapeState } from '../matetial_shape_state.interface'
+import { IMaterialShapeState } from '../shape_state.interface'
 
 export class SquareState implements IMaterialShapeState {
   length!: string

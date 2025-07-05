@@ -1,6 +1,6 @@
 import { UiMaterialShape } from 'domain-model'
 import { Button, ToggleButtonGroup, observer } from 'lib/index'
-import { materialListStore } from './list/store'
+import { materialListStore } from './store'
 
 export const MaterialShapeFilter = observer(() => {
   const shapes = Object.entries(UiMaterialShape)

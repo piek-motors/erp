@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { DetailName } from 'metalflow/details/name'
 import { observer } from 'mobx-react-lite'
-import { MaterialName } from './name'
+import { MaterialName } from '../materials/name'
 
 interface Props {
   operation: {
@@ -17,21 +17,21 @@ interface Props {
 export const OperationName = observer((props: Props) => {
   const { operation, showLinkButton } = props
 
-  if (operation.material_label) {
+  if (operation.material_label && operation.material_id) {
     return (
       <MaterialName
         materialLabel={operation.material_label}
-        materialId={operation.material_id || undefined}
+        materialId={operation.material_id}
         showLinkButton={showLinkButton}
       />
     )
   }
 
-  if (operation.detail_name) {
+  if (operation.detail_name && operation.detail_id) {
     return (
       <DetailName
         detail={{
-          id: operation.detail_id || 0,
+          id: operation.detail_id,
           name: operation.detail_name,
           group_id: null // We don't have group_id in operations, so defaulting to null
         }}
