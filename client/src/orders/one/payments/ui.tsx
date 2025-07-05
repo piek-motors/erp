@@ -83,20 +83,21 @@ const PaymentsTable = observer(
           style={{ tableLayout: 'auto' }}
         >
           <tbody>
-            {props.data.map(payment => (
-              <tr key={payment.id}>
-                <td>{percentage(payment.amount, totalAmount)}</td>
-                <td>{formatMoney(payment.amount)}</td>
-                <td>{formatOnlyDate(payment.date)}</td>
-                {orderStore.editMode && (
-                  <td>
-                    <DeleteResourceButton
-                      onClick={() => props?.onDelete?.(payment.id)}
-                    />
-                  </td>
-                )}
-              </tr>
-            ))}
+            {props.data.length > 1 &&
+              props.data.map(payment => (
+                <tr key={payment.id}>
+                  <td>{percentage(payment.amount, totalAmount)}</td>
+                  <td>{formatMoney(payment.amount)}</td>
+                  <td>{formatOnlyDate(payment.date)}</td>
+                  {orderStore.editMode && (
+                    <td>
+                      <DeleteResourceButton
+                        onClick={() => props?.onDelete?.(payment.id)}
+                      />
+                    </td>
+                  )}
+                </tr>
+              ))}
           </tbody>
           <tfoot>
             <tr>
