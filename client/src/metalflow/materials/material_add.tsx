@@ -11,7 +11,7 @@ import {
   useEffect
 } from 'lib/index'
 import { open, routeMap } from 'lib/routes'
-import { MaterialUnitSelect } from '../shared/basic'
+import { AlloyAutocomplete, MaterialUnitSelect } from '../shared/basic'
 import { t } from '../text'
 import { material } from './material.state'
 import { ListMaterialInputBase } from './shape/list'
@@ -58,6 +58,12 @@ export const MaterialAddPage = observer(() => {
         handleChange={value => {
           material.setShape(value as unknown as EnMaterialShape)
         }}
+      />
+      <AlloyAutocomplete
+        setAlloy={alloy => {
+          material.setAlloy(alloy)
+        }}
+        alloy={material.alloy}
       />
       <Inp
         label={'Линейная масса'}

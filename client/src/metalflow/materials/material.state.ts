@@ -73,6 +73,10 @@ export class MaterialStore {
   setLinearMass(linearMass: string) {
     this.linearMass = linearMass
   }
+  alloy?: string
+  setAlloy(alloy: string) {
+    this.alloy = alloy
+  }
   material?: Material
   detailsMadeFromThisMaterial: IDetail[] = []
   setDetailsMadeFromThisMaterial(details: IDetail[]) {
@@ -104,6 +108,8 @@ export class MaterialStore {
     return this.async.run(async () => {
       const res = await rpc.material.get.query({ id })
       this.setLinearMass(res.material.linear_mass.toString())
+      this.setAlloy(res.material.alloy || '')
+
       this.syncState(map.material.fromDto(res))
       this.setDetailsMadeFromThisMaterial(
         res.details.map(e => ({
@@ -130,7 +136,8 @@ export class MaterialStore {
         shape: this.shape,
         shape_data: this.getShapeState(this.shape).export(),
         unit: this.unit,
-        linear_mass: Number(this.linearMass)
+        linear_mass: Number(this.linearMass),
+        alloy: this.alloy || null
       })
       this.insertedMaterialId = res.id
       this.clear()
@@ -149,6 +156,7 @@ export class MaterialStore {
           this.material,
           this.getShapeState(this.shape).export()
         )
+        this.material.alloy = this.alloy || ''
 
         return await rpc.material.update.mutate({
           id: this.id,
@@ -156,7 +164,8 @@ export class MaterialStore {
           shape_data: this.getShapeState(this.shape).export(),
           label: this.material?.deriveLabel(),
           unit: this.unit,
-          linear_mass: Number(this.linearMass)
+          linear_mass: Number(this.linearMass),
+          alloy: this.alloy || null
         })
       })
       .then(async res => {

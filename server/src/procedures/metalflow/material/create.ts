@@ -16,7 +16,8 @@ export const createMaterial = publicProcedure
       shape: z.nativeEnum(EnMaterialShape),
       label: z.string().nonempty(),
       shape_data: z.any(),
-      linear_mass: z.number()
+      linear_mass: z.number(),
+      alloy: z.string().nullable()
     })
   )
   .mutation(async ({ input }) => {
@@ -33,7 +34,8 @@ export const createMaterial = publicProcedure
         ...input,
         label,
         stock: 0,
-        linear_mass: input.linear_mass
+        linear_mass: input.linear_mass,
+        alloy: input.alloy
       })
       .returningAll()
       .executeTakeFirstOrThrow()

@@ -19,26 +19,22 @@ export class MaterialShapeAbstractionLayer {
     if (material instanceof RoundBar) {
       return {
         diameter: material.diameter,
-        alloy: material.alloy,
         calibrated: material.calibrated,
         density: material.density
       } satisfies RoundBarShapeData
     } else if (material instanceof List) {
       return {
         thickness: material.thickness,
-        alloy: material.alloy || '',
         width: material.width || 0
       } satisfies ListShapeData
     } else if (material instanceof Pipe) {
       return {
         diameter: material.diameter,
-        alloy: material.alloy,
         thickness: material.thickness
       } satisfies PipeShapeData
     } else if (material instanceof SquareBar) {
       return {
-        length: material.length,
-        alloy: material.alloy
+        length: material.length
       } satisfies SquareBarShapeData
     } else {
       throw new ErrNotImplemented()
@@ -50,7 +46,6 @@ export class MaterialShapeAbstractionLayer {
       const d = data as RoundBarShapeData
 
       material.diameter = d.diameter
-      material.alloy = d.alloy
       material.calibrated = d.calibrated
       material.density = d.density || 0
 
@@ -58,7 +53,6 @@ export class MaterialShapeAbstractionLayer {
     } else if (material instanceof List) {
       const d = data as ListShapeData
 
-      material.alloy = d.alloy
       material.thickness = d.thickness
       material.width = d.width
 
@@ -66,7 +60,6 @@ export class MaterialShapeAbstractionLayer {
     } else if (material instanceof Pipe) {
       const d = data as PipeShapeData
 
-      material.alloy = d.alloy
       material.diameter = d.diameter
       material.thickness = d.thickness
 
@@ -74,7 +67,6 @@ export class MaterialShapeAbstractionLayer {
     } else if (material instanceof SquareBar) {
       const d = data as SquareBarShapeData
 
-      material.alloy = d.alloy
       material.length = d.length
 
       return material

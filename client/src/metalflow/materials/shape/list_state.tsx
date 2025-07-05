@@ -11,16 +11,11 @@ export class ListState implements IMaterialShapeState {
   setWidth(width: string) {
     this.width = width
   }
-  alloy!: string
-  setAlloy(alloy: string) {
-    this.alloy = alloy
-  }
   constructor() {
     makeAutoObservable(this)
   }
   export(): ListShapeData {
     return {
-      alloy: this.alloy,
       thickness: Number(this.thickness),
       width: Number(this.width)
     } satisfies ListShapeData
@@ -28,11 +23,9 @@ export class ListState implements IMaterialShapeState {
   sync(material: List): void {
     this.thickness = material.thickness?.toString() || ''
     this.width = material.width?.toString() || ''
-    this.alloy = material.alloy || ''
   }
   reset(): void {
     this.thickness = ''
     this.width = ''
-    this.alloy = ''
   }
 }

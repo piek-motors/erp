@@ -16,7 +16,7 @@ import {
 } from 'lib/index'
 import { open, routeMap } from 'lib/routes'
 import { DetailName } from 'metalflow/details/name'
-import { SaveAndDelete } from '../shared/basic'
+import { AlloyAutocomplete, SaveAndDelete } from '../shared/basic'
 import { material } from './material.state'
 import { tabList } from './material_add'
 import { SupplyModal } from './operations/supply/supply'
@@ -49,6 +49,12 @@ export const MaterialUpdatePage = observer(() => {
         </P>
         <InputStack>
           {tabList.find(t => t.value === material.shape)?.component}
+          <AlloyAutocomplete
+            setAlloy={alloy => {
+              material.setAlloy(alloy)
+            }}
+            alloy={material.alloy}
+          />
           <Inp
             label={'Линейная масса'}
             value={material.linearMass}

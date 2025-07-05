@@ -1,11 +1,11 @@
-import { EnMaterialShape, GenericShapeData, Material } from 'domain-model'
+import { EnMaterialShape, Material } from 'domain-model'
 import { ListState } from './shape/list_state'
 import { PipeState } from './shape/pipe_state'
 import { RoundBarState } from './shape/rounde_bar.state'
 import { SquareState } from './shape/square_state'
 
 export interface IMaterialShapeState {
-  export(): GenericShapeData
+  export(): unknown
   sync(material: Material): void
   reset(): void
 }

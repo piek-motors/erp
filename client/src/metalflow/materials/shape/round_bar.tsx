@@ -8,7 +8,6 @@ import {
   Row,
   ToggleButtonGroup
 } from 'lib/index'
-import { AlloyAutocomplete } from 'metalflow/shared/basic'
 import { t } from 'metalflow/text'
 import { material } from '../material.state'
 
@@ -23,20 +22,15 @@ export const RoundBarInputBase = observer(() => {
         }}
         unit={uiUnit(EnUnit.MilliMeter)}
       />
-      <AlloyAutocomplete
-        setAlloy={alloy => {
-          material.round.setAlloy(alloy)
-        }}
-        alloy={material.round.alloy}
-      />
-      <Inp
+
+      {/* <Inp
         label={t.Density}
         value={material.round.density}
         onChange={v => {
           material.round.setDensity(v)
         }}
         unit="кг/м3"
-      />
+      /> */}
       <MaterialCalibration
         value={material.round.calibrated}
         setValue={v => {
@@ -55,7 +49,7 @@ function MaterialCalibration(props: {
     <Row gap={2}>
       <P>(К) - Калиброванный</P>
       <ToggleButtonGroup
-        variant="plain"
+        variant="outlined"
         color="primary"
         value={props.value ? '1' : '0'}
         onChange={(e, v) => {

@@ -7,25 +7,18 @@ export class SquareState implements IMaterialShapeState {
   setLength(length: string) {
     this.length = length
   }
-  alloy!: string
-  setAlloy(alloy: string) {
-    this.alloy = alloy
-  }
   constructor() {
     makeAutoObservable(this)
   }
   export(): SquareBarShapeData {
     return {
-      length: Number(this.length),
-      alloy: this.alloy
+      length: Number(this.length)
     } satisfies SquareBarShapeData
   }
   sync(material: SquareBar): void {
     this.length = material.length?.toString() || ''
-    this.alloy = material.alloy || ''
   }
   reset(): void {
     this.length = ''
-    this.alloy = ''
   }
 }

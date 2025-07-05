@@ -1,4 +1,4 @@
-import { IsBoolean, IsNumber, IsOptional, IsString, Min } from 'class-validator'
+import { IsBoolean, IsNumber, IsOptional, Min } from 'class-validator'
 import { EnMaterialShape, EnUnit } from './enums'
 import { uiMaterialShape, uiUnit } from './ui.translators'
 
@@ -12,6 +12,11 @@ export abstract class Material {
    * Used for quick mass calculations without volume computation.
    */
   linearMass: number = 0
+  /**
+   * Material grade or alloy type (e.g., "медь", "алюминий").
+   * Used for material identification and properties lookup.
+   */
+  alloy: string = ''
   abstract readonly unit: EnUnit
   abstract readonly shape: EnMaterialShape
   constructor(id: number, label: string = '') {
@@ -37,12 +42,6 @@ export class RoundBar extends Material {
   @IsNumber()
   @Min(0)
   diameter!: number
-  /**
-   * Material grade or alloy type (e.g., "медь", "алюминий").
-   * Used for material identification and properties lookup.
-   */
-  @IsString()
-  alloy!: string
   /**
    * Indicates if the material has undergone calibration process.
    * Calibration is an additional machining process that improves:
@@ -79,13 +78,6 @@ export class List extends Material {
   @Min(0)
   thickness!: number
   /**
-   * Material grade or alloy type (e.g., "медь", "алюминий").
-   * Used for material identification and properties lookup.
-   */
-  @IsString()
-  @IsOptional()
-  alloy?: string
-  /**
    * Width of the sheet in millimeters (mm).
    * Optional dimension that can be used for specific sheet sizes.
    */
@@ -113,12 +105,7 @@ export class Pipe extends Material {
   @IsNumber()
   @Min(0)
   diameter!: number
-  /**
-   * Material grade or alloy type (e.g., "медь", "алюминий").
-   * Used for material identification and properties lookup.
-   */
-  @IsString()
-  alloy!: string
+
   /**
    * Wall thickness of the pipe in millimeters (mm).
    * Used together with diameter to calculate cross-sectional area and mass.
@@ -144,12 +131,6 @@ export class SquareBar extends Material {
   @IsNumber()
   @Min(0)
   length!: number
-  /**
-   * Material grade or alloy type (e.g., "медь", "алюминий").
-   * Used for material identification and properties lookup.
-   */
-  @IsString()
-  alloy!: string
   deriveLabel(): string {
     if (!this.length) {
       throw new Error('length is not specified')

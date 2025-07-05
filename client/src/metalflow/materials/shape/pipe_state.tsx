@@ -11,28 +11,21 @@ export class PipeState implements IMaterialShapeState {
   setThickness(thickness: string) {
     this.thickness = thickness
   }
-  alloy!: string
-  setAlloy(alloy: string) {
-    this.alloy = alloy
-  }
   constructor() {
     makeAutoObservable(this)
   }
   export(): PipeShapeData {
     return {
       diameter: Number(this.diameter),
-      thickness: Number(this.thickness),
-      alloy: this.alloy
+      thickness: Number(this.thickness)
     } satisfies PipeShapeData
   }
   sync(material: Pipe): void {
     this.diameter = material.diameter?.toString() || ''
     this.thickness = material.thickness?.toString() || ''
-    this.alloy = material.alloy || ''
   }
   reset(): void {
     this.diameter = ''
     this.thickness = ''
-    this.alloy = ''
   }
 }

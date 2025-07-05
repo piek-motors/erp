@@ -1,14 +1,7 @@
-import { IsBoolean, IsNumber, IsOptional, IsString } from 'class-validator'
+import { IsBoolean, IsNumber, IsOptional } from 'class-validator'
 import { EnMaterialShape } from '../metal-flow/enums'
 
-class Common {
-  @IsString()
-  alloy!: string
-}
-
-export type GenericShapeData = Common
-
-export class RoundBarShapeData extends Common {
+export class RoundBarShapeData {
   @IsNumber()
   diameter!: number
   @IsBoolean()
@@ -17,7 +10,7 @@ export class RoundBarShapeData extends Common {
   density?: number
 }
 
-export class ListShapeData extends Common {
+export class ListShapeData {
   @IsNumber()
   thickness!: number
   @IsNumber()
@@ -25,14 +18,14 @@ export class ListShapeData extends Common {
   width?: number
 }
 
-export class PipeShapeData extends Common {
+export class PipeShapeData {
   @IsNumber()
   diameter!: number
   @IsNumber()
   thickness!: number
 }
 
-export class SquareBarShapeData extends Common {
+export class SquareBarShapeData {
   @IsNumber()
   length!: number
 }
