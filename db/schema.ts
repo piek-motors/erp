@@ -3,7 +3,8 @@ import {
   EnOperationType,
   EnSupplyReason,
   EnUnit,
-  EnWriteoffReason
+  EnWriteoffReason,
+  UserRole
 } from 'domain-model'
 import {
   type Generated,
@@ -52,7 +53,7 @@ export namespace DB {
     first_name: string | null
     last_name: string | null
     email: string | null
-    role: number | null
+    role: UserRole
     password: string | null
   }
 

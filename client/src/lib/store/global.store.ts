@@ -1,11 +1,11 @@
 import axios from 'axios'
-import { TUser } from 'lib/types/global'
+import { User } from 'domain-model'
 import { makeAutoObservable } from 'mobx'
 import { API_URL } from '../api/axios'
 import { AuthService } from '../services/auth.service'
 
 export class GlobalStore {
-  user: TUser | null = null
+  user: User | null = null
   isLoading = false
   inMemoryToken: string | undefined | null = undefined
 

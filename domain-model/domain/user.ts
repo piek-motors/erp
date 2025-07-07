@@ -1,8 +1,9 @@
 export enum UserRole {
-  Admin = 1,
-  Manager = 2,
-  ProductionManager = 2,
-  Bookkeeper = 3
+  Admin = 'admin',
+  OrderManager = 'order_manager',
+  Bookkeeper = 'bookkeeper',
+  MetalflowWorker = 'metalflow_worker',
+  WarehouseBookkeeper = 'warehouse_bookkeeper'
 }
 
 export class User {
@@ -11,7 +12,6 @@ export class User {
   lastName?: string | null
   email!: string
   role!: UserRole
-
   constructor(dto: Partial<User>) {
     Object.assign(this, dto)
   }

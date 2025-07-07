@@ -2,7 +2,6 @@
 import { Box, Divider, Stack } from '@mui/joy'
 import Grid from '@mui/joy/Grid'
 import { PageTitle } from 'components'
-import { User } from 'domain-model'
 import { useAppContext } from 'hooks'
 import { bgcolors, Chip, P, Row, text } from 'lib/index'
 import { orderStatus } from 'lib/utils/orderColorIndication'
@@ -82,17 +81,15 @@ export const OrderCommentsSection = observer(() => {
   if (!orderStore.order) {
     throw new Error('Order not found')
   }
-  const d_user = new User({
-    id: store.user?.id,
-    firstName: store.user?.first_name ?? '',
-    lastName: store.user?.last_name ?? '',
-    role: store.user?.role
-  })
+  if (!store.user) {
+    throw new Error('User not found')
+  }
+
   return (
     <Box>
       <Divider sx={{ my: 2 }} />
-      <CommentListViewPort user={d_user} orderId={orderStore.order.id} />
-      <CommentInputViewPort user={d_user} orderId={orderStore.order.id} />
+      <CommentListViewPort user={store.user} orderId={orderStore.order.id} />
+      <CommentInputViewPort user={store.user} orderId={orderStore.order.id} />
     </Box>
   )
 })

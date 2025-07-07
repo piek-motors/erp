@@ -46,17 +46,6 @@ class OrderMapper {
   }
 }
 
-class UserMapper {
-  fromDto(dto: gql.GetAllUsersQuery['users'][number]): User {
-    return new User({
-      id: dto.id,
-      firstName: dto.first_name!,
-      lastName: dto.last_name!,
-      role: dto.role
-    })
-  }
-}
-
 class OrderItemMapper {
   fromDto(
     dto: gql.GetOrderPositionsQuery['orders_order_items'][number]
@@ -85,7 +74,6 @@ class AttachmentMapper {
 
 export const map = {
   order: new OrderMapper(),
-  user: new UserMapper(),
   orderItem: new OrderItemMapper(),
   attachment: new AttachmentMapper()
 }

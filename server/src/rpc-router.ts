@@ -18,6 +18,8 @@ import { deleteMaterial } from '#root/procedures/metalflow/material/delete.js'
 import { getMaterial } from '#root/procedures/metalflow/material/get.js'
 import { listMaterials } from '#root/procedures/metalflow/material/list.js'
 import { updateMaterial } from '#root/procedures/metalflow/material/update.js'
+import { UserRole } from 'domain-model'
+import z from 'zod'
 import { getDetailInTheGroup } from './procedures/metalflow/detail/grouping/get.js'
 import { addDetailIntoManufacturingList } from './procedures/metalflow/manufacturing/add.js'
 import { finishManufacturing } from './procedures/metalflow/manufacturing/finish.js'
@@ -73,11 +75,21 @@ export const rpcRouter = router({
     add: addDetailIntoManufacturingList,
     finish: finishManufacturing
   }),
-  userList: publicProcedure.query(async () => {
-    return await db
-      .selectFrom('users')
-      .select(['id', 'first_name', 'last_name', 'role'])
-      .execute()
-  }),
+  userList: publicProcedure
+    .input(
+      z.object({
+        role: z.nativeEnum(UserRole).optional()
+      })
+    )
+    .query(async ({ input }) => {
+      let query = db
+        .selectFrom('users')
+        .select(['id', 'first_name', 'last_name', 'role'])
+
+      if (input.role) {
+        query = query.where('role', '=', input.role)
+      }
+      return await query.execute()
+    }),
   deleteFile
 })

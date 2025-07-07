@@ -19,11 +19,9 @@ function Settings() {
   return (
     <Container maxWidth="sm">
       <PageTitle title="Аккаунт" />
-      <P>
-        {store.user?.first_name} {store.user?.last_name}
-      </P>
-      <P>Уровень доступа: {(store.user as any).role}</P>
-      <P> Email: {(store.user as any).Email}</P>
+      <P>{store.user?.fullName}</P>
+      <P>Роль: {store.user?.role}</P>
+      <P>Email: store.user?.email</P>
       <P level="body-sm">
         Data provider: https://{process.env.REACT_APP_HASURA_ENDPOINT}
       </P>

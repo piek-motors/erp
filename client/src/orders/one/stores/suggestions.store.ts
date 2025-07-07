@@ -1,8 +1,8 @@
-import { User } from 'domain-model'
+import { User, UserRole } from 'domain-model'
 import { apolloClient } from 'lib/api/apollo-client'
+import { rpc } from 'lib/rpc.client'
 import * as gql from 'lib/types/graphql-shema'
 import { makeAutoObservable } from 'mobx'
-import { map } from '../../order.mappers'
 
 export class SuggestionsStore {
   constructor() {
@@ -61,17 +61,19 @@ export class SuggestionsStore {
   }
 
   async getManagers() {
-    const res = await apolloClient.query<
-      gql.GetManagersQuery,
-      gql.GetManagersQueryVariables
-    >({
-      query: gql.GetManagersDocument,
-      fetchPolicy: 'cache-first'
+    const res = await rpc.userList.query({
+      role: UserRole.OrderManager
     })
-    const users_d = res.data.users.map(user => map.user.fromDto(user))
-    if (users_d) {
-      this.setManagers(users_d)
-    }
+    const orderManagers = res.map(
+      user =>
+        new User({
+          id: user.id,
+          firstName: user.first_name!,
+          lastName: user.last_name,
+          role: user.role
+        })
+    )
+    this.setManagers(orderManagers)
   }
 }
 
