@@ -5,7 +5,8 @@ import { makeAutoObservable } from 'mobx'
 import { RouterOutput } from '../../../../../server/src/lib/trpc'
 import { MaterialSupplyStore } from '../operations/supply/state'
 
-export type MaterialListOutput = RouterOutput['material']['list'][number]
+export type MaterialListOutput =
+  RouterOutput['metal']['material']['list'][number]
 
 export class MaterialListStore {
   readonly async = new AsyncStoreController()

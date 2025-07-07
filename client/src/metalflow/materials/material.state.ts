@@ -106,7 +106,7 @@ export class MaterialStore {
   async load(id?: number) {
     if (!id) throw new Error('Material id is not set')
     return this.async.run(async () => {
-      const res = await rpc.material.get.query({ id })
+      const res = await rpc.metal.material.get.query({ id })
       this.setLinearMass(res.material.linear_mass.toString())
       this.setAlloy(res.material.alloy || '')
 
@@ -131,7 +131,7 @@ export class MaterialStore {
         material,
         this.getShapeState(this.shape).export()
       )
-      const res = await rpc.material.create.mutate({
+      const res = await rpc.metal.material.create.mutate({
         label: material.deriveLabel(),
         shape: this.shape,
         shape_data: this.getShapeState(this.shape).export(),
@@ -158,7 +158,7 @@ export class MaterialStore {
         )
         this.material.alloy = this.alloy || ''
 
-        return await rpc.material.update.mutate({
+        return await rpc.metal.material.update.mutate({
           id: this.id,
           shape: this.shape,
           shape_data: this.getShapeState(this.shape).export(),
@@ -179,7 +179,7 @@ export class MaterialStore {
   async delete() {
     return this.async.run(async () => {
       if (!this.id) throw new Error('Material id is not set')
-      await rpc.material.delete.mutate({ id: this.id })
+      await rpc.metal.material.delete.mutate({ id: this.id })
       const materialToRemove = cache.materials
         .getMaterials()
         .find(m => m.id === this.id)

@@ -25,7 +25,7 @@ class DetailCache {
     makeAutoObservable(this)
   }
   async load() {
-    const details = await rpc.details.list.query()
+    const details = await rpc.metal.details.list.query()
 
     this.setDetails(
       details.map(detail => {
@@ -51,7 +51,7 @@ class DetailCache {
   }
 }
 
-export type Material = RouterOutput['material']['list'][number]
+export type Material = RouterOutput['metal']['material']['list'][number]
 
 class MaterialCache {
   private materials: Material[] = []
@@ -76,12 +76,12 @@ class MaterialCache {
     makeAutoObservable(this)
   }
   async load() {
-    const materials = await rpc.material.list.query()
+    const materials = await rpc.metal.material.list.query()
     this.setMaterials(materials)
   }
 }
 
-export type DetailGroup = RouterOutput['detailGroups']['list'][number]
+export type DetailGroup = RouterOutput['metal']['detailGroups']['list'][number]
 class DetailGroupCache {
   private groups: DetailGroup[] = []
   setGroups(groups: DetailGroup[]) {
@@ -110,7 +110,7 @@ class DetailGroupCache {
     makeAutoObservable(this)
   }
   async load() {
-    const groups = await rpc.detailGroups.list.query()
+    const groups = await rpc.metal.detailGroups.list.query()
     this.setGroups(groups)
   }
 }

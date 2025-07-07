@@ -65,14 +65,14 @@ export class DetailGroupStore {
 
   async loadGroupWithDetails(groupId: number) {
     return this.async.run(async () => {
-      const groupData = await rpc.detailGroups.get.query({ groupId })
+      const groupData = await rpc.metal.detailGroups.get.query({ groupId })
       this.setSelectedGroup(groupData)
     })
   }
 
   async loadAvailableDetails() {
     return this.async.run(async () => {
-      const details = await rpc.details.list.query()
+      const details = await rpc.metal.details.list.query()
 
       this.setAvailableDetails(
         details.map(detail => ({
@@ -87,7 +87,7 @@ export class DetailGroupStore {
 
   async createGroup(name: string) {
     return this.async.run(async () => {
-      const newGroup = await rpc.detailGroups.create.mutate({ name })
+      const newGroup = await rpc.metal.detailGroups.create.mutate({ name })
       await cache.detailGroups.load()
       return newGroup
     })
@@ -95,7 +95,7 @@ export class DetailGroupStore {
 
   async updateGroup(id: number, name: string) {
     return this.async.run(async () => {
-      const updatedGroup = await rpc.detailGroups.update.mutate({
+      const updatedGroup = await rpc.metal.detailGroups.update.mutate({
         id,
         name
       })
@@ -109,7 +109,7 @@ export class DetailGroupStore {
 
   async deleteGroup(id: number) {
     return this.async.run(async () => {
-      await rpc.detailGroups.delete.mutate({ id })
+      await rpc.metal.detailGroups.delete.mutate({ id })
       cache.detailGroups.removeGroup(id)
       if (this.selectedGroup?.group.id === id) {
         this.setSelectedGroup(null)
@@ -119,7 +119,7 @@ export class DetailGroupStore {
 
   async addDetailsToGroup(groupId: number, detailIds: number[]) {
     return this.async.run(async () => {
-      await rpc.detailGroups.addDetails.mutate({ groupId, detailIds })
+      await rpc.metal.detailGroups.addDetails.mutate({ groupId, detailIds })
       await this.loadGroupWithDetails(groupId)
       this.clearSelection()
     })
@@ -127,7 +127,7 @@ export class DetailGroupStore {
 
   async removeDetailsFromGroup(groupId: number, detailIds: number[]) {
     return this.async.run(async () => {
-      await rpc.detailGroups.removeDetails.mutate({ groupId, detailIds })
+      await rpc.metal.detailGroups.removeDetails.mutate({ groupId, detailIds })
       await this.loadGroupWithDetails(groupId)
     })
   }

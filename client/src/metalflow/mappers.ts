@@ -7,8 +7,8 @@ import {
 
 // @ts-ignore
 import { RouterOutput } from '../../../server/src/lib/trpc'
-type GetMaterialsOutput = RouterOutput['material']['get']
-type GetMaterialsListOutput = RouterOutput['material']['list'][number]
+type GetMaterialsOutput = RouterOutput['metal']['material']['get']
+type GetMaterialsListOutput = RouterOutput['metal']['material']['list'][number]
 
 class MaterialMapper {
   fromDto(dto: GetMaterialsOutput): Material {

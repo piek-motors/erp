@@ -41,7 +41,7 @@ export class MaterialWriteoffState {
     if (!materialId) {
       throw new Error('Material ID is not set')
     }
-    const stock = await rpc.material.writeoffTroughMaterial.mutate({
+    const stock = await rpc.metal.material.writeoffTroughMaterial.mutate({
       material_id: materialId,
       qty: parseFloat(this.weight),
       reason: this.reason,

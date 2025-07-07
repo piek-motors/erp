@@ -4,6 +4,7 @@ import {
   EnSupplyReason,
   EnUnit,
   EnWriteoffReason,
+  OrderStatus,
   UserRole
 } from 'domain-model'
 import {
@@ -27,6 +28,7 @@ export namespace DB {
     ['orders.orders']: OrderTable
     ['orders.order_attachments']: OrderAttachmentTable
     ['orders.order_payments']: OrderPaymentsTable
+    ['orders.order_items']: OrderItemsTable
 
     ['metal_flow.materials']: MaterialTable
     ['metal_flow.details']: DetailTable
@@ -126,8 +128,30 @@ export namespace DB {
 
   export interface OrderTable {
     id: GeneratedAlways<number>
-    total_amount: number
+    status: OrderStatus
+    manager_id: number | null
     created_at: Date
+    contractor: string | null
+    city: string | null
+    total_amount: number | null
+    comment: string | null
+    invoice_number: string | null
+    shipping_date: Date | null
+    awaiting_dispatch: boolean
+    acceptance_date: Date | null
+    actual_shipping_date: Date | null
+    order_number: string | null
+    is_reclamation: boolean
+    need_attention: string | null
+  }
+
+  export interface OrderItemsTable {
+    id: GeneratedAlways<number>
+    order_id: number
+    name: string
+    quantity: number
+    assembler_name: string | null
+    description: string | null
   }
 
   export interface AttachmentTable {

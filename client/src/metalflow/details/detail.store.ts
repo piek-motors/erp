@@ -142,7 +142,7 @@ export class Detail {
 
   async load(detailId: number) {
     this.reset()
-    const d = await rpc.details.get.query({ id: detailId })
+    const d = await rpc.metal.details.get.query({ id: detailId })
 
     if (!d.detail) {
       throw new Error('fdf')
@@ -177,7 +177,7 @@ export class Detail {
       length: m.length,
       weight: m.weight
     }))
-    const res = await rpc.details.create.mutate({
+    const res = await rpc.metal.details.create.mutate({
       name: this.name.trim(),
       partCode: this.partCode.trim(),
       materialRelations,
@@ -191,7 +191,7 @@ export class Detail {
     if (!this.id) {
       throw new Error('Detail id is not set')
     }
-    const res = await rpc.details.update.mutate({
+    const res = await rpc.metal.details.update.mutate({
       id: this.id,
       name: this.name,
       partCode: this.partCode,
@@ -206,13 +206,13 @@ export class Detail {
     if (!this.id) {
       throw new Error('Detail id is not set')
     }
-    await rpc.details.delete.mutate({ id: this.id })
+    await rpc.metal.details.delete.mutate({ id: this.id })
     cache.details.removeDetail(this.id)
     this.reset()
   }
 
   async deleteDetailMaterial(detailId: number, materialId: number) {
-    await rpc.details.deleteDetailMaterial.mutate({
+    await rpc.metal.details.deleteDetailMaterial.mutate({
       detailId,
       materialId
     })

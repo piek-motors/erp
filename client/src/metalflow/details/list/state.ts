@@ -104,7 +104,7 @@ export class DetailList {
     this.updateSearchResult()
   }
   async deleteDetail(id: number) {
-    await rpc.details.delete.mutate({ id })
+    await rpc.metal.details.delete.mutate({ id })
     cache.details.removeDetail(id)
     this.updateSearchResult()
   }

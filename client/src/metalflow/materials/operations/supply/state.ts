@@ -33,7 +33,7 @@ export class MaterialSupplyStore {
     const qty = this.qty
     if (!qty) throw Error('Количество не указано')
 
-    const res = await rpc.material.supply.mutate({
+    const res = await rpc.metal.material.supply.mutate({
       material_id: materialId,
       qty: Number(qty),
       reason: this.reason

@@ -64,7 +64,7 @@ export class DetailWriteoffStore {
     if (!detail?.id) {
       throw new Error('Detail is not set')
     }
-    await rpc.material.writeoffTroughDetail.mutate({
+    await rpc.metal.material.writeoffTroughDetail.mutate({
       detailId: detail.id,
       qty: this.qty,
       reason: this.reason
