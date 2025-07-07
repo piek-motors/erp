@@ -6,23 +6,19 @@ import { AuthService } from '../services/auth.service'
 
 export class GlobalStore {
   user: User | null = null
-  isLoading = false
-  inMemoryToken: string | undefined | null = undefined
-
-  constructor() {
-    makeAutoObservable(this)
-  }
-
-  setUser(user: typeof GlobalStore.prototype.user) {
+  setUser(user: User | null) {
     this.user = user
   }
-
+  isLoading = false
   setLoading(bool: boolean) {
     this.isLoading = bool
   }
-
+  inMemoryToken: string | null = null
   setInMemoryToken(token: string | null) {
     this.inMemoryToken = token
+  }
+  constructor() {
+    makeAutoObservable(this)
   }
 
   async login(email: string, password: string) {
@@ -30,7 +26,15 @@ export class GlobalStore {
       const res = await AuthService.login(email, password)
       if (res.status === 200) {
         this.setInMemoryToken(res.data.accessToken)
-        this.setUser(res.data.user)
+        this.setUser(
+          new User(
+            res.data.user.id,
+            res.data.user.role,
+            res.data.user.first_name!,
+            res.data.user.last_name,
+            res.data.user.email
+          )
+        )
         return res
       }
     } catch (e) {
@@ -66,7 +70,15 @@ export class GlobalStore {
         .get(`${API_URL}/refresh`, { withCredentials: true })
         .then(res => {
           if (res.status === 200) {
-            this.setUser(res.data.user)
+            this.setUser(
+              new User(
+                res.data.user.id,
+                res.data.user.role,
+                res.data.user.first_name!,
+                res.data.user.last_name,
+                res.data.user.email
+              )
+            )
             this.setInMemoryToken(res.data.accessToken)
           }
         })

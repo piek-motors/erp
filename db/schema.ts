@@ -55,6 +55,7 @@ export namespace DB {
     email: string | null
     role: UserRole
     password: string | null
+    is_deleted: boolean
   }
 
   export interface MaterialTable {

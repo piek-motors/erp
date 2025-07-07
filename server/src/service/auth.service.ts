@@ -1,3 +1,4 @@
+import { db } from '#root/deps.js'
 import ApiError from '../lib/api.error.js'
 import { StaticStringKeys } from '../lib/error-codes.js'
 import { database } from '../lib/graphql-client.js'
@@ -19,15 +20,19 @@ class AuthService {
   }
 
   async login(email: string, password: string) {
-    const users = (await database.AllUsersQuery()).users
-    const user = users.find(el => el.email === email)
+    const user = await db
+      .selectFrom('users')
+      .selectAll()
+      .where('email', '=', email)
+      .where('is_deleted', '=', false)
+      .executeTakeFirst()
 
     if (!user) {
       throw ApiError.UnauthorizedError(StaticStringKeys.INVALID_CREDENTIAL)
     } else if (password !== user.password) {
       throw ApiError.UnauthorizedError(StaticStringKeys.INVALID_CREDENTIAL)
     }
-    ///нужно проверить есть ли просроченные токены у этого юзера
+    //TODO: нужно проверить есть ли просроченные токены у этого юзера
     const tokens = tokenService.generateTokens(this.formPayload(user))
 
     const userCredentials = {
@@ -60,6 +65,18 @@ class AuthService {
     }
 
     const user = this.formPayload(tokenFromDb.user)
+
+    // check user is not deleted
+    const dbuser = await db
+      .selectFrom('users')
+      .selectAll()
+      .where('id', '=', tokenFromDb.user.id)
+      .where('is_deleted', '=', false)
+      .executeTakeFirst()
+
+    if (!dbuser) {
+      throw ApiError.UnauthorizedError(StaticStringKeys.INVALID_REFRESH_TOKEN)
+    }
 
     const newTokens = tokenService.generateTokens(user)
 

@@ -66,12 +66,7 @@ export class SuggestionsStore {
     })
     const orderManagers = res.map(
       user =>
-        new User({
-          id: user.id,
-          firstName: user.first_name!,
-          lastName: user.last_name,
-          role: user.role
-        })
+        new User(user.id, user.role, user.first_name!, user.last_name, null)
     )
     this.setManagers(orderManagers)
   }

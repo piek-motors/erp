@@ -17,11 +17,11 @@ function Settings() {
   }
 
   return (
-    <Container maxWidth="sm">
+    <Container maxWidth="sm" sx={{ p: 1 }}>
       <PageTitle title="Аккаунт" />
       <P>{store.user?.fullName}</P>
       <P>Роль: {store.user?.role}</P>
-      <P>Email: store.user?.email</P>
+      <P>Email: {store.user?.email}</P>
       <P level="body-sm">
         Data provider: https://{process.env.REACT_APP_HASURA_ENDPOINT}
       </P>

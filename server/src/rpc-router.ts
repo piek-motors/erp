@@ -85,6 +85,7 @@ export const rpcRouter = router({
       let query = db
         .selectFrom('users')
         .select(['id', 'first_name', 'last_name', 'role'])
+        .where('is_deleted', '=', false)
 
       if (input.role) {
         query = query.where('role', '=', input.role)

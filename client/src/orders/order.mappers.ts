@@ -21,12 +21,13 @@ class OrderMapper {
       needAttention: dto.need_attention === 'true',
       invoiceNumber: dto.invoice_number,
       factoryNumber: dto.order_number,
-      manager: new User({
-        id: dto.user?.id,
-        email: dto.user?.email ?? '',
-        firstName: dto.user?.first_name!,
-        lastName: dto.user?.last_name!
-      }),
+      manager: new User(
+        dto.user?.id!,
+        null,
+        dto.user?.first_name!,
+        dto.user?.last_name ?? null,
+        dto.user?.email ?? null
+      ),
       items: dto.order_items.map(
         item =>
           new OrderItem({

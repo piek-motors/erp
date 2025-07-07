@@ -7,14 +7,14 @@ export enum UserRole {
 }
 
 export class User {
-  id!: number
-  firstName!: string
-  lastName?: string | null
-  email!: string
-  role!: UserRole
-  constructor(dto: Partial<User>) {
-    Object.assign(this, dto)
-  }
+  constructor(
+    readonly id: number,
+    readonly role: UserRole | null,
+    readonly firstName: string,
+    readonly lastName: string | null,
+    readonly email: string | null
+  ) {}
+
   get fullName() {
     return `${this.firstName} ${this.lastName ?? ''}`.trim()
   }
