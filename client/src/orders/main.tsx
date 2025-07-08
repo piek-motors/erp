@@ -5,7 +5,7 @@ import { Search } from 'components/inputs'
 import { OrderTypeFilter } from 'components/order-type-filter'
 import { TableName } from 'components/table-name'
 import { TabConfig, Tabs } from 'components/tabs'
-import { EnOrderStatus } from 'domain-model'
+import { OrderStatus } from 'domain-model'
 import { useFilter } from 'hooks'
 import { SxProperty } from 'lib/constants'
 import { AddResourceButton } from 'lib/index'
@@ -29,7 +29,7 @@ const PriorityList = observer(() => {
   const store = useOrderListPageStore()
   const { data } = useGetOrdersByStatusQuery({
     variables: {
-      order_status: EnOrderStatus.Production
+      order_status: OrderStatus.InProduction
     }
   })
   const orders = useFilter({
@@ -63,7 +63,7 @@ const RegistrationList = observer(() => {
   const store = useOrderListPageStore()
   const { data } = useGetOrdersByStatusQuery({
     variables: {
-      order_status: EnOrderStatus.Registration
+      order_status: OrderStatus.PreOrder
     }
   })
   const orders = useFilter({
@@ -92,7 +92,7 @@ const RegistrationList = observer(() => {
 
 const NewOrderList = observer(() => {
   const { data } = useGetOrdersByStatusQuery({
-    variables: { order_status: EnOrderStatus.Production }
+    variables: { order_status: OrderStatus.InProduction }
   })
 
   const { todayDate, yesterdayDate } = useMemo(() => {

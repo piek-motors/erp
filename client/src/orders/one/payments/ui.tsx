@@ -4,7 +4,7 @@ import { JSX } from '@emotion/react/jsx-runtime'
 import { Box, Button, Dropdown, Menu, MenuButton, Stack, Table } from '@mui/joy'
 import { DateInput } from 'components/inputs/date_input'
 import { MoneyInput } from 'components/money-input'
-import { Order, Roles } from 'domain-model'
+import { Order, UserRole } from 'domain-model'
 import { useAppContext } from 'hooks'
 import { DeleteResourceButton, P, Row } from 'lib/index'
 import { GetOrderPaymentsQuery } from 'lib/types/graphql-shema'
@@ -17,9 +17,9 @@ export const Paymnets = observer(({ order }: { order: Order }) => {
   const { store }: any = useAppContext()
 
   const isHaveFullRight = [
-    Roles.general,
-    Roles.management,
-    Roles.bookkeeping
+    UserRole.Admin,
+    UserRole.OrderManager,
+    UserRole.Bookkeeper
   ].includes(store?.user?.role)
 
   const paymentHistoryContent = order.totalAmount ? (

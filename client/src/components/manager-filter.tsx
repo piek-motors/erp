@@ -1,30 +1,30 @@
 import { FormControl, Option, Select } from '@mui/joy'
-import { useGetManagersQuery } from 'lib/types/graphql-shema'
+import { observer } from 'lib/deps'
+import { suggestionsStore } from 'orders/one/stores/suggestions.store'
 
 interface IManagerFilterProps {
   value: any
   onChange: (userId: number) => void
 }
 
-export function ManagerFilter({ value, onChange }: IManagerFilterProps) {
-  const { data, loading } = useGetManagersQuery()
+export const ManagerFilter = observer(
+  ({ value, onChange }: IManagerFilterProps) => {
+    return (
+      <FormControl>
+        <Select
+          value={value}
+          onChange={(e, v) => onChange(parseInt(v))}
+          placeholder="Менеджер"
+        >
+          <Option value={0}>Все</Option>
 
-  return (
-    <FormControl>
-      <Select
-        value={value}
-        onChange={(e, v) => onChange(parseInt(v))}
-        placeholder="Менеджер"
-      >
-        <Option value={0}>Все</Option>
-
-        {!loading &&
-          data?.users.map(user => (
+          {suggestionsStore?.managers.map(user => (
             <Option value={user.id} key={user.id}>
-              {`${user.first_name} ${user.last_name}`}
+              {`${user.firstName} ${user.lastName}`}
             </Option>
           ))}
-      </Select>
-    </FormControl>
-  )
-}
+        </Select>
+      </FormControl>
+    )
+  }
+)
