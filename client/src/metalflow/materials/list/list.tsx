@@ -80,7 +80,7 @@ export const MaterialListPage = observer((props: MaterialsTableProps) => {
       refreshTrigger={materialListStore.async.loading}
       staticContent={
         <Stack>
-          <PageTitle subTitle={t.MaterialsList} hideIcon>
+          <PageTitle title={t.MaterialsList}>
             <AddResourceButton
               navigateTo={open(routeMap.metalflow.material.new)}
             />

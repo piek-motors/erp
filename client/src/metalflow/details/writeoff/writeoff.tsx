@@ -19,9 +19,9 @@ export const DetailWriteoffPage = observer(() => {
     }
   }
   return (
-    <Stack p={0} px={2}>
-      <Stack gap={2} py={2}>
-        <PageTitle subTitle={t.WriteOffAdd} hideIcon />
+    <Stack p={1}>
+      <Stack gap={2}>
+        <PageTitle title={t.WriteOffAdd} />
         <Row gap={3}>
           <Row gap={1}>
             <Label label="Деталь" />

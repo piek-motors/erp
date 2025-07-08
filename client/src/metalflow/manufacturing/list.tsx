@@ -2,7 +2,7 @@ import { ScrollableWindow } from 'components/inputs'
 import { PageTitle } from 'components/page-title'
 import { Table } from 'components/table.impl'
 import { observer } from 'lib/deps'
-import { P, Stack, useEffect } from 'lib/index'
+import { Label, P, Stack, useEffect } from 'lib/index'
 import { Column } from 'react-table'
 import { ManufactoringListOutput, ManufacturingStore } from './store'
 
@@ -45,15 +45,15 @@ export const ManufacturingList = observer(() => {
       refreshTrigger={false}
       staticContent={
         <Stack py={1}>
-          <PageTitle subTitle={'Изготавливаемые детали'} hideIcon />
+          <PageTitle title={'Детали в производстве'} />
         </Stack>
       }
       scrollableContent={
         <Stack>
-          <PageTitle subTitle={'В производстве'} hideIcon />
+          <Label label={'В производстве'} />
           <Table data={state.detailsInProduction} columns={columnList} />
 
-          <PageTitle subTitle={'Готовые детали'} hideIcon />
+          <Label label={'Готовые детали'} />
           <Table data={state.detailsFinished} columns={columnList} />
         </Stack>
       }

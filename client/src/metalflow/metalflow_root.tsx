@@ -1,4 +1,5 @@
 import { Box, Stack } from '@mui/joy'
+import { DesktopOnly } from 'lib/index'
 import { useEffect } from 'react'
 import { cache } from './metal_flow_cache'
 import { NavigationSideBar } from './shared/nav'
@@ -20,9 +21,9 @@ export function MetalFlowRootLayout(props: { children?: React.ReactNode }) {
         }
       }}
     >
-      <Box p={1}>
+      <DesktopOnly>
         <NavigationSideBar />
-      </Box>
+      </DesktopOnly>
       {props.children && (
         <Stack sx={{ flexGrow: 1, gap: 1, p: 0 }}>{props.children}</Stack>
       )}

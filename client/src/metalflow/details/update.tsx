@@ -33,8 +33,8 @@ export const UpdateDetailPage = observer(() => {
     }
   }, [])
   return (
-    <Stack gap={1} py={2}>
-      <PageTitle subTitle={t.EditDetail} hideIcon />
+    <Stack gap={1} p={1}>
+      <PageTitle title={t.EditDetail} />
       <RowButColumsAtSm gap={1}>
         {/* Left Column - Detail Info */}
         <Stack gap={0.5} sx={{ flex: 1 }}>

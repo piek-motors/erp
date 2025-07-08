@@ -95,7 +95,7 @@ export const DetailsListPage = observer(() => {
       refreshTrigger={state.async.loading}
       staticContent={
         <>
-          <PageTitle subTitle={t.DetailsList} hideIcon>
+          <PageTitle title={t.DetailsList}>
             <AddResourceButton
               navigateTo={open(routeMap.metalflow.detail.new)}
             />

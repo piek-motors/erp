@@ -1,6 +1,7 @@
 /** @jsxImportSource @emotion/react */
-import { Box, Sheet, Stack } from '@mui/joy'
+import { Box } from '@mui/joy'
 import { PageTitle } from 'components'
+import { ScrollableWindow } from 'components/inputs/scrollable_window'
 import { Table } from 'components/table.impl'
 import {
   EnOperationType,
@@ -88,10 +89,10 @@ export const OperationsList = observer(() => {
     store.load()
   }, [])
   return (
-    <Stack py={2} spacing={3}>
-      <PageTitle subTitle="Журнал операций" hideIcon />
-      {store.operations.length === 0 && <P>Нет операций</P>}
-      <Sheet sx={{ gap: 2 }}>
+    <ScrollableWindow
+      refreshTrigger={false}
+      staticContent={<PageTitle title={'Журнал операций'} />}
+      scrollableContent={
         <Table
           columns={columns}
           data={store.operations}
@@ -104,7 +105,7 @@ export const OperationsList = observer(() => {
             return {}
           }}
         />
-      </Sheet>
-    </Stack>
+      }
+    />
   )
 })

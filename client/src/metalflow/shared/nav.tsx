@@ -1,24 +1,16 @@
 import { UilPlusCircle } from '@iconscout/react-unicons'
 import { Box, Button, ButtonProps, IconButton, Stack } from '@mui/joy'
-import { PageTitle } from 'components'
-import { DesktopOnly, UseIcon } from 'lib/index'
+import { UseIcon } from 'lib/index'
 import { ReactNode } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { Action, actions } from '../nav.links'
-import { t } from '../text'
-import { MobileMenuButton } from './mobile_menu.button'
 
 export function NavigationSideBar() {
   return (
-    <Stack>
-      <PageTitle title={t.PdoModuleTitle} mobileMenu={<MobileMenuButton />} />
-      <DesktopOnly>
-        <Stack gap={1} py={1}>
-          {actions.map(each => (
-            <RenderAction action={each} key={each.href} size="sm" />
-          ))}
-        </Stack>
-      </DesktopOnly>
+    <Stack gap={1} p={1}>
+      {actions.map(each => (
+        <RenderAction action={each} key={each.href} size="sm" />
+      ))}
     </Stack>
   )
 }
