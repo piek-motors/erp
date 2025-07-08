@@ -1,6 +1,6 @@
 import { EnMaterialShape } from 'domain-model'
 import { AsyncStoreController } from 'lib/async-store.controller'
-import { cache } from 'metalflow/metal_flow_cache'
+import { cache } from 'metalflow/cache/root'
 import { makeAutoObservable } from 'mobx'
 import { RouterOutput } from '../../../../../server/src/lib/trpc'
 import { MaterialSupplyStore } from '../operations/supply/state'

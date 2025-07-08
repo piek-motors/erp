@@ -1,7 +1,7 @@
 import { Box, Stack } from '@mui/joy'
 import { DesktopOnly } from 'lib/index'
 import { useEffect } from 'react'
-import { cache } from './metal_flow_cache'
+import { cache } from './cache/root'
 import { NavigationSideBar } from './shared/nav'
 
 export function MetalFlowRootLayout(props: { children?: React.ReactNode }) {

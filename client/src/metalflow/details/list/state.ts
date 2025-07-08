@@ -1,9 +1,11 @@
 import { AsyncStoreController } from 'lib/async-store.controller'
 import { rpc } from 'lib/rpc.client'
-import { cache } from 'metalflow/metal_flow_cache'
+import { cache } from 'metalflow/cache/root'
 import { makeAutoObservable, reaction } from 'mobx'
 import { Detail } from '../detail.store'
+
 export const alphabet = 'АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ'.split('')
+
 export class DetailList {
   readonly async = new AsyncStoreController()
   searchKeyword: string = ''
@@ -26,7 +28,7 @@ export class DetailList {
           clearTimeout(this.searchTimeout)
         }
         this.searchTimeout = setTimeout(() => {
-          this.updateSearchResult()
+          this.search()
         }, 500)
       }
     )
@@ -38,7 +40,7 @@ export class DetailList {
           clearTimeout(this.searchIdTimeout)
         }
         this.searchIdTimeout = setTimeout(() => {
-          this.updateSearchResult()
+          this.search()
         }, 500)
       }
     )
@@ -50,7 +52,7 @@ export class DetailList {
           clearTimeout(this.searchPartCodeTimeout)
         }
         this.searchPartCodeTimeout = setTimeout(() => {
-          this.updateSearchResult()
+          this.search()
         }, 500)
       }
     )
@@ -68,7 +70,12 @@ export class DetailList {
     this.clearSearchArguments()
     this.searchPartCode = partCode
   }
-  updateSearchResult() {
+  searchByFirstLetter(letter: string) {
+    this.clearSearchArguments()
+    this.indexLetter = letter
+    this.search()
+  }
+  search() {
     let filtered = cache.details.getDetails()
     switch (true) {
       case Boolean(this.searchKeyword):
@@ -98,20 +105,13 @@ export class DetailList {
     }
     this.searchResult = this.sort(filtered)
   }
-  searchByFirstLetter(letter: string) {
-    this.indexLetter = letter
-    this.searchKeyword = ''
-    this.updateSearchResult()
-  }
   async deleteDetail(id: number) {
     await rpc.metal.details.delete.mutate({ id })
     cache.details.removeDetail(id)
-    this.updateSearchResult()
+    this.search()
   }
   clear() {
-    this.searchKeyword = ''
-    this.searchPartCode = ''
-    this.searchResult = []
+    this.clearSearchArguments()
     if (this.searchTimeout) {
       clearTimeout(this.searchTimeout)
       this.searchTimeout = null
@@ -131,6 +131,7 @@ export class DetailList {
     this.searchId = ''
     this.searchPartCode = ''
     this.indexLetter = null
+    this.searchResult = []
   }
   sort(filterResult: Detail[]) {
     return filterResult

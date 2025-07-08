@@ -1,6 +1,6 @@
 import { AsyncStoreController } from 'lib/async-store.controller'
 import { rpc } from 'lib/rpc.client'
-import { cache } from 'metalflow/metal_flow_cache'
+import { cache } from 'metalflow/cache/root'
 import { makeAutoObservable } from 'mobx'
 
 export interface Group {

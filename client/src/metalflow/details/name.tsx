@@ -2,7 +2,7 @@
 import { WithSmallLinkButton } from 'components/small_link_button'
 import { Button, P, Row, observer } from 'lib/index'
 import { open, routeMap } from 'lib/routes'
-import { cache } from 'metalflow/metal_flow_cache'
+import { cache } from 'metalflow/cache/root'
 import { Link } from 'react-router-dom'
 
 interface Detail {

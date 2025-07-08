@@ -1,7 +1,7 @@
 import { AttachmentsStore } from 'components/attachments/store'
 import { Attachment } from 'domain-model'
 import { rpc } from 'lib/rpc.client'
-import { cache } from 'metalflow/metal_flow_cache'
+import { cache } from 'metalflow/cache/root'
 import { makeAutoObservable } from 'mobx'
 import { DetailWriteoffStore } from './writeoff/store'
 

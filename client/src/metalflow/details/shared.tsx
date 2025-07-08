@@ -11,7 +11,7 @@ import {
   Stack,
   observer
 } from 'lib/index'
-import { cache } from 'metalflow/metal_flow_cache'
+import { cache } from 'metalflow/cache/root'
 import { MaterialAutocomplete } from '../shared/material_autocomplete'
 import { QtyInputWithUnit } from '../shared/qty_input_with_unit'
 import { MaterialCost, detailStore } from './detail.store'
