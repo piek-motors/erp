@@ -14,13 +14,13 @@ export const ScrollableWindow = ({
     <Stack sx={{ maxHeight: '100vh' }}>
       {staticContent ? (
         <>
-          <Box p={0.6}></Box>
-          <Stack>{staticContent}</Stack>
-          <Box p={1}></Box>
+          <Stack p={1}>{staticContent}</Stack>
         </>
       ) : null}
       <ScrollPreserv refreshTrigger={refreshTrigger}>
-        <Sheet sx={{ borderRadius: 'sm' }}>{scrollableContent}</Sheet>
+        <Sheet sx={{ overflowX: 'auto' }}>
+          <Box>{scrollableContent}</Box>
+        </Sheet>
       </ScrollPreserv>
       <Box p={0.5}></Box>
     </Stack>

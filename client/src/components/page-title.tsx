@@ -40,7 +40,7 @@ export function PageTitle(props: Props) {
           </P>
         )}
         {props.subTitle && (
-          <P level="body-sm" fontWeight={500}>
+          <P level="body-sm" fontWeight={700}>
             {props.subTitle}
           </P>
         )}

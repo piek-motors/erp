@@ -79,22 +79,24 @@ export const MaterialListPage = observer((props: MaterialsTableProps) => {
     <ScrollableWindow
       refreshTrigger={materialListStore.async.loading}
       staticContent={
-        <Stack gap={0}>
+        <Stack>
           <PageTitle subTitle={t.MaterialsList} hideIcon>
             <AddResourceButton
               navigateTo={open(routeMap.metalflow.material.new)}
             />
           </PageTitle>
-          <RowButColumsAtSm gap={1}>
+          <RowButColumsAtSm>
             <Inp
-              sx={{ width: '80px' }}
-              placeholder="ID"
+              size="sm"
+              sx={{ width: '60px' }}
+              placeholder="По ID"
               value={materialListStore.searchId}
               onChange={v => {
                 materialListStore.setSearchId(v)
               }}
             />
             <Search
+              placeholder="По названию"
               onChange={e => {
                 materialListStore.search(e.target.value)
               }}

@@ -6,7 +6,7 @@ import {
   ErrorHint,
   Inp,
   LoadingHint,
-  Row,
+  RowButColumsAtSm,
   Stack,
   observer,
   open,
@@ -94,14 +94,14 @@ export const DetailsListPage = observer(() => {
     <ScrollableWindow
       refreshTrigger={state.async.loading}
       staticContent={
-        <Stack>
+        <>
           <PageTitle subTitle={t.DetailsList} hideIcon>
             <AddResourceButton
               navigateTo={open(routeMap.metalflow.detail.new)}
             />
           </PageTitle>
           <DetailSearchArguments />
-        </Stack>
+        </>
       }
       scrollableContent={<DetailsList />}
     />
@@ -112,8 +112,9 @@ const DetailSearchArguments = observer(() => {
   return (
     <>
       <AlphabetIndex />
-      <Row>
+      <RowButColumsAtSm>
         <Inp
+          size="sm"
           sx={{ width: '80px' }}
           placeholder="По ID"
           value={state.searchId}
@@ -135,7 +136,7 @@ const DetailSearchArguments = observer(() => {
           }}
           value={state.searchPartCode || ''}
         />
-      </Row>
+      </RowButColumsAtSm>
     </>
   )
 })
