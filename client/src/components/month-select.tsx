@@ -66,6 +66,7 @@ function _MonthSelect({ onSearch, store }: IReportConfiguratorProps) {
         onChange={v => {
           store.setMonth(v)
         }}
+        width="100px"
       />
       <Select
         placeholder="Год"
@@ -73,6 +74,7 @@ function _MonthSelect({ onSearch, store }: IReportConfiguratorProps) {
           name: e.toString(),
           value: e
         }))}
+        width="100px"
         value={store.year}
         onChange={v => {
           store.setYear(v)
@@ -80,8 +82,8 @@ function _MonthSelect({ onSearch, store }: IReportConfiguratorProps) {
       />
       <IconButton
         loading={store.isLoading}
-        variant="soft"
-        color="success"
+        variant="solid"
+        color="primary"
         onClick={() => {
           onSearch(store.month, store.year)
         }}
