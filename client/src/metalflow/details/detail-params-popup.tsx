@@ -26,7 +26,8 @@ export const DetailParamsPopup = observer(
               size: 'sm',
               variant: 'soft',
               color: 'neutral',
-              onClick: () => {
+              onClick: e => {
+                e.stopPropagation()
                 detail.reset()
                 detail.load(detailId)
               }
