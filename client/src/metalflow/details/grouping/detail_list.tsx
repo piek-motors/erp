@@ -214,6 +214,7 @@ function DetailRow(props: {
             group_id: props.detail.group_id || null
           }}
           showLinkButton
+          showParamsButton
           hideGroupLink
         />
       </ListItemButton>
