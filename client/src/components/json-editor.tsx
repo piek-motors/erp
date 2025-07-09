@@ -4,7 +4,6 @@ import { IconButton } from '@mui/joy'
 import {
   Box,
   Inp,
-  Label,
   PlusIcon,
   Row,
   Sheet,
@@ -23,7 +22,6 @@ interface JsonEditorProps {
   onChange: (value: Record<string, any> | null) => void
   keyPlaceholder?: string
   valuePlaceholder?: string
-  emptyMessage?: string
   sx?: any
 }
 
@@ -33,7 +31,6 @@ export const JsonEditor = observer((props: JsonEditorProps) => {
     onChange,
     keyPlaceholder = 'Ключ',
     valuePlaceholder = 'Значение',
-    emptyMessage = 'Нажмите + чтобы добавить параметр',
     sx
   } = props
 
@@ -105,13 +102,6 @@ export const JsonEditor = observer((props: JsonEditorProps) => {
             </IconButton>
           </Row>
         ))}
-
-        {jsonFields.length === 0 && (
-          <Label level="body-sm" sx={{ color: 'text.secondary' }}>
-            {emptyMessage}
-          </Label>
-        )}
-
         <Box sx={{ alignSelf: 'flex-start' }}>
           <PlusIcon onClick={addField} />
         </Box>
