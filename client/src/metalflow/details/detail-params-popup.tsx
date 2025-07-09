@@ -1,6 +1,5 @@
 import { UilInfoCircle } from '@iconscout/react-unicons'
 import {
-  Box,
   Dropdown,
   IconButton,
   Menu,
@@ -8,7 +7,8 @@ import {
   MenuItem,
   Stack
 } from '@mui/joy'
-import { observer, P, UseIcon } from 'lib/index'
+import { Label, observer, P, UseIcon } from 'lib/index'
+import { cache } from 'metalflow/cache/root'
 import { detailStore as detail } from './detail.store'
 
 interface DetailParamsPopupProps {
@@ -36,49 +36,63 @@ export const DetailParamsPopup = observer(
         >
           <UseIcon icon={UilInfoCircle} small />
         </MenuButton>
-        <Menu>
-          <MenuItem>
-            <Box sx={{ p: 1, minWidth: '250px' }}>
-              <Stack gap={1}>
-                <Stack gap={0.5}>
-                  <P level="body-xs" color="neutral">
-                    ID: {detail.id || 'Новый'}
-                  </P>
-                  <P level="body-xs" color="neutral">
-                    Название: {detail.name}
-                  </P>
-                  {detail.partCode && (
-                    <P level="body-xs" color="neutral">
-                      Номер: {detail.partCode}
-                    </P>
-                  )}
-                  {detail.groupId && (
-                    <P level="body-xs" color="neutral">
-                      Группа: {detail.groupId}
-                    </P>
-                  )}
-                </Stack>
+        <Menu
+          variant="plain"
+          size="sm"
+          onClick={e => {
+            e.stopPropagation()
+          }}
+          sx={{
+            maxWidth: '500px'
+          }}
+        >
+          {detail.partCode && (
+            <MenuItem>
+              <Label>Артикул</Label>
+              <P level="body-md">{detail.partCode}</P>
+            </MenuItem>
+          )}
 
-                {detail.params && Object.keys(detail.params).length > 0 && (
+          {detail.groupId && (
+            <MenuItem>
+              <Label>Группа</Label>
+              <P level="body-md">
+                {cache.detailGroups.getGroupName(detail.groupId)}
+              </P>
+            </MenuItem>
+          )}
+
+          {detail.description && (
+            <MenuItem>
+              <Stack>
+                <Label>Примечания</Label>
+                <P sx={{ whiteSpace: 'pre-wrap' }}>{detail.description}</P>
+              </Stack>
+            </MenuItem>
+          )}
+          {detail.technicalParameters && (
+            <MenuItem>
+              <Stack gap={0.5}>
+                {Object.keys(detail.technicalParameters).length > 0 && (
                   <Stack gap={0.5}>
-                    <P level="body-xs" fontWeight="bold" sx={{ mt: 0.5 }}>
-                      Параметры:
-                    </P>
-                    {Object.entries(detail.params).map(([key, value]) => (
-                      <P
-                        key={key}
-                        level="body-xs"
-                        color="neutral"
-                        sx={{ ml: 1 }}
-                      >
-                        {key}: {String(value)}
-                      </P>
-                    ))}
+                    <Label>Параметры</Label>
+                    {Object.entries(detail.technicalParameters).map(
+                      ([key, value]) => (
+                        <P
+                          key={key}
+                          level="body-xs"
+                          color="neutral"
+                          sx={{ ml: 0.5 }}
+                        >
+                          {key}: {String(value)}
+                        </P>
+                      )
+                    )}
                   </Stack>
                 )}
               </Stack>
-            </Box>
-          </MenuItem>
+            </MenuItem>
+          )}
         </Menu>
       </Dropdown>
     )

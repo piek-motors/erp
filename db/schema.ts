@@ -76,6 +76,7 @@ export namespace DB {
   export interface DetailTable {
     id: Generated<number>
     name: string
+    description: string | null
     logical_group_id: number | null
     part_code: string
     stock: number

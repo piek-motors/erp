@@ -1,7 +1,7 @@
 import { db, procedure, TRPCError } from '#root/deps.js'
 import { z } from 'zod'
 
-export const addDetailsToGroup = procedure
+export const assignDetailsToGroup = procedure
   .input(
     z.object({
       groupId: z.number(),

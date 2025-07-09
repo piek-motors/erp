@@ -4,7 +4,7 @@ import { createDetailProcedure } from '#root/procedures/metalflow/detail/create.
 import { deleteDetailProcedure } from '#root/procedures/metalflow/detail/delete.js'
 import { deleteDetailMaterial } from '#root/procedures/metalflow/detail/delete_material.js'
 import { getDetailProcedure } from '#root/procedures/metalflow/detail/get.js'
-import { addDetailsToGroup } from '#root/procedures/metalflow/detail/grouping/add-details.js'
+import { assignDetailsToGroup } from '#root/procedures/metalflow/detail/grouping/assign_details.js'
 import { createDetailGroup } from '#root/procedures/metalflow/detail/grouping/create.js'
 import { deleteDetailGroup } from '#root/procedures/metalflow/detail/grouping/delete.js'
 import { listDetailGroups } from '#root/procedures/metalflow/detail/grouping/list.js'
@@ -57,7 +57,7 @@ export const metalFlowRouter = router({
     create: createDetailGroup,
     update: updateDetailGroup,
     delete: deleteDetailGroup,
-    addDetails: addDetailsToGroup,
+    addDetails: assignDetailsToGroup,
     removeDetails: removeDetailsFromGroup
   }),
   operations: router({

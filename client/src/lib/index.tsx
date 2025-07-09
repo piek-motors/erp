@@ -215,7 +215,7 @@ export function MultilineInput(
   return (
     <FormControl>
       <Label label={props.label} />
-      <Textarea placeholder={props.label} {...props} />
+      <Textarea {...props} />
     </FormControl>
   )
 }

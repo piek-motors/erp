@@ -6,6 +6,7 @@ import {
   DeleteResourceButton,
   Inp,
   Label,
+  MultilineInput,
   PlusIcon,
   Row,
   Sheet,
@@ -108,7 +109,6 @@ export const MaterialRelationDataInputs = observer(() => {
           sx={{ mt: 1 }}
           onClick={() => {
             detailStore.addMaterial(
-              detailStore.usedMaterials.length,
               { id: 0, label: '' },
               { length: '', weight: '' }
             )
@@ -130,10 +130,23 @@ export const DetailNameInput = observer(() => {
     />
   )
 })
+
+export const DetailDescriptionInput = observer(() => {
+  return (
+    <MultilineInput
+      label="Примечания в свободной форме"
+      onChange={e => {
+        detailStore.setDescription(e.target.value)
+      }}
+      value={detailStore.description}
+    />
+  )
+})
+
 export const DetailPartCodeInput = observer(() => {
   return (
     <Inp
-      label="Конструкторский номер"
+      label="Артикул (конструкторский номер без приставки 'ВЗИС')"
       onChange={v => {
         detailStore.setPartCode(v)
 
@@ -181,8 +194,8 @@ export const DetailParamsInput = observer(() => {
     <Box>
       <Label>Технические параметры</Label>
       <JsonEditor
-        value={detailStore.params}
-        onChange={params => detailStore.setParams(params)}
+        value={detailStore.technicalParameters}
+        onChange={params => detailStore.setTechnicalParameters(params)}
         keyPlaceholder="Параметр"
         valuePlaceholder="Значение"
       />

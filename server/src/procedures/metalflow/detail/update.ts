@@ -10,6 +10,7 @@ export const updateDetailProcedure = publicProcedure
     z.object({
       id: z.number(),
       name: z.string(),
+      description: z.string().nullable(),
       partCode: z.string(),
       groupId: z.number().nullable(),
       params: z.record(z.any()).nullable(),
@@ -27,6 +28,7 @@ export const updateDetailProcedure = publicProcedure
       .updateTable('metal_flow.details')
       .set({
         name: input.name,
+        description: input.description,
         part_code: input.partCode,
         logical_group_id: input.groupId,
         params: input.params || null

@@ -10,6 +10,7 @@ export const createDetailProcedure = publicProcedure
   .input(
     z.object({
       name: z.string().min(5, 'Название должно быть не менее 5 символов'),
+      description: z.string().nullable(),
       partCode: z.string(),
       groupId: z.number().nullable(),
       params: z.record(z.any()).nullable(),
@@ -27,6 +28,7 @@ export const createDetailProcedure = publicProcedure
       .insertInto('metal_flow.details')
       .values({
         name: input.name,
+        description: input.description,
         part_code: input.partCode,
         stock: 0,
         logical_group_id: input.groupId,

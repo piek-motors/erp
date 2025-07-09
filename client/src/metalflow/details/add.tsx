@@ -10,6 +10,7 @@ import { open, routeMap } from 'lib/routes'
 import { t } from '../text'
 import { detailStore } from './detail.store'
 import {
+  DetailDescriptionInput,
   DetailGroupInput,
   DetailNameInput,
   DetailParamsInput,
@@ -30,6 +31,7 @@ export const CreateDetailPage = observer(() => {
       <DetailPartCodeInput />
       <DetailParamsInput />
       <MaterialRelationDataInputs />
+      <DetailDescriptionInput />
       <SendMutation
         onClick={() => detailStore.insert()}
         additionals={(err, res) => {

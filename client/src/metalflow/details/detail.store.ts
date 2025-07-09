@@ -43,31 +43,48 @@ export class MaterialCost {
 
 export class Detail {
   id?: number
-  name: string = ''
-  partCode: string = ''
-  params: Record<string, any> | null = null
-  setParams(params: Record<string, any> | null) {
-    this.params = params
+  setId(id: number) {
+    this.id = id
   }
-
+  name: string = ''
+  setName(name: string) {
+    this.name = name
+  }
+  description: string = ''
+  setDescription(description: string) {
+    this.description = description
+  }
+  groupId?: number | null
+  setGroupId(groupId: number | null) {
+    this.groupId = groupId
+  }
+  partCode: string = ''
+  setPartCode(partCode: string) {
+    this.partCode = partCode
+  }
+  technicalParameters: Record<string, any> | null = null
+  setTechnicalParameters(params: Record<string, any> | null) {
+    this.technicalParameters = params
+  }
   usedMaterials: MaterialCost[] = []
   setUsedMaterials(materials: MaterialCost[]) {
     this.usedMaterials = materials
   }
-
   recentlyAdded?: number
-  recentlyUpdated?: number
-
-  materialsSuggestions: MaterialCost[] = []
-  setMaterialsSuggestions(suggestions: MaterialCost[]) {
-    this.materialsSuggestions = suggestions
+  setRecentlyAdded(id: number) {
+    this.recentlyAdded = id
   }
-
+  recentlyUpdated?: number
+  setRecentlyUpdated(id: number) {
+    this.recentlyUpdated = id
+  }
   attachments = new AttachmentsStore()
   writeoff = new DetailWriteoffStore()
+
   constructor(init?: {
     id?: number
     name: string
+    description?: string
     partCode: string
     usedMaterials?: MaterialCost[]
     groupId: number | null
@@ -76,48 +93,28 @@ export class Detail {
     if (init) {
       this.id = init.id
       this.name = init.name
+      this.description = init.description ?? ''
       this.partCode = init.partCode
       this.usedMaterials = init.usedMaterials || []
       this.groupId = init.groupId ?? null
-      this.params = init.params ?? null
+      this.technicalParameters = init.params ?? null
     }
     makeAutoObservable(this)
-  }
-
-  setRecentlyAdded(id: number) {
-    this.recentlyAdded = id
-  }
-  setRecentlyUpdated(id: number) {
-    this.recentlyUpdated = id
   }
 
   reset() {
     this.id = undefined
     this.name = ''
+    this.description = ''
     this.usedMaterials = []
     this.recentlyAdded = undefined
     this.recentlyUpdated = undefined
     this.groupId = undefined
     this.partCode = ''
-    this.params = null
-  }
-  setId(id: number) {
-    this.id = id
-  }
-  setName(name: string) {
-    this.name = name
-  }
-  setPartCode(partCode: string) {
-    this.partCode = partCode
-  }
-
-  groupId?: number | null
-  setGroupId(groupId: number | null) {
-    this.groupId = groupId
+    this.technicalParameters = null
   }
 
   addMaterial(
-    index: number,
     material: { id: number; label: string },
     data: MaterialRelationData
   ) {
@@ -137,7 +134,7 @@ export class Detail {
   ) {
     const m = this.usedMaterials[index]
     if (!m) {
-      this.addMaterial(index, material, data)
+      this.addMaterial(material, data)
       return
     }
     m.setMaterialLabel(material.label)
@@ -158,11 +155,11 @@ export class Detail {
     this.setName(d.detail.name!)
     this.setPartCode(d.detail.part_code ?? '')
     this.setGroupId(d.detail.logical_group_id ?? null)
-    this.setParams(d.detail.params ?? null)
+    this.setTechnicalParameters(d.detail.params ?? null)
+    this.setDescription(d.detail.description ?? '')
 
     d.detail_materials.forEach((dm, index) => {
       this.addMaterial(
-        index,
         { id: dm.material_id, label: dm.label ?? '' },
         {
           length: dm.data.length.toString(),
@@ -187,10 +184,11 @@ export class Detail {
     }))
     const res = await rpc.metal.details.create.mutate({
       name: this.name.trim(),
+      description: this.description,
       partCode: this.partCode.trim(),
       materialRelations,
       groupId: this.groupId ?? null,
-      params: this.params
+      params: this.technicalParameters
     })
     await cache.details.load()
     return res
@@ -207,11 +205,12 @@ export class Detail {
     }))
     const res = await rpc.metal.details.update.mutate({
       id: this.id,
+      description: this.description,
       name: this.name,
       partCode: this.partCode,
       groupId: this.groupId ?? null,
       materialRelations,
-      params: this.params
+      params: this.technicalParameters
     })
     await cache.details.load()
     return res

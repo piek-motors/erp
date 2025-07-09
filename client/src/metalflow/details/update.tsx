@@ -15,6 +15,7 @@ import { t } from '../text'
 import { DetailAttachmentList } from './attachments/detail_attachment_list'
 import { detailStore } from './detail.store'
 import {
+  DetailDescriptionInput,
   DetailGroupInput,
   DetailNameInput,
   DetailParamsInput,
@@ -55,6 +56,7 @@ export const UpdateDetailPage = observer(() => {
           <DetailPartCodeInput />
           <DetailParamsInput />
           <MaterialRelationDataInputs />
+          <DetailDescriptionInput />
           <SaveAndDelete
             itemName={`Деталь (${detailStore.id}) - ${detailStore.name}`}
             handleDelete={() =>
