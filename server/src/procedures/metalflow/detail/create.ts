@@ -12,6 +12,7 @@ export const createDetailProcedure = publicProcedure
       name: z.string().min(5, 'Название должно быть не менее 5 символов'),
       partCode: z.string(),
       groupId: z.number().nullable(),
+      params: z.record(z.any()).nullable(),
       materialRelations: z.array(
         z.object({
           materialId: z.number(),
@@ -28,8 +29,9 @@ export const createDetailProcedure = publicProcedure
         name: input.name,
         part_code: input.partCode,
         stock: 0,
-        logical_group_id: input.groupId
-      })
+        logical_group_id: input.groupId,
+        params: input.params || null
+      } as any)
       .returning('id')
       .executeTakeFirstOrThrow()
       .catch(e => {

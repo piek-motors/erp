@@ -45,6 +45,7 @@ export class Detail {
   id?: number
   name: string = ''
   partCode: string = ''
+  params: Record<string, any> | null = null
 
   usedMaterials: MaterialCost[] = []
   setUsedMaterials(materials: MaterialCost[]) {
@@ -67,6 +68,7 @@ export class Detail {
     partCode: string
     usedMaterials?: MaterialCost[]
     groupId: number | null
+    params?: Record<string, any> | null
   }) {
     if (init) {
       this.id = init.id
@@ -74,6 +76,7 @@ export class Detail {
       this.partCode = init.partCode
       this.usedMaterials = init.usedMaterials || []
       this.groupId = init.groupId ?? null
+      this.params = init.params ?? null
     }
     makeAutoObservable(this)
   }
@@ -93,6 +96,7 @@ export class Detail {
     this.recentlyUpdated = undefined
     this.groupId = undefined
     this.partCode = ''
+    this.params = null
   }
   setId(id: number) {
     this.id = id
@@ -102,6 +106,9 @@ export class Detail {
   }
   setPartCode(partCode: string) {
     this.partCode = partCode
+  }
+  setParams(params: Record<string, any> | null) {
+    this.params = params
   }
   groupId?: number | null
   setGroupId(groupId: number | null) {
@@ -151,6 +158,7 @@ export class Detail {
     this.setName(d.detail.name!)
     this.setPartCode(d.detail.part_code ?? '')
     this.setGroupId(d.detail.logical_group_id ?? null)
+    this.setParams(d.detail.params ?? null)
 
     d.detail_materials.forEach((dm, index) => {
       this.addMaterial(
@@ -181,7 +189,8 @@ export class Detail {
       name: this.name.trim(),
       partCode: this.partCode.trim(),
       materialRelations,
-      groupId: this.groupId ?? null
+      groupId: this.groupId ?? null,
+      params: this.params
     })
     await cache.details.load()
     return res
@@ -191,12 +200,18 @@ export class Detail {
     if (!this.id) {
       throw new Error('Detail id is not set')
     }
+    const materialRelations = this.usedMaterials.map(m => ({
+      materialId: m.materialId,
+      length: m.length,
+      weight: m.weight
+    }))
     const res = await rpc.metal.details.update.mutate({
       id: this.id,
       name: this.name,
       partCode: this.partCode,
       groupId: this.groupId ?? null,
-      materialRelations: this.usedMaterials
+      materialRelations,
+      params: this.params
     })
     await cache.details.load()
     return res

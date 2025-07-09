@@ -2,10 +2,11 @@
 import { BaseAutocomplete, BaseOption } from 'components/base-autocomplete'
 import { EnUnit } from 'domain-model'
 import {
-  Button,
+  Box,
   DeleteResourceButton,
   Inp,
   Label,
+  PlusIcon,
   Row,
   Sheet,
   Stack,
@@ -72,53 +73,49 @@ export const MaterialSelect = observer(
 )
 export const MaterialRelationDataInputs = observer(() => {
   return (
-    <Sheet sx={{ borderRadius: 'sm' }}>
-      <Stack gap={1}>
-        {detailStore.usedMaterials.map((materialCost, index) => {
-          return (
-            <Stack
-              sx={{ width: 'max-content', p: 1 }}
-              key={materialCost.materialId}
-            >
-              <Label>Расход для материала</Label>
-              <Stack>
-                <Row>
-                  <MaterialSelect value={materialCost} index={index} />
-                  <DeleteResourceButton
-                    onClick={() => {
-                      if (!detailStore.id) {
-                        throw new Error('Detail id is not set')
-                      }
-                      detailStore.deleteDetailMaterial(
-                        detailStore.id,
-                        materialCost.materialId
-                      )
-                    }}
-                  />
-                </Row>
-                <MaterialWeightInput materialRelation={materialCost} />
+    <Box>
+      <Label>Расход материалов</Label>
+      <Sheet sx={{ borderRadius: 'sm', p: 1 }}>
+        <Stack gap={1}>
+          {detailStore.usedMaterials.map((materialCost, index) => {
+            return (
+              <Stack
+                sx={{ width: 'max-content' }}
+                key={materialCost.materialId}
+              >
+                <Stack>
+                  <Row>
+                    <MaterialSelect value={materialCost} index={index} />
+                    <DeleteResourceButton
+                      onClick={() => {
+                        if (!detailStore.id) {
+                          throw new Error('Detail id is not set')
+                        }
+                        detailStore.deleteDetailMaterial(
+                          detailStore.id,
+                          materialCost.materialId
+                        )
+                      }}
+                    />
+                  </Row>
+                  <MaterialWeightInput materialRelation={materialCost} />
+                </Stack>
               </Stack>
-            </Stack>
-          )
-        })}
-      </Stack>
-      <Button
-        sx={{ m: 1 }}
-        variant="soft"
-        onClick={() => {
-          detailStore.addMaterial(
-            detailStore.usedMaterials.length,
-            {
-              id: 0,
-              label: ''
-            },
-            { length: '', weight: '' }
-          )
-        }}
-      >
-        Добавить материал
-      </Button>
-    </Sheet>
+            )
+          })}
+        </Stack>
+        <PlusIcon
+          sx={{ mt: 1 }}
+          onClick={() => {
+            detailStore.addMaterial(
+              detailStore.usedMaterials.length,
+              { id: 0, label: '' },
+              { length: '', weight: '' }
+            )
+          }}
+        />
+      </Sheet>
+    </Box>
   )
 })
 export const DetailNameInput = observer(() => {
@@ -174,5 +171,21 @@ export const DetailGroupInput = observer(() => {
         }}
       />
     </Stack>
+  )
+})
+
+import { JsonEditor } from 'components/json-editor'
+
+export const DetailParamsInput = observer(() => {
+  return (
+    <Box>
+      <Label>Технические параметры</Label>
+      <JsonEditor
+        value={detailStore.params}
+        onChange={params => detailStore.setParams(params)}
+        keyPlaceholder="Параметр"
+        valuePlaceholder="Значение"
+      />
+    </Box>
   )
 })

@@ -17,6 +17,7 @@ import { detailStore } from './detail.store'
 import {
   DetailGroupInput,
   DetailNameInput,
+  DetailParamsInput,
   DetailPartCodeInput,
   MaterialRelationDataInputs
 } from './shared'
@@ -52,6 +53,7 @@ export const UpdateDetailPage = observer(() => {
           /> */}
           <DetailGroupInput />
           <DetailPartCodeInput />
+          <DetailParamsInput />
           <MaterialRelationDataInputs />
           <SaveAndDelete
             itemName={`Деталь (${detailStore.id}) - ${detailStore.name}`}

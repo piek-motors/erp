@@ -12,6 +12,7 @@ export const updateDetailProcedure = publicProcedure
       name: z.string(),
       partCode: z.string(),
       groupId: z.number().nullable(),
+      params: z.record(z.any()).nullable(),
       materialRelations: z.array(
         z.object({
           materialId: z.number(),
@@ -27,8 +28,9 @@ export const updateDetailProcedure = publicProcedure
       .set({
         name: input.name,
         part_code: input.partCode,
-        logical_group_id: input.groupId
-      })
+        logical_group_id: input.groupId,
+        params: input.params || null
+      } as any)
       .where('id', '=', input.id)
       .execute()
       .catch(e => {

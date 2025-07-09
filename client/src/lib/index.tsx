@@ -1,6 +1,11 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
-import { Icon, UilPen, UilTrashAlt } from '@iconscout/react-unicons'
+import {
+  Icon,
+  UilPen,
+  UilPlusCircle,
+  UilTrashAlt
+} from '@iconscout/react-unicons'
 import {
   Box,
   BoxProps,
@@ -183,6 +188,14 @@ export function AddResourceButton(props: {
     >
       Добавить
     </Button>
+  )
+}
+
+export function PlusIcon(props: IconButtonProps) {
+  return (
+    <IconButton variant="soft" color="primary" {...props}>
+      <UseIcon icon={UilPlusCircle} />
+    </IconButton>
   )
 }
 

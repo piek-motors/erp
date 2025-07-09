@@ -79,6 +79,7 @@ export namespace DB {
     logical_group_id: number | null
     part_code: string
     stock: number
+    params: JSONColumnType<any, any, any>
   }
 
   export interface ManufacturingTable {
