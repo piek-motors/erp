@@ -46,6 +46,9 @@ export class Detail {
   name: string = ''
   partCode: string = ''
   params: Record<string, any> | null = null
+  setParams(params: Record<string, any> | null) {
+    this.params = params
+  }
 
   usedMaterials: MaterialCost[] = []
   setUsedMaterials(materials: MaterialCost[]) {
@@ -107,9 +110,7 @@ export class Detail {
   setPartCode(partCode: string) {
     this.partCode = partCode
   }
-  setParams(params: Record<string, any> | null) {
-    this.params = params
-  }
+
   groupId?: number | null
   setGroupId(groupId: number | null) {
     this.groupId = groupId
@@ -150,7 +151,6 @@ export class Detail {
   async load(detailId: number) {
     this.reset()
     const d = await rpc.metal.details.get.query({ id: detailId })
-
     if (!d.detail) {
       throw new Error('fdf')
     }
