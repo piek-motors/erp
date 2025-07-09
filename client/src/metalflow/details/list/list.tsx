@@ -5,7 +5,9 @@ import {
   AddResourceButton,
   ErrorHint,
   Inp,
+  Link,
   LoadingHint,
+  P,
   RowButColumsAtSm,
   Stack,
   observer,
@@ -138,6 +140,12 @@ const DetailSearchArguments = observer(() => {
           value={state.searchPartCode || ''}
         />
       </RowButColumsAtSm>
+
+      <Link to="https://planner.piek.ru/f6980fc4-c15b-4eb3-9dab-ad70125f65e6/details_register_help">
+        <P level="body-sm" color="primary" p={1}>
+          Инструкция по ведению реестра
+        </P>
+      </Link>
     </>
   )
 })
