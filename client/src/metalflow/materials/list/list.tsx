@@ -43,7 +43,7 @@ const columnList: Column<MaterialListOutput>[] = [
               src={iconUrl}
               width={16}
               height={16}
-              style={{ opacity: 0.6 }}
+              style={{ opacity: 0.65 }}
             />
             <P>{m.label}</P>
           </Row>
