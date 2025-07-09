@@ -2,12 +2,13 @@
 import { PageTitle } from 'components'
 import { ScrollableWindow, Search } from 'components/inputs'
 import { Table } from 'components/table.impl'
-import { uiUnit } from 'domain-model'
+import { EnMaterialShape, uiUnit } from 'domain-model'
 import {
   AddResourceButton,
   Inp,
   observer,
   P,
+  Row,
   RowButColumsAtSm,
   Stack,
   useNavigate
@@ -18,6 +19,13 @@ import { t } from '../../text'
 import { MaterialShapeFilter } from './shape_filter'
 import { MaterialListOutput, materialListStore } from './store'
 
+const ShapeNameToIconMap = {
+  [EnMaterialShape.SquareBar]: '/icons/square.svg',
+  [EnMaterialShape.RoundBar]: '/icons/circle.svg',
+  [EnMaterialShape.Pipe]: '/icons/pipe.svg',
+  [EnMaterialShape.List]: '/icons/list.svg'
+}
+
 const columnList: Column<MaterialListOutput>[] = [
   {
     Header: 'ID',
@@ -27,6 +35,20 @@ const columnList: Column<MaterialListOutput>[] = [
     Header: 'Наименование',
     id: 'name',
     accessor: m => {
+      if (ShapeNameToIconMap[m.shape]) {
+        const iconUrl = ShapeNameToIconMap[m.shape]
+        return (
+          <Row>
+            <img
+              src={iconUrl}
+              width={16}
+              height={16}
+              style={{ opacity: 0.6 }}
+            />
+            <P>{m.label}</P>
+          </Row>
+        )
+      }
       return <P>{m.label}</P>
     },
     width: '95%'
@@ -98,7 +120,7 @@ export const MaterialListPage = observer((props: MaterialsTableProps) => {
             <Search
               placeholder="По названию"
               onChange={e => {
-                materialListStore.search(e.target.value)
+                materialListStore.setSearchKeyword(e.target.value)
               }}
               value={materialListStore.filterKeyword}
             />

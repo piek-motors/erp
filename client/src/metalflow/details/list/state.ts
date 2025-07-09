@@ -58,7 +58,7 @@ export class DetailList {
     )
   }
 
-  search(keyword: string) {
+  setSearchKeyword(keyword: string) {
     this.clearSearchArguments()
     this.searchKeyword = keyword
   }

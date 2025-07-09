@@ -125,7 +125,7 @@ const DetailSearchArguments = observer(() => {
         <Search
           placeholder="По названию"
           onChange={e => {
-            state.search(e.target.value)
+            state.setSearchKeyword(e.target.value)
           }}
           value={state.searchKeyword || ''}
         />

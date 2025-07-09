@@ -20,6 +20,12 @@ export class MaterialListStore {
   }
   getFilteredMaterials(): MaterialListOutput[] {
     let filtered = cache.materials.getMaterials()
+    filtered = filtered.slice().sort((a, b) =>
+      a.label.localeCompare(b.label, 'ru', {
+        numeric: true,
+        sensitivity: 'base'
+      })
+    )
     if (this.searchId) {
       filtered = filtered.filter(
         material => material.id.toString() === this.searchId
@@ -43,7 +49,7 @@ export class MaterialListStore {
     }
     return filtered
   }
-  search(keyword: string) {
+  setSearchKeyword(keyword: string) {
     this.filterKeyword = keyword.toLowerCase()
     this.searchId = ''
   }
