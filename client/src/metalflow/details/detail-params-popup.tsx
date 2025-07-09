@@ -8,7 +8,7 @@ import {
   MenuItem,
   Stack
 } from '@mui/joy'
-import { observer, P, useEffect, UseIcon } from 'lib/index'
+import { observer, P, UseIcon } from 'lib/index'
 import { detailStore as detail } from './detail.store'
 
 interface DetailParamsPopupProps {
@@ -17,10 +17,6 @@ interface DetailParamsPopupProps {
 
 export const DetailParamsPopup = observer(
   ({ detailId }: DetailParamsPopupProps) => {
-    useEffect(() => {
-      detail.load(detailId)
-    }, [])
-
     return (
       <Dropdown>
         <MenuButton
@@ -30,7 +26,10 @@ export const DetailParamsPopup = observer(
               size: 'sm',
               variant: 'soft',
               color: 'neutral',
-              onClick: (e: any) => e.stopPropagation()
+              onClick: () => {
+                detail.reset()
+                detail.load(detailId)
+              }
             }
           }}
         >
