@@ -33,22 +33,22 @@ export const DetailName = observer(
       >
         <P sx={{ whiteSpace: 'nowrap', width: 'min-content' }}>{detail.name}</P>
         {detail.group_id && !hideGroupLink && (
-          <Button
-            variant="plain"
-            color="primary"
-            size="sm"
-            sx={{ p: '.1 0' }}
-            onClick={e => e.stopPropagation()}
+          <Link
+            to={open(routeMap.metalflow.detailGroup, detail.group_id)}
+            style={{ textDecoration: 'none' }}
           >
-            <Link
-              to={open(routeMap.metalflow.detailGroup, detail.group_id)}
-              style={{ textDecoration: 'none' }}
+            <Button
+              variant="plain"
+              color="primary"
+              size="sm"
+              sx={{ p: '.1 0' }}
+              onClick={e => e.stopPropagation()}
             >
               <P color="primary" sx={{ cursor: 'pointer' }}>
                 {cache.detailGroups.getGroupName(detail.group_id)}
               </P>
-            </Link>
-          </Button>
+            </Button>
+          </Link>
         )}
         {showParamsButton && (
           <div
