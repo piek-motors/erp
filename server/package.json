@@ -8,7 +8,6 @@
     "dev": "tsx watch ./src/main.ts",
     "build": "tsc -p tsconfig.json",
     "test": "tsx --test",
-    "gen": "graphql-codegen --config codegen.config.ts",
     "deploy": "tsx ./deploy.ts"
   },
   "imports": {
@@ -26,8 +25,6 @@
     "dotenv": "^16.5.0",
     "express": "~4.16.1",
     "express-validator": "^6.12.0",
-    "graphql": "^16.11.0",
-    "graphql-tag": "^2.12.6",
     "http-errors": "~2.0.0",
     "http-status-codes": "^2.3.0",
     "jsonwebtoken": "^8.5.1",
@@ -35,13 +32,12 @@
     "multer": "^1.4.2",
     "multer-s3": "^2.9.0",
     "node-fetch": "^3.3.2",
+    "pino": "^9.7.0",
+    "pino-pretty": "^13.0.0",
+    "safe-wrapper": "^3.0.0",
     "zod": "^3.25.67"
   },
   "devDependencies": {
-    "@graphql-codegen/cli": "^5.0.6",
-    "@graphql-codegen/typescript": "^4.1.6",
-    "@graphql-codegen/typescript-generic-sdk": "^4.0.1",
-    "@graphql-codegen/typescript-operations": "^4.6.1",
     "@types/cookie-parser": "^1.4.8",
     "@types/cors": "^2.8.18",
     "@types/express": "^5.0.2",

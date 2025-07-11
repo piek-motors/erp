@@ -1,14 +1,15 @@
-import { db } from '#root/lib/db.js'
+import { db } from '#root/ioc/db.js'
 import { publicProcedure, router } from '#root/lib/trpc/trpc.js'
-import { deleteFile } from '#root/procedures/attachment/delete-file.rpc.js'
 import { UserRole } from 'domain-model'
 import z from 'zod'
-import { metalFlowRouter } from './procedures/metalflow/router.js'
-import { ordersRouter } from './procedures/orders/router.js'
+import { attachmentRouter } from '../../procedures/attachment/router.js'
+import { metalFlowRouter } from '../../procedures/metalflow/router.js'
+import { ordersRouter } from '../../procedures/orders/router.js'
 
-export const rpcRouter = router({
+export const trpcRouter = router({
   orders: ordersRouter,
   metal: metalFlowRouter,
+  attachments: attachmentRouter,
   userList: publicProcedure
     .input(
       z.object({
@@ -25,6 +26,5 @@ export const rpcRouter = router({
         query = query.where('role', '=', input.role)
       }
       return await query.execute()
-    }),
-  deleteFile
+    })
 })

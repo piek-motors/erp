@@ -1,4 +1,5 @@
 import { apolloClient } from 'lib/api'
+import { rpc } from 'lib/rpc.client'
 import * as gql from 'lib/types/graphql-shema'
 import { map } from './order.mappers'
 
@@ -179,19 +180,20 @@ class _OrdersApi {
   }
 
   async loadAttachments(orderId: number) {
-    const res = await apolloClient.query<
-      gql.GetOrderAttachmentsQuery,
-      gql.GetOrderAttachmentsQueryVariables
-    >({
-      query: gql.GetOrderAttachmentsDocument,
-      variables: {
-        order_id: orderId
-      }
+    const attachments = await rpc.attachments.getOrderAttachments.query({
+      orderId
     })
-    if (res.errors) {
-      throw new Error(res.errors.toString())
-    }
-    return res.data.orders_order_attachments.map(map.attachment.fromDto)
+    return attachments.map(attachment =>
+      map.attachment.fromDto({
+        attachment: {
+          id: attachment.id,
+          filename: attachment.filename,
+          size: attachment.size,
+          key: attachment.key,
+          uploaded_at: attachment.uploaded_at
+        }
+      })
+    )
   }
 }
 

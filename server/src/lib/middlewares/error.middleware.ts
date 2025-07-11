@@ -1,5 +1,5 @@
-import ApiError from '#root/lib/api.error.js'
-import { StaticStringKeys } from '#root/lib/error-codes.js'
+import { ApiError } from '#root/lib/api.error.js'
+import { Errcode } from '#root/lib/error-code.js'
 import type { NextFunction, Request, Response } from 'express'
 import { StatusCodes } from 'http-status-codes'
 
@@ -20,7 +20,7 @@ export default function (
 
   return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
     error: {
-      message: StaticStringKeys.UNKNOWN_ERROR_TRY_AGAIN,
+      message: Errcode.UNKNOWN_ERROR_TRY_AGAIN,
       code: StatusCodes.INTERNAL_SERVER_ERROR
     }
   })

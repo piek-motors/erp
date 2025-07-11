@@ -1,4 +1,4 @@
-export enum StaticStringKeys {
+export enum Errcode {
   INVALID_REQUEST = 'Invalid request',
   INVALID_CREDENTIAL = 'Invalid credential',
   INVALID_ACCESS_TOKEN = 'Invalid access token',
