@@ -24,6 +24,7 @@ export namespace DB {
   export interface Schema {
     ['users']: UserTable
     ['attachments']: AttachmentTable
+    ['refresh_tokens']: RefreshTokenTable
 
     ['orders.orders']: OrderTable
     ['orders.order_attachments']: OrderAttachmentTable
@@ -38,6 +39,13 @@ export namespace DB {
     ['metal_flow.manufacturing']: ManufacturingTable
     ['metal_flow.detail_group']: DetailGroupTable
     ['metal_flow.detail_group_details']: DetailGroupDetailsTable
+  }
+
+  export interface RefreshTokenTable {
+    id: Generated<number>
+    token: string
+    user_id: number
+    created_at: Generated<Date>
   }
 
   export interface DetailGroupTable {

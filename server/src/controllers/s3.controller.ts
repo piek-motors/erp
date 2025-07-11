@@ -2,7 +2,7 @@ import { config } from '#root/config.js'
 import ApiError from '#root/lib/api.error.js'
 import { StaticStringKeys } from '#root/lib/error-codes.js'
 import { database } from '#root/lib/graphql-client.js'
-import { s3 } from '#root/lib/s3-clients.js'
+import { s3 } from '#root/lib/s3.js'
 import type { NextFunction, Request, Response } from 'express'
 
 class _S3Controller {

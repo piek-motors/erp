@@ -1,5 +1,5 @@
 import { config } from '#root/config.js'
-import { s3 } from '#root/lib/s3-clients.js'
+import { s3 } from '#root/lib/s3.js'
 import multer from 'multer'
 import multerS3, { AUTO_CONTENT_TYPE } from 'multer-s3'
 import { randomUUID } from 'node:crypto'

@@ -1,4 +1,4 @@
-import tokenService from '#root/service/token.service.js'
+import { tokenService } from '#root/service/token.service.js'
 import { TRPCError } from '@trpc/server'
 import * as trpcNext from '@trpc/server/adapters/next'
 
@@ -12,7 +12,7 @@ export async function createContext({
       if (!token) {
         throw new TRPCError({ code: 'UNAUTHORIZED' })
       }
-      return tokenService.validateAccessToken(token)
+      return tokenService.verifyAccess(token)
     }
 
     throw new TRPCError({ code: 'UNAUTHORIZED' })

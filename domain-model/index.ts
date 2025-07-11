@@ -1,7 +1,6 @@
 export * from './domain/attachment'
 export * from './domain/data-maper/material-shape'
 export * from './domain/data-maper/material-shape-data.abstraction-layer'
-export * from './domain/metal-flow/detail'
 export * from './domain/metal-flow/enums'
 export * from './domain/metal-flow/materials'
 export * from './domain/metal-flow/ui.translators'

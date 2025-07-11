@@ -1,5 +1,4 @@
 import {
-  Detail,
   getMaterialConstructor,
   Material,
   MaterialShapeAbstractionLayer
@@ -50,27 +49,6 @@ class MaterialMapper {
   }
 }
 
-class DetailMapper {
-  private materialMapper = new MaterialMapper()
-
-  fromDto(raw: any): Detail | null {
-    if (!raw) return null
-    const detail = new Detail({
-      id: raw.id,
-      name: raw.name,
-      partCode: raw.part_code ?? null
-    })
-
-    for (const each of raw.detail_materials) {
-      const material = this.materialMapper.fromDto(each.material)
-      detail.madeOf(material, each.data?.length, each.data?.weight)
-    }
-
-    return detail
-  }
-}
-
 export const map = {
-  material: new MaterialMapper(),
-  detail: new DetailMapper()
+  material: new MaterialMapper()
 }

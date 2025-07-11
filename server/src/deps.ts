@@ -1,6 +1,6 @@
 export { config } from '#root/config.js'
 export { db } from '#root/lib/db.js'
-export { s3 } from '#root/lib/s3-clients.js'
+export { s3 } from '#root/lib/s3.js'
 export {
   publicProcedure as procedure,
   publicProcedure,
