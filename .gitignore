@@ -14,3 +14,4 @@ node_modules
 .vscode/branch-timer.json
 client/build/tsconfig.tsbuildinfo
 *.tsbuildinfo
+client/build

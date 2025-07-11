@@ -1,21 +1,7 @@
 #!/bin/bash
-# Build client locally
-echo "Building client app..."
-cd ./client || exit 1
-npm run build:release || { echo "Client build failed"; exit 1; }
-cd ..
-# Commit build artifacts and push to repo
-echo "Committing and pushing build artifacts..."
-git add client/build || true
-git commit -m "deploy" || true
-git push
-
-# Choose your target host (you can pass 'namegs' or 'piek' as argument)
-TARGET="piek"
-# Remote directory to deploy
-REMOTE_DIR="/home/prod/erp"  # <-- change this
-# PM2 process name
-PM2_PROCESS_NAME="erp"  # <-- change this
+TARGET="piek-office" # SSH target host 
+REMOTE_DIR="/home/fin/apps/erp" # Remote directory to deploy
+PM2_PROCESS_NAME="erp" # PM2 process name
 # Connect and deploy
 ssh "$TARGET" <<EOF
   set -e  # exit on any error
@@ -23,15 +9,15 @@ ssh "$TARGET" <<EOF
   echo "Pulling latest code..."
   git pull
   pnpm i --frozen-lockfile
-
-  cd ~/erp/domain-model
   pnpm build
+
+  cd ~/erp/client
+  pnpm build:release
 
   cd ~/erp/db
   pnpm migrate
 
   cd ~/erp/server
-  
   if npx pm2 describe "$PM2_PROCESS_NAME" > /dev/null; then
     echo "Process exists. Restarting..."
     npx pm2 restart "$PM2_PROCESS_NAME"
