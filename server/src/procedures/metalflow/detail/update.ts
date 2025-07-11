@@ -1,28 +1,13 @@
-import { db, z } from '#root/deps.js'
+import { db } from '#root/deps.js'
 import { publicProcedure } from '#root/lib/trpc/trpc.js'
 import {
   ErrDetailPartCodeUnique,
-  isDetailPertCodeUniqueError
+  isDetailPertCodeUniqueError,
+  updateDetailDto
 } from '#root/procedures/metalflow/detail/shared.js'
 
 export const updateDetailProcedure = publicProcedure
-  .input(
-    z.object({
-      id: z.number(),
-      name: z.string(),
-      description: z.string().nullable(),
-      partCode: z.string(),
-      groupId: z.number().nullable(),
-      params: z.record(z.any()).nullable(),
-      materialRelations: z.array(
-        z.object({
-          materialId: z.number(),
-          length: z.string(),
-          weight: z.string()
-        })
-      )
-    })
-  )
+  .input(updateDetailDto)
   .mutation(async ({ input }) => {
     await db
       .updateTable('metal_flow.details')
