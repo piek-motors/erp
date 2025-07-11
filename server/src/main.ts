@@ -44,9 +44,6 @@ express()
   })
   .listen(config.PORT, async () => {
     log.info(
-      '🛫 Express running in',
-      config.NODE_ENV,
-      'mode on port',
-      config.PORT
+      `🛫 Express running in ${config.NODE_ENV} mode on port ${config.PORT}`
     )
   })
