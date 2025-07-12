@@ -279,7 +279,7 @@ export function TakeLookHint(props: { text: string; link: string }) {
 export function SendMutation<Result>(props: {
   disabled?: boolean
   onClick: () => Promise<Result>
-  title?: string
+  buttonLabel?: string
   additionals?: (error?: Error, mutationResult?: Result) => JSX.Element | null
   buttonProps?: ButtonProps
   stackProps?: StackProps
@@ -312,7 +312,7 @@ export function SendMutation<Result>(props: {
         disabled={loading || props.disabled}
         {...props.buttonProps}
       >
-        {props.title ?? 'Сохранить'}
+        {props.buttonLabel ?? 'Сохранить'}
       </Button>
       {(mutationResult || error) && props.additionals?.(error, mutationResult)}
     </Stack>

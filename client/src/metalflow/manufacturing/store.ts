@@ -13,9 +13,14 @@ export class ManufacturingStore {
     makeAutoObservable(this)
   }
 
-  async init() {
+  async load() {
     const details = await rpc.metal.manufacturing.list.query()
     this.detailsInProduction = details.inProduction
     this.detailsFinished = details.finished
+  }
+
+  async finishManufacturing(id: number) {
+    await rpc.metal.manufacturing.finish.mutate({ id })
+    this.load()
   }
 }

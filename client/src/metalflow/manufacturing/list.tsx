@@ -1,8 +1,11 @@
+import { UilCheck } from '@iconscout/react-unicons'
+import { IconButton } from '@mui/joy'
 import { ScrollableWindow } from 'components/inputs'
 import { PageTitle } from 'components/page-title'
 import { Table } from 'components/table.impl'
 import { observer } from 'lib/deps'
-import { Label, P, Stack, useEffect } from 'lib/index'
+import { Label, P, Stack, useEffect, UseIcon } from 'lib/index'
+import { DetailName } from 'metalflow/details/name'
 import { Column } from 'react-table'
 import { ManufactoringListOutput, ManufacturingStore } from './store'
 
@@ -15,7 +18,16 @@ const columnList: Column<ManufactoringListOutput>[] = [
   },
   {
     Header: 'Деталь',
-    accessor: 'detail_id'
+    accessor: d => (
+      <DetailName
+        detail={{
+          id: d.detail_id,
+          name: d.detail_name,
+          group_id: d.group_id
+        }}
+        showLinkButton
+      />
+    )
   },
   {
     Header: 'Количество',
@@ -24,21 +36,41 @@ const columnList: Column<ManufactoringListOutput>[] = [
   {
     Header: 'Старт',
     accessor: m => {
+      if (!m.started_at) return '-'
       return <P>{formatDate(new Date(m.started_at))}</P>
     }
   },
   {
     Header: 'Финиш',
     accessor: m => {
-      if (!m.started_at) return '-'
+      if (!m.finished_at) return ''
       return <P>{formatDate(new Date(m.finished_at!))}</P>
+    }
+  },
+  {
+    Header: 'Завершить',
+    accessor: m => {
+      if (m.finished_at) return ''
+
+      return (
+        <IconButton
+          size="sm"
+          variant="soft"
+          color="success"
+          onClick={() => {
+            state.finishManufacturing(m.id)
+          }}
+        >
+          <UseIcon icon={UilCheck} />
+        </IconButton>
+      )
     }
   }
 ]
 
 export const ManufacturingList = observer(() => {
   useEffect(() => {
-    state.init()
+    state.load()
   }, [])
   return (
     <ScrollableWindow
@@ -49,7 +81,7 @@ export const ManufacturingList = observer(() => {
         </Stack>
       }
       scrollableContent={
-        <Stack>
+        <Stack gap={1} p={1}>
           <Label label={'В производстве'} />
           <Table data={state.detailsInProduction} columns={columnList} />
 

@@ -235,6 +235,13 @@ export class Detail {
     )
     this.setUsedMaterials(newMaterials)
   }
+
+  async startManufacturing(qty: number) {
+    return await rpc.metal.manufacturing.add.mutate({
+      detailId: this.id!,
+      qty
+    })
+  }
 }
 
 export const detailStore = new Detail()

@@ -1,4 +1,4 @@
-import { Stack } from '@mui/joy'
+import { Box, Stack } from '@mui/joy'
 import { PageTitle } from 'components/page-title'
 import {
   observer,
@@ -22,6 +22,7 @@ import {
   DetailPartCodeInput,
   MaterialRelationDataInputs
 } from './shared'
+import { StartManufacturing } from './start-manufacturing'
 
 export const UpdateDetailPage = observer(() => {
   const { id } = useParams<{ id: string }>()
@@ -52,6 +53,9 @@ export const UpdateDetailPage = observer(() => {
               // navigate(open(routeMap.metalflow.writeoff.new, detailId))
             }}
           /> */}
+          <Box>
+            <StartManufacturing />
+          </Box>
           <DetailGroupInput />
           <DetailPartCodeInput />
           <DetailParamsInput />

@@ -18,9 +18,9 @@ import { getMaterial } from '#root/procedures/metalflow/material/get.js'
 import { listMaterials } from '#root/procedures/metalflow/material/list.js'
 import { updateMaterial } from '#root/procedures/metalflow/material/update.js'
 import { getDetailInTheGroup } from './detail/grouping/get.js'
-import { addDetailIntoManufacturingList } from './manufacturing/add.js'
 import { finishManufacturing } from './manufacturing/finish.js'
 import { manufacturingList } from './manufacturing/list.js'
+import { addDetailIntoManufacturingList } from './manufacturing/start.js'
 import { createMaterialSupply, listSupplies } from './material/supply.js'
 import {
   listWriteoff,

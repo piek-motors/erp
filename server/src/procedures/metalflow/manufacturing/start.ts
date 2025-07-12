@@ -33,7 +33,7 @@ export const addDetailIntoManufacturingList = publicProcedure
         .execute()
     }
 
-    return await db
+    await db
       .insertInto('metal_flow.manufacturing')
       .values({
         detail_id: input.detailId,
@@ -41,4 +41,6 @@ export const addDetailIntoManufacturingList = publicProcedure
         finished_at: null
       })
       .execute()
+
+    return 'ok'
   })
