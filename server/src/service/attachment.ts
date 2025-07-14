@@ -1,4 +1,4 @@
-import { db } from '#root/ioc/db.js'
+import { IDB } from '#root/deps.js'
 import { ApiError } from '#root/lib/api.error.js'
 import { Errcode } from '#root/lib/error-code.js'
 import type { DB, Selectable } from 'db'
@@ -10,6 +10,7 @@ export interface Attachment {
 }
 
 export class AttachmentService {
+  constructor(private readonly db: IDB) {}
   async insertAttachmentMetadata(
     files: Attachment[]
   ): Promise<Selectable<DB.AttachmentTable>[]> {
@@ -17,7 +18,7 @@ export class AttachmentService {
       throw Error('No files to insert')
     }
 
-    const attachments = await db
+    const attachments = await this.db
       .insertInto('attachments')
       .values(
         files.map(file => ({
@@ -37,7 +38,7 @@ export class AttachmentService {
     attachments: Selectable<DB.AttachmentTable>[],
     orderId: number
   ): Promise<void> {
-    await db
+    await this.db
       .insertInto('orders.order_attachments')
       .values(
         attachments.map(attachment => ({
@@ -52,7 +53,7 @@ export class AttachmentService {
     attachments: Selectable<DB.AttachmentTable>[],
     detailId: number
   ): Promise<void> {
-    await db
+    await this.db
       .insertInto('metal_flow.detail_attachments')
       .values(
         attachments.map(attachment => ({
@@ -88,7 +89,7 @@ export class AttachmentService {
   async getAttachmentByKey(
     key: string
   ): Promise<Selectable<DB.AttachmentTable> | null> {
-    const result = await db
+    const result = await this.db
       .selectFrom('attachments')
       .selectAll()
       .where('key', '=', key)
@@ -100,7 +101,7 @@ export class AttachmentService {
   async getOrderAttachments(
     orderId: number
   ): Promise<Selectable<DB.AttachmentTable>[]> {
-    return await db
+    return await this.db
       .selectFrom('orders.order_attachments as oa')
       .innerJoin('attachments as a', 'oa.attachment_id', 'a.id')
       .selectAll('a')
@@ -111,7 +112,7 @@ export class AttachmentService {
   async getDetailAttachments(
     detailId: number
   ): Promise<Selectable<DB.AttachmentTable>[]> {
-    return await db
+    return await this.db
       .selectFrom('metal_flow.detail_attachments as da')
       .innerJoin('attachments as a', 'da.attachment_id', 'a.id')
       .selectAll('a')

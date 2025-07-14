@@ -29,6 +29,7 @@ export class S3Controller {
       const orderIdNum = orderId ? parseInt(orderId) : undefined
       const detailIdNum = detailId ? parseInt(detailId) : undefined
 
+      console.log('files', this)
       const data = await this.attachmentService.uploadAndLinkFiles(
         files,
         orderIdNum,
