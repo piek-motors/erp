@@ -1,5 +1,5 @@
 import { router } from '#root/lib/trpc/trpc.js'
-import { deleteFile } from '#root/procedures/attachment/delete-file.rpc.js'
+import { deleteFile } from '#root/procedures/attachment/delete_file.rpc.js'
 import { createDetailProcedure } from '#root/procedures/metalflow/detail/create.js'
 import { deleteDetailProcedure } from '#root/procedures/metalflow/detail/delete.js'
 import { deleteDetailMaterial } from '#root/procedures/metalflow/detail/delete_material.js'

@@ -72,11 +72,12 @@ type MyInputProps = {
   autoFocus?: boolean
   sx?: InputProps['sx']
   size?: InputProps['size']
+  variant?: InputProps['variant']
 }
 
 export function Inp(props: MyInputProps) {
   return (
-    <FormControl>
+    <FormControl sx={{ width: '-webkit-fill-available' }}>
       <Label label={props.label} />
       {props.customInput ? (
         <props.customInput onChange={props.onChange} name={props.name} />
@@ -92,6 +93,7 @@ export function Inp(props: MyInputProps) {
             }}
             size={props.size}
             sx={props.sx}
+            variant={props.variant}
           />
           {props.unit && <P>{props.unit}</P>}
         </Row>

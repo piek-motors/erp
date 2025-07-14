@@ -9,6 +9,7 @@ interface AttachmentListProps {
   uploadingFiles?: File[]
   onDelete?: (attachment: Attachment) => void
   onUpload?: (files: FileList) => void
+  onRename?: (attachment: Attachment, name: string) => void
   title?: string
   uploadInputProps?: {
     size?: 'sm' | 'md' | 'lg'
@@ -22,6 +23,7 @@ export const AttachmentList = ({
   uploadingFiles = [],
   onDelete,
   onUpload,
+  onRename,
   title = 'Документы',
   uploadInputProps = {}
 }: AttachmentListProps) => {
@@ -38,6 +40,7 @@ export const AttachmentList = ({
             key={attachment.key}
             attachment={attachment}
             handleDelete={onDelete}
+            handleRename={onRename}
           />
         ))}
 

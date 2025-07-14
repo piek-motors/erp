@@ -6,7 +6,9 @@ export const StartManufacturing = observer(() => {
   const [qty, setQty] = useState(0)
   return (
     <Dropdown>
-      <MenuButton>Начать производство</MenuButton>
+      <MenuButton variant="soft" size="sm" color="primary">
+        Начать производство
+      </MenuButton>
       <Menu size="sm">
         <Stack gap={1} p={1}>
           <Inp

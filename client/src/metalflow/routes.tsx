@@ -58,11 +58,7 @@ const innerRoutes = [
     path: metalflow.detail.new
   },
   {
-    element: (
-      <Narrow maxWidth="md">
-        <UpdateDetailPage />
-      </Narrow>
-    ),
+    element: <UpdateDetailPage />,
     path: metalflow.detail.edit
   },
   {

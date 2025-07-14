@@ -57,14 +57,13 @@ function MenuButton(props: {
   icon?: ReactNode
   size: ButtonProps['size']
 }) {
-  const location = useLocation()
-  const path = location.pathname
   return (
     <Link to={props.href} key={props.href}>
       <Button
-        variant={path === props.href ? 'solid' : 'soft'}
+        sx={{ textAlign: 'left', lineHeight: 1 }}
+        variant="plain"
+        color="neutral"
         size={props.size}
-        sx={{ whiteSpace: 'nowrap' }}
       >
         {props.name}
       </Button>

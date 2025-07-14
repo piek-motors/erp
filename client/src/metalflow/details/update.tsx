@@ -72,7 +72,7 @@ export const UpdateDetailPage = observer(() => {
           />
         </Stack>
         {/* Right Column - Documents */}
-        <Stack gap={1} sx={{ flex: 0.6 }}>
+        <Stack gap={1} sx={{ flex: 1 }}>
           <DetailAttachmentList detailId={detailId} />
         </Stack>
       </RowButColumsAtSm>
