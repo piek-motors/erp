@@ -1,6 +1,6 @@
 import {
   UilCheck,
-  UilEllipsisV,
+  UilEllipsisH,
   UilFile,
   UilFileAlt,
   UilImage,
@@ -43,7 +43,7 @@ export const AttachmentComponent = (props: {
       {editMode === false && (
         <Dropdown>
           <MenuButton variant="plain" size="sm">
-            <UseIcon icon={UilEllipsisV} />
+            <UseIcon icon={UilEllipsisH} />
           </MenuButton>
           <Menu size="sm" sx={{ gap: 1, p: 0.5 }}>
             <MenuItem

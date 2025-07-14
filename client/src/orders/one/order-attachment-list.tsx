@@ -39,7 +39,7 @@ export const OrderAttachmentList = observer(
         attachments={orderStore.attachments.files}
         uploadingFiles={orderStore.attachments.uploadingFiles}
         onRename={handleRename}
-        onDelete={orderStore.editMode ? handleDelete : undefined}
+        onDelete={handleDelete}
         onUpload={handleUpload}
         title="Документы"
       />
