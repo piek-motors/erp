@@ -125,6 +125,7 @@ function FileNameInput(props: {
       onKeyDown={handleKeyDown}
     >
       <Inp
+        fullWidth
         value={name}
         onChange={e => setName(e)}
         variant="plain"

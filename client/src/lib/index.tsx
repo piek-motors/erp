@@ -77,7 +77,9 @@ type MyInputProps = {
 
 export function Inp(props: MyInputProps) {
   return (
-    <FormControl sx={{ width: '-webkit-fill-available' }}>
+    <FormControl
+      sx={{ width: props.fullWidth ? '-webkit-fill-available' : 'auto' }}
+    >
       <Label label={props.label} />
       {props.customInput ? (
         <props.customInput onChange={props.onChange} name={props.name} />
