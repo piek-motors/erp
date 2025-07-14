@@ -19,9 +19,10 @@ export abstract class Material {
   alloy: string = ''
   abstract readonly unit: EnUnit
   abstract readonly shape: EnMaterialShape
-  constructor(id: number, label: string = '') {
+  constructor(id: number, label: string = '', alloy?: string | null) {
     this.id = id
     this.label = label
+    this.alloy = alloy || ''
   }
   get unitUI() {
     return uiUnit(this.unit)

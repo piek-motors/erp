@@ -29,9 +29,8 @@ export async function recalculateMaterialLabels(db: KDB) {
 
   for (const material of materials) {
     const constructor = getMaterialConstructor(material.shape)
-    const m = new constructor(material.id, material.label)
+    const m = new constructor(material.id, material.label, material.alloy)
     MaterialShapeAbstractionLayer.importShapeData(m, material.shape_data)
-
     try {
       m.label = m.deriveLabel()
       updateBuffer.push(m)
@@ -66,4 +65,4 @@ export async function recalculateMaterialLabels(db: KDB) {
   console.log('done')
 }
 
-// main()
+main()

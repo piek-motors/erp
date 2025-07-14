@@ -22,15 +22,6 @@ export const RoundBarInputBase = observer(() => {
         }}
         unit={uiUnit(EnUnit.MilliMeter)}
       />
-
-      {/* <Inp
-        label={t.Density}
-        value={material.round.density}
-        onChange={v => {
-          material.round.setDensity(v)
-        }}
-        unit="кг/м3"
-      /> */}
       <MaterialCalibration
         value={material.round.calibrated}
         setValue={v => {
