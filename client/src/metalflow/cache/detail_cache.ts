@@ -38,8 +38,7 @@ export class DetailCache {
               return new MaterialCost({
                 materialId: e[0],
                 label: e[1],
-                length: e[2].toString(),
-                weight: e[3].toString()
+                length: e[2].toString()
               })
             }
           )

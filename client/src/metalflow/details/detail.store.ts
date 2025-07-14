@@ -1,14 +1,14 @@
 import { AttachmentsStore } from 'components/attachments/store'
-import { Attachment, uiUnit } from 'domain-model'
+import { Attachment } from 'domain-model'
 import { rpc } from 'lib/rpc.client'
 import { notifierStore } from 'lib/store/notifier.store'
+import { mm2m } from 'lib/units'
 import { cache } from 'metalflow/cache/root'
 import { makeAutoObservable } from 'mobx'
 import { DetailWriteoffStore } from './writeoff/store'
 
 type MaterialRelationData = {
   length: string
-  weight: string
 }
 
 export class MaterialCost {
@@ -19,10 +19,6 @@ export class MaterialCost {
   materialLabel!: string
   setMaterialLabel(materialLabel: string) {
     this.materialLabel = materialLabel
-  }
-  weight!: string
-  setWeight(weight: string) {
-    this.weight = weight
   }
   length!: string
   setLength(length: string) {
@@ -36,7 +32,6 @@ export class MaterialCost {
   }) {
     this.materialId = init.materialId
     this.materialLabel = init.label
-    this.weight = init.weight ?? ''
     this.length = init.length ?? ''
     makeAutoObservable(this)
   }
@@ -122,7 +117,6 @@ export class Detail {
     const m = new MaterialCost({
       materialId: material.id,
       label: material.label,
-      weight: data.weight,
       length: data.length
     })
     this.usedMaterials.push(m)
@@ -140,7 +134,6 @@ export class Detail {
     }
     m.setMaterialLabel(material.label)
     m.setMaterialId(material.id)
-    m.setWeight(data.weight)
     m.setLength(data.length)
   }
 
@@ -163,8 +156,7 @@ export class Detail {
       this.addMaterial(
         { id: dm.material_id, label: dm.label ?? '' },
         {
-          length: dm.data.length.toString(),
-          weight: dm.data.weight.toString()
+          length: dm.data.length.toString()
         }
       )
     })
@@ -180,8 +172,7 @@ export class Detail {
   async insert() {
     const materialRelations = this.usedMaterials.map(m => ({
       materialId: m.materialId,
-      length: m.length,
-      weight: m.weight
+      length: m.length
     }))
     const res = await rpc.metal.details.create.mutate({
       name: this.name.trim(),
@@ -201,8 +192,7 @@ export class Detail {
     }
     const materialRelations = this.usedMaterials.map(m => ({
       materialId: m.materialId,
-      length: m.length,
-      weight: m.weight
+      length: m.length
     }))
     const res = await rpc.metal.details.update.mutate({
       id: this.id,
@@ -245,9 +235,9 @@ export class Detail {
 
     for (const m of r) {
       const msg = `
-      Израсходовано ${m.totalCostKg.toFixed(3)} кг материала ${
+      Израсходовано ${mm2m(m.totalCost)} материала ${
         m.material_name
-      }, осталось ${m.stock.toFixed(3)} ${uiUnit(m.unit)}
+      }, осталось ${mm2m(m.stock)}
       `
       notifierStore.notify('info', msg)
     }

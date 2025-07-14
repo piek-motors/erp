@@ -18,19 +18,10 @@ import { MaterialAutocomplete } from '../shared/material_autocomplete'
 import { QtyInputWithUnit } from '../shared/qty_input_with_unit'
 import { MaterialCost, detailStore } from './detail.store'
 
-export const MaterialWeightInput = observer(
+export const MaterialLengthInput = observer(
   (props: { materialRelation: MaterialCost }) => {
     return (
       <Row gap={3}>
-        <QtyInputWithUnit
-          size="sm"
-          label="Вес"
-          unitId={EnUnit.Gram}
-          setValue={v => {
-            props.materialRelation.setWeight(v)
-          }}
-          value={props.materialRelation.weight}
-        />
         <QtyInputWithUnit
           size="sm"
           label="Длина"
@@ -62,8 +53,7 @@ export const MaterialSelect = observer(
               props.index,
               { id: m.materialId, label: m.materialLabel },
               {
-                length: m.length,
-                weight: m.weight
+                length: m.length
               }
             )
           }
@@ -99,7 +89,7 @@ export const MaterialRelationDataInputs = observer(() => {
                       }}
                     />
                   </Row>
-                  <MaterialWeightInput materialRelation={materialCost} />
+                  <MaterialLengthInput materialRelation={materialCost} />
                 </Stack>
               </Stack>
             )
@@ -108,10 +98,7 @@ export const MaterialRelationDataInputs = observer(() => {
         <PlusIcon
           sx={{ mt: 1 }}
           onClick={() => {
-            detailStore.addMaterial(
-              { id: 0, label: '' },
-              { length: '', weight: '' }
-            )
+            detailStore.addMaterial({ id: 0, label: '' }, { length: '' })
           }}
         />
       </Sheet>

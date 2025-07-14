@@ -15,8 +15,7 @@ export const ErrDetailPartCodeUnique = new TRPCError({
 // Shared validation schemas
 export const materialRelationSchema = z.object({
   materialId: z.number(),
-  length: z.string(),
-  weight: z.string()
+  length: z.string()
 })
 
 export const detailBaseSchema = z.object({

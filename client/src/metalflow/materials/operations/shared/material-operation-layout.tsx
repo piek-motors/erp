@@ -9,9 +9,6 @@ interface MaterialOperationLayoutProps {
   title: string
   materialLabel?: string
   materialUnit: EnUnit
-  linearMass: string
-  quantityValue: string
-  quantitySetValue: (value: string) => void
   lengthValue: string
   lengthSetValue: (value: string) => void
   reasonComponent: React.ReactNode
@@ -32,19 +29,11 @@ export const MaterialOperationLayout = observer(
           </P>
         </Row>
         <QtyInputWithUnit
-          unitId={props.materialUnit}
-          value={props.quantityValue}
-          setValue={props.quantitySetValue}
-          label={'Масса'}
+          unitId={EnUnit.M}
+          value={props.lengthValue}
+          setValue={props.lengthSetValue}
+          label={'Длина'}
         />
-        {props.linearMass != '0' && (
-          <QtyInputWithUnit
-            unitId={EnUnit.M}
-            value={props.lengthValue}
-            setValue={props.lengthSetValue}
-            label={'Длина'}
-          />
-        )}
         {props.reasonComponent}
         <SendMutation
           disabled={props.submitDisabled}

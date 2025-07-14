@@ -2,7 +2,7 @@
 import { PageTitle } from 'components'
 import { ScrollableWindow, Search } from 'components/inputs'
 import { Table } from 'components/table.impl'
-import { EnMaterialShape, uiUnit } from 'domain-model'
+import { EnMaterialShape } from 'domain-model'
 import {
   AddResourceButton,
   Inp,
@@ -14,6 +14,7 @@ import {
   useNavigate
 } from 'lib/index'
 import { open, routeMap } from 'lib/routes'
+import { mm2m } from 'lib/units'
 import { Column } from 'react-table'
 import { t } from '../../text'
 import { MaterialShapeFilter } from './shape_filter'
@@ -54,12 +55,8 @@ const columnList: Column<MaterialListOutput>[] = [
     width: '95%'
   },
   {
-    Header: t.Remaining,
-    accessor: m => (
-      <>
-        {m.stock} {uiUnit(m.unit)}
-      </>
-    )
+    Header: 'Остаток, м',
+    accessor: m => <>{mm2m(m.stock, 1)}</>
   }
 ]
 

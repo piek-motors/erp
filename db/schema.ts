@@ -92,7 +92,7 @@ export namespace DB {
   }
 
   interface MetarialWiteoffData {
-    writeoffs: Array<{ id: number; totalCostKg: number }>
+    writeoffs: Array<{ id: number; totalCost: number }>
   }
   export interface ManufacturingTable {
     id: GeneratedAlways<number>
@@ -108,7 +108,6 @@ export namespace DB {
   }
 
   export interface DetailMaterialJsonData {
-    weight: number // grams
     length: number // mm
   }
 

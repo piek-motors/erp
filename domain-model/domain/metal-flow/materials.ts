@@ -63,7 +63,7 @@ export class RoundBar extends Material {
       throw new Error('diameter is NaN')
     }
     const calibrationSuffix = this.calibrated ? 'К' : ''
-    return `${this.shapeUI} ${this.diameter} ${this.alloy} ${calibrationSuffix}`.trim()
+    return `${this.shapeUI} ф${this.diameter} ${this.alloy} ${calibrationSuffix}`.trim()
   }
 }
 
@@ -117,7 +117,7 @@ export class Pipe extends Material {
     if (isNaN(this.diameter)) {
       throw new Error('diameter is NaN')
     }
-    return `${this.shapeUI} ${this.diameter} ${this.alloy}`.trim()
+    return `${this.shapeUI} ф${this.diameter} ${this.thickness} ${this.alloy}`.trim()
   }
 }
 

@@ -1,4 +1,4 @@
-import { EnWriteoffReason, WriteoffTroughDetail } from 'domain-model'
+import { EnWriteoffReason } from 'domain-model'
 import { makeAutoObservable, rpc } from 'lib/deps'
 import { cache } from 'metalflow/cache/root'
 import { Detail } from '../detail.store'
@@ -6,10 +6,6 @@ import { Detail } from '../detail.store'
 export class DetailWriteoffStore {
   constructor() {
     makeAutoObservable(this)
-  }
-  dialogOpen = false
-  setDialogOpen(v: boolean) {
-    this.dialogOpen = v
   }
   detail?: Detail
   setDetail(v: Detail) {
@@ -28,16 +24,6 @@ export class DetailWriteoffStore {
     this.detail = undefined
     this.qty = 0
   }
-  get totalWeight() {
-    if (!this.detail) {
-      throw new Error('Detail is not set')
-    }
-    let totalWeight = 0
-    for (const material of this.detail.usedMaterials) {
-      totalWeight += Number(material.weight) * this.qty
-    }
-    return totalWeight
-  }
   validate(): Error | undefined {
     const detail = this.detail?.id
     if (!detail) {
@@ -48,15 +34,6 @@ export class DetailWriteoffStore {
     }
     if (this.qty === 0) {
       return new Error('Количество не указано')
-    }
-  }
-  getTypeData(): WriteoffTroughDetail {
-    if (!this.detail?.id) {
-      throw new Error('Detail is not set')
-    }
-    return {
-      detailId: this.detail.id,
-      qty: this.qty
     }
   }
   async save(): Promise<number[]> {

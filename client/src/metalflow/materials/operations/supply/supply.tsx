@@ -3,7 +3,6 @@ import { InModal } from 'components/modal'
 import { EnSupplyReason, uiSupplyReason, UiSupplyReason } from 'domain-model'
 import { Btn, P, useState } from 'lib/index'
 import { observer } from 'mobx-react-lite'
-import { t } from '../../../text'
 import { material } from '../../material.state'
 import { MaterialOperationLayout } from '../shared/material-operation-layout'
 import { ReasonSelect } from '../shared/reason-select'
@@ -34,16 +33,11 @@ export const MaterialSupplyPage = observer(() => {
 
   return (
     <MaterialOperationLayout
-      title={t.AddSupply}
+      title="Поставка"
       materialLabel={material.material?.label}
       materialUnit={material.material?.unit}
-      linearMass={material.linearMass}
-      quantityValue={material.supply.qty}
-      quantitySetValue={value => material.supply.setQty(value)}
       lengthValue={material.supply.length}
-      lengthSetValue={value =>
-        material.supply.setLength(value, material.linearMass)
-      }
+      lengthSetValue={value => material.supply.setLength(value)}
       reasonComponent={supplyReasonComponent}
       submitDisabled={material.supply.disabled()}
       onSubmit={() => material.insertSupply()}

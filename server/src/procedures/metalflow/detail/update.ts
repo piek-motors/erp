@@ -6,7 +6,7 @@ import {
   updateDetailDto
 } from '#root/procedures/metalflow/detail/shared.js'
 
-export const updateDetailProcedure = publicProcedure
+export const updateDetail = publicProcedure
   .input(updateDetailDto)
   .mutation(async ({ input }) => {
     await db
@@ -34,15 +34,13 @@ export const updateDetailProcedure = publicProcedure
           detail_id: input.id,
           material_id: materialRelation.materialId,
           data: {
-            length: Number(materialRelation.length),
-            weight: Number(materialRelation.weight)
+            length: Number(materialRelation.length)
           }
         })
         .onConflict(b =>
           b.constraint('detail_materials_p_key').doUpdateSet({
             data: {
-              length: Number(materialRelation.length),
-              weight: Number(materialRelation.weight)
+              length: Number(materialRelation.length)
             }
           })
         )

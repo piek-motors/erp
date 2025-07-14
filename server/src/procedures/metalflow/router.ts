@@ -1,17 +1,17 @@
 import { router } from '#root/lib/trpc/trpc.js'
 import { deleteFile } from '#root/procedures/attachment/delete_file.rpc.js'
-import { createDetailProcedure } from '#root/procedures/metalflow/detail/create.js'
-import { deleteDetailProcedure } from '#root/procedures/metalflow/detail/delete.js'
+import { createDetail } from '#root/procedures/metalflow/detail/create.js'
+import { deleteDetail } from '#root/procedures/metalflow/detail/delete.js'
 import { deleteDetailMaterial } from '#root/procedures/metalflow/detail/delete_material.js'
-import { getDetailProcedure } from '#root/procedures/metalflow/detail/get.js'
+import { getDetail } from '#root/procedures/metalflow/detail/get.js'
 import { assignDetailsToGroup } from '#root/procedures/metalflow/detail/grouping/assign_details.js'
 import { createDetailGroup } from '#root/procedures/metalflow/detail/grouping/create.js'
 import { deleteDetailGroup } from '#root/procedures/metalflow/detail/grouping/delete.js'
 import { listDetailGroups } from '#root/procedures/metalflow/detail/grouping/list.js'
 import { removeDetailsFromGroup } from '#root/procedures/metalflow/detail/grouping/remove-details.js'
 import { updateDetailGroup } from '#root/procedures/metalflow/detail/grouping/update.js'
-import { getDetailListProcedure } from '#root/procedures/metalflow/detail/list.js'
-import { updateDetailProcedure } from '#root/procedures/metalflow/detail/update.js'
+import { getDetailList } from '#root/procedures/metalflow/detail/list.js'
+import { updateDetail } from '#root/procedures/metalflow/detail/update.js'
 import { createMaterial } from '#root/procedures/metalflow/material/create.js'
 import { deleteMaterial } from '#root/procedures/metalflow/material/delete.js'
 import { getMaterial } from '#root/procedures/metalflow/material/get.js'
@@ -44,11 +44,11 @@ export const metalFlowRouter = router({
     writeoffTroughDetail: writeoffThroughDetail
   }),
   details: router({
-    get: getDetailProcedure,
-    list: getDetailListProcedure,
-    delete: deleteDetailProcedure,
-    update: updateDetailProcedure,
-    create: createDetailProcedure,
+    get: getDetail,
+    list: getDetailList,
+    delete: deleteDetail,
+    update: updateDetail,
+    create: createDetail,
     deleteDetailMaterial: deleteDetailMaterial
   }),
   detailGroups: router({

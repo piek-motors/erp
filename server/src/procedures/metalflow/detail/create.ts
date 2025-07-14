@@ -1,12 +1,11 @@
-import { db } from '#root/deps.js'
-import { publicProcedure } from '#root/lib/trpc/trpc.js'
+import { db, procedure } from '#root/deps.js'
 import {
   detailDto,
   ErrDetailPartCodeUnique,
   isDetailPertCodeUniqueError
 } from '#root/procedures/metalflow/detail/shared.js'
 
-export const createDetailProcedure = publicProcedure
+export const createDetail = procedure
   .input(detailDto)
   .mutation(async ({ input }) => {
     const detail = await db
@@ -35,8 +34,7 @@ export const createDetailProcedure = publicProcedure
           detail_id: detail.id,
           material_id: materialRelation.materialId,
           data: {
-            length: Number(materialRelation.length),
-            weight: Number(materialRelation.weight)
+            length: Number(materialRelation.length)
           }
         })
         .execute()

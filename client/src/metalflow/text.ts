@@ -5,7 +5,6 @@ export const t = {
   Action: 'Действие',
   AddDetail: 'Добавить деталь',
   AddMaterial: 'Добавить материал',
-  AddSupply: 'Добавить поставку', // Align with "События поставок"
   AddWriteoff: 'Добавить расход',
   Alloy: 'Сплав',
   Calibrated: 'Калиброванный', // Adjective form
@@ -35,7 +34,6 @@ export const t = {
   Saved: 'Сохранено',
   Shape: 'Форма',
   SuppliesList: 'История поставок',
-  SupplyAdd: 'Добавить поставку',
   TakeLook: 'Посмотреть',
   Thickness: 'Толщина',
   Unit: 'Ед.',

@@ -26,7 +26,7 @@ export const writeoffThroughMaterial = publicProcedure
   .input(
     z.object({
       material_id: z.number(),
-      qty: z.number(),
+      lengthMeters: z.number(),
       reason: z.nativeEnum(EnWriteoffReason),
       type_data: z.any()
     })
@@ -38,17 +38,18 @@ export const writeoffThroughMaterial = publicProcedure
       .where('id', '=', input.material_id)
       .executeTakeFirstOrThrow()
 
-    if (current_stock.stock < input.qty) {
+    const length = input.lengthMeters * 1000
+    if (current_stock.stock < length) {
       throw new Error('Not enough stock')
     }
 
-    const writeoff = await db
+    await db
       .insertInto('metal_flow.operations')
       .values({
         operation_type: EnOperationType.Writeoff,
         user_id: 0,
         material_id: input.material_id,
-        qty: input.qty,
+        qty: input.lengthMeters,
         reason: input.reason
       })
       .execute()
@@ -56,13 +57,14 @@ export const writeoffThroughMaterial = publicProcedure
     const res = await db
       .updateTable('metal_flow.materials')
       .set(eb => ({
-        stock: eb('stock', '-', input.qty)
+        stock: eb('stock', '-', length)
       }))
       .returning(['id'])
       .where('id', '=', input.material_id)
+      .returning(['stock'])
       .execute()
 
-    return current_stock.stock - input.qty
+    return res[0].stock.toString()
   })
 
 export const writeoffThroughDetail = publicProcedure
@@ -87,7 +89,7 @@ export const writeoffThroughDetail = publicProcedure
 
     const ids: number[] = []
     for (const detailMaterial of detailMaterials) {
-      const totalQty = detailMaterial.data.weight * input.qty
+      const totalQty = detailMaterial.data.length * input.qty
       // insert writeoff
       const writeoff = await db
         .insertInto('metal_flow.operations')

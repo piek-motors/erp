@@ -2,14 +2,9 @@ import { EnWriteoffReason, WriteoffDirectUnit } from 'domain-model'
 import { makeAutoObservable, rpc } from 'lib/deps'
 
 export class MaterialWriteoffState {
-  weight = ''
-  setWeight(weight: string) {
-    this.weight = weight
-  }
   length = ''
-  setLength(length: string, linearMass: string) {
+  setLength(length: string) {
     this.length = length
-    this.weight = (Number(length) * Number(linearMass)).toFixed(3)
   }
   reason: EnWriteoffReason = EnWriteoffReason.UsedInProduction
   setReason(reason: EnWriteoffReason) {
@@ -23,19 +18,18 @@ export class MaterialWriteoffState {
     makeAutoObservable(this)
   }
   validate(): Error | undefined {
-    if (parseFloat(this.weight) === 0) {
-      return new Error('Вес не указан')
+    if (parseFloat(this.length) === 0) {
+      return new Error('Длина не указана')
     }
   }
   reset() {
-    this.weight = ''
-    this.reason = EnWriteoffReason.UsedInProduction
+    this.length = ''
   }
   getTypeData(): WriteoffDirectUnit {
     return {}
   }
   disabled() {
-    return this.weight === '' || this.reason == null
+    return this.length === '' || this.reason == null
   }
   async insertWriteoff(materialId?: number): Promise<number> {
     if (!materialId) {
@@ -43,7 +37,7 @@ export class MaterialWriteoffState {
     }
     const stock = await rpc.metal.material.writeoffTroughMaterial.mutate({
       material_id: materialId,
-      qty: parseFloat(this.weight),
+      lengthMeters: Number(this.length),
       reason: this.reason,
       type_data: this.getTypeData()
     })

@@ -21,12 +21,13 @@ export const createMaterialSupply = publicProcedure
   .input(
     z.object({
       material_id: z.number(),
-      qty: z.number(),
+      lengthMeters: z.number(),
       reason: z.nativeEnum(EnSupplyReason)
     })
   )
   .mutation(async ({ input }) => {
-    const supply = await db
+    const length = input.lengthMeters * 1000
+    await db
       .insertInto('metal_flow.operations')
       .values({
         operation_type: EnOperationType.Supply,
@@ -34,7 +35,7 @@ export const createMaterialSupply = publicProcedure
         material_id: input.material_id,
         detail_id: null,
         user_id: 0,
-        qty: input.qty,
+        qty: input.lengthMeters,
         reason: input.reason
       })
       .execute()
@@ -42,7 +43,7 @@ export const createMaterialSupply = publicProcedure
     const currentStock = await db
       .updateTable('metal_flow.materials')
       .set(eb => ({
-        stock: eb('stock', '+', input.qty)
+        stock: eb('stock', '+', length)
       }))
       .where('id', '=', input.material_id)
       .returning(['stock'])

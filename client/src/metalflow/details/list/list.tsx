@@ -28,7 +28,7 @@ const columnList: Column<Detail>[] = [
     accessor: 'id'
   },
   {
-    Header: t.DetailName,
+    Header: 'Наименование',
     id: 'name',
     accessor: r => (
       <DetailName
@@ -42,16 +42,7 @@ const columnList: Column<Detail>[] = [
     )
   },
   {
-    Header: 'Масса гр.',
-    accessor: r => {
-      const m = r.usedMaterials[0]
-      const weight = m?.weight?.toString()
-      if (!weight) return '-'
-      return weight
-    }
-  },
-  {
-    Header: 'Длина мм.',
+    Header: 'Длина заготовки, мм',
     accessor: r => {
       const m = r.usedMaterials[0]
       const length = m?.length?.toString()

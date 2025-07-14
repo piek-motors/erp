@@ -28,7 +28,7 @@ export const addDetailIntoManufacturingList = publicProcedure
         material_writeoffs: {
           writeoffs: materialsWithStock.map(m => ({
             id: m.material_id,
-            totalCostKg: m.totalCostKg
+            totalCost: m.totalCost
           }))
         }
       })
@@ -39,7 +39,7 @@ export const addDetailIntoManufacturingList = publicProcedure
       material_name: m.material_name,
       stock: m.stock,
       unit: m.unit,
-      totalCostKg: m.totalCostKg
+      totalCost: m.totalCost
     }))
   })
 
@@ -48,7 +48,7 @@ async function writeOffMaterials(
     id: number
     label: string
     stock: number
-    data: { weight: number }
+    data: { length: number }
   }[],
   qty: number
 ) {
@@ -57,25 +57,25 @@ async function writeOffMaterials(
     material_name: string
     unit: EnUnit
     stock: number
-    totalCostKg: number
+    totalCost: number
   }[] = []
   // write off materials
   for (const material of materials) {
     const { id, label } = material
-    const totalCostGramms = material.data.weight * qty
-    const totalCostKg = totalCostGramms / 1000
+    const totalCost = material.data.length * qty
 
-    if (material.stock < totalCostKg) {
+    if (material.stock < totalCost) {
       throw new ErrNotEnoughMaterial(
-        `Недостаточно материала (id=${id}) ${label}, требуется ${totalCostKg} кг, имеется ${material.stock} кг`
+        `Недостаточно материала (id=${id}) ${label}, требуется ${
+          totalCost / 1000
+        } м, имеется ${material.stock / 1000} м`
       )
     }
-
-    if (totalCostKg === 0) {
+    if (totalCost === 0) {
       throw new ErrZeroCost(`Не указан расход материала (id=${id}) ${label}`)
     }
 
-    const stock = material.stock - totalCostKg
+    const stock = material.stock - totalCost
     const m = await db
       .updateTable('metal_flow.materials')
       .set({ stock })
@@ -88,7 +88,7 @@ async function writeOffMaterials(
       material_name: material.label,
       unit: m.unit,
       stock,
-      totalCostKg
+      totalCost
     })
   }
 

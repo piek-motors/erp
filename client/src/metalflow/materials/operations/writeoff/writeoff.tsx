@@ -42,13 +42,8 @@ export const MaterialWriteoff = observer(() => {
       title={t.WriteOffAdd}
       materialLabel={material.label}
       materialUnit={material.unit}
-      linearMass={material.linearMass}
-      quantityValue={material.writeoff.weight.toString()}
-      quantitySetValue={v => material.writeoff.setWeight(v)}
       lengthValue={material.writeoff.length}
-      lengthSetValue={value =>
-        material.writeoff.setLength(value, material.linearMass)
-      }
+      lengthSetValue={value => material.writeoff.setLength(value)}
       reasonComponent={writeoffReasonComponent}
       submitDisabled={material.writeoff.disabled()}
       onSubmit={() => material.insertWriteoff()}

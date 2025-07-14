@@ -3,14 +3,9 @@ import { rpc } from 'lib/rpc.client'
 import { makeAutoObservable } from 'mobx'
 
 export class MaterialSupplyStore {
-  qty: string = ''
-  setQty(qty: string) {
-    this.qty = qty
-  }
   length: string = ''
-  setLength(length: string, linearMass: string) {
+  setLength(length: string) {
     this.length = length
-    this.qty = (Number(length) * Number(linearMass)).toFixed(3)
   }
   reason: EnSupplyReason = EnSupplyReason.FromSupplier
   setReason(reason: EnSupplyReason) {
@@ -20,22 +15,21 @@ export class MaterialSupplyStore {
     makeAutoObservable(this)
   }
   reset() {
-    this.qty = ''
-    this.reason = EnSupplyReason.FromSupplier
+    this.length = ''
   }
   disabled() {
-    return this.qty === '' || this.reason == null
+    return this.length === '' || this.reason == null
   }
   async insertSupply(materialId?: number): Promise<number> {
     if (!materialId) throw Error('Материал не выбран')
     if (this.reason == null) throw Error('Причина не указана')
 
-    const qty = this.qty
-    if (!qty) throw Error('Количество не указано')
+    const length = this.length
+    if (!length) throw Error('Длина не указана')
 
     const res = await rpc.metal.material.supply.mutate({
       material_id: materialId,
-      qty: Number(qty),
+      lengthMeters: Number(length),
       reason: this.reason
     })
     this.reset()

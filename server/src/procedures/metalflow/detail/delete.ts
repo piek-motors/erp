@@ -2,7 +2,7 @@ import { db } from '#root/deps.js'
 import { publicProcedure } from '#root/lib/trpc/trpc.js'
 import { z } from 'zod'
 
-export const deleteDetailProcedure = publicProcedure
+export const deleteDetail = publicProcedure
   .input(z.object({ id: z.number() }))
   .mutation(async ({ input }) => {
     await db
