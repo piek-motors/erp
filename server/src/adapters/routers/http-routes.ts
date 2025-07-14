@@ -1,8 +1,12 @@
 import { Router } from 'express'
 import { body } from 'express-validator'
-import { s3, userController } from '../../ioc/index.js'
+import { userController } from '../../ioc/index.js'
 import { log } from '../../ioc/log.js'
 import { multerMiddleware } from '../../lib/index.js'
+import {
+  getBinaryFile,
+  uploadBinaryFiles
+} from '../controllers/s3.controller.js'
 
 export const router: Router = Router()
   .post('/login', body('email').isEmail(), (req, res, next) => {
@@ -23,5 +27,5 @@ export const router: Router = Router()
       next(err)
     })
   })
-  .put('/s3', [multerMiddleware, s3.uploadBinaryFiles])
-  .get('/s3/:key', s3.getBinaryFile)
+  .put('/s3', [multerMiddleware, uploadBinaryFiles])
+  .get('/s3/:key', getBinaryFile)
