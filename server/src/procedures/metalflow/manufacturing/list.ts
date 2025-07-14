@@ -1,4 +1,4 @@
-import { db, publicProcedure } from '#root/deps.js'
+import { db, procedure } from '#root/deps.js'
 
 const query = db
   .selectFrom('metal_flow.manufacturing as m')
@@ -7,14 +7,20 @@ const query = db
   .select(['d.name as detail_name', 'd.logical_group_id as group_id'])
   .orderBy('m.started_at', 'desc')
 
-export const manufacturingList = publicProcedure.query(async () => {
-  const inProduction = await query.where('m.finished_at', 'is', null).execute()
-  const finished = await query
-    .where('m.finished_at', 'is not', null)
-    .limit(50)
-    .execute()
+export const manufacturingList = procedure.query(async () => {
+  const [inProduction, finished] = await Promise.all([
+    query.where('m.finished_at', 'is', null).execute(),
+    query.where('m.finished_at', 'is not', null).limit(50).execute()
+  ])
+
   return {
-    inProduction,
-    finished
+    inProduction: inProduction.map(e => ({
+      ...e,
+      material_writeoffs: undefined
+    })),
+    finished: finished.map(e => ({
+      ...e,
+      material_writeoffs: undefined
+    }))
   }
 })

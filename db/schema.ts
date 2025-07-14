@@ -91,12 +91,20 @@ export namespace DB {
     params: JSONColumnType<any, any, any>
   }
 
+  interface MetarialWiteoffData {
+    writeoffs: Array<{ id: number; totalCostKg: number }>
+  }
   export interface ManufacturingTable {
     id: GeneratedAlways<number>
     detail_id: number
     qty: number
     finished_at: Date | null
     started_at: GeneratedAlways<Date>
+    material_writeoffs: JSONColumnType<
+      MetarialWiteoffData,
+      MetarialWiteoffData,
+      MetarialWiteoffData
+    >
   }
 
   export interface DetailMaterialJsonData {

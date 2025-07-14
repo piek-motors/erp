@@ -1,4 +1,4 @@
-import { create } from 'zustand'
+import { makeAutoObservable, runInAction } from 'mobx'
 
 const RempvalTime = 10_000
 
@@ -8,30 +8,31 @@ type Notification = {
   level: 'err' | 'info'
 }
 
-interface NotifierStore {
-  notifications: Notification[]
-  notify(level: Notification['level'], msg: string): void
-  all(): Notification[]
-}
+class NotifierStore {
+  notifications: Notification[] = []
 
-export const useNotifier = create<NotifierStore>((set, get) => {
-  return {
-    notifications: [],
-    notify(level: Notification['level'], msg: string) {
-      const id = crypto.randomUUID()
-
-      setTimeout(() => {
-        set(state => ({
-          notifications: state.notifications.filter(each => each.id !== id)
-        }))
-      }, RempvalTime)
-
-      set(state => ({
-        notifications: [...state.notifications, { msg: msg, level: level, id }]
-      }))
-    },
-    all() {
-      return get().notifications
-    }
+  constructor() {
+    makeAutoObservable(this)
   }
-})
+
+  notify(level: Notification['level'], msg: string) {
+    const id = crypto.randomUUID()
+
+    // Add notification immediately
+    runInAction(() => {
+      this.notifications.push({ msg, level, id })
+    })
+
+    // Remove notification after timeout
+    setTimeout(() => {
+      runInAction(() => {
+        this.notifications = this.notifications.filter(each => each.id !== id)
+      })
+    }, RempvalTime)
+  }
+
+  all() {
+    return this.notifications
+  }
+}
+export const notifierStore = new NotifierStore()

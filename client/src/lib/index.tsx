@@ -220,13 +220,12 @@ export function MultilineInput(
   )
 }
 
-export function SavedHint(props: { show: any }) {
+export function SavedHint(props: { data: any }) {
   return (
-    props.show && (
-      <Stack>
-        <P color="success">Сохранено</P>
-        <P fontFamily={'monospace'}>{JSON.stringify(props.show, null, 2)}</P>
-      </Stack>
+    props.data && (
+      <P color="success" level="body-sm">
+        Сохранено
+      </P>
     )
   )
 }
@@ -306,7 +305,7 @@ export function SendMutation<Result>(props: {
   return (
     <Stack gap={1} {...props.stackProps}>
       <ErrorHint e={error} />
-      <SavedHint show={mutationResult} />
+      <SavedHint data={mutationResult} />
       <Button
         onClick={async () => handleSubmit()}
         disabled={loading || props.disabled}

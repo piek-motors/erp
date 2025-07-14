@@ -1,8 +1,8 @@
 import { Alert, Box, Stack } from '@mui/joy'
-import { useNotifier } from '../lib/store/notifier.store'
+import { notifierStore } from 'lib/store/notifier.store'
+import { observer } from 'mobx-react-lite'
 
-export function NotifierOverlay() {
-  const notifier = useNotifier()
+export const NotifierOverlay = observer(() => {
   return (
     <Box
       sx={{
@@ -12,7 +12,7 @@ export function NotifierOverlay() {
       }}
     >
       <Stack gap={1}>
-        {notifier.all().map(each => (
+        {notifierStore.all().map(each => (
           <Alert
             variant="soft"
             color={each.level === 'err' ? 'danger' : 'success'}
@@ -24,4 +24,4 @@ export function NotifierOverlay() {
       </Stack>
     </Box>
   )
-}
+})

@@ -7,7 +7,7 @@ export const StartManufacturing = observer(() => {
   return (
     <Dropdown>
       <MenuButton>Начать производство</MenuButton>
-      <Menu>
+      <Menu size="sm">
         <Stack gap={1} p={1}>
           <Inp
             label="Кол-во"

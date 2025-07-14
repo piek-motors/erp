@@ -1,6 +1,7 @@
 import { AttachmentsStore } from 'components/attachments/store'
-import { Attachment } from 'domain-model'
+import { Attachment, uiUnit } from 'domain-model'
 import { rpc } from 'lib/rpc.client'
+import { notifierStore } from 'lib/store/notifier.store'
 import { cache } from 'metalflow/cache/root'
 import { makeAutoObservable } from 'mobx'
 import { DetailWriteoffStore } from './writeoff/store'
@@ -237,10 +238,20 @@ export class Detail {
   }
 
   async startManufacturing(qty: number) {
-    return await rpc.metal.manufacturing.add.mutate({
+    const r = await rpc.metal.manufacturing.add.mutate({
       detailId: this.id!,
       qty
     })
+
+    for (const m of r) {
+      const msg = `
+      Израсходовано ${m.totalCostKg.toFixed(3)} кг материала ${
+        m.material_name
+      }, осталось ${m.stock.toFixed(3)} ${uiUnit(m.unit)}
+      `
+      notifierStore.notify('info', msg)
+    }
+    return r
   }
 }
 
