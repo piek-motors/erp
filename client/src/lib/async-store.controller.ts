@@ -15,6 +15,12 @@ export class AsyncStoreController {
     this.loading = false
     this.error = null
   }
+  start() {
+    this.setLoading(true)
+  }
+  end() {
+    this.setLoading(false)
+  }
   async run<T>(fn: () => Promise<T>) {
     this.setLoading(true)
     try {

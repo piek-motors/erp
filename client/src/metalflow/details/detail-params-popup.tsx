@@ -7,9 +7,9 @@ import {
   MenuItem,
   Stack
 } from '@mui/joy'
-import { Label, observer, P, UseIcon } from 'lib/index'
+import { Label, observer, P, UseIcon, useState } from 'lib/index'
 import { cache } from 'metalflow/cache/root'
-import { detailStore as detail } from './detail.store'
+import { Detail } from './detail.store'
 
 interface DetailParamsPopupProps {
   detailId: number
@@ -17,9 +17,11 @@ interface DetailParamsPopupProps {
 
 export const DetailParamsPopup = observer(
   ({ detailId }: DetailParamsPopupProps) => {
+    const [detail] = useState(() => new Detail())
     return (
       <Dropdown>
         <MenuButton
+          loading={detail.async.loading}
           slots={{ root: IconButton }}
           slotProps={{
             root: {

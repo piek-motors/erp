@@ -1,5 +1,6 @@
 import { AttachmentsStore } from 'components/attachments/store'
 import { Attachment } from 'domain-model'
+import { AsyncStoreController } from 'lib/async-store.controller'
 import { rpc } from 'lib/rpc.client'
 import { notifierStore } from 'lib/store/notifier.store'
 import { mm2m } from 'lib/units'
@@ -38,6 +39,8 @@ export class MaterialCost {
 }
 
 export class Detail {
+  readonly async = new AsyncStoreController()
+
   id?: number
   setId(id: number) {
     this.id = id
@@ -141,6 +144,7 @@ export class Detail {
 
   async load(detailId: number) {
     this.reset()
+    this.async.start()
     const d = await rpc.metal.details.get.query({ id: detailId })
     if (!d.detail) {
       throw new Error('fdf')
@@ -167,6 +171,7 @@ export class Detail {
           new Attachment(a.id ?? 0, a.filename ?? '', a.size ?? 0, a.key ?? '')
       )
     )
+    this.async.end()
   }
 
   async insert() {

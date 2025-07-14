@@ -50,19 +50,7 @@ export const DetailName = observer(
             </Button>
           </Link>
         )}
-        {showParamsButton && (
-          <div
-            className="params-button"
-            css={css`
-              opacity: 0;
-              visibility: hidden;
-              transition: opacity 100ms ease-in-out,
-                visibility 100ms ease-in-out;
-            `}
-          >
-            <DetailParamsPopup detailId={detail.id} />
-          </div>
-        )}
+        {showParamsButton && <DetailParamsPopup detailId={detail.id} />}
       </Row>
     )
 
