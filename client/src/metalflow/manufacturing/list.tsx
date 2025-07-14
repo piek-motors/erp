@@ -4,7 +4,7 @@ import { ScrollableWindow } from 'components/inputs'
 import { PageTitle } from 'components/page-title'
 import { Table } from 'components/table.impl'
 import { observer } from 'lib/deps'
-import { Label, P, Stack, useEffect, UseIcon } from 'lib/index'
+import { Label, LoadingHint, P, Stack, useEffect, UseIcon } from 'lib/index'
 import { DetailName } from 'metalflow/details/name'
 import { Column } from 'react-table'
 import { ManufactoringListOutput, ManufacturingStore } from './store'
@@ -75,13 +75,10 @@ export const ManufacturingList = observer(() => {
   return (
     <ScrollableWindow
       refreshTrigger={false}
-      staticContent={
-        <Stack py={1}>
-          <PageTitle title={'Детали в производстве'} />
-        </Stack>
-      }
+      staticContent={<PageTitle title={'Детали в производстве'} />}
       scrollableContent={
         <Stack gap={1} p={1}>
+          <LoadingHint show={state.async.loading} />
           <Label label={'В производстве'} />
           <Table data={state.detailsInProduction} columns={columnList} />
 

@@ -15,7 +15,7 @@ export class DetailGroupCache {
   getGroupName(id: number) {
     const name = this.groups.find(g => g.id === id)?.name
     if (!name) {
-      return 'Неизвестная группа'
+      return '--'
     }
     return name
   }
