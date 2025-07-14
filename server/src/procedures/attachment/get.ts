@@ -1,8 +1,6 @@
+import { attachmentService } from '#root/ioc/index.js'
 import { publicProcedure } from '#root/lib/trpc/trpc.js'
-import { AttachmentService } from '#root/service/attachment.js'
 import { z } from 'zod'
-
-const attachmentService = new AttachmentService()
 
 export const getOrderAttachments = publicProcedure
   .input(

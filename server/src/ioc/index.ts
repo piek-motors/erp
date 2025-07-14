@@ -12,7 +12,7 @@ const tokenRepo = new TokenRepository(userRepo, db)
 
 export const tokenService = new TokenService(tokenRepo)
 const authService = new AuthSevice(tokenService, userRepo)
-const attachmentService = new AttachmentService(db)
+export const attachmentService = new AttachmentService(db)
 
 export const userController = new UserController(authService)
 export const s3 = new S3Controller(attachmentService)

@@ -11,6 +11,7 @@ export interface Attachment {
 
 export class AttachmentService {
   constructor(private readonly db: IDB) {}
+
   async insertAttachmentMetadata(
     files: Attachment[]
   ): Promise<Selectable<DB.AttachmentTable>[]> {
