@@ -1,4 +1,5 @@
 import { config } from '#root/config.js'
+import { log } from '#root/ioc/log.js'
 import { s3 } from '#root/ioc/s3.js'
 import { AttachmentService } from '#root/service/attachment.js'
 import type { NextFunction, Request, Response } from 'express'
@@ -35,6 +36,7 @@ export class S3Controller {
       )
       res.send(data)
     } catch (error) {
+      log.error(error, 'Error uploading binary files')
       next(error)
     }
   }
@@ -52,6 +54,7 @@ export class S3Controller {
       res.set('Content-Disposition', `inline;filename*=utf-8''${fileName}`)
       res.send(data.Body)
     } catch (error) {
+      log.error(error, 'Error getting binary file')
       next(error)
     }
   }
