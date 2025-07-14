@@ -11,7 +11,7 @@ import {
   useEffect
 } from 'lib/index'
 import { open, routeMap } from 'lib/routes'
-import { AlloyAutocomplete, MaterialUnitSelect } from '../shared/basic'
+import { AlloyAutocomplete } from '../shared/basic'
 import { t } from '../text'
 import { material } from './material.state'
 import { ListMaterialInputBase } from './shape/list'
@@ -73,10 +73,10 @@ export const MaterialAddPage = observer(() => {
         }}
         unit="кг/м"
       />
-      <MaterialUnitSelect
+      {/* <MaterialUnitSelect
         value={material.unit}
         onChange={v => material.setUnit(v)}
-      />
+      /> */}
       <SendMutation onClick={() => material.insert()} />
       {material.insertedMaterialId && (
         <TakeLookHint

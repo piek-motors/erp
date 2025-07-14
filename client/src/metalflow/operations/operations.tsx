@@ -6,10 +6,8 @@ import { Table } from 'components/table.impl'
 import {
   EnOperationType,
   EnSupplyReason,
-  EnUnit,
   EnWriteoffReason,
   uiSupplyReason,
-  uiUnit,
   uiWriteoffReason
 } from 'domain-model'
 import { DeleteResourceButton, P } from 'lib/index'
@@ -43,14 +41,11 @@ function getColumns(props: {
     },
     {
       Header: 'Количество',
-      accessor: data =>
-        data.material_label ? (
-          <P>
-            {data.qty} {uiUnit(data.material_unit as EnUnit)}
-          </P>
-        ) : (
-          <P>{data.qty} шт</P>
-        )
+      accessor: data => (
+        <P>
+          {data.qty} {data.material_label ? 'м' : 'шт'}
+        </P>
+      )
     },
     {
       Header: 'Дата',
