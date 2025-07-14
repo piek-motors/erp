@@ -11,12 +11,11 @@ export const getMaterial = publicProcedure
       .where('id', '=', input.id)
       .executeTakeFirstOrThrow()
 
-    const details = await db
+    const detailCount = await db
       .selectFrom('metal_flow.detail_materials')
       .where('material_id', '=', input.id)
-      .innerJoin('metal_flow.details', 'detail_id', 'id')
-      .selectAll()
-      .execute()
+      .select(eb => eb.fn.countAll().as('count'))
+      .executeTakeFirstOrThrow()
 
-    return { material, details }
+    return { material, detailCount: Number(detailCount.count) }
   })

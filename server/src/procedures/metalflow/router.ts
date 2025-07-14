@@ -18,6 +18,7 @@ import { getMaterial } from '#root/procedures/metalflow/material/get.js'
 import { listMaterials } from '#root/procedures/metalflow/material/list.js'
 import { updateMaterial } from '#root/procedures/metalflow/material/update.js'
 import { getDetailInTheGroup } from './detail/grouping/get.js'
+import { listDetailsByMaterialId } from './detail/list_by_material_id.js'
 import { finishManufacturing } from './manufacturing/finish.js'
 import { manufacturingList } from './manufacturing/list.js'
 import { addDetailIntoManufacturingList } from './manufacturing/start.js'
@@ -46,6 +47,7 @@ export const metalFlowRouter = router({
   details: router({
     get: getDetail,
     list: getDetailList,
+    listByMaterialId: listDetailsByMaterialId,
     delete: deleteDetail,
     update: updateDetail,
     create: createDetail,

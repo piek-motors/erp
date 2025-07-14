@@ -19,12 +19,6 @@ import { RoundBarState } from './shape/rounde_bar.state'
 import { SquareState } from './shape/square_state'
 import { IMaterialShapeState } from './shape_state.interface'
 
-interface IDetail {
-  id: number
-  name: string
-  group_id: number | null
-}
-
 export class MaterialStore {
   readonly async = new AsyncStoreController()
   readonly supply = new MaterialSupplyStore()
@@ -78,9 +72,10 @@ export class MaterialStore {
     this.alloy = alloy
   }
   material?: Material
-  detailsMadeFromThisMaterial: IDetail[] = []
-  setDetailsMadeFromThisMaterial(details: IDetail[]) {
-    this.detailsMadeFromThisMaterial = details
+
+  detailCount: number = 0
+  setDetailCount(detailCount: number) {
+    this.detailCount = detailCount
   }
 
   clear() {
@@ -88,7 +83,6 @@ export class MaterialStore {
     this.unit = EnUnit.Kg
     this.shape = EnMaterialShape.RoundBar
     this.getShapeState(this.shape).reset()
-    this.detailsMadeFromThisMaterial = []
   }
 
   insertedMaterialId?: number
@@ -109,16 +103,8 @@ export class MaterialStore {
       const res = await rpc.metal.material.get.query({ id })
       this.setLinearMass(res.material.linear_mass.toString())
       this.setAlloy(res.material.alloy || '')
-
       this.syncState(map.material.fromDto(res))
-      this.setDetailsMadeFromThisMaterial(
-        res.details.map(e => ({
-          id: e.detail_id,
-          name: e.name,
-          group_id: e.logical_group_id
-        }))
-      )
-
+      this.setDetailCount(Number(res.detailCount))
       return res
     })
   }

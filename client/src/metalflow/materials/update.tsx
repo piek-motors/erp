@@ -1,9 +1,11 @@
 /** @jsxImportSource @emotion/react */
-import { List } from '@mui/joy'
+import { Button, List } from '@mui/joy'
+import { InModal } from 'components/modal'
 import {
   Inp,
   InputStack,
   Link,
+  LoadingHint,
   observer,
   P,
   Row,
@@ -18,6 +20,7 @@ import { mm2m } from 'lib/units'
 import { DetailName } from 'metalflow/details/name'
 import { AlloyAutocomplete, SaveAndDelete } from '../shared/basic'
 import { tabList } from './add'
+import { detailList } from './detail_list'
 import { material } from './material.state'
 import { SupplyModal } from './operations/supply/supply'
 import { WriteoffModal } from './operations/writeoff/writeoff'
@@ -78,19 +81,34 @@ export const MaterialUpdatePage = observer(() => {
 })
 
 const DetailsMadeOfMaterial = observer(() => {
-  if (material.detailsMadeFromThisMaterial.length === 0) {
-    return null
-  }
+  if (!material.id) return 'No material id'
+  const count =
+    material?.detailCount > 0 ? `[${material.detailCount}]` : undefined
+
+  const isEmptyList =
+    !detailList.async.loading &&
+    detailList.detailsMadeFromThisMaterial.length === 0
+
   return (
-    <Stack gap={2} sx={{ overflowY: 'scroll', maxHeight: '100vh' }}>
-      <P fontWeight={600}>Детали из этого материала</P>
-      <List>
-        {material.detailsMadeFromThisMaterial.map(each => (
-          <Link to={open(routeMap.metalflow.detail.edit, each.id)}>
-            <DetailName detail={each} />
-          </Link>
-        ))}
-      </List>
-    </Stack>
+    <InModal
+      openButton={<Button variant="outlined">Детали {count}</Button>}
+      open={detailList.detailsModalOpen}
+      setOpen={open => {
+        detailList.setDetailsModalOpen(open, material.id!)
+      }}
+    >
+      <Stack gap={2} sx={{ overflowY: 'scroll', maxHeight: '100vh' }}>
+        <P fontWeight={600}>Детали из этого материала</P>
+        <LoadingHint show={detailList.async.loading} />
+        <List>
+          {detailList.detailsMadeFromThisMaterial.map(each => (
+            <Link to={open(routeMap.metalflow.detail.edit, each.id)}>
+              <DetailName detail={each} />
+            </Link>
+          ))}
+          {isEmptyList && <P>Этот материал не используется в деталях</P>}
+        </List>
+      </Stack>
+    </InModal>
   )
 })
