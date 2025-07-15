@@ -1,5 +1,5 @@
-import { db, z } from '#root/deps.js'
-import { publicProcedure } from '#root/lib/trpc/trpc.js'
+import { db, publicProcedure, z } from '#root/deps.js'
+import { Warehouse } from '#root/service/warehouse.js'
 import { EnOperationType, EnWriteoffReason } from 'domain-model'
 
 export const listWriteoff = publicProcedure.query(async () => {
@@ -33,89 +33,13 @@ export const writeoffThroughMaterial = publicProcedure
   )
   .mutation(async ({ input, ctx }) => {
     return await db.transaction().execute(async trx => {
-      const current_stock = await trx
-        .selectFrom('metal_flow.materials')
-        .select(['stock'])
-        .where('id', '=', input.material_id)
-        .executeTakeFirstOrThrow()
-
-      if (current_stock.stock < input.lengthMeters) {
-        throw new Error('Not enough stock')
-      }
-
-      await trx
-        .insertInto('metal_flow.operations')
-        .values({
-          operation_type: EnOperationType.Writeoff,
-          user_id: ctx.user.id,
-          material_id: input.material_id,
-          qty: input.lengthMeters,
-          reason: input.reason
-        })
-        .execute()
-
-      const res = await trx
-        .updateTable('metal_flow.materials')
-        .set(eb => ({
-          stock: eb('stock', '-', input.lengthMeters)
-        }))
-        .returning(['id'])
-        .where('id', '=', input.material_id)
-        .returning(['stock'])
-        .execute()
-
-      return res[0].stock.toString()
-    })
-  })
-
-export const writeoffThroughDetail = publicProcedure
-  .input(
-    z.object({
-      detailId: z.number(),
-      qty: z.number(),
-      reason: z.nativeEnum(EnWriteoffReason)
-    })
-  )
-  .mutation(async ({ input }) => {
-    return await db.transaction().execute(async trx => {
-      const detailMaterials = await trx
-        .selectFrom('metal_flow.detail_materials')
-        .leftJoin(
-          'metal_flow.materials',
-          'metal_flow.detail_materials.material_id',
-          'metal_flow.materials.id'
-        )
-        .selectAll()
-        .where('detail_id', '=', input.detailId)
-        .execute()
-
-      const ids: number[] = []
-      for (const detailMaterial of detailMaterials) {
-        const totalQty = detailMaterial.data.length * input.qty
-        // insert writeoff
-        const writeoff = await trx
-          .insertInto('metal_flow.operations')
-          .values({
-            operation_type: EnOperationType.Writeoff,
-            user_id: 0,
-            material_id: detailMaterial.material_id,
-            qty: totalQty,
-            reason: input.reason
-          })
-          .returning(['id'])
-          .execute()
-        // update stock
-        await trx
-          .updateTable('metal_flow.materials')
-          .set(eb => ({
-            stock: eb('stock', '-', totalQty)
-          }))
-          .where('id', '=', detailMaterial.material_id)
-          .execute()
-        ids.push(detailMaterial.material_id)
-      }
-
-      return ids
+      const warehouse = new Warehouse(trx, ctx.user.id)
+      const result = await warehouse.subtractMaterial(
+        input.material_id,
+        input.lengthMeters,
+        input.reason
+      )
+      return result.stock.toString()
     })
   })
 

@@ -20,14 +20,10 @@ import { updateMaterial } from '#root/procedures/metalflow/material/update.js'
 import { getDetailInTheGroup } from './detail/grouping/get.js'
 import { listDetailsByMaterialId } from './detail/list_by_material_id.js'
 import { finishManufacturing } from './manufacturing/finish.js'
-import { manufacturingList } from './manufacturing/list.js'
-import { addDetailIntoManufacturingList } from './manufacturing/start.js'
+import { listManufacturing } from './manufacturing/list.js'
+import { startManufacturing } from './manufacturing/start.js'
 import { createMaterialSupply, listSupplies } from './material/supply.js'
-import {
-  listWriteoff,
-  writeoffThroughDetail,
-  writeoffThroughMaterial
-} from './material/writeoff.js'
+import { listWriteoff, writeoffThroughMaterial } from './material/writeoff.js'
 import { listOperations } from './operations/list.js'
 import { revertOperation } from './operations/revert-operation.js'
 
@@ -41,8 +37,7 @@ export const metalFlowRouter = router({
     listSupply: listSupplies,
     supply: createMaterialSupply,
     listWriteoff: listWriteoff,
-    writeoffTroughMaterial: writeoffThroughMaterial,
-    writeoffTroughDetail: writeoffThroughDetail
+    writeoffTroughMaterial: writeoffThroughMaterial
   }),
   details: router({
     get: getDetail,
@@ -67,8 +62,8 @@ export const metalFlowRouter = router({
     revert: revertOperation
   }),
   manufacturing: router({
-    list: manufacturingList,
-    add: addDetailIntoManufacturingList,
+    list: listManufacturing,
+    start: startManufacturing,
     finish: finishManufacturing
   }),
   deleteFile

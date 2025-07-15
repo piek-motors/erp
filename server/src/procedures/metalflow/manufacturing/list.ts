@@ -7,7 +7,7 @@ const query = db
   .select(['d.name as detail_name', 'd.logical_group_id as group_id'])
   .orderBy('m.started_at', 'desc')
 
-export const manufacturingList = procedure.query(async () => {
+export const listManufacturing = procedure.query(async () => {
   const [inProduction, finished] = await Promise.all([
     query.where('m.finished_at', 'is', null).execute(),
     query.where('m.finished_at', 'is not', null).limit(50).execute()

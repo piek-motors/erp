@@ -233,14 +233,14 @@ export class Detail {
   }
 
   async startManufacturing(qty: number) {
-    const r = await rpc.metal.manufacturing.add.mutate({
+    const r = await rpc.metal.manufacturing.start.mutate({
       detailId: this.id!,
       qty
     })
 
-    for (const m of r) {
+    for (const m of r.writeoffs) {
       const msg = `
-      Израсходовано ${roundAndTrim(m.totalCost)} материала ${
+      Израсходовано ${roundAndTrim(m.total_cost)} материала ${
         m.material_name
       }, осталось ${roundAndTrim(m.stock)}
       `
