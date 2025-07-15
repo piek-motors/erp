@@ -15,7 +15,7 @@ class OperationsStore {
   }
   async revertOperation(id: number) {
     await rpc.metal.operations.revert.mutate({ id })
-    this.setOperations(this.operations.filter(op => op.operation_id !== id))
+    this.setOperations(this.operations.filter(op => op.id !== id))
     await cache.materials.load()
     return true
   }

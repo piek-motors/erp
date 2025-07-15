@@ -1,5 +1,4 @@
 /** @jsxImportSource @emotion/react */
-import { Box } from '@mui/joy'
 import { PageTitle } from 'components'
 import { ScrollableWindow } from 'components/inputs/scrollable_window'
 import { Table } from 'components/table.impl'
@@ -12,6 +11,7 @@ import {
 } from 'domain-model'
 import { DeleteResourceButton, P } from 'lib/index'
 import { formatDateWithTime } from 'lib/utils/formatting'
+import { DetailName } from 'metalflow/details/name'
 import { OperationName } from 'metalflow/operations/operation_name'
 import { observer } from 'mobx-react-lite'
 import { useEffect, useMemo, useState } from 'react'
@@ -27,11 +27,11 @@ function getColumns(props: {
       Header: 'ID',
       accessor: 'operation_id'
     },
+
     {
-      Header: 'Тип',
+      Header: 'Дата',
       accessor: data => {
-        const isSupply = Number(data.operation_type) === EnOperationType.Supply
-        return <Box>{isSupply ? 'Поставка' : 'Списание'}</Box>
+        return formatDateWithTime(data.timestamp!)
       }
     },
     {
@@ -40,17 +40,26 @@ function getColumns(props: {
       accessor: data => <OperationName operation={data} showLinkButton={true} />
     },
     {
-      Header: 'Количество',
+      Header: 'Кол-во',
       accessor: data => (
         <P>
-          {data.qty} {data.material_label ? 'м' : 'шт'}
+          {data.qty} {data.label ? 'м' : 'шт'}
         </P>
       )
     },
     {
-      Header: 'Дата',
+      Header: 'Деталь',
       accessor: data => {
-        return formatDateWithTime(data.timestamp!)
+        if (!data.detail_id) return null
+        return (
+          <DetailName
+            detail={{
+              id: data.detail_id,
+              name: data.detail_name!,
+              group_id: data.logical_group_id!
+            }}
+          />
+        )
       }
     },
     {
@@ -69,7 +78,7 @@ function getColumns(props: {
           variant="plain"
           small
           onClick={() => {
-            store.revertOperation(data.operation_id)
+            store.revertOperation(data.id!)
           }}
         />
       )

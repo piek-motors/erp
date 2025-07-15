@@ -7,21 +7,12 @@ export const listOperations = publicProcedure
       .selectFrom('metal_flow.operations as o')
       .leftJoin('metal_flow.materials as m', 'o.material_id', 'm.id')
       .leftJoin('metal_flow.details as d', 'o.detail_id', 'd.id')
-      .select([
-        'o.id as operation_id',
-        'o.qty',
-        'o.timestamp',
-        'o.operation_type',
-        'o.data',
-        'o.reason',
-        'o.material_id',
-        'o.detail_id',
-        'm.label as material_label',
-        'm.unit as material_unit',
-        'd.name as detail_name'
-      ])
+      .selectAll(['o', 'm', 'd'])
+      .select('d.name as detail_name')
+      .select('o.id as operation_id')
+      .select('m.label as material_label')
+      .orderBy('o.id', 'desc')
       .limit(100)
-      .orderBy('operation_id', 'desc')
       .execute()
 
     return operations
