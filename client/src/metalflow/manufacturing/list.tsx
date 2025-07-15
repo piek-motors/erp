@@ -6,9 +6,9 @@ import { Label, LoadingHint, P, Stack, useEffect } from 'lib/index'
 import { DetailName } from 'metalflow/details/name'
 import { Column } from 'react-table'
 import { FinishModal } from './finish_modal'
-import { ManufactoringListOutput, ManufacturingStore } from './store'
+import { ManufactoringListOutput, ManufacturingListStore } from './list_store'
 
-const state = new ManufacturingStore()
+const state = new ManufacturingListStore()
 
 const columnList: Column<ManufactoringListOutput>[] = [
   {
