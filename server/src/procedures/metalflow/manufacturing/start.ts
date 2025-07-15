@@ -62,7 +62,7 @@ async function writeOffMaterials(
   // write off materials
   for (const material of materials) {
     const { id, label } = material
-    const totalCost = material.data.length * qty
+    const totalCost = (material.data.length * qty) / 1000
 
     if (material.stock < totalCost) {
       throw new ErrNotEnoughMaterial(
