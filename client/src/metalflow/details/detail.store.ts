@@ -3,7 +3,7 @@ import { Attachment } from 'domain-model'
 import { AsyncStoreController } from 'lib/async-store.controller'
 import { rpc } from 'lib/rpc.client'
 import { notifierStore } from 'lib/store/notifier.store'
-import { mm2m } from 'lib/units'
+import { roundAndTrim } from 'lib/utils/formatting'
 import { cache } from 'metalflow/cache/root'
 import { makeAutoObservable } from 'mobx'
 import { DetailWriteoffStore } from './writeoff/store'
@@ -240,9 +240,9 @@ export class Detail {
 
     for (const m of r) {
       const msg = `
-      Израсходовано ${mm2m(m.totalCost)} материала ${
+      Израсходовано ${roundAndTrim(m.totalCost)} материала ${
         m.material_name
-      }, осталось ${mm2m(m.stock)}
+      }, осталось ${roundAndTrim(m.stock)}
       `
       notifierStore.notify('info', msg)
     }

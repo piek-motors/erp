@@ -16,7 +16,7 @@ import {
   useParams
 } from 'lib/index'
 import { open, routeMap } from 'lib/routes'
-import { mm2m } from 'lib/units'
+import { roundAndTrim } from 'lib/utils/formatting'
 import { DetailName } from 'metalflow/details/name'
 import { AlloyAutocomplete, SaveAndDelete } from '../shared/basic'
 import { tabList } from './add'
@@ -47,7 +47,7 @@ export const MaterialUpdatePage = observer(() => {
           <WriteoffModal />
         </Row>
         <P level="body-sm">ID: {materialId}</P>
-        <P level="body-sm">Остаток: {mm2m(material.stock)}</P>
+        <P level="body-sm">Остаток: {roundAndTrim(material.stock)} м</P>
         <InputStack>
           {tabList.find(t => t.value === material.shape)?.component}
           <AlloyAutocomplete

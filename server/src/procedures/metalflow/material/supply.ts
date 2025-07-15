@@ -26,7 +26,6 @@ export const createMaterialSupply = publicProcedure
     })
   )
   .mutation(async ({ input }) => {
-    const length = input.lengthMeters * 1000
     await db
       .insertInto('metal_flow.operations')
       .values({
@@ -43,7 +42,7 @@ export const createMaterialSupply = publicProcedure
     const currentStock = await db
       .updateTable('metal_flow.materials')
       .set(eb => ({
-        stock: eb('stock', '+', length)
+        stock: eb('stock', '+', input.lengthMeters)
       }))
       .where('id', '=', input.material_id)
       .returning(['stock'])

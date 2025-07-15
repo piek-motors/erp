@@ -66,9 +66,9 @@ async function writeOffMaterials(
 
     if (material.stock < totalCost) {
       throw new ErrNotEnoughMaterial(
-        `Недостаточно материала (id=${id}) ${label}, требуется ${
-          totalCost / 1000
-        } м, имеется ${material.stock / 1000} м`
+        `Недостаточно материала (id=${id}) ${label}, требуется ${totalCost.toFixed(
+          1
+        )} м, имеется ${material.stock.toFixed(1)} м`
       )
     }
     if (totalCost === 0) {

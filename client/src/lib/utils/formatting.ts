@@ -48,3 +48,8 @@ export const formatTime: FormatTime = (
 
   return moment(payload).format('H:mm')
 }
+
+export function roundAndTrim(value: number, precision: number = 1): string {
+  if (!value) return '0'
+  return parseFloat(value.toFixed(precision)).toString()
+}

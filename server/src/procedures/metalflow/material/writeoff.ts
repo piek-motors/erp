@@ -38,8 +38,7 @@ export const writeoffThroughMaterial = publicProcedure
       .where('id', '=', input.material_id)
       .executeTakeFirstOrThrow()
 
-    const length = input.lengthMeters * 1000
-    if (current_stock.stock < length) {
+    if (current_stock.stock < input.lengthMeters) {
       throw new Error('Not enough stock')
     }
 
@@ -57,7 +56,7 @@ export const writeoffThroughMaterial = publicProcedure
     const res = await db
       .updateTable('metal_flow.materials')
       .set(eb => ({
-        stock: eb('stock', '-', length)
+        stock: eb('stock', '-', input.lengthMeters)
       }))
       .returning(['id'])
       .where('id', '=', input.material_id)

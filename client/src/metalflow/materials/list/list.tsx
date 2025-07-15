@@ -14,7 +14,7 @@ import {
   useNavigate
 } from 'lib/index'
 import { open, routeMap } from 'lib/routes'
-import { mm2m } from 'lib/units'
+import { roundAndTrim } from 'lib/utils/formatting'
 import { Column } from 'react-table'
 import { t } from '../../text'
 import { MaterialShapeFilter } from './shape_filter'
@@ -56,7 +56,7 @@ const columnList: Column<MaterialListOutput>[] = [
   },
   {
     Header: 'Остаток, м',
-    accessor: m => <>{mm2m(m.stock, 1)}</>
+    accessor: m => <>{roundAndTrim(m.stock)}</>
   }
 ]
 
