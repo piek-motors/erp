@@ -15,7 +15,7 @@ export class TokenService {
     }
   }
   verifyAccess(token: string) {
-    return jwt.verify(token, this.secret('access'))
+    return jwt.verify(token, this.secret('access')) as { id: number }
   }
   verifyRefresh(token: string) {
     return jwt.verify(token, this.secret('refresh'))

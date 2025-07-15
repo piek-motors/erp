@@ -92,7 +92,11 @@ export namespace DB {
   }
 
   interface MetarialWiteoffData {
-    writeoffs: Array<{ id: number; totalCost: number }>
+    writeoffs: Array<{
+      material_id: number
+      total_cost: number
+      writeoff_id: number
+    }>
   }
   export interface ManufacturingTable {
     id: GeneratedAlways<number>

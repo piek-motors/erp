@@ -1,5 +1,5 @@
 import { db, publicProcedure, TRPCError, z } from '#root/deps.js'
-import { EnUnit } from 'domain-model'
+import { EnOperationType, EnUnit, EnWriteoffReason } from 'domain-model'
 
 export const addDetailIntoManufacturingList = publicProcedure
   .input(
@@ -8,16 +8,14 @@ export const addDetailIntoManufacturingList = publicProcedure
       qty: z.number()
     })
   )
-  .mutation(async ({ input }) => {
-    // select materials from which detail is made
-    const materials = await db
-      .selectFrom('metal_flow.detail_materials')
-      .innerJoin('metal_flow.materials', 'material_id', 'id')
-      .where('detail_id', '=', input.detailId)
-      .select(['material_id as id', 'data', 'stock', 'label', 'unit'])
-      .execute()
-
-    const materialsWithStock = await writeOffMaterials(materials, input.qty)
+  .mutation(async ({ input, ctx }) => {
+    const materials = await getMaterialsForDetail(input.detailId)
+    const materialsWithStock = await writeOffMaterials(
+      materials,
+      input.qty,
+      ctx.user.id,
+      input.detailId
+    )
 
     await db
       .insertInto('metal_flow.manufacturing')
@@ -27,8 +25,9 @@ export const addDetailIntoManufacturingList = publicProcedure
         finished_at: null,
         material_writeoffs: {
           writeoffs: materialsWithStock.map(m => ({
-            id: m.material_id,
-            totalCost: m.totalCost
+            material_id: m.material_id,
+            total_cost: m.totalCost,
+            writeoff_id: m.writeoff_id
           }))
         }
       })
@@ -50,7 +49,9 @@ async function writeOffMaterials(
     stock: number
     data: { length: number }
   }[],
-  qty: number
+  qty: number,
+  user_id: number,
+  detail_id: number
 ) {
   const res: {
     material_id: number
@@ -58,7 +59,9 @@ async function writeOffMaterials(
     unit: EnUnit
     stock: number
     totalCost: number
+    writeoff_id: number
   }[] = []
+
   // write off materials
   for (const material of materials) {
     const { id, label } = material
@@ -83,9 +86,30 @@ async function writeOffMaterials(
       .returning(['unit'])
       .executeTakeFirstOrThrow()
 
+    const operation = await db
+      .insertInto('metal_flow.operations')
+      .values({
+        operation_type: EnOperationType.Writeoff,
+        reason: EnWriteoffReason.UsedInProduction,
+        material_id: material.id,
+        user_id,
+        detail_id,
+        qty: totalCost
+      })
+      .returning('id')
+      .executeTakeFirst()
+
+    if (!operation?.id) {
+      throw new TRPCError({
+        code: 'INTERNAL_SERVER_ERROR',
+        message: 'Failed to write off material'
+      })
+    }
+
     res.push({
       material_id: material.id,
       material_name: material.label,
+      writeoff_id: operation.id,
       unit: m.unit,
       stock,
       totalCost
@@ -93,6 +117,15 @@ async function writeOffMaterials(
   }
 
   return res
+}
+
+const getMaterialsForDetail = async (detailId: number) => {
+  return db
+    .selectFrom('metal_flow.detail_materials')
+    .innerJoin('metal_flow.materials', 'material_id', 'id')
+    .where('detail_id', '=', detailId)
+    .select(['material_id as id', 'data', 'stock', 'label', 'unit'])
+    .execute()
 }
 
 class ErrNotEnoughMaterial extends TRPCError {
