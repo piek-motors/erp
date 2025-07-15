@@ -23,7 +23,7 @@ export function InModal(props: {
           props.setOpen(false)
         }}
       >
-        <ModalDialog layout={props.layout} size="md">
+        <ModalDialog layout={props.layout} size={props.size}>
           <ModalClose variant="soft" color="danger" />
           <Box>{props.children}</Box>
         </ModalDialog>

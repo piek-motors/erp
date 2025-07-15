@@ -1,12 +1,11 @@
-import { UilCheck } from '@iconscout/react-unicons'
-import { IconButton } from '@mui/joy'
 import { ScrollableWindow } from 'components/inputs'
 import { PageTitle } from 'components/page-title'
 import { Table } from 'components/table.impl'
 import { observer } from 'lib/deps'
-import { Label, LoadingHint, P, Stack, useEffect, UseIcon } from 'lib/index'
+import { Label, LoadingHint, P, Stack, useEffect } from 'lib/index'
 import { DetailName } from 'metalflow/details/name'
 import { Column } from 'react-table'
+import { FinishModal } from './finish_modal'
 import { ManufactoringListOutput, ManufacturingStore } from './store'
 
 const state = new ManufacturingStore()
@@ -49,22 +48,7 @@ const columnList: Column<ManufactoringListOutput>[] = [
   },
   {
     Header: 'Завершить',
-    accessor: m => {
-      if (m.finished_at) return ''
-
-      return (
-        <IconButton
-          size="sm"
-          variant="soft"
-          color="success"
-          onClick={() => {
-            state.finishManufacturing(m.id)
-          }}
-        >
-          <UseIcon icon={UilCheck} />
-        </IconButton>
-      )
-    }
+    accessor: m => <FinishModal detail={m} />
   }
 ]
 
