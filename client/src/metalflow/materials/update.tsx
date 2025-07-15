@@ -81,7 +81,7 @@ export const MaterialUpdatePage = observer(() => {
 })
 
 const DetailsMadeOfMaterial = observer(() => {
-  if (!material.id) return 'No material id'
+  if (!material.id) return null
   const count =
     material?.detailCount > 0 ? `[${material.detailCount}]` : undefined
 

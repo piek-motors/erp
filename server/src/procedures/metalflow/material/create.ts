@@ -22,7 +22,7 @@ export const createMaterial = publicProcedure
   )
   .mutation(async ({ input }) => {
     const constructor = MaterialConstructorMap[input.shape]
-    const materialModel = new constructor(input.shape_data)
+    const materialModel = new constructor(input.shape_data, '', input.alloy)
     MaterialShapeAbstractionLayer.importShapeData(
       materialModel,
       input.shape_data
