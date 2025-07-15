@@ -1,28 +1,8 @@
-import { db, publicProcedure, z } from '#root/deps.js'
+import { db, procedure, publicProcedure, z } from '#root/deps.js'
 import { Warehouse } from '#root/service/warehouse.js'
-import { EnOperationType, EnWriteoffReason } from 'domain-model'
+import { EnWriteoffReason } from 'domain-model'
 
-export const listWriteoff = publicProcedure.query(async () => {
-  const writeoffs = await db
-    .selectFrom('metal_flow.operations as w')
-    .where('w.operation_type', '=', EnOperationType.Writeoff)
-    .innerJoin('metal_flow.materials as m', 'm.id', 'w.material_id')
-    .select([
-      'w.id',
-      'w.qty',
-      'w.timestamp',
-      'w.reason',
-      'w.data',
-      'm.id as material_id',
-      'm.label',
-      'm.unit'
-    ])
-    .execute()
-
-  return writeoffs
-})
-
-export const writeoffThroughMaterial = publicProcedure
+export const writeoffMaterial = procedure
   .input(
     z.object({
       material_id: z.number(),

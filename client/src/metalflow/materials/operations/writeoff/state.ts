@@ -35,7 +35,7 @@ export class MaterialWriteoffState {
     if (!materialId) {
       throw new Error('Material ID is not set')
     }
-    const stock = await rpc.metal.material.writeoffTroughMaterial.mutate({
+    const stock = await rpc.metal.material.writeoff.mutate({
       material_id: materialId,
       lengthMeters: Number(this.length),
       reason: this.reason,

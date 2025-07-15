@@ -222,7 +222,7 @@ export class Detail {
   }
 
   async deleteDetailMaterial(detailId: number, materialId: number) {
-    await rpc.metal.details.deleteDetailMaterial.mutate({
+    await rpc.metal.details.deleteMaterialRelation.mutate({
       detailId,
       materialId
     })

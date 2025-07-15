@@ -28,6 +28,5 @@ export const updateMaterial = publicProcedure
       })
       .where('id', '=', input.id)
       .executeTakeFirstOrThrow()
-
     return 'ok'
   })
