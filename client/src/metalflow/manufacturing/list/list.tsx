@@ -1,19 +1,36 @@
 import { ScrollableWindow } from 'components/inputs'
 import { PageTitle } from 'components/page-title'
 import { Table } from 'components/table.impl'
+import {
+  EnManufacturingOrderStatus,
+  uiManufacturingOrderStatus
+} from 'domain-model'
 import { observer } from 'lib/deps'
-import { Label, LoadingHint, P, Stack, useEffect } from 'lib/index'
+import {
+  LoadingHint,
+  open,
+  P,
+  routeMap,
+  Stack,
+  useEffect,
+  useNavigate
+} from 'lib/index'
 import { DetailName } from 'metalflow/details/name'
 import { Column } from 'react-table'
-import { FinishModal } from './finish_modal'
 import { ManufactoringListOutput, ManufacturingListStore } from './list_store'
 
 const state = new ManufacturingListStore()
 
 const columnList: Column<ManufactoringListOutput>[] = [
   {
-    Header: 'ID',
+    Header: 'ID Заказа',
     accessor: 'id'
+  },
+  {
+    Header: 'Статус',
+    accessor: m => {
+      return <P>{uiManufacturingOrderStatus(m.status)}</P>
+    }
   },
   {
     Header: 'Деталь',
@@ -45,17 +62,19 @@ const columnList: Column<ManufactoringListOutput>[] = [
       if (!m.finished_at) return ''
       return <P>{formatDate(new Date(m.finished_at!))}</P>
     }
-  },
-  {
-    Header: 'Завершить',
-    accessor: m => <FinishModal detail={m} />
   }
 ]
 
 export const ManufacturingList = observer(() => {
+  const navigate = useNavigate()
   useEffect(() => {
     state.load()
   }, [])
+
+  const onRowClick = (row: ManufactoringListOutput) => {
+    navigate(open(routeMap.metalflow.manufacturing_order.edit, row.id))
+  }
+
   return (
     <ScrollableWindow
       refreshTrigger={false}
@@ -63,11 +82,19 @@ export const ManufacturingList = observer(() => {
       scrollableContent={
         <Stack gap={1} p={1}>
           <LoadingHint show={state.async.loading} />
-          <Label label={'В производстве'} />
-          <Table data={state.detailsInProduction} columns={columnList} />
-
-          <Label label={'Готовые детали'} />
-          <Table data={state.detailsFinished} columns={columnList} />
+          <Table
+            trStyleCallback={tr => {
+              if (tr.original.status === EnManufacturingOrderStatus.Collected) {
+                return {
+                  backgroundColor: 'lightgreen'
+                }
+              }
+              return {}
+            }}
+            data={state.orders}
+            columns={columnList}
+            onRowClick={onRowClick}
+          />
         </Stack>
       }
     />

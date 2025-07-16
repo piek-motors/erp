@@ -34,3 +34,10 @@ export enum EnOperationType {
   Writeoff = 0,
   Supply = 1
 }
+
+export enum EnManufacturingOrderStatus {
+  Waiting = 0,
+  MaterialPreparation = 1,
+  Production = 2,
+  Collected = 3
+}

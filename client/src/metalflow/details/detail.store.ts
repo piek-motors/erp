@@ -232,15 +232,31 @@ export class Detail {
     this.setUsedMaterials(newMaterials)
   }
 
-  async startManufacturing(qty: number) {
-    const r = await rpc.metal.manufacturing.start.mutate({
-      detailId: this.id!,
+  async createManufacturingOrder() {
+    const r = await rpc.metal.manufacturing.create.mutate({
+      detailId: this.id!
+    })
+    return r
+  }
+
+  async startMaterialPreparationPhase() {
+    const r =
+      await rpc.metal.manufacturing.startMaterialPreparationPhase.mutate({
+        orderId: this.id!
+      })
+
+    return r
+  }
+
+  async startProductionPhase(qty: number) {
+    const r = await rpc.metal.manufacturing.startProductionPhase.mutate({
+      orderId: this.id!,
       qty
     })
 
-    for (const m of r.writeoffs) {
+    for (const m of r) {
       const msg = `
-      Израсходовано ${roundAndTrim(m.total_cost)} материала ${
+      Израсходовано ${roundAndTrim(m.totalCost)} материала ${
         m.material_name
       }, осталось ${roundAndTrim(m.stock)}
       `

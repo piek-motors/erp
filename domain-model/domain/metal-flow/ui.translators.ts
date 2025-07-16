@@ -1,4 +1,5 @@
 import {
+  EnManufacturingOrderStatus,
   EnMaterialShape,
   EnSupplyReason,
   EnUnit,
@@ -57,4 +58,15 @@ export const UiWriteoffType = {
 
 export function uiWriteoffType(type: EnWriteoffType) {
   return UiWriteoffType[type]
+}
+
+export const UiManufacturingOrderStatus = {
+  [EnManufacturingOrderStatus.Waiting]: 'Ожидание',
+  [EnManufacturingOrderStatus.MaterialPreparation]: 'Подготовка',
+  [EnManufacturingOrderStatus.Production]: 'Производство',
+  [EnManufacturingOrderStatus.Collected]: 'Завершено'
+}
+
+export function uiManufacturingOrderStatus(status: EnManufacturingOrderStatus) {
+  return UiManufacturingOrderStatus[status]
 }

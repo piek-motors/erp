@@ -235,11 +235,13 @@ export function SavedHint(props: { data: any }) {
 }
 
 export function ErrorHint(props: { e?: Error | any }) {
+  if (props.e) {
+    console.error(props.e)
+  }
   return (
     props.e && (
       <Box>
         <P color="danger">{props.e['message']}</P>
-        <P color="danger">{JSON.stringify(props.e)}</P>
       </Box>
     )
   )

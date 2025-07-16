@@ -5,7 +5,8 @@ import { DetailGroupPage } from './details/grouping/detail-group-page'
 import { DetailGroupsPage } from './details/grouping/groups-page'
 import { DetailsListPage } from './details/list/list'
 import { UpdateDetailPage } from './details/update'
-import { ManufacturingList } from './manufacturing/list'
+import { ManufacturingList } from './manufacturing/list/list'
+import { ManufacturingUpdatePage } from './manufacturing/update'
 import { MaterialAddPage } from './materials/add'
 import { MaterialListPage } from './materials/list/list'
 import { MaterialUpdatePage } from './materials/update'
@@ -75,7 +76,15 @@ const innerRoutes = [
   },
   {
     element: <ManufacturingList />,
-    path: metalflow.manufacturing
+    path: metalflow.manufacturing_orders
+  },
+  {
+    element: (
+      <Narrow>
+        <ManufacturingUpdatePage />
+      </Narrow>
+    ),
+    path: metalflow.manufacturing_order.edit
   }
 ] as RouteConfig[]
 

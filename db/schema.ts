@@ -1,4 +1,5 @@
 import {
+  EnManufacturingOrderStatus,
   EnMaterialShape,
   EnOperationType,
   EnSupplyReason,
@@ -109,6 +110,7 @@ export namespace DB {
       MetarialWiteoffData,
       MetarialWiteoffData
     >
+    status: EnManufacturingOrderStatus
   }
 
   export interface DetailMaterialJsonData {

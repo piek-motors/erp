@@ -1,5 +1,7 @@
 import { IDB, TRPCError } from '#root/deps.js'
-import { EnWriteoffReason } from 'domain-model'
+import { DB } from 'db'
+import { EnManufacturingOrderStatus, EnWriteoffReason } from 'domain-model'
+import { Selectable } from 'kysely'
 import { Warehouse } from './warehouse.js'
 
 export class Manufacturing {
@@ -8,7 +10,61 @@ export class Manufacturing {
     this.warehouse = new Warehouse(trx, userId)
   }
 
-  async startProduction(
+  async createOrder(
+    detailId: number
+  ): Promise<Selectable<DB.ManufacturingTable>> {
+    const detail = await this.trx
+      .insertInto('metal_flow.manufacturing')
+      .values({
+        detail_id: detailId,
+        qty: 0,
+        finished_at: null,
+        material_writeoffs: {
+          writeoffs: []
+        },
+        status: EnManufacturingOrderStatus.Waiting
+      })
+      .returningAll()
+      .executeTakeFirst()
+
+    if (!detail) {
+      throw new ErrManufacturingOrderNotFound(
+        `Manufacturing with id ${detailId} not found`
+      )
+    }
+
+    return detail
+  }
+
+  async startMaterialPreparationPhase(
+    orderId: number
+  ): Promise<Selectable<DB.ManufacturingTable>> {
+    const order = await this.trx
+      .selectFrom('metal_flow.manufacturing')
+      .where('id', '=', orderId)
+      .selectAll()
+      .executeTakeFirst()
+    if (!order)
+      throw new ErrManufacturingOrderNotFound(
+        `Manufacturing with id ${orderId} not found`
+      )
+    if (order.status !== EnManufacturingOrderStatus.Waiting) {
+      throw new ErrManufacturingOrderInvalidStatusTransition(
+        `Manufacturing with id ${orderId} not waiting`
+      )
+    }
+
+    await this.trx
+      .updateTable('metal_flow.manufacturing')
+      .set({ status: EnManufacturingOrderStatus.MaterialPreparation })
+      .where('id', '=', orderId)
+      .execute()
+
+    order.status = EnManufacturingOrderStatus.MaterialPreparation
+    return order
+  }
+
+  async startProductionPhase(
     detailId: number,
     qty: number
   ): Promise<
@@ -35,6 +91,7 @@ export class Manufacturing {
       .insertInto('metal_flow.manufacturing')
       .values({
         detail_id: detailId,
+        status: EnManufacturingOrderStatus.Production,
         qty,
         finished_at: null,
         material_writeoffs: {
@@ -50,7 +107,7 @@ export class Manufacturing {
     return writeoffs
   }
 
-  async finishProduction(manufacturingId: number): Promise<{
+  async finishOrder(manufacturingId: number): Promise<{
     id: number
     detail_id: number
     qty: number
@@ -59,13 +116,16 @@ export class Manufacturing {
   }> {
     const manufacturing = await this.trx
       .updateTable('metal_flow.manufacturing')
-      .set({ finished_at: new Date() })
+      .set({
+        finished_at: new Date(),
+        status: EnManufacturingOrderStatus.Collected
+      })
       .where('id', '=', manufacturingId)
       .returningAll()
       .executeTakeFirst()
 
     if (!manufacturing) {
-      throw new ErrManufacturingNotFound(
+      throw new ErrManufacturingOrderNotFound(
         `Manufacturing with id ${manufacturingId} not found`
       )
     }
@@ -138,10 +198,19 @@ class ErrZeroCost extends TRPCError {
   }
 }
 
-class ErrManufacturingNotFound extends TRPCError {
+class ErrManufacturingOrderNotFound extends TRPCError {
   constructor(message: string) {
     super({
       code: 'NOT_FOUND',
+      message
+    })
+  }
+}
+
+class ErrManufacturingOrderInvalidStatusTransition extends TRPCError {
+  constructor(message: string) {
+    super({
+      code: 'BAD_REQUEST',
       message
     })
   }

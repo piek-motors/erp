@@ -36,7 +36,10 @@ export const routeMap = {
     detailGroup: '/metalflow/details/groups/:id',
 
     operations: '/metalflow/operations',
-    manufacturing: '/metalflow/manufacturing'
+    manufacturing_orders: '/metalflow/manufacturing',
+    manufacturing_order: {
+      edit: '/metalflow/manufacturing/:id/edit'
+    }
   }
 } as const
 

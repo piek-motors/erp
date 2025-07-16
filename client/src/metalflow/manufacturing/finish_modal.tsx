@@ -3,7 +3,7 @@ import { Box, Button, IconButton, Stack } from '@mui/joy'
 import { InModal } from 'components/modal'
 import { Label, observer, P, Row, useEffect, UseIcon } from 'lib/index'
 import { finishModalStore } from './finish_modal_store'
-import { ManufactoringListOutput } from './list_store'
+import { ManufactoringListOutput } from './list/list_store'
 
 export const FinishModal = observer(
   (props: { detail: ManufactoringListOutput }) => {

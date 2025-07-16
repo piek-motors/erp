@@ -1,4 +1,4 @@
-import { Box, Stack } from '@mui/joy'
+import { Stack } from '@mui/joy'
 import { PageTitle } from 'components/page-title'
 import {
   observer,
@@ -37,7 +37,10 @@ export const UpdateDetailPage = observer(() => {
   }, [])
   return (
     <Stack gap={1} p={1}>
-      <PageTitle title={t.EditDetail} />
+      <PageTitle title={t.EditDetail}>
+        <StartManufacturing />
+      </PageTitle>
+
       <RowButColumsAtSm gap={1}>
         {/* Left Column - Detail Info */}
         <Stack gap={0.5} sx={{ flex: 1 }}>
@@ -53,9 +56,6 @@ export const UpdateDetailPage = observer(() => {
               // navigate(open(routeMap.metalflow.writeoff.new, detailId))
             }}
           /> */}
-          <Box>
-            <StartManufacturing />
-          </Box>
           <DetailGroupInput />
           <DetailPartCodeInput />
           <DetailParamsInput />
