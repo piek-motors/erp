@@ -1,4 +1,4 @@
-import { Box, Typography } from '@mui/joy'
+import { Box } from '@mui/joy'
 import { PageTitle } from 'components/page-title'
 import {
   EnManufacturingOrderStatus,
@@ -13,14 +13,18 @@ import {
   LoadingHint,
   observer,
   P,
+  routeMap,
   Stack,
   useEffect,
+  useNavigate,
   useParams
 } from 'lib/index'
+import { formatDateWithTime } from 'lib/utils/formatting'
 import { store } from './order.store'
 
 export const ManufacturingUpdatePage = observer(() => {
   const { id } = useParams<{ id: string }>()
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (id) {
@@ -50,27 +54,23 @@ export const ManufacturingUpdatePage = observer(() => {
 
       <Stack>
         <Label label="Деталь" />
-        <Typography>{order.detail_name}</Typography>
+        <P>{order.detail_name}</P>
       </Stack>
 
       <Stack>
         <Label label="Статус" />
-        <Typography>{uiManufacturingOrderStatus(order.status)}</Typography>
+        <P>{uiManufacturingOrderStatus(order.status)}</P>
       </Stack>
 
       <Stack>
         <Label label="Дата создания" />
-        <Typography>
-          {new Date(order.started_at).toLocaleString('ru-RU')}
-        </Typography>
+        <P>{formatDateWithTime(order.started_at)}</P>
       </Stack>
 
       {order.finished_at && (
         <Stack>
           <Label label="Дата окончания" />
-          <Typography>
-            {new Date(order.finished_at).toLocaleString('ru-RU')}
-          </Typography>
+          <P>{formatDateWithTime(order.finished_at)}</P>
         </Stack>
       )}
 
@@ -94,7 +94,7 @@ export const ManufacturingUpdatePage = observer(() => {
         <LoadingHint show={store.async.loading} />
         <ErrorHint e={store.async.error} />
 
-        {order.status === 0 && (
+        {order.status === EnManufacturingOrderStatus.Waiting && (
           <Button
             onClick={() => store.startMaterialPreparation()}
             disabled={store.async.loading}
@@ -103,7 +103,7 @@ export const ManufacturingUpdatePage = observer(() => {
           </Button>
         )}
 
-        {order.status === 1 && (
+        {order.status === EnManufacturingOrderStatus.MaterialPreparation && (
           <Button
             onClick={() => store.startProduction()}
             disabled={store.async.loading || store.qty === 0}
@@ -112,12 +112,13 @@ export const ManufacturingUpdatePage = observer(() => {
           </Button>
         )}
 
-        {order.status === 2 && (
+        {order.status === EnManufacturingOrderStatus.Production && (
           <Button onClick={() => store.finish()} disabled={store.async.loading}>
             Завершить заказ
           </Button>
         )}
       </Stack>
+
       {isDeletionAllowed && (
         <Box>
           <DeleteResourceButton
@@ -126,7 +127,9 @@ export const ManufacturingUpdatePage = observer(() => {
               if (
                 window.confirm(`Удалить производственный заказ ${order.id}?`)
               ) {
-                store.delete()
+                store.delete().then(() => {
+                  navigate(routeMap.metalflow.manufacturing_orders)
+                })
               }
             }}
           />
