@@ -142,7 +142,7 @@ export function CancelButton(props: { onClick: () => void }) {
 
 export function DeleteResourceButton(props: {
   variant?: IconButtonProps['variant']
-  onClick?: () => void
+  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void
   small?: boolean
 }) {
   return (

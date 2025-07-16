@@ -21,6 +21,7 @@ import { getDetailInTheGroup } from './detail/grouping/get.js'
 import { listDetailsByMaterialId } from './detail/list_by_material_id.js'
 import { createDetailWriteoff } from './detail/writeoff.js'
 import { createManufacturingOrder } from './manufacturing_order/create.js'
+import { deleteManufacturingOrder } from './manufacturing_order/delete.js'
 import { finishManufacturing } from './manufacturing_order/finish.js'
 import { getManufacturingOrder } from './manufacturing_order/get.js'
 import { listManufacturing } from './manufacturing_order/list.js'
@@ -67,6 +68,7 @@ export const metalFlowRouter = router({
   manufacturing: router({
     get: getManufacturingOrder,
     create: createManufacturingOrder,
+    delete: deleteManufacturingOrder,
     startMaterialPreparationPhase: startMaterialPreparationPhase,
     startProductionPhase: startProductionPhase,
     list: listManufacturing,

@@ -1,8 +1,12 @@
-import { Typography } from '@mui/joy'
+import { Box, Typography } from '@mui/joy'
 import { PageTitle } from 'components/page-title'
-import { uiManufacturingOrderStatus } from 'domain-model'
+import {
+  EnManufacturingOrderStatus,
+  uiManufacturingOrderStatus
+} from 'domain-model'
 import {
   Button,
+  DeleteResourceButton,
   ErrorHint,
   Inp,
   Label,
@@ -33,6 +37,12 @@ export const ManufacturingUpdatePage = observer(() => {
   }
 
   const order = store.order
+
+  const deletionAllowed = [
+    EnManufacturingOrderStatus.Waiting,
+    EnManufacturingOrderStatus.MaterialPreparation
+  ]
+  const isDeletionAllowed = deletionAllowed.includes(order.status)
 
   return (
     <Stack gap={1} p={1}>
@@ -108,6 +118,20 @@ export const ManufacturingUpdatePage = observer(() => {
           </Button>
         )}
       </Stack>
+      {isDeletionAllowed && (
+        <Box>
+          <DeleteResourceButton
+            onClick={e => {
+              e.stopPropagation()
+              if (
+                window.confirm(`Удалить производственный заказ ${order.id}?`)
+              ) {
+                store.delete()
+              }
+            }}
+          />
+        </Box>
+      )}
     </Stack>
   )
 })

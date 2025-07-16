@@ -29,4 +29,9 @@ export class ManufacturingListStore {
     await rpc.metal.manufacturing.finish.mutate({ id })
     this.load()
   }
+
+  async deleteOrder(id: number) {
+    await rpc.metal.manufacturing.delete.mutate({ id })
+    this.load()
+  }
 }

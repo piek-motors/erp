@@ -141,6 +141,36 @@ export class Manufacturing {
     return manufacturing
   }
 
+  async deleteOrder(manufacturingId: number): Promise<void> {
+    const manufacturing = await this.trx
+      .selectFrom('metal_flow.manufacturing')
+      .where('id', '=', manufacturingId)
+      .select(['id', 'status', 'material_writeoffs'])
+      .executeTakeFirst()
+
+    if (!manufacturing) {
+      throw new ErrManufacturingOrderNotFound(
+        `Manufacturing with id ${manufacturingId} not found`
+      )
+    }
+
+    const allowedStatuses = [
+      EnManufacturingOrderStatus.Waiting,
+      EnManufacturingOrderStatus.MaterialPreparation
+    ]
+
+    if (!allowedStatuses.includes(manufacturing.status)) {
+      throw new ErrCannotDeleteStartedOrder(
+        `Cannot delete manufacturing order that has already started`
+      )
+    }
+
+    await this.trx
+      .deleteFrom('metal_flow.manufacturing')
+      .where('id', '=', manufacturingId)
+      .execute()
+  }
+
   private async subtractMaterials(
     material: {
       id: number
@@ -208,6 +238,15 @@ class ErrManufacturingOrderNotFound extends TRPCError {
 }
 
 class ErrManufacturingOrderInvalidStatusTransition extends TRPCError {
+  constructor(message: string) {
+    super({
+      code: 'BAD_REQUEST',
+      message
+    })
+  }
+}
+
+class ErrCannotDeleteStartedOrder extends TRPCError {
   constructor(message: string) {
     super({
       code: 'BAD_REQUEST',

@@ -6,7 +6,7 @@ import { RouterOutput } from '../../../../server/src/lib/trpc'
 export type ManufacturingOrderOutput =
   RouterOutput['metal']['manufacturing']['get']
 
-class ManufacturingOrderStore {
+export class ManufacturingOrderStore {
   readonly async = new AsyncStoreController()
 
   order: ManufacturingOrderOutput | null = null
@@ -55,6 +55,11 @@ class ManufacturingOrderStore {
     if (!this.order) return
     await rpc.metal.manufacturing.finish.mutate({ id: this.order.id })
     await this.load(this.order.id)
+  }
+
+  async delete() {
+    if (!this.order) return
+    await rpc.metal.manufacturing.delete.mutate({ id: this.order.id })
   }
 }
 
