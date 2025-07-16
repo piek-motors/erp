@@ -6,12 +6,20 @@ import { RouterOutput } from '../../../../server/src/lib/trpc'
 export type ManufacturingOrderOutput =
   RouterOutput['metal']['manufacturing']['get']
 
+export type DetailMaterialOutput =
+  RouterOutput['metal']['details']['get']['detail_materials'][0]
+
 export class ManufacturingOrderStore {
   readonly async = new AsyncStoreController()
 
   order: ManufacturingOrderOutput | null = null
   setOrder(order: ManufacturingOrderOutput) {
     this.order = order
+  }
+
+  detailMaterials: DetailMaterialOutput[] = []
+  setDetailMaterials(materials: DetailMaterialOutput[]) {
+    this.detailMaterials = materials
   }
 
   qty: number = 0
@@ -27,6 +35,14 @@ export class ManufacturingOrderStore {
     this.async.run(async () => {
       const order = await rpc.metal.manufacturing.get.query({ id })
       this.setOrder(order)
+
+      // Load detail materials if we have a detail_id
+      if (order.detail_id) {
+        const detailInfo = await rpc.metal.details.get.query({
+          id: order.detail_id
+        })
+        this.setDetailMaterials(detailInfo.detail_materials)
+      }
     })
   }
 

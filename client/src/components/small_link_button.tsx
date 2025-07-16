@@ -26,20 +26,20 @@ export const WithSmallLinkButton = observer((props: Props) => {
     >
       <P sx={{ whiteSpace: 'nowrap' }}>{children}</P>
       {
-        <MuiJoyIconButton
-          variant="soft"
-          size="sm"
-          className={className}
-          sx={{
-            opacity: 0,
-            transition: 'opacity 50ms ease-in-out'
-          }}
-          onClick={onLinkClick}
-        >
-          <Link to={linkTo}>
+        <Link to={linkTo}>
+          <MuiJoyIconButton
+            variant="soft"
+            size="sm"
+            className={className}
+            sx={{
+              opacity: 0,
+              transition: 'opacity 50ms ease-in-out'
+            }}
+            onClick={onLinkClick}
+          >
             <UseIcon icon={UilLink} small />
-          </Link>
-        </MuiJoyIconButton>
+          </MuiJoyIconButton>
+        </Link>
       }
     </Row>
   )

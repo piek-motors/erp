@@ -14,12 +14,15 @@ import {
   observer,
   P,
   routeMap,
+  Row,
   Stack,
   useEffect,
   useNavigate,
   useParams
 } from 'lib/index'
 import { formatDateWithTime } from 'lib/utils/formatting'
+import { DetailName } from 'metalflow/details/name'
+import { MaterialName } from 'metalflow/shared'
 import { store } from './order.store'
 
 export const ManufacturingUpdatePage = observer(() => {
@@ -54,7 +57,40 @@ export const ManufacturingUpdatePage = observer(() => {
 
       <Stack>
         <Label label="Деталь" />
-        <P>{order.detail_name}</P>
+        <DetailName
+          showLinkButton
+          showParamsButton
+          detail={{
+            id: order.detail_id,
+            name: order.detail_name,
+            group_id: order.group_id || null
+          }}
+        />
+      </Stack>
+
+      <Stack>
+        <Label label="Необходимые материалы" />
+        {store.detailMaterials.length > 0 ? (
+          <Stack gap={0.5}>
+            {store.detailMaterials.map((material, index) => (
+              <Row gap={1}>
+                <MaterialName
+                  materialId={material.id || 0}
+                  materialLabel={material.label || ''}
+                  showLinkButton
+                />
+                -
+                <P level="body-sm" color="primary">
+                  расход {material.data?.length || 'не указано'} мм
+                </P>
+              </Row>
+            ))}
+          </Stack>
+        ) : (
+          <P sx={{ fontStyle: 'italic', color: 'text.secondary' }}>
+            Материалы не указаны
+          </P>
+        )}
       </Stack>
 
       <Stack>
