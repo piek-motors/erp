@@ -14,6 +14,10 @@ export function InModal(props: {
   layout?: 'fullscreen' | 'center'
   size?: ModalDialogProps['size']
 }) {
+  // Use provided layout or default to responsive behavior
+  const mobileLayout = props.layout || 'fullscreen'
+  const desktopLayout = props.layout || 'center'
+
   return (
     <>
       <Box onClick={() => props.setOpen(true)}>{props.openButton}</Box>
@@ -23,10 +27,23 @@ export function InModal(props: {
           props.setOpen(false)
         }}
       >
-        <ModalDialog layout={props.layout} size={props.size}>
-          <ModalClose variant="soft" color="danger" />
-          <Box>{props.children}</Box>
-        </ModalDialog>
+        <>
+          {/* Mobile Modal */}
+          <Box sx={{ display: { xs: 'block', md: 'none' } }}>
+            <ModalDialog layout={mobileLayout} size={props.size}>
+              <ModalClose variant="soft" color="danger" />
+              <Box>{props.children}</Box>
+            </ModalDialog>
+          </Box>
+
+          {/* Desktop Modal */}
+          <Box sx={{ display: { xs: 'none', md: 'block' } }}>
+            <ModalDialog layout={desktopLayout} size={props.size}>
+              <ModalClose variant="soft" color="danger" />
+              <Box>{props.children}</Box>
+            </ModalDialog>
+          </Box>
+        </>
       </MuiModal>
     </>
   )
