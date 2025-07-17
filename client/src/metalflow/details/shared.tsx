@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { UilTimes } from '@iconscout/react-unicons'
+import { UilMinus } from '@iconscout/react-unicons'
 import { Divider, IconButton } from '@mui/joy'
 import { BaseAutocomplete, BaseOption } from 'components/base-autocomplete'
 import { JsonEditor } from 'components/json-editor'
@@ -71,14 +71,14 @@ export const MaterialCostInputs = observer(() => {
                     }}
                   />
                   <IconButton
-                    variant="plain"
+                    variant="soft"
                     color="danger"
                     size="sm"
                     onClick={() => {
                       detailStore.deleteDetailMaterial(materialCost.materialId)
                     }}
                   >
-                    <UseIcon icon={UilTimes} />
+                    <UseIcon icon={UilMinus} />
                   </IconButton>
                 </Row>
               </Stack>
