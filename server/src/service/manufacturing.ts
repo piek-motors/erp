@@ -12,12 +12,12 @@ export class Manufacturing {
   }
 
   async createOrder(
-    detailId: number
+    detail_id: number
   ): Promise<Selectable<DB.ManufacturingTable>> {
-    const detail = await this.trx
+    return await this.trx
       .insertInto('metal_flow.manufacturing')
       .values({
-        detail_id: detailId,
+        detail_id,
         qty: 0,
         finished_at: null,
         material_writeoffs: {
@@ -26,29 +26,13 @@ export class Manufacturing {
         status: EnManufacturingOrderStatus.Waiting
       })
       .returningAll()
-      .executeTakeFirst()
-
-    if (!detail) {
-      throw new ErrManufacturingOrderNotFound(
-        `Manufacturing with id ${detailId} not found`
-      )
-    }
-
-    return detail
+      .executeTakeFirstOrThrow()
   }
 
   async startMaterialPreparationPhase(
     orderId: number
   ): Promise<Selectable<DB.ManufacturingTable>> {
-    const order = await this.trx
-      .selectFrom('metal_flow.manufacturing')
-      .where('id', '=', orderId)
-      .selectAll()
-      .executeTakeFirst()
-    if (!order)
-      throw new ErrManufacturingOrderNotFound(
-        `Manufacturing with id ${orderId} not found`
-      )
+    const order = await this.getOrder(orderId)
     if (order.status !== EnManufacturingOrderStatus.Waiting) {
       throw new ErrManufacturingOrderInvalidStatusTransition(
         `Manufacturing with id ${orderId} not waiting`
@@ -77,17 +61,7 @@ export class Manufacturing {
       totalCost: number
     }>
   > {
-    const order = await this.trx
-      .selectFrom('metal_flow.manufacturing')
-      .where('id', '=', orderId)
-      .selectAll()
-      .executeTakeFirst()
-
-    if (!order)
-      throw new ErrManufacturingOrderNotFound(
-        `Manufacturing with id ${orderId} not found`
-      )
-
+    const order = await this.getOrder(orderId)
     const materials = await this.trx
       .selectFrom('metal_flow.detail_materials')
       .innerJoin('metal_flow.materials', 'material_id', 'id')
@@ -146,18 +120,7 @@ export class Manufacturing {
   }
 
   async deleteOrder(manufacturingId: number): Promise<void> {
-    const manufacturing = await this.trx
-      .selectFrom('metal_flow.manufacturing')
-      .where('id', '=', manufacturingId)
-      .select(['id', 'status', 'material_writeoffs'])
-      .executeTakeFirst()
-
-    if (!manufacturing) {
-      throw new ErrManufacturingOrderNotFound(
-        `Manufacturing with id ${manufacturingId} not found`
-      )
-    }
-
+    const manufacturing = await this.getOrder(manufacturingId)
     const allowedStatuses = [
       EnManufacturingOrderStatus.Waiting,
       EnManufacturingOrderStatus.MaterialPreparation
@@ -213,6 +176,22 @@ export class Manufacturing {
         stock: res.stock,
         totalCost
       }))
+  }
+
+  private async getOrder(orderId: number) {
+    const order = await this.trx
+      .selectFrom('metal_flow.manufacturing')
+      .where('id', '=', orderId)
+      .selectAll()
+      .executeTakeFirst()
+
+    if (!order) {
+      throw new ErrManufacturingOrderNotFound(
+        `Manufacturing with id ${orderId} not found`
+      )
+    }
+
+    return order
   }
 }
 

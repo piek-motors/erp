@@ -1,4 +1,4 @@
-import { Stack } from '@mui/joy'
+import { Box, Stack } from '@mui/joy'
 import { PageTitle } from 'components/page-title'
 import {
   observer,
@@ -47,6 +47,9 @@ export const UpdateDetailPage = observer(() => {
           <P>
             <b>ID</b> {detailStore.id}
           </P>
+          <P>
+            <b>Остаток:</b> {detailStore.stock} шт
+          </P>
           <DetailNameInput />
           {/* <WarehouseOperationsLinks
             onSupplyClick={() => {
@@ -61,15 +64,17 @@ export const UpdateDetailPage = observer(() => {
           <DetailParamsInput />
           <MaterialRelationDataInputs />
           <DetailDescriptionInput />
-          <SaveAndDelete
-            itemName={`Деталь (${detailStore.id}) - ${detailStore.name}`}
-            handleDelete={() =>
-              detailStore.delete().then(() => {
-                navigate(open(routeMap.metalflow.details))
-              })
-            }
-            handleSave={() => detailStore.update()}
-          />
+          <Box width={'min-content'}>
+            <SaveAndDelete
+              itemName={`Деталь (${detailStore.id}) - ${detailStore.name}`}
+              handleDelete={() =>
+                detailStore.delete().then(() => {
+                  navigate(open(routeMap.metalflow.details))
+                })
+              }
+              handleSave={() => detailStore.update()}
+            />
+          </Box>
         </Stack>
         {/* Right Column - Documents */}
         <Stack gap={1} sx={{ flex: 1 }}>

@@ -41,7 +41,8 @@ export class DetailCache {
                 length: e[2].toString()
               })
             }
-          )
+          ),
+          stock: detail[5] as number
         })
       })
     )

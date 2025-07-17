@@ -144,17 +144,17 @@ export const SaveAndDelete = (props: {
 }) => {
   return (
     <Row alignItems={'end'} sx={{ py: 1 }}>
+      <DeleteConfirmDialog
+        title={props.itemName}
+        handleDelete={() => props.handleDelete()}
+        button={<DeleteResourceButton />}
+      />
       <SendMutation
         onClick={() => props.handleSave()}
         stackProps={{ sx: { flexGrow: 1 } }}
         buttonProps={{
           fullWidth: true
         }}
-      />
-      <DeleteConfirmDialog
-        title={props.itemName}
-        handleDelete={() => props.handleDelete()}
-        button={<DeleteResourceButton />}
       />
     </Row>
   )

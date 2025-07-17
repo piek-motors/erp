@@ -49,6 +49,10 @@ export class Detail {
   setName(name: string) {
     this.name = name
   }
+  stock!: number
+  setStock(stock: number) {
+    this.stock = stock
+  }
   description: string = ''
   setDescription(description: string) {
     this.description = description
@@ -86,6 +90,7 @@ export class Detail {
     description?: string
     partCode: string
     usedMaterials?: MaterialCost[]
+    stock: number
     groupId: number | null
     params?: Record<string, any> | null
   }) {
@@ -96,6 +101,7 @@ export class Detail {
       this.partCode = init.partCode
       this.usedMaterials = init.usedMaterials || []
       this.groupId = init.groupId ?? null
+      this.stock = init.stock
       this.technicalParameters = init.params ?? null
     }
     makeAutoObservable(this)
@@ -155,6 +161,7 @@ export class Detail {
     this.setGroupId(d.detail.logical_group_id ?? null)
     this.setTechnicalParameters(d.detail.params ?? null)
     this.setDescription(d.detail.description ?? '')
+    this.setStock(d.detail.stock)
 
     d.detail_materials.forEach((dm, index) => {
       this.addMaterial(

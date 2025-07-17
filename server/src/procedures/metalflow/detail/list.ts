@@ -10,6 +10,7 @@ export const getDetailList = publicProcedure.query(async ({ input }) => {
       'd.name',
       'd.part_code',
       'd.logical_group_id',
+      'd.stock',
       sql<
         {
           material_id: number
@@ -40,7 +41,8 @@ export const getDetailList = publicProcedure.query(async ({ input }) => {
         material.data.length,
         material.data.weight
       ]),
-      row.logical_group_id
+      row.logical_group_id,
+      row.stock
     ]
   })
 })

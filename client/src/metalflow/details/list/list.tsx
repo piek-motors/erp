@@ -42,6 +42,10 @@ const columnList: Column<Detail>[] = [
     )
   },
   {
+    Header: 'Остаток',
+    accessor: r => r.stock
+  },
+  {
     Header: 'Длина заготовки, мм',
     accessor: r => {
       const m = r.usedMaterials[0]
