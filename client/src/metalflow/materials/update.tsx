@@ -1,15 +1,10 @@
 /** @jsxImportSource @emotion/react */
-import { Button, Divider, List } from '@mui/joy'
-import { InModal } from 'components/modal'
+import { Card, Divider } from '@mui/joy'
 import {
   Inp,
-  InputStack,
-  Link,
-  LoadingHint,
   observer,
   P,
   Row,
-  RowButColumsAtSm,
   Stack,
   useEffect,
   useNavigate,
@@ -17,10 +12,9 @@ import {
 } from 'lib/index'
 import { open, routeMap } from 'lib/routes'
 import { roundAndTrim } from 'lib/utils/formatting'
-import { DetailName } from 'metalflow/details/name'
 import { AlloyAutocomplete, SaveAndDelete } from '../shared/basic'
 import { tabList } from './add'
-import { detailList } from './detail_list.store'
+import { DetailsMadeOfMaterial } from './details_made_of_that_material'
 import { material } from './material.store'
 import { OperationsListModal } from './operations/list'
 import { SupplyModal } from './operations/supply/supply'
@@ -40,14 +34,25 @@ export const MaterialUpdatePage = observer(() => {
   }, [])
 
   return (
-    <RowButColumsAtSm alignItems={'start'} p={1} gap={1}>
-      <Stack gap={1}>
-        <Row gap={2}>
-          <P level="h4">{material.label}</P>
-        </Row>
-        <P level="body-sm">ID: {materialId}</P>
-        <P level="body-sm">Остаток: {roundAndTrim(material.stock)} м</P>
-        <InputStack>
+    <Stack alignItems={'start'} p={1} gap={1}>
+      <Row gap={1} alignItems={'start'}>
+        <Stack alignItems={'start'}>
+          <Row gap={2}>
+            <P level="h4">{material.label}</P>
+          </Row>
+          <P level="body-sm">ID: {materialId}</P>
+          <P level="body-sm">Остаток: {roundAndTrim(material.stock)} м</P>
+        </Stack>
+        <Stack gap={1} justifyContent={'flex-end'} alignItems={'flex-end'}>
+          <SupplyModal />
+          <WriteoffModal />
+          <DetailsMadeOfMaterial />
+          <OperationsListModal materialId={materialId} />
+        </Stack>
+      </Row>
+      <Divider sx={{ mx: 1 }} />
+      <Card variant="outlined" size="sm">
+        <Stack>
           {tabList.find(t => t.value === material.shape)?.component}
           <AlloyAutocomplete
             setAlloy={alloy => {
@@ -63,7 +68,7 @@ export const MaterialUpdatePage = observer(() => {
             }}
             unit="кг/м"
           />
-        </InputStack>
+        </Stack>
         <SaveAndDelete
           itemName={`Материал (${material.id}) - ${material.label}`}
           handleDelete={() =>
@@ -73,51 +78,7 @@ export const MaterialUpdatePage = observer(() => {
           }
           handleSave={() => material.update()}
         />
-      </Stack>
-      <Divider orientation="vertical" sx={{ mx: 1 }} />
-      <Stack gap={2}>
-        <SupplyModal />
-        <WriteoffModal />
-        <DetailsMadeOfMaterial />
-        <OperationsListModal materialId={materialId} />
-      </Stack>
-    </RowButColumsAtSm>
-  )
-})
-
-const DetailsMadeOfMaterial = observer(() => {
-  if (!material.id) return null
-  const count =
-    material?.detailCount > 0 ? `[${material.detailCount}]` : undefined
-
-  const isEmptyList =
-    !detailList.async.loading &&
-    detailList.detailsMadeFromThisMaterial.length === 0
-
-  return (
-    <InModal
-      openButton={
-        <Button variant="soft" color="neutral">
-          Детали {count}
-        </Button>
-      }
-      open={detailList.detailsModalOpen}
-      setOpen={open => {
-        detailList.setDetailsModalOpen(open, material.id!)
-      }}
-    >
-      <Stack gap={2} sx={{ overflowY: 'auto', maxHeight: '100vh' }}>
-        <P fontWeight={600}>Детали из этого материала</P>
-        <LoadingHint show={detailList.async.loading} />
-        <List>
-          {detailList.detailsMadeFromThisMaterial.map(each => (
-            <Link to={open(routeMap.metalflow.detail.edit, each.id)}>
-              <DetailName detail={each} />
-            </Link>
-          ))}
-          {isEmptyList && <P>Этот материал не используется в деталях</P>}
-        </List>
-      </Stack>
-    </InModal>
+      </Card>
+    </Stack>
   )
 })

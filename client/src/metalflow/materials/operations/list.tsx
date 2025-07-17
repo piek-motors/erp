@@ -15,7 +15,7 @@ export const OperationsListModal = observer(
         }}
         openButton={
           <Button variant="soft" color="neutral">
-            Журнал операций
+            Операции
           </Button>
         }
       >
