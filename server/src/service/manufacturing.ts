@@ -6,6 +6,7 @@ import { Warehouse } from './warehouse.js'
 
 export class Manufacturing {
   private readonly warehouse: Warehouse
+
   constructor(private readonly trx: IDB, private readonly userId: number) {
     this.warehouse = new Warehouse(trx, userId)
   }
@@ -65,7 +66,7 @@ export class Manufacturing {
   }
 
   async startProductionPhase(
-    detailId: number,
+    orderId: number,
     qty: number
   ): Promise<
     Array<{
@@ -76,11 +77,22 @@ export class Manufacturing {
       totalCost: number
     }>
   > {
+    const order = await this.trx
+      .selectFrom('metal_flow.manufacturing')
+      .where('id', '=', orderId)
+      .selectAll()
+      .executeTakeFirst()
+
+    if (!order)
+      throw new ErrManufacturingOrderNotFound(
+        `Manufacturing with id ${orderId} not found`
+      )
+
     const materials = await this.trx
       .selectFrom('metal_flow.detail_materials')
       .innerJoin('metal_flow.materials', 'material_id', 'id')
-      .where('detail_id', '=', detailId)
-      .select(['material_id as id', 'data', 'stock', 'label', 'unit'])
+      .where('detail_id', '=', order.detail_id)
+      .select(['material_id', 'data', 'stock', 'label', 'unit'])
       .execute()
 
     const writeoffs = await Promise.all(
@@ -88,26 +100,18 @@ export class Manufacturing {
     )
 
     await this.trx
-      .insertInto('metal_flow.manufacturing')
-      .values({
-        detail_id: detailId,
-        status: EnManufacturingOrderStatus.Production,
+      .updateTable('metal_flow.manufacturing')
+      .set({
         qty,
-        finished_at: null,
-        material_writeoffs: {
-          writeoffs: writeoffs.map(m => ({
-            material_id: m.material_id,
-            total_cost: m.totalCost,
-            writeoff_id: m.writeoff_id
-          }))
-        }
+        status: EnManufacturingOrderStatus.Production
       })
+      .where('id', '=', orderId)
       .execute()
 
     return writeoffs
   }
 
-  async finishOrder(manufacturingId: number): Promise<{
+  async finishOrder(orderId: number): Promise<{
     id: number
     detail_id: number
     qty: number
@@ -120,13 +124,13 @@ export class Manufacturing {
         finished_at: new Date(),
         status: EnManufacturingOrderStatus.Collected
       })
-      .where('id', '=', manufacturingId)
+      .where('id', '=', orderId)
       .returningAll()
       .executeTakeFirst()
 
     if (!manufacturing) {
       throw new ErrManufacturingOrderNotFound(
-        `Manufacturing with id ${manufacturingId} not found`
+        `Manufacturing with id ${orderId} not found`
       )
     }
 
@@ -173,35 +177,37 @@ export class Manufacturing {
 
   private async subtractMaterials(
     material: {
-      id: number
+      material_id: number
       data: { length: number }
       stock: number
       label: string
     },
     qty: number
   ) {
-    const { id, label } = material
+    const { material_id, label } = material
     const totalCost = (material.data.length * qty) / 1000
 
     if (material.stock < totalCost) {
       throw new ErrNotEnoughMaterial(
-        `Недостаточно материала (id=${id}) ${label}, требуется ${totalCost.toFixed(
+        `Недостаточно материала (id=${material_id}) ${label}, требуется ${totalCost.toFixed(
           1
         )} м, имеется ${material.stock.toFixed(1)} м`
       )
     }
     if (totalCost === 0) {
-      throw new ErrZeroCost(`Не указан расход материала (id=${id}) ${label}`)
+      throw new ErrZeroCost(
+        `Не указан расход материала (id=${material_id}) ${label}`
+      )
     }
 
     return await this.warehouse
       .subtractMaterial(
-        material.id,
+        material.material_id,
         totalCost,
         EnWriteoffReason.UsedInProduction
       )
       .then(res => ({
-        material_id: material.id,
+        material_id: material.material_id,
         material_name: material.label,
         writeoff_id: res.operation_id,
         stock: res.stock,

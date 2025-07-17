@@ -1,5 +1,6 @@
 import { AsyncStoreController } from 'lib/async-store.controller'
 import { rpc } from 'lib/rpc.client'
+import { notifierStore } from 'lib/store/notifier.store'
 import { makeAutoObservable } from 'mobx'
 import { RouterOutput } from '../../../../server/src/lib/trpc'
 
@@ -46,36 +47,48 @@ export class ManufacturingOrderStore {
     })
   }
 
-  async startMaterialPreparation() {
-    if (!this.order) return
-    await rpc.metal.manufacturing.startMaterialPreparationPhase.mutate({
-      orderId: this.order.id
+  async startMaterialPreparationPhase() {
+    await this.async.run(async () => {
+      if (!this.order) throw new Error('Заказ не найден')
+      await rpc.metal.manufacturing.startMaterialPreparationPhase.mutate({
+        orderId: this.order.id
+      })
+      await this.load(this.order.id)
     })
-    await this.load(this.order.id)
   }
 
-  async startProduction() {
-    if (!this.order) return
-    if (!this.qty) {
-      this.async.setError(new Error('Кол-во не может быть 0'))
-      return
-    }
-    await rpc.metal.manufacturing.startProductionPhase.mutate({
-      orderId: this.order.id,
-      qty: parseInt(this.qty)
+  async startProductionPhase() {
+    await this.async.run(async () => {
+      if (!this.order) throw new Error('Заказ не найден')
+      if (!this.qty) throw new Error('Кол-во не может быть 0')
+      const writeoffs =
+        await rpc.metal.manufacturing.startProductionPhase.mutate({
+          orderId: this.order.id,
+          qty: parseInt(this.qty)
+        })
+      await this.load(this.order.id)
+      for (const writeoff of writeoffs) {
+        notifierStore.notify(
+          'info',
+          `Списано ${writeoff.totalCost} м ${writeoff.material_name}, остаток ${writeoff.stock} м`
+        )
+      }
     })
-    await this.load(this.order.id)
   }
 
   async finish() {
-    if (!this.order) return
-    await rpc.metal.manufacturing.finish.mutate({ id: this.order.id })
-    await this.load(this.order.id)
+    await this.async.run(async () => {
+      if (!this.order) throw new Error('Заказ не найден')
+      await rpc.metal.manufacturing.finish.mutate({ id: this.order.id })
+      await this.load(this.order.id)
+    })
   }
 
   async delete() {
-    if (!this.order) return
-    await rpc.metal.manufacturing.delete.mutate({ id: this.order.id })
+    await this.async.run(async () => {
+      if (!this.order) throw new Error('Заказ не найден')
+      await rpc.metal.manufacturing.delete.mutate({ id: this.order.id })
+    })
   }
 }
 

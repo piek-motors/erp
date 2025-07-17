@@ -17,19 +17,20 @@ export class AsyncStoreController {
   }
   start() {
     this.setLoading(true)
+    this.setError(null)
   }
   end() {
     this.setLoading(false)
   }
   async run<T>(fn: () => Promise<T>) {
-    this.setLoading(true)
+    this.start()
     try {
       return await fn()
     } catch (error) {
       this.setError(error as Error)
       throw error
     } finally {
-      this.setLoading(false)
+      this.end()
     }
   }
 }
