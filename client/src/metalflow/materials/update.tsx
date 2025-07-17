@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { Card, Divider } from '@mui/joy'
+import { Card } from '@mui/joy'
 import {
   Inp,
   observer,
@@ -50,7 +50,6 @@ export const MaterialUpdatePage = observer(() => {
           <OperationsListModal materialId={materialId} />
         </Stack>
       </Row>
-      <Divider sx={{ mx: 1 }} />
       <Card variant="outlined" size="sm">
         <Stack>
           {tabList.find(t => t.value === material.shape)?.component}
