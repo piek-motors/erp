@@ -146,8 +146,6 @@ export class Detail {
     m.setLength(data.length)
   }
 
-  deleteMaterialRelation(materialId: number) {}
-
   async load(detailId: number) {
     this.reset()
     this.async.start()
@@ -228,9 +226,12 @@ export class Detail {
     this.reset()
   }
 
-  async deleteDetailMaterial(detailId: number, materialId: number) {
+  async deleteDetailMaterial(materialId: number) {
+    if (!this.id) {
+      throw new Error('Detail id is not set')
+    }
     await rpc.metal.details.deleteMaterialRelation.mutate({
-      detailId,
+      detailId: this.id,
       materialId
     })
     const newMaterials = this.usedMaterials.filter(

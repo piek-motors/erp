@@ -20,7 +20,7 @@ import {
   DetailNameInput,
   DetailParamsInput,
   DetailPartCodeInput,
-  MaterialRelationDataInputs
+  MaterialCostInputs
 } from './shared'
 import { StartManufacturing } from './start-manufacturing'
 
@@ -62,7 +62,7 @@ export const UpdateDetailPage = observer(() => {
           <DetailGroupInput />
           <DetailPartCodeInput />
           <DetailParamsInput />
-          <MaterialRelationDataInputs />
+          <MaterialCostInputs />
           <DetailDescriptionInput />
           <Box width={'min-content'}>
             <SaveAndDelete

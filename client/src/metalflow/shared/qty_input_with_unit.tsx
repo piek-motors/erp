@@ -7,21 +7,29 @@ export const QtyInputWithUnit = (props: {
   value?: string
   defaultValue?: string
   setValue: (num: string) => void
-  label: string
+  label?: string
+  placeholder?: string
   size?: InputProps['size']
+  sx?: InputProps['sx']
 }) => {
   const { unitId, value: qty, setValue: setQty } = props
   return (
-    <Stack direction="row" alignItems="end" gap={1}>
+    <Stack
+      direction="row"
+      alignItems="end"
+      gap={1}
+      sx={{ width: 'min-content' }}
+    >
       <Inp
         label={props.label}
+        placeholder={props.placeholder}
         value={qty}
         onChange={v => {
           setQty(v)
         }}
         size={props.size}
-        sx={{ width: 150 }}
         type="number"
+        sx={{ maxWidth: 100, ...props.sx }}
       />
       <P pb={1}>{uiUnit(unitId)}</P>
     </Stack>

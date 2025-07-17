@@ -15,7 +15,7 @@ import {
   DetailNameInput,
   DetailParamsInput,
   DetailPartCodeInput,
-  MaterialRelationDataInputs
+  MaterialCostInputs
 } from './shared'
 export const CreateDetailPage = observer(() => {
   useEffect(() => {
@@ -30,7 +30,7 @@ export const CreateDetailPage = observer(() => {
       <DetailGroupInput />
       <DetailPartCodeInput />
       <DetailParamsInput />
-      <MaterialRelationDataInputs />
+      <MaterialCostInputs />
       <DetailDescriptionInput />
       <SendMutation
         onClick={() => detailStore.insert()}

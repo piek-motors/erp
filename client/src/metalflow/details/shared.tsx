@@ -1,9 +1,11 @@
 /** @jsxImportSource @emotion/react */
+import { UilTimes } from '@iconscout/react-unicons'
+import { Divider, IconButton } from '@mui/joy'
 import { BaseAutocomplete, BaseOption } from 'components/base-autocomplete'
+import { JsonEditor } from 'components/json-editor'
 import { EnUnit } from 'domain-model'
 import {
   Box,
-  DeleteResourceButton,
   Inp,
   Label,
   MultilineInput,
@@ -11,30 +13,14 @@ import {
   Row,
   Sheet,
   Stack,
+  UseIcon,
   observer
 } from 'lib/index'
 import { cache } from 'metalflow/cache/root'
+import { QtyInputWithUnit } from 'metalflow/shared'
 import { MaterialAutocomplete } from '../shared/material_autocomplete'
-import { QtyInputWithUnit } from '../shared/qty_input_with_unit'
 import { MaterialCost, detailStore } from './detail.store'
 
-export const MaterialLengthInput = observer(
-  (props: { materialRelation: MaterialCost }) => {
-    return (
-      <Row gap={3}>
-        <QtyInputWithUnit
-          size="sm"
-          label="Длина"
-          unitId={EnUnit.MilliMeter}
-          setValue={v => {
-            props.materialRelation.setLength(v)
-          }}
-          value={props.materialRelation.length}
-        />
-      </Row>
-    )
-  }
-)
 export const MaterialSelect = observer(
   (props: { value: MaterialCost; index: number }) => {
     return (
@@ -62,7 +48,7 @@ export const MaterialSelect = observer(
     )
   }
 )
-export const MaterialRelationDataInputs = observer(() => {
+export const MaterialCostInputs = observer(() => {
   return (
     <Box>
       <Label>Расход материалов</Label>
@@ -74,29 +60,33 @@ export const MaterialRelationDataInputs = observer(() => {
                 sx={{ width: 'max-content' }}
                 key={materialCost.materialId}
               >
-                <Stack>
-                  <Row>
-                    <MaterialSelect value={materialCost} index={index} />
-                    <DeleteResourceButton
-                      onClick={() => {
-                        if (!detailStore.id) {
-                          throw new Error('Detail id is not set')
-                        }
-                        detailStore.deleteDetailMaterial(
-                          detailStore.id,
-                          materialCost.materialId
-                        )
-                      }}
-                    />
-                  </Row>
-                  <MaterialLengthInput materialRelation={materialCost} />
-                </Stack>
+                <Row alignItems={'end'} gap={1}>
+                  <MaterialSelect value={materialCost} index={index} />
+                  <QtyInputWithUnit
+                    size="sm"
+                    unitId={EnUnit.MilliMeter}
+                    value={materialCost.length}
+                    setValue={v => {
+                      materialCost.setLength(v)
+                    }}
+                  />
+                  <IconButton
+                    variant="plain"
+                    color="danger"
+                    size="sm"
+                    onClick={() => {
+                      detailStore.deleteDetailMaterial(materialCost.materialId)
+                    }}
+                  >
+                    <UseIcon icon={UilTimes} />
+                  </IconButton>
+                </Row>
               </Stack>
             )
           })}
         </Stack>
+        <Divider sx={{ my: 1 }} />
         <PlusIcon
-          sx={{ mt: 1 }}
           onClick={() => {
             detailStore.addMaterial({ id: 0, label: '' }, { length: '' })
           }}
@@ -173,8 +163,6 @@ export const DetailGroupInput = observer(() => {
     </Stack>
   )
 })
-
-import { JsonEditor } from 'components/json-editor'
 
 export const DetailParamsInput = observer(() => {
   return (
