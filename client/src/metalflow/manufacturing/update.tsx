@@ -1,4 +1,4 @@
-import { Box } from '@mui/joy'
+import { Box, Card } from '@mui/joy'
 import { PageTitle } from 'components/page-title'
 import {
   EnManufacturingOrderStatus,
@@ -23,7 +23,7 @@ import {
 import { formatDateWithTime } from 'lib/utils/formatting'
 import { DetailName } from 'metalflow/details/name'
 import { MaterialName } from 'metalflow/shared'
-import { store } from './order.store'
+import { DetailMaterialOutput, store } from './order.store'
 
 export const ManufacturingUpdatePage = observer(() => {
   const { id } = useParams<{ id: string }>()
@@ -73,17 +73,7 @@ export const ManufacturingUpdatePage = observer(() => {
         {store.detailMaterials.length > 0 ? (
           <Stack gap={0.5}>
             {store.detailMaterials.map((material, index) => (
-              <Row gap={1}>
-                <MaterialName
-                  materialId={material.id || 0}
-                  materialLabel={material.label || ''}
-                  showLinkButton
-                />
-                -
-                <P level="body-sm" color="primary">
-                  расход {material.data?.length || 'не указано'} мм
-                </P>
-              </Row>
+              <DetailMaterialInfo key={index} material={material} />
             ))}
           </Stack>
         ) : (
@@ -113,14 +103,10 @@ export const ManufacturingUpdatePage = observer(() => {
       <Stack>
         <Inp
           label="Кол-во"
-          sx={{ maxWidth: 100 }}
-          type="number"
+          sx={{ maxWidth: 70 }}
           value={store.qty}
           onChange={v => {
-            const qty = Number(v)
-            if (qty > 0) {
-              store.setQty(qty)
-            }
+            store.setQty(v)
           }}
         />
       </Stack>
@@ -142,7 +128,7 @@ export const ManufacturingUpdatePage = observer(() => {
         {order.status === EnManufacturingOrderStatus.MaterialPreparation && (
           <Button
             onClick={() => store.startProduction()}
-            disabled={store.async.loading || store.qty === 0}
+            disabled={store.async.loading || !store.qty}
           >
             Начать производство
           </Button>
@@ -174,3 +160,51 @@ export const ManufacturingUpdatePage = observer(() => {
     </Stack>
   )
 })
+
+const DetailMaterialInfo = observer(
+  (props: { material: DetailMaterialOutput }) => {
+    const { material } = props
+    const totalConsumedAmount =
+      (parseInt(store.qty) * (material.data?.length || 0)) / 1000
+
+    const remainingAmount = material.stock
+      ? material.stock - totalConsumedAmount
+      : 0
+    return (
+      <Stack py={0.5}>
+        <Row gap={1}>
+          <MaterialName
+            materialId={material.id || 0}
+            materialLabel={material.label || ''}
+            showLinkButton
+          />
+          <P level="body-sm" color="primary">
+            Расход {material.data?.length || 'не указано'} мм
+          </P>
+        </Row>
+        {store.qty && (
+          <Card variant="outlined" size="sm">
+            <P level="body-sm" color="neutral">
+              Текущий остаток: {material.stock?.toFixed(1)} м
+            </P>
+            <P level="body-sm" color="primary">
+              Потребное количество: {totalConsumedAmount} мм
+            </P>
+            <P
+              color={
+                remainingAmount > 0
+                  ? 'success'
+                  : remainingAmount < 0
+                  ? 'danger'
+                  : 'primary'
+              }
+              level="body-sm"
+            >
+              Остаток после запуска {remainingAmount.toFixed(1)} м
+            </P>
+          </Card>
+        )}
+      </Stack>
+    )
+  }
+)

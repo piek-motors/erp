@@ -22,8 +22,8 @@ export class ManufacturingOrderStore {
     this.detailMaterials = materials
   }
 
-  qty: number = 0
-  setQty(qty: number) {
+  qty: string = ''
+  setQty(qty: string) {
     this.qty = qty
   }
 
@@ -56,13 +56,13 @@ export class ManufacturingOrderStore {
 
   async startProduction() {
     if (!this.order) return
-    if (this.qty === 0) {
+    if (!this.qty) {
       this.async.setError(new Error('Кол-во не может быть 0'))
       return
     }
     await rpc.metal.manufacturing.startProductionPhase.mutate({
       orderId: this.order.id,
-      qty: this.qty
+      qty: parseInt(this.qty)
     })
     await this.load(this.order.id)
   }
