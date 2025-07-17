@@ -4,7 +4,7 @@ import { uiWriteoffReason, UiWriteoffReason } from 'domain-model'
 import { observer } from 'lib/deps'
 import { Btn, P, useState } from 'lib/index'
 import { t } from '../../../text'
-import { material } from '../../material.state'
+import { material } from '../../material.store'
 import { MaterialOperationLayout } from '../shared/material-operation-layout'
 import { ReasonSelect } from '../shared/reason-select'
 

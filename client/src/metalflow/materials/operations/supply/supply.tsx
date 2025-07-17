@@ -3,7 +3,7 @@ import { InModal } from 'components/modal'
 import { EnSupplyReason, uiSupplyReason, UiSupplyReason } from 'domain-model'
 import { Btn, P, useState } from 'lib/index'
 import { observer } from 'mobx-react-lite'
-import { material } from '../../material.state'
+import { material } from '../../material.store'
 import { MaterialOperationLayout } from '../shared/material-operation-layout'
 import { ReasonSelect } from '../shared/reason-select'
 

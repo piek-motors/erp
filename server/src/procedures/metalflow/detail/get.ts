@@ -38,16 +38,9 @@ export const getDetail = publicProcedure
         .selectAll()
         .execute()
     ])
-    const group = await db
-      .selectFrom('metal_flow.detail_group')
-      .where('id', '=', detail.logical_group_id)
-      .select('name')
-      .executeTakeFirst()
-
     return {
       detail,
       detail_materials: detailMaterials,
-      attachments,
-      groupName: group?.name ?? null
+      attachments
     }
   })

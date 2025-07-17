@@ -1,6 +1,6 @@
 import { db, publicProcedure, z } from '#root/deps.js'
 
-export const listDetailsByMaterialId = publicProcedure
+export const getDetailsByMaterialId = publicProcedure
   .input(z.object({ material_id: z.number() }))
   .query(async ({ input }) => {
     const details = await db

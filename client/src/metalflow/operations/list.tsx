@@ -86,12 +86,18 @@ function getColumns(props: {
   ]
 }
 
-export const OperationsList = observer(() => {
+interface Props {
+  materialId?: number
+  detailId?: number
+}
+
+export const OperationsList = observer((props: Props) => {
+  const { materialId, detailId } = props
   const [key, setKey] = useState(0)
   const columns = useMemo(() => getColumns({ key, setKey }), [key, setKey])
   useEffect(() => {
-    store.load()
-  }, [])
+    store.load(materialId, detailId)
+  }, [materialId, detailId])
   return (
     <ScrollableWindow
       refreshTrigger={false}

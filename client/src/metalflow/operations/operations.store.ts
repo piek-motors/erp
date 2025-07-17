@@ -19,8 +19,11 @@ class OperationsStore {
     await cache.materials.load()
     return true
   }
-  async load() {
-    const operations = await rpc.metal.operations.list.query({})
+  async load(materialId?: number, detailId?: number) {
+    const operations = await rpc.metal.operations.list.query({
+      materialId,
+      detailId
+    })
     this.setOperations(operations)
   }
 }

@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { Button, List } from '@mui/joy'
+import { Button, Divider, List } from '@mui/joy'
 import { InModal } from 'components/modal'
 import {
   Inp,
@@ -20,8 +20,9 @@ import { roundAndTrim } from 'lib/utils/formatting'
 import { DetailName } from 'metalflow/details/name'
 import { AlloyAutocomplete, SaveAndDelete } from '../shared/basic'
 import { tabList } from './add'
-import { detailList } from './detail_list'
-import { material } from './material.state'
+import { detailList } from './detail_list.store'
+import { material } from './material.store'
+import { OperationsListModal } from './operations/list'
 import { SupplyModal } from './operations/supply/supply'
 import { WriteoffModal } from './operations/writeoff/writeoff'
 
@@ -39,12 +40,10 @@ export const MaterialUpdatePage = observer(() => {
   }, [])
 
   return (
-    <RowButColumsAtSm alignItems={'start'} p={1} gap={2}>
+    <RowButColumsAtSm alignItems={'start'} p={1} gap={1}>
       <Stack gap={1}>
         <Row gap={2}>
           <P level="h4">{material.label}</P>
-          <SupplyModal />
-          <WriteoffModal />
         </Row>
         <P level="body-sm">ID: {materialId}</P>
         <P level="body-sm">Остаток: {roundAndTrim(material.stock)} м</P>
@@ -75,7 +74,13 @@ export const MaterialUpdatePage = observer(() => {
           handleSave={() => material.update()}
         />
       </Stack>
-      <DetailsMadeOfMaterial />
+      <Divider orientation="vertical" sx={{ mx: 1 }} />
+      <Stack gap={2}>
+        <SupplyModal />
+        <WriteoffModal />
+        <DetailsMadeOfMaterial />
+        <OperationsListModal materialId={materialId} />
+      </Stack>
     </RowButColumsAtSm>
   )
 })
@@ -91,13 +96,17 @@ const DetailsMadeOfMaterial = observer(() => {
 
   return (
     <InModal
-      openButton={<Button variant="outlined">Детали {count}</Button>}
+      openButton={
+        <Button variant="soft" color="neutral">
+          Детали {count}
+        </Button>
+      }
       open={detailList.detailsModalOpen}
       setOpen={open => {
         detailList.setDetailsModalOpen(open, material.id!)
       }}
     >
-      <Stack gap={2} sx={{ overflowY: 'scroll', maxHeight: '100vh' }}>
+      <Stack gap={2} sx={{ overflowY: 'auto', maxHeight: '100vh' }}>
         <P fontWeight={600}>Детали из этого материала</P>
         <LoadingHint show={detailList.async.loading} />
         <List>

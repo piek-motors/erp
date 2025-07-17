@@ -9,7 +9,7 @@ import {
   ToggleButtonGroup
 } from 'lib/index'
 import { t } from 'metalflow/text'
-import { material } from '../material.state'
+import { material } from '../material.store'
 
 export const RoundBarInputBase = observer(() => {
   return (

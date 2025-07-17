@@ -13,7 +13,7 @@ import {
 import { open, routeMap } from 'lib/routes'
 import { AlloyAutocomplete } from '../shared/basic'
 import { t } from '../text'
-import { material } from './material.state'
+import { material } from './material.store'
 import { ListMaterialInputBase } from './shape/list'
 import { PipeMaterialInputBase } from './shape/pipe'
 import { RoundBarInputBase } from './shape/round_bar'
