@@ -188,7 +188,7 @@ const DetailMaterialInfo = observer(
               Текущий остаток: {material.stock?.toFixed(1)} м
             </P>
             <P level="body-sm" color="primary">
-              Потребное количество: {totalConsumedAmount} мм
+              Потребное количество: {totalConsumedAmount.toFixed(3)} м
             </P>
             <P
               color={
