@@ -22,7 +22,7 @@ import { Column } from 'react-table'
 import { Detail } from '../detail.store'
 import { DetailName } from '../name'
 import { AlphabetIndex } from './alphabet_index'
-import { detailListStore as state } from './state'
+import { detailListStore as state } from './store'
 
 const columnList: Column<Detail>[] = [
   {

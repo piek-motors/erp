@@ -4,7 +4,7 @@ import { z } from 'zod'
 export const createDetailGroup = procedure
   .input(
     z.object({
-      name: z.string().min(5, 'Group name is required')
+      name: z.string().min(3, 'Название группы должно быть не менее 3 символов')
     })
   )
   .mutation(async ({ input }) => {

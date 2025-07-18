@@ -28,7 +28,7 @@ export const WithSmallLinkButton = observer((props: Props) => {
       {
         <Link to={linkTo}>
           <MuiJoyIconButton
-            variant="soft"
+            variant="outlined"
             size="sm"
             className={className}
             sx={{

@@ -31,7 +31,7 @@ export function InModal(props: {
           {/* Mobile Modal */}
           <Box sx={{ display: { xs: 'block', md: 'none' } }}>
             <ModalDialog layout={mobileLayout} size={props.size}>
-              <ModalClose variant="soft" color="danger" />
+              <ModalClose variant="soft" color="warning" />
               <Box>{props.children}</Box>
             </ModalDialog>
           </Box>
@@ -39,7 +39,7 @@ export function InModal(props: {
           {/* Desktop Modal */}
           <Box sx={{ display: { xs: 'none', md: 'block' } }}>
             <ModalDialog layout={desktopLayout} size={props.size}>
-              <ModalClose variant="soft" color="danger" />
+              <ModalClose variant="soft" color="warning" />
               <Box>{props.children}</Box>
             </ModalDialog>
           </Box>

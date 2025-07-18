@@ -5,7 +5,7 @@ export const updateDetailGroup = procedure
   .input(
     z.object({
       id: z.number(),
-      name: z.string().min(1, 'Group name is required')
+      name: z.string().min(3, 'Название группы должно быть не менее 3 символов')
     })
   )
   .mutation(async ({ input }) => {

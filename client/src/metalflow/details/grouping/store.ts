@@ -2,6 +2,7 @@ import { AsyncStoreController } from 'lib/async-store.controller'
 import { rpc } from 'lib/rpc.client'
 import { cache } from 'metalflow/cache/root'
 import { makeAutoObservable } from 'mobx'
+import { groupNameState } from './group_name.state'
 
 export interface Group {
   id: number
@@ -23,9 +24,10 @@ export interface GroupWithDetails {
 export class DetailGroupStore {
   readonly async = new AsyncStoreController()
 
-  selectedGroup: GroupWithDetails | null = null
-  setSelectedGroup(group: GroupWithDetails | null) {
-    this.selectedGroup = group
+  targetGroup: GroupWithDetails | null = null
+  setTargetGroup(group: GroupWithDetails | null) {
+    this.targetGroup = group
+    groupNameState.setName(group?.group.name || '')
   }
   availableDetails: Detail[] = []
   setAvailableDetails(details: Detail[]) {
@@ -35,6 +37,7 @@ export class DetailGroupStore {
   setSelectedDetailIds(ids: number[]) {
     this.selectedDetailIds = ids
   }
+
   constructor() {
     makeAutoObservable(this)
   }
@@ -66,14 +69,15 @@ export class DetailGroupStore {
   async loadGroupWithDetails(groupId: number) {
     return this.async.run(async () => {
       const groupData = await rpc.metal.detailGroups.get.query({ groupId })
-      this.setSelectedGroup(groupData)
+      this.setTargetGroup(groupData)
     })
   }
 
-  async loadAvailableDetails() {
+  async loadAvailableUniversalDetails() {
     return this.async.run(async () => {
-      const details = await rpc.metal.details.list.query()
-
+      const details = await rpc.metal.details.list.query({
+        onlyUniversalDetails: true
+      })
       this.setAvailableDetails(
         details.map(detail => ({
           id: detail[0] as number,
@@ -100,20 +104,10 @@ export class DetailGroupStore {
         name
       })
       await cache.detailGroups.load()
-      if (this.selectedGroup?.group.id === id) {
+      if (this.targetGroup?.group.id === id) {
         await this.loadGroupWithDetails(id)
       }
       return updatedGroup
-    })
-  }
-
-  async deleteGroup(id: number) {
-    return this.async.run(async () => {
-      await rpc.metal.detailGroups.delete.mutate({ id })
-      cache.detailGroups.removeGroup(id)
-      if (this.selectedGroup?.group.id === id) {
-        this.setSelectedGroup(null)
-      }
     })
   }
 
@@ -129,13 +123,14 @@ export class DetailGroupStore {
     return this.async.run(async () => {
       await rpc.metal.detailGroups.removeDetails.mutate({ groupId, detailIds })
       await this.loadGroupWithDetails(groupId)
+      this.clearSelection()
     })
   }
 
   get filteredAvailableDetails() {
-    if (!this.selectedGroup) return this.availableDetails
+    if (!this.targetGroup) return this.availableDetails
 
-    const groupDetailIds = this.selectedGroup.details.map(d => d.id)
+    const groupDetailIds = this.targetGroup.details.map(d => d.id)
     return this.availableDetails
       .filter(
         // remove details that are already in the group
@@ -146,11 +141,11 @@ export class DetailGroupStore {
   }
 
   clear() {
-    this.selectedGroup = null
+    this.targetGroup = null
     this.availableDetails = []
     this.selectedDetailIds = []
     this.async.reset()
   }
 }
 
-export const detailGroupStore = new DetailGroupStore()
+export const store = new DetailGroupStore()

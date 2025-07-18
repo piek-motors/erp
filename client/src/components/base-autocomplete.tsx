@@ -11,6 +11,7 @@ export interface BaseOption {
 
 interface BaseAutocompleteProps<T extends BaseOption> {
   label?: string
+  placeholder?: string
   sx?: SxProps
   options: T[]
   value: T | T[] | null
@@ -29,6 +30,7 @@ interface BaseAutocompleteProps<T extends BaseOption> {
 
 export function BaseAutocomplete<T extends BaseOption>({
   label,
+  placeholder,
   sx,
   options,
   value,
@@ -52,6 +54,7 @@ export function BaseAutocomplete<T extends BaseOption>({
       <Label label={label} />
       {error}
       <Autocomplete
+        placeholder={placeholder}
         size={size}
         sx={sx}
         multiple={multiple}

@@ -34,5 +34,6 @@ export class DetailGroupCache {
   async load() {
     const groups = await rpc.metal.detailGroups.list.query()
     this.setGroups(groups)
+    return groups
   }
 }

@@ -5,7 +5,7 @@ import { Button, P, Row, observer } from 'lib/index'
 import { open, routeMap } from 'lib/routes'
 import { cache } from 'metalflow/cache/root'
 import { Link } from 'react-router-dom'
-import { DetailParamsPopup } from './detail-params-popup'
+import { DetailShortInfoPopup } from './detail_short_info.popup'
 
 interface Detail {
   id: number
@@ -59,7 +59,7 @@ export const DetailName = observer(
               transition: opacity 50ms ease-in-out, visibility 50ms ease-in-out;
             `}
           >
-            <DetailParamsPopup detailId={detail.id} />
+            <DetailShortInfoPopup detailId={detail.id} />
           </div>
         )}
       </Row>

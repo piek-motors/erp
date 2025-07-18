@@ -1,5 +1,5 @@
 import { makeAutoObservable } from 'mobx'
-import { detailListStore as store } from '../details/list/state'
+import { detailListStore as store } from '../details/list/store'
 import { DetailCache } from './detail_cache'
 import { DetailGroupCache } from './detail_group_cache'
 import { MaterialCache } from './material_cache'

@@ -15,7 +15,7 @@ interface DetailParamsPopupProps {
   detailId: number
 }
 
-export const DetailParamsPopup = observer(
+export const DetailShortInfoPopup = observer(
   ({ detailId }: DetailParamsPopupProps) => {
     const [detail] = useState(() => new Detail())
     return (
@@ -26,7 +26,7 @@ export const DetailParamsPopup = observer(
           slotProps={{
             root: {
               size: 'sm',
-              variant: 'soft',
+              variant: 'outlined',
               color: 'neutral',
               onClick: e => {
                 e.stopPropagation()

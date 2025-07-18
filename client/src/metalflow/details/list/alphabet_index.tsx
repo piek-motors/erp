@@ -1,6 +1,6 @@
 import { Button, observer, Stack } from 'lib'
 import { cache } from 'metalflow/cache/root'
-import { detailListStore } from './state'
+import { detailListStore } from './store'
 
 export const alphabet = 'АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ'.split('')
 

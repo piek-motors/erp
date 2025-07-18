@@ -23,7 +23,7 @@ export class DetailCache {
     makeAutoObservable(this)
   }
   async load() {
-    const details = await rpc.metal.details.list.query()
+    const details = await rpc.metal.details.list.query({})
 
     this.setDetails(
       details.map(detail => {
