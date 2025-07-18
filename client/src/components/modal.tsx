@@ -11,6 +11,7 @@ export function InModal(props: {
   children: React.ReactNode
   open: boolean
   setOpen: (open: boolean) => void
+  onClose?: () => void
   layout?: 'fullscreen' | 'center'
   size?: ModalDialogProps['size']
 }) {
@@ -25,6 +26,7 @@ export function InModal(props: {
         open={props.open}
         onClose={() => {
           props.setOpen(false)
+          props.onClose?.()
         }}
       >
         <>

@@ -1,7 +1,7 @@
 import { observer, open, routeMap, SendMutation, useNavigate } from 'lib/index'
 import { detailStore } from './detail.store'
 
-export const StartManufacturing = observer(() => {
+export const CreateManufacturingOrder = observer(() => {
   const navigate = useNavigate()
   return (
     <SendMutation

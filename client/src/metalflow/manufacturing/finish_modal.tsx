@@ -11,7 +11,7 @@ export const FinishModal = observer(
       return null
     }
     useEffect(() => {
-      finishModalStore.loadDetail(props.detail.detail_id)
+      finishModalStore.detail.loadShortInfo(props.detail.detail_id)
     }, [props.detail.detail_id])
 
     return (

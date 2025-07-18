@@ -45,9 +45,9 @@ export function DetailRow({
             name: detail.name,
             group_id: detail.group_id || null
           }}
-          showLinkButton
-          showParamsButton
-          hideGroupLink
+          withLink
+          withGroupLink
+          withParamsButton
         />
       </Row>
     </Row>

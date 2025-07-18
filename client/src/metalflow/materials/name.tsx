@@ -1,4 +1,4 @@
-import { WithSmallLinkButton } from 'components/small_link_button'
+import { WithHiddenLinkButton } from 'components/hidden_button'
 import { P } from 'lib/index'
 import { open, routeMap } from 'lib/routes'
 import { observer } from 'mobx-react-lite'
@@ -13,11 +13,11 @@ export const MaterialName = observer(
 
     if (showLinkButton && materialId) {
       return (
-        <WithSmallLinkButton
+        <WithHiddenLinkButton
           linkTo={open(routeMap.metalflow.material.edit, materialId)}
         >
           {materialLabel}
-        </WithSmallLinkButton>
+        </WithHiddenLinkButton>
       )
     }
     return <P>{materialLabel}</P>

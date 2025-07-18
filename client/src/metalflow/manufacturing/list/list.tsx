@@ -42,7 +42,9 @@ const columnList: Column<ManufactoringListOutput>[] = [
           name: d.detail_name,
           group_id: d.group_id
         }}
-        showLinkButton
+        withLink
+        withGroupLink
+        withParamsButton
       />
     )
   },

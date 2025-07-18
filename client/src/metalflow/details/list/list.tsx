@@ -39,7 +39,9 @@ const columnList: Column<Detail>[] = [
           name: r.name,
           group_id: r.groupId || null
         }}
-        showParamsButton={true}
+        withLink
+        withGroupLink
+        withParamsButton
       />
     )
   },

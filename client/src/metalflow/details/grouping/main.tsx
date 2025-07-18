@@ -11,7 +11,7 @@ import { MetalPageTitle } from 'metalflow/shared/basic'
 import { ReactNode } from 'react'
 import { useParams } from 'react-router-dom'
 import { GroupActions, TargetGroupDetailList } from './detail_list'
-import { DetailGroupList } from './group_list'
+import { DesktopGroupList, MobileGroupList } from './group_list'
 import { UpdateGroupNameModal } from './group_name.modal'
 import { store } from './store'
 
@@ -23,8 +23,11 @@ const DetailGroupsLayout = observer((props: DetailGroupsLayoutProps) => (
   <RowButColumsAtSm>
     {/* Group list */}
     <Box p={1}>
-      <MetalPageTitle title="Группы деталей" hideIcon />
-      <DetailGroupList />
+      <MetalPageTitle title="Группы деталей" hideIcon>
+        <MobileGroupList />
+      </MetalPageTitle>
+
+      <DesktopGroupList />
     </Box>
     {/* Group details */}
     <Box>
@@ -38,7 +41,7 @@ const DetailGroupsLayout = observer((props: DetailGroupsLayoutProps) => (
           )
         }
         scrollableContent={
-          <Stack p={1}>
+          <Stack p={1} px={2}>
             <TargetGroupDetailList />
           </Stack>
         }

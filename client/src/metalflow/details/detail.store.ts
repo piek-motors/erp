@@ -2,16 +2,16 @@ import { AttachmentsStore } from 'components/attachments/store'
 import { Attachment } from 'domain-model'
 import { AsyncStoreController } from 'lib/async-store.controller'
 import { rpc } from 'lib/rpc.client'
-import { notifierStore } from 'lib/store/notifier.store'
-import { roundAndTrim } from 'lib/utils/formatting'
 import { cache } from 'metalflow/cache/root'
 import { makeAutoObservable } from 'mobx'
+import { RouterOutput } from '../../../../server/src/lib/trpc'
 import { DetailWriteoffStore } from './writeoff/store'
 
 type MaterialRelationData = {
   length: string
 }
 
+type DetailResponse = RouterOutput['metal']['details']['get']['detail']
 export class MaterialCost {
   materialId!: number
   setMaterialId(materialId: number) {
@@ -146,20 +146,11 @@ export class Detail {
     m.setLength(data.length)
   }
 
-  async load(detailId: number) {
+  async loadFullInfo(detailId: number) {
     this.reset()
     this.async.start()
     const d = await rpc.metal.details.get.query({ id: detailId })
-    if (!d.detail) {
-      throw new Error('fdf')
-    }
-    this.setId(d.detail.id!)
-    this.setName(d.detail.name!)
-    this.setPartCode(d.detail.part_code ?? '')
-    this.setGroupId(d.detail.logical_group_id ?? null)
-    this.setTechnicalParameters(d.detail.params ?? null)
-    this.setDescription(d.detail.description ?? '')
-    this.setStock(d.detail.stock)
+    this.setDetailData(d.detail)
 
     d.detail_materials.forEach((dm, index) => {
       this.addMaterial(
@@ -177,6 +168,20 @@ export class Detail {
       )
     )
     this.async.end()
+  }
+
+  async loadShortInfo(detailId: number) {
+    this.setDetailData(await rpc.metal.details.getShort.query({ id: detailId }))
+  }
+
+  private setDetailData(d: DetailResponse) {
+    this.setId(d.id!)
+    this.setName(d.name!)
+    this.setPartCode(d.part_code!)
+    this.setGroupId(d.logical_group_id ?? null)
+    this.setTechnicalParameters(d.params ?? null)
+    this.setDescription(d.description ?? '')
+    this.setStock(d.stock)
   }
 
   async insert() {
@@ -244,32 +249,6 @@ export class Detail {
     const r = await rpc.metal.manufacturing.create.mutate({
       detailId: this.id!
     })
-    return r
-  }
-
-  async startMaterialPreparationPhase() {
-    const r =
-      await rpc.metal.manufacturing.startMaterialPreparationPhase.mutate({
-        orderId: this.id!
-      })
-
-    return r
-  }
-
-  async startProductionPhase(qty: number) {
-    const r = await rpc.metal.manufacturing.startProductionPhase.mutate({
-      orderId: this.id!,
-      qty
-    })
-
-    for (const m of r) {
-      const msg = `
-      Израсходовано ${roundAndTrim(m.totalCost)} материала ${
-        m.material_name
-      }, осталось ${roundAndTrim(m.stock)}
-      `
-      notifierStore.notify('info', msg)
-    }
     return r
   }
 }

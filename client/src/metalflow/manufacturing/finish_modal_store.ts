@@ -14,10 +14,6 @@ export class FinishModalStore {
     this.detail = new Detail()
   }
 
-  async loadDetail(id: number) {
-    return this.detail.load(id)
-  }
-
   async finishManufacturing() {
     await rpc.metal.manufacturing.finish.mutate({ id: this.detail.id! })
     this.setOpen(false)

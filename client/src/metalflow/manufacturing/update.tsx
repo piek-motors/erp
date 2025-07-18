@@ -54,8 +54,9 @@ export const ManufacturingUpdatePage = observer(() => {
       <Stack>
         <Label label="Деталь" />
         <DetailName
-          showLinkButton
-          showParamsButton
+          withGroupLink
+          withLink
+          withParamsButton
           detail={{
             id: store.order.detail_id,
             name: store.order.detail_name,

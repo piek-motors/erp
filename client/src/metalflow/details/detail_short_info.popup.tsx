@@ -15,6 +15,16 @@ interface DetailParamsPopupProps {
   detailId: number
 }
 
+const Pair = (props: { label: string; value?: string | null }) => {
+  if (!props.value) return null
+  return (
+    <MenuItem sx={{ display: 'flex', alignItems: 'baseline' }}>
+      <Label level="body-xs">{props.label}</Label>
+      <P level="body-sm">{props.value}</P>
+    </MenuItem>
+  )
+}
+
 export const DetailShortInfoPopup = observer(
   ({ detailId }: DetailParamsPopupProps) => {
     const [detail] = useState(() => new Detail())
@@ -31,7 +41,7 @@ export const DetailShortInfoPopup = observer(
               onClick: e => {
                 e.stopPropagation()
                 detail.reset()
-                detail.load(detailId)
+                detail.loadFullInfo(detailId)
               }
             }
           }}
@@ -48,30 +58,14 @@ export const DetailShortInfoPopup = observer(
             maxWidth: '500px'
           }}
         >
-          {detail.partCode && (
-            <MenuItem>
-              <Label>Артикул</Label>
-              <P level="body-md">{detail.partCode}</P>
-            </MenuItem>
-          )}
+          <Pair label="Название" value={detail.name} />
+          <Pair label="Артикул" value={detail.partCode} />
+          <Pair
+            label="Группа"
+            value={cache.detailGroups.getGroupName(detail.groupId)}
+          />
+          <Pair label="Примечания" value={detail.description} />
 
-          {detail.groupId && (
-            <MenuItem>
-              <Label>Группа</Label>
-              <P level="body-md">
-                {cache.detailGroups.getGroupName(detail.groupId)}
-              </P>
-            </MenuItem>
-          )}
-
-          {detail.description && (
-            <MenuItem>
-              <Stack>
-                <Label>Примечания</Label>
-                <P sx={{ whiteSpace: 'pre-wrap' }}>{detail.description}</P>
-              </Stack>
-            </MenuItem>
-          )}
           {detail.technicalParameters && (
             <MenuItem>
               <Stack gap={0.5}>

@@ -53,7 +53,7 @@ const UniversalDetailSelection = observer(() => {
                   justifyContent="space-between"
                   alignItems="center"
                 >
-                  <DetailName detail={detail} showLinkButton />
+                  <DetailName detail={detail} withLink />
                   <IconButton
                     variant="soft"
                     color="danger"
@@ -122,6 +122,9 @@ export const UniversalDetailsModalSelect = observer(() => {
       open={open}
       setOpen={v => {
         setOpen(v)
+      }}
+      onClose={() => {
+        store.setSelectedDetailIds([])
       }}
     >
       <Stack sx={{ flex: 1 }} gap={1}>

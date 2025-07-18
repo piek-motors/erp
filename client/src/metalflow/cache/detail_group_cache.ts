@@ -12,12 +12,9 @@ export class DetailGroupCache {
   getGroups() {
     return this.groups
   }
-  getGroupName(id: number) {
-    const name = this.groups.find(g => g.id === id)?.name
-    if (!name) {
-      return '--'
-    }
-    return name
+  getGroupName(id?: number | null) {
+    if (!id) return null
+    return this.groups.find(g => g.id === id)?.name
   }
   removeGroup(id: number) {
     this.setGroups(this.groups.filter(g => g.id !== id))

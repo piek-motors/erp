@@ -11,6 +11,7 @@ import {
 } from 'lib/index'
 import { MetalPageTitle, SaveAndDelete } from 'metalflow/shared/basic'
 import { DetailAttachmentList } from './attachments/detail_attachment_list'
+import { CreateManufacturingOrder } from './create_manufacturing_order'
 import { detailStore } from './detail.store'
 import {
   DetailDescriptionInput,
@@ -20,7 +21,6 @@ import {
   DetailPartCodeInput,
   MaterialCostInputs
 } from './shared'
-import { StartManufacturing } from './start-manufacturing'
 
 export const UpdateDetailPage = observer(() => {
   const { id } = useParams<{ id: string }>()
@@ -28,7 +28,7 @@ export const UpdateDetailPage = observer(() => {
   const detailId = Number(id)
   const navigate = useNavigate()
   useEffect(() => {
-    detailStore.load(detailId)
+    detailStore.loadFullInfo(detailId)
     return () => {
       detailStore.reset()
     }
@@ -49,7 +49,7 @@ export const UpdateDetailPage = observer(() => {
           <P>
             <b>Остаток:</b> {detailStore.stock} шт
           </P>
-          <StartManufacturing />
+          <CreateManufacturingOrder />
           <DetailNameInput />
           {/* <WarehouseOperationsLinks
             onSupplyClick={() => {

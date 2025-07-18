@@ -6,7 +6,7 @@ import { store } from './store'
 
 export const GroupActions = observer(() => {
   return (
-    <Stack direction="row" alignItems="center" mb={1} gap={1}>
+    <Stack direction="row" alignItems="center" gap={1}>
       <UniversalDetailsModalSelect />
       {store.selectedDetailIds.length > 0 && (
         <Button
