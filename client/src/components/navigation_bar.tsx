@@ -16,7 +16,7 @@ export interface Props {
   homeUrl?: string
 }
 
-export function PageTitle(props: Props) {
+export function NavigationBar(props: Props) {
   const isDev = process.env.REACT_APP_NODE_ENV === 'development'
 
   return (

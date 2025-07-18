@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { Box, Divider, Stack } from '@mui/joy'
 import Grid from '@mui/joy/Grid'
-import { PageTitle } from 'components'
+import { NavigationBar } from 'components'
 import { useAppContext } from 'hooks'
 import { bgcolors, Chip, P, Row, text } from 'lib/index'
 import { orderStatus } from 'lib/utils/orderColorIndication'
@@ -16,9 +16,9 @@ import { OrderStatementInput, StatementView } from './statement/ui'
 import { orderStore } from './stores/order.store'
 
 export const PageHeader = () => (
-  <PageTitle title={text.orderDetails} spaceBetween>
+  <NavigationBar title={text.orderDetails} spaceBetween>
     <OrderActions />
-  </PageTitle>
+  </NavigationBar>
 )
 
 // Order metadata component showing entity, city and status chips

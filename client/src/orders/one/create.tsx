@@ -1,5 +1,5 @@
 import { Box } from '@mui/joy'
-import { PageTitle } from 'components/page-title'
+import { NavigationBar } from 'components/navigation_bar'
 import { CenteredContainer } from 'components/utilities/centered-container'
 import { OrderStatus } from 'domain-model'
 import { Row } from 'lib/index'
@@ -39,7 +39,7 @@ export const CreateOrder = observer(() => {
     <CenteredContainer>
       <Box p={1}>
         <Row>
-          <PageTitle title={'Новый заказ'} />
+          <NavigationBar title={'Новый заказ'} />
         </Row>
         <OrderStatementInput mutation={() => handleCreateOrder()} />
       </Box>

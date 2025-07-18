@@ -1,6 +1,6 @@
 import { Employee, RouteConfig } from 'lib/types/global'
 import { useGetEmployeeListQuery } from 'lib/types/graphql-shema'
-import { PageTitle } from '../components'
+import { NavigationBar } from '../components'
 import { Box, LoadingHint, routeMap, Sheet, useMemo, useState } from '../lib'
 import { genColumns } from './columns'
 import ReportConfigurator from './control'
@@ -60,7 +60,7 @@ function Attendance() {
 
   return (
     <Box p={1} mb={5}>
-      <PageTitle title={'Рабочее время'} />
+      <NavigationBar title={'Рабочее время'} />
       <Box p={2} width={'min-content'} borderRadius={20}>
         <ReportConfigurator state={state} setState={setState} />
       </Box>

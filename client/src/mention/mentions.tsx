@@ -2,7 +2,7 @@
 import styled from '@emotion/styled'
 import { UilArrowRight } from '@iconscout/react-unicons'
 import { Container } from '@mui/joy'
-import { PageTitle } from 'components/page-title'
+import { NavigationBar } from 'components/navigation_bar'
 import { Context } from 'index'
 import {
   Box,
@@ -122,7 +122,7 @@ export function MentionList() {
 
   return (
     <Container sx={{ p: 1 }}>
-      <PageTitle title="Упоминания" />
+      <NavigationBar title="Упоминания" />
       <Stack direction={'column'} gap={2}>
         {/* unreaderd notifs */}
         {notifications.unviewed.length ? (

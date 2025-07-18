@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { Sheet, Stack } from '@mui/joy'
-import { ManagerFilter, PageTitle } from 'components'
+import { ManagerFilter, NavigationBar } from 'components'
 import { Search } from 'components/inputs'
 import { OrderTypeFilter } from 'components/order-type-filter'
 import { TableName } from 'components/table-name'
@@ -210,9 +210,9 @@ const Wrapper = observer(
 
     return (
       <Stack p={1}>
-        <PageTitle title={t.ordersTitle}>
+        <NavigationBar title={t.ordersTitle}>
           <AddResourceButton onClick={() => insertNewOrder()} />
-        </PageTitle>
+        </NavigationBar>
         <Tabs
           tabs={tabs}
           value={currentTab}

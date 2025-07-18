@@ -5,7 +5,7 @@ import { P } from 'lib/index'
 import { routeMap } from 'lib/routes'
 import { RouteConfig } from 'lib/types/global'
 import { useNavigate } from 'react-router-dom'
-import { PageTitle } from './components'
+import { NavigationBar } from './components'
 
 function Settings() {
   const { store } = useAppContext()
@@ -18,7 +18,7 @@ function Settings() {
 
   return (
     <Container maxWidth="sm" sx={{ p: 1 }}>
-      <PageTitle title="Аккаунт" />
+      <NavigationBar title="Аккаунт" />
       <P>{store.user?.fullName}</P>
       <P>Роль: {store.user?.role}</P>
       <P>Email: {store.user?.email}</P>

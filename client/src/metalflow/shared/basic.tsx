@@ -100,7 +100,10 @@ export function AlloyAutocomplete(props: {
 
 import { Autocomplete } from '@mui/joy'
 import { DeleteConfirmDialog } from 'components/delete_confirm_dialog'
-import { PageTitle, Props as PageTitleProps } from 'components/page-title'
+import {
+  NavigationBar,
+  Props as PageTitleProps
+} from 'components/navigation_bar'
 import { cache } from 'metalflow/cache/root'
 import { observer } from 'mobx-react-lite'
 import { Detail } from '../details/detail.store'
@@ -180,5 +183,5 @@ export function WarehouseOperationsLinks(props: {
 }
 
 export function MetalPageTitle(props: PageTitleProps) {
-  return <PageTitle {...props} homeUrl={routeMap.metalflow.index} />
+  return <NavigationBar {...props} homeUrl={routeMap.metalflow.index} />
 }

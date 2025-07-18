@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { Box, Card, Stack } from '@mui/joy'
-import { PageTitle } from 'components'
+import { NavigationBar } from 'components'
 import { Order } from 'domain-model'
 import { AddResourceButton, LoadingHint, P, Pre } from 'lib/index'
 import { openOrderDetailPage, routeMap } from 'lib/routes'
@@ -159,13 +159,13 @@ const ReclamationPage = observer(() => {
 
   return (
     <Stack p={1}>
-      <PageTitle title="Рекламация">
+      <NavigationBar title="Рекламация">
         <AddResourceButton
           onClick={() => {
             navigate(routeMap.order.new, { state: { reclamation: true } })
           }}
         />
-      </PageTitle>
+      </NavigationBar>
 
       <Box>
         <LoadingHint show={reclamationStore.loading} />
