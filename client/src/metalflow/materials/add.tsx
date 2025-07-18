@@ -1,5 +1,4 @@
 /** @jsxImportSource @emotion/react */
-import { PageTitle } from 'components/page-title'
 import { TabConfig, Tabs } from 'components/tabs'
 import { EnMaterialShape, UiMaterialShape } from 'domain-model'
 import {
@@ -11,6 +10,7 @@ import {
   useEffect
 } from 'lib/index'
 import { open, routeMap } from 'lib/routes'
+import { MetalPageTitle } from 'metalflow/shared/basic'
 import { AlloyAutocomplete } from '../shared/basic'
 import { t } from '../text'
 import { material } from './material.store'
@@ -52,7 +52,7 @@ export const MaterialAddPage = observer(() => {
 
   return (
     <Stack gap={1} py={2}>
-      <PageTitle subTitle={t.AddMaterial} hideIcon />
+      <MetalPageTitle subTitle={t.AddMaterial} hideIcon />
       <Tabs
         tabs={tabList}
         handleChange={value => {

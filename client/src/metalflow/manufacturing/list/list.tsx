@@ -1,5 +1,4 @@
 import { ScrollableWindow } from 'components/inputs'
-import { PageTitle } from 'components/page-title'
 import { Table } from 'components/table.impl'
 import {
   EnManufacturingOrderStatus,
@@ -17,6 +16,7 @@ import {
   useNavigate
 } from 'lib/index'
 import { DetailName } from 'metalflow/details/name'
+import { MetalPageTitle } from 'metalflow/shared/basic'
 import { Column } from 'react-table'
 import { ManufactoringListOutput, ManufacturingListStore } from './list_store'
 
@@ -81,7 +81,7 @@ export const ManufacturingList = observer(() => {
       refreshTrigger={false}
       staticContent={
         <Box p={1}>
-          <PageTitle title={'Детали в производстве'} hideIcon />
+          <MetalPageTitle title={'Детали в производстве'} hideIcon />
         </Box>
       }
       scrollableContent={

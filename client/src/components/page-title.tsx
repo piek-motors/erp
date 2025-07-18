@@ -1,4 +1,4 @@
-import { UilArrowLeft } from '@iconscout/react-unicons'
+import { UilHome } from '@iconscout/react-unicons'
 import { Box, IconButton, Stack } from '@mui/joy'
 import { SxProperty } from 'lib/constants'
 import { routeMap } from 'lib/routes'
@@ -13,7 +13,7 @@ export interface Props {
   children?: React.ReactNode
   hideIcon?: boolean
   spaceBetween?: boolean
-  hideBackButton?: boolean
+  homeUrl?: string
 }
 
 export function PageTitle(props: Props) {
@@ -36,11 +36,11 @@ export function PageTitle(props: Props) {
       )}
 
       {/* Mobile-only metalflow navigation button */}
-      {!props.hideBackButton && (
+      {props.homeUrl && (
         <MobileOnly>
-          <Link to={routeMap.metalflow.index}>
+          <Link to={props.homeUrl}>
             <IconButton variant="soft" size="sm">
-              <UseIcon icon={UilArrowLeft} />
+              <UseIcon icon={UilHome} />
             </IconButton>
           </Link>
         </MobileOnly>

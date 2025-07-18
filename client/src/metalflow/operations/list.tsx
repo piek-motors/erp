@@ -1,5 +1,4 @@
 /** @jsxImportSource @emotion/react */
-import { PageTitle } from 'components'
 import { ScrollableWindow } from 'components/inputs/scrollable_window'
 import { Table } from 'components/table.impl'
 import {
@@ -13,6 +12,7 @@ import { Box, DeleteResourceButton, P } from 'lib/index'
 import { formatDateWithTime } from 'lib/utils/formatting'
 import { DetailName } from 'metalflow/details/name'
 import { OperationName } from 'metalflow/operations/operation_name'
+import { MetalPageTitle } from 'metalflow/shared/basic'
 import { observer } from 'mobx-react-lite'
 import { useEffect, useMemo, useState } from 'react'
 import { Column } from 'react-table'
@@ -103,7 +103,7 @@ export const OperationsList = observer((props: Props) => {
       refreshTrigger={false}
       staticContent={
         <Box p={1}>
-          <PageTitle title={'Журнал операций'} hideIcon />
+          <MetalPageTitle title={'Журнал операций'} hideIcon />
         </Box>
       }
       scrollableContent={

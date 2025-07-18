@@ -1,4 +1,3 @@
-import { PageTitle } from 'components/page-title'
 import {
   observer,
   SendMutation,
@@ -7,6 +6,7 @@ import {
   useEffect
 } from 'lib/index'
 import { open, routeMap } from 'lib/routes'
+import { MetalPageTitle } from 'metalflow/shared/basic'
 import { t } from '../text'
 import { detailStore } from './detail.store'
 import {
@@ -25,7 +25,7 @@ export const CreateDetailPage = observer(() => {
   }, [])
   return (
     <Stack gap={1} p={1}>
-      <PageTitle title={t.AddDetail} />
+      <MetalPageTitle title={t.AddDetail} />
       <DetailNameInput />
       <DetailGroupInput />
       <DetailPartCodeInput />

@@ -55,6 +55,7 @@ import {
   DeleteResourceButton,
   ErrorHint,
   Label,
+  routeMap,
   Row,
   SendMutation
 } from 'lib/index'
@@ -99,6 +100,7 @@ export function AlloyAutocomplete(props: {
 
 import { Autocomplete } from '@mui/joy'
 import { DeleteConfirmDialog } from 'components/delete_confirm_dialog'
+import { PageTitle, Props as PageTitleProps } from 'components/page-title'
 import { cache } from 'metalflow/cache/root'
 import { observer } from 'mobx-react-lite'
 import { Detail } from '../details/detail.store'
@@ -175,4 +177,8 @@ export function WarehouseOperationsLinks(props: {
       </Button>
     </Row>
   )
+}
+
+export function MetalPageTitle(props: PageTitleProps) {
+  return <PageTitle {...props} homeUrl={routeMap.metalflow.index} />
 }

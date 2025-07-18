@@ -1,5 +1,4 @@
 import { Card, Divider } from '@mui/joy'
-import { PageTitle } from 'components'
 import {
   Inp,
   observer,
@@ -13,6 +12,7 @@ import {
 } from 'lib/index'
 import { open, routeMap } from 'lib/routes'
 import { roundAndTrim } from 'lib/utils/formatting'
+import { MetalPageTitle } from 'metalflow/shared/basic'
 import { AlloyAutocomplete, SaveAndDelete } from '../shared/basic'
 import { tabList } from './add'
 import { DetailsMadeOfMaterial } from './details_made_of_that_material'
@@ -36,7 +36,7 @@ export const MaterialUpdatePage = observer(() => {
 
   return (
     <Stack alignItems={'start'} p={1} gap={1}>
-      <PageTitle
+      <MetalPageTitle
         title={`Материал #${materialId} - ${material.label}`}
         hideIcon
       />

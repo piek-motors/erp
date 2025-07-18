@@ -1,5 +1,4 @@
 import { Box, Card, Divider } from '@mui/joy'
-import { PageTitle } from 'components/page-title'
 import {
   EnManufacturingOrderStatus,
   uiManufacturingOrderStatus
@@ -23,6 +22,7 @@ import {
 import { formatDateWithTime } from 'lib/utils/formatting'
 import { DetailName } from 'metalflow/details/name'
 import { MaterialName } from 'metalflow/shared'
+import { MetalPageTitle } from 'metalflow/shared/basic'
 import { DetailMaterialOutput, store } from './order.store'
 
 export const ManufacturingUpdatePage = observer(() => {
@@ -47,7 +47,7 @@ export const ManufacturingUpdatePage = observer(() => {
 
   return (
     <Stack gap={1} p={1}>
-      <PageTitle title={`Производственный заказ #${store.order.id}`} />
+      <MetalPageTitle title={`Производственный заказ #${store.order.id}`} />
       <Stack>
         <Label label="Деталь" />
         <DetailName

@@ -1,8 +1,8 @@
 /** @jsxImportSource @emotion/react */
 import { Stack } from '@mui/joy'
-import { PageTitle } from 'components'
 import { observer } from 'lib/deps'
 import { Inp, Label, P, Row, SendMutation } from 'lib/index'
+import { MetalPageTitle } from 'metalflow/shared/basic'
 import { WriteoffReasonSelect } from 'metalflow/writeoffs/writeoff.shared'
 import { t } from '../../text'
 import { detailStore, detailStore as store } from '../detail.store'
@@ -21,7 +21,7 @@ export const DetailWriteoffPage = observer(() => {
   return (
     <Stack p={1}>
       <Stack gap={2}>
-        <PageTitle title={t.WriteOffAdd} hideIcon />
+        <MetalPageTitle title={t.WriteOffAdd} hideIcon />
         <Row gap={3}>
           <Row gap={1}>
             <Label label="Деталь" />

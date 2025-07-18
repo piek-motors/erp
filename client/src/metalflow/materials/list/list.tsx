@@ -1,6 +1,5 @@
 /** @jsxImportSource @emotion/react */
 import { SxProps } from '@mui/joy/styles/types'
-import { PageTitle } from 'components'
 import { ScrollableWindow, Search } from 'components/inputs'
 import { Table } from 'components/table.impl'
 import { EnMaterialShape } from 'domain-model'
@@ -16,6 +15,7 @@ import {
 } from 'lib/index'
 import { open, routeMap } from 'lib/routes'
 import { roundAndTrim } from 'lib/utils/formatting'
+import { MetalPageTitle } from 'metalflow/shared/basic'
 import { Column } from 'react-table'
 import { t } from '../../text'
 import { MaterialShapeFilter } from './shape_filter'
@@ -102,11 +102,11 @@ export const MaterialListPage = observer((props: MaterialsTableProps) => {
       refreshTrigger={materialListStore.async.loading}
       staticContent={
         <Stack p={1} gap={0.5}>
-          <PageTitle title={t.MaterialsList} hideIcon>
+          <MetalPageTitle title={t.MaterialsList} hideIcon>
             <AddResourceButton
               navigateTo={open(routeMap.metalflow.material.new)}
             />
-          </PageTitle>
+          </MetalPageTitle>
           <Row>
             <Inp
               size="sm"

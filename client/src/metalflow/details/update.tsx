@@ -1,5 +1,4 @@
 import { Box, Stack } from '@mui/joy'
-import { PageTitle } from 'components/page-title'
 import {
   observer,
   open,
@@ -10,7 +9,7 @@ import {
   useNavigate,
   useParams
 } from 'lib/index'
-import { SaveAndDelete } from 'metalflow/shared/basic'
+import { MetalPageTitle, SaveAndDelete } from 'metalflow/shared/basic'
 import { DetailAttachmentList } from './attachments/detail_attachment_list'
 import { detailStore } from './detail.store'
 import {
@@ -36,7 +35,7 @@ export const UpdateDetailPage = observer(() => {
   }, [])
   return (
     <Stack gap={1} p={1}>
-      <PageTitle
+      <MetalPageTitle
         title={`Деталь #${detailStore.id} - ${detailStore.name}`}
         hideIcon
       />

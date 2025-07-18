@@ -1,8 +1,8 @@
 import { Stack } from '@mui/joy'
-import { PageTitle } from 'components'
 import { EnUnit } from 'domain-model'
 import { Label, P, Row, SendMutation } from 'lib/index'
 import { QtyInputWithUnit } from 'metalflow/shared'
+import { MetalPageTitle } from 'metalflow/shared/basic'
 import { observer } from 'mobx-react-lite'
 
 interface MaterialOperationLayoutProps {
@@ -21,7 +21,7 @@ export const MaterialOperationLayout = observer(
   (props: MaterialOperationLayoutProps) => {
     return (
       <Stack spacing={1} p={1}>
-        <PageTitle title={props.title} hideIcon />
+        <MetalPageTitle title={props.title} hideIcon />
         <Row sx={{ fontSize: 20 }}>
           <Label>Материал: </Label>
           <P fontWeight={600} color="primary">

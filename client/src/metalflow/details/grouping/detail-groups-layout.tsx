@@ -1,6 +1,6 @@
 import { ScrollableWindow } from 'components/inputs'
-import { PageTitle } from 'components/page-title'
 import { Box, observer, Row, RowButColumsAtSm, Stack } from 'lib/index'
+import { MetalPageTitle } from 'metalflow/shared/basic'
 import { ReactNode } from 'react'
 import { CreateGroupModal } from './create-group.modal'
 import { DetailGroupList } from './group_list'
@@ -19,7 +19,7 @@ export const DetailGroupsLayout = observer(
             scrollableContent={
               <Stack p={1} gap={0}>
                 <Row justifyContent="space-between">
-                  <PageTitle title="Группы" hideIcon />
+                  <MetalPageTitle title="Группы" hideIcon />
                   <CreateGroupModal />
                 </Row>
                 {showGroupList && <DetailGroupList />}

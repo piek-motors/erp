@@ -1,5 +1,4 @@
 import { Divider } from '@mui/joy'
-import { PageTitle } from 'components'
 import { ScrollableWindow, Search } from 'components/inputs'
 import { Table } from 'components/table.impl'
 import {
@@ -17,6 +16,7 @@ import {
   routeMap,
   useNavigate
 } from 'lib/index'
+import { MetalPageTitle } from 'metalflow/shared/basic'
 import { t } from 'metalflow/text'
 import { Column } from 'react-table'
 import { Detail } from '../detail.store'
@@ -95,11 +95,11 @@ export const DetailsListPage = observer(() => {
       refreshTrigger={state.async.loading}
       staticContent={
         <Stack gap={1} p={1}>
-          <PageTitle title={t.DetailsList} hideIcon>
+          <MetalPageTitle title={t.DetailsList} hideIcon>
             <AddResourceButton
               navigateTo={open(routeMap.metalflow.detail.new)}
             />
-          </PageTitle>
+          </MetalPageTitle>
         </Stack>
       }
       scrollableContent={
