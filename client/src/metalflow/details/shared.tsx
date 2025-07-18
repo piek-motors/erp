@@ -56,11 +56,8 @@ export const MaterialCostInputs = observer(() => {
         <Stack gap={1}>
           {detailStore.usedMaterials.map((materialCost, index) => {
             return (
-              <Stack
-                sx={{ width: 'max-content' }}
-                key={materialCost.materialId}
-              >
-                <Row alignItems={'end'} gap={1}>
+              <Row key={materialCost.materialId}>
+                <Stack gap={0.5}>
                   <MaterialSelect value={materialCost} index={index} />
                   <QtyInputWithUnit
                     size="sm"
@@ -70,6 +67,8 @@ export const MaterialCostInputs = observer(() => {
                       materialCost.setLength(v)
                     }}
                   />
+                </Stack>
+                <Stack>
                   <IconButton
                     variant="soft"
                     color="danger"
@@ -80,8 +79,8 @@ export const MaterialCostInputs = observer(() => {
                   >
                     <UseIcon icon={UilMinus} />
                   </IconButton>
-                </Row>
-              </Stack>
+                </Stack>
+              </Row>
             )
           })}
         </Stack>

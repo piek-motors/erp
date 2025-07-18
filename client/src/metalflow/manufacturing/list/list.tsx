@@ -7,6 +7,7 @@ import {
 } from 'domain-model'
 import { observer } from 'lib/deps'
 import {
+  Box,
   LoadingHint,
   open,
   P,
@@ -78,7 +79,11 @@ export const ManufacturingList = observer(() => {
   return (
     <ScrollableWindow
       refreshTrigger={false}
-      staticContent={<PageTitle title={'Детали в производстве'} />}
+      staticContent={
+        <Box p={1}>
+          <PageTitle title={'Детали в производстве'} hideIcon />
+        </Box>
+      }
       scrollableContent={
         <Stack gap={1} p={1}>
           <LoadingHint show={state.async.loading} />

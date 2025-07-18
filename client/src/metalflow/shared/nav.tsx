@@ -1,5 +1,6 @@
 import { UilPlusCircle } from '@iconscout/react-unicons'
 import { Box, Button, ButtonProps, IconButton, Stack } from '@mui/joy'
+import { PageTitle } from 'components/page-title'
 import { UseIcon } from 'lib/index'
 import { ReactNode } from 'react'
 import { Link, useLocation } from 'react-router-dom'
@@ -8,6 +9,7 @@ import { Action, actions } from '../nav.links'
 export function NavigationSideBar() {
   return (
     <Stack gap={1} p={1}>
+      <PageTitle title="Материаловедение" hideBackButton />
       {actions.map(each => (
         <RenderAction action={each} key={each.href} size="sm" />
       ))}
@@ -18,6 +20,7 @@ export function NavigationSideBar() {
 export function MobileNavigationLinks() {
   return (
     <Stack gap={1} py={1}>
+      <PageTitle title="Материаловедение" hideBackButton />
       {actions.map(each => (
         <RenderAction action={each} key={each.href} size="lg" />
       ))}
@@ -36,7 +39,7 @@ function RenderAction(props: { action: Action; size: ButtonProps['size'] }) {
     >
       <MenuButton href={action.href} name={action.name} size={size} />
 
-      <Box px={2}>
+      <Box>
         {action.endBlock?.length && (
           <Stack>
             {action.endBlock?.map(e => (

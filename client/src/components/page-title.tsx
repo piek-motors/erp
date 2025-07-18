@@ -1,9 +1,10 @@
+import { UilArrowLeft } from '@iconscout/react-unicons'
 import { Box, IconButton, Stack } from '@mui/joy'
 import { SxProperty } from 'lib/constants'
 import { routeMap } from 'lib/routes'
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { MobileOnly, P, Row } from '../lib'
+import { MobileOnly, P, Row, UseIcon } from '../lib'
 
 export interface Props {
   title?: string
@@ -12,18 +13,19 @@ export interface Props {
   children?: React.ReactNode
   hideIcon?: boolean
   spaceBetween?: boolean
-  mobileMenu?: React.ReactNode
+  hideBackButton?: boolean
 }
 
 export function PageTitle(props: Props) {
   const isDev = process.env.REACT_APP_NODE_ENV === 'development'
 
   return (
-    <Stack direction="row" gap={1} pb={1}>
+    <Stack direction="row" gap={1}>
       {!props.hideIcon && (
         <Link to={routeMap.index}>
           <IconButton
             variant="outlined"
+            size="sm"
             sx={{
               background: isDev ? 'red' : 'transparent'
             }}
@@ -31,6 +33,17 @@ export function PageTitle(props: Props) {
             <img src={'/favicon.ico'} width={20} height={20} />
           </IconButton>
         </Link>
+      )}
+
+      {/* Mobile-only metalflow navigation button */}
+      {!props.hideBackButton && (
+        <MobileOnly>
+          <Link to={routeMap.metalflow.index}>
+            <IconButton variant="soft" size="sm">
+              <UseIcon icon={UilArrowLeft} />
+            </IconButton>
+          </Link>
+        </MobileOnly>
       )}
 
       <Row gap={2} sx={props.sx}>
@@ -47,7 +60,6 @@ export function PageTitle(props: Props) {
       </Row>
       {props.spaceBetween && <Box sx={{ width: '100%' }} />}
       <Box>{props.children}</Box>
-      <MobileOnly sx={{ ml: 'auto' }}>{props.mobileMenu}</MobileOnly>
     </Stack>
   )
 }

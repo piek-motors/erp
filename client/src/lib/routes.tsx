@@ -24,13 +24,13 @@ export const routeMap = {
     materials: '/metalflow/materials',
     material: {
       new: '/metalflow/materials/new',
-      edit: '/metalflow/materials/:id/edit'
+      edit: '/metalflow/materials/:id'
     },
 
     details: '/metalflow/details',
     detail: {
       new: '/metalflow/details/new',
-      edit: '/metalflow/details/:id/edit'
+      edit: '/metalflow/details/:id'
     },
     detailGroups: '/metalflow/details/groups',
     detailGroup: '/metalflow/details/groups/:id',
@@ -38,7 +38,7 @@ export const routeMap = {
     operations: '/metalflow/operations',
     manufacturing_orders: '/metalflow/manufacturing',
     manufacturing_order: {
-      edit: '/metalflow/manufacturing/:id/edit'
+      edit: '/metalflow/manufacturing/:id'
     }
   }
 } as const

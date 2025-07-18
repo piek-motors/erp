@@ -1,8 +1,10 @@
+import { Divider } from '@mui/joy'
 import { PageTitle } from 'components'
 import { ScrollableWindow, Search } from 'components/inputs'
 import { Table } from 'components/table.impl'
 import {
   AddResourceButton,
+  Box,
   ErrorHint,
   Inp,
   Link,
@@ -92,16 +94,21 @@ export const DetailsListPage = observer(() => {
     <ScrollableWindow
       refreshTrigger={state.async.loading}
       staticContent={
-        <>
-          <PageTitle title={t.DetailsList}>
+        <Stack gap={1} p={1}>
+          <PageTitle title={t.DetailsList} hideIcon>
             <AddResourceButton
               navigateTo={open(routeMap.metalflow.detail.new)}
             />
           </PageTitle>
-          <DetailSearchArguments />
-        </>
+        </Stack>
       }
-      scrollableContent={<DetailsList />}
+      scrollableContent={
+        <Box p={1}>
+          <DetailSearchArguments />
+          <Divider sx={{ mt: 1 }} />
+          <DetailsList />
+        </Box>
+      }
     />
   )
 })
@@ -110,6 +117,7 @@ const DetailSearchArguments = observer(() => {
   return (
     <>
       <AlphabetIndex />
+      <Divider sx={{ my: 1 }} />
       <RowButColumsAtSm>
         <Inp
           size="sm"

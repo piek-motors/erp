@@ -1,16 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { UilMinus } from '@iconscout/react-unicons'
-import { IconButton } from '@mui/joy'
-import {
-  Box,
-  Inp,
-  PlusIcon,
-  Row,
-  Sheet,
-  Stack,
-  UseIcon,
-  observer
-} from 'lib/index'
+import { IconButton, Textarea } from '@mui/joy'
+import { Box, observer, PlusIcon, Row, Stack, UseIcon } from 'lib/index'
 
 interface JsonField {
   key: string
@@ -74,38 +65,36 @@ export const JsonEditor = observer((props: JsonEditorProps) => {
   }
 
   return (
-    <Sheet sx={{ borderRadius: 'sm', p: 1, ...sx }}>
-      <Stack gap={1}>
-        {jsonFields.map((field, index) => (
-          <Row key={index} gap={1} sx={{ alignItems: 'flex-start' }}>
-            <Inp
-              size="sm"
-              placeholder={keyPlaceholder}
-              value={field.key}
-              onChange={v => updateField(index, 'key', v)}
-              sx={{ minWidth: 150 }}
-            />
-            <Inp
-              size="sm"
-              placeholder={valuePlaceholder}
-              value={field.value}
-              onChange={v => updateField(index, 'value', v)}
-              sx={{ flex: 1 }}
-            />
-            <IconButton
-              variant="soft"
-              color="danger"
-              size="sm"
-              onClick={() => removeField(index)}
-            >
-              <UseIcon icon={UilMinus} />
-            </IconButton>
-          </Row>
-        ))}
-        <Box sx={{ alignSelf: 'flex-start' }}>
-          <PlusIcon onClick={addField} />
-        </Box>
-      </Stack>
-    </Sheet>
+    <Stack gap={0.5}>
+      {jsonFields.map((field, index) => (
+        <Row key={index} gap={0.5} sx={{ alignItems: 'flex-start' }}>
+          <Textarea
+            variant="plain"
+            placeholder={keyPlaceholder}
+            value={field.key}
+            onChange={e => updateField(index, 'key', e.target.value)}
+            sx={{ minWidth: 150, flex: 2 }}
+          />
+          <Textarea
+            variant="plain"
+            placeholder={valuePlaceholder}
+            value={field.value}
+            onChange={e => updateField(index, 'value', e.target.value)}
+            sx={{ flex: 1 }}
+          />
+          <IconButton
+            variant="soft"
+            color="danger"
+            size="sm"
+            onClick={() => removeField(index)}
+          >
+            <UseIcon icon={UilMinus} />
+          </IconButton>
+        </Row>
+      ))}
+      <Box sx={{ alignSelf: 'flex-start' }}>
+        <PlusIcon onClick={addField} />
+      </Box>
+    </Stack>
   )
 })

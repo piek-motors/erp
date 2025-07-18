@@ -21,7 +21,7 @@ export const DetailWriteoffPage = observer(() => {
   return (
     <Stack p={1}>
       <Stack gap={2}>
-        <PageTitle title={t.WriteOffAdd} />
+        <PageTitle title={t.WriteOffAdd} hideIcon />
         <Row gap={3}>
           <Row gap={1}>
             <Label label="Деталь" />

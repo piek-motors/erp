@@ -14,7 +14,6 @@ export const t = {
   DetailName: 'Название детали',
   DetailsList: 'Список деталей',
   Diameter: 'Диаметр',
-  EditDetail: 'Изменить деталь',
   EditMaterial: 'Изменить материал',
   InResultWillBeSubtracted: 'В результате будет вычтено', // Fixed key typo
   Length: 'Длина',

@@ -9,7 +9,7 @@ export const StartManufacturing = observer(() => {
       buttonLabel="Создать заказ"
       buttonProps={{
         variant: 'soft',
-        color: 'primary'
+        color: 'neutral'
       }}
       onClick={() =>
         detailStore.createManufacturingOrder().then(r => {

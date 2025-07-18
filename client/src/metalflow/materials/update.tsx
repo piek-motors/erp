@@ -1,10 +1,11 @@
-/** @jsxImportSource @emotion/react */
-import { Card } from '@mui/joy'
+import { Card, Divider } from '@mui/joy'
+import { PageTitle } from 'components'
 import {
   Inp,
   observer,
   P,
   Row,
+  RowButColumsAtSm,
   Stack,
   useEffect,
   useNavigate,
@@ -35,19 +36,20 @@ export const MaterialUpdatePage = observer(() => {
 
   return (
     <Stack alignItems={'start'} p={1} gap={1}>
-      <Row gap={1} alignItems={'start'}>
-        <Stack alignItems={'start'}>
-          <Row gap={2}>
-            <P level="h4">{material.label}</P>
-          </Row>
-          <P level="body-sm">ID: {materialId}</P>
-          <P level="body-sm">Остаток: {roundAndTrim(material.stock)} м</P>
-        </Stack>
-        <Stack gap={1} justifyContent={'flex-end'} alignItems={'flex-end'}>
+      <PageTitle
+        title={`Материал #${materialId} - ${material.label}`}
+        hideIcon
+      />
+      <Row gap={2} alignItems={'center'}>
+        <RowButColumsAtSm>
           <SupplyModal />
           <WriteoffModal />
           <DetailsMadeOfMaterial />
           <OperationsListModal materialId={materialId} />
+        </RowButColumsAtSm>
+        <Divider orientation="vertical" />
+        <Stack>
+          <P>Остаток: {roundAndTrim(material.stock)} м</P>
         </Stack>
       </Row>
       <Card variant="outlined" size="sm">

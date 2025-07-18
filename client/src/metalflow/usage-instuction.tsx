@@ -5,11 +5,7 @@ import { MobileNavigationLinks } from './shared/nav'
 export function UsageInstruction() {
   return (
     <Container maxWidth="md">
-      <Stack spacing={4} sx={{ py: 4 }}>
-        <P level="h4" fontWeight={700}>
-          Добро пожаловать в систему управления металлопотоками
-        </P>
-
+      <Stack spacing={4}>
         <MobileOnly>
           <MobileNavigationLinks />
         </MobileOnly>

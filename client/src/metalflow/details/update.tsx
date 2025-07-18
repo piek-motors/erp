@@ -11,7 +11,6 @@ import {
   useParams
 } from 'lib/index'
 import { SaveAndDelete } from 'metalflow/shared/basic'
-import { t } from '../text'
 import { DetailAttachmentList } from './attachments/detail_attachment_list'
 import { detailStore } from './detail.store'
 import {
@@ -37,9 +36,10 @@ export const UpdateDetailPage = observer(() => {
   }, [])
   return (
     <Stack gap={1} p={1}>
-      <PageTitle title={t.EditDetail}>
-        <StartManufacturing />
-      </PageTitle>
+      <PageTitle
+        title={`Деталь #${detailStore.id} - ${detailStore.name}`}
+        hideIcon
+      />
 
       <RowButColumsAtSm gap={1}>
         {/* Left Column - Detail Info */}
@@ -50,6 +50,7 @@ export const UpdateDetailPage = observer(() => {
           <P>
             <b>Остаток:</b> {detailStore.stock} шт
           </P>
+          <StartManufacturing />
           <DetailNameInput />
           {/* <WarehouseOperationsLinks
             onSupplyClick={() => {

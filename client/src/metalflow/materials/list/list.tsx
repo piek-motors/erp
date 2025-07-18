@@ -1,15 +1,16 @@
 /** @jsxImportSource @emotion/react */
+import { SxProps } from '@mui/joy/styles/types'
 import { PageTitle } from 'components'
 import { ScrollableWindow, Search } from 'components/inputs'
 import { Table } from 'components/table.impl'
 import { EnMaterialShape } from 'domain-model'
 import {
   AddResourceButton,
+  Box,
   Inp,
   observer,
   P,
   Row,
-  RowButColumsAtSm,
   Stack,
   useNavigate
 } from 'lib/index'
@@ -64,12 +65,14 @@ interface MaterialsTableProps {
   onRowClick?: (material: MaterialListOutput) => void
   highlight?: (material: MaterialListOutput) => boolean
   highlightColor?: string
+  sx?: SxProps
 }
 
 export const MaterialList = observer((props: MaterialsTableProps) => {
   const navigate = useNavigate()
   return (
     <Table
+      sx={props.sx}
       columns={columnList}
       data={materialListStore.getFilteredMaterials()}
       onRowClick={row => {
@@ -98,13 +101,13 @@ export const MaterialListPage = observer((props: MaterialsTableProps) => {
     <ScrollableWindow
       refreshTrigger={materialListStore.async.loading}
       staticContent={
-        <Stack>
-          <PageTitle title={t.MaterialsList}>
+        <Stack p={1} gap={0.5}>
+          <PageTitle title={t.MaterialsList} hideIcon>
             <AddResourceButton
               navigateTo={open(routeMap.metalflow.material.new)}
             />
           </PageTitle>
-          <RowButColumsAtSm>
+          <Row>
             <Inp
               size="sm"
               sx={{ width: '60px' }}
@@ -121,11 +124,15 @@ export const MaterialListPage = observer((props: MaterialsTableProps) => {
               }}
               value={materialListStore.filterKeyword}
             />
-            <MaterialShapeFilter />
-          </RowButColumsAtSm>
+          </Row>
+          <MaterialShapeFilter />
         </Stack>
       }
-      scrollableContent={<MaterialList {...props} />}
+      scrollableContent={
+        <Box sx={{ m: 1 }}>
+          <MaterialList {...props} />
+        </Box>
+      }
     />
   )
 })

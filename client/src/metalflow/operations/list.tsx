@@ -9,7 +9,7 @@ import {
   uiSupplyReason,
   uiWriteoffReason
 } from 'domain-model'
-import { DeleteResourceButton, P } from 'lib/index'
+import { Box, DeleteResourceButton, P } from 'lib/index'
 import { formatDateWithTime } from 'lib/utils/formatting'
 import { DetailName } from 'metalflow/details/name'
 import { OperationName } from 'metalflow/operations/operation_name'
@@ -101,20 +101,28 @@ export const OperationsList = observer((props: Props) => {
   return (
     <ScrollableWindow
       refreshTrigger={false}
-      staticContent={<PageTitle title={'Журнал операций'} />}
+      staticContent={
+        <Box p={1}>
+          <PageTitle title={'Журнал операций'} hideIcon />
+        </Box>
+      }
       scrollableContent={
-        <Table
-          columns={columns}
-          data={store.operations}
-          trStyleCallback={op => {
-            if (Number(op.original.operation_type) === EnOperationType.Supply) {
-              return {
-                backgroundColor: '#c6e7c3b9'
+        <Box px={1}>
+          <Table
+            columns={columns}
+            data={store.operations}
+            trStyleCallback={op => {
+              if (
+                Number(op.original.operation_type) === EnOperationType.Supply
+              ) {
+                return {
+                  backgroundColor: '#c6e7c3b9'
+                }
               }
-            }
-            return {}
-          }}
-        />
+              return {}
+            }}
+          />
+        </Box>
       }
     />
   )

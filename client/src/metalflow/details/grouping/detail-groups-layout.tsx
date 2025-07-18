@@ -19,7 +19,7 @@ export const DetailGroupsLayout = observer(
             scrollableContent={
               <Stack p={1} gap={0}>
                 <Row justifyContent="space-between">
-                  <PageTitle title="Группы" />
+                  <PageTitle title="Группы" hideIcon />
                   <CreateGroupModal />
                 </Row>
                 {showGroupList && <DetailGroupList />}
