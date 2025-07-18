@@ -36,10 +36,7 @@ export const MaterialUpdatePage = observer(() => {
 
   return (
     <Stack alignItems={'start'} p={1} gap={1}>
-      <MetalPageTitle
-        title={`Материал #${materialId} - ${material.label}`}
-        hideIcon
-      />
+      <MetalPageTitle t={`Материал #${materialId} - ${material.label}`} />
       <Row gap={2} alignItems={'center'}>
         <RowButColumsAtSm>
           <SupplyModal />

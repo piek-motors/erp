@@ -21,7 +21,7 @@ export const MaterialOperationLayout = observer(
   (props: MaterialOperationLayoutProps) => {
     return (
       <Stack spacing={1} p={1}>
-        <MetalPageTitle title={props.title} hideIcon />
+        <MetalPageTitle t={props.title} />
         <Row sx={{ fontSize: 20 }}>
           <Label>Материал: </Label>
           <P fontWeight={600} color="primary">

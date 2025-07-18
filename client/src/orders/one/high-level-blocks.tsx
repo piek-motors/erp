@@ -16,7 +16,7 @@ import { OrderStatementInput, StatementView } from './statement/ui'
 import { orderStore } from './stores/order.store'
 
 export const PageHeader = () => (
-  <NavigationBar title={text.orderDetails} spaceBetween>
+  <NavigationBar t={text.orderDetails} spaceBetween>
     <OrderActions />
   </NavigationBar>
 )

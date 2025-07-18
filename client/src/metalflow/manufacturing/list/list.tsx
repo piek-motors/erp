@@ -83,7 +83,7 @@ export const ManufacturingList = observer(() => {
       refreshTrigger={false}
       staticContent={
         <Box p={1}>
-          <MetalPageTitle title={'Детали в производстве'} hideIcon />
+          <MetalPageTitle t={'Детали в производстве'} />
         </Box>
       }
       scrollableContent={

@@ -35,11 +35,7 @@ export const UpdateDetailPage = observer(() => {
   }, [])
   return (
     <Stack gap={1} p={1}>
-      <MetalPageTitle
-        title={`Деталь #${detailStore.id} - ${detailStore.name}`}
-        hideIcon
-      />
-
+      <MetalPageTitle t={`Деталь #${detailStore.id} - ${detailStore.name}`} />
       <RowButColumsAtSm gap={1}>
         {/* Left Column - Detail Info */}
         <Stack gap={0.5} sx={{ flex: 1 }}>

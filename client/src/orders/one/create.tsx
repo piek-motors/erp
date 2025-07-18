@@ -39,7 +39,7 @@ export const CreateOrder = observer(() => {
     <CenteredContainer>
       <Box p={1}>
         <Row>
-          <NavigationBar title={'Новый заказ'} />
+          <NavigationBar t={'Новый заказ'} />
         </Row>
         <OrderStatementInput mutation={() => handleCreateOrder()} />
       </Box>

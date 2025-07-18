@@ -47,10 +47,7 @@ export const ManufacturingUpdatePage = observer(() => {
 
   return (
     <Stack gap={1} p={1}>
-      <MetalPageTitle
-        title={`Производственный заказ #${store.order.id}`}
-        hideIcon
-      />
+      <MetalPageTitle t={`Производственный заказ #${store.order.id}`} />
       <Stack>
         <Label label="Деталь" />
         <DetailName

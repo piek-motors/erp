@@ -60,7 +60,7 @@ function Attendance() {
 
   return (
     <Box p={1} mb={5}>
-      <NavigationBar title={'Рабочее время'} />
+      <NavigationBar t={'Рабочее время'} />
       <Box p={2} width={'min-content'} borderRadius={20}>
         <ReportConfigurator state={state} setState={setState} />
       </Box>

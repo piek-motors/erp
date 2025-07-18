@@ -25,7 +25,7 @@ export const CreateDetailPage = observer(() => {
   }, [])
   return (
     <Stack gap={1} p={1}>
-      <MetalPageTitle title={t.AddDetail} />
+      <MetalPageTitle t={t.AddDetail} />
       <DetailNameInput />
       <DetailGroupInput />
       <DetailPartCodeInput />

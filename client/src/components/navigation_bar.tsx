@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom'
 import { MobileOnly, P, Row, UseIcon } from '../lib'
 
 export interface Props {
-  title?: string
+  t?: string
   subTitle?: string | null
   sx?: SxProperty
   children?: React.ReactNode
@@ -47,9 +47,9 @@ export function NavigationBar(props: Props) {
       )}
 
       <Row gap={2} sx={props.sx}>
-        {props.title && (
+        {props.t && (
           <P color="primary" fontWeight={600} sx={{ whiteSpace: 'nowrap' }}>
-            {props.title}
+            {props.t}
           </P>
         )}
         {props.subTitle && (

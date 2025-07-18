@@ -52,7 +52,7 @@ export const MaterialAddPage = observer(() => {
 
   return (
     <Stack gap={1} py={2}>
-      <MetalPageTitle subTitle={t.AddMaterial} hideIcon />
+      <MetalPageTitle subTitle={t.AddMaterial} />
       <Tabs
         tabs={tabList}
         handleChange={value => {

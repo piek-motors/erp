@@ -210,7 +210,7 @@ const Wrapper = observer(
 
     return (
       <Stack p={1}>
-        <NavigationBar title={t.ordersTitle}>
+        <NavigationBar t={t.ordersTitle}>
           <AddResourceButton onClick={() => insertNewOrder()} />
         </NavigationBar>
         <Tabs

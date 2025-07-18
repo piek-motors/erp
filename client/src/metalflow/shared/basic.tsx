@@ -183,5 +183,12 @@ export function WarehouseOperationsLinks(props: {
 }
 
 export function MetalPageTitle(props: PageTitleProps) {
-  return <NavigationBar {...props} homeUrl={routeMap.metalflow.index} />
+  return (
+    <NavigationBar
+      {...props}
+      homeUrl={routeMap.metalflow.index}
+      hideIcon
+      spaceBetween
+    />
+  )
 }

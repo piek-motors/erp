@@ -159,7 +159,7 @@ const ReclamationPage = observer(() => {
 
   return (
     <Stack p={1}>
-      <NavigationBar title="Рекламация">
+      <NavigationBar t="Рекламация">
         <AddResourceButton
           onClick={() => {
             navigate(routeMap.order.new, { state: { reclamation: true } })
