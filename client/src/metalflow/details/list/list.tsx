@@ -138,7 +138,7 @@ const DetailSearchArguments = observer(() => {
           value={state.searchKeyword || ''}
         />
         <Search
-          placeholder="По номеру"
+          placeholder="По артикулу"
           onChange={e => {
             state.setSearchPartCode(e.target.value)
           }}

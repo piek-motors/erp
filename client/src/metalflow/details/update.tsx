@@ -44,9 +44,6 @@ export const UpdateDetailPage = observer(() => {
         {/* Left Column - Detail Info */}
         <Stack gap={0.5} sx={{ flex: 1 }}>
           <P>
-            <b>ID</b> {detailStore.id}
-          </P>
-          <P>
             <b>Остаток:</b> {detailStore.stock} шт
           </P>
           <CreateManufacturingOrder />
