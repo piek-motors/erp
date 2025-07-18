@@ -1,5 +1,5 @@
-import { UilMinus } from '@iconscout/react-unicons'
-import { Button, IconButton, Stack } from '@mui/joy'
+import { UilBackspace, UilMinus } from '@iconscout/react-unicons'
+import { Box, Button, IconButton, Stack } from '@mui/joy'
 import { BaseAutocomplete, BaseOption } from 'components/base-autocomplete'
 import { InModal } from 'components/modal'
 import { observer, P, Row, UseIcon, useState } from 'lib/index'
@@ -83,6 +83,9 @@ const UniversalDetailSelection = observer(() => {
             onChange={handleSelectionChange}
             width="100%"
           />
+          <IconButton variant="solid" color="success" onClick={() => {}}>
+            <UseIcon icon={UilBackspace} />
+          </IconButton>
         </Row>
       </Stack>
     </Stack>
@@ -121,21 +124,22 @@ export const UniversalDetailsModalSelect = observer(() => {
         setOpen(v)
       }}
     >
-      <Stack sx={{ flex: 1, minWidth: '400px' }} gap={1}>
+      <Stack sx={{ flex: 1 }} gap={1}>
         <P>
           Доступные универсальные детали [
           {store.filteredAvailableDetails.length}]
         </P>
         <UniversalDetailSelection />
-        <Button
-          size="sm"
-          variant="soft"
-          color="primary"
-          onClick={handleAddDetails}
-          disabled={store.selectedDetailIds.length === 0}
-        >
-          Добавить [{store.selectedDetailIds.length}]
-        </Button>
+        <Box>
+          <Button
+            sx={{ mt: 2 }}
+            size="sm"
+            onClick={handleAddDetails}
+            disabled={store.selectedDetailIds.length === 0}
+          >
+            Добавить [{store.selectedDetailIds.length}]
+          </Button>
+        </Box>
       </Stack>
     </InModal>
   )

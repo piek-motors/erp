@@ -46,11 +46,11 @@ export const DetailGroupList = observer(() => {
   )
 
   return (
-    <Stack gap={0.5}>
+    <>
       <MobileOnly>
         <InModal
           openButton={
-            <Button variant="soft" color="primary" sx={{ mt: 1 }}>
+            <Button variant="soft" color="primary">
               Список групп
             </Button>
           }
@@ -62,8 +62,7 @@ export const DetailGroupList = observer(() => {
           {list}
         </InModal>
       </MobileOnly>
-
       <DesktopOnly>{list}</DesktopOnly>
-    </Stack>
+    </>
   )
 })

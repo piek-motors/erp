@@ -22,20 +22,12 @@ interface DetailGroupsLayoutProps {
 const DetailGroupsLayout = observer((props: DetailGroupsLayoutProps) => (
   <RowButColumsAtSm>
     {/* Group list */}
-    <Box p={1} pt={1.5}>
+    <Box p={1}>
       <MetalPageTitle title="Группы деталей" hideIcon />
-      <ScrollableWindow
-        useSheet={false}
-        scrollableContent={
-          <Stack p={0}>
-            <DetailGroupList />
-          </Stack>
-        }
-        refreshTrigger={null}
-      />
+      <DetailGroupList />
     </Box>
     {/* Group details */}
-    <Box sx={{ flex: 1 }}>
+    <Box>
       <ScrollableWindow
         staticContent={
           store.targetGroup && (
