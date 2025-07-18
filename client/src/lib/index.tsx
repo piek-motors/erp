@@ -354,12 +354,18 @@ export const IconSettings = {
   fill: 'black'
 }
 
-export function UseIcon(props: { icon: Icon; small?: boolean }) {
+export function UseIcon(props: {
+  icon: Icon
+  small?: boolean
+  invert?: boolean
+}) {
+  const fillColor = props.invert ? 'white' : IconSettings.fill
+
   return (
     <props.icon
       width={props.small ? IconSettings.width / 1.5 : IconSettings.width}
       opacity={IconSettings.opacity}
-      fill={IconSettings.fill}
+      fill={fillColor}
     />
   )
 }

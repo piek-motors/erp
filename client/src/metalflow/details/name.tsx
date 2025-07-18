@@ -25,9 +25,7 @@ export const DetailName = observer((props: Props) => {
   // Main content: detail name + optional group link
   const mainContent = (
     <>
-      <Box sx={{ whiteSpace: 'nowrap', width: 'min-content' }}>
-        {detail.name}
-      </Box>
+      <Box sx={{ width: 'min-content' }}>{detail.name}</Box>
       {withGroupLink && <GroupLink groupId={detail.group_id} />}
     </>
   )

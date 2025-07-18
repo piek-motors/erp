@@ -23,7 +23,7 @@ const DetailGroupsLayout = observer((props: DetailGroupsLayoutProps) => (
   <RowButColumsAtSm>
     {/* Group list */}
     <Box p={1}>
-      <MetalPageTitle title="Группы деталей" hideIcon>
+      <MetalPageTitle title="Группы деталей" hideIcon spaceBetween>
         <MobileGroupList />
       </MetalPageTitle>
 

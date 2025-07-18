@@ -1,6 +1,14 @@
+import { UilBars } from '@iconscout/react-unicons'
 import { Button, Stack } from '@mui/joy'
 import { InModal } from 'components/modal'
-import { DesktopOnly, MobileOnly, observer, P, useState } from 'lib/index'
+import {
+  DesktopOnly,
+  MobileOnly,
+  observer,
+  P,
+  UseIcon,
+  useState
+} from 'lib/index'
 import { open, routeMap } from 'lib/routes'
 import { Link } from 'react-router-dom'
 import { CreateGroupModal } from './group_name.modal'
@@ -58,8 +66,12 @@ export const MobileGroupList = observer(() => {
     <MobileOnly>
       <InModal
         openButton={
-          <Button variant="soft" color="primary">
-            Список групп
+          <Button
+            variant="solid"
+            color="primary"
+            startDecorator={<UseIcon icon={UilBars} invert />}
+          >
+            Группы
           </Button>
         }
         open={mobileOnlyOpen}
