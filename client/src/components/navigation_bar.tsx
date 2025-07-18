@@ -20,7 +20,7 @@ export function NavigationBar(props: Props) {
   const isDev = process.env.REACT_APP_NODE_ENV === 'development'
 
   return (
-    <Stack direction="row" gap={1}>
+    <Stack direction="row" gap={1} alignItems="center" sx={{ ml: 0.5 }}>
       {!props.hideIcon && (
         <Link to={routeMap.index}>
           <IconButton
@@ -59,7 +59,7 @@ export function NavigationBar(props: Props) {
         )}
       </Row>
       {props.spaceBetween && <Box sx={{ width: '100%' }} />}
-      <Box>{props.children}</Box>
+      <Box sx={{ margin: 0.5 }}>{props.children}</Box>
     </Stack>
   )
 }
