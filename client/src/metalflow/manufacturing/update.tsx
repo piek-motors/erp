@@ -194,7 +194,7 @@ const DetailMaterialInfo = observer(
             <MaterialName
               materialId={material.id || 0}
               materialLabel={material.label || ''}
-              showLinkButton
+              withLink
             />
             <P level="body-sm" color="primary">
               Расход {material.data?.length || 'не указано'} мм

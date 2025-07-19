@@ -22,7 +22,7 @@ export const OperationName = observer((props: Props) => {
       <MaterialName
         materialLabel={operation.material_label}
         materialId={operation.material_id}
-        showLinkButton={showLinkButton}
+        withLink={showLinkButton}
       />
     )
   }

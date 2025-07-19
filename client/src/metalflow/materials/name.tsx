@@ -7,11 +7,10 @@ export const MaterialName = observer(
   (props: {
     materialLabel: string
     materialId?: number
-    showLinkButton?: boolean
+    withLink?: boolean
   }) => {
-    const { materialLabel, materialId, showLinkButton } = props
-
-    if (showLinkButton && materialId) {
+    const { materialLabel, materialId, withLink } = props
+    if (withLink && materialId) {
       return (
         <WithHiddenLinkButton
           linkTo={open(routeMap.metalflow.material.edit, materialId)}
