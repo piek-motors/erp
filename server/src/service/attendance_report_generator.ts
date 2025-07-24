@@ -114,6 +114,7 @@ export class AttendanceReportGenerator {
       result.push(employee)
     }
 
+    result.sort((a, b) => a.name.localeCompare(b.name))
     return { employees: result, daysInMonth: days.length }
   }
 }
