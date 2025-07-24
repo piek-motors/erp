@@ -58,6 +58,9 @@ function getColumns(props: {
               name: data.detail_name!,
               group_id: data.logical_group_id!
             }}
+            withLink
+            withGroupLink
+            withParamsButton
           />
         )
       }

@@ -10,7 +10,8 @@ import {
 export const UiWriteoffReason = {
   [EnWriteoffReason.UsedInProduction]: 'Производство',
   [EnWriteoffReason.Defective]: 'Брак продукта',
-  [EnWriteoffReason.InventoryAdjustment]: 'Инвентаризация'
+  [EnWriteoffReason.InventoryAdjustment]: 'Инвентаризация',
+  [EnWriteoffReason.Sell]: 'Продажа'
 }
 export function uiWriteoffReason(reason?: EnWriteoffReason | null) {
   if (reason == null) return '-'

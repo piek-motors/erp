@@ -1,7 +1,8 @@
 export enum EnWriteoffReason {
   UsedInProduction = 0,
   Defective = 1,
-  InventoryAdjustment = 2
+  InventoryAdjustment = 2,
+  Sell = 3
 }
 
 export enum EnSupplyReason {

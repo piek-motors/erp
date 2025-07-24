@@ -30,7 +30,12 @@ export class Warehouse {
     }
   }
 
-  async subtractMaterial(id: number, qty: number, reason: EnWriteoffReason) {
+  async subtractMaterial(
+    id: number,
+    qty: number,
+    reason: EnWriteoffReason,
+    detail_id?: number
+  ) {
     const current_stock = await this.trx
       .selectFrom('metal_flow.materials')
       .select(['stock', 'label'])
@@ -49,6 +54,7 @@ export class Warehouse {
         operation_type: EnOperationType.Writeoff,
         user_id: this.userId,
         material_id: id,
+        detail_id,
         qty,
         reason
       })

@@ -70,7 +70,9 @@ export class Manufacturing {
       .execute()
 
     const writeoffs = await Promise.all(
-      materials.map(material => this.subtractMaterials(material, qty))
+      materials.map(material =>
+        this.subtractMaterials(material, qty, order.detail_id)
+      )
     )
 
     await this.trx
@@ -145,7 +147,8 @@ export class Manufacturing {
       stock: number
       label: string
     },
-    qty: number
+    qty: number,
+    detail_id: number
   ) {
     const { material_id, label } = material
     const totalCost = (material.data.length * qty) / 1000
@@ -167,7 +170,8 @@ export class Manufacturing {
       .subtractMaterial(
         material.material_id,
         totalCost,
-        EnWriteoffReason.UsedInProduction
+        EnWriteoffReason.UsedInProduction,
+        detail_id
       )
       .then(res => ({
         material_id: material.material_id,
