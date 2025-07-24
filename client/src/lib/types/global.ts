@@ -2,7 +2,6 @@ import { JSX } from 'react'
 import {
   CommentsSubscription,
   GetAllUsersQuery,
-  GetEmployeeListQuery,
   GetNotificationsSubscription,
   GetOrderByPkQuery,
   GetReclamationOrdersQuery,
@@ -55,9 +54,6 @@ export type PreparedEmployeeDto = {
 
 export type AppColorTheme = 'light' | 'dark' | 'system'
 export type AppColorMode = 'light' | 'dark'
-
-export type Employee =
-  GetEmployeeListQuery['attendance_users_aggregate']['nodes'][number]
 
 export type TOrderItem =
   GetOrderByPkQuery['orders_orders'][number]['order_items'][number]

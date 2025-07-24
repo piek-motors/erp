@@ -1,114 +1,49 @@
-/** @jsxImportSource @emotion/react */
-import { Button, Checkbox, Input, P, Row, Stack } from 'lib'
-import { monthAdd } from 'lib/date'
-import { useUpdateTimeDeductionMutation } from 'lib/types/graphql-shema'
-import { ReactNode } from 'react'
-import { State } from './main'
+import { MonthSelect } from 'components/month-select'
+import { Button, Checkbox, Input, Label, observer, P, Row, Stack } from 'lib'
+import { store } from './store'
 
-const months = [
-  'янв',
-  'фев',
-  'мар',
-  'апр',
-  'май',
-  'июн',
-  'июл',
-  'авг',
-  'сен',
-  'окт',
-  'ноя',
-  'дек'
-]
-
-interface IReportConfiguratorProps {
-  state: State
-  setState: React.Dispatch<React.SetStateAction<State>>
-}
-
-export default function ReportConfigurator({
-  state,
-  setState
-}: IReportConfiguratorProps) {
-  const [updateTimeDeductionMutation] = useUpdateTimeDeductionMutation()
-
-  const date = new Date()
-
-  const handleMonthClick = (date: Date) => {
-    setState({
-      ...state,
-      employess: [],
-      selectedMonth: [date.getMonth(), date.getFullYear()]
-    })
-  }
-
-  async function handleOnRetentionSave() {
-    updateTimeDeductionMutation({
-      variables: { ID: 1, TimeDeduction: state.timeRetention }
-    })
-  }
-
-  function handleShowFullInfo() {
-    setState({
-      ...state,
-      showFullInfo: !state.showFullInfo
-    })
-  }
-
-  const handleTimeRetentionInput: React.ChangeEventHandler<
-    HTMLInputElement
-  > = e => {
-    setState({
-      ...state,
-      timeRetention: parseInt(e.target.value)
-    })
-  }
-
+const ReportConfigurator = observer(() => {
   return (
     <Stack gap={1}>
-      <Row gap={1}>
-        {Array.from({ length: 9 }, (v: unknown, k: number) => k).map<ReactNode>(
-          i => {
-            const suitable = monthAdd(date, -i)
-            return (
-              <Button
-                variant="soft"
-                color="neutral"
-                key={i}
-                onClick={() => handleMonthClick(suitable)}
-                className={
-                  suitable.getMonth() === state.selectedMonth[0] ? 'active' : ''
-                }
-              >
-                {[months[suitable.getMonth()]]}
-              </Button>
-            )
-          }
-        )}
-      </Row>
-
+      <MonthSelect store={store.monthSelect} />
       <Row alignItems={'center'} gap={1}>
-        <P>Норма вычета времени</P>
+        <Label sx={{ whiteSpace: 'nowrap' }}>Норма вычета времени</Label>
         <Row gap={1}>
           <Input
             size="sm"
             sx={{ width: 60 }}
             type="number"
-            value={state.timeRetention ?? ''}
-            onChange={handleTimeRetentionInput}
+            value={store.timeRetention ?? ''}
+            onChange={e => {
+              store.setTimeRetention(e.target.value)
+            }}
           />
           <P>мин</P>
         </Row>
-
-        <Button onClick={handleOnRetentionSave} size="sm">
-          Обновить
-        </Button>
       </Row>
-
       <Checkbox
+        variant="soft"
         label="Показывать время прихода и ухода"
-        checked={state.showFullInfo}
-        onClick={handleShowFullInfo}
+        checked={store.showFullInfo}
+        onClick={() => {
+          store.setShowFullInfo(!store.showFullInfo)
+        }}
       />
+
+      {/* Generate Report Button */}
+      <Button
+        variant="solid"
+        color="primary"
+        onClick={() => {
+          store.load(store.monthSelect.month, store.monthSelect.year)
+        }}
+        disabled={store.async.loading}
+        sx={{ mt: 1 }}
+      >
+        {store.async.loading ? 'Генерация...' : 'Сгенерировать отчет'}
+      </Button>
     </Stack>
   )
-}
+})
+
+export default ReportConfigurator

@@ -50,12 +50,12 @@ export class MonthSelectStore {
 
 interface IReportConfiguratorProps {
   store: MonthSelectStore
-  onSearch: (month: number, year: number) => void
+  onSearch?: (month: number, year: number) => void
 }
 
 function _MonthSelect({ onSearch, store }: IReportConfiguratorProps) {
   return (
-    <Row gap={1} my={2}>
+    <Row gap={0.5}>
       <Select
         placeholder="Месяц"
         selectElements={months.map((e, i) => ({
@@ -64,7 +64,7 @@ function _MonthSelect({ onSearch, store }: IReportConfiguratorProps) {
         }))}
         value={store.month}
         onChange={v => {
-          store.setMonth(v)
+          store.setMonth(Number(v))
         }}
         width="100px"
       />
@@ -77,19 +77,21 @@ function _MonthSelect({ onSearch, store }: IReportConfiguratorProps) {
         width="100px"
         value={store.year}
         onChange={v => {
-          store.setYear(v)
+          store.setYear(Number(v))
         }}
       />
-      <IconButton
-        loading={store.isLoading}
-        variant="solid"
-        color="primary"
-        onClick={() => {
-          onSearch(store.month, store.year)
-        }}
-      >
-        <UseIcon icon={UilSearch} />
-      </IconButton>
+      {onSearch && (
+        <IconButton
+          loading={store.isLoading}
+          variant="solid"
+          color="primary"
+          onClick={() => {
+            onSearch(store.month, store.year)
+          }}
+        >
+          <UseIcon icon={UilSearch} />
+        </IconButton>
+      )}
     </Row>
   )
 }

@@ -4,6 +4,7 @@ import { router } from '#root/lib/trpc/trpc.js'
 import { UserRole } from 'domain-model'
 import z from 'zod'
 import { attachmentRouter } from './attachment/router.js'
+import { attendanceRouter } from './attendance/router.js'
 import { metalFlowRouter } from './metalflow/router.js'
 import { ordersRouter } from './orders/router.js'
 
@@ -11,6 +12,7 @@ export const trpcRouter = router({
   orders: ordersRouter,
   metal: metalFlowRouter,
   attachments: attachmentRouter,
+  attendance: attendanceRouter,
   userList: procedure
     .input(
       z.object({

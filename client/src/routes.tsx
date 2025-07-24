@@ -1,7 +1,7 @@
 import { routeMap } from 'lib/routes'
 import { MentionList } from 'mention/mentions'
-import { IndexPage } from './attendance'
 import Attendance from './attendance/main'
+import { IndexPage } from './index.page'
 import { RouteConfig } from './lib/types/global'
 import metalflow from './metalflow/routes'
 import orders from './orders/main'

@@ -33,6 +33,9 @@ export namespace DB {
     ['orders.order_items']: OrderItemsTable
     ['orders.notifications']: NotificationTable
 
+    ['attendance.intervals']: AttendanceIntervalTable
+    ['attendance.users']: AttendanceUserTable
+
     ['metal_flow.materials']: MaterialTable
     ['metal_flow.details']: DetailTable
     ['metal_flow.detail_attachments']: DetailAttachmentTable
@@ -202,5 +205,22 @@ export namespace DB {
   export interface DetailAttachmentTable {
     detail_id: number
     attachment_id: number
+  }
+
+  export interface AttendanceIntervalTable {
+    ent: Date
+    ext: Date | null
+    card: string
+    database: string | null
+    ent_event_id: number
+    ext_event_id: number | null
+  }
+
+  export interface AttendanceUserTable {
+    id: GeneratedAlways<number>
+    firstname: string
+    lastname: string
+    card: string
+    created_at: GeneratedAlways<Date>
   }
 }

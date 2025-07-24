@@ -1,15 +1,15 @@
 /** @jsxImportSource @emotion/react */
+import { css } from '@emotion/react'
 import { Sheet } from 'lib'
-import { PreparedEmployeeDto } from 'lib/types/global'
 import { useTable } from 'react-table'
+import { AttendanceEmployee } from '../../../server/src/service/attendance_report_generator'
 
 interface ITableProps {
   readonly columns: any[]
-  readonly data: PreparedEmployeeDto[]
-  readonly className?: string
+  readonly data: AttendanceEmployee[]
 }
 
-export function Table({ columns, data, className }: ITableProps) {
+export function Table({ columns, data }: ITableProps) {
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable({
       columns,
@@ -17,13 +17,13 @@ export function Table({ columns, data, className }: ITableProps) {
     })
 
   return (
-    <Sheet>
+    <Sheet sx={{ overflow: 'visible', width: 'max-content' }}>
       <table
         {...getTableProps()}
-        style={{
-          width: '100%',
-          borderCollapse: 'collapse'
-        }}
+        css={css`
+          width: 100%;
+          border-collapse: collapse;
+        `}
       >
         <thead>
           {headerGroups.map((headerGroup, i) => (
@@ -47,7 +47,7 @@ export function Table({ columns, data, className }: ITableProps) {
                     <td
                       {...cell.getCellProps()}
                       style={{
-                        border: '1px solid #8b8787',
+                        border: '1px solid #d3cbcb',
                         padding: '0px 4px'
                       }}
                     >
