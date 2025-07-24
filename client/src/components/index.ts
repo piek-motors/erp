@@ -1,6 +1,5 @@
 export * from './attachments/attachment'
 export * from './attachments/attachment-list'
-export * from './manager-filter'
 export * from './navigation_bar'
 export * from './order-type-filter'
 export * from './table-name'

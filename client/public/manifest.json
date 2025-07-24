@@ -1,14 +1,21 @@
 {
-  "short_name": "ПЭК.Производство",
-  "name": "ПЭК.Производство",
+  "short_name": "Piek Factory",
+  "name": "Piek Factory Resource Planning System",
+  "description": "Система управления производством Piek Factory",
   "icons": [
     {
       "src": "factory_icon.png",
       "sizes": "832x832",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ],
-  "display": "minimal-ui",
+  "display": "standalone",
   "theme_color": "#a2b3ff",
-  "background_color": "#a2b3ff"
+  "background_color": "#a2b3ff",
+  "start_url": "/",
+  "scope": "/",
+  "orientation": "portrait-primary",
+  "categories": ["business", "productivity"],
+  "lang": "ru"
 }

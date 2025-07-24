@@ -96,7 +96,7 @@ export const DetailsListPage = observer(() => {
     <ScrollableWindow
       refreshTrigger={state.async.loading}
       staticContent={
-        <Stack gap={1}>
+        <Stack gap={1} p={0.5}>
           <MetalPageTitle t={t.DetailsList}>
             <AddResourceButton
               navigateTo={open(routeMap.metalflow.detail.new)}

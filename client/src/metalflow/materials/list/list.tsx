@@ -101,7 +101,7 @@ export const MaterialListPage = observer((props: MaterialsTableProps) => {
     <ScrollableWindow
       refreshTrigger={materialListStore.async.loading}
       staticContent={
-        <Stack p={1} gap={0.5}>
+        <Stack p={0.5} gap={0.5}>
           <MetalPageTitle t={t.MaterialsList}>
             <AddResourceButton
               navigateTo={open(routeMap.metalflow.material.new)}
@@ -129,7 +129,7 @@ export const MaterialListPage = observer((props: MaterialsTableProps) => {
         </Stack>
       }
       scrollableContent={
-        <Box sx={{ m: 1 }}>
+        <Box sx={{ p: 0.5 }}>
           <MaterialList {...props} />
         </Box>
       }

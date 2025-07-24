@@ -20,7 +20,12 @@ export function NavigationBar(props: Props) {
   const isDev = process.env.REACT_APP_NODE_ENV === 'development'
 
   return (
-    <Stack direction="row" gap={1} alignItems="center" sx={{ ml: 0.5 }}>
+    <Stack
+      direction="row"
+      gap={1}
+      alignItems="center"
+      sx={{ p: 0.5, minHeight: '36px' }}
+    >
       {!props.hideIcon && (
         <Link to={routeMap.index}>
           <IconButton
@@ -46,7 +51,7 @@ export function NavigationBar(props: Props) {
         </MobileOnly>
       )}
 
-      <Row gap={2} sx={props.sx}>
+      <Row gap={1} sx={props.sx}>
         {props.t && (
           <P color="primary" fontWeight={600} sx={{ whiteSpace: 'nowrap' }}>
             {props.t}
@@ -59,7 +64,7 @@ export function NavigationBar(props: Props) {
         )}
       </Row>
       {props.spaceBetween && <Box sx={{ width: '100%' }} />}
-      <Box sx={{ margin: 0.5 }}>{props.children}</Box>
+      <Box sx={{ margin: 0 }}>{props.children}</Box>
     </Stack>
   )
 }
