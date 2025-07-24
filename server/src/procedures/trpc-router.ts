@@ -1,16 +1,17 @@
+import { procedure } from '#root/deps.js'
 import { db } from '#root/ioc/db.js'
-import { publicProcedure, router } from '#root/lib/trpc/trpc.js'
+import { router } from '#root/lib/trpc/trpc.js'
 import { UserRole } from 'domain-model'
 import z from 'zod'
-import { attachmentRouter } from '../../procedures/attachment/router.js'
-import { metalFlowRouter } from '../../procedures/metalflow/router.js'
-import { ordersRouter } from '../../procedures/orders/router.js'
+import { attachmentRouter } from './attachment/router.js'
+import { metalFlowRouter } from './metalflow/router.js'
+import { ordersRouter } from './orders/router.js'
 
 export const trpcRouter = router({
   orders: ordersRouter,
   metal: metalFlowRouter,
   attachments: attachmentRouter,
-  userList: publicProcedure
+  userList: procedure
     .input(
       z.object({
         role: z.nativeEnum(UserRole).optional()
@@ -26,5 +27,19 @@ export const trpcRouter = router({
         query = query.where('role', '=', input.role)
       }
       return await query.execute()
+    }),
+  markAllNotificationsAsRead: procedure
+    .input(
+      z.object({
+        userId: z.number()
+      })
+    )
+    .mutation(async ({ input }) => {
+      await db
+        .updateTable('orders.notifications')
+        .set({ seen: true })
+        .where('user_id', '=', input.userId)
+        .execute()
+      return true
     })
 })

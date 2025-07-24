@@ -1,6 +1,5 @@
 /** @jsxImportSource @emotion/react */
 import styled from '@emotion/styled'
-import { UilArrowRight } from '@iconscout/react-unicons'
 import { Container } from '@mui/joy'
 import { NavigationBar } from 'components/navigation_bar'
 import { Context } from 'index'
@@ -9,13 +8,14 @@ import {
   Button,
   P,
   Row,
+  SendMutation,
   Sheet,
   Stack,
-  UseIcon,
   useNavigate,
   useState
 } from 'lib/index'
 import { openOrderDetailPage } from 'lib/routes'
+import { rpc } from 'lib/rpc.client'
 import { TNotification } from 'lib/types/global'
 import {
   useGetNotificationsSubscription,
@@ -65,27 +65,23 @@ function Mention({ data }: INotificationProps) {
             </P>
           </Stack>
 
-          <Row>
+          <Row justifyContent={'space-between'}>
             <P fontWeight={600}>
               {data.order.contractor}__{data.order.city}
             </P>
-
-            <Box>
+            <Stack justifyContent={'flex-end'}>
               <Button
+                size="sm"
                 onClick={toOrderDetailPageHandler}
-                variant="soft"
-                color="neutral"
+                color="primary"
               >
-                <Row>
-                  <P sx={{ whiteSpace: 'nowrap' }}>К заказу</P>
-                  <UseIcon icon={UilArrowRight} />
-                </Row>
+                Посмотреть
               </Button>
-            </Box>
+            </Stack>
           </Row>
         </Box>
 
-        <Box p={1}>
+        <Box p={0.1}>
           <CommentContentWrapper
             dangerouslySetInnerHTML={{ __html: data.comment.text }}
           ></CommentContentWrapper>
@@ -128,6 +124,22 @@ export function MentionList() {
         {notifications.unviewed.length ? (
           <Stack gap={1}>
             <SectionTitle title="Новые" />
+            <Box>
+              <SendMutation
+                disabled={notifications.unviewed.length === 0}
+                buttonProps={{
+                  color: 'neutral',
+                  variant: 'soft',
+                  size: 'sm'
+                }}
+                buttonLabel="Прочитать все"
+                onClick={() => {
+                  return rpc.markAllNotificationsAsRead.mutate({
+                    userId: store?.user?.id
+                  })
+                }}
+              />
+            </Box>
             {!loading &&
               notifications?.unviewed.map((e, index) => (
                 <Mention key={index} data={e} />

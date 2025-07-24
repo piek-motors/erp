@@ -31,6 +31,7 @@ export namespace DB {
     ['orders.order_attachments']: OrderAttachmentTable
     ['orders.order_payments']: OrderPaymentsTable
     ['orders.order_items']: OrderItemsTable
+    ['orders.notifications']: NotificationTable
 
     ['metal_flow.materials']: MaterialTable
     ['metal_flow.details']: DetailTable
@@ -175,6 +176,14 @@ export namespace DB {
     quantity: number
     assembler_name: string | null
     description: string | null
+  }
+
+  export interface NotificationTable {
+    id: GeneratedAlways<number>
+    order_id: number
+    comment_id: number
+    user_id: number
+    seen: boolean
   }
 
   export interface AttachmentTable {
