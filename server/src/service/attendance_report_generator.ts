@@ -18,8 +18,7 @@ interface Interval {
 }
 export interface AttendanceEmployee {
   id: number
-  firstname: string
-  lastname: string
+  name: string
   card: string
   total: number
   workDays: number
@@ -75,8 +74,7 @@ export class AttendanceReportGenerator {
       const employee: AttendanceEmployee = {
         totalIntervalsCount: userRelatedIntervals.length,
         id: user.id,
-        firstname: user.firstname,
-        lastname: user.lastname,
+        name: `${user.lastname} ${user.firstname}`,
         card: user.card,
         total: 0,
         workDays: 0,

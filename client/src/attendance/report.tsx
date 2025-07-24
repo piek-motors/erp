@@ -16,8 +16,8 @@ export const AttendanceReportComponent = (props: {
 }) => {
   const columns: Column<AttendanceEmployee>[] = [
     {
-      Header: 'Имя Фамилия',
-      accessor: data => `${data.firstname} ${data.lastname}`
+      Header: 'Фамилия Имя',
+      accessor: data => data.name
     },
     {
       Header: '∑',
