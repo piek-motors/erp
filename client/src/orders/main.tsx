@@ -23,11 +23,10 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { OrdersTable } from './columns'
 import { ManagerFilter } from './manager-filter'
 import { RequestReportPage } from './report/report.page'
-import { useOrderListPageStore } from './stores/state'
+import { orderListPageStore as store } from './stores/state'
 import { t } from './text'
 
 const PriorityList = observer(() => {
-  const store = useOrderListPageStore()
   const { data } = useGetOrdersByStatusQuery({
     variables: {
       order_status: OrderStatus.InProduction
@@ -45,12 +44,12 @@ const PriorityList = observer(() => {
       <Sheet>
         <Search
           value={store.searchTerm}
-          onChange={store.searchInputHandler}
+          onChange={e => store.searchInputHandler(e)}
           placeholder={t.inputPlaceholder}
         >
           <ManagerFilter
             value={store.managerId}
-            onChange={store.managerFilterHandler}
+            onChange={userId => store.managerFilterHandler(userId)}
           />
         </Search>
 
@@ -61,7 +60,6 @@ const PriorityList = observer(() => {
 })
 
 const RegistrationList = observer(() => {
-  const store = useOrderListPageStore()
   const { data } = useGetOrdersByStatusQuery({
     variables: {
       order_status: OrderStatus.PreOrder
@@ -78,12 +76,12 @@ const RegistrationList = observer(() => {
     <>
       <Search
         value={store.searchTerm}
-        onChange={store.searchInputHandler}
+        onChange={e => store.searchInputHandler(e)}
         placeholder={t.inputPlaceholder}
       >
         <ManagerFilter
           value={store.managerId}
-          onChange={store.managerFilterHandler}
+          onChange={userId => store.managerFilterHandler(userId)}
         />
       </Search>
       <OrdersTable data={orders} />
@@ -130,8 +128,6 @@ const NewOrderList = observer(() => {
 })
 
 const Archive = observer(() => {
-  const store = useOrderListPageStore()
-
   const keyword = () => {
     if (!store.searchTerm) return ''
     if (store.searchTerm === '/all') return '%%'
@@ -154,16 +150,16 @@ const Archive = observer(() => {
     <>
       <Search
         value={store.searchTerm}
-        onChange={store.searchInputHandler}
+        onChange={e => store.searchInputHandler(e)}
         placeholder={t.inputPlaceholder}
       >
         <ManagerFilter
           value={store.managerId}
-          onChange={store.managerFilterHandler}
+          onChange={userId => store.managerFilterHandler(userId)}
         />
         <OrderTypeFilter
           value={store.orderStatusId}
-          onChange={store.orderTypeFilterHandler}
+          onChange={e => store.orderTypeFilterHandler(e)}
         />
       </Search>
       <OrdersTable data={orders} />

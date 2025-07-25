@@ -1,29 +1,38 @@
 import { OrderStatus } from 'domain-model'
+import { makeAutoObservable } from 'mobx'
 import { ChangeEvent } from 'react'
-import { create } from 'zustand'
 
-interface IOrderListPageStore {
-  managerId: number
-  orderStatusId: OrderStatus
-  searchTerm: string
+export class OrderListPageStore {
+  managerId: number = 0
+  setManagerId(userId: number) {
+    this.managerId = userId
+  }
 
-  orderTypeFilterHandler(e: any): void
-  searchInputHandler(e: ChangeEvent<HTMLInputElement>): void
-  managerFilterHandler(userId: number): void
+  orderStatusId: OrderStatus = OrderStatus.Archived
+  setOrderStatusId(status: OrderStatus) {
+    this.orderStatusId = status
+  }
+
+  searchTerm: string = ''
+  setSearchTerm(term: string) {
+    this.searchTerm = term
+  }
+
+  constructor() {
+    makeAutoObservable(this)
+  }
+
+  orderTypeFilterHandler(e: any) {
+    this.orderStatusId = e.target.value as unknown as OrderStatus
+  }
+
+  searchInputHandler(e: ChangeEvent<HTMLInputElement>) {
+    this.searchTerm = e.target.value
+  }
+
+  managerFilterHandler(userId: number) {
+    this.managerId = userId
+  }
 }
 
-export const useOrderListPageStore = create<IOrderListPageStore>(set => ({
-  managerId: 0,
-  orderStatusId: OrderStatus.Archived,
-  searchTerm: '',
-  orderTypeFilterHandler(e) {
-    set({ orderStatusId: e.target.value as unknown as OrderStatus })
-  },
-  managerFilterHandler(userId) {
-    set({ managerId: userId })
-  },
-
-  searchInputHandler(e) {
-    set({ searchTerm: e.target.value })
-  }
-}))
+export const orderListPageStore = new OrderListPageStore()

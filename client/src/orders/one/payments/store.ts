@@ -74,8 +74,8 @@ export class PaymentStore {
       }
 
       const paymentDate = moment(this.date, 'DD.MM.YY').utc(true)
-      if (!paymentDate.isValid() || paymentDate.isAfter()) {
-        throw Error('Invalid date format or future date not allowed')
+      if (!paymentDate.isValid()) {
+        throw Error('Invalid date format')
       }
 
       const paymentId = await PaymentsApi.insert({
