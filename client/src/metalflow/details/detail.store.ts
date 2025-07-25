@@ -4,7 +4,7 @@ import { AsyncStoreController } from 'lib/async-store.controller'
 import { rpc } from 'lib/rpc.client'
 import { cache } from 'metalflow/cache/root'
 import { makeAutoObservable } from 'mobx'
-import { RouterOutput } from '../../../../server/src/lib/trpc'
+import { RouterOutput } from 'srv/lib/trpc'
 import { DetailWriteoffStore } from './writeoff/store'
 
 type MaterialRelationData = {

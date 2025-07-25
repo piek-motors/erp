@@ -1,6 +1,6 @@
 import { rpc } from 'lib/rpc.client'
 import { makeAutoObservable } from 'mobx'
-import { RouterOutput } from '../../../../server/src/lib/trpc'
+import { RouterOutput } from 'srv/lib/trpc'
 
 export type DetailGroup = RouterOutput['metal']['detailGroups']['list'][number]
 

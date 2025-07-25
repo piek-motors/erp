@@ -7,7 +7,7 @@ import { Column } from 'react-table'
 import {
   AttendanceEmployee,
   AttendanceReport
-} from '../../../server/src/service/attendance_report_generator'
+} from 'srv/service/attendance_report_generator'
 import { store } from './store'
 import { Table } from './table'
 
@@ -88,7 +88,6 @@ export const AttendanceReportComponent = (props: {
         })}
       </Label>
       <Label>Норма вычета времени: {store.timeRetention} мин</Label>
-      <Divider sx={{ my: 1 }} />
       <Table columns={columns} data={props.report.employees} />
     </Sheet>
   )

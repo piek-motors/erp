@@ -5,9 +5,9 @@ import {
 } from 'domain-model'
 
 // @ts-ignore
-import { RouterOutput } from '../../../server/src/lib/trpc'
+import { RouterOutput } from 'srv/lib/trpc'
+import { ListMaterialsOutput as MaterialListDto } from 'srv/procedures/metalflow/material/list'
 type GetMaterialsOutput = RouterOutput['metal']['material']['get']
-type GetMaterialsListOutput = RouterOutput['metal']['material']['list'][number]
 
 class MaterialMapper {
   fromDto(dto: GetMaterialsOutput): Material {
@@ -33,7 +33,7 @@ class MaterialMapper {
     return emptyMaterial
   }
 
-  listFromDto(dto: GetMaterialsListOutput): Material {
+  listFromDto(dto: MaterialListDto): Material {
     if (dto == null) throw new Error('material mapper: empty dto passed')
     if (dto.shape == null)
       throw new Error('material mapper: shape is not specified')

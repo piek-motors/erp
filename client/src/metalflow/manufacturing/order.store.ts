@@ -2,7 +2,7 @@ import { AsyncStoreController } from 'lib/async-store.controller'
 import { rpc } from 'lib/rpc.client'
 import { notifierStore } from 'lib/store/notifier.store'
 import { makeAutoObservable } from 'mobx'
-import { RouterOutput } from '../../../../server/src/lib/trpc'
+import { RouterOutput } from 'srv/lib/trpc'
 
 export type ManufacturingOrderOutput =
   RouterOutput['metal']['manufacturing']['get']

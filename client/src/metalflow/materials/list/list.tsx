@@ -17,9 +17,10 @@ import { open, routeMap } from 'lib/routes'
 import { roundAndTrim } from 'lib/utils/formatting'
 import { MetalPageTitle } from 'metalflow/shared/basic'
 import { Column } from 'react-table'
+import { ListMaterialsOutput } from 'srv/procedures/metalflow/material/list'
 import { t } from '../../text'
 import { MaterialShapeFilter } from './shape_filter'
-import { MaterialListOutput, materialListStore } from './store'
+import { materialListStore } from './store'
 
 const ShapeNameToIconMap = {
   [EnMaterialShape.SquareBar]: '/icons/square.svg',
@@ -28,7 +29,7 @@ const ShapeNameToIconMap = {
   [EnMaterialShape.List]: '/icons/list.svg'
 }
 
-const columnList: Column<MaterialListOutput>[] = [
+const columnList: Column<ListMaterialsOutput>[] = [
   {
     Header: 'ID',
     accessor: 'id'
@@ -62,8 +63,8 @@ const columnList: Column<MaterialListOutput>[] = [
 ]
 
 interface MaterialsTableProps {
-  onRowClick?: (material: MaterialListOutput) => void
-  highlight?: (material: MaterialListOutput) => boolean
+  onRowClick?: (material: ListMaterialsOutput) => void
+  highlight?: (material: ListMaterialsOutput) => boolean
   highlightColor?: string
   sx?: SxProps
 }

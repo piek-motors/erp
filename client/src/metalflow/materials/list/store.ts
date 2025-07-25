@@ -2,11 +2,8 @@ import { EnMaterialShape } from 'domain-model'
 import { AsyncStoreController } from 'lib/async-store.controller'
 import { cache } from 'metalflow/cache/root'
 import { makeAutoObservable } from 'mobx'
-import { RouterOutput } from '../../../../../server/src/lib/trpc'
+import { ListMaterialsOutput } from 'srv/procedures/metalflow/material/list'
 import { MaterialSupplyStore } from '../operations/supply/state'
-
-export type MaterialListOutput =
-  RouterOutput['metal']['material']['list'][number]
 
 export class MaterialListStore {
   readonly async = new AsyncStoreController()
@@ -18,7 +15,7 @@ export class MaterialListStore {
   constructor() {
     makeAutoObservable(this)
   }
-  getFilteredMaterials(): MaterialListOutput[] {
+  getFilteredMaterials(): ListMaterialsOutput[] {
     let filtered = cache.materials.getMaterials()
     filtered = filtered.slice().sort((a, b) =>
       a.label.localeCompare(b.label, 'ru', {

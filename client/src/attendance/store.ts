@@ -2,7 +2,7 @@ import { MonthSelectStore } from 'components/month-select'
 import { AsyncStoreController } from 'lib/async-store.controller'
 import { rpc } from 'lib/rpc.client'
 import { makeAutoObservable } from 'mobx'
-import { AttendanceReport } from '../../../server/src/service/attendance_report_generator'
+import { AttendanceReport } from 'srv/service/attendance_report_generator'
 
 export class AttendanceStore {
   async = new AsyncStoreController()
