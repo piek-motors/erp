@@ -53,3 +53,13 @@ export function roundAndTrim(value: number, precision: number = 1): string {
   if (!value) return '0'
   return parseFloat(value.toFixed(precision)).toString()
 }
+
+export function formatDetailDate(date: Date): string {
+  return date.toLocaleString('ru-RU', {
+    day: '2-digit',
+    month: 'long',
+    year: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit'
+  })
+}

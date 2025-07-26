@@ -9,6 +9,7 @@ import {
   useNavigate,
   useParams
 } from 'lib/index'
+import { formatDetailDate } from 'lib/utils/formatting'
 import { MetalPageTitle, SaveAndDelete } from 'metalflow/shared/basic'
 import { DetailAttachmentList } from './attachments/detail_attachment_list'
 import { CreateManufacturingOrder } from './create_manufacturing_order'
@@ -67,7 +68,11 @@ export const UpdateDetailPage = observer(() => {
               }
               handleSave={() => detailStore.update()}
             />
-            <DetailUpdatedAt updatedAt={detailStore.updatedAt} />
+            <DetailInfo
+              updatedAt={detailStore.updatedAt}
+              lastManufacturingDate={detailStore.lastManufacturingDate}
+              lastManufacturingQty={detailStore.lastManufacturingQty}
+            />
           </Box>
         </Stack>
         <Stack gap={1} sx={{ flex: 1 }}>
@@ -78,18 +83,27 @@ export const UpdateDetailPage = observer(() => {
   )
 })
 
-function DetailUpdatedAt(props: { updatedAt?: Date }) {
-  if (!props.updatedAt) return null
+function DetailInfo(props: {
+  updatedAt?: Date
+  lastManufacturingDate?: Date
+  lastManufacturingQty?: number
+}) {
   return (
-    <P level="body-sm" color="neutral" sx={{ whiteSpace: 'nowrap' }}>
-      Обновлена{' '}
-      {props.updatedAt.toLocaleString('ru-RU', {
-        day: '2-digit',
-        month: 'long',
-        year: '2-digit',
-        hour: '2-digit',
-        minute: '2-digit'
-      })}
-    </P>
+    <Stack gap={0.5} sx={{ mt: 1 }}>
+      {props.lastManufacturingDate && (
+        <P level="body-sm" color="neutral" sx={{ whiteSpace: 'nowrap' }}>
+          <b>Последнее производство:</b>{' '}
+          {formatDetailDate(props.lastManufacturingDate)}
+          {props.lastManufacturingQty && (
+            <span> ({props.lastManufacturingQty} шт)</span>
+          )}
+        </P>
+      )}
+      {props.updatedAt && (
+        <P level="body-sm" color="neutral" sx={{ whiteSpace: 'nowrap' }}>
+          <b>Обновлено:</b> {formatDetailDate(props.updatedAt)}
+        </P>
+      )}
+    </Stack>
   )
 }

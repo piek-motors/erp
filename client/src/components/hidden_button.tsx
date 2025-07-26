@@ -44,7 +44,7 @@ interface Props {
 export const WithHiddenLinkButton = (props: Props) => (
   <HoverReveal
     hidden={
-      <Link to={props.linkTo}>
+      <Link to={props.linkTo} onClick={e => e.stopPropagation()}>
         <MuiJoyIconButton
           variant="outlined"
           size="sm"

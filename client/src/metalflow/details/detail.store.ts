@@ -73,6 +73,14 @@ export class Detail {
   setUpdatedAt(date: Date | undefined) {
     this.updatedAt = date
   }
+  lastManufacturingDate?: Date
+  setLastManufacturingDate(date: Date | undefined) {
+    this.lastManufacturingDate = date
+  }
+  lastManufacturingQty?: number
+  setLastManufacturingQty(qty: number | undefined) {
+    this.lastManufacturingQty = qty
+  }
   usedMaterials: MaterialCost[] = []
   setUsedMaterials(materials: MaterialCost[]) {
     this.usedMaterials = materials
@@ -98,6 +106,8 @@ export class Detail {
     groupId: number | null
     params?: Record<string, any> | null
     updatedAt?: Date
+    lastManufacturingDate?: Date
+    lastManufacturingQty?: number
   }) {
     if (init) {
       this.id = init.id
@@ -109,6 +119,8 @@ export class Detail {
       this.stock = init.stock
       this.technicalParameters = init.params ?? null
       this.updatedAt = init.updatedAt
+      this.lastManufacturingDate = init.lastManufacturingDate
+      this.lastManufacturingQty = init.lastManufacturingQty
     }
     makeAutoObservable(this)
   }
@@ -124,6 +136,8 @@ export class Detail {
     this.partCode = ''
     this.technicalParameters = null
     this.updatedAt = undefined
+    this.lastManufacturingDate = undefined
+    this.lastManufacturingQty = undefined
   }
 
   addMaterial(
@@ -158,6 +172,12 @@ export class Detail {
     this.async.start()
     const d = await rpc.metal.details.get.query({ id: detailId })
     this.setDetailData(d.detail)
+    this.setLastManufacturingDate(
+      d.last_manufacturing?.date
+        ? new Date(d.last_manufacturing.date)
+        : undefined
+    )
+    this.setLastManufacturingQty(d.last_manufacturing?.qty)
 
     d.detail_materials.forEach((dm, index) => {
       this.addMaterial(
