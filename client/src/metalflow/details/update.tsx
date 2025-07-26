@@ -1,4 +1,4 @@
-import { Box, Stack } from '@mui/joy'
+import { Box, LinearProgress, Stack } from '@mui/joy'
 import {
   observer,
   open,
@@ -33,25 +33,24 @@ export const UpdateDetailPage = observer(() => {
       detailStore.reset()
     }
   }, [])
+
+  if (detailStore.async.loading) {
+    return (
+      <Box>
+        <LinearProgress size="sm" color="neutral" />
+      </Box>
+    )
+  }
   return (
     <Stack gap={1} p={1}>
       <MetalPageTitle t={`Деталь #${detailStore.id} - ${detailStore.name}`} />
       <RowButColumsAtSm gap={1}>
-        {/* Left Column - Detail Info */}
         <Stack gap={0.5} sx={{ flex: 1 }}>
           <P>
             <b>Остаток:</b> {detailStore.stock} шт
           </P>
           <CreateManufacturingOrder />
           <DetailNameInput />
-          {/* <WarehouseOperationsLinks
-            onSupplyClick={() => {
-              // navigate(open(routeMap.metalflow.supply.new, detailId))
-            }}
-            onWriteoffClick={() => {
-              // navigate(open(routeMap.metalflow.writeoff.new, detailId))
-            }}
-          /> */}
           <DetailGroupInput />
           <DetailPartCodeInput />
           <DetailParamsInput />
@@ -69,7 +68,6 @@ export const UpdateDetailPage = observer(() => {
             />
           </Box>
         </Stack>
-        {/* Right Column - Documents */}
         <Stack gap={1} sx={{ flex: 1 }}>
           <DetailAttachmentList detailId={detailId} />
         </Stack>
