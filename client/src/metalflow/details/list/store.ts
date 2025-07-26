@@ -1,142 +1,148 @@
+import {
+  PaginatedSearchStore,
+  SearchFilters
+} from 'components/search-paginated'
 import { AsyncStoreController } from 'lib/async-store.controller'
 import { rpc } from 'lib/rpc.client'
 import { cache } from 'metalflow/cache/root'
-import { makeAutoObservable, reaction } from 'mobx'
+import { action, makeObservable, observable, runInAction } from 'mobx'
 import { Detail } from '../detail.store'
 
 export const alphabet = 'АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ'.split('')
 
 export class DetailList {
   readonly async = new AsyncStoreController()
-  searchKeyword: string = ''
-  searchId: string = ''
   searchPartCode: string = ''
-  searchResult: Detail[] = []
-  indexLetter: string | null = alphabet[0]
+  indexLetter: string | null = null
 
-  private searchTimeout: NodeJS.Timeout | null = null
-  private searchIdTimeout: NodeJS.Timeout | null = null
-  private searchPartCodeTimeout: NodeJS.Timeout | null = null
+  // Composition: embed the paginated search store
+  readonly searchStore: PaginatedSearchStore<Detail>
 
   constructor() {
-    makeAutoObservable(this)
-    // Setup reaction for debounced search updates
-    reaction(
-      () => this.searchKeyword,
-      keyword => {
-        if (this.searchTimeout) {
-          clearTimeout(this.searchTimeout)
-        }
-        this.searchTimeout = setTimeout(() => {
-          this.search()
-        }, 500)
+    this.searchStore = new PaginatedSearchStore<Detail>(
+      () => cache.details.getDetails(),
+      {
+        pageSize: 50,
+        customFilter: this.filterDetails.bind(this)
       }
     )
-    // Setup reaction for debounced search updates
-    reaction(
-      () => this.searchId,
-      keyword => {
-        if (this.searchIdTimeout) {
-          clearTimeout(this.searchIdTimeout)
-        }
-        this.searchIdTimeout = setTimeout(() => {
-          this.search()
-        }, 500)
-      }
-    )
-    // Setup reaction for debounced part code search updates
-    reaction(
-      () => this.searchPartCode,
-      partCode => {
-        if (this.searchPartCodeTimeout) {
-          clearTimeout(this.searchPartCodeTimeout)
-        }
-        this.searchPartCodeTimeout = setTimeout(() => {
-          this.search()
-        }, 500)
-      }
-    )
+
+    makeObservable(this, {
+      searchPartCode: observable,
+      indexLetter: observable,
+      setSearchPartCode: action,
+      searchByFirstLetter: action,
+      deleteDetail: action
+    })
   }
 
+  init() {
+    this.searchStore.search()
+  }
+
+  // Delegate search methods to the embedded store
   setSearchKeyword(keyword: string) {
     this.clearSearchArguments()
-    this.searchKeyword = keyword
+    this.searchStore.setSearchKeyword(keyword)
   }
+
   setSearchId(id: string) {
     this.clearSearchArguments()
-    this.searchId = id
+    this.searchStore.setSearchId(id)
   }
+
   setSearchPartCode(partCode: string) {
     this.clearSearchArguments()
     this.searchPartCode = partCode
+    this.searchStore.search() // Trigger search when part code changes
   }
+
   searchByFirstLetter(letter: string) {
     this.clearSearchArguments()
     this.indexLetter = letter
-    this.search()
+    this.searchStore.search() // Trigger search when letter changes
   }
-  search() {
-    let filtered = cache.details.getDetails()
-    switch (true) {
-      case Boolean(this.searchKeyword):
-        filtered = filtered.filter(detail =>
-          detail.name.toLowerCase().includes(this.searchKeyword.toLowerCase())
-        )
-        break
-      case Boolean(this.searchId):
-        filtered = filtered.filter(
-          detail => detail.id?.toString() === this.searchId
-        )
-        break
-      case Boolean(this.searchPartCode): {
-        const x = this.searchPartCode.toLowerCase().trim()
-        filtered = filtered.filter(detail => {
-          if (!detail.partCode) return false
 
-          return detail.partCode.toLowerCase().trim().startsWith(x)
-        })
-        break
-      }
-      case Boolean(this.indexLetter):
-        filtered = filtered.filter(detail =>
-          detail.name.toUpperCase().startsWith(this.indexLetter!)
-        )
-        break
+  // Custom filter function for the search store
+  private filterDetails(details: Detail[], filters: SearchFilters): Detail[] {
+    // Handle built-in filters first (keyword, id)
+    if (filters.keyword) {
+      const keyword = filters.keyword.toLowerCase()
+      return details.filter(detail =>
+        detail.name.toLowerCase().includes(keyword)
+      )
     }
-    this.searchResult = this.sort(filtered)
+
+    if (filters.id) {
+      return details.filter(detail => detail.id?.toString() === filters.id)
+    }
+
+    // Handle custom filters (partCode, indexLetter)
+    if (this.searchPartCode) {
+      const partCode = this.searchPartCode.toLowerCase()
+      return details.filter(
+        detail =>
+          detail.partCode && detail.partCode.toLowerCase().startsWith(partCode)
+      )
+    }
+
+    if (this.indexLetter) {
+      return details.filter(
+        detail => detail.name.charAt(0).toUpperCase() === this.indexLetter
+      )
+    }
+
+    return details
   }
+
   async deleteDetail(id: number) {
     await rpc.metal.details.delete.mutate({ id })
     cache.details.removeDetail(id)
-    this.search()
+    this.searchStore.search()
   }
+
   clear() {
+    this.searchStore.clear()
     this.clearSearchArguments()
-    if (this.searchTimeout) {
-      clearTimeout(this.searchTimeout)
-      this.searchTimeout = null
-    }
-    if (this.searchIdTimeout) {
-      clearTimeout(this.searchIdTimeout)
-      this.searchIdTimeout = null
-    }
-    if (this.searchPartCodeTimeout) {
-      clearTimeout(this.searchPartCodeTimeout)
-      this.searchPartCodeTimeout = null
-    }
     this.async.reset()
   }
-  clearSearchArguments() {
-    this.searchKeyword = ''
-    this.searchId = ''
-    this.searchPartCode = ''
-    this.indexLetter = null
-    this.searchResult = []
+
+  private clearSearchArguments() {
+    runInAction(() => {
+      this.searchPartCode = ''
+      this.indexLetter = null
+    })
   }
-  sort(filterResult: Detail[]) {
-    return filterResult
-      .slice()
-      .sort((a, b) => a.name.localeCompare(b.name, 'ru'))
+
+  // Getters to expose search store properties
+  get searchResult() {
+    return this.searchStore.searchResult
+  }
+
+  get displayedResults() {
+    return this.searchStore.displayedResults
+  }
+
+  get isSearching() {
+    return this.searchStore.isSearching
+  }
+
+  get hasMore() {
+    return this.searchStore.hasMore
+  }
+
+  get searchKeyword() {
+    return this.searchStore.searchFilters.keyword || ''
+  }
+
+  get searchId() {
+    return this.searchStore.searchFilters.id || ''
+  }
+
+  // Delegate load more to search store
+  loadMore() {
+    this.searchStore.loadMore()
   }
 }
+
 export const detailListStore = new DetailList()

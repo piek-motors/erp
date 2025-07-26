@@ -16,3 +16,5 @@ export const RuMonths = [
 ]
 
 export type SxProperty = SxProps
+
+export const debounceMs = 400

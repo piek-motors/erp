@@ -1,5 +1,6 @@
 import { Divider } from '@mui/joy'
 import { ScrollableWindow, Search } from 'components/inputs'
+import { SearchResults } from 'components/search-paginated'
 import { Table } from 'components/table.impl'
 import {
   AddResourceButton,
@@ -71,7 +72,7 @@ const DetailList = observer((props: DetailsTableProps) => {
   return (
     <Table
       columns={columnList}
-      data={state.searchResult as unknown as readonly Detail[]}
+      data={state.displayedResults}
       trStyleCallback={row => {
         if (props.highlight) {
           return props.highlight(row.original)
@@ -126,22 +127,16 @@ const DetailSearchArguments = observer(() => {
           sx={{ width: '80px' }}
           placeholder="По ID"
           value={state.searchId}
-          onChange={v => {
-            state.setSearchId(v)
-          }}
+          onChange={v => state.setSearchId(v)}
         />
         <Search
           placeholder="По названию"
-          onChange={e => {
-            state.setSearchKeyword(e.target.value)
-          }}
+          onChange={e => state.setSearchKeyword(e.target.value)}
           value={state.searchKeyword || ''}
         />
         <Search
           placeholder="По артикулу"
-          onChange={e => {
-            state.setSearchPartCode(e.target.value)
-          }}
+          onChange={e => state.setSearchPartCode(e.target.value)}
           value={state.searchPartCode || ''}
         />
       </RowButColumsAtSm>
@@ -160,11 +155,13 @@ const DetailsList = observer((props: DetailsTableProps) => {
     <Stack gap={1}>
       <ErrorHint e={state.async.error} />
       <LoadingHint show={state.async.loading} />
-      <DetailList
-        highlight={props.highlight}
-        highlightColor={props.highlightColor}
-        onRowClick={props.onRowClick}
-      />
+      <SearchResults store={state.searchStore} emptyMessage="Детали не найдены">
+        <DetailList
+          highlight={props.highlight}
+          highlightColor={props.highlightColor}
+          onRowClick={props.onRowClick}
+        />
+      </SearchResults>
     </Stack>
   )
 })
