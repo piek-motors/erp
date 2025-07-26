@@ -207,7 +207,7 @@ export function PlusIcon(props: IconButtonProps) {
 export function InputStack(props: { children: React.ReactNode }) {
   return (
     <Sheet sx={{ borderRadius: 'sm' }}>
-      <Stack display="flex" direction="column" gap={0.1} my={1} p={2}>
+      <Stack display="flex" direction="column" gap={0.3} my={1}>
         {props.children}
       </Stack>
     </Sheet>

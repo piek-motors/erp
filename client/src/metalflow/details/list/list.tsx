@@ -95,7 +95,7 @@ const DetailList = observer((props: DetailsTableProps) => {
 export const DetailsListPage = observer(() => {
   return (
     <ScrollableWindow
-      refreshTrigger={state.async.loading}
+      refreshTrigger={false}
       staticContent={
         <Stack gap={1} p={0.5}>
           <MetalPageTitle t={t.DetailsList}>

@@ -1,6 +1,7 @@
 import { SxProps } from '@mui/joy/styles/types'
+import { ScrollPreserv } from 'components/utilities/scroll_preserve'
+import { ScrollPreservNavigation } from 'components/utilities/scroll_preserve_navigation'
 import { Box, Sheet, Stack } from 'lib'
-import { ScrollPreserv } from '../utilities/scroll_preserve'
 
 function Wrapper(props: {
   children: React.ReactNode
@@ -20,15 +21,21 @@ export const ScrollableWindow = (props: {
   scrollableContent: React.ReactNode
   refreshTrigger: any
   useSheet?: boolean
+  preserveScrollAcrossNavigation?: boolean
 }) => {
+  const ScrollComponent =
+    props.preserveScrollAcrossNavigation !== false
+      ? ScrollPreservNavigation
+      : ScrollPreserv
+
   return (
     <Stack sx={{ maxHeight: '100vh' }}>
       {props.staticContent}
-      <ScrollPreserv refreshTrigger={props.refreshTrigger}>
+      <ScrollComponent refreshTrigger={props.refreshTrigger}>
         <Wrapper sx={{ overflowX: 'auto' }} useSheet={props.useSheet ?? true}>
           <Box>{props.scrollableContent}</Box>
         </Wrapper>
-      </ScrollPreserv>
+      </ScrollComponent>
       <Box p={0.5}></Box>
     </Stack>
   )

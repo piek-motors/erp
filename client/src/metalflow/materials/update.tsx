@@ -41,7 +41,7 @@ export const MaterialUpdatePage = observer(() => {
   return (
     <Stack alignItems={'start'} p={1} gap={0.5}>
       <MetalPageTitle t={`Материал #${materialId} - ${material.label}`} />
-      <Row gap={2} alignItems={'center'}>
+      <Row gap={2} py={1} alignItems={'center'}>
         <RowButColumsAtSm>
           <SupplyModal />
           <WriteoffModal />

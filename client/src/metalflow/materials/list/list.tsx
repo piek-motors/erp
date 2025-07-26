@@ -100,7 +100,7 @@ export const MaterialList = observer((props: MaterialsTableProps) => {
 export const MaterialListPage = observer((props: MaterialsTableProps) => {
   return (
     <ScrollableWindow
-      refreshTrigger={materialListStore.async.loading}
+      refreshTrigger={false}
       staticContent={
         <Stack p={0.5} gap={0.5}>
           <MetalPageTitle t={t.MaterialsList}>
