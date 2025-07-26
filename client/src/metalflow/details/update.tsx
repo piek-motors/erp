@@ -49,6 +49,7 @@ export const UpdateDetailPage = observer(() => {
           <P>
             <b>Остаток:</b> {detailStore.stock} шт
           </P>
+
           <CreateManufacturingOrder />
           <DetailNameInput />
           <DetailGroupInput />
@@ -66,6 +67,7 @@ export const UpdateDetailPage = observer(() => {
               }
               handleSave={() => detailStore.update()}
             />
+            <DetailUpdatedAt updatedAt={detailStore.updatedAt} />
           </Box>
         </Stack>
         <Stack gap={1} sx={{ flex: 1 }}>
@@ -75,3 +77,19 @@ export const UpdateDetailPage = observer(() => {
     </Stack>
   )
 })
+
+function DetailUpdatedAt(props: { updatedAt?: Date }) {
+  if (!props.updatedAt) return null
+  return (
+    <P level="body-sm" color="neutral" sx={{ whiteSpace: 'nowrap' }}>
+      Обновлена{' '}
+      {props.updatedAt.toLocaleString('ru-RU', {
+        day: '2-digit',
+        month: 'long',
+        year: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit'
+      })}
+    </P>
+  )
+}

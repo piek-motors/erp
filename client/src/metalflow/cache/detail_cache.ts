@@ -42,7 +42,8 @@ export class DetailCache {
               })
             }
           ),
-          stock: detail[5] as number
+          stock: detail[5] as number,
+          updatedAt: detail[6] ? new Date(detail[6] as string) : undefined
         })
       })
     )

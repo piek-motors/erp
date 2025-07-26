@@ -65,6 +65,12 @@ export const DetailShortInfoPopup = observer(
             value={cache.detailGroups.getGroupName(detail.groupId)}
           />
           <Pair label="Примечания" value={detail.description} />
+          {detail.updatedAt && (
+            <Pair
+              label="Обновлено"
+              value={detail.updatedAt.toLocaleString('ru-RU')}
+            />
+          )}
 
           {detail.technicalParameters && (
             <MenuItem>

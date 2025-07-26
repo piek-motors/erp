@@ -69,6 +69,10 @@ export class Detail {
   setTechnicalParameters(params: Record<string, any> | null) {
     this.technicalParameters = params
   }
+  updatedAt?: Date
+  setUpdatedAt(date: Date | undefined) {
+    this.updatedAt = date
+  }
   usedMaterials: MaterialCost[] = []
   setUsedMaterials(materials: MaterialCost[]) {
     this.usedMaterials = materials
@@ -93,6 +97,7 @@ export class Detail {
     stock: number
     groupId: number | null
     params?: Record<string, any> | null
+    updatedAt?: Date
   }) {
     if (init) {
       this.id = init.id
@@ -103,6 +108,7 @@ export class Detail {
       this.groupId = init.groupId ?? null
       this.stock = init.stock
       this.technicalParameters = init.params ?? null
+      this.updatedAt = init.updatedAt
     }
     makeAutoObservable(this)
   }
@@ -117,6 +123,7 @@ export class Detail {
     this.groupId = undefined
     this.partCode = ''
     this.technicalParameters = null
+    this.updatedAt = undefined
   }
 
   addMaterial(
@@ -182,6 +189,7 @@ export class Detail {
     this.setTechnicalParameters(d.params ?? null)
     this.setDescription(d.description ?? '')
     this.setStock(d.stock)
+    this.setUpdatedAt(d.updated_at ? new Date(d.updated_at) : undefined)
   }
 
   async insert() {

@@ -94,6 +94,7 @@ export namespace DB {
     part_code: string
     stock: number
     params: JSONColumnType<any, any, any>
+    updated_at: Date
   }
 
   interface MetarialWiteoffData {
