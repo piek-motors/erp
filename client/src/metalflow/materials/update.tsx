@@ -1,6 +1,7 @@
 import { Card, Divider } from '@mui/joy'
 import {
   Inp,
+  Loading,
   observer,
   P,
   Row,
@@ -34,6 +35,9 @@ export const MaterialUpdatePage = observer(() => {
     }
   }, [])
 
+  if (material.async.loading) {
+    return <Loading />
+  }
   return (
     <Stack alignItems={'start'} p={1} gap={0.5}>
       <MetalPageTitle t={`Материал #${materialId} - ${material.label}`} />

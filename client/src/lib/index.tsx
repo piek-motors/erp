@@ -21,6 +21,7 @@ import {
   IconButtonProps,
   Input,
   InputProps,
+  LinearProgress,
   Chip as MuiChip,
   Sheet,
   Stack,
@@ -249,6 +250,7 @@ export function ErrorHint(props: { e?: Error | any }) {
   )
 }
 
+/**@deprecated use LinearProgress instead */
 export function LoadingHint(props: { show: boolean }) {
   return (
     props.show && (
@@ -257,6 +259,14 @@ export function LoadingHint(props: { show: boolean }) {
         <CircularProgress size="sm" color="neutral" />
       </Row>
     )
+  )
+}
+
+export function Loading() {
+  return (
+    <Box>
+      <LinearProgress size="sm" color="neutral" />
+    </Box>
   )
 }
 

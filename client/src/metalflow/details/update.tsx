@@ -1,5 +1,6 @@
-import { Box, LinearProgress, Stack } from '@mui/joy'
+import { Box, Stack } from '@mui/joy'
 import {
+  Loading,
   observer,
   open,
   P,
@@ -36,12 +37,9 @@ export const UpdateDetailPage = observer(() => {
   }, [])
 
   if (detailStore.async.loading) {
-    return (
-      <Box>
-        <LinearProgress size="sm" color="neutral" />
-      </Box>
-    )
+    return <Loading />
   }
+
   return (
     <Stack gap={1} p={1}>
       <MetalPageTitle t={`Деталь #${detailStore.id} - ${detailStore.name}`} />

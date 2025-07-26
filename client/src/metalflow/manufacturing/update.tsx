@@ -9,6 +9,7 @@ import {
   ErrorHint,
   Inp,
   Label,
+  Loading,
   LoadingHint,
   observer,
   P,
@@ -45,6 +46,9 @@ export const ManufacturingUpdatePage = observer(() => {
   ]
   const isDeletionAllowed = deletionAllowed.includes(store.order.status)
 
+  if (store.async.loading) {
+    return <Loading />
+  }
   return (
     <Stack gap={1} p={1}>
       <MetalPageTitle t={`Производственный заказ #${store.order.id}`} />
