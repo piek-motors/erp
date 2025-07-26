@@ -34,5 +34,13 @@ class NotifierStore {
   all() {
     return this.notifications
   }
+
+  ok(msg: string) {
+    this.notify('info', msg)
+  }
+
+  err(msg: string) {
+    this.notify('err', msg)
+  }
 }
 export const notifierStore = new NotifierStore()

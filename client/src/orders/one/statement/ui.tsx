@@ -14,8 +14,16 @@ export const OrderStatementInput = observer(
           {columns.map((column, idx) => (
             <RenderInput key={idx} column={column} idx={idx} />
           ))}
+          <SendMutation
+            onClick={() => mutation()}
+            stackProps={{
+              sx: {
+                mt: 2,
+                width: 'max-content'
+              }
+            }}
+          />
         </InputStack>
-        <SendMutation onClick={() => mutation()} />
       </form>
     )
   }

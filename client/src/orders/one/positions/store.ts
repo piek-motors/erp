@@ -1,7 +1,18 @@
-import { OrderItem } from 'domain-model'
+import { rpc } from 'lib/rpc.client'
+import { notifierStore } from 'lib/store/notifier.store'
 import { makeAutoObservable } from 'mobx'
 import { ordersApi } from '../../orders.api'
 
+export class OrderItem {
+  id!: number
+  name!: string
+  description?: string | null
+  quantity!: number
+  assembler_name?: string | null
+  constructor() {
+    makeAutoObservable(this)
+  }
+}
 export class PositionsStore {
   items: OrderItem[] = []
   isOpen = false
@@ -47,13 +58,24 @@ export class PositionsStore {
   }
 
   setItems(items: OrderItem[]) {
-    items.sort((a, b) => a.id - b.id)
-    this.items = items
+    this.items = [...items].sort((a, b) => a.id - b.id)
   }
 
-  async load(orderId: number) {
-    const positions = await ordersApi.loadOrderItems(orderId)
-    this.setItems(positions)
+  async load(order_id: number) {
+    const positions = await rpc.orders.positions.list.query({
+      order_id: order_id
+    })
+    this.setItems(
+      positions.map(p => {
+        const item = new OrderItem()
+        item.id = p.id
+        item.name = p.name
+        item.description = p.description
+        item.quantity = p.quantity
+        item.assembler_name = p.assembler_name ?? null
+        return item
+      })
+    )
   }
 
   async save(orderId: number) {
@@ -61,8 +83,10 @@ export class PositionsStore {
 
     if (this.editedOrderItem?.id) {
       await this.updateOrderItem(orderId)
+      notifierStore.ok('Позиция обновлена')
     } else {
       await this.insertOrderItem(orderId)
+      notifierStore.ok(`Позиция "${this.name}" создана`)
     }
     this.closeDialog()
   }
@@ -72,26 +96,39 @@ export class PositionsStore {
     if (!positionId) {
       throw new Error('No order item to update')
     }
-
-    await ordersApi.updateOrderItem({
+    if (!this.quantity) {
+      throw new Error('Quantity is required')
+    }
+    await rpc.orders.positions.update.mutate({
       id: positionId,
-      _set: {
-        name: this.name,
-        quantity: this.quantity!,
-        description: this.description
-      }
+      quantity: this.quantity,
+      name: this.name,
+      description: this.description
     })
-    await this.load(orderId)
+    const item = this.items.find(item => item.id === positionId)
+    if (item) {
+      Object.assign(item, {
+        quantity: this.quantity,
+        name: this.name,
+        description: this.description
+      })
+    }
   }
 
   private async insertOrderItem(orderId: number) {
-    await ordersApi.insertOrderItem({
+    const result = await rpc.orders.positions.insert.mutate({
       order_id: orderId,
       name: this.name,
       quantity: this.quantity!,
       description: this.description
     })
-    await this.load(orderId)
+    // update local state
+    const item = new OrderItem()
+    item.id = result.id
+    item.name = this.name
+    item.quantity = this.quantity!
+    item.description = this.description
+    this.items.push(item)
   }
 
   async delete(orderItemId: number, orderId: number) {

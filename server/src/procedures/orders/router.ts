@@ -1,8 +1,10 @@
 import { db, procedure, z } from '#root/deps.js'
 import { router } from '#root/lib/trpc/trpc.js'
 import { OrderStatus } from 'domain-model'
+import { positionRouter } from './positions.js'
 
 export const ordersRouter = router({
+  positions: positionRouter,
   getByStatus: procedure
     .input(
       z.object({

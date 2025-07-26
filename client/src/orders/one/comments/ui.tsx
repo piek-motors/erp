@@ -1,3 +1,5 @@
+/** @jsxImportSource @emotion/react */
+import { css } from '@emotion/react'
 import { Box, Button, Card, Divider } from '@mui/joy'
 import { User } from 'domain-model'
 import { DeleteResourceButton, P, Row, text } from 'lib/index'
@@ -75,7 +77,15 @@ export function Comment({ data, userID }: ICommentProps) {
         </Row>
       </Row>
       <Divider />
-      {getCommentContent()}
+      <Box
+        css={css`
+          p {
+            margin: 0;
+          }
+        `}
+      >
+        {getCommentContent()}
+      </Box>
     </Card>
   )
 }

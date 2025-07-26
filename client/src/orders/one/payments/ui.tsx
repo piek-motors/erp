@@ -155,7 +155,12 @@ const NewPaymentInput = observer((props: NewPaymentInputProps) => {
         }
       }}
     >
-      <MenuButton variant="outlined" size="sm" disabled={os.payments.loading}>
+      <MenuButton
+        variant="soft"
+        color="primary"
+        size="sm"
+        disabled={os.payments.loading}
+      >
         Добавить
       </MenuButton>
       <Menu

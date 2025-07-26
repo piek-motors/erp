@@ -13,7 +13,6 @@ export const PositionsList = observer(() => {
   if (!orderStore.order) {
     return <div>No data</div>
   }
-
   return (
     <Stack gap={1}>
       {orderStore.positions.items.map((position, index) => (
