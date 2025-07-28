@@ -9,6 +9,7 @@ interface Period {
 interface GeneratorOptions {
   period: Period
   showFullInfo: boolean
+  timeRetentionMinutes: number
 }
 
 interface Interval {
@@ -56,6 +57,7 @@ export class AttendanceReportGenerator {
 
     const days = createDaysInMonthArray(period)
     const result: AttendanceEmployee[] = []
+    const dailyTimeRetention = options.timeRetentionMinutes * 60
 
     for (const user of users) {
       const userRelatedIntervals = intervals.filter(
@@ -97,7 +99,7 @@ export class AttendanceReportGenerator {
 
         const dayInMonth = new Date(interval.ent).getDate()
         daysMap[dayInMonth].intervals.push(i)
-        daysMap[dayInMonth].total_dur += i.dur
+        daysMap[dayInMonth].total_dur += i.dur - dailyTimeRetention
       }
 
       employee.total = Object.values(employee.days).reduce(

@@ -19,7 +19,8 @@ export const getAttendanceList = procedure
         month: input.month,
         year: input.year
       },
-      showFullInfo: input.showFullInfo
+      showFullInfo: input.showFullInfo,
+      timeRetentionMinutes: input.timeRetentionMinutes
     })
     return report as AttendanceReport
   })

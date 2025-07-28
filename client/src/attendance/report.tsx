@@ -1,7 +1,6 @@
-import { BoxProps, Divider, Stack } from '@mui/joy'
+import { BoxProps, Stack } from '@mui/joy'
 import { Box, Label, LoadingHint, Sheet } from 'lib'
 import { sec2hours } from 'lib/date'
-import { roundAndTrim } from 'lib/utils/formatting'
 import moment from 'moment'
 import { Column } from 'react-table'
 import {
@@ -21,19 +20,7 @@ export const AttendanceReportComponent = (props: {
     },
     {
       Header: '∑',
-      Cell: props => {
-        const retentionHours =
-          (props.row.original.workDays * store.timeRetention) / 60
-        return (
-          <>
-            <div>∑{sec2hours(props.row.original.total)}</div>
-            <div>-{roundAndTrim(retentionHours, 0)}</div>
-            <div>
-              ={sec2hours(props.row.original.total - retentionHours * 60 * 60)}
-            </div>
-          </>
-        )
-      }
+      Cell: props => sec2hours(props.row.original.total)
     },
     ...Array.from({ length: props.report.daysInMonth }).map<
       Column<AttendanceEmployee>
@@ -59,7 +46,6 @@ export const AttendanceReportComponent = (props: {
                   )}
                 </>
               ))}
-              <Divider />
               <Box>
                 {!!data.total_dur && (
                   <Time sx={{ fontWeight: 700, color: 'primary.500' }}>
