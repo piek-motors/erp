@@ -1,6 +1,7 @@
 import { ScrollableWindow } from 'components/inputs'
 import {
   Box,
+  Loading,
   observer,
   Row,
   RowButColumsAtSm,
@@ -66,6 +67,9 @@ export const DetailGroupById = observer(() => {
       store.clear()
     }
   }, [id])
+  if (store.async.loading) {
+    return <Loading />
+  }
   return <DetailGroupsLayout />
 })
 

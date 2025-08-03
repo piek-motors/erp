@@ -46,7 +46,6 @@ export function DetailRow({
             group_id: detail.group_id || null
           }}
           withLink
-          withGroupLink
           withParamsButton
         />
       </Row>
