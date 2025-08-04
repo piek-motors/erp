@@ -19,13 +19,20 @@ interface Props {
   withParamsButton?: boolean
 }
 
+const capitalizeFirstLetter = (str: string): string => {
+  if (str.length < 2) return str
+  return str.charAt(0).toUpperCase() + str.slice(1)
+}
+
 export const DetailName = observer((props: Props) => {
   const { detail, withLink, withGroupLink, withParamsButton } = props
 
   // Main content: detail name + optional group link
   const mainContent = (
     <>
-      <Box sx={{ width: 'min-content' }}>{detail.name}</Box>
+      <Box sx={{ width: 'min-content' }}>
+        {capitalizeFirstLetter(detail.name)}
+      </Box>
       {withGroupLink && <GroupLink groupId={detail.group_id} />}
     </>
   )

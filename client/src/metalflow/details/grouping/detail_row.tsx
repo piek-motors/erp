@@ -1,4 +1,3 @@
-import { Checkbox } from '@mui/joy'
 import { Row } from 'lib/index'
 import { DetailName } from '../name'
 import { Detail } from './store'
@@ -20,20 +19,12 @@ export function DetailRow({
         display: 'flex',
         p: 0,
         mb: 0,
+        backgroundColor: isSelected ? '#fac3cc' : 'transparent',
         '&:hover .detail-arrow': {
           opacity: 1
         }
       }}
     >
-      {detail.group_id == null ? (
-        <Checkbox
-          size="sm"
-          variant="outlined"
-          checked={isSelected}
-          onChange={() => onToggle(detail.id)}
-          onClick={e => e.stopPropagation()}
-        />
-      ) : null}
       <Row
         sx={{ cursor: detail.group_id === null ? 'pointer' : 'default' }}
         alignItems="center"
