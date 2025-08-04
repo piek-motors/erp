@@ -13,6 +13,7 @@ import { cache } from 'metalflow/cache/root'
 import { map } from 'metalflow/mappers'
 import { MaterialSupplyStore } from './operations/supply/state'
 import { MaterialWriteoffState } from './operations/writeoff/state'
+import { HexagonBarState } from './shape/hexagon_bar.state'
 import { ListState } from './shape/list_state'
 import { PipeState } from './shape/pipe_state'
 import { RoundBarState } from './shape/rounde_bar.state'
@@ -31,12 +32,14 @@ export class MaterialStore {
   round = new RoundBarState()
   square = new SquareState()
   pipe = new PipeState()
+  hexagon = new HexagonBarState()
 
   shapeState = {
     [EnMaterialShape.RoundBar]: this.round,
     [EnMaterialShape.SquareBar]: this.square,
     [EnMaterialShape.Pipe]: this.pipe,
-    [EnMaterialShape.List]: this.list
+    [EnMaterialShape.List]: this.list,
+    [EnMaterialShape.HexagonBar]: this.hexagon
   } as const
 
   getShapeState(shape: EnMaterialShape): IMaterialShapeState {

@@ -32,7 +32,8 @@ export const UiMaterialShape = {
   [EnMaterialShape.RoundBar]: 'Круг',
   [EnMaterialShape.List]: 'Лист',
   [EnMaterialShape.Pipe]: 'Труба',
-  [EnMaterialShape.SquareBar]: 'Квадрат'
+  [EnMaterialShape.SquareBar]: 'Квадрат',
+  [EnMaterialShape.HexagonBar]: 'Шестигранник'
 }
 
 export function uiMaterialShape(shape: EnMaterialShape) {

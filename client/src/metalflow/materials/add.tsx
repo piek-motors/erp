@@ -14,6 +14,7 @@ import { MetalPageTitle } from 'metalflow/shared/basic'
 import { AlloyAutocomplete } from '../shared/basic'
 import { t } from '../text'
 import { material } from './material.store'
+import { HexagonBarMaterialInputBase } from './shape/hexagon_bar'
 import { ListMaterialInputBase } from './shape/list'
 import { PipeMaterialInputBase } from './shape/pipe'
 import { RoundBarInputBase } from './shape/round_bar'
@@ -40,6 +41,11 @@ export const tabList: TabConfig = [
     value: EnMaterialShape.SquareBar,
     label: UiMaterialShape[EnMaterialShape.SquareBar],
     component: <SquareMaterialInputBase />
+  },
+  {
+    value: EnMaterialShape.HexagonBar,
+    label: UiMaterialShape[EnMaterialShape.HexagonBar],
+    component: <HexagonBarMaterialInputBase />
   }
 ] as const
 

@@ -1,4 +1,3 @@
-import { IsBoolean, IsNumber, IsOptional, Min } from 'class-validator'
 import { EnMaterialShape, EnUnit } from './enums'
 import { uiMaterialShape, uiUnit } from './ui.translators'
 
@@ -34,14 +33,12 @@ export abstract class Material {
 }
 
 export class RoundBar extends Material {
-  unit = EnUnit.Kg
+  unit = EnUnit.M
   shape = EnMaterialShape.RoundBar
   /**
    * Diameter of the round bar in millimeters (mm).
    * This is the primary dimension used for identification and calculations.
    */
-  @IsNumber()
-  @Min(0)
   diameter!: number
   /**
    * Indicates if the material has undergone calibration process.
@@ -50,14 +47,11 @@ export class RoundBar extends Material {
    * - Dimensional accuracy
    * - Geometric parameters
    */
-  @IsBoolean()
   calibrated!: boolean
   /**
    * Material density in kilograms per cubic meter (kg/m³).
    * Used for mass calculations and material identification.
    */
-  @IsNumber()
-  @Min(0)
   density!: number
   deriveLabel(): string {
     if (Number.isNaN(this.diameter)) {
@@ -69,22 +63,17 @@ export class RoundBar extends Material {
 }
 
 export class List extends Material {
-  unit = EnUnit.Kg
+  unit = EnUnit.M
   shape = EnMaterialShape.List
   /**
    * Thickness of the sheet in millimeters (mm).
    * This is the primary dimension used for identification and calculations.
    */
-  @IsNumber()
-  @Min(0)
   thickness!: number
   /**
    * Width of the sheet in millimeters (mm).
    * Optional dimension that can be used for specific sheet sizes.
    */
-  @IsNumber()
-  @Min(0)
-  @IsOptional()
   width?: number
   deriveLabel(): string {
     if (Number.isNaN(this.thickness) || this.thickness == null) {
@@ -97,22 +86,18 @@ export class List extends Material {
 }
 
 export class Pipe extends Material {
-  unit = EnUnit.Kg
+  unit = EnUnit.M
   shape = EnMaterialShape.Pipe
   /**
    * Outer diameter of the pipe in millimeters (mm).
    * This is the primary dimension used for identification and calculations.
    */
-  @IsNumber()
-  @Min(0)
   diameter!: number
 
   /**
    * Wall thickness of the pipe in millimeters (mm).
    * Used together with diameter to calculate cross-sectional area and mass.
    */
-  @IsNumber()
-  @Min(0)
   thickness!: number
   deriveLabel(): string {
     if (isNaN(this.diameter)) {
@@ -123,14 +108,12 @@ export class Pipe extends Material {
 }
 
 export class SquareBar extends Material {
-  unit = EnUnit.Kg
+  unit = EnUnit.M
   shape = EnMaterialShape.SquareBar
   /**
    * Side length of the square bar in millimeters (mm).
    * This is the primary dimension used for identification and calculations.
    */
-  @IsNumber()
-  @Min(0)
   length!: number
   deriveLabel(): string {
     if (!this.length) {
@@ -140,11 +123,21 @@ export class SquareBar extends Material {
   }
 }
 
+export class HexagonBar extends Material {
+  unit = EnUnit.M
+  shape = EnMaterialShape.HexagonBar
+  diameter!: number
+  deriveLabel(): string {
+    return `${this.shapeUI} ${this.diameter} ${this.alloy || ''}`.trim()
+  }
+}
+
 export const MaterialConstructorMap = {
   [EnMaterialShape.RoundBar]: RoundBar,
   [EnMaterialShape.List]: List,
   [EnMaterialShape.Pipe]: Pipe,
-  [EnMaterialShape.SquareBar]: SquareBar
+  [EnMaterialShape.SquareBar]: SquareBar,
+  [EnMaterialShape.HexagonBar]: HexagonBar
 }
 
 export function getMaterialConstructor<T extends EnMaterialShape>(

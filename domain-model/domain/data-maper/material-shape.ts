@@ -25,6 +25,11 @@ export class PipeShapeData {
   thickness!: number
 }
 
+export class HexagonBarShapeData {
+  @IsNumber()
+  diameter!: number
+}
+
 export class SquareBarShapeData {
   @IsNumber()
   length!: number

@@ -1,4 +1,5 @@
 import {
+  HexagonBar,
   List,
   Material,
   Pipe,
@@ -6,6 +7,7 @@ import {
   SquareBar
 } from '../metal-flow/materials'
 import {
+  HexagonBarShapeData,
   ListShapeData,
   PipeShapeData,
   RoundBarShapeData,
@@ -15,7 +17,12 @@ import {
 export class MaterialShapeAbstractionLayer {
   static exportShapeData(
     material: Material
-  ): RoundBarShapeData | ListShapeData | PipeShapeData | SquareBarShapeData {
+  ):
+    | RoundBarShapeData
+    | ListShapeData
+    | PipeShapeData
+    | SquareBarShapeData
+    | HexagonBarShapeData {
     if (material instanceof RoundBar) {
       return {
         diameter: material.diameter,
@@ -36,6 +43,10 @@ export class MaterialShapeAbstractionLayer {
       return {
         length: material.length
       } satisfies SquareBarShapeData
+    } else if (material instanceof HexagonBar) {
+      return {
+        diameter: material.diameter
+      } satisfies HexagonBarShapeData
     } else {
       throw new ErrNotImplemented()
     }
@@ -68,6 +79,12 @@ export class MaterialShapeAbstractionLayer {
       const d = data as SquareBarShapeData
 
       material.length = d.length
+
+      return material
+    } else if (material instanceof HexagonBar) {
+      const d = data as HexagonBarShapeData
+
+      material.diameter = d.diameter
 
       return material
     } else {

@@ -15,7 +15,8 @@ export enum EnMaterialShape {
   RoundBar = 0,
   List = 1,
   Pipe = 2,
-  SquareBar = 3
+  SquareBar = 3,
+  HexagonBar = 4
 }
 
 export enum EnUnit {
