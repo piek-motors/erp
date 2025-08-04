@@ -27,6 +27,7 @@ export class DetailGroupStore {
   targetGroup: GroupWithDetails | null = null
   setTargetGroup(group: GroupWithDetails | null) {
     this.targetGroup = group
+    this.targetGroup?.details.sort((a, b) => a.name.localeCompare(b.name))
     groupNameState.setName(group?.group.name || '')
   }
   availableDetails: Detail[] = []
