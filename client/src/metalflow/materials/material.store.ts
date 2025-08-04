@@ -83,8 +83,6 @@ export class MaterialStore {
 
   clear() {
     this.id = undefined
-    this.unit = EnUnit.Kg
-    this.shape = EnMaterialShape.RoundBar
     this.getShapeState(this.shape).reset()
   }
 
@@ -120,8 +118,11 @@ export class MaterialStore {
         material,
         this.getShapeState(this.shape).export()
       )
+      const label = material.deriveLabel()
+      console.log('creating material', label)
+      if (!label) throw new Error('Material label is not set')
       const res = await rpc.metal.material.create.mutate({
-        label: material.deriveLabel(),
+        label,
         shape: this.shape,
         shape_data: this.getShapeState(this.shape).export(),
         unit: this.unit,
