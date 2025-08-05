@@ -1,7 +1,7 @@
+import { AttachmentsStore } from 'components/attachments/store'
 import { Order, OrderStatus } from 'domain-model'
 import * as gql from 'lib/types/graphql-shema'
 import { makeAutoObservable } from 'mobx'
-import { AttachmentsStore } from '../../../components/attachments/store'
 import { ordersApi } from '../../orders.api'
 import { PaymentStore } from '../payments/store'
 import { PositionsStore } from '../positions/store'

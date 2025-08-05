@@ -1,6 +1,6 @@
 import { FormControl, Option, Select } from '@mui/joy'
+import { suggestionsStore } from 'domains/orders/one/stores/suggestions.store'
 import { observer } from 'lib/deps'
-import { suggestionsStore } from 'orders/one/stores/suggestions.store'
 import { useEffect } from 'react'
 
 interface IManagerFilterProps {
