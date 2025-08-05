@@ -1,9 +1,9 @@
 import { observer, useParams } from 'lib/index'
+import { SupplyReasonSelect } from 'metalflow/shared/supply-reason-select'
+import { WriteoffReasonSelect } from 'metalflow/shared/writeoff-reason-select'
 import { WarehouseCard } from 'metalflow/warehouse/shared/card'
 import { material } from '../material.store'
-import { MaterialOperation } from './shared/material-operation-layout'
-import { SupplyReasonSelect } from './shared/supply-reason-select'
-import { WriteoffReasonSelect } from './shared/writeoff-reason-select'
+import { CreateWarehouseMaterialOperation } from './create_operation'
 
 export const MaterialWarehouse = observer(() => {
   const { id } = useParams<{ id: string }>()
@@ -15,7 +15,7 @@ export const MaterialWarehouse = observer(() => {
       stock={material.stock}
       unit="м"
       supplyModal={
-        <MaterialOperation
+        <CreateWarehouseMaterialOperation
           materialLabel={material.label}
           lengthValue={material.supply.length}
           lengthSetValue={value => material.supply.setLength(value)}
@@ -30,7 +30,7 @@ export const MaterialWarehouse = observer(() => {
         />
       }
       writeoffModal={
-        <MaterialOperation
+        <CreateWarehouseMaterialOperation
           materialLabel={material.label}
           lengthValue={material.writeoff.length}
           lengthSetValue={value => material.writeoff.setLength(value)}

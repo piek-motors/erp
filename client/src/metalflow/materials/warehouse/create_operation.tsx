@@ -13,7 +13,7 @@ interface Props {
   onSubmit: () => Promise<unknown>
 }
 
-export const MaterialOperation = observer((props: Props) => (
+export const CreateWarehouseMaterialOperation = observer((props: Props) => (
   <Stack spacing={1} p={1}>
     <Row sx={{ fontSize: 20 }}>
       <Label>Материал: </Label>

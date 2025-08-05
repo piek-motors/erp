@@ -1,10 +1,10 @@
 import { ExecuteAction, Inp, observer, P } from 'lib/index'
-import { SupplyReasonSelect } from 'metalflow/materials/warehouse/shared/supply-reason-select'
-import { WriteoffReasonSelect } from 'metalflow/materials/warehouse/shared/writeoff-reason-select'
+import { SupplyReasonSelect } from 'metalflow/shared/supply-reason-select'
+import { WriteoffReasonSelect } from 'metalflow/shared/writeoff-reason-select'
 import { WarehouseCard } from 'metalflow/warehouse/shared/card'
 import { detailStore } from '../detail.store'
 
-const CreateWarehouseOperation = observer(
+const CreateWarehouseDetailOperation = observer(
   (props: {
     reasonComponent: React.ReactNode
     submitDisabled: boolean
@@ -38,7 +38,7 @@ export const DetailWarehouse = observer(() => {
       stock={detailStore.stock}
       unit="шт"
       writeoffModal={
-        <CreateWarehouseOperation
+        <CreateWarehouseDetailOperation
           reasonComponent={
             <WriteoffReasonSelect
               reason={detailStore.warehouse.writeoff.reason}
@@ -56,7 +56,7 @@ export const DetailWarehouse = observer(() => {
         />
       }
       supplyModal={
-        <CreateWarehouseOperation
+        <CreateWarehouseDetailOperation
           reasonComponent={
             <SupplyReasonSelect
               reason={detailStore.warehouse.supply.reason}

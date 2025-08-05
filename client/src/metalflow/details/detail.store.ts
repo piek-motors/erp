@@ -5,9 +5,7 @@ import { rpc } from 'lib/rpc.client'
 import { cache } from 'metalflow/cache/root'
 import { makeAutoObservable } from 'mobx'
 import { RouterOutput } from 'srv/lib/trpc'
-import { DetailSupplyStore } from './warehouse/supply_store'
-import { DetailWarehouseStore } from './warehouse/warehouse_store'
-import { DetailWriteoffStore } from './warehouse/writeoff_store'
+import { DetailWarehouseStore } from './warehouse/store'
 
 type MaterialRelationData = {
   length: string
@@ -97,8 +95,6 @@ export class Detail {
     this.recentlyUpdated = id
   }
   attachments = new AttachmentsStore()
-  writeoff = new DetailWriteoffStore()
-  supply = new DetailSupplyStore()
 
   constructor(init?: {
     id?: number

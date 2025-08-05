@@ -23,7 +23,7 @@ import {
   DetailPartCodeInput,
   MaterialCostInputs
 } from './shared'
-import { DetailWarehouse } from './warehouse/warehouse'
+import { DetailWarehouse } from './warehouse/ui'
 
 export const UpdateDetailPage = observer(() => {
   const { id } = useParams<{ id: string }>()

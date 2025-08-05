@@ -15,7 +15,7 @@ import { AlloyAutocomplete, SaveAndDelete } from '../shared/basic'
 import { tabList } from './add'
 import { DetailsMadeOfMaterialModal } from './details_made_of_that_material'
 import { material } from './material.store'
-import { MaterialWarehouse } from './warehouse/warehouse'
+import { MaterialWarehouse } from './warehouse/ui'
 
 export const MaterialUpdatePage = observer(() => {
   const { id } = useParams<{ id: string }>()
