@@ -51,14 +51,14 @@ export function NavigationBar(props: Props) {
         </MobileOnly>
       )}
 
-      <Row gap={1} sx={props.sx}>
+      <Row gap={1} sx={{ ...props.sx }}>
         {props.t && (
-          <P color="primary" fontWeight={600} sx={{ whiteSpace: 'nowrap' }}>
+          <P color="primary" fontWeight={600} sx={{ width: 'max-content' }}>
             {props.t}
           </P>
         )}
         {props.subTitle && (
-          <P level="body-sm" fontWeight={700}>
+          <P level="body-sm" fontWeight={700} sx={{ width: 'max-content' }}>
             {props.subTitle}
           </P>
         )}

@@ -76,8 +76,19 @@ export class Warehouse {
     }
   }
 
-  async addDetail(id: number, qty: number) {
-    const res = await this.trx
+  async addDetail(id: number, qty: number, reason: EnSupplyReason) {
+    const operation = await this.trx
+      .insertInto('metal_flow.operations')
+      .values({
+        operation_type: EnOperationType.Supply,
+        user_id: this.userId,
+        detail_id: id,
+        qty,
+        reason
+      })
+      .returning(['id'])
+      .executeTakeFirstOrThrow()
+    const detail = await this.trx
       .updateTable('metal_flow.details')
       .set(eb => ({
         stock: eb('stock', '+', qty)
@@ -87,11 +98,12 @@ export class Warehouse {
       .executeTakeFirstOrThrow()
 
     return {
-      stock: res.stock
+      operation_id: operation.id,
+      stock: detail.stock
     }
   }
 
-  async subtractDetail(id: number, qty: number) {
+  async subtractDetail(id: number, qty: number, reason: EnWriteoffReason) {
     const current_stock = await this.trx
       .selectFrom('metal_flow.details')
       .select(['stock'])
@@ -102,7 +114,7 @@ export class Warehouse {
       throw new ErrNotEnoughStock(`Недостаточно деталей ${id}`)
     }
 
-    const res = await this.trx
+    const detail = await this.trx
       .updateTable('metal_flow.details')
       .set(eb => ({
         stock: eb('stock', '-', qty)
@@ -110,8 +122,22 @@ export class Warehouse {
       .where('id', '=', id)
       .returning(['stock'])
       .executeTakeFirstOrThrow()
+
+    const operation = await this.trx
+      .insertInto('metal_flow.operations')
+      .values({
+        operation_type: EnOperationType.Writeoff,
+        user_id: this.userId,
+        detail_id: id,
+        qty,
+        reason
+      })
+      .returning('id')
+      .executeTakeFirstOrThrow()
+
     return {
-      stock: res.stock
+      stock: detail.stock,
+      operation_id: operation.id
     }
   }
 }

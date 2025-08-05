@@ -9,7 +9,8 @@ interface ReasonOption {
 
 interface ReasonSelectProps {
   label: string
-  options: ReasonOption[]
+  enum: object
+  enumTranslationEnum: object
   value: ReasonOption
   onChange: (value: ReasonOption | null) => void
 }
@@ -18,7 +19,12 @@ export const ReasonSelect = observer((props: ReasonSelectProps) => (
   <Stack py={0.5}>
     <Label label={props.label} />
     <Autocomplete
-      options={props.options}
+      options={Object.entries(props.enum)
+        .filter(([k, v]) => !Number.isNaN(Number(k)))
+        .map(([k, v]) => ({
+          label: props.enumTranslationEnum[k],
+          value: k
+        }))}
       value={props.value}
       isOptionEqualToValue={(option, value) => option.value === value.value}
       getOptionLabel={option => option.label}

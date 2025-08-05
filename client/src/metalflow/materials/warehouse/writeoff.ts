@@ -10,10 +10,6 @@ export class MaterialWriteoffState {
   setReason(reason: EnWriteoffReason) {
     this.reason = reason
   }
-  dialogOpen = false
-  setDialogOpen(v: boolean) {
-    this.dialogOpen = v
-  }
   constructor() {
     makeAutoObservable(this)
   }

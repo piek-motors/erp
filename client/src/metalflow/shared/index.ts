@@ -3,7 +3,7 @@
  */
 
 export * from '../materials/name'
-export * from '../operations/operation_name'
+export * from '../warehouse/shared/operation_name'
 export * from './basic'
 export * from './material_autocomplete'
 export * from './mobile_menu.button'

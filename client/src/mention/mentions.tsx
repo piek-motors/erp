@@ -6,9 +6,9 @@ import { Context } from 'index'
 import {
   Box,
   Button,
+  ExecuteAction,
   P,
   Row,
-  SendMutation,
   Sheet,
   Stack,
   useNavigate,
@@ -125,7 +125,7 @@ export function MentionList() {
           <Stack gap={1}>
             <SectionTitle title="Новые" />
             <Box>
-              <SendMutation
+              <ExecuteAction
                 disabled={notifications.unviewed.length === 0}
                 buttonProps={{
                   color: 'neutral',
@@ -133,7 +133,7 @@ export function MentionList() {
                   size: 'sm'
                 }}
                 buttonLabel="Прочитать все"
-                onClick={() => {
+                onSubmit={() => {
                   return rpc.markAllNotificationsAsRead.mutate({
                     userId: store?.user?.id
                   })

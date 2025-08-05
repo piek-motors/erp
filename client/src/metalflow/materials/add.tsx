@@ -2,9 +2,9 @@
 import { TabConfig, Tabs } from 'components/tabs'
 import { EnMaterialShape, UiMaterialShape } from 'domain-model'
 import {
+  ExecuteAction,
   Inp,
   observer,
-  SendMutation,
   Stack,
   TakeLookHint,
   useEffect
@@ -83,7 +83,7 @@ export const MaterialAddPage = observer(() => {
         value={material.unit}
         onChange={v => material.setUnit(v)}
       /> */}
-      <SendMutation onClick={() => material.insert()} />
+      <ExecuteAction onSubmit={() => material.insert()} />
       {material.insertedMaterialId && (
         <TakeLookHint
           text={t.RecentlyNewMaterialAdded}

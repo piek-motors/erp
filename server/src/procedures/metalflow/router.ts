@@ -20,6 +20,7 @@ import { updateMaterial } from '#root/procedures/metalflow/material/update.js'
 import { getDetailsByMaterialId } from './detail/get_by_material_id.js'
 import { getDetailShortInfo } from './detail/get_short.js'
 import { getDetailInTheGroup } from './detail/grouping/get.js'
+import { createDetailSupply } from './detail/supply.js'
 import { createDetailWriteoff } from './detail/writeoff.js'
 import { createManufacturingOrder } from './manufacturing_order/create.js'
 import { deleteManufacturingOrder } from './manufacturing_order/delete.js'
@@ -52,7 +53,8 @@ export const metalFlowRouter = router({
     update: updateDetail,
     create: createDetail,
     deleteMaterialRelation: deleteDetailMaterial,
-    writeoff: createDetailWriteoff
+    writeoff: createDetailWriteoff,
+    supply: createDetailSupply
   }),
   detailGroups: router({
     get: getDetailInTheGroup,

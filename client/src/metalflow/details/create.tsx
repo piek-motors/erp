@@ -1,6 +1,6 @@
 import {
+  ExecuteAction,
   observer,
-  SendMutation,
   Stack,
   TakeLookHint,
   useEffect
@@ -32,8 +32,8 @@ export const CreateDetailPage = observer(() => {
       <DetailParamsInput />
       <MaterialCostInputs />
       <DetailDescriptionInput />
-      <SendMutation
-        onClick={() => detailStore.insert()}
+      <ExecuteAction
+        onSubmit={() => detailStore.insert()}
         additionals={(err, res) => {
           if (!res) return null
           return (

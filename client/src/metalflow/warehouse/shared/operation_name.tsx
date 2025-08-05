@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { DetailName } from 'metalflow/details/name'
+import { MaterialName } from 'metalflow/shared'
 import { observer } from 'mobx-react-lite'
-import { MaterialName } from '../materials/name'
 
 interface Props {
   operation: {

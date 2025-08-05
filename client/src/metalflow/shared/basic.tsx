@@ -54,10 +54,10 @@ import { BaseAutocomplete, BaseOption } from 'components/base-autocomplete'
 import {
   DeleteResourceButton,
   ErrorHint,
+  ExecuteAction,
   Label,
   routeMap,
-  Row,
-  SendMutation
+  Row
 } from 'lib/index'
 import { useGetPossibleAlloysQuery } from 'lib/types/graphql-shema'
 import { t } from '../text'
@@ -154,8 +154,8 @@ export const SaveAndDelete = (props: {
         handleDelete={() => props.handleDelete()}
         button={<DeleteResourceButton />}
       />
-      <SendMutation
-        onClick={() => props.handleSave()}
+      <ExecuteAction
+        onSubmit={() => props.handleSave()}
         stackProps={{ sx: { flexGrow: 1 } }}
         buttonProps={{
           fullWidth: true

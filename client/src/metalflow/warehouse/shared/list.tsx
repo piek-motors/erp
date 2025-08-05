@@ -8,15 +8,15 @@ import {
   uiSupplyReason,
   uiWriteoffReason
 } from 'domain-model'
-import { Box, DeleteResourceButton, P } from 'lib/index'
+import { Box, DeleteResourceButton, Label, P } from 'lib/index'
 import { formatDateWithTime } from 'lib/utils/formatting'
 import { DetailName } from 'metalflow/details/name'
-import { OperationName } from 'metalflow/operations/operation_name'
 import { MetalPageTitle } from 'metalflow/shared/basic'
+import { OperationName } from 'metalflow/warehouse/shared/operation_name'
 import { observer } from 'mobx-react-lite'
 import { useEffect, useMemo, useState } from 'react'
 import { Column } from 'react-table'
-import { Operation, store } from './operations.store'
+import { Operation, store } from '../store'
 
 function getColumns(props: {
   key: number
@@ -111,6 +111,11 @@ export const OperationsList = observer((props: Props) => {
       }
       scrollableContent={
         <Box px={1}>
+          {store.operations.length === 0 && (
+            <Label color="neutral" level="body-sm">
+              Операций нет
+            </Label>
+          )}
           <Table
             columns={columns}
             data={store.operations}
@@ -119,7 +124,7 @@ export const OperationsList = observer((props: Props) => {
                 Number(op.original.operation_type) === EnOperationType.Supply
               ) {
                 return {
-                  backgroundColor: '#c6e7c3b9'
+                  backgroundColor: '#c6e7c392'
                 }
               }
               return {}

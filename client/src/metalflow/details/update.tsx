@@ -23,6 +23,7 @@ import {
   DetailPartCodeInput,
   MaterialCostInputs
 } from './shared'
+import { DetailWarehouse } from './warehouse/warehouse'
 
 export const UpdateDetailPage = observer(() => {
   const { id } = useParams<{ id: string }>()
@@ -44,11 +45,8 @@ export const UpdateDetailPage = observer(() => {
     <Stack gap={1} p={1}>
       <MetalPageTitle t={`Деталь #${detailStore.id} - ${detailStore.name}`} />
       <RowButColumsAtSm gap={1}>
+        <DetailWarehouse />
         <Stack gap={0.5} sx={{ flex: 1 }}>
-          <P>
-            <b>Остаток:</b> {detailStore.stock} шт
-          </P>
-
           <CreateManufacturingOrder />
           <DetailNameInput />
           <DetailGroupInput />
@@ -66,7 +64,7 @@ export const UpdateDetailPage = observer(() => {
               }
               handleSave={() => detailStore.update()}
             />
-            <DetailInfo
+            <Metadata
               updatedAt={detailStore.updatedAt}
               lastManufacturingDate={detailStore.lastManufacturingDate}
               lastManufacturingQty={detailStore.lastManufacturingQty}
@@ -81,7 +79,7 @@ export const UpdateDetailPage = observer(() => {
   )
 })
 
-function DetailInfo(props: {
+function Metadata(props: {
   updatedAt?: Date
   lastManufacturingDate?: Date
   lastManufacturingQty?: number

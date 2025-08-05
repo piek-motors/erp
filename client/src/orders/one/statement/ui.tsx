@@ -1,6 +1,6 @@
 import { Box } from '@mui/joy'
 import { PrintOnly, WebOnly } from 'components/conditional-display'
-import { InputStack, P, SendMutation } from 'lib/index'
+import { ExecuteAction, InputStack, P } from 'lib/index'
 import { observer } from 'mobx-react-lite'
 import { orderStore } from '../stores/order.store'
 import { RenderInput } from './render-input'
@@ -14,8 +14,8 @@ export const OrderStatementInput = observer(
           {columns.map((column, idx) => (
             <RenderInput key={idx} column={column} idx={idx} />
           ))}
-          <SendMutation
-            onClick={() => mutation()}
+          <ExecuteAction
+            onSubmit={() => mutation()}
             stackProps={{
               sx: {
                 mt: 2,

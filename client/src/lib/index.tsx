@@ -293,9 +293,9 @@ export function TakeLookHint(props: { text: string; link: string }) {
   )
 }
 
-export function SendMutation<Result>(props: {
+export function ExecuteAction<Result>(props: {
   disabled?: boolean
-  onClick: () => Promise<Result>
+  onSubmit: () => Promise<Result>
   buttonLabel?: string
   additionals?: (error?: Error, mutationResult?: Result) => JSX.Element | null
   buttonProps?: ButtonProps
@@ -311,7 +311,7 @@ export function SendMutation<Result>(props: {
     setMutationResult(undefined)
 
     try {
-      const result = await props.onClick()
+      const result = await props.onSubmit()
       setMutationResult(result)
     } catch (e: any) {
       setError(e.message || e)

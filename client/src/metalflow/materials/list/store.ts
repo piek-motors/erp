@@ -3,7 +3,7 @@ import { AsyncStoreController } from 'lib/async-store.controller'
 import { cache } from 'metalflow/cache/root'
 import { makeAutoObservable } from 'mobx'
 import { ListMaterialsOutput } from 'srv/procedures/metalflow/material/list'
-import { MaterialSupplyStore } from '../operations/supply/state'
+import { MaterialSupplyStore } from '../warehouse/supply'
 
 export class MaterialListStore {
   readonly async = new AsyncStoreController()

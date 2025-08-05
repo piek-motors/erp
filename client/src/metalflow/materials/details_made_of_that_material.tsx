@@ -1,13 +1,13 @@
 /** @jsxImportSource @emotion/react */
 import { Button, List } from '@mui/joy'
 import { InModal } from 'components/modal'
-import { Link, LoadingHint, observer, P, Stack } from 'lib/index'
+import { Link, Loading, observer, P, Stack } from 'lib/index'
 import { open, routeMap } from 'lib/routes'
 import { DetailName } from 'metalflow/details/name'
-import { detailList } from './detail_list.store'
+import { detailList } from './detail_list_store'
 import { material } from './material.store'
 
-export const DetailsMadeOfMaterial = observer(() => {
+export const DetailsMadeOfMaterialModal = observer(() => {
   if (!material.id) return null
   const count =
     material?.detailCount > 0 ? `[${material.detailCount}]` : undefined
@@ -30,7 +30,8 @@ export const DetailsMadeOfMaterial = observer(() => {
     >
       <Stack gap={2} sx={{ overflowY: 'auto', maxHeight: '100vh' }}>
         <P fontWeight={600}>Детали из этого материала</P>
-        <LoadingHint show={detailList.async.loading} />
+        {detailList.async.loading && <Loading />}
+
         <List>
           {detailList.detailsMadeFromThisMaterial.map(each => (
             <Link to={open(routeMap.metalflow.detail.edit, each.id)}>

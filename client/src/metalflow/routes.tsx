@@ -10,9 +10,9 @@ import { MaterialAddPage } from './materials/add'
 import { MaterialListPage } from './materials/list/list'
 import { MaterialUpdatePage } from './materials/update'
 import { MetalFlowRootLayout } from './metalflow_root'
-import { OperationsList } from './operations/list'
 import { Narrow } from './shared/basic'
 import { UsageInstruction } from './usage-instuction'
+import { OperationsList } from './warehouse/list'
 
 const { metalflow } = routeMap
 
