@@ -75,7 +75,7 @@ export const OperationsListModal = observer(
 
 export const WriteoffModal = observer(
   (props: { children: React.ReactNode }) => (
-    <OperationModal buttonLabel="Списать" buttonColor="danger">
+    <OperationModal buttonLabel="Списание" buttonColor="danger">
       <MetalPageTitle t="Списание" />
       <Stack gap={2}>{props.children}</Stack>
     </OperationModal>

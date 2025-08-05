@@ -12,7 +12,7 @@ interface Props {
 
 export const WarehouseCard = (props: Props) => {
   return (
-    <Card variant="outlined" size="sm" sx={{ width: 'fit-content' }}>
+    <Card variant="outlined" size="sm" sx={{ width: 'fit-content', gap: 1.2 }}>
       <P>
         Остаток: {props.stock} {props.unit}
       </P>
