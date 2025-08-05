@@ -26,7 +26,8 @@ const ShapeNameToIconMap = {
   [EnMaterialShape.SquareBar]: '/icons/square.svg',
   [EnMaterialShape.RoundBar]: '/icons/circle.svg',
   [EnMaterialShape.Pipe]: '/icons/pipe.svg',
-  [EnMaterialShape.List]: '/icons/list.svg'
+  [EnMaterialShape.List]: '/icons/list.svg',
+  [EnMaterialShape.HexagonBar]: '/icons/hexagon.svg'
 }
 
 const columnList: Column<ListMaterialsOutput>[] = [
