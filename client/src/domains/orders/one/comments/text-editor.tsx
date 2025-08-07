@@ -5,7 +5,6 @@ import Bold from '@tiptap/extension-bold'
 import Heading from '@tiptap/extension-heading'
 import Highlight from '@tiptap/extension-highlight'
 import Mention from '@tiptap/extension-mention'
-import Paragraph from '@tiptap/extension-paragraph'
 import Placeholder from '@tiptap/extension-placeholder'
 import { Editor, EditorContent, useEditor } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
@@ -32,7 +31,6 @@ export const TextEditor = (props: {
         placeholder: props.placeholder
       }),
       Bold,
-      Paragraph,
       Highlight,
       Heading.configure({
         levels: [1, 2, 3]
@@ -137,28 +135,6 @@ export const TextEditor = (props: {
               }}
             >
               H3
-            </TextFormatButton>
-          </Box>
-          <Box sx={{ display: 'flex', gap: 0.5 }}>
-            <TextFormatButton
-              editor={editor}
-              color={editor.isActive('bulletList') ? 'primary' : 'neutral'}
-              onClick={() => {
-                editor.chain().focus().toggleBulletList().run()
-                handleChange()
-              }}
-            >
-              • List
-            </TextFormatButton>
-            <TextFormatButton
-              editor={editor}
-              color={editor.isActive('orderedList') ? 'primary' : 'neutral'}
-              onClick={() => {
-                editor.chain().focus().toggleOrderedList().run()
-                handleChange()
-              }}
-            >
-              1. List
             </TextFormatButton>
           </Box>
         </Row>
