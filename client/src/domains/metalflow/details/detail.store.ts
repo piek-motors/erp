@@ -63,7 +63,7 @@ export class Detail {
     this.groupId = groupId
   }
   drawingName: string = ''
-  engineeringSetName(name: string) {
+  setDrawingName(name: string) {
     this.drawingName = name
   }
   drawingNumber: string = ''
@@ -135,6 +135,19 @@ export class Detail {
       this.drawingName = init.drawingName ?? ''
     }
     makeAutoObservable(this)
+  }
+
+  private setDetailData(d: DetailResponse) {
+    this.setId(d.id!)
+    this.setName(d.name!)
+    this.setDrawingNumber(d.part_code!)
+    this.setGroupId(d.logical_group_id ?? null)
+    this.setTechnicalParameters(d.params ?? null)
+    this.setDescription(d.description ?? '')
+    this.setStock(d.stock)
+    this.setUpdatedAt(d.updated_at ? new Date(d.updated_at) : undefined)
+    this.setProcessingRoute(d.processing_route ?? '')
+    this.setDrawingName(d.drawing_name ?? '')
   }
 
   reset() {
@@ -213,17 +226,6 @@ export class Detail {
 
   async loadShortInfo(detailId: number) {
     this.setDetailData(await rpc.metal.details.getShort.query({ id: detailId }))
-  }
-
-  private setDetailData(d: DetailResponse) {
-    this.setId(d.id!)
-    this.setName(d.name!)
-    this.setDrawingNumber(d.part_code!)
-    this.setGroupId(d.logical_group_id ?? null)
-    this.setTechnicalParameters(d.params ?? null)
-    this.setDescription(d.description ?? '')
-    this.setStock(d.stock)
-    this.setUpdatedAt(d.updated_at ? new Date(d.updated_at) : undefined)
   }
 
   async insert() {

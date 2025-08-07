@@ -74,6 +74,7 @@ export type MyInputProps = {
   sx?: InputProps['sx']
   size?: InputProps['size']
   variant?: InputProps['variant']
+  color?: InputProps['color']
 }
 
 export function Inp(props: MyInputProps) {
@@ -88,6 +89,7 @@ export function Inp(props: MyInputProps) {
         <Row>
           <Input
             {...props}
+            color={props.color}
             value={props.value?.toString() || ''}
             autoComplete={props.enableAutoComplete ? 'on' : 'off'}
             onChange={e => {

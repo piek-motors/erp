@@ -145,6 +145,7 @@ export const CommentInputViewPort = observer(
       <Box>
         <Box sx={{ overflow: 'scroll', py: 2 }}>
           <TextEditor
+            placeholder="Введите комментарий"
             onSubmit={content => {
               return commentsStore.insertComment(content, orderId, user.id)
             }}

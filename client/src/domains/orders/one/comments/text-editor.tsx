@@ -2,33 +2,46 @@
 import { css } from '@emotion/react'
 import { Box, Button, ButtonProps, Sheet, Stack } from '@mui/joy'
 import Bold from '@tiptap/extension-bold'
+import Heading from '@tiptap/extension-heading'
 import Highlight from '@tiptap/extension-highlight'
 import Mention from '@tiptap/extension-mention'
+import Paragraph from '@tiptap/extension-paragraph'
 import Placeholder from '@tiptap/extension-placeholder'
 import { Editor, EditorContent, useEditor } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import { Row } from 'lib/index'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { suggestion } from './mention-suggestion'
 
 export const TextEditor = (props: {
-  onSubmit: (content: string) => Promise<void>
+  defaultValue?: string
+  placeholder?: string
+  onSubmit?: (content: string) => Promise<void>
+  onChange?: (content: string) => void
 }) => {
   const [key, setKey] = useState(0)
+
+  const handleChange = () => {
+    props.onChange?.(editor?.getHTML() ?? '')
+  }
+
   const editor = useEditor({
     extensions: [
       StarterKit,
       Placeholder.configure({
-        placeholder: 'Введите комментарий'
+        placeholder: props.placeholder
       }),
       Bold,
+      Paragraph,
       Highlight,
+      Heading.configure({
+        levels: [1, 2, 3]
+      }),
       Mention.configure({
         HTMLAttributes: {
           class: 'mention'
         },
         renderText: mention => {
-          console.log(mention)
           return `<span class="mention" data-mention="${mention.node.attrs.id}">${mention.node.attrs.label}</span>`
         },
         suggestion
@@ -55,6 +68,13 @@ export const TextEditor = (props: {
       pointer-events: none;
     }
   `
+
+  useEffect(() => {
+    if (props.defaultValue) {
+      editor?.commands.setContent(props.defaultValue)
+    }
+  }, [])
+
   if (!editor) return null
   return (
     <Stack gap={1} key={key} css={styles} sx={{ position: 'relative' }}>
@@ -65,25 +85,88 @@ export const TextEditor = (props: {
             color={editor.isActive('bold') ? 'primary' : 'neutral'}
             onClick={() => {
               editor.chain().focus().toggleBold().run()
-              setKey(key + 1)
+              handleChange()
             }}
           >
-            Bold
+            B
           </TextFormatButton>
           <TextFormatButton
             editor={editor}
+            defaultValue={props.defaultValue}
             color={editor.isActive('highlight') ? 'primary' : 'neutral'}
             onClick={() => {
               editor.chain().focus().toggleHighlight().run()
-              setKey(key + 1)
+              handleChange()
             }}
           >
             Highlight
           </TextFormatButton>
+          <Box sx={{ display: 'flex', gap: 0.5 }}>
+            <TextFormatButton
+              editor={editor}
+              color={
+                editor.isActive('heading', { level: 1 }) ? 'primary' : 'neutral'
+              }
+              onClick={() => {
+                editor.chain().focus().toggleHeading({ level: 1 }).run()
+                handleChange()
+              }}
+            >
+              H1
+            </TextFormatButton>
+            <TextFormatButton
+              editor={editor}
+              color={
+                editor.isActive('heading', { level: 2 }) ? 'primary' : 'neutral'
+              }
+              onClick={() => {
+                editor.chain().focus().toggleHeading({ level: 2 }).run()
+                handleChange()
+              }}
+            >
+              H2
+            </TextFormatButton>
+            <TextFormatButton
+              editor={editor}
+              color={
+                editor.isActive('heading', { level: 3 }) ? 'primary' : 'neutral'
+              }
+              onClick={() => {
+                editor.chain().focus().toggleHeading({ level: 3 }).run()
+                handleChange()
+              }}
+            >
+              H3
+            </TextFormatButton>
+          </Box>
+          <Box sx={{ display: 'flex', gap: 0.5 }}>
+            <TextFormatButton
+              editor={editor}
+              color={editor.isActive('bulletList') ? 'primary' : 'neutral'}
+              onClick={() => {
+                editor.chain().focus().toggleBulletList().run()
+                handleChange()
+              }}
+            >
+              • List
+            </TextFormatButton>
+            <TextFormatButton
+              editor={editor}
+              color={editor.isActive('orderedList') ? 'primary' : 'neutral'}
+              onClick={() => {
+                editor.chain().focus().toggleOrderedList().run()
+                handleChange()
+              }}
+            >
+              1. List
+            </TextFormatButton>
+          </Box>
         </Row>
-        <EditorContent editor={editor} />
+        <EditorContent editor={editor} onInput={() => handleChange()} />
       </Sheet>
-      <PublishButton editor={editor} onSubmit={props.onSubmit} />
+      {props.onSubmit && (
+        <PublishButton editor={editor} onSubmit={props.onSubmit} />
+      )}
     </Stack>
   )
 }

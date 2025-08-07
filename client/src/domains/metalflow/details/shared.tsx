@@ -6,11 +6,11 @@ import { JsonEditor } from 'components/json-editor'
 import { EnUnit } from 'domain-model'
 import { cache } from 'domains/metalflow/cache/root'
 import { QtyInputWithUnit } from 'domains/metalflow/shared'
+import { TextEditor } from 'domains/orders/one/comments/text-editor'
 import {
   Box,
   Inp,
   Label,
-  MultilineInput,
   MyInputProps,
   PlusIcon,
   Row,
@@ -35,78 +35,75 @@ export const DetailInputs = () => (
 )
 
 export const MaterialSelect = observer(
-  (props: { value: MaterialCost; index: number }) => {
-    return (
-      <MaterialAutocomplete
-        size="sm"
-        data={cache.materials.getMaterials().map(e => {
-          return new MaterialCost({
-            materialId: e.id,
-            label: e.label
-          })
+  (props: { value: MaterialCost; index: number }) => (
+    <MaterialAutocomplete
+      size="sm"
+      data={cache.materials.getMaterials().map(e => {
+        return new MaterialCost({
+          materialId: e.id,
+          label: e.label
+        })
+      })}
+      value={props.value}
+      onChange={m => {
+        if (m) {
+          detailStore.updateMaterialRelation(
+            props.index,
+            { id: m.materialId, label: m.materialLabel },
+            {
+              length: m.length
+            }
+          )
+        }
+      }}
+    />
+  )
+)
+
+export const MaterialCostInputs = observer(() => (
+  <Box>
+    <Label>Расход материалов</Label>
+    <Sheet sx={{ borderRadius: 'sm', p: 1 }}>
+      <Stack gap={1}>
+        {detailStore.usedMaterials.map((materialCost, index) => {
+          return (
+            <Row key={materialCost.materialId}>
+              <Stack gap={0.5}>
+                <MaterialSelect value={materialCost} index={index} />
+                <QtyInputWithUnit
+                  size="sm"
+                  unitId={EnUnit.MilliMeter}
+                  value={materialCost.length}
+                  setValue={v => {
+                    materialCost.setLength(v)
+                  }}
+                />
+              </Stack>
+              <Stack>
+                <IconButton
+                  variant="soft"
+                  color="danger"
+                  size="sm"
+                  onClick={() => {
+                    detailStore.deleteDetailMaterial(materialCost.materialId)
+                  }}
+                >
+                  <UseIcon icon={UilMinus} />
+                </IconButton>
+              </Stack>
+            </Row>
+          )
         })}
-        value={props.value}
-        onChange={m => {
-          if (m) {
-            detailStore.updateMaterialRelation(
-              props.index,
-              { id: m.materialId, label: m.materialLabel },
-              {
-                length: m.length
-              }
-            )
-          }
+      </Stack>
+      <Divider sx={{ my: 1 }} />
+      <PlusIcon
+        onClick={() => {
+          detailStore.addMaterial({ id: 0, label: '' }, { length: '' })
         }}
       />
-    )
-  }
-)
-export const MaterialCostInputs = observer(() => {
-  return (
-    <Box>
-      <Label>Расход материалов</Label>
-      <Sheet sx={{ borderRadius: 'sm', p: 1 }}>
-        <Stack gap={1}>
-          {detailStore.usedMaterials.map((materialCost, index) => {
-            return (
-              <Row key={materialCost.materialId}>
-                <Stack gap={0.5}>
-                  <MaterialSelect value={materialCost} index={index} />
-                  <QtyInputWithUnit
-                    size="sm"
-                    unitId={EnUnit.MilliMeter}
-                    value={materialCost.length}
-                    setValue={v => {
-                      materialCost.setLength(v)
-                    }}
-                  />
-                </Stack>
-                <Stack>
-                  <IconButton
-                    variant="soft"
-                    color="danger"
-                    size="sm"
-                    onClick={() => {
-                      detailStore.deleteDetailMaterial(materialCost.materialId)
-                    }}
-                  >
-                    <UseIcon icon={UilMinus} />
-                  </IconButton>
-                </Stack>
-              </Row>
-            )
-          })}
-        </Stack>
-        <Divider sx={{ my: 1 }} />
-        <PlusIcon
-          onClick={() => {
-            detailStore.addMaterial({ id: 0, label: '' }, { length: '' })
-          }}
-        />
-      </Sheet>
-    </Box>
-  )
-})
+    </Sheet>
+  </Box>
+))
 export const DetailNameInput = observer(() => {
   return (
     <Input
@@ -124,58 +121,55 @@ export const DetailDrawingNameInput = observer(() => {
     <Input
       label="Название чертежа"
       onChange={v => {
-        detailStore.engineeringSetName(v)
+        detailStore.setDrawingName(v)
       }}
       value={detailStore.drawingName}
     />
   )
 })
 
-export const DetailDescriptionInput = observer(() => {
-  return (
-    <MultilineInput
-      variant="soft"
-      label="Примечания в свободной форме"
-      onChange={e => {
-        detailStore.setDescription(e.target.value)
+export const DetailProcessingRouteInput = observer(() => (
+  <Box>
+    <Label>Маршрут обработки</Label>
+    <TextEditor
+      defaultValue={detailStore.processingRoute}
+      onChange={content => {
+        detailStore.setProcessingRoute(content)
       }}
-      value={detailStore.description}
     />
-  )
-})
+  </Box>
+))
 
-export const DetailProcessingRouteInput = observer(() => {
-  return (
-    <MultilineInput
-      variant="soft"
-      label="Маршрут обработки"
-      onChange={e => {
-        detailStore.setProcessingRoute(e.target.value)
+export const DetailDescriptionInput = observer(() => (
+  <Box>
+    <Label>Примечания в свободной форме</Label>
+    <TextEditor
+      defaultValue={detailStore.description}
+      onChange={content => {
+        detailStore.setDescription(content)
       }}
-      value={detailStore.processingRoute}
     />
-  )
-})
+  </Box>
+))
 
-export const DetailPartCodeInput = observer(() => {
-  return (
-    <Input
-      label="Номер чертежа"
-      onChange={v => {
-        detailStore.setDrawingNumber(v)
+export const DetailPartCodeInput = observer(() => (
+  <Input
+    label="Номер чертежа"
+    onChange={v => {
+      detailStore.setDrawingNumber(v)
 
-        if (v.startsWith('ВЗИС')) {
-          alert('Впишите конструкторский номер без приставки "ВЗИС"')
-        }
-      }}
-      value={detailStore.drawingNumber}
-    />
-  )
-})
+      if (v.startsWith('ВЗИС')) {
+        alert('Впишите конструкторский номер без приставки "ВЗИС"')
+      }
+    }}
+    value={detailStore.drawingNumber}
+  />
+))
 
-const Input = (props: MyInputProps) => {
-  return <Inp variant="soft" fullWidth {...props} />
-}
+const Input = (props: MyInputProps) => (
+  <Inp variant="plain" color="neutral" fullWidth {...props} />
+)
+
 export const DetailGroupInput = observer(() => {
   const groupOptions: BaseOption[] = cache.detailGroups
     .getGroups()
@@ -191,7 +185,7 @@ export const DetailGroupInput = observer(() => {
     <Stack>
       <Label>Группа детали. Для универсальных деталей оставьте пустым.</Label>
       <BaseAutocomplete
-        variant="soft"
+        variant="plain"
         options={groupOptions}
         value={selectedGroup}
         onChange={group => {
@@ -202,16 +196,14 @@ export const DetailGroupInput = observer(() => {
   )
 })
 
-export const DetailParamsInput = observer(() => {
-  return (
-    <Box>
-      <Label>Технические параметры</Label>
-      <JsonEditor
-        value={detailStore.technicalParameters}
-        onChange={params => detailStore.setTechnicalParameters(params)}
-        keyPlaceholder="Параметр"
-        valuePlaceholder="Значение"
-      />
-    </Box>
-  )
-})
+export const DetailParamsInput = observer(() => (
+  <Box>
+    <Label>Технические параметры</Label>
+    <JsonEditor
+      value={detailStore.technicalParameters}
+      onChange={params => detailStore.setTechnicalParameters(params)}
+      keyPlaceholder="Параметр"
+      valuePlaceholder="Значение"
+    />
+  </Box>
+))
