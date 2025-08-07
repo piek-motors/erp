@@ -32,9 +32,7 @@ export const TextEditor = (props: {
       }),
       Bold,
       Highlight,
-      Heading.configure({
-        levels: [1, 2, 3]
-      }),
+      Heading,
       Mention.configure({
         HTMLAttributes: {
           class: 'mention'
@@ -103,10 +101,10 @@ export const TextEditor = (props: {
             <TextFormatButton
               editor={editor}
               color={
-                editor.isActive('heading', { level: 1 }) ? 'primary' : 'neutral'
+                editor.isActive('heading', { level: 3 }) ? 'primary' : 'neutral'
               }
               onClick={() => {
-                editor.chain().focus().toggleHeading({ level: 1 }).run()
+                editor.chain().focus().toggleHeading({ level: 3 }).run()
                 handleChange()
               }}
             >
@@ -115,26 +113,14 @@ export const TextEditor = (props: {
             <TextFormatButton
               editor={editor}
               color={
-                editor.isActive('heading', { level: 2 }) ? 'primary' : 'neutral'
+                editor.isActive('heading', { level: 4 }) ? 'primary' : 'neutral'
               }
               onClick={() => {
-                editor.chain().focus().toggleHeading({ level: 2 }).run()
+                editor.chain().focus().toggleHeading({ level: 4 }).run()
                 handleChange()
               }}
             >
               H2
-            </TextFormatButton>
-            <TextFormatButton
-              editor={editor}
-              color={
-                editor.isActive('heading', { level: 3 }) ? 'primary' : 'neutral'
-              }
-              onClick={() => {
-                editor.chain().focus().toggleHeading({ level: 3 }).run()
-                handleChange()
-              }}
-            >
-              H3
             </TextFormatButton>
           </Box>
         </Row>
