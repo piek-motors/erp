@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { UilMinus } from '@iconscout/react-unicons'
-import { Divider, IconButton } from '@mui/joy'
+import { Divider, IconButton, Stack } from '@mui/joy'
 import { BaseAutocomplete, BaseOption } from 'components/base-autocomplete'
 import { JsonEditor } from 'components/json-editor'
 import { EnUnit } from 'domain-model'
@@ -11,15 +11,28 @@ import {
   Inp,
   Label,
   MultilineInput,
+  MyInputProps,
   PlusIcon,
   Row,
   Sheet,
-  Stack,
   UseIcon,
   observer
 } from 'lib/index'
 import { MaterialAutocomplete } from '../shared/material_autocomplete'
 import { MaterialCost, detailStore } from './detail.store'
+
+export const DetailInputs = () => (
+  <Stack gap={0.5}>
+    <DetailNameInput />
+    <DetailDrawingNameInput />
+    <DetailPartCodeInput />
+    <DetailGroupInput />
+    <DetailParamsInput />
+    <MaterialCostInputs />
+    <DetailProcessingRouteInput />
+    <DetailDescriptionInput />
+  </Stack>
+)
 
 export const MaterialSelect = observer(
   (props: { value: MaterialCost; index: number }) => {
@@ -96,9 +109,8 @@ export const MaterialCostInputs = observer(() => {
 })
 export const DetailNameInput = observer(() => {
   return (
-    <Inp
-      fullWidth
-      label="Наименование детали (без группы)"
+    <Input
+      label="Название со склада"
       onChange={v => {
         detailStore.setName(v)
       }}
@@ -107,9 +119,22 @@ export const DetailNameInput = observer(() => {
   )
 })
 
+export const DetailDrawingNameInput = observer(() => {
+  return (
+    <Input
+      label="Название чертежа"
+      onChange={v => {
+        detailStore.engineeringSetName(v)
+      }}
+      value={detailStore.drawingName}
+    />
+  )
+})
+
 export const DetailDescriptionInput = observer(() => {
   return (
     <MultilineInput
+      variant="soft"
       label="Примечания в свободной форме"
       onChange={e => {
         detailStore.setDescription(e.target.value)
@@ -119,22 +144,38 @@ export const DetailDescriptionInput = observer(() => {
   )
 })
 
+export const DetailProcessingRouteInput = observer(() => {
+  return (
+    <MultilineInput
+      variant="soft"
+      label="Маршрут обработки"
+      onChange={e => {
+        detailStore.setProcessingRoute(e.target.value)
+      }}
+      value={detailStore.processingRoute}
+    />
+  )
+})
+
 export const DetailPartCodeInput = observer(() => {
   return (
-    <Inp
-      label="Артикул (конструкторский номер без приставки 'ВЗИС')"
+    <Input
+      label="Номер чертежа"
       onChange={v => {
-        detailStore.setPartCode(v)
+        detailStore.setDrawingNumber(v)
 
         if (v.startsWith('ВЗИС')) {
           alert('Впишите конструкторский номер без приставки "ВЗИС"')
         }
       }}
-      value={detailStore.partCode}
+      value={detailStore.drawingNumber}
     />
   )
 })
 
+const Input = (props: MyInputProps) => {
+  return <Inp variant="soft" fullWidth {...props} />
+}
 export const DetailGroupInput = observer(() => {
   const groupOptions: BaseOption[] = cache.detailGroups
     .getGroups()
@@ -148,11 +189,9 @@ export const DetailGroupInput = observer(() => {
 
   return (
     <Stack>
-      <Label>
-        Группа детали (если деталь универсальная и используется в разных
-        группах, оставьте пустым)
-      </Label>
+      <Label>Группа детали. Для универсальных деталей оставьте пустым.</Label>
       <BaseAutocomplete
+        variant="soft"
         options={groupOptions}
         value={selectedGroup}
         onChange={group => {

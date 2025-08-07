@@ -9,14 +9,8 @@ import {
 import { open, routeMap } from 'lib/routes'
 import { t } from '../text'
 import { detailStore } from './detail.store'
-import {
-  DetailDescriptionInput,
-  DetailGroupInput,
-  DetailNameInput,
-  DetailParamsInput,
-  DetailPartCodeInput,
-  MaterialCostInputs
-} from './shared'
+import { DetailInputs } from './shared'
+
 export const CreateDetailPage = observer(() => {
   useEffect(() => {
     return () => {
@@ -24,14 +18,9 @@ export const CreateDetailPage = observer(() => {
     }
   }, [])
   return (
-    <Stack gap={1} p={1}>
+    <Stack gap={2} p={1}>
       <MetalPageTitle t={t.AddDetail} />
-      <DetailNameInput />
-      <DetailGroupInput />
-      <DetailPartCodeInput />
-      <DetailParamsInput />
-      <MaterialCostInputs />
-      <DetailDescriptionInput />
+      <DetailInputs />
       <ExecuteAction
         onSubmit={() => detailStore.insert()}
         additionals={(err, res) => {

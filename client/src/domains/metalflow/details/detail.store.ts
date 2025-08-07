@@ -62,9 +62,17 @@ export class Detail {
   setGroupId(groupId: number | null) {
     this.groupId = groupId
   }
-  partCode: string = ''
-  setPartCode(partCode: string) {
-    this.partCode = partCode
+  drawingName: string = ''
+  engineeringSetName(name: string) {
+    this.drawingName = name
+  }
+  drawingNumber: string = ''
+  setDrawingNumber(drawingNumber: string) {
+    this.drawingNumber = drawingNumber
+  }
+  processingRoute: string = ''
+  setProcessingRoute(route: string) {
+    this.processingRoute = route
   }
   technicalParameters: Record<string, any> | null = null
   setTechnicalParameters(params: Record<string, any> | null) {
@@ -108,12 +116,14 @@ export class Detail {
     updatedAt?: Date
     lastManufacturingDate?: Date
     lastManufacturingQty?: number
+    processingRoute?: string | null
+    drawingName?: string | null
   }) {
     if (init) {
       this.id = init.id
       this.name = init.name
       this.description = init.description ?? ''
-      this.partCode = init.partCode
+      this.drawingNumber = init.partCode
       this.usedMaterials = init.usedMaterials || []
       this.groupId = init.groupId ?? null
       this.stock = init.stock
@@ -121,6 +131,8 @@ export class Detail {
       this.updatedAt = init.updatedAt
       this.lastManufacturingDate = init.lastManufacturingDate
       this.lastManufacturingQty = init.lastManufacturingQty
+      this.processingRoute = init.processingRoute ?? ''
+      this.drawingName = init.drawingName ?? ''
     }
     makeAutoObservable(this)
   }
@@ -133,11 +145,13 @@ export class Detail {
     this.recentlyAdded = undefined
     this.recentlyUpdated = undefined
     this.groupId = undefined
-    this.partCode = ''
+    this.drawingNumber = ''
     this.technicalParameters = null
     this.updatedAt = undefined
     this.lastManufacturingDate = undefined
     this.lastManufacturingQty = undefined
+    this.processingRoute = ''
+    this.drawingName = ''
   }
 
   addMaterial(
@@ -204,7 +218,7 @@ export class Detail {
   private setDetailData(d: DetailResponse) {
     this.setId(d.id!)
     this.setName(d.name!)
-    this.setPartCode(d.part_code!)
+    this.setDrawingNumber(d.part_code!)
     this.setGroupId(d.logical_group_id ?? null)
     this.setTechnicalParameters(d.params ?? null)
     this.setDescription(d.description ?? '')
@@ -220,10 +234,12 @@ export class Detail {
     const res = await rpc.metal.details.create.mutate({
       name: this.name.trim(),
       description: this.description,
-      partCode: this.partCode.trim(),
+      partCode: this.drawingNumber.trim(),
       materialRelations,
       groupId: this.groupId ?? null,
-      params: this.technicalParameters
+      params: this.technicalParameters,
+      processingRoute: this.processingRoute,
+      drawingName: this.drawingName
     })
     await cache.details.load()
     return res
@@ -241,10 +257,12 @@ export class Detail {
       id: this.id,
       description: this.description,
       name: this.name,
-      partCode: this.partCode,
+      partCode: this.drawingNumber,
       groupId: this.groupId ?? null,
       materialRelations,
-      params: this.technicalParameters
+      params: this.technicalParameters,
+      processingRoute: this.processingRoute,
+      drawingName: this.drawingName
     })
     await cache.details.load()
     return res

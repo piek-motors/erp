@@ -24,7 +24,9 @@ export const detailBaseSchema = z.object({
   partCode: z.string().nullable(),
   groupId: z.number().nullable(),
   params: z.record(z.any()).nullable(),
-  materialRelations: z.array(materialRelationSchema)
+  materialRelations: z.array(materialRelationSchema),
+  processingRoute: z.string().nullable(),
+  drawingName: z.string().nullable()
 })
 
 export const detailDto = detailBaseSchema

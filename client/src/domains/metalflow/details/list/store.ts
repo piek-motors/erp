@@ -82,7 +82,8 @@ export class DetailList {
       const partCode = this.searchPartCode.toLowerCase()
       return details.filter(
         detail =>
-          detail.partCode && detail.partCode.toLowerCase().startsWith(partCode)
+          detail.drawingNumber &&
+          detail.drawingNumber.toLowerCase().startsWith(partCode)
       )
     }
 

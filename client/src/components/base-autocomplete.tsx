@@ -26,11 +26,13 @@ interface BaseAutocompleteProps<T extends BaseOption> {
   getOptionLabel?: (option: T | string) => string
   isOptionEqualToValue?: (option: T, value: T) => boolean
   size?: InputProps['size']
+  variant?: InputProps['variant']
 }
 
 export function BaseAutocomplete<T extends BaseOption>({
   label,
   placeholder,
+  variant,
   sx,
   options,
   value,
@@ -54,6 +56,7 @@ export function BaseAutocomplete<T extends BaseOption>({
       <Label label={label} />
       {error}
       <Autocomplete
+        variant={variant}
         placeholder={placeholder}
         size={size}
         sx={sx}

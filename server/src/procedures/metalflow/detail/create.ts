@@ -16,7 +16,9 @@ export const createDetail = procedure
         part_code: input.partCode,
         stock: 0,
         logical_group_id: input.groupId,
-        params: input.params || null
+        params: input.params || null,
+        processing_route: input.processingRoute || null,
+        drawing_name: input.drawingName || null
       } as any)
       .returning('id')
       .executeTakeFirstOrThrow()

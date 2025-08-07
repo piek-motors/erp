@@ -17,7 +17,9 @@ export const updateDetail = publicProcedure
         part_code: input.partCode,
         logical_group_id: input.groupId,
         params: input.params || null,
-        updated_at: new Date()
+        updated_at: new Date(),
+        processing_route: input.processingRoute || null,
+        drawing_name: input.drawingName || null
       } as any)
       .where('id', '=', input.id)
       .execute()

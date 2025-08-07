@@ -58,7 +58,7 @@ export const Label = (props: TypographyProps & { label?: string }) =>
     </Typography>
   )
 
-type MyInputProps = {
+export type MyInputProps = {
   label?: string
   helperText?: string
   value?: string | number | null

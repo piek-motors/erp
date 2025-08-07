@@ -15,14 +15,7 @@ import { formatDetailDate } from 'lib/utils/formatting'
 import { DetailAttachmentList } from './attachments/detail_attachment_list'
 import { CreateManufacturingOrder } from './create_manufacturing_order'
 import { detailStore } from './detail.store'
-import {
-  DetailDescriptionInput,
-  DetailGroupInput,
-  DetailNameInput,
-  DetailParamsInput,
-  DetailPartCodeInput,
-  MaterialCostInputs
-} from './shared'
+import { DetailInputs } from './shared'
 import { DetailWarehouse } from './warehouse/ui'
 
 export const UpdateDetailPage = observer(() => {
@@ -46,15 +39,15 @@ export const UpdateDetailPage = observer(() => {
       <MetalPageTitle t={`Деталь #${detailStore.id} - ${detailStore.name}`} />
       <RowButColumsAtSm gap={1}>
         <DetailWarehouse />
-        <Stack gap={0.5} sx={{ flex: 1 }}>
+        <Stack gap={2} sx={{ flex: 1 }}>
           <CreateManufacturingOrder />
-          <DetailNameInput />
-          <DetailGroupInput />
-          <DetailPartCodeInput />
-          <DetailParamsInput />
-          <MaterialCostInputs />
-          <DetailDescriptionInput />
+          <DetailInputs />
           <Box width={'min-content'}>
+            <Metadata
+              updatedAt={detailStore.updatedAt}
+              lastManufacturingDate={detailStore.lastManufacturingDate}
+              lastManufacturingQty={detailStore.lastManufacturingQty}
+            />
             <SaveAndDelete
               itemName={`Деталь (${detailStore.id}) - ${detailStore.name}`}
               handleDelete={() =>
@@ -63,11 +56,6 @@ export const UpdateDetailPage = observer(() => {
                 })
               }
               handleSave={() => detailStore.update()}
-            />
-            <Metadata
-              updatedAt={detailStore.updatedAt}
-              lastManufacturingDate={detailStore.lastManufacturingDate}
-              lastManufacturingQty={detailStore.lastManufacturingQty}
             />
           </Box>
         </Stack>
@@ -87,7 +75,7 @@ function Metadata(props: {
   return (
     <Stack gap={0.5} sx={{ mt: 1 }}>
       {props.lastManufacturingDate && (
-        <P level="body-sm" color="neutral" sx={{ whiteSpace: 'nowrap' }}>
+        <P level="body-xs" color="neutral" sx={{ whiteSpace: 'nowrap' }}>
           <b>Последнее производство:</b>{' '}
           {formatDetailDate(props.lastManufacturingDate)}
           {props.lastManufacturingQty && (
@@ -96,7 +84,7 @@ function Metadata(props: {
         </P>
       )}
       {props.updatedAt && (
-        <P level="body-sm" color="neutral" sx={{ whiteSpace: 'nowrap' }}>
+        <P level="body-xs" color="neutral" sx={{ whiteSpace: 'nowrap' }}>
           <b>Обновлено:</b> {formatDetailDate(props.updatedAt)}
         </P>
       )}

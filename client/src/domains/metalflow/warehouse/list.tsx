@@ -10,7 +10,7 @@ import {
 } from 'domain-model'
 import { DetailName } from 'domains/metalflow/details/name'
 import { MetalPageTitle } from 'domains/metalflow/shared/basic'
-import { Box, DeleteResourceButton, P } from 'lib/index'
+import { Box, P } from 'lib/index'
 import { formatDateWithTime } from 'lib/utils/formatting'
 import { observer } from 'mobx-react-lite'
 import { useEffect, useMemo, useState } from 'react'
@@ -73,18 +73,6 @@ function getColumns(props: {
           ? uiSupplyReason(data?.reason as EnSupplyReason)
           : uiWriteoffReason(data?.reason as EnWriteoffReason)
       }
-    },
-    {
-      Header: 'Действие',
-      accessor: data => (
-        <DeleteResourceButton
-          variant="plain"
-          small
-          onClick={() => {
-            store.revertOperation(data.id!)
-          }}
-        />
-      )
     }
   ]
 }

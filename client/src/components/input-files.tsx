@@ -24,7 +24,7 @@ export function InputFiles(
         role={undefined}
         tabIndex={-1}
         size="sm"
-        variant="plain"
+        variant="soft"
         color="neutral"
         startDecorator={
           <SvgIcon>
