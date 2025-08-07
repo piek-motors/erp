@@ -16,7 +16,7 @@ interface DetailParamsPopupProps {
   detailId: number
 }
 
-const Pair = (props: { label: string; value?: string | null }) => {
+const Pair = (props: { label?: string; value?: string | null }) => {
   if (!props.value) return null
   return (
     <MenuItem sx={{ display: 'flex', alignItems: 'baseline' }}>
