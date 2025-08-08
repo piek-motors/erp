@@ -1,6 +1,6 @@
-import { Order, Payment } from 'domain-model'
 import * as gql from 'lib/types/graphql-shema'
 import { makeAutoObservable } from 'mobx'
+import { Order, Payment } from 'models'
 import moment from 'moment'
 import { PaymentsApi } from './api'
 

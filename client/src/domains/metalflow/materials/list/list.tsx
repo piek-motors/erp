@@ -2,7 +2,6 @@
 import { SxProps } from '@mui/joy/styles/types'
 import { ScrollableWindow, Search } from 'components/inputs'
 import { Table } from 'components/table.impl'
-import { EnMaterialShape } from 'domain-model'
 import { MetalPageTitle } from 'domains/metalflow/shared/basic'
 import {
   AddResourceButton,
@@ -16,6 +15,7 @@ import {
 } from 'lib/index'
 import { open, routeMap } from 'lib/routes'
 import { roundAndTrim } from 'lib/utils/formatting'
+import { EnMaterialShape } from 'models'
 import { Column } from 'react-table'
 import { ListMaterialsOutput } from 'srv/procedures/metalflow/material/list'
 import { t } from '../../text'

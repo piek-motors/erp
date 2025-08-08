@@ -1,6 +1,6 @@
-import { EnSupplyReason } from 'domain-model'
 import { rpc } from 'lib/rpc.client'
 import { makeAutoObservable } from 'mobx'
+import { EnSupplyReason } from 'models'
 
 export class MaterialSupplyStore {
   length: string = ''

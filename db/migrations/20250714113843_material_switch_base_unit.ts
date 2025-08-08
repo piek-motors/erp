@@ -1,4 +1,4 @@
-import { EnUnit } from 'domain-model'
+import { EnUnit } from 'models'
 import { type KDB } from '../schema'
 
 export async function up(db: KDB): Promise<void> {

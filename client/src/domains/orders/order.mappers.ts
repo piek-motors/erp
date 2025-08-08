@@ -1,5 +1,5 @@
-import { Attachment, Order, OrderItem, Payment, User } from 'domain-model'
 import * as gql from 'lib/types/graphql-shema'
+import { Attachment, Order, OrderItem, Payment, User } from 'models'
 
 class OrderMapper {
   fromDto(dto: gql.OrderFragment): Order {

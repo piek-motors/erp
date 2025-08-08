@@ -1,6 +1,5 @@
 /** @jsxImportSource @emotion/react */
 import { TabConfig, Tabs } from 'components/tabs'
-import { EnMaterialShape, UiMaterialShape } from 'domain-model'
 import { MetalPageTitle } from 'domains/metalflow/shared/basic'
 import {
   ExecuteAction,
@@ -11,6 +10,7 @@ import {
   useEffect
 } from 'lib/index'
 import { open, routeMap } from 'lib/routes'
+import { EnMaterialShape, UiMaterialShape } from 'models'
 import { AlloyAutocomplete } from '../shared/basic'
 import { t } from '../text'
 import { material } from './material.store'

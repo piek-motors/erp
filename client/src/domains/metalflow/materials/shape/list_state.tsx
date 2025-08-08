@@ -1,5 +1,5 @@
-import { List, ListShapeData } from 'domain-model'
 import { makeAutoObservable } from 'mobx'
+import { List, ListShapeData } from 'models'
 import { IMaterialShapeState } from '../shape_state.interface'
 
 export class ListState implements IMaterialShapeState {

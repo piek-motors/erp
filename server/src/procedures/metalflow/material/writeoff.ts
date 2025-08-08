@@ -1,6 +1,6 @@
 import { db, procedure, publicProcedure, z } from '#root/deps.js'
 import { Warehouse } from '#root/service/warehouse.js'
-import { EnWriteoffReason } from 'domain-model'
+import { EnWriteoffReason } from 'models'
 
 export const writeoffMaterial = procedure
   .input(

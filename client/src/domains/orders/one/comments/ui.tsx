@@ -1,11 +1,11 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import { Box, Button, Card, Divider } from '@mui/joy'
-import { User } from 'domain-model'
 import { DeleteResourceButton, P, Row, text } from 'lib/index'
 import { TComment } from 'lib/types/global'
 import * as gql from 'lib/types/graphql-shema'
 import { observer } from 'mobx-react-lite'
+import { User } from 'models'
 import moment from 'moment'
 import { useRef, useState } from 'react'
 import { orderStore } from '../stores/order.store'

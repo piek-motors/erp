@@ -1,5 +1,5 @@
 {
-  "name": "domain-model",
+  "name": "models",
   "version": "1.0.0",
   "scripts": {
     "barrels:generate": "barrelsby --config barrelsby.json",

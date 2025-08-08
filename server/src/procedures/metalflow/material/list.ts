@@ -1,7 +1,7 @@
 import { db } from '#root/deps.js'
 import { matrixEncoder } from '#root/lib/matrix_encoder.js'
 import { publicProcedure } from '#root/lib/trpc/trpc.js'
-import { EnMaterialShape } from 'domain-model'
+import { EnMaterialShape } from 'models'
 
 export interface ListMaterialsOutput {
   id: number

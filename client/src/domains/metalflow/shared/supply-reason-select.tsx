@@ -1,5 +1,5 @@
-import { EnSupplyReason, UiSupplyReason, uiSupplyReason } from 'domain-model'
 import { observer } from 'mobx-react-lite'
+import { EnSupplyReason, UiSupplyReason, uiSupplyReason } from 'models'
 import { ReasonSelect } from './reason-select'
 
 interface Props {

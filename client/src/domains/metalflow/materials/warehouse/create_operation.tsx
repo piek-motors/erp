@@ -1,8 +1,8 @@
 import { Stack } from '@mui/joy'
-import { EnUnit } from 'domain-model'
 import { QtyInputWithUnit } from 'domains/metalflow/shared'
 import { ExecuteAction, Label, P, Row } from 'lib/index'
 import { observer } from 'mobx-react-lite'
+import { EnUnit } from 'models'
 
 interface Props {
   materialLabel?: string

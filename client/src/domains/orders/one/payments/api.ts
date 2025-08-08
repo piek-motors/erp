@@ -1,6 +1,6 @@
-import { Payment } from 'domain-model'
 import { apolloClient } from 'lib/api'
 import * as gql from 'lib/types/graphql-shema'
+import { Payment } from 'models'
 
 export class PaymentsApi {
   static async load(orderId: number) {

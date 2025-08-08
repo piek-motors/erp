@@ -1,7 +1,7 @@
 import { procedure } from '#root/deps.js'
 import { db } from '#root/ioc/db.js'
 import { router } from '#root/lib/trpc/trpc.js'
-import { UserRole } from 'domain-model'
+import { UserRole } from 'models'
 import z from 'zod'
 import { attachmentRouter } from './attachment/router.js'
 import { attendanceRouter } from './attendance/router.js'

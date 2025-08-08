@@ -1,6 +1,6 @@
 import { AttachmentList } from 'components'
-import { Attachment } from 'domain-model'
 import { observer } from 'lib'
+import { Attachment } from 'models'
 import { detailStore } from '../detail.store'
 
 interface DetailAttachmentListProps {
@@ -31,7 +31,7 @@ export const DetailAttachmentList = observer(
         onDelete={handleDelete}
         onRename={handleRename}
         onUpload={handleUpload}
-        title="Файлы детали"
+        title="Файлы"
       />
     )
   }

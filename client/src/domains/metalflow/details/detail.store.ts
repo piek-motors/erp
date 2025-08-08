@@ -1,9 +1,9 @@
 import { AttachmentsStore } from 'components/attachments/store'
-import { Attachment } from 'domain-model'
 import { cache } from 'domains/metalflow/cache/root'
 import { AsyncStoreController } from 'lib/async-store.controller'
 import { rpc } from 'lib/rpc.client'
 import { makeAutoObservable } from 'mobx'
+import { Attachment } from 'models'
 import { RouterOutput } from 'srv/lib/trpc'
 import { DetailWarehouseStore } from './warehouse/store'
 

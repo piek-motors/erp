@@ -1,6 +1,6 @@
 import { db } from '#root/deps.js'
 import { publicProcedure } from '#root/lib/trpc/trpc.js'
-import { EnMaterialShape, EnUnit } from 'domain-model'
+import { EnMaterialShape, EnUnit } from 'models'
 import { z } from 'zod'
 
 export const updateMaterial = publicProcedure

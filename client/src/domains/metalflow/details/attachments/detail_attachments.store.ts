@@ -1,7 +1,7 @@
-import { Attachment } from 'domain-model'
 import { rpc } from 'lib/rpc.client'
 import { FileService } from 'lib/services/file.service'
 import { makeAutoObservable } from 'mobx'
+import { Attachment } from 'models'
 interface UploadFileResp {
   filename: string
   id: number

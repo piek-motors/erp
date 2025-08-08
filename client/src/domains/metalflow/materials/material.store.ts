@@ -1,3 +1,8 @@
+import { cache } from 'domains/metalflow/cache/root'
+import { map } from 'domains/metalflow/mappers'
+import { AsyncStoreController } from 'lib/async-store.controller'
+import { makeAutoObservable } from 'lib/deps'
+import { rpc } from 'lib/rpc.client'
 import {
   EnMaterialShape,
   EnUnit,
@@ -5,12 +10,7 @@ import {
   Material,
   MaterialShapeAbstractionLayer,
   uiUnit
-} from 'domain-model'
-import { cache } from 'domains/metalflow/cache/root'
-import { map } from 'domains/metalflow/mappers'
-import { AsyncStoreController } from 'lib/async-store.controller'
-import { makeAutoObservable } from 'lib/deps'
-import { rpc } from 'lib/rpc.client'
+} from 'models'
 import { HexagonBarState } from './shape/hexagon_bar.state'
 import { ListState } from './shape/list_state'
 import { PipeState } from './shape/pipe_state'

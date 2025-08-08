@@ -1,5 +1,5 @@
 import { db, procedure, z } from '#root/deps.js'
-import { EnOperationType } from 'domain-model'
+import { EnOperationType } from 'models'
 
 interface StockUpdate {
   table: 'metal_flow.materials' | 'metal_flow.details'

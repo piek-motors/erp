@@ -1,5 +1,5 @@
-import { OrderStatus } from 'domain-model'
 import { makeAutoObservable } from 'mobx'
+import { OrderStatus } from 'models'
 import { ChangeEvent } from 'react'
 
 export class OrderListPageStore {

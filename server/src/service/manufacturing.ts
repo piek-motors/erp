@@ -1,7 +1,7 @@
 import { IDB, TRPCError } from '#root/deps.js'
 import { DB } from 'db'
-import { EnManufacturingOrderStatus, EnWriteoffReason } from 'domain-model'
 import { Selectable } from 'kysely'
+import { EnManufacturingOrderStatus, EnWriteoffReason } from 'models'
 import { Warehouse } from './warehouse.js'
 
 export class Manufacturing {

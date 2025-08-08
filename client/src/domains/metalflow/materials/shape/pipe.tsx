@@ -1,6 +1,6 @@
-import { EnUnit, uiUnit } from 'domain-model'
 import { t } from 'domains/metalflow/text'
 import { Inp, InputStack, observer } from 'lib/index'
+import { EnUnit, uiUnit } from 'models'
 import { material } from '../material.store'
 
 export const PipeMaterialInputBase = observer(() => {

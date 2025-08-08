@@ -1,6 +1,5 @@
-import { HexagonBarShapeData } from 'domain-model'
-import { HexagonBar } from 'domain-model/domain/metal-flow/materials'
 import { makeAutoObservable } from 'mobx'
+import { HexagonBar, HexagonBarShapeData } from 'models'
 import { IMaterialShapeState } from '../shape_state.interface'
 
 export class HexagonBarState implements IMaterialShapeState {

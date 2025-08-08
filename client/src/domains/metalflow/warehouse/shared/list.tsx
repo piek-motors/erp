@@ -1,19 +1,19 @@
 /** @jsxImportSource @emotion/react */
 import { ScrollableWindow } from 'components/inputs/scrollable_window'
 import { Table } from 'components/table.impl'
-import {
-  EnOperationType,
-  EnSupplyReason,
-  EnWriteoffReason,
-  uiSupplyReason,
-  uiWriteoffReason
-} from 'domain-model'
 import { DetailName } from 'domains/metalflow/details/name'
 import { MetalPageTitle } from 'domains/metalflow/shared/basic'
 import { OperationName } from 'domains/metalflow/warehouse/shared/operation_name'
 import { Box, DeleteResourceButton, Label, P } from 'lib/index'
 import { formatDateWithTime } from 'lib/utils/formatting'
 import { observer } from 'mobx-react-lite'
+import {
+  EnOperationType,
+  EnSupplyReason,
+  EnWriteoffReason,
+  uiSupplyReason,
+  uiWriteoffReason
+} from 'models'
 import { useEffect, useMemo, useState } from 'react'
 import { Column } from 'react-table'
 import { Operation, store } from '../store'

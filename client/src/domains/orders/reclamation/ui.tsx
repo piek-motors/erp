@@ -1,11 +1,11 @@
 /** @jsxImportSource @emotion/react */
 import { Box, Card, Stack } from '@mui/joy'
 import { NavigationBar } from 'components'
-import { Order } from 'domain-model'
 import { AddResourceButton, LoadingHint, P, Pre } from 'lib/index'
 import { openOrderDetailPage, routeMap } from 'lib/routes'
 import { RouteConfig } from 'lib/types/global'
 import { observer } from 'mobx-react-lite'
+import { Order } from 'models'
 import { useEffect } from 'react'
 import * as dnd from 'react-beautiful-dnd'
 import { useNavigate } from 'react-router-dom'

@@ -1,8 +1,8 @@
-import { User, UserRole } from 'domain-model'
 import { apolloClient } from 'lib/api/apollo-client'
 import { rpc } from 'lib/rpc.client'
 import * as gql from 'lib/types/graphql-shema'
 import { makeAutoObservable } from 'mobx'
+import { User, UserRole } from 'models'
 
 export class SuggestionsStore {
   constructor() {

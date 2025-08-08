@@ -1,6 +1,6 @@
-import { EnSupplyReason, EnWriteoffReason } from 'domain-model'
 import { rpc } from 'lib/rpc.client'
 import { makeAutoObservable } from 'mobx'
+import { EnSupplyReason, EnWriteoffReason } from 'models'
 
 class Supply {
   constructor() {

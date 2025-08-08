@@ -1,4 +1,3 @@
-import { EnUnit, uiUnit } from 'domain-model'
 import { t } from 'domains/metalflow/text'
 import {
   Button,
@@ -9,6 +8,7 @@ import {
   Row,
   ToggleButtonGroup
 } from 'lib/index'
+import { EnUnit, uiUnit } from 'models'
 import { material } from '../material.store'
 
 export const RoundBarInputBase = observer(() => {

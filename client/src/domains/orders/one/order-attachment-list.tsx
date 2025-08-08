@@ -1,6 +1,6 @@
 import { AttachmentList } from 'components'
-import { Attachment } from 'domain-model'
 import { observer } from 'mobx-react-lite'
+import { Attachment } from 'models'
 import { useEffect } from 'react'
 import { ordersApi } from '../orders.api'
 import { orderStore } from './stores/order.store'

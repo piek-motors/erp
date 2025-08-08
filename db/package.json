@@ -20,7 +20,7 @@
     }
   },
   "peerDependencies": {
-    "domain-model": "workspace:*"
+    "models": "workspace:*"
   },
   "types": "./dist/index.d.ts",
   "dependencies": {

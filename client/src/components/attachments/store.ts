@@ -1,6 +1,6 @@
-import { Attachment } from 'domain-model'
 import { makeAutoObservable, rpc } from 'lib/deps'
 import { FileService } from 'lib/services/file.service'
+import { Attachment } from 'models'
 
 interface UploadFileResp {
   filename: string

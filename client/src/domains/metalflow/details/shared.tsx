@@ -3,7 +3,6 @@ import { UilMinus } from '@iconscout/react-unicons'
 import { Divider, IconButton, Stack } from '@mui/joy'
 import { BaseAutocomplete, BaseOption } from 'components/base-autocomplete'
 import { JsonEditor } from 'components/json-editor'
-import { EnUnit } from 'domain-model'
 import { cache } from 'domains/metalflow/cache/root'
 import { QtyInputWithUnit } from 'domains/metalflow/shared'
 import { TextEditor } from 'domains/orders/one/comments/text-editor'
@@ -18,6 +17,7 @@ import {
   UseIcon,
   observer
 } from 'lib/index'
+import { EnUnit } from 'models'
 import { MaterialAutocomplete } from '../shared/material_autocomplete'
 import { MaterialCost, detailStore } from './detail.store'
 

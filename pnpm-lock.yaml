@@ -86,9 +86,6 @@ importers:
       class-transformer:
         specifier: ^0.5.1
         version: 0.5.1
-      domain-model:
-        specifier: workspace:*
-        version: link:../domain-model
       env-cmd:
         specifier: ^10.1.0
         version: 10.1.0
@@ -110,6 +107,9 @@ importers:
       mobx-react-lite:
         specifier: ^4.1.0
         version: 4.1.0(mobx@6.13.7)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      models:
+        specifier: workspace:*
+        version: link:../models
       moment:
         specifier: ^2.30.1
         version: 2.30.1
@@ -192,15 +192,15 @@ importers:
       commander:
         specifier: ^13.1.0
         version: 13.1.0
-      domain-model:
-        specifier: workspace:*
-        version: link:../domain-model
       dotenv:
         specifier: ^10.0.0
         version: 10.0.0
       kysely:
         specifier: ^0.27.6
         version: 0.27.6
+      models:
+        specifier: workspace:*
+        version: link:../models
       pg:
         specifier: ^8.14.1
         version: 8.16.0
@@ -218,7 +218,7 @@ importers:
         specifier: ^5.8.2
         version: 5.8.3
 
-  domain-model:
+  models:
     dependencies:
       class-transformer:
         specifier: ^0.5.1
@@ -260,9 +260,6 @@ importers:
       db:
         specifier: workspace:*
         version: link:../db
-      domain-model:
-        specifier: workspace:*
-        version: link:../domain-model
       dotenv:
         specifier: ^16.5.0
         version: 16.5.0
@@ -284,6 +281,9 @@ importers:
       kysely:
         specifier: ^0.27.6
         version: 0.27.6
+      models:
+        specifier: workspace:*
+        version: link:../models
       moment:
         specifier: ^2.30.1
         version: 2.30.1

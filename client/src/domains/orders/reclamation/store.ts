@@ -1,7 +1,7 @@
-import { Order, OrderStatus } from 'domain-model'
 import { apolloClient } from 'lib/api'
 import * as gql from 'lib/types/graphql-shema'
 import { makeAutoObservable } from 'mobx'
+import { Order, OrderStatus } from 'models'
 import { map } from '../order.mappers'
 
 export type ColocatedStateKey = 'inbox' | 'decision' | 'inproduction'

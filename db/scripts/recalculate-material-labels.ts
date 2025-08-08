@@ -1,10 +1,10 @@
+import dotenv from 'dotenv'
+import { sql } from 'kysely'
 import {
   getMaterialConstructor,
   Material,
   MaterialShapeAbstractionLayer
-} from 'domain-model'
-import dotenv from 'dotenv'
-import { sql } from 'kysely'
+} from 'models'
 import { KDB } from 'schema'
 import { connect } from '../connect'
 

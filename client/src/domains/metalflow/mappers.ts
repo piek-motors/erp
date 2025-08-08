@@ -2,7 +2,7 @@ import {
   getMaterialConstructor,
   Material,
   MaterialShapeAbstractionLayer
-} from 'domain-model'
+} from 'models'
 
 // @ts-ignore
 import { RouterOutput } from 'srv/lib/trpc'

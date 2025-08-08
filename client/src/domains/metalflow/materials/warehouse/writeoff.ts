@@ -1,5 +1,5 @@
-import { EnWriteoffReason, WriteoffDirectUnit } from 'domain-model'
 import { makeAutoObservable, rpc } from 'lib/deps'
+import { EnWriteoffReason, WriteoffDirectUnit } from 'models'
 
 export class MaterialWriteoffState {
   length = ''

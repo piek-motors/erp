@@ -1,4 +1,12 @@
 import {
+  type Generated,
+  type GeneratedAlways,
+  type JSONColumnType,
+  type Kysely,
+  type Selectable as KyselySelectable,
+  type Updateable as KyselyUpdateable
+} from 'kysely'
+import {
   EnManufacturingOrderStatus,
   EnMaterialShape,
   EnOperationType,
@@ -7,15 +15,7 @@ import {
   EnWriteoffReason,
   OrderStatus,
   UserRole
-} from 'domain-model'
-import {
-  type Generated,
-  type GeneratedAlways,
-  type JSONColumnType,
-  type Kysely,
-  type Selectable as KyselySelectable,
-  type Updateable as KyselyUpdateable
-} from 'kysely'
+} from 'models'
 
 export type KDB = Kysely<DB.Schema>
 export type Selectable<T> = KyselySelectable<T>

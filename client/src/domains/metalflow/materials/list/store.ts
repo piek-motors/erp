@@ -1,7 +1,7 @@
-import { EnMaterialShape } from 'domain-model'
 import { cache } from 'domains/metalflow/cache/root'
 import { AsyncStoreController } from 'lib/async-store.controller'
 import { makeAutoObservable } from 'mobx'
+import { EnMaterialShape } from 'models'
 import { ListMaterialsOutput } from 'srv/procedures/metalflow/material/list'
 import { MaterialSupplyStore } from '../warehouse/supply'
 

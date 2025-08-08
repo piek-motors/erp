@@ -1,5 +1,5 @@
 import { IDB, TRPCError } from '#root/deps.js'
-import { EnOperationType, EnSupplyReason, EnWriteoffReason } from 'domain-model'
+import { EnOperationType, EnSupplyReason, EnWriteoffReason } from 'models'
 
 export class Warehouse {
   constructor(private readonly trx: IDB, private readonly userId: number) {}

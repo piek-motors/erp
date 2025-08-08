@@ -1,6 +1,6 @@
 import { InputProps, Stack } from '@mui/joy'
-import { uiUnit } from 'domain-model'
 import { Inp, P } from 'lib/index'
+import { uiUnit } from 'models'
 
 export const QtyInputWithUnit = (props: {
   unitId?: number

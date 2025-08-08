@@ -1,8 +1,4 @@
 import { Box, Card, Divider } from '@mui/joy'
-import {
-  EnManufacturingOrderStatus,
-  uiManufacturingOrderStatus
-} from 'domain-model'
 import { DetailName } from 'domains/metalflow/details/name'
 import { MaterialName } from 'domains/metalflow/shared'
 import { MetalPageTitle } from 'domains/metalflow/shared/basic'
@@ -24,6 +20,7 @@ import {
   useParams
 } from 'lib/index'
 import { formatDateWithTime } from 'lib/utils/formatting'
+import { EnManufacturingOrderStatus, uiManufacturingOrderStatus } from 'models'
 import { DetailMaterialOutput, store } from './order.store'
 
 export const ManufacturingUpdatePage = observer(() => {

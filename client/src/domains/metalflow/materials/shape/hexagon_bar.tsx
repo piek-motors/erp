@@ -1,7 +1,7 @@
-import { EnUnit, uiUnit } from 'domain-model'
 import { t } from 'domains/metalflow/text'
 import { observer } from 'lib/deps'
 import { Inp, InputStack } from 'lib/index'
+import { EnUnit, uiUnit } from 'models'
 import { material } from '../material.store'
 
 export const HexagonBarMaterialInputBase = observer(() => {

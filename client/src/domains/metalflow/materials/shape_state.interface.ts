@@ -1,4 +1,4 @@
-import { Material } from 'domain-model'
+import { Material } from 'models'
 
 export interface IMaterialShapeState {
   export(): unknown

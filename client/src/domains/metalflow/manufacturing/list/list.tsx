@@ -1,9 +1,5 @@
 import { ScrollableWindow } from 'components/inputs'
 import { Table } from 'components/table.impl'
-import {
-  EnManufacturingOrderStatus,
-  uiManufacturingOrderStatus
-} from 'domain-model'
 import { DetailName } from 'domains/metalflow/details/name'
 import { MetalPageTitle } from 'domains/metalflow/shared/basic'
 import { observer } from 'lib/deps'
@@ -17,6 +13,7 @@ import {
   useEffect,
   useNavigate
 } from 'lib/index'
+import { EnManufacturingOrderStatus, uiManufacturingOrderStatus } from 'models'
 import { Column } from 'react-table'
 import { ManufactoringListOutput, ManufacturingListStore } from './list_store'
 

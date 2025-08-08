@@ -1,6 +1,6 @@
 import axios from 'axios'
-import { User } from 'domain-model'
 import { makeAutoObservable } from 'mobx'
+import { User } from 'models'
 import { API_URL } from '../api/axios'
 import { AuthService } from '../services/auth.service'
 

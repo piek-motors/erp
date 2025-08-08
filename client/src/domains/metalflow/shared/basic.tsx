@@ -5,7 +5,7 @@ import {
   Stack,
   ToggleButtonGroup
 } from '@mui/joy'
-import { EnUnit, UiUnit } from 'domain-model'
+import { EnUnit, UiUnit } from 'models'
 
 export function WorkPage(props: ContainerProps) {
   return (

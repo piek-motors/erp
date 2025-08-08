@@ -1,5 +1,5 @@
-import { RoundBar, RoundBarShapeData } from 'domain-model'
 import { makeAutoObservable } from 'mobx'
+import { RoundBar, RoundBarShapeData } from 'models'
 import { IMaterialShapeState } from '../shape_state.interface'
 
 export class RoundBarState implements IMaterialShapeState {

@@ -6,7 +6,7 @@ import {
   EnUnit,
   MaterialConstructorMap,
   MaterialShapeAbstractionLayer
-} from 'domain-model'
+} from 'models'
 import { z } from 'zod'
 
 export const createMaterial = publicProcedure

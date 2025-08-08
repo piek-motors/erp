@@ -1,5 +1,5 @@
-import { UserRole } from 'domain-model'
 import { sql } from 'kysely'
+import { UserRole } from 'models'
 import { type KDB } from '../schema'
 
 export async function up(db: KDB): Promise<void> {

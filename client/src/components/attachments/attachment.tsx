@@ -7,8 +7,8 @@ import {
   UilPen
 } from '@iconscout/react-unicons'
 import { Button, Dropdown, Menu, MenuButton, MenuItem, Stack } from '@mui/joy'
-import { Attachment } from 'domain-model'
 import { DeleteResourceButton, Inp, P, Row, UseIcon, useState } from 'lib/index'
+import { Attachment } from 'models'
 
 export const AttachmentComponent = (props: {
   attachment: Attachment
