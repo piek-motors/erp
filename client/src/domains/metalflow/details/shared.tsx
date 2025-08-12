@@ -1,6 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { UilMinus } from '@iconscout/react-unicons'
 import { Divider, IconButton, Stack } from '@mui/joy'
+import { ArrayJsonEditor } from 'components/array-json-editor'
 import { BaseAutocomplete, BaseOption } from 'components/base-autocomplete'
 import { JsonEditor } from 'components/json-editor'
 import { cache } from 'domains/metalflow/cache/root'
@@ -128,18 +129,6 @@ export const DetailDrawingNameInput = observer(() => {
   )
 })
 
-export const DetailProcessingRouteInput = observer(() => (
-  <Box>
-    <Label>Маршрут обработки</Label>
-    <TextEditor
-      defaultValue={detailStore.processingRoute}
-      onChange={content => {
-        detailStore.setProcessingRoute(content)
-      }}
-    />
-  </Box>
-))
-
 export const DetailDescriptionInput = observer(() => (
   <Box>
     <Label>Примечания в свободной форме</Label>
@@ -205,5 +194,30 @@ export const DetailParamsInput = observer(() => (
       keyPlaceholder="Параметр"
       valuePlaceholder="Значение"
     />
+  </Box>
+))
+
+export const DetailProcessingRouteInput = observer(() => (
+  <Box>
+    <Label>Маршрут обработки</Label>
+    <Sheet sx={{ borderRadius: 'sm', p: 1 }}>
+      <ArrayJsonEditor
+        value={
+          detailStore.processingRoute?.steps.map(e => ({
+            name: e.name,
+            dur: e.dur
+          })) ?? null
+        }
+        placeholder={{
+          name: '',
+          dur: null
+        }}
+        onChange={steps =>
+          detailStore.setProcessingRoute(steps ? { steps } : null)
+        }
+        placeholders={['Операция', 'мин']}
+        width={[80, 20]}
+      />
+    </Sheet>
   </Box>
 ))

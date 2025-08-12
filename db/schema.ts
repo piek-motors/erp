@@ -95,8 +95,19 @@ export namespace DB {
     stock: number
     params: JSONColumnType<any, any, any>
     updated_at: Date
-    processing_route: string | null
+    processing_route: JSONColumnType<
+      ProcessingRoute,
+      ProcessingRoute,
+      ProcessingRoute
+    > | null
     drawing_name: string | null
+  }
+
+  export interface ProcessingRoute {
+    steps: {
+      name: string
+      dur: number
+    }[]
   }
 
   interface MetarialWiteoffData {

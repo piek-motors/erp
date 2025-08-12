@@ -200,7 +200,7 @@ export function AddResourceButton(props: {
 
 export function PlusIcon(props: IconButtonProps) {
   return (
-    <IconButton variant="soft" color="primary" {...props}>
+    <IconButton variant="soft" color="primary" {...props} size="sm">
       <UseIcon icon={UilPlusCircle} />
     </IconButton>
   )

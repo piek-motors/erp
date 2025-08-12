@@ -38,6 +38,13 @@ export class MaterialCost {
   }
 }
 
+interface ProcessingRoute {
+  steps: {
+    name: string
+    dur: number
+  }[]
+}
+
 export class Detail {
   readonly async = new AsyncStoreController()
   readonly warehouse = new DetailWarehouseStore()
@@ -70,8 +77,8 @@ export class Detail {
   setDrawingNumber(drawingNumber: string) {
     this.drawingNumber = drawingNumber
   }
-  processingRoute: string = ''
-  setProcessingRoute(route: string) {
+  processingRoute: ProcessingRoute | null = null
+  setProcessingRoute(route: ProcessingRoute | null) {
     this.processingRoute = route
   }
   technicalParameters: Record<string, any> | null = null
@@ -116,7 +123,7 @@ export class Detail {
     updatedAt?: Date
     lastManufacturingDate?: Date
     lastManufacturingQty?: number
-    processingRoute?: string | null
+    processingRoute?: ProcessingRoute
     drawingName?: string | null
   }) {
     if (init) {
@@ -131,7 +138,7 @@ export class Detail {
       this.updatedAt = init.updatedAt
       this.lastManufacturingDate = init.lastManufacturingDate
       this.lastManufacturingQty = init.lastManufacturingQty
-      this.processingRoute = init.processingRoute ?? ''
+      this.processingRoute = init.processingRoute ?? null
       this.drawingName = init.drawingName ?? ''
     }
     makeAutoObservable(this)
@@ -146,7 +153,7 @@ export class Detail {
     this.setDescription(d.description ?? '')
     this.setStock(d.stock)
     this.setUpdatedAt(d.updated_at ? new Date(d.updated_at) : undefined)
-    this.setProcessingRoute(d.processing_route ?? '')
+    this.setProcessingRoute(d.processing_route ?? null)
     this.setDrawingName(d.drawing_name ?? '')
   }
 
@@ -163,7 +170,7 @@ export class Detail {
     this.updatedAt = undefined
     this.lastManufacturingDate = undefined
     this.lastManufacturingQty = undefined
-    this.processingRoute = ''
+    this.processingRoute = null
     this.drawingName = ''
   }
 
@@ -240,7 +247,7 @@ export class Detail {
       materialRelations,
       groupId: this.groupId ?? null,
       params: this.technicalParameters,
-      processingRoute: this.processingRoute,
+      processingRoute: this.serializeProcessingRoute(this.processingRoute),
       drawingName: this.drawingName
     })
     await cache.details.load()
@@ -263,11 +270,22 @@ export class Detail {
       groupId: this.groupId ?? null,
       materialRelations,
       params: this.technicalParameters,
-      processingRoute: this.processingRoute,
+      processingRoute: this.serializeProcessingRoute(this.processingRoute),
       drawingName: this.drawingName
     })
     await cache.details.load()
     return res
+  }
+
+  private serializeProcessingRoute(route: ProcessingRoute | null) {
+    return route
+      ? {
+          steps: route.steps.map(s => ({
+            name: s.name,
+            dur: +s.dur
+          }))
+        }
+      : null
   }
 
   async delete() {

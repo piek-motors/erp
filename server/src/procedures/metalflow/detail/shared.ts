@@ -18,6 +18,15 @@ export const materialRelationSchema = z.object({
   length: z.string()
 })
 
+export const processingRouteSchema = z.object({
+  steps: z.array(
+    z.object({
+      name: z.string(),
+      dur: z.number()
+    })
+  )
+})
+
 export const detailBaseSchema = z.object({
   name: z.string().min(5, 'Название должно быть не менее 5 символов'),
   description: z.string().nullable(),
@@ -25,7 +34,7 @@ export const detailBaseSchema = z.object({
   groupId: z.number().nullable(),
   params: z.record(z.any()).nullable(),
   materialRelations: z.array(materialRelationSchema),
-  processingRoute: z.string().nullable(),
+  processingRoute: processingRouteSchema.nullable(),
   drawingName: z.string().nullable()
 })
 
