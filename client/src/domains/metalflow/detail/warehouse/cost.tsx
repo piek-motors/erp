@@ -1,22 +1,14 @@
 import { UilMinus } from '@iconscout/react-unicons'
 import { Divider, IconButton, Stack } from '@mui/joy'
 import { AccordionCard } from 'components/accordion_card'
+import { cache } from 'domains/metalflow/cache/root'
 import { QtyInputWithUnit } from 'domains/metalflow/shared'
-import {
-  Box,
-  Label,
-  P,
-  PlusIcon,
-  Row,
-  Sheet,
-  UseIcon,
-  observer
-} from 'lib/index'
+import { Box, Label, PlusIcon, Row, Sheet, UseIcon, observer } from 'lib/index'
 import { EnUnit } from 'models'
-import { cache } from '../../cache/root'
 import { api } from '../api'
 import { MaterialSelect } from '../components'
 import { DetailSelectModal } from '../list/list'
+import { DetailName } from '../name'
 
 interface CostRowProps {
   children: React.ReactNode
@@ -100,36 +92,45 @@ export const DetailCostInputs = observer(() => (
     label="Расход деталей"
     handleAdd={() => api.detail.autoWriteoff.insertDetail()}
   >
-    {api.detail.autoWriteoff.detailsCost.map((cost, index) => (
-      <CostRow
-        key={index}
-        onDelete={() => api.detail.autoWriteoff.deleteDetail(cost.detailId)}
-        qtyInput={
-          <QtyInputWithUnit
-            size="sm"
-            sx={{ width: '80px' }}
-            unitId={EnUnit.Countable}
-            value={cost.qty}
-            setValue={v => {
-              cost.setQty(v)
-            }}
-          />
-        }
-      >
-        {cost.detailId ? (
-          <P>
-            <Label>{cost.detailId}</Label>{' '}
-            {cache.details.getLabel(cost.detailId) ?? 'Выберите деталь'}
-          </P>
-        ) : (
+    {api.detail.autoWriteoff.detailsCost.map((cost, index) => {
+      const detail = cache.details.get(cost.detailId)
+      if (!detail) {
+        return (
           <DetailSelectModal
             onRowClick={detail => {
               cost.setDetailId(detail.id!)
             }}
           />
-        )}
-      </CostRow>
-    ))}
+        )
+      }
+      return (
+        <CostRow
+          key={index}
+          onDelete={() => api.detail.autoWriteoff.deleteDetail(cost.detailId)}
+          qtyInput={
+            <QtyInputWithUnit
+              size="sm"
+              sx={{ width: '80px' }}
+              value={cost.qty}
+              setValue={v => {
+                cost.setQty(v)
+              }}
+            />
+          }
+        >
+          <DetailName
+            detail={{
+              id: detail.id ?? 0,
+              name: detail.name,
+              group_id: detail.groupId ?? 0
+            }}
+            withLink
+            withGroupLink
+            withParamsButton
+          />
+        </CostRow>
+      )
+    })}
   </Base>
 ))
 
