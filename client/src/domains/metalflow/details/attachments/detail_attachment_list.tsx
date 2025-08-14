@@ -1,7 +1,7 @@
 import { AttachmentList } from 'components'
 import { observer } from 'lib'
 import { Attachment } from 'models'
-import { detailStore } from '../detail.store'
+import { detailStore } from '../store'
 
 interface DetailAttachmentListProps {
   detailId: number

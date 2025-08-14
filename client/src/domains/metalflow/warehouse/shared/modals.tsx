@@ -2,7 +2,8 @@ import { InModal } from 'components/modal'
 import { MetalPageTitle } from 'domains/metalflow/shared'
 import { Btn, Stack } from 'lib/index'
 import { observer } from 'mobx-react-lite'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useState } from 'react'
+import { useEscapeClose } from './use-escape-close'
 
 type OperationModalProps = {
   children: React.ReactNode
@@ -14,24 +15,15 @@ const OperationModal = observer(
   ({ children, buttonLabel, buttonColor }: OperationModalProps) => {
     const [open, setOpen] = useState(false)
 
-    const handleKeyDown = useCallback(
-      (e: KeyboardEvent) => {
-        if (e.key === 'Escape' && open) {
-          setOpen(false)
-        }
-      },
-      [open]
-    )
+    const handleClose = useCallback(() => {
+      setOpen(false)
+    }, [])
 
-    useEffect(() => {
-      if (open) {
-        window.addEventListener('keydown', handleKeyDown)
-        return () => window.removeEventListener('keydown', handleKeyDown)
-      }
-    }, [open, handleKeyDown])
+    useEscapeClose(open, handleClose)
 
     return (
       <InModal
+        size="sm"
         openButton={
           <Btn variant="soft" color={buttonColor}>
             {buttonLabel}
@@ -47,13 +39,18 @@ const OperationModal = observer(
 )
 
 import { Button } from '@mui/joy'
-import { OperationsList } from './list'
+import { OperationsList } from '../list'
 
 export const OperationsListModal = observer(
   (props: { materialId?: number; detailId?: number }) => {
     const [open, setOpen] = useState(false)
+    const handleClose = useCallback(() => {
+      setOpen(false)
+    }, [])
+    useEscapeClose(open, handleClose)
     return (
       <InModal
+        size="sm"
         open={open}
         setOpen={open => {
           setOpen(open)
@@ -77,7 +74,9 @@ export const WriteoffModal = observer(
   (props: { children: React.ReactNode }) => (
     <OperationModal buttonLabel="Списание" buttonColor="danger">
       <MetalPageTitle t="Списание" />
-      <Stack gap={2}>{props.children}</Stack>
+      <Stack gap={1} my={1}>
+        {props.children}
+      </Stack>
     </OperationModal>
   )
 )
@@ -85,6 +84,8 @@ export const WriteoffModal = observer(
 export const SupplyModal = observer((props: { children: React.ReactNode }) => (
   <OperationModal buttonLabel="Поставка" buttonColor="success">
     <MetalPageTitle t="Поставка" />
-    <Stack gap={2}>{props.children}</Stack>
+    <Stack gap={1} my={1}>
+      {props.children}
+    </Stack>
   </OperationModal>
 ))

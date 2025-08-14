@@ -4,7 +4,8 @@ import { AsyncStoreController } from 'lib/async-store.controller'
 import { rpc } from 'lib/rpc.client'
 import { makeAutoObservable } from 'mobx'
 import { Attachment } from 'models'
-import { RouterOutput } from 'srv/lib/trpc'
+import { RouterInput, RouterOutput } from 'srv/lib/trpc'
+import { DetailCost, MaterialCost } from './cost.store'
 import { DetailWarehouseStore } from './warehouse/store'
 
 type MaterialRelationData = {
@@ -12,37 +13,17 @@ type MaterialRelationData = {
 }
 
 type DetailResponse = RouterOutput['metal']['details']['get']['detail']
-export class MaterialCost {
-  materialId!: number
-  setMaterialId(materialId: number) {
-    this.materialId = materialId
-  }
-  materialLabel!: string
-  setMaterialLabel(materialLabel: string) {
-    this.materialLabel = materialLabel
-  }
-  length!: string
-  setLength(length: string) {
-    this.length = length
-  }
-  constructor(init: {
-    materialId: number
-    label: string
-    weight?: string
-    length?: string
-  }) {
-    this.materialId = init.materialId
-    this.materialLabel = init.label
-    this.length = init.length ?? ''
-    makeAutoObservable(this)
-  }
-}
+type UpdateDetailRequest = RouterInput['metal']['details']['update']
 
 interface ProcessingRoute {
   steps: {
     name: string
     dur: number
   }[]
+}
+
+type TechicalParameters = {
+  arr: { key: string; value: any }[]
 }
 
 export class Detail {
@@ -56,10 +37,6 @@ export class Detail {
   name: string = ''
   setName(name: string) {
     this.name = name
-  }
-  stock!: number
-  setStock(stock: number) {
-    this.stock = stock
   }
   description: string = ''
   setDescription(description: string) {
@@ -81,8 +58,8 @@ export class Detail {
   setProcessingRoute(route: ProcessingRoute | null) {
     this.processingRoute = route
   }
-  technicalParameters: Record<string, any> | null = null
-  setTechnicalParameters(params: Record<string, any> | null) {
+  technicalParameters: TechicalParameters | null = null
+  setTechnicalParameters(params: TechicalParameters | null) {
     this.technicalParameters = params
   }
   updatedAt?: Date
@@ -97,9 +74,13 @@ export class Detail {
   setLastManufacturingQty(qty: number | undefined) {
     this.lastManufacturingQty = qty
   }
-  usedMaterials: MaterialCost[] = []
-  setUsedMaterials(materials: MaterialCost[]) {
-    this.usedMaterials = materials
+  detailsCost: DetailCost[] = []
+  setDetailCost(details?: DetailCost[]) {
+    this.detailsCost = details || []
+  }
+  materialsCost: MaterialCost[] = []
+  setMaterialCost(materials: MaterialCost[]) {
+    this.materialsCost = materials
   }
   recentlyAdded?: number
   setRecentlyAdded(id: number) {
@@ -113,28 +94,29 @@ export class Detail {
 
   constructor(init?: {
     id?: number
-    name: string
-    description?: string
-    partCode: string
+    name?: string
+    description?: string | null
+    partCode?: string | null
     usedMaterials?: MaterialCost[]
-    stock: number
-    groupId: number | null
-    params?: Record<string, any> | null
+    usedDetails?: DetailCost[]
+    stock?: number
+    groupId?: number | null
+    technicalParameters?: TechicalParameters | null
     updatedAt?: Date
     lastManufacturingDate?: Date
     lastManufacturingQty?: number
-    processingRoute?: ProcessingRoute
+    processingRoute?: ProcessingRoute | null
     drawingName?: string | null
   }) {
     if (init) {
       this.id = init.id
-      this.name = init.name
+      this.name = init.name ?? ''
       this.description = init.description ?? ''
-      this.drawingNumber = init.partCode
-      this.usedMaterials = init.usedMaterials || []
+      this.drawingNumber = init.partCode ?? ''
+      this.materialsCost = init.usedMaterials || []
+      this.detailsCost = init.usedDetails || []
       this.groupId = init.groupId ?? null
-      this.stock = init.stock
-      this.technicalParameters = init.params ?? null
+      this.technicalParameters = init.technicalParameters ?? null
       this.updatedAt = init.updatedAt
       this.lastManufacturingDate = init.lastManufacturingDate
       this.lastManufacturingQty = init.lastManufacturingQty
@@ -151,17 +133,21 @@ export class Detail {
     this.setGroupId(d.logical_group_id ?? null)
     this.setTechnicalParameters(d.params ?? null)
     this.setDescription(d.description ?? '')
-    this.setStock(d.stock)
+    this.warehouse.setStock(d.stock)
     this.setUpdatedAt(d.updated_at ? new Date(d.updated_at) : undefined)
     this.setProcessingRoute(d.processing_route ?? null)
     this.setDrawingName(d.drawing_name ?? '')
+    this.setDetailCost(
+      d.automatic_writeoff?.details.map(d => new DetailCost(d))
+    )
   }
 
   reset() {
     this.id = undefined
     this.name = ''
     this.description = ''
-    this.usedMaterials = []
+    this.materialsCost = []
+    this.detailsCost = []
     this.recentlyAdded = undefined
     this.recentlyUpdated = undefined
     this.groupId = undefined
@@ -174,29 +160,24 @@ export class Detail {
     this.drawingName = ''
   }
 
-  addMaterial(
-    material: { id: number; label: string },
-    data: MaterialRelationData
-  ) {
-    const m = new MaterialCost({
-      materialId: material.id,
-      label: material.label,
-      length: data.length
-    })
-    this.usedMaterials.push(m)
+  newMaterialCost() {
+    this.materialsCost.push(new MaterialCost())
+  }
+
+  newDetailCost() {
+    this.detailsCost.push(new DetailCost())
   }
 
   updateMaterialRelation(
     index: number,
-    material: { id: number; label: string },
+    material: { id: number },
     data: MaterialRelationData
   ) {
-    const m = this.usedMaterials[index]
+    const m = this.materialsCost[index]
     if (!m) {
-      this.addMaterial(material, data)
+      this.newMaterialCost()
       return
     }
-    m.setMaterialLabel(material.label)
     m.setMaterialId(material.id)
     m.setLength(data.length)
   }
@@ -213,15 +194,6 @@ export class Detail {
     )
     this.setLastManufacturingQty(d.last_manufacturing?.qty)
 
-    d.detail_materials.forEach((dm, index) => {
-      this.addMaterial(
-        { id: dm.material_id, label: dm.label ?? '' },
-        {
-          length: dm.data.length.toString()
-        }
-      )
-    })
-
     this.attachments.setFiles(
       d.attachments.map(
         a =>
@@ -236,52 +208,58 @@ export class Detail {
   }
 
   async insert() {
-    const materialRelations = this.usedMaterials.map(m => ({
-      materialId: m.materialId,
-      length: m.length
-    }))
-    const res = await rpc.metal.details.create.mutate({
-      name: this.name.trim(),
-      description: this.description,
-      partCode: this.drawingNumber.trim(),
-      materialRelations,
-      groupId: this.groupId ?? null,
-      params: this.technicalParameters,
-      processingRoute: this.serializeProcessingRoute(this.processingRoute),
-      drawingName: this.drawingName
-    })
+    const payload = this.createPayload()
+    const res = await rpc.metal.details.create.mutate(payload)
     await cache.details.load()
     return res
   }
 
   async update() {
-    if (!this.id) {
-      throw new Error('Detail id is not set')
-    }
-    const materialRelations = this.usedMaterials.map(m => ({
-      materialId: m.materialId,
-      length: m.length
-    }))
-    const res = await rpc.metal.details.update.mutate({
-      id: this.id,
-      description: this.description,
-      name: this.name,
-      partCode: this.drawingNumber,
-      groupId: this.groupId ?? null,
-      materialRelations,
-      params: this.technicalParameters,
-      processingRoute: this.serializeProcessingRoute(this.processingRoute),
-      drawingName: this.drawingName
-    })
+    const payload = this.createPayload()
+    const res = await rpc.metal.details.update.mutate(payload)
     await cache.details.load()
     return res
   }
 
+  private createPayload(): UpdateDetailRequest {
+    const technicalParams =
+      this.technicalParameters?.arr?.map(({ key, value }) => ({
+        key: key.trim(),
+        value: value.trim()
+      })) || []
+
+    return {
+      id: this.id ?? 0,
+      description: this.description,
+      name: this.name,
+      partCode: this.drawingNumber,
+      groupId: this.groupId ?? null,
+      technicalParams: {
+        arr: technicalParams ?? []
+      },
+      processingRoute: this.serializeProcessingRoute(this.processingRoute),
+      drawingName: this.drawingName,
+      automaticWriteoff: {
+        details: this.detailsCost.map(d => ({
+          detail_id: d.detailId,
+          qty: +d.qty
+        })),
+        materials: this.materialsCost.map(m => ({
+          material_id: m.materialId,
+          length: +m.length
+        }))
+      }
+    }
+  }
+
   private serializeProcessingRoute(route: ProcessingRoute | null) {
+    if (!route?.steps || route.steps.length === 0) {
+      return null
+    }
     return route
       ? {
           steps: route.steps.map(s => ({
-            name: s.name,
+            name: s.name?.trim(),
             dur: +s.dur
           }))
         }
@@ -297,7 +275,7 @@ export class Detail {
     this.reset()
   }
 
-  async deleteDetailMaterial(materialId: number) {
+  async deleteMaterialCost(materialId: number) {
     if (!this.id) {
       throw new Error('Detail id is not set')
     }
@@ -305,17 +283,29 @@ export class Detail {
       detailId: this.id,
       materialId
     })
-    const newMaterials = this.usedMaterials.filter(
+    const newMaterials = this.materialsCost.filter(
       m => m.materialId !== materialId
     )
-    this.setUsedMaterials(newMaterials)
+    this.setMaterialCost(newMaterials)
+  }
+
+  async deleteDetailCost(detailId: number) {
+    if (!this.id) {
+      throw new Error('Detail id is not set')
+    }
+    // TODO: Implement server-side deletion
+    // await rpc.metal.details.deleteDetailRelation.mutate({
+    //   detailId: this.id,
+    //   usedDetailId: detailId
+    // })
+    const newDetails = this.detailsCost.filter(d => d.detailId !== detailId)
+    this.setDetailCost(newDetails)
   }
 
   async createManufacturingOrder() {
-    const r = await rpc.metal.manufacturing.create.mutate({
+    return rpc.metal.manufacturing.create.mutate({
       detailId: this.id!
     })
-    return r
   }
 }
 

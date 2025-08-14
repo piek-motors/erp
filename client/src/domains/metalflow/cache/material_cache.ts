@@ -8,6 +8,13 @@ export class MaterialCache {
   setMaterials(materials: ListMaterialsOutput[]) {
     this.materials = materials
   }
+  get(id: number): ListMaterialsOutput | undefined {
+    return this.materials.find(material => material.id === id)
+  }
+  getLabel(id: number): string {
+    const material = this.get(id)
+    return material ? material.label : '＼（´Ｏ｀）／'
+  }
   getMaterials() {
     return this.materials
   }

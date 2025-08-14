@@ -1,4 +1,4 @@
-import { Box, Stack } from '@mui/joy'
+import { Box, Sheet, Stack } from '@mui/joy'
 import { MetalPageTitle, SaveAndDelete } from 'domains/metalflow/shared/basic'
 import {
   Loading,
@@ -14,8 +14,8 @@ import {
 import { formatDetailDate } from 'lib/utils/formatting'
 import { DetailAttachmentList } from './attachments/detail_attachment_list'
 import { CreateManufacturingOrder } from './create_manufacturing_order'
-import { detailStore } from './detail.store'
 import { DetailInputs } from './shared'
+import { detailStore } from './store'
 import { DetailWarehouse } from './warehouse/ui'
 
 export const UpdateDetailPage = observer(() => {
@@ -37,7 +37,7 @@ export const UpdateDetailPage = observer(() => {
   return (
     <Stack gap={1} p={1}>
       <MetalPageTitle t={`Деталь #${detailStore.id} - ${detailStore.name}`} />
-      <RowButColumsAtSm gap={1}>
+      <RowButColumsAtSm gap={1} flexGrow={4}>
         <DetailWarehouse />
         <Stack gap={2} sx={{ flex: 1 }}>
           <CreateManufacturingOrder />
@@ -59,8 +59,10 @@ export const UpdateDetailPage = observer(() => {
             />
           </Box>
         </Stack>
-        <Stack gap={1} sx={{ flex: 1 }}>
-          <DetailAttachmentList detailId={detailId} />
+        <Stack gap={1} sx={{ flex: 0 }}>
+          <Sheet sx={{ p: 1, borderRadius: 'sm' }}>
+            <DetailAttachmentList detailId={detailId} />
+          </Sheet>
         </Stack>
       </RowButColumsAtSm>
     </Stack>

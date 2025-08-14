@@ -5,7 +5,7 @@ import { DetailName } from 'domains/metalflow/details/name'
 import { Link, Loading, observer, P, Stack } from 'lib/index'
 import { open, routeMap } from 'lib/routes'
 import { detailList } from './detail_list_store'
-import { material } from './material.store'
+import { material } from './store'
 
 export const DetailsMadeOfMaterialModal = observer(() => {
   if (!material.id) return null

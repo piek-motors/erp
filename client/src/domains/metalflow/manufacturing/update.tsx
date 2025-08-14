@@ -21,7 +21,10 @@ import {
 } from 'lib/index'
 import { formatDateWithTime } from 'lib/utils/formatting'
 import { EnManufacturingOrderStatus, uiManufacturingOrderStatus } from 'models'
-import { DetailMaterialOutput, store } from './order.store'
+import { cache } from '../cache/root'
+import { MaterialCost } from '../details/cost.store'
+import { MaterialStore } from '../materials/store'
+import { store } from './order.store'
 
 export const ManufacturingUpdatePage = observer(() => {
   const { id } = useParams<{ id: string }>()
@@ -41,6 +44,7 @@ export const ManufacturingUpdatePage = observer(() => {
     EnManufacturingOrderStatus.Waiting,
     EnManufacturingOrderStatus.MaterialPreparation
   ]
+
   const isDeletionAllowed = deletionAllowed.includes(store.order.status)
 
   if (store.async.loading) {
@@ -65,10 +69,14 @@ export const ManufacturingUpdatePage = observer(() => {
 
       <Stack>
         <Label label="Необходимые материалы" />
-        {store.detailMaterials.length > 0 ? (
+        {store.detail.materialsCost.length > 0 ? (
           <Stack gap={0.5}>
-            {store.detailMaterials.map((material, index) => (
-              <DetailMaterialInfo key={index} material={material} />
+            {store.detail.materialsCost.map((cost, index) => (
+              <DetailMaterialInfo
+                key={index}
+                cost={cost}
+                material={cache.materials.get(cost.materialId)}
+              />
             ))}
           </Stack>
         ) : (
@@ -181,12 +189,16 @@ const ActionButton = observer(
 )
 
 const DetailMaterialInfo = observer(
-  (props: { material: DetailMaterialOutput }) => {
-    const { material } = props
+  (props: { cost: MaterialCost; material?: MaterialStore | null }) => {
+    if (!props.material) {
+      throw new Error('Material not found')
+    }
+    const { material, cost } = props
     const totalConsumedAmount =
-      (parseInt(store.qty) * (material.data?.length || 0)) / 1000
+      (parseInt(store.qty) * (+cost.length || 0)) / 1000
 
-    const remainingAmount = (material.stock || 0) - totalConsumedAmount
+    const remainingAmount =
+      (material.warehouse.stock || 0) - totalConsumedAmount
 
     return (
       <Stack py={0.5}>
@@ -198,11 +210,11 @@ const DetailMaterialInfo = observer(
               withLink
             />
             <P level="body-sm" color="primary">
-              Расход {material.data?.length || 'не указано'} мм
+              Расход {cost?.length || 'не указано'} мм
             </P>
           </Row>
           <P level="body-sm" color="neutral">
-            Текущий остаток: {material.stock?.toFixed(1)} м
+            Текущий остаток: {material.warehouse.stock?.toFixed(1)} м
           </P>
           {store.qty && (
             <>

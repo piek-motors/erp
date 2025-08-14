@@ -2,8 +2,9 @@ import { UilCheck } from '@iconscout/react-unicons'
 import { Box, Button, IconButton, Stack } from '@mui/joy'
 import { InModal } from 'components/modal'
 import { Label, observer, P, Row, useEffect, UseIcon } from 'lib/index'
+import { cache } from '../cache/root'
 import { finishModalStore } from './finish_modal_store'
-import { ManufactoringListOutput } from './list/list_store'
+import { ManufactoringListOutput } from './list/store'
 
 export const FinishModal = observer(
   (props: { detail: ManufactoringListOutput }) => {
@@ -40,8 +41,10 @@ export const FinishModal = observer(
           <Stack>
             <Label label="Используемые материалы" />
             <Stack gap={1}>
-              {finishModalStore.detail.usedMaterials.map(m => (
-                <P key={m.materialId}>{m.materialLabel}</P>
+              {finishModalStore.detail.materialsCost.map(m => (
+                <P key={m.materialId}>
+                  {cache.materials.getLabel(m.materialId)}
+                </P>
               ))}
             </Stack>
           </Stack>

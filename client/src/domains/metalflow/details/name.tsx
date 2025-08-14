@@ -51,6 +51,7 @@ export const DetailName = observer((props: Props) => {
     const editLink = detail.id
       ? open(routeMap.metalflow.detail.edit, detail.id)
       : '#'
+
     return (
       <WithHiddenLinkButton linkTo={editLink}>
         {contentWithPopup}
@@ -64,20 +65,18 @@ export const DetailName = observer((props: Props) => {
 // Component for linking to a detail group
 const GroupLink = observer(({ groupId }: { groupId: number | null }) => {
   if (!groupId) return null
-
   const groupName = cache.detailGroups.getGroupName(groupId)
   const groupLink = open(routeMap.metalflow.detailGroup, groupId)
-
   return (
     <Link to={groupLink} style={{ textDecoration: 'none' }}>
       <Button
         variant="plain"
         color="primary"
         size="sm"
-        sx={{ p: '.1 0' }}
+        sx={{ p: '0 5px' }}
         onClick={e => e.stopPropagation()}
       >
-        <Box color="primary" sx={{ cursor: 'pointer' }}>
+        <Box color="primary" sx={{ cursor: 'pointer', fontSize: '0.9em' }}>
           {groupName}
         </Box>
       </Button>

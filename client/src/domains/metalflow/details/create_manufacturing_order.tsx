@@ -1,5 +1,5 @@
 import { ExecuteAction, observer, open, routeMap, useNavigate } from 'lib/index'
-import { detailStore } from './detail.store'
+import { detailStore } from './store'
 
 export const CreateManufacturingOrder = observer(() => {
   const navigate = useNavigate()

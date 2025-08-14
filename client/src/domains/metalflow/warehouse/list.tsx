@@ -66,7 +66,7 @@ function getColumns(props: {
       }
     },
     {
-      Header: 'Причина',
+      Header: 'Тип операции',
       accessor: data => {
         const isSupply = Number(data.operation_type) === EnOperationType.Supply
         return isSupply
@@ -98,14 +98,17 @@ export const OperationsList = observer((props: Props) => {
         </Box>
       }
       scrollableContent={
-        <Box px={1}>
+        <Box>
           <Table
             columns={columns}
             data={store.operations}
             trStyleCallback={op => {
-              if (
-                Number(op.original.operation_type) === EnOperationType.Supply
-              ) {
+              const type = Number(op.original.operation_type)
+              if (type === EnOperationType.Writeoff) {
+                return {
+                  backgroundColor: '#f8d6d6b4'
+                }
+              } else if (type === EnOperationType.Supply) {
                 return {
                   backgroundColor: '#c6e7c3b9'
                 }

@@ -1,11 +1,21 @@
+import { matrixDecoder } from 'lib/matrix_decoder'
 import { rpc } from 'lib/rpc.client'
 import { makeAutoObservable } from 'mobx'
-import { Detail, MaterialCost } from '../details/detail.store'
+import { ListDetailsOutput } from 'srv/procedures/metalflow/detail/list'
+import { Detail } from '../details/store'
+import { map } from '../mappers'
 
 export class DetailCache {
   private details: Detail[] = []
   setDetails(details: Detail[]) {
     this.details = details
+  }
+  get(id: number): Detail | undefined {
+    return this.details.find(detail => detail.id === id)
+  }
+  getLabel(id: number): string {
+    const detail = this.get(id)
+    return detail ? detail.name : '＼（´Ｏ｀）／'
   }
   getDetails() {
     return this.details
@@ -23,29 +33,8 @@ export class DetailCache {
     makeAutoObservable(this)
   }
   async load() {
-    const details = await rpc.metal.details.list.query({})
-
-    this.setDetails(
-      details.map(detail => {
-        const groupId = detail[4] as number | null
-        return new Detail({
-          id: detail[0] as number,
-          name: detail[1] as string,
-          partCode: detail[2] as string,
-          groupId,
-          usedMaterials: (detail[3] as [number, string, number, number][]).map(
-            e => {
-              return new MaterialCost({
-                materialId: e[0],
-                label: e[1],
-                length: e[2].toString()
-              })
-            }
-          ),
-          stock: detail[5] as number,
-          updatedAt: detail[6] ? new Date(detail[6] as string) : undefined
-        })
-      })
-    )
+    const detailsRaw = await rpc.metal.details.list.query({})
+    const details = matrixDecoder<ListDetailsOutput>(detailsRaw)
+    this.setDetails(details.map(each => map.detail.fromDto(each)))
   }
 }

@@ -8,12 +8,12 @@ export const createDetailWriteoff = publicProcedure
   .input(
     z.object({
       detailId: z.number(),
-      qty: z.number(),
+      qty: z.number().gt(0),
       reason: z.nativeEnum(EnWriteoffReason)
     })
   )
-  .mutation(async ({ input, ctx }) => {
-    return await db.transaction().execute(async trx => {
+  .mutation(async ({ input, ctx }) =>
+    db.transaction().execute(async trx => {
       const warehouse = new Warehouse(trx, ctx.user.id)
       const result = await warehouse.subtractDetail(
         input.detailId,
@@ -21,7 +21,7 @@ export const createDetailWriteoff = publicProcedure
         input.reason
       )
       return {
-        qty: result.stock.toString()
+        stock: result.stock
       }
     })
-  })
+  )

@@ -1,31 +1,32 @@
 import { SupplyReasonSelect } from 'domains/metalflow/shared/supply-reason-select'
 import { WriteoffReasonSelect } from 'domains/metalflow/shared/writeoff-reason-select'
 import { WarehouseCard } from 'domains/metalflow/warehouse/shared/card'
-import { ExecuteAction, Inp, observer, P } from 'lib/index'
-import { detailStore } from '../detail.store'
+import { ExecuteAction, Inp, Label, observer, P } from 'lib/index'
+import { detailStore } from '../store'
 
 const CreateWarehouseDetailOperation = observer(
   (props: {
     reasonComponent: React.ReactNode
-    submitDisabled: boolean
     onSubmit: () => Promise<unknown>
   }) => {
     return (
       <>
-        <P>Деталь: {detailStore.name}</P>
-        <P>Остаток: {detailStore.stock} шт</P>
+        <P>
+          <Label>Деталь:</Label> {detailStore.name}
+        </P>
+        <P>
+          <Label>Остаток:</Label> {detailStore.warehouse.stock} шт
+        </P>
         <Inp
           label="Кол-во"
           autoFocus
           type="number"
+          sx={{ width: '100px' }}
           value={detailStore.warehouse.qty}
           onChange={val => detailStore.warehouse.setQty(Number(val))}
         />
         {props.reasonComponent}
-        <ExecuteAction
-          disabled={props.submitDisabled}
-          onSubmit={props.onSubmit}
-        />
+        <ExecuteAction onSubmit={() => props.onSubmit()} />
       </>
     )
   }
@@ -35,7 +36,7 @@ export const DetailWarehouse = observer(() => {
   return (
     <WarehouseCard
       detailId={detailStore.id}
-      stock={detailStore.stock}
+      stock={detailStore.warehouse.stock}
       unit="шт"
       writeoffModal={
         <CreateWarehouseDetailOperation
@@ -47,12 +48,7 @@ export const DetailWarehouse = observer(() => {
               }
             />
           }
-          submitDisabled={false}
-          onSubmit={() =>
-            detailStore.warehouse.insertWriteoff(detailStore.id!).then(() => {
-              detailStore.loadFullInfo(detailStore.id!)
-            })
-          }
+          onSubmit={() => detailStore.warehouse.insertWriteoff(detailStore.id!)}
         />
       }
       supplyModal={
@@ -65,12 +61,7 @@ export const DetailWarehouse = observer(() => {
               }
             />
           }
-          submitDisabled={false}
-          onSubmit={() =>
-            detailStore.warehouse.insertSupply(detailStore.id!).then(() => {
-              detailStore.loadFullInfo(detailStore.id!)
-            })
-          }
+          onSubmit={() => detailStore.warehouse.insertSupply(detailStore.id!)}
         />
       }
     />

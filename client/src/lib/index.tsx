@@ -2,6 +2,7 @@
 import { css } from '@emotion/react'
 import {
   Icon,
+  UilLink,
   UilPen,
   UilPlusCircle,
   UilTrashAlt
@@ -32,8 +33,10 @@ import {
   Typography,
   TypographyProps
 } from '@mui/joy'
+import { observer } from 'mobx-react-lite'
 import React, { JSX } from 'react'
 import { Link as ReactLink, useNavigate } from 'react-router-dom'
+import { notifierStore } from './store/notifier.store'
 export { observer, Observer } from 'mobx-react-lite'
 export { useCallback, useEffect, useMemo, useState } from 'react'
 export { useLocation, useNavigate, useParams } from 'react-router-dom'
@@ -239,6 +242,12 @@ export function SavedHint(props: { data: any }) {
   )
 }
 
+export const ErrorText = (props: { e?: Error | any }) => (
+  <P color="danger" level="body-sm" fontFamily={'monospace'}>
+    {props.e['message'] || props.e}
+  </P>
+)
+
 export function ErrorHint(props: { e?: Error | any }) {
   if (props.e) {
     console.error(props.e)
@@ -267,7 +276,7 @@ export function LoadingHint(props: { show: boolean }) {
 export function Loading() {
   return (
     <Box>
-      <LinearProgress size="sm" color="neutral" />
+      <LinearProgress size="sm" color="warning" />
     </Box>
   )
 }
@@ -288,55 +297,60 @@ export function TakeLookHint(props: { text: string; link: string }) {
         onClick={() => navigate(props.link)}
         variant="outlined"
         color="success"
+        startDecorator={<UseIcon icon={UilLink} small />}
       >
-        "Посмотреть"
+        Посмотреть
       </Btn>
     </Stack>
   )
 }
 
-export function ExecuteAction<Result>(props: {
-  disabled?: boolean
-  onSubmit: () => Promise<Result>
-  buttonLabel?: string
-  additionals?: (error?: Error, mutationResult?: Result) => JSX.Element | null
-  buttonProps?: ButtonProps
-  stackProps?: StackProps
-}) {
-  const [loading, setLoading] = React.useState(false)
-  const [error, setError] = React.useState<Error>()
-  const [mutationResult, setMutationResult] = React.useState<Result>()
+export const ExecuteAction = observer(
+  (props: {
+    disabled?: boolean
+    onSubmit: () => Promise<any>
+    buttonLabel?: string
+    additionals?: (error?: Error, mutationResult?: any) => JSX.Element | null
+    buttonProps?: ButtonProps
+    stackProps?: StackProps
+  }) => {
+    const [loading, setLoading] = React.useState(false)
+    const [error, setError] = React.useState<Error>()
+    const [mutationResult, setMutationResult] = React.useState<any>()
 
-  const handleSubmit = async () => {
-    setLoading(true)
-    setError(undefined)
-    setMutationResult(undefined)
+    const handleSubmit = async () => {
+      setLoading(true)
+      setError(undefined)
+      setMutationResult(undefined)
 
-    try {
-      const result = await props.onSubmit()
-      setMutationResult(result)
-    } catch (e: any) {
-      setError(e.message || e)
-      throw e
-    } finally {
-      setLoading(false)
+      try {
+        const result = await props.onSubmit()
+        setMutationResult(result)
+      } catch (e: any) {
+        notifierStore.notify('err', e.message || e)
+        setError(e.message || e)
+      } finally {
+        setLoading(false)
+      }
     }
+    return (
+      <Stack gap={1} {...props.stackProps}>
+        {error && <ErrorText e={error} />}
+        <SavedHint data={mutationResult} />
+        <Button
+          onClick={async () => handleSubmit()}
+          disabled={props.disabled}
+          loading={loading}
+          {...props.buttonProps}
+        >
+          {props.buttonLabel ?? 'Сохранить'}
+        </Button>
+        {(mutationResult || error) &&
+          props.additionals?.(error, mutationResult)}
+      </Stack>
+    )
   }
-  return (
-    <Stack gap={1} {...props.stackProps}>
-      <ErrorHint e={error} />
-      <SavedHint data={mutationResult} />
-      <Button
-        onClick={async () => handleSubmit()}
-        disabled={loading || props.disabled}
-        {...props.buttonProps}
-      >
-        {props.buttonLabel ?? 'Сохранить'}
-      </Button>
-      {(mutationResult || error) && props.additionals?.(error, mutationResult)}
-    </Stack>
-  )
-}
+)
 
 export function Pre(props: { children: React.ReactNode }) {
   return (

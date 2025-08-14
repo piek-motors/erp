@@ -23,32 +23,41 @@ class Writeoff {
 }
 
 export class DetailWarehouseStore {
+  readonly supply = new Supply()
+  readonly writeoff = new Writeoff()
   constructor() {
     makeAutoObservable(this)
   }
-  supply = new Supply()
-  writeoff = new Writeoff()
   qty = 0
   setQty(qty: number) {
     this.qty = qty
   }
+  stock = 0
+  setStock(stock: number) {
+    this.stock = stock
+  }
   clear() {
     this.qty = 0
   }
+
   async insertSupply(detailId: number) {
-    await rpc.metal.details.supply.mutate({
+    const res = await rpc.metal.details.supply.mutate({
       detailId,
       qty: this.qty,
       reason: this.supply.reason
     })
     this.clear()
+    this.setStock(res.stock)
+    return res.stock
   }
   async insertWriteoff(detailId: number) {
-    await rpc.metal.details.writeoff.mutate({
+    const res = await rpc.metal.details.writeoff.mutate({
       detailId,
       qty: this.qty,
       reason: this.writeoff.reason
     })
     this.clear()
+    this.setStock(res.stock)
+    return res.stock
   }
 }

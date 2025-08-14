@@ -3,13 +3,13 @@ import {
   Button,
   Inp,
   InputStack,
+  Label,
   observer,
-  P,
-  Row,
+  Stack,
   ToggleButtonGroup
 } from 'lib/index'
 import { EnUnit, uiUnit } from 'models'
-import { material } from '../material.store'
+import { material } from '../store'
 
 export const RoundBarInputBase = observer(() => {
   return (
@@ -37,8 +37,8 @@ function MaterialCalibration(props: {
   setValue: (v: boolean) => void
 }) {
   return (
-    <Row gap={2}>
-      <P>(К) - Калиброванный</P>
+    <Stack>
+      <Label>Калиброванный</Label>
       <ToggleButtonGroup
         variant="outlined"
         color="primary"
@@ -50,6 +50,6 @@ function MaterialCalibration(props: {
         <Button value={'1'}>Да</Button>
         <Button value={'0'}>Нет</Button>
       </ToggleButtonGroup>
-    </Row>
+    </Stack>
   )
 }

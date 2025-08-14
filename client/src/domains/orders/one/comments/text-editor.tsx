@@ -124,7 +124,18 @@ export const TextEditor = (props: {
             </TextFormatButton>
           </Box>
         </Row>
-        <EditorContent editor={editor} onInput={() => handleChange()} />
+        <EditorContent
+          editor={editor}
+          onInput={() => handleChange()}
+          css={css`
+            .tiptap {
+            }
+            .tiptap p {
+              font-size: 14px;
+              margin: 0 !important;
+            }
+          `}
+        />
       </Sheet>
       {props.onSubmit && (
         <PublishButton editor={editor} onSubmit={props.onSubmit} />

@@ -3,12 +3,11 @@ import { rpc } from 'lib/rpc.client'
 import { notifierStore } from 'lib/store/notifier.store'
 import { makeAutoObservable } from 'mobx'
 import { RouterOutput } from 'srv/lib/trpc'
+import { Detail } from '../details/store'
+import { map } from '../mappers'
 
 export type ManufacturingOrderOutput =
   RouterOutput['metal']['manufacturing']['get']
-
-export type DetailMaterialOutput =
-  RouterOutput['metal']['details']['get']['detail_materials'][0]
 
 export class ManufacturingOrderStore {
   readonly async = new AsyncStoreController()
@@ -18,9 +17,9 @@ export class ManufacturingOrderStore {
     this.order = order
   }
 
-  detailMaterials: DetailMaterialOutput[] = []
-  setDetailMaterials(materials: DetailMaterialOutput[]) {
-    this.detailMaterials = materials
+  detail!: Detail
+  setDetail(detail: Detail) {
+    this.detail = detail
   }
 
   qty: string = ''
@@ -39,10 +38,17 @@ export class ManufacturingOrderStore {
 
       // Load detail materials if we have a detail_id
       if (order.detail_id) {
-        const detailInfo = await rpc.metal.details.get.query({
+        const res = await rpc.metal.details.get.query({
           id: order.detail_id
         })
-        this.setDetailMaterials(detailInfo.detail_materials)
+        this.setDetail(
+          map.detail.fromDto({
+            ...res,
+            updated_at: res.detail.updated_at
+              ? new Date(res.detail.updated_at)
+              : undefined
+          })
+        )
       }
     })
   }

@@ -13,12 +13,12 @@ import { open, routeMap } from 'lib/routes'
 import { EnMaterialShape, UiMaterialShape } from 'models'
 import { AlloyAutocomplete } from '../shared/basic'
 import { t } from '../text'
-import { material } from './material.store'
 import { HexagonBarMaterialInputBase } from './shape/hexagon_bar'
 import { ListMaterialInputBase } from './shape/list'
 import { PipeMaterialInputBase } from './shape/pipe'
 import { RoundBarInputBase } from './shape/round_bar'
 import { SquareMaterialInputBase } from './shape/square'
+import { material } from './store'
 
 // Should be in proper order with EnMaterialShape
 export const tabList: TabConfig = [

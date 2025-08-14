@@ -98,40 +98,11 @@ export function AlloyAutocomplete(props: {
   )
 }
 
-import { Autocomplete } from '@mui/joy'
 import { DeleteConfirmDialog } from 'components/delete_confirm_dialog'
 import {
   NavigationBar,
   Props as PageTitleProps
 } from 'components/navigation_bar'
-import { cache } from 'domains/metalflow/cache/root'
-import { observer } from 'mobx-react-lite'
-import { Detail } from '../details/detail.store'
-
-export const DetailSelect = observer(
-  (props: { value?: Detail; onChange: (value: Detail) => void }) => {
-    const options =
-      cache.details.getDetails().map(detail => ({
-        label: detail.name,
-        data: detail
-      })) || []
-
-    return (
-      <Autocomplete
-        onChange={(_, selected) => {
-          if (selected?.data) {
-            props.onChange(selected.data)
-          }
-        }}
-        getOptionLabel={option => option.label}
-        options={options}
-        isOptionEqualToValue={(option, value) =>
-          option.data?.id === value.data?.id
-        }
-      />
-    )
-  }
-)
 
 /** Narrow container */
 export function Narrow(props: ContainerProps) {

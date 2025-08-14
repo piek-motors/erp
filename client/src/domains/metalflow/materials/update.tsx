@@ -14,7 +14,7 @@ import { open, routeMap } from 'lib/routes'
 import { AlloyAutocomplete, SaveAndDelete } from '../shared/basic'
 import { tabList } from './add'
 import { DetailsMadeOfMaterialModal } from './details_made_of_that_material'
-import { material } from './material.store'
+import { material } from './store'
 import { MaterialWarehouse } from './warehouse/ui'
 
 export const MaterialUpdatePage = observer(() => {
@@ -30,9 +30,7 @@ export const MaterialUpdatePage = observer(() => {
     }
   }, [])
 
-  if (material.async.loading) {
-    return <Loading />
-  }
+  if (material.loadingWall.loading) return <Loading />
 
   return (
     <Stack alignItems={'start'} p={1} gap={0.5}>

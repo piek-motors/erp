@@ -1,6 +1,6 @@
 import { Inp, InputStack, observer } from 'lib/index'
 import { EnUnit, uiUnit } from 'models'
-import { material } from '../material.store'
+import { material } from '../store'
 
 export const SquareMaterialInputBase = observer(() => {
   return (

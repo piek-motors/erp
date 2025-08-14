@@ -16,10 +16,12 @@ export const createDetail = procedure
         part_code: input.partCode,
         stock: 0,
         logical_group_id: input.groupId,
-        params: input.params || null,
+        params: input.technicalParams || null,
         processing_route: input.processingRoute || null,
-        drawing_name: input.drawingName || null
-      } as any)
+        drawing_name: input.drawingName || null,
+        automatic_writeoff: input.automaticWriteoff,
+        updated_at: new Date()
+      })
       .returning('id')
       .executeTakeFirstOrThrow()
       .catch(e => {
@@ -28,19 +30,6 @@ export const createDetail = procedure
         }
         throw e
       })
-
-    for (const materialRelation of input.materialRelations) {
-      await db
-        .insertInto('metal_flow.detail_materials')
-        .values({
-          detail_id: detail.id,
-          material_id: materialRelation.materialId,
-          data: {
-            length: Number(materialRelation.length)
-          }
-        })
-        .execute()
-    }
 
     return {
       id: detail.id

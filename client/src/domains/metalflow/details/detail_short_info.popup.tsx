@@ -1,16 +1,9 @@
 import { UilInfoCircle } from '@iconscout/react-unicons'
-import {
-  Divider,
-  Dropdown,
-  IconButton,
-  Menu,
-  MenuButton,
-  MenuItem,
-  Stack
-} from '@mui/joy'
+import { Box, Dropdown, Menu, MenuButton, MenuItem, Stack } from '@mui/joy'
+import { ExtraSmallIconButton } from 'components/buttons'
 import { cache } from 'domains/metalflow/cache/root'
-import { Label, observer, P, UseIcon, useState } from 'lib/index'
-import { Detail } from './detail.store'
+import { Label, observer, P, useState } from 'lib/index'
+import { Detail } from './store'
 
 interface DetailParamsPopupProps {
   detailId: number
@@ -20,13 +13,14 @@ const Pair = (props: { label?: string; value?: string | null }) => {
   if (!props.value) return null
   return (
     <MenuItem sx={{ display: 'flex', alignItems: 'baseline' }}>
-      {props.label && (
-        <>
-          <Label level="body-xs">{props.label}</Label>
-          <Divider orientation="vertical" />
-        </>
-      )}
-      <P level="body-sm">{props.value}</P>
+      <Stack>
+        {props.label && (
+          <Label level="body-xs" color="warning">
+            {props.label}
+          </Label>
+        )}
+        <P>{props.value}</P>
+      </Stack>
     </MenuItem>
   )
 }
@@ -38,12 +32,9 @@ export const DetailShortInfoPopup = observer(
       <Dropdown>
         <MenuButton
           loading={detail.async.loading}
-          slots={{ root: IconButton }}
+          slots={{ root: Box }}
           slotProps={{
             root: {
-              size: 'sm',
-              variant: 'outlined',
-              color: 'neutral',
               onClick: e => {
                 e.stopPropagation()
                 detail.reset()
@@ -52,7 +43,7 @@ export const DetailShortInfoPopup = observer(
             }
           }}
         >
-          <UseIcon icon={UilInfoCircle} small />
+          <ExtraSmallIconButton icon={UilInfoCircle} />
         </MenuButton>
         <Menu
           variant="plain"
@@ -71,29 +62,24 @@ export const DetailShortInfoPopup = observer(
             value={cache.detailGroups.getGroupName(detail.groupId)}
           />
           <Pair label="Примечания" value={detail.description} />
-          {detail.technicalParameters && (
-            <MenuItem>
-              <Stack gap={0.5}>
-                {Object.keys(detail.technicalParameters).length > 0 && (
-                  <Stack gap={0.5}>
-                    <Label>Параметры</Label>
-                    {Object.entries(detail.technicalParameters).map(
-                      ([key, value]) => (
-                        <P
-                          key={key}
-                          level="body-xs"
-                          color="neutral"
-                          sx={{ ml: 0.5 }}
-                        >
-                          {key}: {String(value)}
-                        </P>
-                      )
-                    )}
-                  </Stack>
-                )}
-              </Stack>
-            </MenuItem>
-          )}
+          {detail.technicalParameters &&
+            detail.technicalParameters?.arr?.length > 0 && (
+              <MenuItem>
+                <Stack gap={0.5}>
+                  <Label>Параметры</Label>
+                  {detail.technicalParameters.arr.map(({ key, value }, idx) => (
+                    <P
+                      key={key + idx}
+                      level="body-xs"
+                      color="neutral"
+                      sx={{ ml: 0.5 }}
+                    >
+                      {key}: {String(value)}
+                    </P>
+                  ))}
+                </Stack>
+              </MenuItem>
+            )}
         </Menu>
       </Dropdown>
     )

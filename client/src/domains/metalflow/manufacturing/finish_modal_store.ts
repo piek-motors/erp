@@ -1,4 +1,4 @@
-import { Detail } from 'domains/metalflow/details/detail.store'
+import { Detail } from 'domains/metalflow/details/store'
 import { rpc } from 'lib/rpc.client'
 import { makeAutoObservable } from 'mobx'
 

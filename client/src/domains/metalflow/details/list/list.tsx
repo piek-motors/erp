@@ -1,5 +1,6 @@
-import { Divider } from '@mui/joy'
+import { Button, Divider } from '@mui/joy'
 import { ScrollableWindow, Search } from 'components/inputs'
+import { InModal } from 'components/modal'
 import { SearchResults } from 'components/search-paginated'
 import { Table } from 'components/table.impl'
 import { MetalPageTitle } from 'domains/metalflow/shared/basic'
@@ -10,18 +11,19 @@ import {
   ErrorHint,
   Inp,
   Link,
-  LoadingHint,
+  Loading,
   P,
   RowButColumsAtSm,
   Stack,
   observer,
   open,
   routeMap,
-  useNavigate
+  useNavigate,
+  useState
 } from 'lib/index'
 import { Column } from 'react-table'
-import { Detail } from '../detail.store'
 import { DetailName } from '../name'
+import { Detail } from '../store'
 import { AlphabetIndex } from './alphabet_index'
 import { detailListStore as state } from './store'
 
@@ -48,16 +50,7 @@ const columnList: Column<Detail>[] = [
   },
   {
     Header: 'Остаток',
-    accessor: r => r.stock
-  },
-  {
-    Header: 'Длина заготовки, мм',
-    accessor: r => {
-      const m = r.usedMaterials[0]
-      const length = m?.length?.toString()
-      if (!length) return '-'
-      return m.length
-    }
+    accessor: r => r.warehouse.stock
   }
 ]
 
@@ -92,27 +85,59 @@ const DetailList = observer((props: DetailsTableProps) => {
   )
 })
 
-export const DetailsListPage = observer(() => {
+export const DetailsListPage = observer(() => (
+  <ScrollableWindow
+    refreshTrigger={false}
+    staticContent={
+      <Stack gap={1} p={0.5}>
+        <MetalPageTitle t={t.DetailsList}>
+          <AddResourceButton navigateTo={open(routeMap.metalflow.detail.new)} />
+        </MetalPageTitle>
+      </Stack>
+    }
+    scrollableContent={
+      <Box p={1}>
+        <DetailSearchArguments />
+        <Divider sx={{ mt: 1 }} />
+        <DetailsList />
+      </Box>
+    }
+  />
+))
+
+interface DetailSelectModalProps {
+  value?: Detail
+  onRowClick: (row: Detail) => void
+}
+
+export const DetailSelectModal = observer((props: DetailSelectModalProps) => {
+  const [opnen, setOpen] = useState(false)
   return (
-    <ScrollableWindow
-      refreshTrigger={false}
-      staticContent={
-        <Stack gap={1} p={0.5}>
-          <MetalPageTitle t={t.DetailsList}>
-            <AddResourceButton
-              navigateTo={open(routeMap.metalflow.detail.new)}
+    <InModal
+      layout="fullscreen"
+      open={opnen}
+      setOpen={() => setOpen(!opnen)}
+      openButton={
+        <Button variant="soft" size="sm">
+          Выбрать
+        </Button>
+      }
+    >
+      <ScrollableWindow
+        refreshTrigger={false}
+        scrollableContent={
+          <Box p={1} mb={3}>
+            <DetailSearchArguments />
+            <DetailsList
+              onRowClick={v => {
+                props.onRowClick(v)
+                setOpen(false)
+              }}
             />
-          </MetalPageTitle>
-        </Stack>
-      }
-      scrollableContent={
-        <Box p={1}>
-          <DetailSearchArguments />
-          <Divider sx={{ mt: 1 }} />
-          <DetailsList />
-        </Box>
-      }
-    />
+          </Box>
+        }
+      />
+    </InModal>
   )
 })
 
@@ -154,7 +179,7 @@ const DetailsList = observer((props: DetailsTableProps) => {
   return (
     <Stack gap={1}>
       <ErrorHint e={state.async.error} />
-      <LoadingHint show={state.async.loading} />
+      {state.async.loading && <Loading />}
       <SearchResults store={state.searchStore} emptyMessage="Детали не найдены">
         <DetailList
           highlight={props.highlight}

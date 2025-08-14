@@ -1,26 +1,15 @@
 /** @jsxImportSource @emotion/react */
-import { UilMinus } from '@iconscout/react-unicons'
-import { Divider, IconButton, Stack } from '@mui/joy'
+import { AccordionGroup, Stack } from '@mui/joy'
+import { AccordionCard } from 'components/accordion_card'
 import { ArrayJsonEditor } from 'components/array-json-editor'
 import { BaseAutocomplete, BaseOption } from 'components/base-autocomplete'
-import { JsonEditor } from 'components/json-editor'
 import { cache } from 'domains/metalflow/cache/root'
-import { QtyInputWithUnit } from 'domains/metalflow/shared'
 import { TextEditor } from 'domains/orders/one/comments/text-editor'
-import {
-  Box,
-  Inp,
-  Label,
-  MyInputProps,
-  PlusIcon,
-  Row,
-  Sheet,
-  UseIcon,
-  observer
-} from 'lib/index'
-import { EnUnit } from 'models'
+import { Box, Inp, Label, MyInputProps, observer } from 'lib/index'
 import { MaterialAutocomplete } from '../shared/material_autocomplete'
-import { MaterialCost, detailStore } from './detail.store'
+import { AutomaticWriteoffAccordion } from './cost'
+import { MaterialCost } from './cost.store'
+import { detailStore } from './store'
 
 export const DetailInputs = () => (
   <Stack gap={0.5}>
@@ -28,10 +17,12 @@ export const DetailInputs = () => (
     <DetailDrawingNameInput />
     <DetailPartCodeInput />
     <DetailGroupInput />
-    <DetailParamsInput />
-    <MaterialCostInputs />
-    <DetailProcessingRouteInput />
     <DetailDescriptionInput />
+    <AccordionGroup>
+      <DetailParamsInput />
+      <ProcessingRouteAccordion />
+      <AutomaticWriteoffAccordion />
+    </AccordionGroup>
   </Stack>
 )
 
@@ -41,8 +32,7 @@ export const MaterialSelect = observer(
       size="sm"
       data={cache.materials.getMaterials().map(e => {
         return new MaterialCost({
-          materialId: e.id,
-          label: e.label
+          material_id: e.id
         })
       })}
       value={props.value}
@@ -50,7 +40,7 @@ export const MaterialSelect = observer(
         if (m) {
           detailStore.updateMaterialRelation(
             props.index,
-            { id: m.materialId, label: m.materialLabel },
+            { id: m.materialId },
             {
               length: m.length
             }
@@ -61,75 +51,27 @@ export const MaterialSelect = observer(
   )
 )
 
-export const MaterialCostInputs = observer(() => (
-  <Box>
-    <Label>Расход материалов</Label>
-    <Sheet sx={{ borderRadius: 'sm', p: 1 }}>
-      <Stack gap={1}>
-        {detailStore.usedMaterials.map((materialCost, index) => {
-          return (
-            <Row key={materialCost.materialId}>
-              <Stack gap={0.5}>
-                <MaterialSelect value={materialCost} index={index} />
-                <QtyInputWithUnit
-                  size="sm"
-                  unitId={EnUnit.MilliMeter}
-                  value={materialCost.length}
-                  setValue={v => {
-                    materialCost.setLength(v)
-                  }}
-                />
-              </Stack>
-              <Stack>
-                <IconButton
-                  variant="soft"
-                  color="danger"
-                  size="sm"
-                  onClick={() => {
-                    detailStore.deleteDetailMaterial(materialCost.materialId)
-                  }}
-                >
-                  <UseIcon icon={UilMinus} />
-                </IconButton>
-              </Stack>
-            </Row>
-          )
-        })}
-      </Stack>
-      <Divider sx={{ my: 1 }} />
-      <PlusIcon
-        onClick={() => {
-          detailStore.addMaterial({ id: 0, label: '' }, { length: '' })
-        }}
-      />
-    </Sheet>
-  </Box>
+const DetailNameInput = observer(() => (
+  <Input
+    label="Название со склада"
+    onChange={v => {
+      detailStore.setName(v)
+    }}
+    value={detailStore.name}
+  />
 ))
-export const DetailNameInput = observer(() => {
-  return (
-    <Input
-      label="Название со склада"
-      onChange={v => {
-        detailStore.setName(v)
-      }}
-      value={detailStore.name}
-    />
-  )
-})
 
-export const DetailDrawingNameInput = observer(() => {
-  return (
-    <Input
-      label="Название чертежа"
-      onChange={v => {
-        detailStore.setDrawingName(v)
-      }}
-      value={detailStore.drawingName}
-    />
-  )
-})
+const DetailDrawingNameInput = observer(() => (
+  <Input
+    label="Название чертежа"
+    onChange={v => {
+      detailStore.setDrawingName(v)
+    }}
+    value={detailStore.drawingName}
+  />
+))
 
-export const DetailDescriptionInput = observer(() => (
+const DetailDescriptionInput = observer(() => (
   <Box>
     <Label>Примечания в свободной форме</Label>
     <TextEditor
@@ -141,7 +83,7 @@ export const DetailDescriptionInput = observer(() => (
   </Box>
 ))
 
-export const DetailPartCodeInput = observer(() => (
+const DetailPartCodeInput = observer(() => (
   <Input
     label="Номер чертежа"
     onChange={v => {
@@ -186,38 +128,39 @@ export const DetailGroupInput = observer(() => {
 })
 
 export const DetailParamsInput = observer(() => (
-  <Box>
-    <Label>Технические параметры</Label>
-    <JsonEditor
-      value={detailStore.technicalParameters}
-      onChange={params => detailStore.setTechnicalParameters(params)}
-      keyPlaceholder="Параметр"
-      valuePlaceholder="Значение"
+  <AccordionCard title="Тех. параметры" defaultExpanded>
+    <ArrayJsonEditor
+      value={detailStore.technicalParameters?.arr ?? null}
+      onChange={parameters =>
+        detailStore.setTechnicalParameters(
+          parameters ? { arr: parameters } : null
+        )
+      }
+      newItem={{ key: '', value: '' }}
+      placeholders={['Параметр', 'Значение']}
+      width={[70, 30]}
     />
-  </Box>
+  </AccordionCard>
 ))
 
-export const DetailProcessingRouteInput = observer(() => (
-  <Box>
-    <Label>Маршрут обработки</Label>
-    <Sheet sx={{ borderRadius: 'sm', p: 1 }}>
-      <ArrayJsonEditor
-        value={
-          detailStore.processingRoute?.steps.map(e => ({
-            name: e.name,
-            dur: e.dur
-          })) ?? null
-        }
-        placeholder={{
-          name: '',
-          dur: null
-        }}
-        onChange={steps =>
-          detailStore.setProcessingRoute(steps ? { steps } : null)
-        }
-        placeholders={['Операция', 'мин']}
-        width={[80, 20]}
-      />
-    </Sheet>
-  </Box>
+export const ProcessingRouteAccordion = observer(() => (
+  <AccordionCard title="Маршрут обработки" defaultExpanded>
+    <ArrayJsonEditor
+      value={
+        detailStore.processingRoute?.steps?.map(e => ({
+          name: e.name,
+          dur: e.dur
+        })) ?? null
+      }
+      newItem={{
+        name: '',
+        dur: null
+      }}
+      onChange={steps =>
+        detailStore.setProcessingRoute(steps ? { steps } : null)
+      }
+      placeholders={['Операция', 'мин']}
+      width={[80, 20]}
+    />
+  </AccordionCard>
 ))

@@ -9,16 +9,18 @@ export const deleteMaterial = publicProcedure
     const { id } = input
     await db.transaction().execute(async trx => {
       await trx
+        .deleteFrom('metal_flow.operations')
+        .where('material_id', '=', id)
+        .execute()
+      await trx
         .deleteFrom('metal_flow.detail_materials')
         .where('material_id', '=', id)
         .execute()
-
       const { label } = await trx
         .deleteFrom('metal_flow.materials')
         .where('id', '=', id)
         .returning(['label'])
         .executeTakeFirstOrThrow()
-
       log.warn(`Material deleted: ${id} ${label}`)
     })
     return {

@@ -5,7 +5,7 @@ import { MetalPageTitle } from 'domains/metalflow/shared/basic'
 import { observer } from 'lib/deps'
 import {
   Box,
-  LoadingHint,
+  Loading,
   open,
   P,
   routeMap,
@@ -15,7 +15,7 @@ import {
 } from 'lib/index'
 import { EnManufacturingOrderStatus, uiManufacturingOrderStatus } from 'models'
 import { Column } from 'react-table'
-import { ManufactoringListOutput, ManufacturingListStore } from './list_store'
+import { ManufactoringListOutput, ManufacturingListStore } from './store'
 
 const state = new ManufacturingListStore()
 
@@ -75,6 +75,7 @@ export const ManufacturingList = observer(() => {
     navigate(open(routeMap.metalflow.manufacturing_order.edit, row.id))
   }
 
+  if (state.async.loading) return <Loading />
   return (
     <ScrollableWindow
       refreshTrigger={false}
@@ -84,8 +85,7 @@ export const ManufacturingList = observer(() => {
         </Box>
       }
       scrollableContent={
-        <Stack gap={1} p={1}>
-          <LoadingHint show={state.async.loading} />
+        <Stack gap={1}>
           <Table
             trStyleCallback={tr => {
               if (tr.original.status === EnManufacturingOrderStatus.Collected) {

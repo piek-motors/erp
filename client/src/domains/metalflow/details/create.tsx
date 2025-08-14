@@ -8,8 +8,8 @@ import {
 } from 'lib/index'
 import { open, routeMap } from 'lib/routes'
 import { t } from '../text'
-import { detailStore } from './detail.store'
 import { DetailInputs } from './shared'
+import { detailStore } from './store'
 
 export const CreateDetailPage = observer(() => {
   useEffect(() => {

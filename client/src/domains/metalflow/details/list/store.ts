@@ -6,7 +6,7 @@ import { cache } from 'domains/metalflow/cache/root'
 import { AsyncStoreController } from 'lib/async-store.controller'
 import { rpc } from 'lib/rpc.client'
 import { action, makeObservable, observable, runInAction } from 'mobx'
-import { Detail } from '../detail.store'
+import { Detail } from '../store'
 
 export const alphabet = 'АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ'.split('')
 

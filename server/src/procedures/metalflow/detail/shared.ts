@@ -27,15 +27,39 @@ export const processingRouteSchema = z.object({
   )
 })
 
+export const technicalParametersSchema = z.object({
+  arr: z.array(
+    z.object({
+      key: z.string(),
+      value: z.any()
+    })
+  )
+})
+
+export const automaticWriteoffSchema = z.object({
+  details: z.array(
+    z.object({
+      detail_id: z.number(),
+      qty: z.number()
+    })
+  ),
+  materials: z.array(
+    z.object({
+      material_id: z.number(),
+      length: z.number()
+    })
+  )
+})
+
 export const detailBaseSchema = z.object({
   name: z.string().min(5, 'Название должно быть не менее 5 символов'),
   description: z.string().nullable(),
   partCode: z.string().nullable(),
   groupId: z.number().nullable(),
-  params: z.record(z.any()).nullable(),
-  materialRelations: z.array(materialRelationSchema),
+  technicalParams: technicalParametersSchema.nullable(),
   processingRoute: processingRouteSchema.nullable(),
-  drawingName: z.string().nullable()
+  drawingName: z.string().nullable(),
+  automaticWriteoff: automaticWriteoffSchema.nullable()
 })
 
 export const detailDto = detailBaseSchema

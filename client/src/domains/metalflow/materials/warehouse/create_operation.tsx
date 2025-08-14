@@ -11,6 +11,7 @@ interface Props {
   reasonComponent: React.ReactNode
   submitDisabled: boolean
   onSubmit: () => Promise<unknown>
+  stock?: string
 }
 
 export const CreateWarehouseMaterialOperation = observer((props: Props) => (
@@ -21,6 +22,7 @@ export const CreateWarehouseMaterialOperation = observer((props: Props) => (
         {props.materialLabel || <P color="neutral">Не выбран</P>}
       </P>
     </Row>
+    {props.stock && <P level="body-sm">{props.stock}</P>}
     <QtyInputWithUnit
       unitId={EnUnit.M}
       value={props.lengthValue}
