@@ -26,7 +26,7 @@ export const MaterialUpdatePage = observer(() => {
   useEffect(() => {
     api.reset()
     api.load(materialId)
-  }, [])
+  }, [id])
 
   if (api.s.loadingWall.loading) return <Loading />
   return (

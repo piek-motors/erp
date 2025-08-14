@@ -71,6 +71,11 @@ export class DetailApi {
     this.detail.setUpdatedAt(new Date())
     return res
   }
+
+  reset() {
+    this.status.reset()
+    this.detail.reset()
+  }
 }
 
 export const api = new DetailApi()

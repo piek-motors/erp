@@ -25,8 +25,9 @@ export const UpdateDetailPage = observer(() => {
   const navigate = useNavigate()
 
   useEffect(() => {
+    api.reset()
     api.loadFull(Number(id))
-  }, [])
+  }, [id])
 
   if (api.status.loading) return <Loading />
   return (
