@@ -53,7 +53,12 @@ export function NavigationBar(props: Props) {
 
       <Row gap={1} sx={{ ...props.sx }}>
         {props.t && (
-          <P color="primary" fontWeight={600} sx={{ width: 'max-content' }}>
+          <P
+            color="primary"
+            fontWeight={600}
+            level="body-md"
+            sx={{ width: 'max-content' }}
+          >
             {props.t}
           </P>
         )}

@@ -1,12 +1,12 @@
 import { UilMinus } from '@iconscout/react-unicons'
-import { IconButton, Textarea } from '@mui/joy'
-import { Box, PlusIcon, Row, Stack, UseIcon, observer } from 'lib/index'
+import { Divider, IconButton, Textarea } from '@mui/joy'
+import { Box, Label, PlusIcon, Row, Stack, UseIcon, observer } from 'lib/index'
 import * as dnd from 'react-beautiful-dnd'
 
 interface ArrayJsonEditorProps {
   value: any[] | null
   onChange: (value: any[] | null) => void
-  placeholder?: object
+  newItem?: Record<string, any>
   width?: number[]
   placeholders?: string[]
 }
@@ -16,7 +16,7 @@ export const ArrayJsonEditor = observer((props: ArrayJsonEditorProps) => {
   const items = value ?? []
 
   const addItem = () => {
-    const next = [...items, props.placeholder ?? {}]
+    const next = [...items, props.newItem ?? {}]
     onChange(next)
   }
 
@@ -26,10 +26,10 @@ export const ArrayJsonEditor = observer((props: ArrayJsonEditorProps) => {
 
     let casted: any = inputValue
     if (
-      props.placeholder &&
-      Object.prototype.hasOwnProperty.call(props.placeholder, key)
+      props.newItem &&
+      Object.prototype.hasOwnProperty.call(props.newItem, key)
     ) {
-      const templateValue = (props.placeholder as any)[key]
+      const templateValue = (props.newItem as any)[key]
       if (typeof templateValue === 'number') {
         const n = Number(inputValue)
         casted = Number.isFinite(n) ? n : templateValue
@@ -59,12 +59,18 @@ export const ArrayJsonEditor = observer((props: ArrayJsonEditorProps) => {
 
   return (
     <dnd.DragDropContext onDragEnd={onDragEnd}>
-      <dnd.Droppable droppableId="array-json-editor" direction="vertical">
+      <dnd.Droppable
+        droppableId="array-json-editor"
+        direction="vertical"
+        isDropDisabled={false}
+        isCombineEnabled={false}
+        ignoreContainerClipping={false}
+      >
         {provided => (
           <Stack gap={0.5} ref={provided.innerRef} {...provided.droppableProps}>
             {items.map((item, index) => {
-              const keys = props.placeholder
-                ? Object.keys(props.placeholder)
+              const keys = props.newItem
+                ? Object.keys(props.newItem)
                 : Object.keys(item)
 
               return (
@@ -74,54 +80,54 @@ export const ArrayJsonEditor = observer((props: ArrayJsonEditorProps) => {
                   index={index}
                 >
                   {dragProvided => (
-                    <Row
-                      gap={1}
-                      sx={{ alignItems: 'center' }}
-                      ref={dragProvided.innerRef}
-                      {...dragProvided.draggableProps}
-                      {...dragProvided.dragHandleProps}
-                    >
-                      <Box
-                        sx={{
-                          textAlign: 'center',
-                          opacity: 0.5
-                        }}
+                    <>
+                      <Row
+                        sx={{ alignItems: 'center' }}
+                        ref={dragProvided.innerRef}
+                        {...dragProvided.draggableProps}
+                        {...dragProvided.dragHandleProps}
                       >
-                        {index + 1}
-                      </Box>
-                      <Row sx={{ flexGrow: 1, flexShrink: 0, height: '100%' }}>
-                        {keys.map((key, keyIdx) => (
-                          <Box
-                            sx={{
-                              width: props.width?.[keyIdx]
-                                ? `${props.width?.[keyIdx]}%`
-                                : undefined,
-                              display: 'flex',
-                              flexGrow: props.width?.[keyIdx] ? 0 : 1
-                            }}
-                          >
-                            <Textarea
-                              variant="plain"
-                              size="sm"
-                              placeholder={props.placeholders?.[keyIdx] ?? key}
-                              value={String((item as any)[key] ?? '')}
-                              onChange={e =>
-                                updateItemProp(index, key, e.target.value)
-                              }
-                              sx={{ width: '100%', flexShrink: 1 }}
-                            />
-                          </Box>
-                        ))}
+                        <Label>{index + 1}</Label>
+                        <Row
+                          sx={{ flexGrow: 1, flexShrink: 0, height: '100%' }}
+                        >
+                          {keys.map((key, keyIdx) => (
+                            <Box
+                              key={keyIdx}
+                              sx={{
+                                width: props.width?.[keyIdx]
+                                  ? `${props.width?.[keyIdx]}%`
+                                  : undefined,
+                                display: 'flex',
+                                flexGrow: props.width?.[keyIdx] ? 0 : 1
+                              }}
+                            >
+                              <Textarea
+                                variant="plain"
+                                size="sm"
+                                placeholder={
+                                  props.placeholders?.[keyIdx] ?? key
+                                }
+                                value={String((item as any)[key] ?? '')}
+                                onChange={e =>
+                                  updateItemProp(index, key, e.target.value)
+                                }
+                                sx={{ width: '100%', flexShrink: 1 }}
+                              />
+                            </Box>
+                          ))}
+                        </Row>
+                        <IconButton
+                          variant="soft"
+                          color="danger"
+                          size="sm"
+                          onClick={() => removeItem(index)}
+                        >
+                          <UseIcon icon={UilMinus} />
+                        </IconButton>
                       </Row>
-                      <IconButton
-                        variant="soft"
-                        color="danger"
-                        size="sm"
-                        onClick={() => removeItem(index)}
-                      >
-                        <UseIcon icon={UilMinus} />
-                      </IconButton>
-                    </Row>
+                      <Divider sx={{ opacity: 0.3 }} />
+                    </>
                   )}
                 </dnd.Draggable>
               )
