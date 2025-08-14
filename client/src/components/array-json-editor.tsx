@@ -126,7 +126,9 @@ export const ArrayJsonEditor = observer((props: ArrayJsonEditorProps) => {
                           <UseIcon icon={UilMinus} />
                         </IconButton>
                       </Row>
-                      <Divider sx={{ opacity: 0.3 }} />
+                      {index !== items.length - 1 && (
+                        <Divider sx={{ opacity: 0.3 }} />
+                      )}
                     </>
                   )}
                 </dnd.Draggable>

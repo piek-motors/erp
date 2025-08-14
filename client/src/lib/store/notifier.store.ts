@@ -43,4 +43,4 @@ class NotifierStore {
     this.notify('err', msg)
   }
 }
-export const notifierStore = new NotifierStore()
+export const notifier = new NotifierStore()

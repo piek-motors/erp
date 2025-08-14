@@ -8,8 +8,7 @@ import {
 import { RouterOutput } from 'srv/lib/trpc'
 import { SelectableDetail } from 'srv/procedures/metalflow/detail/get'
 import { ListMaterialsOutput as MaterialListDto } from 'srv/procedures/metalflow/material/list'
-import { DetailCost, MaterialCost } from './details/cost.store'
-import { Detail } from './details/store'
+import { DetailState } from './detail/detail.state'
 type GetMaterialsOutput = RouterOutput['metal']['material']['get']
 
 class MaterialMapper {
@@ -53,25 +52,23 @@ class MaterialMapper {
 }
 
 class DetailMapper {
-  fromDto(detail: Partial<SelectableDetail>): Detail {
-    return new Detail({
-      id: detail.id,
-      name: detail.name,
-      partCode: detail.part_code,
-      groupId: detail.logical_group_id,
-      stock: detail.stock,
-      description: detail.description,
-      drawingName: detail.drawing_name,
-      updatedAt: detail.updated_at && new Date(detail.updated_at),
-      technicalParameters: detail.params,
-      processingRoute: detail.processing_route,
-      usedDetails: detail.automatic_writeoff?.details.map(
-        d => new DetailCost(d)
-      ),
-      usedMaterials: detail.automatic_writeoff?.materials.map(
-        m => new MaterialCost(m)
-      )
+  fromDto(detail: Partial<SelectableDetail>): DetailState {
+    const res = new DetailState()
+
+    res.init({
+      id: detail.id ?? 0,
+      name: detail.name ?? '',
+      part_code: detail.part_code ?? null,
+      logical_group_id: detail.logical_group_id ?? null,
+      stock: detail.stock || 0,
+      description: detail.description || '',
+      drawing_name: detail.drawing_name ?? '',
+      updated_at: detail.updated_at?.toString() ?? '',
+      params: detail.params,
+      processing_route: detail.processing_route ?? null,
+      automatic_writeoff: detail.automatic_writeoff ?? null
     })
+    return res
   }
 }
 

@@ -2,20 +2,22 @@ import { matrixDecoder } from 'lib/matrix_decoder'
 import { rpc } from 'lib/rpc.client'
 import { makeAutoObservable } from 'mobx'
 import { ListDetailsOutput } from 'srv/procedures/metalflow/detail/list'
-import { Detail } from '../details/store'
+import { DetailState } from '../detail/detail.state'
 import { map } from '../mappers'
 
+const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
+
 export class DetailCache {
-  private details: Detail[] = []
-  setDetails(details: Detail[]) {
+  private details: DetailState[] = []
+  setDetails(details: DetailState[]) {
     this.details = details
   }
-  get(id: number): Detail | undefined {
+  get(id: number): DetailState | undefined {
     return this.details.find(detail => detail.id === id)
   }
-  getLabel(id: number): string {
+  getLabel(id: number): string | null {
     const detail = this.get(id)
-    return detail ? detail.name : '＼（´Ｏ｀）／'
+    return detail ? capitalize(detail.name) : null
   }
   getDetails() {
     return this.details
@@ -23,10 +25,10 @@ export class DetailCache {
   removeDetail(id: number) {
     this.setDetails(this.details.filter(d => d.id !== id))
   }
-  addDetail(detail: Detail) {
+  addDetail(detail: DetailState) {
     this.setDetails([...this.details, detail])
   }
-  updateDetail(detail: Detail) {
+  updateDetail(detail: DetailState) {
     this.setDetails(this.details.map(d => (d.id === detail.id ? detail : d)))
   }
   constructor() {

@@ -36,7 +36,7 @@ import {
 import { observer } from 'mobx-react-lite'
 import React, { JSX } from 'react'
 import { Link as ReactLink, useNavigate } from 'react-router-dom'
-import { notifierStore } from './store/notifier.store'
+import { notifier } from './store/notifier.store'
 export { observer, Observer } from 'mobx-react-lite'
 export { useCallback, useEffect, useMemo, useState } from 'react'
 export { useLocation, useNavigate, useParams } from 'react-router-dom'
@@ -313,6 +313,7 @@ export const ExecuteAction = observer(
     additionals?: (error?: Error, mutationResult?: any) => JSX.Element | null
     buttonProps?: ButtonProps
     stackProps?: StackProps
+    fullWidth?: boolean
   }) => {
     const [loading, setLoading] = React.useState(false)
     const [error, setError] = React.useState<Error>()
@@ -322,22 +323,26 @@ export const ExecuteAction = observer(
       setLoading(true)
       setError(undefined)
       setMutationResult(undefined)
-
       try {
         const result = await props.onSubmit()
         setMutationResult(result)
       } catch (e: any) {
-        notifierStore.notify('err', e.message || e)
+        notifier.notify('err', e.message || e)
         setError(e.message || e)
       } finally {
         setLoading(false)
       }
     }
     return (
-      <Stack gap={1} {...props.stackProps}>
+      <Stack
+        gap={1}
+        {...props.stackProps}
+        sx={{ width: props.fullWidth ? '100%' : 'auto' }}
+      >
         {error && <ErrorText e={error} />}
         <SavedHint data={mutationResult} />
         <Button
+          fullWidth={props.fullWidth}
           onClick={async () => handleSubmit()}
           disabled={props.disabled}
           loading={loading}

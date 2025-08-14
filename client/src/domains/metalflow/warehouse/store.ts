@@ -24,6 +24,7 @@ class OperationsStore {
       materialId,
       detailId
     })
+    console.log(operations)
     this.setOperations(operations)
   }
 }

@@ -1,5 +1,5 @@
 import { rpc } from 'lib/rpc.client'
-import { notifierStore } from 'lib/store/notifier.store'
+import { notifier } from 'lib/store/notifier.store'
 import { makeAutoObservable } from 'mobx'
 import { ordersApi } from '../../orders.api'
 
@@ -83,10 +83,10 @@ export class PositionsStore {
 
     if (this.editedOrderItem?.id) {
       await this.updateOrderItem(orderId)
-      notifierStore.ok('Позиция обновлена')
+      notifier.ok('Позиция обновлена')
     } else {
       await this.insertOrderItem(orderId)
-      notifierStore.ok(`Позиция "${this.name}" создана`)
+      notifier.ok(`Позиция "${this.name}" создана`)
     }
     this.closeDialog()
   }

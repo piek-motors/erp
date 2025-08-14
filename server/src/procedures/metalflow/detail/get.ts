@@ -5,7 +5,7 @@ import { Selectable } from 'kysely'
 import { z } from 'zod'
 
 export type SelectableDetail = Selectable<DB.DetailTable>
-export type DetailWriteoffData = DB.DetailAutomaticWriteoffData
+export type DetailAutomaticWriteoffData = DB.DetailAutomaticWriteoffData
 
 export const getDetail = publicProcedure
   .input(

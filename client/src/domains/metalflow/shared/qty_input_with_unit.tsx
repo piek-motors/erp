@@ -1,5 +1,5 @@
 import { InputProps, Stack } from '@mui/joy'
-import { Inp, P } from 'lib/index'
+import { Inp, Label } from 'lib/index'
 import { uiUnit } from 'models'
 
 export const QtyInputWithUnit = (props: {
@@ -16,7 +16,7 @@ export const QtyInputWithUnit = (props: {
   return (
     <Stack
       direction="row"
-      alignItems="end"
+      alignItems="center"
       gap={1}
       sx={{ width: 'min-content' }}
     >
@@ -31,7 +31,7 @@ export const QtyInputWithUnit = (props: {
         type="number"
         sx={{ maxWidth: 100, ...props.sx }}
       />
-      <P pb={1}>{uiUnit(unitId)}</P>
+      <Label>{uiUnit(unitId)}</Label>
     </Stack>
   )
 }

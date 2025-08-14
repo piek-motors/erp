@@ -1,5 +1,5 @@
 import { Box, Card, Divider } from '@mui/joy'
-import { DetailName } from 'domains/metalflow/details/name'
+import { DetailName } from 'domains/metalflow/detail/name'
 import { MaterialName } from 'domains/metalflow/shared'
 import { MetalPageTitle } from 'domains/metalflow/shared/basic'
 import {
@@ -9,7 +9,6 @@ import {
   Inp,
   Label,
   Loading,
-  LoadingHint,
   observer,
   P,
   routeMap,
@@ -21,10 +20,8 @@ import {
 } from 'lib/index'
 import { formatDateWithTime } from 'lib/utils/formatting'
 import { EnManufacturingOrderStatus, uiManufacturingOrderStatus } from 'models'
-import { cache } from '../cache/root'
-import { MaterialCost } from '../details/cost.store'
-import { MaterialStore } from '../materials/store'
-import { store } from './order.store'
+import { MaterialCost } from '../detail/warehouse/cost.store'
+import { api } from './api'
 
 export const ManufacturingUpdatePage = observer(() => {
   const { id } = useParams<{ id: string }>()
@@ -32,11 +29,11 @@ export const ManufacturingUpdatePage = observer(() => {
 
   useEffect(() => {
     if (id) {
-      store.load(Number(id))
+      api.load(Number(id))
     }
   }, [id])
 
-  if (!store.order) {
+  if (!api.s.order) {
     return <div>Заказ не найден</div>
   }
 
@@ -45,14 +42,14 @@ export const ManufacturingUpdatePage = observer(() => {
     EnManufacturingOrderStatus.MaterialPreparation
   ]
 
-  const isDeletionAllowed = deletionAllowed.includes(store.order.status)
+  const isDeletionAllowed = deletionAllowed.includes(api.s.order.status)
 
-  if (store.async.loading) {
+  if (api.status.loading) {
     return <Loading />
   }
   return (
     <Stack gap={1} p={1}>
-      <MetalPageTitle t={`Производственный заказ #${store.order.id}`} />
+      <MetalPageTitle t={`Производственный заказ #${api.s.order.id}`} />
       <Stack>
         <Label label="Деталь" />
         <DetailName
@@ -60,23 +57,19 @@ export const ManufacturingUpdatePage = observer(() => {
           withLink
           withParamsButton
           detail={{
-            id: store.order.detail_id,
-            name: store.order.detail_name,
-            group_id: store.order.group_id || null
+            id: api.s.order.detail_id,
+            name: api.s.order.detail_name,
+            group_id: api.s.order.group_id || null
           }}
         />
       </Stack>
 
       <Stack>
         <Label label="Необходимые материалы" />
-        {store.detail.materialsCost.length > 0 ? (
+        {api.s.detail.autoWriteoff.materialsCost.length > 0 ? (
           <Stack gap={0.5}>
-            {store.detail.materialsCost.map((cost, index) => (
-              <DetailMaterialInfo
-                key={index}
-                cost={cost}
-                material={cache.materials.get(cost.materialId)}
-              />
+            {api.s.detail.autoWriteoff.materialsCost.map((cost, index) => (
+              <DetailMaterialInfo key={index} cost={cost} />
             ))}
           </Stack>
         ) : (
@@ -86,28 +79,28 @@ export const ManufacturingUpdatePage = observer(() => {
 
       <Stack>
         <Label label="Статус" />
-        <P>{uiManufacturingOrderStatus(store.order.status)}</P>
+        <P>{uiManufacturingOrderStatus(api.s.order.status)}</P>
       </Stack>
 
       <Stack>
         <Label label="Дата создания" />
-        <P>{formatDateWithTime(store.order.started_at)}</P>
+        <P>{formatDateWithTime(api.s.order.started_at)}</P>
       </Stack>
 
-      {store.order.finished_at && (
+      {api.s.order.finished_at && (
         <Stack>
           <Label label="Дата окончания" />
-          <P>{formatDateWithTime(store.order.finished_at)}</P>
+          <P>{formatDateWithTime(api.s.order.finished_at)}</P>
         </Stack>
       )}
 
       <QuantityInput />
       <Divider />
       <Stack gap={1} mt={1}>
-        <LoadingHint show={store.async.loading} />
-        <ErrorHint e={store.async.error} />
+        {api.status.loading && <Loading />}
+        <ErrorHint e={api.status.error} />
         <Box>
-          <ActionButton status={store.order.status} />
+          <ActionButton status={api.s.order.status} />
         </Box>
       </Stack>
 
@@ -117,7 +110,7 @@ export const ManufacturingUpdatePage = observer(() => {
             onClick={e => {
               e.stopPropagation()
               if (window.confirm(`Удалить производственный заказ?`)) {
-                store.delete().then(() => {
+                api.delete().then(() => {
                   navigate(routeMap.metalflow.manufacturing_orders)
                 })
               }
@@ -130,24 +123,24 @@ export const ManufacturingUpdatePage = observer(() => {
 })
 
 const QuantityInput = observer(() => {
-  if (!store.order) return null
-  if (store.order.status === EnManufacturingOrderStatus.MaterialPreparation) {
+  if (!api.s.order) return null
+  if (api.s.order.status === EnManufacturingOrderStatus.MaterialPreparation) {
     return (
       <Inp
         label="Кол-во"
         sx={{ maxWidth: 70 }}
-        value={store.qty}
+        value={api.s.qty}
         onChange={v => {
-          store.setQty(v)
+          api.s.setQty(v)
         }}
       />
     )
   }
-  if (store.order.status === EnManufacturingOrderStatus.Production) {
+  if (api.s.order.status === EnManufacturingOrderStatus.Production) {
     return (
       <Stack>
         <Label label="Кол-во" />
-        <P>{store.order.qty}</P>
+        <P>{api.s.order.qty}</P>
       </Stack>
     )
   }
@@ -160,8 +153,8 @@ const ActionButton = observer(
       case EnManufacturingOrderStatus.Waiting:
         return (
           <Button
-            onClick={() => store.startMaterialPreparationPhase()}
-            disabled={store.async.loading}
+            onClick={() => api.startMaterialPreparationPhase()}
+            disabled={api.status.loading}
           >
             Начать подготовку материалов
           </Button>
@@ -170,15 +163,15 @@ const ActionButton = observer(
         return (
           <Button
             color="success"
-            onClick={() => store.startProductionPhase()}
-            disabled={store.async.loading || !store.qty}
+            onClick={() => api.startProductionPhase()}
+            disabled={api.status.loading || !api.s.qty}
           >
             Начать производство
           </Button>
         )
       case EnManufacturingOrderStatus.Production:
         return (
-          <Button onClick={() => store.finish()} disabled={store.async.loading}>
+          <Button onClick={() => api.finish()} disabled={api.status.loading}>
             Завершить заказ
           </Button>
         )
@@ -188,55 +181,46 @@ const ActionButton = observer(
   }
 )
 
-const DetailMaterialInfo = observer(
-  (props: { cost: MaterialCost; material?: MaterialStore | null }) => {
-    if (!props.material) {
-      throw new Error('Material not found')
-    }
-    const { material, cost } = props
-    const totalConsumedAmount =
-      (parseInt(store.qty) * (+cost.length || 0)) / 1000
-
-    const remainingAmount =
-      (material.warehouse.stock || 0) - totalConsumedAmount
-
-    return (
-      <Stack py={0.5}>
-        <Card variant="outlined" size="sm">
-          <Row gap={1}>
-            <MaterialName
-              materialId={material.id || 0}
-              materialLabel={material.label || ''}
-              withLink
-            />
-            <P level="body-sm" color="primary">
-              Расход {cost?.length || 'не указано'} мм
-            </P>
-          </Row>
-          <P level="body-sm" color="neutral">
-            Текущий остаток: {material.warehouse.stock?.toFixed(1)} м
+const DetailMaterialInfo = observer((props: { cost: MaterialCost }) => {
+  const { cost } = props
+  const totalConsumedAmount = (parseInt(api.s.qty) * (+cost.length || 0)) / 1000
+  const remainingAmount = (cost.material?.stock || 0) - totalConsumedAmount
+  return (
+    <Stack py={0.5}>
+      <Card variant="outlined" size="sm">
+        <Row gap={1}>
+          <MaterialName
+            materialId={cost.materialId}
+            materialLabel={cost.material?.label || ''}
+            withLink
+          />
+          <P level="body-sm" color="primary">
+            Расход {cost?.length || 'не указано'} мм
           </P>
-          {store.qty && (
-            <>
-              <P level="body-sm" color="primary">
-                Потребное количество: {totalConsumedAmount.toFixed(3)} м
-              </P>
-              <P
-                color={
-                  remainingAmount > 0
-                    ? 'success'
-                    : remainingAmount < 0
-                    ? 'danger'
-                    : 'primary'
-                }
-                level="body-sm"
-              >
-                Остаток после запуска {remainingAmount.toFixed(1)} м
-              </P>
-            </>
-          )}
-        </Card>
-      </Stack>
-    )
-  }
-)
+        </Row>
+        <P level="body-sm" color="neutral">
+          Текущий остаток: {cost.material?.stock?.toFixed(1)} м
+        </P>
+        {api.s.qty && (
+          <>
+            <P level="body-sm" color="primary">
+              Потребное количество: {totalConsumedAmount.toFixed(3)} м
+            </P>
+            <P
+              color={
+                remainingAmount > 0
+                  ? 'success'
+                  : remainingAmount < 0
+                  ? 'danger'
+                  : 'primary'
+              }
+              level="body-sm"
+            >
+              Остаток после запуска {remainingAmount.toFixed(1)} м
+            </P>
+          </>
+        )}
+      </Card>
+    </Stack>
+  )
+})

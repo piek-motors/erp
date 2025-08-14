@@ -10,13 +10,13 @@ export const ExtraSmallIconButton = (props: {
 }) => {
   const btn = (
     <IconButton
-      sx={{ minWidth: '22px', minHeight: '22px' }}
-      variant="solid"
+      variant="soft"
       color="neutral"
       size="sm"
       {...props.buttonProps}
+      sx={{ border: '1px solid', borderColor: 'grey' }}
     >
-      <UseIcon icon={props.icon} small invert />
+      <UseIcon icon={props.icon} small />
     </IconButton>
   )
 

@@ -35,3 +35,5 @@ export class ManufacturingListStore {
     this.load()
   }
 }
+
+export const listStore = new ManufacturingListStore()

@@ -1,6 +1,6 @@
 import { ScrollableWindow } from 'components/inputs'
 import { Table } from 'components/table.impl'
-import { DetailName } from 'domains/metalflow/details/name'
+import { DetailName } from 'domains/metalflow/detail/name'
 import { MetalPageTitle } from 'domains/metalflow/shared/basic'
 import { observer } from 'lib/deps'
 import {
@@ -15,9 +15,7 @@ import {
 } from 'lib/index'
 import { EnManufacturingOrderStatus, uiManufacturingOrderStatus } from 'models'
 import { Column } from 'react-table'
-import { ManufactoringListOutput, ManufacturingListStore } from './store'
-
-const state = new ManufacturingListStore()
+import { listStore, ManufactoringListOutput } from './store'
 
 const columnList: Column<ManufactoringListOutput>[] = [
   {
@@ -68,14 +66,14 @@ const columnList: Column<ManufactoringListOutput>[] = [
 export const ManufacturingList = observer(() => {
   const navigate = useNavigate()
   useEffect(() => {
-    state.load()
+    listStore.load()
   }, [])
 
   const onRowClick = (row: ManufactoringListOutput) => {
     navigate(open(routeMap.metalflow.manufacturing_order.edit, row.id))
   }
 
-  if (state.async.loading) return <Loading />
+  if (listStore.async.loading) return <Loading />
   return (
     <ScrollableWindow
       refreshTrigger={false}
@@ -95,7 +93,7 @@ export const ManufacturingList = observer(() => {
               }
               return {}
             }}
-            data={state.orders}
+            data={listStore.orders}
             columns={columnList}
             onRowClick={onRowClick}
           />

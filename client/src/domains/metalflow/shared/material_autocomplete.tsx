@@ -1,7 +1,7 @@
 import { InputProps } from '@mui/joy'
 import { BaseAutocomplete, BaseOption } from 'components/base-autocomplete'
 import { cache } from '../cache/root'
-import { MaterialCost } from '../details/cost.store'
+import { MaterialCost } from '../detail/warehouse/cost.store'
 
 export function MaterialAutocomplete(props: {
   data?: MaterialCost[]
@@ -19,9 +19,13 @@ export function MaterialAutocomplete(props: {
     <BaseAutocomplete
       size={props.size}
       options={options}
+      placeholder="Выберите материал"
       value={
         value
-          ? { label: cache.materials.getLabel(value.materialId) || '', value }
+          ? {
+              label: cache.materials.getLabel(value.materialId) || '',
+              value
+            }
           : null
       }
       onChange={newValue => {

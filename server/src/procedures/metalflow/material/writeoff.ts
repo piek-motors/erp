@@ -6,7 +6,7 @@ export const writeoffMaterial = procedure
   .input(
     z.object({
       material_id: z.number(),
-      lengthMeters: z.number(),
+      lengthMeters: z.number().gt(0),
       reason: z.nativeEnum(EnWriteoffReason),
       type_data: z.any()
     })

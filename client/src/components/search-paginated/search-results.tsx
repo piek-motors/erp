@@ -28,9 +28,9 @@ export const SearchResults = observer(
 
         {/* Results summary */}
         {store.searchResult.length > 0 && (
-          <P level="body-sm" color="neutral">
+          <P level="body-xs" color="neutral">
             Показано {store.displayedResults.length} из{' '}
-            {store.searchResult.length} результатов
+            {store.searchResult.length} деталей
           </P>
         )}
 

@@ -1,4 +1,4 @@
-import { detailListStore } from 'domains/metalflow/details/list/store'
+import { detailListStore } from 'domains/metalflow/detail/list/store'
 import { makeAutoObservable } from 'mobx'
 import { DetailCache } from './detail_cache'
 import { DetailGroupCache } from './detail_group_cache'
