@@ -1,4 +1,5 @@
 import {
+  EnUnit,
   getMaterialConstructor,
   Material,
   MaterialShapeAbstractionLayer
@@ -7,7 +8,7 @@ import {
 // @ts-ignore
 import { RouterOutput } from 'srv/lib/trpc'
 import { SelectableDetail } from 'srv/procedures/metalflow/detail/get'
-import { ListMaterialsOutput as MaterialListDto } from 'srv/procedures/metalflow/material/list'
+import { Material as MaterialListDto } from 'srv/procedures/metalflow/material/list'
 import { DetailState } from './detail/detail.state'
 type GetMaterialsOutput = RouterOutput['metal']['material']['get']
 
@@ -66,7 +67,8 @@ class DetailMapper {
       updated_at: detail.updated_at?.toString() ?? '',
       params: detail.params,
       processing_route: detail.processing_route ?? null,
-      automatic_writeoff: detail.automatic_writeoff ?? null
+      automatic_writeoff: detail.automatic_writeoff ?? null,
+      unit: detail.unit ?? EnUnit.Countable
     })
     return res
   }

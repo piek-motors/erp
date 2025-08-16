@@ -49,9 +49,12 @@ export const formatTime: FormatTime = (
   return moment(payload).format('H:mm')
 }
 
-export function roundAndTrim(value: number, precision: number = 1): string {
+export function roundAndTrim(value: unknown, precision: number = 1): string {
   if (!value) return '0'
-  return parseFloat(value.toFixed(precision)).toString()
+
+  const num = typeof value === 'number' ? value : Number(value)
+  if (isNaN(num) || num === 0) return '0'
+  return parseFloat(num.toFixed(precision)).toString()
 }
 
 export function formatDetailDate(date: Date): string {

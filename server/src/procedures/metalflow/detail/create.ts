@@ -4,6 +4,7 @@ import {
   ErrDetailPartCodeUnique,
   isDetailPertCodeUniqueError
 } from '#root/procedures/metalflow/detail/shared.js'
+import { EnUnit } from 'models'
 
 export const createDetail = procedure
   .input(detailDto)
@@ -20,7 +21,8 @@ export const createDetail = procedure
         processing_route: input.processingRoute || null,
         drawing_name: input.drawingName || null,
         automatic_writeoff: input.automaticWriteoff,
-        updated_at: new Date()
+        updated_at: new Date(),
+        unit: EnUnit.Countable
       })
       .returning('id')
       .executeTakeFirstOrThrow()

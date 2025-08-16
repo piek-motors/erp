@@ -1,22 +1,16 @@
 import { db } from '#root/deps.js'
 import { matrixEncoder } from '#root/lib/matrix_encoder.js'
 import { publicProcedure } from '#root/lib/trpc/trpc.js'
-import { EnMaterialShape } from 'models'
+import { DB } from 'db'
 
-export interface ListMaterialsOutput {
-  id: number
-  label: string
-  shape: EnMaterialShape
-  shape_data: Record<string, unknown>
-  unit: string
-  stock: number
-}
+export type Material = DB.Material
 
 export const listMaterials = publicProcedure.query(async () => {
   const materials = await db
     .selectFrom('metal_flow.materials as m')
-    .select(['m.id', 'm.label', 'm.shape', 'm.shape_data', 'm.unit', 'm.stock'])
+    .selectAll()
     .orderBy('m.label')
     .execute()
+
   return matrixEncoder(materials)
 })

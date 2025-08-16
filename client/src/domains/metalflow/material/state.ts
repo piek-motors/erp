@@ -17,12 +17,14 @@ export class MaterialState {
       id?: number
       label?: string
       stock?: number
+      safety_stock?: number
     } = {}
   ) {
     makeAutoObservable(this)
     this.id = init.id
     this.label = init.label
     this.warehouse.setStock(init.stock || 0)
+    this.safetyStock = init.safety_stock?.toString() || ''
   }
 
   list = new ListState()
@@ -72,6 +74,10 @@ export class MaterialState {
   detailCount: number = 0
   setDetailCount(detailCount: number) {
     this.detailCount = detailCount
+  }
+  safetyStock = ''
+  setSafetyStock(safetyStock: string) {
+    this.safetyStock = safetyStock
   }
   insertedMaterialId?: number
   syncState(material: Material) {

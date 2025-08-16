@@ -12,7 +12,8 @@ export const updateMaterial = publicProcedure
       shape_data: z.any(),
       unit: z.nativeEnum(EnUnit),
       linear_mass: z.number(),
-      alloy: z.string().nullable()
+      alloy: z.string().nullable(),
+      safety_stock: z.number()
     })
   )
   .mutation(async ({ input }) => {
@@ -24,7 +25,8 @@ export const updateMaterial = publicProcedure
         shape_data: input.shape_data,
         unit: input.unit,
         linear_mass: input.linear_mass,
-        alloy: input.alloy
+        alloy: input.alloy,
+        safety_stock: input.safety_stock
       })
       .where('id', '=', input.id)
       .executeTakeFirstOrThrow()

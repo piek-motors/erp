@@ -35,7 +35,8 @@ export const createMaterial = publicProcedure
         label,
         stock: 0,
         linear_mass: input.linear_mass,
-        alloy: input.alloy
+        alloy: input.alloy,
+        safety_stock: 0
       })
       .returningAll()
       .executeTakeFirstOrThrow()

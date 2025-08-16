@@ -80,6 +80,7 @@ export namespace DB {
     shape: EnMaterialShape
     shape_data: JSONColumnType<any, any, any>
     stock: number
+    safety_stock: number
     linear_mass: number // kg/m
     alloy: string | null
   }
@@ -89,6 +90,7 @@ export namespace DB {
   export interface DetailTable {
     id: Generated<number>
     name: string
+    unit: EnUnit // defailt Countable
     description: string | null
     logical_group_id: number | null
     part_code: string | null

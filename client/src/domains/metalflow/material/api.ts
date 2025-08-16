@@ -22,6 +22,7 @@ export class MaterialApi {
       const res = await rpc.metal.material.get.query({ id })
       this.s.setLinearMass(res.material.linear_mass.toString())
       this.s.setAlloy(res.material.alloy || '')
+      this.s.setSafetyStock(res.material.safety_stock?.toString())
       this.s.syncState(map.material.fromDto(res))
       this.s.setDetailCount(Number(res.detailCount))
       return res
@@ -69,7 +70,8 @@ export class MaterialApi {
         label: this.s.material?.deriveLabel(),
         unit: this.s.unit,
         linear_mass: Number(this.s.linearMass),
-        alloy: this.s.alloy || null
+        alloy: this.s.alloy || null,
+        safety_stock: Number(this.s.safetyStock)
       })
       .then(async res => {
         if (!this.s.id) throw new Error('Material id is not set')

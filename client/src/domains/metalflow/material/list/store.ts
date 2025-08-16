@@ -2,7 +2,7 @@ import { cache } from 'domains/metalflow/cache/root'
 import { AsyncStoreController } from 'lib/async-store.controller'
 import { makeAutoObservable } from 'mobx'
 import { EnMaterialShape } from 'models'
-import { ListMaterialsOutput } from 'srv/procedures/metalflow/material/list'
+import { Material } from 'srv/procedures/metalflow/material/list'
 import { MaterialSupplyStore } from '../warehouse/supply'
 
 export class MaterialListStore {
@@ -15,7 +15,7 @@ export class MaterialListStore {
   constructor() {
     makeAutoObservable(this)
   }
-  getFilteredMaterials(): ListMaterialsOutput[] {
+  getFilteredMaterials(): Material[] {
     let filtered = cache.materials.getMaterials()
     filtered = filtered.slice().sort((a, b) =>
       a.label.localeCompare(b.label, 'ru', {

@@ -54,6 +54,13 @@ export const MaterialUpdatePage = observer(() => {
               }}
               unit="кг/м"
             />
+            <Inp
+              label={'Безопасный остаток'}
+              value={api.s.safetyStock}
+              onChange={v => {
+                api.s.setSafetyStock(v)
+              }}
+            />
           </Stack>
           <SaveAndDelete
             itemName={`Материал (${api.s.id}) - ${api.s.label}`}

@@ -17,7 +17,7 @@ import { open, routeMap } from 'lib/routes'
 import { roundAndTrim } from 'lib/utils/formatting'
 import { EnMaterialShape } from 'models'
 import { Column } from 'react-table'
-import { ListMaterialsOutput } from 'srv/procedures/metalflow/material/list'
+import { Material } from 'srv/procedures/metalflow/material/list'
 import { t } from '../../text'
 import { MaterialShapeFilter } from './shape_filter'
 import { materialListStore } from './store'
@@ -30,7 +30,7 @@ const ShapeNameToIconMap = {
   [EnMaterialShape.HexagonBar]: '/icons/hexagon.svg'
 }
 
-const columnList: Column<ListMaterialsOutput>[] = [
+const columnList: Column<Material>[] = [
   {
     Header: 'ID',
     accessor: 'id'
@@ -60,12 +60,16 @@ const columnList: Column<ListMaterialsOutput>[] = [
   {
     Header: 'Остаток, м',
     accessor: m => <>{roundAndTrim(m.stock)}</>
+  },
+  {
+    Header: 'Безопасный остаток, м',
+    accessor: m => <>{roundAndTrim(m.safety_stock)}</>
   }
 ]
 
 interface MaterialsTableProps {
-  onRowClick?: (material: ListMaterialsOutput) => void
-  highlight?: (material: ListMaterialsOutput) => boolean
+  onRowClick?: (material: Material) => void
+  highlight?: (material: Material) => boolean
   highlightColor?: string
   sx?: SxProps
 }

@@ -1,14 +1,14 @@
 import { matrixDecoder } from 'lib/matrix_decoder'
 import { rpc } from 'lib/rpc.client'
 import { makeAutoObservable } from 'mobx'
-import { ListMaterialsOutput } from 'srv/procedures/metalflow/material/list'
+import { Material } from 'srv/procedures/metalflow/material/list'
 
 export class MaterialCache {
-  private materials: ListMaterialsOutput[] = []
-  setMaterials(materials: ListMaterialsOutput[]) {
+  private materials: Material[] = []
+  setMaterials(materials: Material[]) {
     this.materials = materials
   }
-  get(id: number): ListMaterialsOutput | undefined {
+  get(id: number): Material | undefined {
     return this.materials.find(material => material.id === id)
   }
   getLabel(id: number): string | null {
@@ -18,13 +18,13 @@ export class MaterialCache {
   getMaterials() {
     return this.materials
   }
-  removeMaterial(material: ListMaterialsOutput) {
+  removeMaterial(material: Material) {
     this.setMaterials(this.materials.filter(m => m.id !== material.id))
   }
-  addMaterial(material: ListMaterialsOutput) {
+  addMaterial(material: Material) {
     this.setMaterials([...this.materials, material])
   }
-  updateMaterial(material: ListMaterialsOutput) {
+  updateMaterial(material: Material) {
     this.setMaterials(
       this.materials.map(m => (m.id === material.id ? material : m))
     )
@@ -34,7 +34,7 @@ export class MaterialCache {
   }
   async load() {
     const materials = await rpc.metal.material.list.query()
-    const decodedMaterials = matrixDecoder<ListMaterialsOutput>(materials)
+    const decodedMaterials = matrixDecoder<Material>(materials)
     this.setMaterials(decodedMaterials)
   }
 }
