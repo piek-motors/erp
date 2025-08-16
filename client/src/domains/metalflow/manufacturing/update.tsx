@@ -172,12 +172,12 @@ const DetailDescription = observer(() => {
 
 const columnList: Column<Step>[] = [
   {
-    accessor: 'name',
-    Header: 'Операция'
+    Header: 'N',
+    accessor: (_, index) => index + 1
   },
   {
-    accessor: 'dur',
-    Header: 'Норма времени'
+    accessor: 'name',
+    Header: 'Операция'
   },
   {
     Header: 'Исполнитель',
