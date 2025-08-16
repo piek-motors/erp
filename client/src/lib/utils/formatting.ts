@@ -50,7 +50,7 @@ export const formatTime: FormatTime = (
 }
 
 export function roundAndTrim(value: unknown, precision: number = 1): string {
-  if (!value) return '0'
+  if (!value) return ''
 
   const num = typeof value === 'number' ? value : Number(value)
   if (isNaN(num) || num === 0) return '0'
