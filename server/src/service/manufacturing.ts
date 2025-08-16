@@ -14,6 +14,19 @@ export class Manufacturing {
   async createOrder(
     detail_id: number
   ): Promise<Selectable<DB.ManufacturingTable>> {
+    const detail = await this.trx
+      .selectFrom('metal_flow.details')
+      .where('id', '=', detail_id)
+      .select('processing_route')
+      .executeTakeFirstOrThrow()
+    const data: DB.ManufacturingData = {
+      processing_route: {
+        steps: []
+      }
+    }
+    if (detail.processing_route) {
+      data.processing_route.steps = detail.processing_route.steps
+    }
     return await this.trx
       .insertInto('metal_flow.manufacturing')
       .values({
@@ -23,6 +36,7 @@ export class Manufacturing {
         material_writeoffs: {
           writeoffs: []
         },
+        data,
         status: EnManufacturingOrderStatus.Waiting
       })
       .returningAll()

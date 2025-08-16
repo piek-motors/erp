@@ -7,11 +7,39 @@ import { DetailWarehouseStore } from './warehouse/store'
 type DetailResponse = RouterOutput['metal']['details']['get']['detail']
 type UpdateDetailRequest = RouterInput['metal']['details']['update']
 
-interface ProcessingRoute {
-  steps: {
-    name: string
-    dur: number
-  }[]
+export class Step {
+  name!: string
+  dur!: number
+  executor_name: string = ''
+  setExecutor(name: string) {
+    this.executor_name = name
+  }
+  date: string = ''
+  setDate(d: string) {
+    this.date = d
+  }
+  constructor() {
+    makeAutoObservable(this)
+  }
+  reset() {
+    this.name = ''
+    this.dur = 0
+    this.executor_name = ''
+    this.date = ''
+  }
+}
+
+export class ProcessingRoute {
+  steps: Step[] = []
+  init(steps: Step[]) {
+    this.steps = steps
+  }
+  constructor() {
+    makeAutoObservable(this)
+  }
+  reset() {
+    this.steps = []
+  }
 }
 
 type TechicalParameters = {
@@ -22,6 +50,7 @@ export class DetailState {
   readonly attachments = new AttachmentsStore()
   readonly warehouse = new DetailWarehouseStore()
   readonly autoWriteoff = new DetailAutomaticWriteoffStore()
+  readonly processingRoute = new ProcessingRoute()
 
   id?: number
   setId(id: number) {
@@ -47,10 +76,7 @@ export class DetailState {
   setDrawingNumber(drawingNumber: string) {
     this.drawingNumber = drawingNumber
   }
-  processingRoute?: ProcessingRoute | null = null
-  setProcessingRoute(route: ProcessingRoute | null) {
-    this.processingRoute = route
-  }
+
   technicalParameters?: TechicalParameters | null = null
   setTechnicalParameters(params: TechicalParameters | null) {
     this.technicalParameters = params
@@ -89,7 +115,17 @@ export class DetailState {
     this.setDescription(d.description ?? '')
     this.warehouse.setStock(d.stock)
     this.setUpdatedAt(d.updated_at ? new Date(d.updated_at) : undefined)
-    this.setProcessingRoute(d.processing_route ?? null)
+    this.processingRoute.init(
+      d.processing_route && d.processing_route.steps
+        ? d.processing_route.steps.map(s => {
+            const step = new Step()
+            step.name = s.name
+            step.dur = s.dur
+            step.executor_name = s.executor_name ?? ''
+            return step
+          })
+        : []
+    )
     this.setDrawingName(d.drawing_name ?? '')
     if (d.automatic_writeoff) {
       this.autoWriteoff.init(d.automatic_writeoff)
@@ -108,8 +144,8 @@ export class DetailState {
     this.updatedAt = undefined
     this.lastManufacturingDate = undefined
     this.lastManufacturingQty = undefined
-    this.processingRoute = null
     this.drawingName = ''
+    this.processingRoute.reset()
     this.autoWriteoff.reset()
   }
 
@@ -132,9 +168,10 @@ export class DetailState {
       processingRoute: this.processingRoute
         ? {
             steps:
-              this.processingRoute?.steps?.map(s => ({
+              this.processingRoute.steps?.map(s => ({
                 name: s.name?.trim(),
-                dur: +s.dur
+                dur: +s.dur,
+                executor_name: s.executor_name?.trim() ?? ''
               })) ?? null
           }
         : null,

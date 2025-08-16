@@ -1,4 +1,5 @@
-import { Box, Card, Divider } from '@mui/joy'
+import { Box, Card, Divider, Sheet } from '@mui/joy'
+import { Table } from 'components/table.impl'
 import { DetailName } from 'domains/metalflow/detail/name'
 import { MaterialName } from 'domains/metalflow/shared'
 import { MetalPageTitle } from 'domains/metalflow/shared/basic'
@@ -6,6 +7,7 @@ import {
   Button,
   DeleteResourceButton,
   ErrorHint,
+  ExecuteAction,
   Inp,
   Label,
   Loading,
@@ -20,6 +22,8 @@ import {
 } from 'lib/index'
 import { formatDateWithTime } from 'lib/utils/formatting'
 import { EnManufacturingOrderStatus, uiManufacturingOrderStatus } from 'models'
+import { Column } from 'react-table'
+import { Step } from '../detail/detail.state'
 import { MaterialCost } from '../detail/warehouse/cost.store'
 import { api } from './api'
 
@@ -63,20 +67,7 @@ export const ManufacturingUpdatePage = observer(() => {
           }}
         />
       </Stack>
-
-      <Stack>
-        <Label label="Необходимые материалы" />
-        {api.s.detail.autoWriteoff.materialsCost.length > 0 ? (
-          <Stack gap={0.5}>
-            {api.s.detail.autoWriteoff.materialsCost.map((cost, index) => (
-              <DetailMaterialInfo key={index} cost={cost} />
-            ))}
-          </Stack>
-        ) : (
-          <P color="danger">Материалы детали не указаны</P>
-        )}
-      </Stack>
-
+      <QuantityInput />
       <Stack>
         <Label label="Статус" />
         <P>{uiManufacturingOrderStatus(api.s.order.status)}</P>
@@ -93,9 +84,9 @@ export const ManufacturingUpdatePage = observer(() => {
           <P>{formatDateWithTime(api.s.order.finished_at)}</P>
         </Stack>
       )}
-
-      <QuantityInput />
-      <Divider />
+      <Cost />
+      <DetailDescription />
+      <ProductionRoute />
       <Stack gap={1} mt={1}>
         {api.status.loading && <Loading />}
         <ErrorHint e={api.status.error} />
@@ -119,6 +110,121 @@ export const ManufacturingUpdatePage = observer(() => {
         </Box>
       )}
     </Stack>
+  )
+})
+
+export const Cost = observer(() => {
+  const materils = api.s.detail.autoWriteoff.materialsCost
+  const details = api.s.detail.autoWriteoff.detailsCost
+  return (
+    <Stack gap={2}>
+      {materils.length ? (
+        <Stack>
+          <Label label="Материалы к потреблению" />
+          <Stack gap={0.5}>
+            {materils.map((cost, index) => (
+              <DetailMaterialInfo key={index} cost={cost} />
+            ))}
+          </Stack>
+        </Stack>
+      ) : null}
+
+      {details.length ? (
+        <Stack>
+          <Label label="Детали к потреблению" />
+          <Stack gap={0.5}>
+            {details.map((cost, index) => (
+              <Row gap={1}>
+                <DetailName
+                  detail={{
+                    id: cost.detailId,
+                    name: cost.detail?.name || '',
+                    group_id: cost.detail?.groupId || null
+                  }}
+                />
+                <P>{cost.qty} шт</P>
+              </Row>
+            ))}
+          </Stack>
+        </Stack>
+      ) : null}
+    </Stack>
+  )
+})
+
+const DetailDescription = observer(() => {
+  if (!api.s.detail.description) return null
+  return (
+    <Stack>
+      <Label label="Примечания детали" />
+      <div
+        contentEditable="false"
+        key={api.s.detail.id}
+        suppressContentEditableWarning={true}
+        dangerouslySetInnerHTML={{
+          __html: api.s.detail.description || ''
+        }}
+      />
+      <Divider />
+    </Stack>
+  )
+})
+
+const columnList: Column<Step>[] = [
+  {
+    accessor: 'name',
+    Header: 'Операция'
+  },
+  {
+    accessor: 'dur',
+    Header: 'Норма времени'
+  },
+  {
+    Header: 'Исполнитель',
+    accessor: step => <ExecutorCell step={step} />
+  },
+  {
+    Header: 'Дата',
+    accessor: step => <DateCell step={step} />
+  },
+  {
+    Header: 'Подписть',
+    accessor: step => <Box minWidth={100}></Box>
+  }
+]
+
+const ExecutorCell = observer((props: { step: Step }) => (
+  <Inp
+    variant="plain"
+    value={props.step.executor_name}
+    onChange={v => {
+      props.step.setExecutor(v ?? '')
+    }}
+  />
+))
+
+const DateCell = observer((props: { step: Step }) => (
+  <Inp
+    variant="plain"
+    value={props.step.date}
+    onChange={v => {
+      props.step.setDate(v ?? '')
+    }}
+  />
+))
+
+const ProductionRoute = observer(() => {
+  if (api.s.processingRoute.steps.length === 0) return null
+  return (
+    <Sheet sx={{ borderRadius: 'sm', p: 1 }}>
+      <Stack>
+        <Label label="Маршрут производства" />
+        <Table columns={columnList} data={api.s.processingRoute.steps} />
+        <Box width="min-content" mt={1} ml="auto">
+          <ExecuteAction onSubmit={() => api.save()} buttonLabel="Сохранить" />
+        </Box>
+      </Stack>
+    </Sheet>
   )
 })
 

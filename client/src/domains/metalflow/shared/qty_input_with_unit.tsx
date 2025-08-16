@@ -4,6 +4,7 @@ import { uiUnit } from 'models'
 
 export const QtyInputWithUnit = (props: {
   unitId?: number
+  autoFocus?: boolean
   value?: string
   defaultValue?: string
   setValue: (num: string) => void
@@ -21,6 +22,7 @@ export const QtyInputWithUnit = (props: {
       sx={{ width: 'min-content' }}
     >
       <Inp
+        autoFocus={props.autoFocus}
         label={props.label}
         placeholder={props.placeholder}
         value={qty}

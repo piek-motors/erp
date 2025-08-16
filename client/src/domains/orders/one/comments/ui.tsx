@@ -7,7 +7,7 @@ import * as gql from 'lib/types/graphql-shema'
 import { observer } from 'mobx-react-lite'
 import { User } from 'models'
 import moment from 'moment'
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 import { orderStore } from '../stores/order.store'
 import { commentsStore } from './store'
 import { TextEditor } from './text-editor'
@@ -96,10 +96,6 @@ interface ICommentsListProps {
 }
 
 export function CommentListViewPort({ user, orderId }: ICommentsListProps) {
-  const [insertOrderCommentMutation] = gql.useInsertCommentMutation()
-  const [insertNotificationMutation] = gql.useInsertNotificationMutation()
-  const inputRef = useRef<HTMLInputElement>(null)
-
   const { data, loading } = gql.useCommentsSubscription({
     variables: { OrderID: orderId }
   })

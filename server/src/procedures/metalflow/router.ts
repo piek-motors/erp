@@ -29,6 +29,7 @@ import { getManufacturingOrder } from './manufacturing/get.js'
 import { listManufacturing } from './manufacturing/list.js'
 import { startMaterialPreparationPhase } from './manufacturing/start_material_preparation.js'
 import { startProductionPhase } from './manufacturing/start_production.js'
+import { updateManufacturing } from './manufacturing/update.js'
 import { createMaterialSupply } from './material/supply.js'
 import { writeoffMaterial } from './material/writeoff.js'
 import { listOperations } from './operations/list.js'
@@ -72,6 +73,7 @@ export const metalFlowRouter = router({
   manufacturing: router({
     get: getManufacturingOrder,
     create: createManufacturingOrder,
+    update: updateManufacturing,
     delete: deleteManufacturingOrder,
     startMaterialPreparationPhase: startMaterialPreparationPhase,
     startProductionPhase: startProductionPhase,

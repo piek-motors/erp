@@ -22,7 +22,9 @@ export const processingRouteSchema = z.object({
   steps: z.array(
     z.object({
       name: z.string(),
-      dur: z.number()
+      dur: z.number(),
+      executor_name: z.string().optional(),
+      date: z.string().optional()
     })
   )
 })

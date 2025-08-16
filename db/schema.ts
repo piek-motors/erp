@@ -123,6 +123,8 @@ export namespace DB {
     steps: {
       name: string
       dur: number
+      executor_name?: string
+      date?: string
     }[]
   }
 
@@ -145,6 +147,15 @@ export namespace DB {
       MetarialWiteoffData
     >
     status: EnManufacturingOrderStatus
+    data: JSONColumnType<
+      ManufacturingData,
+      ManufacturingData,
+      ManufacturingData
+    >
+  }
+
+  export interface ManufacturingData {
+    processing_route: ProcessingRoute
   }
 
   export interface DetailMaterialJsonData {

@@ -24,6 +24,7 @@ export const CreateWarehouseMaterialOperation = observer((props: Props) => (
     </Row>
     {props.stock && <P level="body-sm">{props.stock}</P>}
     <QtyInputWithUnit
+      autoFocus
       unitId={EnUnit.M}
       value={props.lengthValue}
       setValue={props.lengthSetValue}

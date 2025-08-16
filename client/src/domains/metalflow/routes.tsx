@@ -79,7 +79,7 @@ const innerRoutes = [
   },
   {
     element: (
-      <Narrow>
+      <Narrow maxWidth="xl">
         <ManufacturingUpdatePage />
       </Narrow>
     ),

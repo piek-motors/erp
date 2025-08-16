@@ -16,7 +16,6 @@ export class ManufacturingApi {
     this.status.run(async () => {
       const order = await rpc.metal.manufacturing.get.query({ id })
       this.s.setOrder(order)
-
       // Load detail materials if we have a detail_id
       if (order.detail_id) {
         const { detail } = await rpc.metal.details.get.query({
@@ -41,6 +40,15 @@ export class ManufacturingApi {
         orderId: this.s.order.id
       })
       await this.load(this.s.order.id)
+    })
+  }
+
+  async save() {
+    if (!this.s.order) throw new Error('Заказ не найден')
+    return rpc.metal.manufacturing.update.mutate({
+      orderId: this.s.order.id,
+      processingRoute: this.s.processingRoute,
+      qty: parseInt(this.s.qty)
     })
   }
 

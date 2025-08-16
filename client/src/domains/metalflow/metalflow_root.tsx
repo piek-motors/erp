@@ -1,4 +1,5 @@
 import { Box, Stack } from '@mui/joy'
+import { WebOnly } from 'components/conditional-display'
 import { DesktopOnly } from 'lib/index'
 import { useEffect } from 'react'
 import { cache } from './cache/root'
@@ -22,7 +23,9 @@ export function MetalFlowRootLayout(props: { children?: React.ReactNode }) {
       }}
     >
       <DesktopOnly>
-        <NavigationSideBar />
+        <WebOnly>
+          <NavigationSideBar />
+        </WebOnly>
       </DesktopOnly>
       {props.children && (
         <Stack sx={{ flexGrow: 1, gap: 1, p: 0 }}>{props.children}</Stack>

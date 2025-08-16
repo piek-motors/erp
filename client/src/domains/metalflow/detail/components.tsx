@@ -144,19 +144,12 @@ export const DetailParamsInput = observer(() => (
 export const ProcessingRouteAccordion = observer(() => (
   <AccordionCard title="Маршрут обработки" defaultExpanded>
     <ArrayJsonEditor
-      value={
-        api.detail.processingRoute?.steps?.map(e => ({
-          name: e.name,
-          dur: e.dur
-        })) ?? null
-      }
+      value={api.detail.processingRoute.steps ?? null}
       newItem={{
         name: '',
         dur: null
       }}
-      onChange={steps =>
-        api.detail.setProcessingRoute(steps ? { steps } : null)
-      }
+      onChange={steps => api.detail.processingRoute.init(steps ?? [])}
       placeholders={['Операция', 'мин']}
       width={[80, 20]}
     />
