@@ -19,6 +19,6 @@ export const MaterialName = observer(
         </WithHiddenLinkButton>
       )
     }
-    return <P>{materialLabel}</P>
+    return <P whiteSpace={'nowrap'}>{materialLabel}</P>
   }
 )
