@@ -1,3 +1,4 @@
+import { db, procedure } from '#root/deps.js'
 import { router } from '#root/lib/trpc/trpc.js'
 import { deleteFile } from '#root/procedures/attachment/delete_file.rpc.js'
 import { createDetail } from '#root/procedures/metalflow/detail/create.js'
@@ -17,7 +18,7 @@ import { deleteMaterial } from '#root/procedures/metalflow/material/delete.js'
 import { getMaterial } from '#root/procedures/metalflow/material/get.js'
 import { listMaterials } from '#root/procedures/metalflow/material/list.js'
 import { updateMaterial } from '#root/procedures/metalflow/material/update.js'
-import { getDetailsByMaterialId } from './detail/get_by_material_id.js'
+import z from 'zod'
 import { getDetailShortInfo } from './detail/get_short.js'
 import { getDetailInTheGroup } from './detail/grouping/get.js'
 import { createDetailSupply } from './detail/supply.js'
@@ -49,7 +50,16 @@ export const metalFlowRouter = router({
     get: getDetail,
     getShort: getDetailShortInfo,
     list: getDetailList,
-    listByMaterialId: getDetailsByMaterialId,
+    listByMaterialId: procedure
+      .input(z.object({ material_id: z.number() }))
+      .query(async ({ input }) =>
+        db
+          .selectFrom('metal_flow.detail_materials')
+          .where('material_id', '=', input.material_id)
+          .innerJoin('metal_flow.details', 'detail_id', 'id')
+          .selectAll()
+          .execute()
+      ),
     delete: deleteDetail,
     update: updateDetail,
     create: createDetail,

@@ -9,7 +9,7 @@ import {
   TakeLookHint,
   useEffect
 } from 'lib/index'
-import { open, routeMap } from 'lib/routes'
+import { openPage, routeMap } from 'lib/routes'
 import { EnMaterialShape, UiMaterialShape } from 'models'
 import { AlloyAutocomplete } from '../shared/basic'
 import { t } from '../text'
@@ -85,7 +85,7 @@ export const MaterialAddPage = observer(() => {
       {api.s.insertedMaterialId && (
         <TakeLookHint
           text={t.RecentlyNewMaterialAdded}
-          link={open(
+          link={openPage(
             routeMap.metalflow.material.edit,
             api.s.insertedMaterialId
           )}

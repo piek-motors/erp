@@ -57,12 +57,20 @@ export function roundAndTrim(value: unknown, precision: number = 1): string {
   return parseFloat(num.toFixed(precision)).toString()
 }
 
-export function formatDetailDate(date: Date): string {
+export function formatDetailDateTime(date: Date): string {
   return date.toLocaleString('ru-RU', {
     day: '2-digit',
     month: 'long',
     year: '2-digit',
     hour: '2-digit',
     minute: '2-digit'
+  })
+}
+
+export function formatDetailDate(date: Date): string {
+  return date.toLocaleString('ru-RU', {
+    day: '2-digit',
+    month: 'long',
+    year: '2-digit'
   })
 }

@@ -40,7 +40,7 @@ import { notifier } from './store/notifier.store'
 export { observer, Observer } from 'mobx-react-lite'
 export { useCallback, useEffect, useMemo, useState } from 'react'
 export { useLocation, useNavigate, useParams } from 'react-router-dom'
-export { open, routeMap } from './routes'
+export { openPage, routeMap } from './routes'
 export {
   Box,
   Button,

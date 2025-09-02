@@ -15,7 +15,7 @@ import {
   RowButColumsAtSm,
   Stack,
   observer,
-  open,
+  openPage,
   routeMap,
   useNavigate,
   useState
@@ -77,7 +77,7 @@ const DetailList = observer((props: DetailsTableProps) => {
         if (props.onRowClick) {
           props.onRowClick(row)
         } else {
-          navigate(open(routeMap.metalflow.detail.edit, row.id))
+          navigate(openPage(routeMap.metalflow.detail.edit, row.id))
         }
       }}
     />
@@ -89,7 +89,9 @@ export const DetailsListPage = observer(() => (
     refreshTrigger={false}
     staticContent={
       <MetalPageTitle t={'Детали'}>
-        <AddResourceButton navigateTo={open(routeMap.metalflow.detail.new)} />
+        <AddResourceButton
+          navigateTo={openPage(routeMap.metalflow.detail.new)}
+        />
       </MetalPageTitle>
     }
     scrollableContent={

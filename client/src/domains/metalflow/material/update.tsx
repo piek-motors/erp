@@ -10,7 +10,7 @@ import {
   useNavigate,
   useParams
 } from 'lib/index'
-import { open, routeMap } from 'lib/routes'
+import { openPage, routeMap } from 'lib/routes'
 import { AlloyAutocomplete, SaveAndDelete } from '../shared/basic'
 import { api } from './api'
 import { DetailsMadeOfMaterialModal } from './details_made_of_that_material'
@@ -26,12 +26,13 @@ export const MaterialUpdatePage = observer(() => {
   useEffect(() => {
     api.reset()
     api.load(materialId)
+    api.loadDetailsMadeFromThatMaterial(materialId)
   }, [id])
 
   if (api.s.loadingWall.loading) return <Loading />
   return (
     <Stack alignItems={'start'} p={1} gap={0.5}>
-      <MetalPageTitle t={`Материал #${materialId} ${api.s.label}`} />
+      <MetalPageTitle t={`Материал #${materialId} ${api.s.label || ''}`} />
       <RowButColumsAtSm>
         <Stack gap={1}>
           <MaterialWarehouse />
@@ -66,7 +67,7 @@ export const MaterialUpdatePage = observer(() => {
             itemName={`Материал (${api.s.id}) - ${api.s.label}`}
             handleDelete={() =>
               api.delete().then(() => {
-                navigate(open(routeMap.metalflow.materials))
+                navigate(openPage(routeMap.metalflow.materials))
               })
             }
             handleSave={() => api.update()}

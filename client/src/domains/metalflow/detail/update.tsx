@@ -3,7 +3,7 @@ import { MetalPageTitle, SaveAndDelete } from 'domains/metalflow/shared/basic'
 import {
   Loading,
   observer,
-  open,
+  openPage,
   P,
   routeMap,
   Row,
@@ -12,7 +12,7 @@ import {
   useNavigate,
   useParams
 } from 'lib/index'
-import { formatDetailDate } from 'lib/utils/formatting'
+import { formatDetailDate, formatDetailDateTime } from 'lib/utils/formatting'
 import { CreateDetailOrder } from '../warehouse/create_order'
 import { api } from './api'
 import { DetailAttachmentList } from './attachment/list'
@@ -22,7 +22,6 @@ import { DetailWarehouse } from './warehouse/ui'
 export const UpdateDetailPage = observer(() => {
   const { id } = useParams<{ id: string }>()
   if (!id) throw new Error('No id')
-  const navigate = useNavigate()
 
   useEffect(() => {
     api.reset()
@@ -40,34 +39,12 @@ export const UpdateDetailPage = observer(() => {
         </Stack>
         <Stack gap={2} sx={{ flex: 1 }}>
           <DetailInputs />
-          <Sheet
-            sx={{
-              border: '1px solid',
-              borderColor: 'divider',
-              borderRadius: 'md',
-              position: 'sticky',
-              bottom: 0,
-              width: 'min-content',
-              px: 2
-            }}
-          >
-            <Row>
-              <SaveAndDelete
-                itemName={`Деталь (${api.detail.id}) - ${api.detail.name}`}
-                handleDelete={() =>
-                  api.delete().then(() => {
-                    navigate(open(routeMap.metalflow.details))
-                  })
-                }
-                handleSave={() => api.update()}
-              />
-              <Metadata
-                updatedAt={api.detail.updatedAt}
-                lastManufacturingDate={api.detail.lastManufacturingDate}
-                lastManufacturingQty={api.detail.lastManufacturingQty}
-              />
-            </Row>
-          </Sheet>
+          <Metadata
+            updatedAt={api.detail.updatedAt}
+            lastManufacturingDate={api.detail.lastManufacturingDate}
+            lastManufacturingQty={api.detail.lastManufacturingQty}
+          />
+          <SaveFloatingButton />
         </Stack>
         <Stack gap={1} sx={{ flex: 0 }}>
           <Sheet sx={{ p: 1, borderRadius: 'sm' }}>
@@ -79,6 +56,38 @@ export const UpdateDetailPage = observer(() => {
   )
 })
 
+function SaveFloatingButton() {
+  const navigate = useNavigate()
+  return (
+    <Sheet
+      sx={{
+        border: '2px dashed',
+        borderColor: 'divider',
+        borderRadius: 'md',
+        backgroundColor: 'lightblue',
+        position: 'sticky',
+        bottom: 0,
+        width: 'min-content',
+        px: 3,
+        py: 0.5,
+        height: 'min-content'
+      }}
+    >
+      <Row>
+        <SaveAndDelete
+          itemName={`Деталь (${api.detail.id}) - ${api.detail.name}`}
+          handleDelete={() =>
+            api.delete().then(() => {
+              navigate(openPage(routeMap.metalflow.details))
+            })
+          }
+          handleSave={() => api.update()}
+        />
+      </Row>
+    </Sheet>
+  )
+}
+
 function Metadata(props: {
   updatedAt?: Date
   lastManufacturingDate?: Date
@@ -89,7 +98,7 @@ function Metadata(props: {
       {props.lastManufacturingDate && (
         <P level="body-xs" color="neutral" sx={{ whiteSpace: 'nowrap' }}>
           <b>Последнее производство:</b>{' '}
-          {formatDetailDate(props.lastManufacturingDate)}
+          {formatDetailDateTime(props.lastManufacturingDate)}
           {props.lastManufacturingQty && (
             <span> ({props.lastManufacturingQty} шт)</span>
           )}

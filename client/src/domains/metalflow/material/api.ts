@@ -8,7 +8,7 @@ import { MaterialState } from './state'
 
 export class MaterialApi {
   readonly status = new AsyncStoreController()
-  s = new MaterialState()
+  s: MaterialState = new MaterialState()
   reset() {
     this.s = new MaterialState()
   }
@@ -90,6 +90,17 @@ export class MaterialApi {
     if (materialToRemove) {
       cache.materials.removeMaterial(materialToRemove)
     }
+  }
+
+  async loadDetailsMadeFromThatMaterial(material_id: number) {
+    const res = await rpc.metal.details.listByMaterialId.query({ material_id })
+    this.s.setDetailsMadeFromThisMaterial(
+      res.map(e => ({
+        id: e.detail_id,
+        name: e.name,
+        group_id: e.logical_group_id
+      }))
+    )
   }
 }
 

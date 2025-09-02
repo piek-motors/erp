@@ -6,7 +6,7 @@ import {
   TakeLookHint,
   useEffect
 } from 'lib/index'
-import { open, routeMap } from 'lib/routes'
+import { openPage, routeMap } from 'lib/routes'
 import { t } from '../text'
 import { api } from './api'
 import { DetailInputs } from './components'
@@ -28,7 +28,7 @@ export const CreateDetailPage = observer(() => {
           return (
             <TakeLookHint
               text={t.RecentlyNewDetailAdded}
-              link={open(routeMap.metalflow.detail.edit, res.id)}
+              link={openPage(routeMap.metalflow.detail.edit, res.id)}
             />
           )
         }}

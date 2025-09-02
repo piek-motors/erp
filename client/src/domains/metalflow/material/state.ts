@@ -75,6 +75,20 @@ export class MaterialState {
   setDetailCount(detailCount: number) {
     this.detailCount = detailCount
   }
+  detailsMadeFromThisMaterial: {
+    id: number
+    name: string
+    group_id: number | null
+  }[] = []
+  setDetailsMadeFromThisMaterial(
+    details: { id: number; name: string; group_id: number | null }[]
+  ) {
+    this.detailsMadeFromThisMaterial = details
+  }
+  resetDetails() {
+    this.detailsMadeFromThisMaterial = []
+  }
+
   safetyStock = ''
   setSafetyStock(safetyStock: string) {
     this.safetyStock = safetyStock

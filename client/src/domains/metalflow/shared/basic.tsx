@@ -119,7 +119,7 @@ export const SaveAndDelete = (props: {
   handleSave: () => Promise<unknown>
 }) => {
   return (
-    <Row alignItems={'end'} sx={{ py: 1 }}>
+    <Row alignItems={'end'}>
       <DeleteConfirmDialog
         title={props.itemName}
         handleDelete={() => props.handleDelete()}
@@ -129,7 +129,7 @@ export const SaveAndDelete = (props: {
         onSubmit={() => props.handleSave()}
         stackProps={{ sx: { flexGrow: 1 } }}
         buttonProps={{
-          fullWidth: true
+          size: 'sm'
         }}
       />
     </Row>

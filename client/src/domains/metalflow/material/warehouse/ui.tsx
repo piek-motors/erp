@@ -10,9 +10,8 @@ export const MaterialWarehouse = observer(() => {
   const { id } = useParams<{ id: string }>()
   if (!id) throw new Error('No id')
   const materialId = Number(id)
-  const stockMsg = `Текущий остаток: ${api.s.warehouse.stock} ${uiUnit(
-    api.s.unit
-  )}`
+  const stock = api.s.warehouse.stock.toFixed(0)
+  const stockMsg = `Остаток: ${stock} ${uiUnit(api.s.unit)}`
   return (
     <WarehouseCard
       materialId={materialId}

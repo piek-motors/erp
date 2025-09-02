@@ -53,7 +53,7 @@ export const ManufacturingUpdatePage = observer(() => {
     return <Loading />
   }
   return (
-    <Stack gap={1} p={1}>
+    <Stack gap={1}>
       <MetalPageTitle t={`Заказ #${api.s.order.id}`} />
       <Row gap={1}>
         <Label label="Деталь" />
@@ -70,10 +70,12 @@ export const ManufacturingUpdatePage = observer(() => {
       </Row>
       <QuantityInput />
 
-      <Row gap={1}>
-        <Label label="Статус" />
-        <P>{uiManufacturingOrderStatus(api.s.order.status)}</P>
-      </Row>
+      <WebOnly>
+        <Row gap={1}>
+          <Label label="Статус" />
+          <P>{uiManufacturingOrderStatus(api.s.order.status)}</P>
+        </Row>
+      </WebOnly>
 
       <Row gap={1}>
         <Label label="Дата создания" />
@@ -94,13 +96,8 @@ export const ManufacturingUpdatePage = observer(() => {
         <Row gap={1} mt={1}>
           {api.status.loading && <Loading />}
           <ErrorHint e={api.status.error} />
-          <Box>
-            <ActionButton status={api.s.order.status} />
-          </Box>
-        </Row>
-
-        {isDeletionAllowed && (
-          <Box>
+          <ActionButton status={api.s.order.status} />
+          {isDeletionAllowed && (
             <DeleteResourceButton
               onClick={e => {
                 e.stopPropagation()
@@ -111,8 +108,8 @@ export const ManufacturingUpdatePage = observer(() => {
                 }
               }}
             />
-          </Box>
-        )}
+          )}
+        </Row>
       </WebOnly>
     </Stack>
   )
@@ -254,10 +251,10 @@ const QuantityInput = observer(() => {
   }
   if (api.s.order.status === EnManufacturingOrderStatus.Production) {
     return (
-      <Stack>
+      <Row gap={1}>
         <Label label="Кол-во" />
         <P>{api.s.order.qty}</P>
-      </Stack>
+      </Row>
     )
   }
   return null
@@ -269,6 +266,9 @@ const ActionButton = observer(
       case EnManufacturingOrderStatus.Waiting:
         return (
           <Button
+            size="sm"
+            variant="soft"
+            color="success"
             onClick={() => api.startMaterialPreparationPhase()}
             disabled={api.status.loading}
           >
@@ -278,6 +278,8 @@ const ActionButton = observer(
       case EnManufacturingOrderStatus.MaterialPreparation:
         return (
           <Button
+            size="sm"
+            variant="soft"
             color="success"
             onClick={() => api.startProductionPhase()}
             disabled={api.status.loading || !api.s.qty}
@@ -287,7 +289,13 @@ const ActionButton = observer(
         )
       case EnManufacturingOrderStatus.Production:
         return (
-          <Button onClick={() => api.finish()} disabled={api.status.loading}>
+          <Button
+            onClick={() => api.finish()}
+            disabled={api.status.loading}
+            size="sm"
+            variant="soft"
+            color="danger"
+          >
             Завершить заказ
           </Button>
         )
@@ -315,7 +323,7 @@ const DetailMaterialInfo = observer((props: { cost: MaterialCost }) => {
           </P>
         </Row>
         <P level="body-sm" color="neutral">
-          Текущий остаток: {cost.material?.stock?.toFixed(1)} м
+          Остаток: {cost.material?.stock?.toFixed(1)} м
         </P>
         {api.s.qty && (
           <>

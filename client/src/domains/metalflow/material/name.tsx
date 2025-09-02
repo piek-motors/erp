@@ -1,6 +1,6 @@
 import { WithHiddenLinkButton } from 'components/hidden_button'
 import { P } from 'lib/index'
-import { open, routeMap } from 'lib/routes'
+import { openPage, routeMap } from 'lib/routes'
 import { observer } from 'mobx-react-lite'
 
 export const MaterialName = observer(
@@ -13,7 +13,7 @@ export const MaterialName = observer(
     if (withLink && materialId) {
       return (
         <WithHiddenLinkButton
-          linkTo={open(routeMap.metalflow.material.edit, materialId)}
+          linkTo={openPage(routeMap.metalflow.material.edit, materialId)}
         >
           {materialLabel}
         </WithHiddenLinkButton>

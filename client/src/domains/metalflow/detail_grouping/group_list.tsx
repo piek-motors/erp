@@ -9,7 +9,7 @@ import {
   UseIcon,
   useState
 } from 'lib/index'
-import { open, routeMap } from 'lib/routes'
+import { openPage, routeMap } from 'lib/routes'
 import { Link } from 'react-router-dom'
 import { crud } from './api'
 import { CreateGroupModal } from './group_name.modal'
@@ -33,7 +33,7 @@ const SharedGroupList = observer(
                 props.setMobileOnlyOpen?.(false)
               }}
               key={group.id}
-              to={open(routeMap.metalflow.detailGroup, group.id)}
+              to={openPage(routeMap.metalflow.detailGroup, group.id)}
               style={{ textDecoration: 'none' }}
             >
               <Button

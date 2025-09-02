@@ -1,4 +1,10 @@
-import { ExecuteAction, observer, open, routeMap, useNavigate } from 'lib/index'
+import {
+  ExecuteAction,
+  observer,
+  openPage,
+  routeMap,
+  useNavigate
+} from 'lib/index'
 import { api } from '../detail/api'
 
 export const CreateDetailOrder = observer(() => {
@@ -12,7 +18,7 @@ export const CreateDetailOrder = observer(() => {
       }}
       onSubmit={() =>
         api.createManufacturingOrder().then(r => {
-          navigate(open(routeMap.metalflow.manufacturing_order.edit, r.id))
+          navigate(openPage(routeMap.metalflow.manufacturing_order.edit, r.id))
         })
       }
     />

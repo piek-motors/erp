@@ -31,22 +31,25 @@ export const MaterialSelect = observer(
     value: MaterialCost
     index: number
     onChange: (m: MaterialCost) => void
-  }) => (
-    <MaterialAutocomplete
-      size="sm"
-      data={cache.materials.getMaterials().map(
-        e =>
-          new MaterialCost({
-            material_id: e.id,
-            length: props.value.length
-          })
-      )}
-      value={props.value}
-      onChange={m => {
-        props.onChange(m)
-      }}
-    />
-  )
+  }) => {
+    const data = cache.materials.getMaterials().map(
+      e =>
+        new MaterialCost({
+          material_id: e.id,
+          length: props.value.length
+        })
+    )
+    return (
+      <MaterialAutocomplete
+        size="sm"
+        data={data}
+        value={props.value}
+        onChange={m => {
+          props.onChange(m)
+        }}
+      />
+    )
+  }
 )
 
 const DetailNameInput = observer(() => (

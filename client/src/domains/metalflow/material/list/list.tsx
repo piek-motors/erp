@@ -13,7 +13,7 @@ import {
   Stack,
   useNavigate
 } from 'lib/index'
-import { open, routeMap } from 'lib/routes'
+import { openPage, routeMap } from 'lib/routes'
 import { roundAndTrim } from 'lib/utils/formatting'
 import { EnMaterialShape } from 'models'
 import { Column } from 'react-table'
@@ -87,7 +87,7 @@ export const MaterialList = observer((props: MaterialsTableProps) => {
           return
         } else {
           if (!row.id) throw Error('Material id is null')
-          navigate(open(routeMap.metalflow.material.edit, row.id))
+          navigate(openPage(routeMap.metalflow.material.edit, row.id))
         }
       }}
       trStyleCallback={row => {
@@ -110,7 +110,7 @@ export const MaterialListPage = observer((props: MaterialsTableProps) => {
         <Stack p={0.5} gap={0.5}>
           <MetalPageTitle t={t.MaterialsList}>
             <AddResourceButton
-              navigateTo={open(routeMap.metalflow.material.new)}
+              navigateTo={openPage(routeMap.metalflow.material.new)}
             />
           </MetalPageTitle>
           <Row>

@@ -2,7 +2,7 @@
 import { HoverReveal, WithHiddenLinkButton } from 'components/hidden_button'
 import { cache } from 'domains/metalflow/cache/root'
 import { Box, Button, Row, observer } from 'lib/index'
-import { open, routeMap } from 'lib/routes'
+import { openPage, routeMap } from 'lib/routes'
 import { Link } from 'react-router-dom'
 import { DetailInfoPopup } from './detail_info.popup'
 
@@ -49,7 +49,7 @@ export const DetailName = observer((props: Props) => {
   // Final content with optional link button
   if (withLink) {
     const editLink = detail.id
-      ? open(routeMap.metalflow.detail.edit, detail.id)
+      ? openPage(routeMap.metalflow.detail.edit, detail.id)
       : '#'
 
     return (
@@ -66,7 +66,7 @@ export const DetailName = observer((props: Props) => {
 const GroupLink = observer(({ groupId }: { groupId: number | null }) => {
   if (!groupId) return null
   const groupName = cache.detailGroups.getGroupName(groupId)
-  const groupLink = open(routeMap.metalflow.detailGroup, groupId)
+  const groupLink = openPage(routeMap.metalflow.detailGroup, groupId)
   return (
     <Link to={groupLink} style={{ textDecoration: 'none' }}>
       <Button

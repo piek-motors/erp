@@ -43,7 +43,7 @@ export const routeMap = {
   }
 } as const
 
-export function open(
+export function openPage(
   page: string,
   id?: string | number,
   params: Record<string, any> = {}

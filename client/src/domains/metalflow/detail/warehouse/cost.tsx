@@ -1,9 +1,20 @@
-import { UilMinus } from '@iconscout/react-unicons'
+import { UilLink, UilMinus } from '@iconscout/react-unicons'
 import { Divider, IconButton, Stack } from '@mui/joy'
 import { AccordionCard } from 'components/accordion_card'
+import { ExtraSmallIconButton } from 'components/buttons'
 import { cache } from 'domains/metalflow/cache/root'
 import { QtyInputWithUnit } from 'domains/metalflow/shared'
-import { Box, Label, PlusIcon, Row, Sheet, UseIcon, observer } from 'lib/index'
+import {
+  Box,
+  Label,
+  PlusIcon,
+  Row,
+  Sheet,
+  UseIcon,
+  observer,
+  routeMap
+} from 'lib/index'
+import { openPage } from 'lib/routes'
 import { EnUnit } from 'models'
 import { api } from '../api'
 import { MaterialSelect } from '../components'
@@ -55,17 +66,26 @@ export const MaterialCostInputs = observer(() => (
           />
         }
       >
-        <MaterialSelect
-          value={materialCost}
-          index={index}
-          onChange={cost => {
-            api.detail.autoWriteoff.updateMaterial(
-              index,
-              cost.materialId,
-              cost.length
-            )
-          }}
-        />
+        <Row>
+          <MaterialSelect
+            value={materialCost}
+            index={index}
+            onChange={cost => {
+              api.detail.autoWriteoff.updateMaterial(
+                index,
+                cost.materialId,
+                cost.length
+              )
+            }}
+          />
+          <ExtraSmallIconButton
+            link={openPage(
+              routeMap.metalflow.material.edit,
+              materialCost.materialId
+            )}
+            icon={UilLink}
+          />
+        </Row>
       </CostRow>
     ))}
   </Base>

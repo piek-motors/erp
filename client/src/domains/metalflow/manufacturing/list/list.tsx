@@ -5,7 +5,7 @@ import { MetalPageTitle } from 'domains/metalflow/shared/basic'
 import { observer } from 'lib/deps'
 import {
   Loading,
-  open,
+  openPage,
   P,
   routeMap,
   Stack,
@@ -69,7 +69,7 @@ export const ManufacturingList = observer(() => {
   }, [])
 
   const onRowClick = (row: ManufactoringListOutput) => {
-    navigate(open(routeMap.metalflow.manufacturing_order.edit, row.id))
+    navigate(openPage(routeMap.metalflow.manufacturing_order.edit, row.id))
   }
 
   if (listStore.async.loading) return <Loading />
