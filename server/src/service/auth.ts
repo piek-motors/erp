@@ -1,4 +1,5 @@
 import { UserRepository } from '#root/adapters/repositories/user.js'
+import { log } from '#root/ioc/log.js'
 import { safe } from 'safe-wrapper'
 import { ApiError } from '../lib/api.error.js'
 import { Errcode } from '../lib/error-code.js'
@@ -19,7 +20,7 @@ export class AuthSevice {
     const tokenPayload = this.createTokenPayload(user)
     const tokens = this.tokenService.generateTokenPair(tokenPayload)
     await this.tokenService.insert(user.id, tokens.refreshToken)
-
+    log.info(`login ${user.id} ${user.first_name} ${user.last_name}`)
     return {
       ...tokens,
       user: tokenPayload
@@ -31,7 +32,7 @@ export class AuthSevice {
   }
 
   async refresh(refreshToken: string) {
-    await this.verifyRefreshToken(refreshToken)
+    await this.verifyRefresh(refreshToken)
 
     const token = await this.tokenService.find(refreshToken)
     const tokenPayload = this.createTokenPayload(token.user)
@@ -41,11 +42,13 @@ export class AuthSevice {
       this.tokenService.deleteOutdatedTokens(token.user.id, 30),
       this.tokenService.insert(token.user.id, newTokenPair.refreshToken)
     ])
-
+    log.info(
+      `auth ${token.user.id} ${token.user.first_name} ${token.user.last_name}`
+    )
     return { ...newTokenPair, user: tokenPayload }
   }
 
-  async verifyRefreshToken(refreshToken: string) {
+  async verifyRefresh(refreshToken: string) {
     const [error] = safe(() => this.tokenService.verifyRefresh(refreshToken))()
     if (error) {
       throw ApiError.Unauthorized(Errcode.INVALID_REFRESH_TOKEN)

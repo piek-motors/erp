@@ -39,6 +39,7 @@ const columnList: Column<Material>[] = [
     Header: 'Наименование',
     id: 'name',
     accessor: m => {
+      const label = <P whiteSpace={'nowrap'}>{m.label}</P>
       if (ShapeNameToIconMap[m.shape]) {
         const iconUrl = ShapeNameToIconMap[m.shape]
         return (
@@ -49,11 +50,11 @@ const columnList: Column<Material>[] = [
               height={16}
               style={{ opacity: 0.65 }}
             />
-            <P>{m.label}</P>
+            {label}
           </Row>
         )
       }
-      return <P>{m.label}</P>
+      return label
     },
     width: '95%'
   },
