@@ -5,7 +5,7 @@ import { P } from 'lib/index'
 import { routeMap } from 'lib/routes'
 import { RouteConfig } from 'lib/types/global'
 import { useNavigate } from 'react-router-dom'
-import { NavigationBar } from './components'
+import { NavigationBar } from './components/navigation_bar'
 
 function Settings() {
   const { store } = useAppContext()

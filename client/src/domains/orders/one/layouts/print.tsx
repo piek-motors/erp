@@ -1,6 +1,6 @@
 import { Box, Divider, Grid, Stack } from '@mui/joy'
 
-import { PrintOnly } from 'components/conditional-display'
+import { PrintOnly } from 'components/utilities/conditional-display'
 import { P } from 'lib/index'
 import { formatOnlyDate } from 'lib/utils/formatting'
 import { observer } from 'mobx-react-lite'

@@ -1,4 +1,4 @@
-import { AttachmentList } from 'components'
+import { AttachmentList } from 'components/attachments/attachment-list'
 import { observer } from 'mobx-react-lite'
 import { Attachment } from 'models'
 import { useEffect } from 'react'

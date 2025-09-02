@@ -1,4 +1,4 @@
-import { MonthSelectStore } from 'components/month-select'
+import { MonthSelectStore } from 'components/inputs/month-select'
 import { AsyncStoreController } from 'lib/async-store.controller'
 import { rpc } from 'lib/rpc.client'
 import { makeAutoObservable } from 'mobx'

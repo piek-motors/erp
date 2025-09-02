@@ -1,4 +1,4 @@
-import { MonthSelect } from 'components/month-select'
+import { MonthSelect } from 'components/inputs/month-select'
 import { Button, Checkbox, Input, Label, observer, P, Row, Stack } from 'lib'
 import { store } from './store'
 

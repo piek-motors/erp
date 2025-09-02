@@ -1,4 +1,8 @@
-import { Layout, PrintOnly, WebOnly } from 'components/conditional-display'
+import {
+  Layout,
+  PrintOnly,
+  WebOnly
+} from 'components/utilities/conditional-display'
 import { apolloClient } from 'lib/api'
 import * as gql from 'lib/types/graphql-shema'
 import { makeAutoObservable } from 'mobx'

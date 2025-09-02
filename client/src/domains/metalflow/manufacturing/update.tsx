@@ -1,6 +1,6 @@
 import { Box, Card, Divider, Sheet } from '@mui/joy'
-import { WebOnly } from 'components/conditional-display'
 import { Table } from 'components/table.impl'
+import { WebOnly } from 'components/utilities/conditional-display'
 import { DetailName } from 'domains/metalflow/detail/name'
 import { MaterialName } from 'domains/metalflow/shared'
 import { ComplexTitle, MetalPageTitle } from 'domains/metalflow/shared/basic'

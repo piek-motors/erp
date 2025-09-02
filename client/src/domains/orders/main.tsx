@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { Sheet, Stack } from '@mui/joy'
-import { NavigationBar } from 'components'
 import { Search } from 'components/inputs'
+import { NavigationBar } from 'components/navigation_bar'
 import { OrderTypeFilter } from 'components/order-type-filter'
 import { TableName } from 'components/table-name'
 import { TabConfig, Tabs } from 'components/tabs'

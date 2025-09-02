@@ -1,5 +1,5 @@
 import { Box } from '@mui/joy'
-import { MonthSelect } from 'components/month-select'
+import { MonthSelect } from 'components/inputs/month-select'
 import { TableName } from 'components/table-name'
 import { P } from 'lib/index'
 import { formatMoney } from 'lib/utils/formatting'

@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { Box, Divider, Stack } from '@mui/joy'
 import Grid from '@mui/joy/Grid'
-import { NavigationBar } from 'components'
+import { NavigationBar } from 'components/navigation_bar'
 import { useAppContext } from 'hooks'
 import { bgcolors, Chip, P, Row, text } from 'lib/index'
 import { orderStatus } from 'lib/utils/orderColorIndication'

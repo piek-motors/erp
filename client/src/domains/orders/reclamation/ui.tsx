@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { Box, Card, Stack } from '@mui/joy'
-import { NavigationBar } from 'components'
+import { NavigationBar } from 'components/navigation_bar'
 import { AddResourceButton, Loading, P, Pre } from 'lib/index'
 import { openOrderDetailPage, routeMap } from 'lib/routes'
 import { RouteConfig } from 'lib/types/global'

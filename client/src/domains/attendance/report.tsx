@@ -16,7 +16,9 @@ export const AttendanceReportComponent = (props: {
   const columns: Column<AttendanceEmployee>[] = [
     {
       Header: 'Фамилия Имя',
-      accessor: data => <P width={'min-content'}>{data.name}</P>
+      accessor: data => (
+        <P>{data.name.replace(/\d+/g, '').replace(/\s+/g, ' ').trim()}</P>
+      )
     },
     {
       Header: '∑',
@@ -31,7 +33,7 @@ export const AttendanceReportComponent = (props: {
         Cell: props => {
           const data = props.row.original.days[day]
           return (
-            <Stack>
+            <Stack sx={{ fontSize: '0.86rem' }}>
               {data.intervals.map(interval => (
                 <>
                   {interval.ent && (

@@ -1,5 +1,5 @@
 import Grid from '@mui/joy/Grid'
-import { WebOnly } from 'components/conditional-display'
+import { WebOnly } from 'components/utilities/conditional-display'
 import { OrderLeftPanel, OrderRightPanel } from '../high-level-blocks'
 import { InputPositionModal } from '../positions/input.modal'
 

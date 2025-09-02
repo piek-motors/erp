@@ -1,6 +1,6 @@
 import { BaseAutocomplete } from 'components/base-autocomplete'
 import { DateInput } from 'components/inputs/date_input'
-import { MoneyInput } from 'components/money-input'
+import { MoneyInput } from 'components/inputs/money-input'
 import { Select } from 'components/select'
 import { Inp, MultilineInput, observer } from 'lib/index'
 import { orderStore } from '../stores/order.store'

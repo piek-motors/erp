@@ -1,5 +1,5 @@
 import { Box, Stack } from '@mui/joy'
-import { WebOnly } from 'components/conditional-display'
+import { WebOnly } from 'components/utilities/conditional-display'
 import { DesktopOnly } from 'lib/index'
 import { useEffect } from 'react'
 import { cache } from './cache/root'
