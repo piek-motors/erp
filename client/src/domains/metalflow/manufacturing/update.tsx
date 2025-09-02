@@ -14,7 +14,6 @@ import {
   Loading,
   observer,
   P,
-  printPage,
   routeMap,
   Row,
   Stack,
@@ -103,7 +102,6 @@ export const ManufacturingUpdatePage = observer(() => {
           {api.status.loading && <Loading />}
           <ErrorHint e={api.status.error} />
           <ActionButton status={api.s.order.status} />
-          <PrintButton />
           {isDeletionAllowed && <DeleteButton />}
         </Row>
       </WebOnly>
@@ -126,21 +124,6 @@ const DeleteButton = observer(() => {
     />
   )
 })
-
-const PrintButton = observer(() => (
-  <Button
-    size="sm"
-    variant="soft"
-    onClick={() =>
-      printPage({
-        filename: `${api.s.order?.id ?? ''}_Производственный заказ`,
-        page: { orientation: 'landscape', margin: '10mm' }
-      })
-    }
-  >
-    Печать
-  </Button>
-))
 
 export const Cost = observer(() => {
   const materils = api.s.detail.autoWriteoff.materialsCost

@@ -418,9 +418,6 @@ export function Chip(props: {
   )
 }
 
-export { printPage } from './utils/print'
-export type { PrintOptions } from './utils/print'
-
 // create function to show content only on mobile and hide on desktop
 export function MobileOnly(props: {
   children: React.ReactNode

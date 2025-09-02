@@ -1,5 +1,5 @@
 import { BoxProps, Stack } from '@mui/joy'
-import { Box, Label, LoadingHint, Sheet } from 'lib'
+import { Box, Label, Loading, P, Sheet } from 'lib'
 import { sec2hours } from 'lib/date'
 import moment from 'moment'
 import { Column } from 'react-table'
@@ -16,7 +16,7 @@ export const AttendanceReportComponent = (props: {
   const columns: Column<AttendanceEmployee>[] = [
     {
       Header: 'Фамилия Имя',
-      accessor: data => data.name
+      accessor: data => <P width={'min-content'}>{data.name}</P>
     },
     {
       Header: '∑',
@@ -48,8 +48,8 @@ export const AttendanceReportComponent = (props: {
               ))}
               <Box>
                 {!!data.total_dur && (
-                  <Time sx={{ fontWeight: 700, color: 'primary.500' }}>
-                    ={formatTimeToHoursAndMinutes(data.total_dur)}
+                  <Time sx={{ fontWeight: 600, color: 'primary.500' }}>
+                    {formatTimeToHoursAndMinutes(data.total_dur)}
                   </Time>
                 )}
               </Box>
@@ -59,9 +59,15 @@ export const AttendanceReportComponent = (props: {
       }
     })
   ]
+  if (store.async.loading) return <Loading />
   return (
-    <Sheet sx={{ p: 2, borderRadius: 'sm', width: 'max-content' }}>
-      <LoadingHint show={store.async.loading} />
+    <Sheet
+      sx={{
+        p: 1,
+        borderRadius: 'sm',
+        width: '100%'
+      }}
+    >
       <Label>
         Отчет за{' '}
         {new Date(
@@ -94,7 +100,7 @@ export const formatTimeToHoursAndMinutes = (
 
 function Time(props: { children: React.ReactNode; sx?: BoxProps }) {
   return (
-    <Box sx={{ ...props.sx, whiteSpace: 'nowrap' }}>
+    <Box sx={{ ...props.sx, whiteSpace: 'nowrap', fontSize: '0.86rem' }}>
       <div>{props.children}</div>
     </Box>
   )

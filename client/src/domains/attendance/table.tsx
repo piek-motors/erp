@@ -17,7 +17,7 @@ export function Table({ columns, data }: ITableProps) {
     })
 
   return (
-    <Sheet sx={{ overflow: 'visible', width: 'max-content' }}>
+    <Sheet sx={{ overflow: 'visible', width: '100%' }}>
       <table
         {...getTableProps()}
         css={css`
