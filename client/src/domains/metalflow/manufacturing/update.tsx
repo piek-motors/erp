@@ -1,4 +1,5 @@
 import { Box, Card, Divider, Sheet } from '@mui/joy'
+import { WebOnly } from 'components/conditional-display'
 import { Table } from 'components/table.impl'
 import { DetailName } from 'domains/metalflow/detail/name'
 import { MaterialName } from 'domains/metalflow/shared'
@@ -53,8 +54,8 @@ export const ManufacturingUpdatePage = observer(() => {
   }
   return (
     <Stack gap={1} p={1}>
-      <MetalPageTitle t={`Производственный заказ #${api.s.order.id}`} />
-      <Stack>
+      <MetalPageTitle t={`Заказ #${api.s.order.id}`} />
+      <Row gap={1}>
         <Label label="Деталь" />
         <DetailName
           withGroupLink
@@ -66,49 +67,53 @@ export const ManufacturingUpdatePage = observer(() => {
             group_id: api.s.order.group_id || null
           }}
         />
-      </Stack>
+      </Row>
       <QuantityInput />
-      <Stack>
+
+      <Row gap={1}>
         <Label label="Статус" />
         <P>{uiManufacturingOrderStatus(api.s.order.status)}</P>
-      </Stack>
+      </Row>
 
-      <Stack>
+      <Row gap={1}>
         <Label label="Дата создания" />
         <P>{formatDateWithTime(api.s.order.started_at)}</P>
-      </Stack>
+      </Row>
 
       {api.s.order.finished_at && (
-        <Stack>
+        <Row gap={1}>
           <Label label="Дата окончания" />
           <P>{formatDateWithTime(api.s.order.finished_at)}</P>
-        </Stack>
+        </Row>
       )}
       <Cost />
       <DetailDescription />
       <ProductionRoute />
-      <Stack gap={1} mt={1}>
-        {api.status.loading && <Loading />}
-        <ErrorHint e={api.status.error} />
-        <Box>
-          <ActionButton status={api.s.order.status} />
-        </Box>
-      </Stack>
 
-      {isDeletionAllowed && (
-        <Box>
-          <DeleteResourceButton
-            onClick={e => {
-              e.stopPropagation()
-              if (window.confirm(`Удалить производственный заказ?`)) {
-                api.delete().then(() => {
-                  navigate(routeMap.metalflow.manufacturing_orders)
-                })
-              }
-            }}
-          />
-        </Box>
-      )}
+      <WebOnly>
+        <Row gap={1} mt={1}>
+          {api.status.loading && <Loading />}
+          <ErrorHint e={api.status.error} />
+          <Box>
+            <ActionButton status={api.s.order.status} />
+          </Box>
+        </Row>
+
+        {isDeletionAllowed && (
+          <Box>
+            <DeleteResourceButton
+              onClick={e => {
+                e.stopPropagation()
+                if (window.confirm(`Удалить производственный заказ?`)) {
+                  api.delete().then(() => {
+                    navigate(routeMap.metalflow.manufacturing_orders)
+                  })
+                }
+              }}
+            />
+          </Box>
+        )}
+      </WebOnly>
     </Stack>
   )
 })
@@ -220,9 +225,14 @@ const ProductionRoute = observer(() => {
       <Stack>
         <Label label="Маршрут производства" />
         <Table columns={columnList} data={api.s.processingRoute.steps} />
-        <Box width="min-content" mt={1} ml="auto">
-          <ExecuteAction onSubmit={() => api.save()} buttonLabel="Сохранить" />
-        </Box>
+        <WebOnly>
+          <Box width="min-content" mt={1} ml="auto">
+            <ExecuteAction
+              onSubmit={() => api.save()}
+              buttonLabel="Сохранить"
+            />
+          </Box>
+        </WebOnly>
       </Stack>
     </Sheet>
   )

@@ -118,7 +118,7 @@ export const UniversalDetailsModalSelect = observer(() => {
       size="sm"
       sx={{ whiteSpace: 'pre-wrap' }}
     >
-      Добавить
+      Расширить
     </Button>
   )
 
@@ -143,10 +143,11 @@ export const UniversalDetailsModalSelect = observer(() => {
           <Button
             sx={{ mt: 2 }}
             size="sm"
+            variant="soft"
             onClick={handleAddDetails}
             disabled={crud.store.selectedDetailIds.length === 0}
           >
-            Добавить [{crud.store.selectedDetailIds.length}]
+            Расширить группу на [{crud.store.selectedDetailIds.length}] деталей
           </Button>
         </Box>
       </Stack>

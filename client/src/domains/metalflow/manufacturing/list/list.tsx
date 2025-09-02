@@ -4,7 +4,6 @@ import { DetailName } from 'domains/metalflow/detail/name'
 import { MetalPageTitle } from 'domains/metalflow/shared/basic'
 import { observer } from 'lib/deps'
 import {
-  Box,
   Loading,
   open,
   P,
@@ -77,11 +76,7 @@ export const ManufacturingList = observer(() => {
   return (
     <ScrollableWindow
       refreshTrigger={false}
-      staticContent={
-        <Box p={1}>
-          <MetalPageTitle t={'Детали в производстве'} />
-        </Box>
-      }
+      staticContent={<MetalPageTitle t={'Производство'} />}
       scrollableContent={
         <Stack gap={1}>
           <Table

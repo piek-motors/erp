@@ -4,7 +4,6 @@ import { InModal } from 'components/modal'
 import { SearchResults } from 'components/search-paginated'
 import { Table } from 'components/table.impl'
 import { MetalPageTitle } from 'domains/metalflow/shared/basic'
-import { t } from 'domains/metalflow/text'
 import {
   AddResourceButton,
   Box,
@@ -89,11 +88,9 @@ export const DetailsListPage = observer(() => (
   <ScrollableWindow
     refreshTrigger={false}
     staticContent={
-      <Stack gap={1} p={0.5}>
-        <MetalPageTitle t={t.DetailsList}>
-          <AddResourceButton navigateTo={open(routeMap.metalflow.detail.new)} />
-        </MetalPageTitle>
-      </Stack>
+      <MetalPageTitle t={'Детали'}>
+        <AddResourceButton navigateTo={open(routeMap.metalflow.detail.new)} />
+      </MetalPageTitle>
     }
     scrollableContent={
       <Box p={1}>

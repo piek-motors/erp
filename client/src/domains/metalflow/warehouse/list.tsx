@@ -90,11 +90,7 @@ export const OperationsList = observer((props: Props) => {
   return (
     <ScrollableWindow
       refreshTrigger={false}
-      staticContent={
-        <Box p={1}>
-          <MetalPageTitle t={'Журнал операций'} />
-        </Box>
-      }
+      staticContent={<MetalPageTitle t={'Журнал операций'} />}
       scrollableContent={
         <Box>
           <Table

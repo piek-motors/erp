@@ -23,8 +23,8 @@ interface DetailGroupsLayoutProps {
 const DetailGroupsLayout = observer((props: DetailGroupsLayoutProps) => (
   <RowButColumsAtSm>
     {/* Group list */}
-    <Box p={1}>
-      <MetalPageTitle t="Группы деталей">
+    <Box>
+      <MetalPageTitle t="Группы">
         <MobileGroupList />
       </MetalPageTitle>
 

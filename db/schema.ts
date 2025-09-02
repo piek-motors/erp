@@ -139,6 +139,7 @@ export namespace DB {
   }
   export interface ManufacturingTable {
     id: GeneratedAlways<number>
+    status: EnManufacturingOrderStatus
     detail_id: number
     qty: number
     finished_at: Date | null
@@ -148,7 +149,6 @@ export namespace DB {
       MetarialWiteoffData,
       MetarialWiteoffData
     >
-    status: EnManufacturingOrderStatus
     data: JSONColumnType<
       ManufacturingData,
       ManufacturingData,
