@@ -36,12 +36,10 @@ const DetailGroupsLayout = observer((props: DetailGroupsLayoutProps) => (
     <Box>
       <ScrollableWindow
         staticContent={
-          crud.store.targetGroup && (
-            <Row p={1} gap={1}>
-              <UpdateGroupNameModal />
-              <GroupActions />
-            </Row>
-          )
+          <Row p={0.4}>
+            <UpdateGroupNameModal />
+            <GroupActions />
+          </Row>
         }
         scrollableContent={
           <Stack p={1} px={2}>

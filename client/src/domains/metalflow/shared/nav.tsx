@@ -2,13 +2,12 @@ import { UilPlusCircle } from '@iconscout/react-unicons'
 import { Box, Button, ButtonProps, IconButton, Stack } from '@mui/joy'
 import { NavigationBar } from 'components/navigation_bar'
 import { UseIcon } from 'lib/index'
-import { ReactNode } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { Action, actions } from '../nav.links'
 
 export function NavigationSideBar() {
   return (
-    <Stack gap={1}>
+    <Stack gap={1} p={0.5}>
       <NavigationBar t="Материаловедение" />
       {actions.map(each => (
         <RenderAction action={each} key={each.href} size="sm" />
@@ -57,7 +56,6 @@ function RenderAction(props: { action: Action; size: ButtonProps['size'] }) {
 function MenuButton(props: {
   href: string
   name?: string
-  icon?: ReactNode
   size: ButtonProps['size']
 }) {
   return (

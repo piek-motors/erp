@@ -21,6 +21,7 @@ ssh "$TARGET" <<EOF
   pnpm migrate
 
   cd ~/apps/erp/server
+  rm -rf ~/apps/erp/server/public
   cp -r ~/apps/erp/client/build ~/apps/erp/server/public
   if npx pm2 describe "$PM2_PROCESS_NAME" > /dev/null; then
     echo "Process exists. Restarting..."
