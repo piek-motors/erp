@@ -32,7 +32,7 @@ const ShapeNameToIconMap = {
 
 const columnList: Column<Material>[] = [
   {
-    Header: 'ID',
+    Header: '№',
     accessor: 'id'
   },
   {

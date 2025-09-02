@@ -117,7 +117,7 @@ export function MentionList() {
   })
 
   return (
-    <Container sx={{ p: 1 }}>
+    <Container>
       <NavigationBar t="Упоминания" />
       <Stack direction={'column'} gap={2}>
         {/* unreaderd notifs */}

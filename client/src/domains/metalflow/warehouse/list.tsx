@@ -4,7 +4,7 @@ import { Table } from 'components/table.impl'
 import { DetailName } from 'domains/metalflow/detail/name'
 import { MetalPageTitle } from 'domains/metalflow/shared/basic'
 import { Box, P } from 'lib/index'
-import { formatDateWithTime } from 'lib/utils/formatting'
+import { formatOnlyDate } from 'lib/utils/formatting'
 import { observer } from 'mobx-react-lite'
 import {
   EnOperationType,
@@ -24,14 +24,14 @@ function getColumns(props: {
 }): Column<Operation>[] {
   return [
     {
-      Header: 'ID',
+      Header: '№',
       accessor: 'id'
     },
 
     {
       Header: 'Дата',
       accessor: data => {
-        return formatDateWithTime(data.timestamp!)
+        return formatOnlyDate(data.timestamp!)
       }
     },
     {

@@ -1,4 +1,6 @@
-import { ScrollableWindow } from 'components/inputs'
+import { AccordionGroup } from '@mui/joy'
+import { AccordionCard } from 'components/accordion_card'
+import { ScrollableWindow, Search } from 'components/inputs'
 import { Table } from 'components/table.impl'
 import { DetailName } from 'domains/metalflow/detail/name'
 import { MetalPageTitle } from 'domains/metalflow/shared/basic'
@@ -8,9 +10,11 @@ import {
   openPage,
   P,
   routeMap,
+  Row,
   Stack,
   useEffect,
-  useNavigate
+  useNavigate,
+  useState
 } from 'lib/index'
 import { EnManufacturingOrderStatus, uiManufacturingOrderStatus } from 'models'
 import { Column } from 'react-table'
@@ -18,14 +22,8 @@ import { listStore, ManufactoringListOutput } from './store'
 
 const columnList: Column<ManufactoringListOutput>[] = [
   {
-    Header: 'ID Заказа',
+    Header: '№',
     accessor: 'id'
-  },
-  {
-    Header: 'Статус',
-    accessor: m => {
-      return <P>{uiManufacturingOrderStatus(m.status)}</P>
-    }
   },
   {
     Header: 'Деталь',
@@ -43,7 +41,7 @@ const columnList: Column<ManufactoringListOutput>[] = [
     )
   },
   {
-    Header: 'Количество',
+    Header: 'Кол-во',
     accessor: 'qty'
   },
   {
@@ -52,15 +50,56 @@ const columnList: Column<ManufactoringListOutput>[] = [
       if (!m.started_at) return '-'
       return <P>{formatDate(new Date(m.started_at))}</P>
     }
-  },
+  }
+]
+
+const finishColumns = columnList.concat([
   {
     Header: 'Финиш',
     accessor: m => {
       if (!m.finished_at) return ''
       return <P>{formatDate(new Date(m.finished_at!))}</P>
     }
+  },
+  {
+    Header: 'Дельта',
+    accessor: m => {
+      if (!m.started_at || !m.finished_at) return ''
+      const ms =
+        new Date(m.finished_at).getTime() - new Date(m.started_at).getTime()
+      if (ms <= 0) return ''
+      const totalMinutes = Math.floor(ms / 60000)
+      const days = Math.floor(totalMinutes / 1440)
+      const hours = Math.floor((totalMinutes % 1440) / 60)
+      const value = days > 0 ? `${days}д ${hours}ч` : `${hours}ч`
+      return <P>{value}</P>
+    }
   }
-]
+])
+
+function StatusAccordion(props: {
+  status: EnManufacturingOrderStatus
+  onRowClick: (row: ManufactoringListOutput) => void
+  expanded?: boolean
+  data: ManufactoringListOutput[]
+}) {
+  return (
+    <AccordionCard
+      title={uiManufacturingOrderStatus(props.status)}
+      expanded={props.expanded}
+    >
+      <Table
+        data={props.data}
+        columns={
+          props.status === EnManufacturingOrderStatus.Collected
+            ? finishColumns
+            : columnList
+        }
+        onRowClick={props.onRowClick}
+      />
+    </AccordionCard>
+  )
+}
 
 export const ManufacturingList = observer(() => {
   const navigate = useNavigate()
@@ -72,26 +111,48 @@ export const ManufacturingList = observer(() => {
     navigate(openPage(routeMap.metalflow.manufacturing_order.edit, row.id))
   }
 
+  const [query, setQuery] = useState('')
+  const q = query.trim().toLowerCase()
+  const filtered = q
+    ? listStore.orders.filter(o => {
+        const idMatch = String(o.id).includes(q)
+        const nameMatch = o.detail_name?.toLowerCase().includes(q)
+        const groupMatch = String(o.group_id || '').includes(q)
+        return idMatch || nameMatch || groupMatch
+      })
+    : listStore.orders
+
+  const hasInStatus = (s: EnManufacturingOrderStatus) =>
+    filtered.some(o => o.status === s)
+
   if (listStore.async.loading) return <Loading />
   return (
     <ScrollableWindow
       refreshTrigger={false}
-      staticContent={<MetalPageTitle t={'Производство'} />}
+      staticContent={
+        <Row gap={0}>
+          <MetalPageTitle t={'Производство'} />
+          <Search value={query} onChange={e => setQuery(e.target.value)} />
+        </Row>
+      }
       scrollableContent={
         <Stack gap={1}>
-          <Table
-            trStyleCallback={tr => {
-              if (tr.original.status === EnManufacturingOrderStatus.Collected) {
-                return {
-                  backgroundColor: 'lightgreen'
-                }
-              }
-              return {}
-            }}
-            data={listStore.orders}
-            columns={columnList}
-            onRowClick={onRowClick}
-          />
+          <AccordionGroup>
+            {[
+              EnManufacturingOrderStatus.Collected,
+              EnManufacturingOrderStatus.Production,
+              EnManufacturingOrderStatus.MaterialPreparation,
+              EnManufacturingOrderStatus.Waiting
+            ].map(s => (
+              <StatusAccordion
+                key={s}
+                status={s}
+                onRowClick={onRowClick}
+                expanded={q ? hasInStatus(s) : undefined}
+                data={filtered.filter(o => o.status === s)}
+              />
+            ))}
+          </AccordionGroup>
         </Stack>
       }
     />
@@ -100,10 +161,7 @@ export const ManufacturingList = observer(() => {
 
 function formatDate(date: Date) {
   return Intl.DateTimeFormat('ru-RU', {
-    year: '2-digit',
-    month: 'numeric',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit'
+    month: 'short',
+    day: 'numeric'
   }).format(date)
 }

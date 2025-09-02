@@ -37,7 +37,7 @@ export const CreateOrder = observer(() => {
 
   return (
     <CenteredContainer>
-      <Box p={1}>
+      <Box>
         <Row>
           <NavigationBar t={'Новый заказ'} />
         </Row>

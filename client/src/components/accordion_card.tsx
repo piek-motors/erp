@@ -6,13 +6,15 @@ export interface AccordionCardProps {
   children: React.ReactNode
   sx?: React.CSSProperties
   defaultExpanded?: boolean
+  expanded?: boolean
 }
 
 export const AccordionCard: React.FC<AccordionCardProps> = ({
   title,
   children,
   sx,
-  defaultExpanded
+  defaultExpanded,
+  expanded: expandedProp
 }) => {
   const key = typeof title === 'string' ? title : String(title)
   const storageKey = `accordion_expanded_${key}`
@@ -25,6 +27,10 @@ export const AccordionCard: React.FC<AccordionCardProps> = ({
   useEffect(() => {
     localStorage.setItem(storageKey, String(expanded))
   }, [expanded, storageKey])
+
+  useEffect(() => {
+    if (typeof expandedProp === 'boolean') setExpanded(expandedProp)
+  }, [expandedProp])
 
   return (
     <Sheet sx={{ borderRadius: 'sm', overflow: 'hidden', ...sx }}>

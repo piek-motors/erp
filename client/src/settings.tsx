@@ -17,7 +17,7 @@ function Settings() {
   }
 
   return (
-    <Container maxWidth="sm" sx={{ p: 1 }}>
+    <Container maxWidth="sm">
       <NavigationBar t="Аккаунт" />
       <P>{store.user?.fullName}</P>
       <P>Роль: {store.user?.role}</P>

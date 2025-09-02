@@ -3,6 +3,7 @@ import { MetalPageTitle } from 'domains/metalflow/shared/basic'
 import {
   Box,
   Loading,
+  MobileOnly,
   observer,
   Row,
   RowButColumsAtSm,
@@ -13,7 +14,7 @@ import { ReactNode } from 'react'
 import { useParams } from 'react-router-dom'
 import { crud } from './api'
 import { GroupActions, TargetGroupDetailList } from './detail_list'
-import { DesktopGroupList, MobileGroupList } from './group_list'
+import { DesktopGroupList, GroupSelectModal } from './group_list'
 import { UpdateGroupNameModal } from './group_name.modal'
 
 interface DetailGroupsLayoutProps {
@@ -25,7 +26,9 @@ const DetailGroupsLayout = observer((props: DetailGroupsLayoutProps) => (
     {/* Group list */}
     <Box>
       <MetalPageTitle t="Группы">
-        <MobileGroupList />
+        <MobileOnly>
+          <GroupSelectModal />
+        </MobileOnly>
       </MetalPageTitle>
 
       <DesktopGroupList />

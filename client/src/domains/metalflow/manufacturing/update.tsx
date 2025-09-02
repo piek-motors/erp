@@ -14,6 +14,7 @@ import {
   Loading,
   observer,
   P,
+  printPage,
   routeMap,
   Row,
   Stack,
@@ -30,7 +31,6 @@ import { api } from './api'
 
 export const ManufacturingUpdatePage = observer(() => {
   const { id } = useParams<{ id: string }>()
-  const navigate = useNavigate()
 
   useEffect(() => {
     if (id) {
@@ -53,7 +53,7 @@ export const ManufacturingUpdatePage = observer(() => {
     return <Loading />
   }
   return (
-    <Stack gap={1}>
+    <Stack gap={0.5}>
       <MetalPageTitle t={`Заказ #${api.s.order.id}`} />
       <Row gap={1}>
         <Label label="Деталь" />
@@ -77,14 +77,14 @@ export const ManufacturingUpdatePage = observer(() => {
         </Row>
       </WebOnly>
 
-      <Row gap={1}>
-        <Label label="Дата создания" />
+      <Row>
+        <Label label="Создан" />
         <P>{formatDateWithTime(api.s.order.started_at)}</P>
       </Row>
 
       {api.s.order.finished_at && (
-        <Row gap={1}>
-          <Label label="Дата окончания" />
+        <Row>
+          <Label label="Завершен" />
           <P>{formatDateWithTime(api.s.order.finished_at)}</P>
         </Row>
       )}
@@ -93,27 +93,48 @@ export const ManufacturingUpdatePage = observer(() => {
       <ProductionRoute />
 
       <WebOnly>
-        <Row gap={1} mt={1}>
+        <Row mt={1}>
           {api.status.loading && <Loading />}
           <ErrorHint e={api.status.error} />
           <ActionButton status={api.s.order.status} />
-          {isDeletionAllowed && (
-            <DeleteResourceButton
-              onClick={e => {
-                e.stopPropagation()
-                if (window.confirm(`Удалить производственный заказ?`)) {
-                  api.delete().then(() => {
-                    navigate(routeMap.metalflow.manufacturing_orders)
-                  })
-                }
-              }}
-            />
-          )}
+          <PrintButton />
+          {isDeletionAllowed && <DeleteButton />}
         </Row>
       </WebOnly>
     </Stack>
   )
 })
+
+const DeleteButton = observer(() => {
+  const navigate = useNavigate()
+  return (
+    <DeleteResourceButton
+      onClick={e => {
+        e.stopPropagation()
+        if (window.confirm(`Удалить заказ?`)) {
+          api.delete().then(() => {
+            navigate(routeMap.metalflow.manufacturing_orders)
+          })
+        }
+      }}
+    />
+  )
+})
+
+const PrintButton = observer(() => (
+  <Button
+    size="sm"
+    variant="soft"
+    onClick={() =>
+      printPage({
+        filename: `${api.s.order?.id ?? ''}_Производственный заказ`,
+        page: { orientation: 'landscape', margin: '5mm' }
+      })
+    }
+  >
+    Печать
+  </Button>
+))
 
 export const Cost = observer(() => {
   const materils = api.s.detail.autoWriteoff.materialsCost
@@ -136,7 +157,7 @@ export const Cost = observer(() => {
           <Label label="Детали к потреблению" />
           <Stack gap={0.5}>
             {details.map((cost, index) => (
-              <Row gap={1}>
+              <Row>
                 <DetailName
                   detail={{
                     id: cost.detailId,
@@ -243,6 +264,7 @@ const QuantityInput = observer(() => {
         label="Кол-во"
         sx={{ maxWidth: 70 }}
         value={api.s.qty}
+        variant="plain"
         onChange={v => {
           api.s.setQty(v)
         }}

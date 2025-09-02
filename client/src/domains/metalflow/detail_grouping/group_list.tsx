@@ -1,21 +1,14 @@
 import { UilBars } from '@iconscout/react-unicons'
 import { Button, Stack } from '@mui/joy'
 import { InModal } from 'components/modal'
-import {
-  DesktopOnly,
-  MobileOnly,
-  observer,
-  P,
-  UseIcon,
-  useState
-} from 'lib/index'
+import { DesktopOnly, observer, P, UseIcon, useState } from 'lib/index'
 import { openPage, routeMap } from 'lib/routes'
 import { Link } from 'react-router-dom'
 import { crud } from './api'
 import { CreateGroupModal } from './group_name.modal'
 
 const SharedGroupList = observer(
-  (props: { setMobileOnlyOpen?: (open: boolean) => void }) => {
+  (props: { onLinkClick?: (open: boolean) => void }) => {
     if (crud.store.groups.length === 0) {
       return (
         <P level="body-sm" color="neutral">
@@ -30,7 +23,7 @@ const SharedGroupList = observer(
           return (
             <Link
               onClick={e => {
-                props.setMobileOnlyOpen?.(false)
+                props.onLinkClick?.(false)
               }}
               key={group.id}
               to={openPage(routeMap.metalflow.detailGroup, group.id)}
@@ -60,27 +53,23 @@ export const DesktopGroupList = observer(() => {
   )
 })
 
-export const MobileGroupList = observer(() => {
-  const [mobileOnlyOpen, setMobileOnlyOpen] = useState(false)
+export const GroupSelectModal = observer(() => {
+  const [open, setOpen] = useState(false)
   return (
-    <MobileOnly>
-      <InModal
-        openButton={
-          <Button
-            variant="solid"
-            color="primary"
-            startDecorator={<UseIcon icon={UilBars} invert />}
-          >
-            Группы
-          </Button>
-        }
-        open={mobileOnlyOpen}
-        setOpen={v => {
-          setMobileOnlyOpen(v)
-        }}
-      >
-        <SharedGroupList setMobileOnlyOpen={setMobileOnlyOpen} />
-      </InModal>
-    </MobileOnly>
+    <InModal
+      openButton={
+        <Button
+          variant="solid"
+          color="primary"
+          startDecorator={<UseIcon icon={UilBars} invert />}
+        >
+          Группы
+        </Button>
+      }
+      open={open}
+      setOpen={v => setOpen(v)}
+    >
+      <SharedGroupList onLinkClick={setOpen} />
+    </InModal>
   )
 })

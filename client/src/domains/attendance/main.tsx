@@ -8,7 +8,7 @@ import { store } from './store'
 
 const Attendance = observer(() => {
   return (
-    <Stack p={1} gap={1} sx={{ overflow: 'auto' }}>
+    <Stack gap={1} sx={{ overflow: 'auto' }}>
       <NavigationBar t={'Рабочее время'} />
       <WebOnly>
         <Box width={'min-content'} borderRadius={20}>

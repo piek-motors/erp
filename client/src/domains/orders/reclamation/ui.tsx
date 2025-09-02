@@ -158,7 +158,7 @@ const ReclamationPage = observer(() => {
   }, [])
 
   return (
-    <Stack p={1}>
+    <Stack>
       <NavigationBar t="Рекламация">
         <AddResourceButton
           onClick={() => {

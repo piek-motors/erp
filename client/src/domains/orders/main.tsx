@@ -206,7 +206,7 @@ const Wrapper = observer(
     }
 
     return (
-      <Stack p={1}>
+      <Stack>
         <NavigationBar t={t.ordersTitle}>
           <AddResourceButton onClick={() => insertNewOrder()} />
         </NavigationBar>
@@ -253,7 +253,7 @@ const exportRoutes = (
   ] as const
 ).map(({ path, element }) => ({
   path,
-  element: <Wrapper sx={{ p: 1 }}>{element}</Wrapper>
+  element: <Wrapper sx={{ p: 0 }}>{element}</Wrapper>
 })) as RouteConfig[]
 
 export default exportRoutes

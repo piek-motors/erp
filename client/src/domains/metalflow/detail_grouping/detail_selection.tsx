@@ -147,7 +147,7 @@ export const UniversalDetailsModalSelect = observer(() => {
             onClick={handleAddDetails}
             disabled={crud.store.selectedDetailIds.length === 0}
           >
-            Расширить группу на [{crud.store.selectedDetailIds.length}] деталей
+            Расширить [{crud.store.selectedDetailIds.length}]
           </Button>
         </Box>
       </Stack>

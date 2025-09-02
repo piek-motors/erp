@@ -33,6 +33,7 @@ import {
   Typography,
   TypographyProps
 } from '@mui/joy'
+import { useIsDesktop, useIsMobile } from 'hooks/use-media-query'
 import { observer } from 'mobx-react-lite'
 import React, { JSX } from 'react'
 import { Link as ReactLink, useNavigate } from 'react-router-dom'
@@ -416,11 +417,18 @@ export function Chip(props: {
   )
 }
 
+export { printPage } from './utils/print'
+export type { PrintOptions } from './utils/print'
+
 // create function to show content only on mobile and hide on desktop
 export function MobileOnly(props: {
   children: React.ReactNode
   sx?: BoxProps['sx']
 }) {
+  const isMobile = useIsMobile()
+  if (!isMobile) {
+    return null
+  }
   return (
     <Box sx={{ display: { xs: 'block', sm: 'none' }, ...props.sx }}>
       {props.children}
@@ -433,6 +441,10 @@ export function DesktopOnly(props: {
   children: React.ReactNode
   sx?: BoxProps['sx']
 }) {
+  const isDesktop = useIsDesktop()
+  if (!isDesktop) {
+    return null
+  }
   return (
     <Box sx={{ display: { xs: 'none', sm: 'block' }, ...props.sx }}>
       {props.children}

@@ -28,7 +28,7 @@ import { detailListStore as state } from './store'
 
 const columnList: Column<DetailState>[] = [
   {
-    Header: 'ID',
+    Header: '№',
     accessor: 'id'
   },
   {
