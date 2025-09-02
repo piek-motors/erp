@@ -1,5 +1,7 @@
 import { db, procedure } from '#root/deps.js'
 
+const FinishedLimit = 20
+
 const query = db
   .selectFrom('metal_flow.manufacturing as m')
   .selectAll('m')
@@ -12,7 +14,7 @@ export const listManufacturing = procedure.query(async () => {
       .where('m.finished_at', 'is', null)
       .orderBy('m.status', 'asc')
       .execute(),
-    query.where('m.finished_at', 'is not', null).limit(50).execute()
+    query.where('m.finished_at', 'is not', null).limit(FinishedLimit).execute()
   ])
 
   return [

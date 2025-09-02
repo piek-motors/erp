@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { Box, Card, Stack } from '@mui/joy'
 import { NavigationBar } from 'components'
-import { AddResourceButton, LoadingHint, P, Pre } from 'lib/index'
+import { AddResourceButton, Loading, P, Pre } from 'lib/index'
 import { openOrderDetailPage, routeMap } from 'lib/routes'
 import { RouteConfig } from 'lib/types/global'
 import { observer } from 'mobx-react-lite'
@@ -168,7 +168,7 @@ const ReclamationPage = observer(() => {
       </NavigationBar>
 
       <Box>
-        <LoadingHint show={reclamationStore.loading} />
+        {reclamationStore.loading && <Loading />}
         <Reclamation />
       </Box>
     </Stack>

@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   Container,
   ContainerProps,
@@ -28,8 +29,8 @@ export function MaterialUnitSelect(props: {
   onChange: (e: EnUnit) => void
 }) {
   return (
-    <Stack gap={1}>
-      <Label label="Единицы измерения" />
+    <Stack>
+      <Label label="Ед. измерения" />
       <ToggleButtonGroup
         variant="plain"
         color="primary"
@@ -40,7 +41,7 @@ export function MaterialUnitSelect(props: {
       >
         {Object.entries(UiUnit).map(([key, value]) => {
           return (
-            <Button value={key} key={key}>
+            <Button value={key} key={key} color="neutral">
               {value}
             </Button>
           )
@@ -56,6 +57,7 @@ import {
   ErrorHint,
   ExecuteAction,
   Label,
+  P,
   routeMap,
   Row
 } from 'lib/index'
@@ -103,6 +105,7 @@ import {
   NavigationBar,
   Props as PageTitleProps
 } from 'components/navigation_bar'
+import { ReactNode } from 'react'
 
 /** Narrow container */
 export function Narrow(props: ContainerProps) {
@@ -161,5 +164,29 @@ export function MetalPageTitle(props: PageTitleProps) {
       hideIcon
       spaceBetween
     />
+  )
+}
+
+export function capitalize(text: string) {
+  if (!text) return ''
+  return text[0].toUpperCase() + text.slice(1)
+}
+
+export function ComplexTitle(props: {
+  subtitle: string
+  title: string | ReactNode
+  index: number
+}) {
+  return (
+    <Box>
+      <P level="body-sm" whiteSpace={'nowrap'}>
+        {props.subtitle} №{props.index}
+      </P>
+      <P whiteSpace={'nowrap'} color="primary" fontWeight={700} level="body-lg">
+        {typeof props.title === 'string'
+          ? capitalize(props.title)
+          : props.title}
+      </P>
+    </Box>
   )
 }

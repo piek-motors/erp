@@ -185,7 +185,8 @@ export function AddResourceButton(props: {
 
   return (
     <Button
-      variant="soft"
+      variant="solid"
+      size="sm"
       color="primary"
       onClick={
         props.onClick

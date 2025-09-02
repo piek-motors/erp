@@ -2,12 +2,12 @@ import { UilHome } from '@iconscout/react-unicons'
 import { Box, IconButton, Stack } from '@mui/joy'
 import { SxProperty } from 'lib/constants'
 import { routeMap } from 'lib/routes'
-import React from 'react'
+import React, { ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import { MobileOnly, P, Row, UseIcon } from '../lib'
 
 export interface Props {
-  t?: string
+  t?: string | ReactNode
   subTitle?: string | null
   sx?: SxProperty
   children?: React.ReactNode
@@ -24,7 +24,7 @@ export function NavigationBar(props: Props) {
       direction="row"
       gap={1}
       alignItems="center"
-      sx={{ p: 0.5, minHeight: '36px' }}
+      sx={{ minHeight: '36px' }}
     >
       {!props.hideIcon && (
         <Link to={routeMap.index}>
@@ -52,7 +52,7 @@ export function NavigationBar(props: Props) {
       )}
 
       <Row gap={1} sx={{ ...props.sx }}>
-        {props.t && (
+        {props.t && typeof props.t === 'string' ? (
           <P
             color="primary"
             fontWeight={600}
@@ -61,9 +61,11 @@ export function NavigationBar(props: Props) {
           >
             {props.t}
           </P>
+        ) : (
+          props.t
         )}
         {props.subTitle && (
-          <P level="body-sm" fontWeight={700} sx={{ width: 'max-content' }}>
+          <P level="body-sm" fontWeight={600} sx={{ width: 'max-content' }}>
             {props.subTitle}
           </P>
         )}

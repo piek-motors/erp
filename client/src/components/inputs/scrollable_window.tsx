@@ -57,7 +57,7 @@ export const ScrollableWindow = (props: {
       {props.staticContent}
       <ScrollComponent refreshTrigger={props.refreshTrigger} sx={scrollSx}>
         <Wrapper
-          sx={{ width: '100%', ...props.contentSx }}
+          sx={{ width: '100%', ...props.contentSx, borderRadius: 'sm' }}
           useSheet={props.useSheet ?? true}
         >
           <Box sx={{ width: '100%' }}>{props.scrollableContent}</Box>

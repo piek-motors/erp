@@ -1,7 +1,5 @@
-import { Card } from '@mui/joy'
-import { MetalPageTitle } from 'domains/metalflow/shared/basic'
+import { ComplexTitle, MetalPageTitle } from 'domains/metalflow/shared/basic'
 import {
-  Inp,
   Loading,
   observer,
   RowButColumsAtSm,
@@ -11,10 +9,10 @@ import {
   useParams
 } from 'lib/index'
 import { openPage, routeMap } from 'lib/routes'
-import { AlloyAutocomplete, SaveAndDelete } from '../shared/basic'
+import { SaveAndDelete } from '../shared/basic'
 import { api } from './api'
 import { DetailsMadeOfMaterialModal } from './details_made_of_that_material'
-import { tabList } from './insert'
+import { MaterialFormFields } from './form-fields'
 import { MaterialWarehouse } from './warehouse/ui'
 
 export const MaterialUpdatePage = observer(() => {
@@ -30,39 +28,25 @@ export const MaterialUpdatePage = observer(() => {
   }, [id])
 
   if (api.s.loadingWall.loading) return <Loading />
+  if (!api.s || !api.s.id || !api.s.label) return <Loading />
   return (
     <Stack alignItems={'start'} p={1} gap={0.5}>
-      <MetalPageTitle t={`Материал #${materialId} ${api.s.label || ''}`} />
+      <MetalPageTitle
+        t={
+          <ComplexTitle
+            subtitle="Материал"
+            title={api.s.label}
+            index={api.s.id}
+          />
+        }
+      />
       <RowButColumsAtSm>
         <Stack gap={1}>
           <MaterialWarehouse />
           <DetailsMadeOfMaterialModal />
         </Stack>
-        <Card variant="outlined" size="sm">
-          <Stack>
-            {tabList.find(t => t.value === api.s.shape)?.component}
-            <AlloyAutocomplete
-              setAlloy={alloy => {
-                api.s.setAlloy(alloy)
-              }}
-              alloy={api.s.alloy}
-            />
-            <Inp
-              label={'Линейная масса'}
-              value={api.s.linearMass}
-              onChange={v => {
-                api.s.setLinearMass(v)
-              }}
-              unit="кг/м"
-            />
-            <Inp
-              label={'Безопасный остаток'}
-              value={api.s.safetyStock}
-              onChange={v => {
-                api.s.setSafetyStock(v)
-              }}
-            />
-          </Stack>
+        <Stack gap={1}>
+          <MaterialFormFields />
           <SaveAndDelete
             itemName={`Материал (${api.s.id}) - ${api.s.label}`}
             handleDelete={() =>
@@ -72,7 +56,7 @@ export const MaterialUpdatePage = observer(() => {
             }
             handleSave={() => api.update()}
           />
-        </Card>
+        </Stack>
       </RowButColumsAtSm>
     </Stack>
   )

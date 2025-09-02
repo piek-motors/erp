@@ -1,5 +1,9 @@
 import { Sheet, Stack } from '@mui/joy'
-import { MetalPageTitle, SaveAndDelete } from 'domains/metalflow/shared/basic'
+import {
+  ComplexTitle,
+  MetalPageTitle,
+  SaveAndDelete
+} from 'domains/metalflow/shared/basic'
 import {
   Loading,
   observer,
@@ -31,7 +35,15 @@ export const UpdateDetailPage = observer(() => {
   if (api.status.loading) return <Loading />
   return (
     <Stack gap={1} p={1}>
-      <MetalPageTitle t={`Деталь #${api.detail.id} - ${api.detail.name}`} />
+      <MetalPageTitle
+        t={
+          <ComplexTitle
+            subtitle="Деталь"
+            title={api.detail.name}
+            index={api.detail.id!}
+          />
+        }
+      />
       <RowButColumsAtSm gap={1} flexGrow={4}>
         <Stack gap={1} sx={{ flex: 0 }}>
           <DetailWarehouse />

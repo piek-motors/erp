@@ -16,7 +16,7 @@ import { OrderStatementInput, StatementView } from './statement/ui'
 import { orderStore } from './stores/order.store'
 
 export const PageHeader = () => (
-  <NavigationBar t={text.orderDetails} spaceBetween>
+  <NavigationBar t={'Детали заказа'} spaceBetween>
     <OrderActions />
   </NavigationBar>
 )
@@ -102,7 +102,6 @@ export const OrderLeftPanel = observer(() => (
     flexGrow={1}
     css={orderPositionsStyle}
     sx={{
-      p: 1,
       overflowY: 'scroll',
       height: {
         xs: 'auto',
@@ -112,7 +111,7 @@ export const OrderLeftPanel = observer(() => (
   >
     <Stack display={'flex'} flexGrow={1} flexShrink={0}>
       <PageHeader />
-      <Stack p={2} gap={3}>
+      <Stack p={1} gap={3}>
         <OrderMetadata />
         <Box>
           <PositionsList />

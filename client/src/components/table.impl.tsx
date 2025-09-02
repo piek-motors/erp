@@ -29,7 +29,7 @@ export function Table<T extends object>(props: Props<T>) {
     )
   if (data.length === 0) return
   return (
-    <Sheet>
+    <Sheet sx={{ borderRadius: 'sm' }}>
       <MuiTable
         {...getTableProps()}
         style={{ tableLayout: 'auto' }}

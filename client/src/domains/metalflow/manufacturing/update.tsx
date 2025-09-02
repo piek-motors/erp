@@ -3,7 +3,7 @@ import { WebOnly } from 'components/conditional-display'
 import { Table } from 'components/table.impl'
 import { DetailName } from 'domains/metalflow/detail/name'
 import { MaterialName } from 'domains/metalflow/shared'
-import { MetalPageTitle } from 'domains/metalflow/shared/basic'
+import { ComplexTitle, MetalPageTitle } from 'domains/metalflow/shared/basic'
 import {
   Button,
   DeleteResourceButton,
@@ -54,20 +54,26 @@ export const ManufacturingUpdatePage = observer(() => {
   }
   return (
     <Stack gap={0.5}>
-      <MetalPageTitle t={`Заказ #${api.s.order.id}`} />
-      <Row gap={1}>
-        <Label label="Деталь" />
-        <DetailName
-          withGroupLink
-          withLink
-          withParamsButton
-          detail={{
-            id: api.s.order.detail_id,
-            name: api.s.order.detail_name,
-            group_id: api.s.order.group_id || null
-          }}
-        />
-      </Row>
+      <MetalPageTitle
+        t={
+          <ComplexTitle
+            subtitle="Заказ"
+            title={
+              <DetailName
+                withLink
+                withParamsButton
+                detail={{
+                  id: api.s.order.detail_id,
+                  name: api.s.order.detail_name,
+                  group_id: api.s.order.group_id || null
+                }}
+              />
+            }
+            index={api.s.order.id}
+          />
+        }
+      />
+
       <QuantityInput />
 
       <WebOnly>
@@ -128,7 +134,7 @@ const PrintButton = observer(() => (
     onClick={() =>
       printPage({
         filename: `${api.s.order?.id ?? ''}_Производственный заказ`,
-        page: { orientation: 'landscape', margin: '5mm' }
+        page: { orientation: 'landscape', margin: '10mm' }
       })
     }
   >
