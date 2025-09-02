@@ -2,7 +2,6 @@ import { ScrollableWindow } from 'components/inputs'
 import { MetalPageTitle } from 'domains/metalflow/shared/basic'
 import {
   Box,
-  Loading,
   MobileOnly,
   observer,
   Row,
@@ -69,9 +68,7 @@ export const DetailGroupById = observer(() => {
       crud.store.clear()
     }
   }, [id])
-  if (crud.async.loading) {
-    return <Loading />
-  }
+
   return <DetailGroupsLayout />
 })
 

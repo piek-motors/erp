@@ -31,7 +31,7 @@ const SharedGroupList = observer(
             >
               <Button
                 size="sm"
-                variant={isSelected ? 'soft' : 'plain'}
+                variant={isSelected ? 'solid' : 'plain'}
                 color={isSelected ? 'primary' : 'neutral'}
               >
                 {group.name}
