@@ -12,8 +12,7 @@ export const listManufacturing = procedure.query(async () => {
   const [inProduction, finished] = await Promise.all([
     query
       .where('m.finished_at', 'is', null)
-      .orderBy('m.status', 'asc')
-      .orderBy('m.started_at', 'desc')
+      .orderBy('m.started_at', 'asc')
       .execute(),
     query
       .where('m.finished_at', 'is not', null)
