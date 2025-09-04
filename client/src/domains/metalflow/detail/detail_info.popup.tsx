@@ -61,7 +61,6 @@ export const DetailInfoPopup = observer(
             label="Группа"
             value={cache.detailGroups.getGroupName(api.detail.groupId)}
           />
-          <Pair label="Примечания" value={api.detail.description} />
           {api.detail.technicalParameters &&
             api.detail.technicalParameters?.arr?.length > 0 && (
               <MenuItem>

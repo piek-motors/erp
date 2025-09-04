@@ -13,8 +13,13 @@ export const listManufacturing = procedure.query(async () => {
     query
       .where('m.finished_at', 'is', null)
       .orderBy('m.status', 'asc')
+      .orderBy('m.started_at', 'desc')
       .execute(),
-    query.where('m.finished_at', 'is not', null).limit(FinishedLimit).execute()
+    query
+      .where('m.finished_at', 'is not', null)
+      .limit(FinishedLimit)
+      .orderBy('m.finished_at', 'desc')
+      .execute()
   ])
 
   return [
