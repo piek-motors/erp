@@ -22,7 +22,7 @@ export function NavigationBar(props: Props) {
   return (
     <Stack
       direction="row"
-      gap={1}
+      gap={2}
       alignItems="center"
       sx={{ minHeight: '36px' }}
     >

@@ -67,7 +67,7 @@ export const AttendanceReportComponent = (props: {
       sx={{
         p: 1,
         borderRadius: 'sm',
-        width: '100%'
+        width: 'max-content'
       }}
     >
       <Label>

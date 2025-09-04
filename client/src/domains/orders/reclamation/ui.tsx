@@ -20,7 +20,7 @@ function ReclamationItem({ order }: Props) {
   return (
     <Card
       sx={{ my: 1, backgroundColor: order.getBackgroundColor() }}
-      variant="soft"
+      variant="outlined"
       onDoubleClick={() => navigate(openOrderDetailPage(order.id))}
     >
       <P color="primary">

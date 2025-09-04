@@ -1,9 +1,8 @@
 /** @jsxImportSource @emotion/react */
-import { Box, Divider, Stack } from '@mui/joy'
+import { Box, Divider, Sheet, Stack } from '@mui/joy'
 import Grid from '@mui/joy/Grid'
-import { NavigationBar } from 'components/navigation_bar'
 import { useAppContext } from 'hooks'
-import { bgcolors, Chip, P, Row, text } from 'lib/index'
+import { Chip, P, Row, text } from 'lib/index'
 import { orderStatus } from 'lib/utils/orderColorIndication'
 import { observer } from 'mobx-react-lite'
 import { CommentInputViewPort, CommentListViewPort } from './comments/ui'
@@ -15,11 +14,7 @@ import { orderInfoPrintStyle, orderPositionsStyle } from './prints.styles'
 import { OrderStatementInput, StatementView } from './statement/ui'
 import { orderStore } from './stores/order.store'
 
-export const PageHeader = () => (
-  <NavigationBar t={'Детали заказа'} spaceBetween>
-    <OrderActions />
-  </NavigationBar>
-)
+export const PageHeader = () => <OrderActions />
 
 // Order metadata component showing entity, city and status chips
 export const OrderMetadata = observer(() => {
@@ -110,15 +105,16 @@ export const OrderLeftPanel = observer(() => (
     }}
   >
     <Stack display={'flex'} flexGrow={1} flexShrink={0}>
-      <PageHeader />
-      <Stack p={1} gap={3}>
-        <OrderMetadata />
-        <Box>
-          <PositionsList />
-        </Box>
-        <Divider />
-        <OrderInfoSection />
-      </Stack>
+      <Sheet sx={{ borderRadius: 'sm', p: 2 }}>
+        <Stack gap={3}>
+          <OrderMetadata />
+          <Box>
+            <PositionsList />
+          </Box>
+          <Divider />
+          <OrderInfoSection />
+        </Stack>
+      </Sheet>
     </Stack>
   </Grid>
 ))
@@ -129,13 +125,12 @@ export const OrderRightPanel = observer(() => (
     <Grid
       sx={{
         p: 2,
-        background: bgcolors.blue,
         overflowY: {
           xs: 'scroll'
         },
         height: {
           xs: 'auto',
-          md: '100vh'
+          md: 'auto'
         }
       }}
     >

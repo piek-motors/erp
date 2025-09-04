@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
-import { Sheet, Stack } from '@mui/joy'
+import { Sheet } from '@mui/joy'
+import { FactoryPage } from 'components/factory_page'
 import { Search } from 'components/inputs'
-import { NavigationBar } from 'components/navigation_bar'
 import { OrderTypeFilter } from 'components/order-type-filter'
 import { TableName } from 'components/table-name'
 import { TabConfig, Tabs } from 'components/tabs'
@@ -206,10 +206,10 @@ const Wrapper = observer(
     }
 
     return (
-      <Stack>
-        <NavigationBar t={t.ordersTitle}>
-          <AddResourceButton onClick={() => insertNewOrder()} />
-        </NavigationBar>
+      <FactoryPage
+        pageTitle={t.ordersTitle}
+        header={<AddResourceButton onClick={() => insertNewOrder()} />}
+      >
         <Tabs
           tabs={tabs}
           value={currentTab}
@@ -218,7 +218,7 @@ const Wrapper = observer(
             navigate(url)
           }}
         />
-      </Stack>
+      </FactoryPage>
     )
   }
 )
@@ -253,7 +253,7 @@ const exportRoutes = (
   ] as const
 ).map(({ path, element }) => ({
   path,
-  element: <Wrapper sx={{ p: 0 }}>{element}</Wrapper>
+  element: <Wrapper>{element}</Wrapper>
 })) as RouteConfig[]
 
 export default exportRoutes

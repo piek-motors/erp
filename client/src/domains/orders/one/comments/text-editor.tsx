@@ -1,5 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
+import { UilMessage } from '@iconscout/react-unicons'
 import { Box, Button, ButtonProps, Sheet, Stack } from '@mui/joy'
 import Bold from '@tiptap/extension-bold'
 import Heading from '@tiptap/extension-heading'
@@ -8,7 +9,7 @@ import Mention from '@tiptap/extension-mention'
 import Placeholder from '@tiptap/extension-placeholder'
 import { Editor, EditorContent, useEditor } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
-import { Row } from 'lib/index'
+import { Row, UseIcon } from 'lib/index'
 import { useEffect, useState } from 'react'
 import { suggestion } from './mention-suggestion'
 
@@ -84,7 +85,7 @@ export const TextEditor = (props: {
               handleChange()
             }}
           >
-            B
+            Жир
           </TextFormatButton>
           <TextFormatButton
             editor={editor}
@@ -95,7 +96,7 @@ export const TextEditor = (props: {
               handleChange()
             }}
           >
-            Highlight
+            Выделить
           </TextFormatButton>
           <Box sx={{ display: 'flex', gap: 0.5 }}>
             <TextFormatButton
@@ -167,9 +168,10 @@ function PublishButton(props: {
   return (
     <Box>
       <Button
-        color="primary"
-        variant="plain"
+        color="neutral"
+        variant="soft"
         size="sm"
+        startDecorator={<UseIcon icon={UilMessage} small />}
         onClick={() => {
           const content = editor?.getHTML()
           if (!content) return
@@ -179,7 +181,7 @@ function PublishButton(props: {
           })
         }}
       >
-        Опубликовать
+        Прикрепить
       </Button>
     </Box>
   )

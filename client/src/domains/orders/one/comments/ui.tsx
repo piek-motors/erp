@@ -138,15 +138,13 @@ export function CommentListViewPort({ user, orderId }: ICommentsListProps) {
 export const CommentInputViewPort = observer(
   ({ user, orderId }: ICommentsListProps) => {
     return (
-      <Box>
-        <Box sx={{ overflow: 'scroll', py: 2 }}>
-          <TextEditor
-            placeholder="Введите комментарий"
-            onSubmit={content => {
-              return commentsStore.insertComment(content, orderId, user.id)
-            }}
-          />
-        </Box>
+      <Box sx={{ overflow: 'scroll' }}>
+        <TextEditor
+          placeholder="Начините обсуждение"
+          onSubmit={content => {
+            return commentsStore.insertComment(content, orderId, user.id)
+          }}
+        />
       </Box>
     )
   }

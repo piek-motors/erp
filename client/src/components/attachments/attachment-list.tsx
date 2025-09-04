@@ -1,5 +1,5 @@
 import { Box, Stack } from '@mui/joy'
-import { Label, P, text } from 'lib/index'
+import { P, text } from 'lib/index'
 import { Attachment } from 'models'
 import { InputFiles } from '../input-files'
 import { AttachmentComponent } from './attachment'
@@ -29,7 +29,7 @@ export const AttachmentList = ({
 }: AttachmentListProps) => {
   return (
     <Stack gap={1}>
-      <Label>{title}</Label>
+      <P fontWeight={500}>{title}</P>
       <Stack gap={1}>
         {attachments.map(attachment => (
           <AttachmentComponent
