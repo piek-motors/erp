@@ -52,7 +52,7 @@ export const ManufacturingUpdatePage = observer(() => {
     return <Loading />
   }
   return (
-    <Stack gap={0.5}>
+    <Stack gap={0.5} p={0.5}>
       <MetalPageTitle
         t={
           <ComplexTitle

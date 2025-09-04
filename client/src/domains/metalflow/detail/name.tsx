@@ -77,7 +77,7 @@ const GroupLink = observer(({ groupId }: { groupId: number | null }) => {
         onClick={e => e.stopPropagation()}
       >
         <Box color="primary" sx={{ cursor: 'pointer', fontSize: '0.9em' }}>
-          {groupName}
+          {groupName?.toLowerCase() || ''}
         </Box>
       </Button>
     </Link>
