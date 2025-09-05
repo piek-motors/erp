@@ -1,4 +1,4 @@
-import { Box, Card, Divider, Sheet } from '@mui/joy'
+import { Box, Divider, Sheet } from '@mui/joy'
 import { Table } from 'components/table.impl'
 import { WebOnly } from 'components/utilities/conditional-display'
 import { DetailName } from 'domains/metalflow/detail/name'
@@ -21,13 +21,14 @@ import {
   useNavigate,
   useParams
 } from 'lib/index'
-import { formatDateWithTime } from 'lib/utils/formatting'
+import { roundAndTrim } from 'lib/utils/formatting'
 import { EnManufacturingOrderStatus, uiManufacturingOrderStatus } from 'models'
 import { Column } from 'react-table'
 import { TechParamsDisplay } from '../detail/components'
 import { Step } from '../detail/detail.state'
 import { MaterialCost } from '../detail/warehouse/cost.store'
 import { api } from './api'
+import { formatDate } from './list/list'
 
 export const ManufacturingUpdatePage = observer(() => {
   const { id } = useParams<{ id: string }>()
@@ -74,29 +75,36 @@ export const ManufacturingUpdatePage = observer(() => {
         }
       />
 
-      <QuantityInput />
-
-      <WebOnly>
-        <Row gap={1}>
-          <Label label="Статус" />
-          <P>{uiManufacturingOrderStatus(api.s.order.status)}</P>
-        </Row>
-      </WebOnly>
-
       <Row>
-        <Label label="Создан" />
-        <P>{formatDateWithTime(api.s.order.started_at)}</P>
+        <QuantityInput />
+        <WebOnly>
+          <Row gap={1}>
+            <Label label="Статус" />
+            <P>{uiManufacturingOrderStatus(api.s.order.status)}</P>
+          </Row>
+        </WebOnly>
+
+        <Row>
+          <Label label="от" />
+          <P>{formatDate(new Date(api.s.order.started_at))}</P>
+        </Row>
+
+        {api.s.order.finished_at && (
+          <Row>
+            <Label label="завершен" />
+            <P>{formatDate(new Date(api.s.order.finished_at))}</P>
+          </Row>
+        )}
+      </Row>
+      <Row gap={2} alignContent={'flex-start'} alignItems={'flex-start'}>
+        <TechParamsDisplay
+          level="body-md"
+          params={api.s.detail.technicalParameters}
+        />
+        <Cost />
       </Row>
 
-      {api.s.order.finished_at && (
-        <Row>
-          <Label label="Завершен" />
-          <P>{formatDateWithTime(api.s.order.finished_at)}</P>
-        </Row>
-      )}
-      <Cost />
       <DetailDescription />
-      <TechParamsDisplay level="body-sm" />
       <ProductionRoute />
 
       <WebOnly>
@@ -132,7 +140,7 @@ export const Cost = observer(() => {
   const details = api.s.detail.autoWriteoff.detailsCost
   return (
     <Stack gap={2}>
-      {materils.length ? (
+      {!!materils.length ? (
         <Stack>
           <Label label="Материалы к потреблению" />
           <Stack gap={0.5}>
@@ -143,7 +151,7 @@ export const Cost = observer(() => {
         </Stack>
       ) : null}
 
-      {details.length ? (
+      {!!details.length ? (
         <Stack>
           <Label label="Детали к потреблению" />
           <Stack gap={0.5}>
@@ -211,7 +219,7 @@ const columnList: Column<Step>[] = [
       },
       {
         Header: 'Подпись',
-        accessor: step => <Box></Box>
+        accessor: step => <Box />
       }
     ]
   },
@@ -224,7 +232,11 @@ const columnList: Column<Step>[] = [
       },
       {
         Header: 'Штамп',
-        accessor: step => <Box></Box>
+        accessor: step => <Box />
+      },
+      {
+        Header: 'Примечание',
+        accessor: step => <Box />
       }
     ]
   }
@@ -261,9 +273,9 @@ const DateCell = observer((props: { step: Step }) => (
 const ProductionRoute = observer(() => {
   if (api.s.processingRoute.steps.length === 0) return null
   return (
-    <Sheet sx={{ borderRadius: 'sm', p: 1 }}>
-      <Stack>
-        <Label label="Маршрут производства" />
+    <Stack>
+      <Label label="Маршрут производства" />
+      <Sheet sx={{ borderRadius: 'sm', p: 1 }}>
         <Table columns={columnList} data={api.s.processingRoute.steps} />
         <WebOnly>
           <Box width="min-content" mt={1} ml="auto">
@@ -273,8 +285,8 @@ const ProductionRoute = observer(() => {
             />
           </Box>
         </WebOnly>
-      </Stack>
-    </Sheet>
+      </Sheet>
+    </Stack>
   )
 })
 
@@ -354,26 +366,29 @@ const DetailMaterialInfo = observer((props: { cost: MaterialCost }) => {
   const totalConsumedAmount = (parseInt(api.s.qty) * (+cost.length || 0)) / 1000
   const remainingAmount = (cost.material?.stock || 0) - totalConsumedAmount
   return (
-    <Stack py={0.5}>
-      <Card variant="outlined" size="sm" sx={{ width: 'fit-content' }}>
-        <Row gap={1}>
-          <MaterialName
-            materialId={cost.materialId}
-            materialLabel={cost.material?.label || ''}
-            withLink
-          />
+    <Box>
+      <Row>
+        <MaterialName
+          materialId={cost.materialId}
+          materialLabel={cost.material?.label || ''}
+          withLink
+        />
+        <Label level="body-sm" color="primary">
+          Расход {cost?.length || 'не указано'} мм
+        </Label>
+      </Row>
+      {api.s.qty && (
+        <>
           <P level="body-sm" color="primary">
-            Расход {cost?.length || 'не указано'} мм
+            Потребное количество: {roundAndTrim(totalConsumedAmount)} м
           </P>
-        </Row>
-        <P level="body-sm" color="neutral">
-          Остаток: {cost.material?.stock?.toFixed(1)} м
-        </P>
-        {api.s.qty && (
-          <>
-            <P level="body-sm" color="primary">
-              Потребное количество: {totalConsumedAmount.toFixed(3)} м
-            </P>
+
+          <P level="body-sm" color="neutral">
+            Остаток: {roundAndTrim(cost.material?.stock)} м
+          </P>
+
+          {api.s.order?.status ===
+            EnManufacturingOrderStatus.MaterialPreparation && (
             <P
               color={
                 remainingAmount > 0
@@ -386,9 +401,9 @@ const DetailMaterialInfo = observer((props: { cost: MaterialCost }) => {
             >
               Остаток после запуска {remainingAmount.toFixed(1)} м
             </P>
-          </>
-        )}
-      </Card>
-    </Stack>
+          )}
+        </>
+      )}
+    </Box>
   )
 })

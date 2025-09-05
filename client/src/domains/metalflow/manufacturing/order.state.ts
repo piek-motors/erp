@@ -22,6 +22,7 @@ export class OrderState {
       return step
     })
     this.processingRoute.init(steps ?? [])
+    this.qty = order.qty.toString()
   }
   detail!: DetailState
   setDetail(detail: DetailState) {

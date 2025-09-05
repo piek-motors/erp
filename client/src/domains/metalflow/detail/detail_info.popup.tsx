@@ -62,7 +62,10 @@ export const DetailInfoPopup = observer(
             label="Группа"
             value={cache.detailGroups.getGroupName(api.detail.groupId)}
           />
-          <TechParamsDisplay level="body-xs" />
+          <TechParamsDisplay
+            level="body-xs"
+            params={api.detail.technicalParameters}
+          />
         </Menu>
       </Dropdown>
     )

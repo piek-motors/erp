@@ -66,7 +66,7 @@ export const UiManufacturingOrderStatus = {
   [EnManufacturingOrderStatus.Waiting]: 'Ожидание',
   [EnManufacturingOrderStatus.MaterialPreparation]: 'Подготовка',
   [EnManufacturingOrderStatus.Production]: 'Производство',
-  [EnManufacturingOrderStatus.Collected]: 'Завершено'
+  [EnManufacturingOrderStatus.Collected]: 'Завершен'
 }
 
 export function uiManufacturingOrderStatus(status: EnManufacturingOrderStatus) {

@@ -8,6 +8,7 @@ import { TextEditor } from 'domains/orders/one/comments/text-editor'
 import { Box, Inp, Label, MyInputProps, observer, P, Row } from 'lib/index'
 import { MaterialAutocomplete } from '../shared/material_autocomplete'
 import { api } from './api'
+import { TechicalParameters } from './detail.state'
 import { AutomaticWriteoffAccordion } from './warehouse/cost'
 import { MaterialCost } from './warehouse/cost.store'
 
@@ -160,28 +161,23 @@ export const ProcessingRouteAccordion = observer(() => (
 ))
 
 export const TechParamsDisplay = observer(
-  (props: { level: keyof TypographySystem }) => (
+  (props: {
+    params?: TechicalParameters | null
+    level: keyof TypographySystem
+  }) => (
     <>
-      {api.detail.technicalParameters &&
-        api.detail.technicalParameters?.arr?.length > 0 && (
-          <Row>
-            <Stack>
-              <Label color="warning" level={props.level}>
-                Тех. параметры
-              </Label>
-              {api.detail.technicalParameters.arr.map(({ key, value }, idx) => (
-                <P
-                  key={key + idx}
-                  level={props.level}
-                  color="neutral"
-                  sx={{ ml: 0.5 }}
-                >
-                  {key}: {String(value)}
-                </P>
-              ))}
-            </Stack>
-          </Row>
-        )}
+      {props.params?.arr?.length && props.params.arr.length > 0 && (
+        <Row>
+          <Stack>
+            <Label>Тех. параметры</Label>
+            {props.params?.arr.map(({ key, value }, idx) => (
+              <P key={key + idx} level={props.level} sx={{ ml: 0.5 }}>
+                {key}: {String(value)}
+              </P>
+            ))}
+          </Stack>
+        </Row>
+      )}
     </>
   )
 )

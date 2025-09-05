@@ -159,7 +159,7 @@ export const ManufacturingList = observer(() => {
   )
 })
 
-function formatDate(date: Date) {
+export function formatDate(date: Date) {
   return Intl.DateTimeFormat('ru-RU', {
     month: 'short',
     day: 'numeric'

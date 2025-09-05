@@ -47,7 +47,7 @@ export class ProcessingRoute {
   }
 }
 
-type TechicalParameters = {
+export type TechicalParameters = {
   arr: { key: string; value: any }[]
 }
 
