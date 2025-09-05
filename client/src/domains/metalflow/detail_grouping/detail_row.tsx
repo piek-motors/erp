@@ -19,7 +19,7 @@ export function DetailRow({
         display: 'flex',
         p: 0,
         mb: 0,
-        backgroundColor: isSelected ? '#fac3cc' : 'transparent',
+        backgroundColor: isSelected ? '#e7b6be' : 'transparent',
         '&:hover .detail-arrow': {
           opacity: 1
         }
