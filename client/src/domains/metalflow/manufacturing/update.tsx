@@ -52,7 +52,7 @@ export const ManufacturingUpdatePage = observer(() => {
     return <Loading />
   }
   return (
-    <Stack gap={0.5} p={0.5}>
+    <Stack p={1} gap={1}>
       <MetalPageTitle
         t={
           <ComplexTitle
@@ -184,26 +184,57 @@ const DetailDescription = observer(() => {
 
 const columnList: Column<Step>[] = [
   {
-    Header: 'N',
-    accessor: (_, index) => index + 1
-  },
-  {
-    accessor: 'name',
-    Header: 'Операция'
+    Header: 'Операция',
+    columns: [
+      {
+        Header: '№',
+        accessor: (_, index) => index + 1
+      },
+      {
+        accessor: 'name',
+        Header: 'Операция'
+      }
+    ]
   },
   {
     Header: 'Исполнитель',
-    accessor: step => <ExecutorCell step={step} />
+    columns: [
+      {
+        Header: 'ФИ',
+        accessor: step => <ExecutorCell step={step} />
+      },
+      {
+        Header: 'Дата',
+        accessor: step => <DateCell step={step} />
+      },
+      {
+        Header: 'Подпись',
+        accessor: step => <Box></Box>
+      }
+    ]
   },
   {
-    Header: 'Дата',
-    accessor: step => <DateCell step={step} />
-  },
-  {
-    Header: 'Подписть',
-    accessor: step => <Box minWidth={100}></Box>
+    Header: 'Приемка ОТК',
+    columns: [
+      {
+        Header: 'Отбраковано',
+        accessor: step => <DefectCell step={step} />
+      },
+      {
+        Header: 'Штамп',
+        accessor: step => <Box></Box>
+      }
+    ]
   }
 ]
+
+const DefectCell = observer((props: { step: Step }) => (
+  <Inp
+    variant="plain"
+    value={props.step.defected ?? ''}
+    onChange={v => props.step.setDefected(v == '' ? null : Number(v))}
+  />
+))
 
 const ExecutorCell = observer((props: { step: Step }) => (
   <Inp
@@ -322,7 +353,7 @@ const DetailMaterialInfo = observer((props: { cost: MaterialCost }) => {
   const remainingAmount = (cost.material?.stock || 0) - totalConsumedAmount
   return (
     <Stack py={0.5}>
-      <Card variant="outlined" size="sm">
+      <Card variant="outlined" size="sm" sx={{ width: 'fit-content' }}>
         <Row gap={1}>
           <MaterialName
             materialId={cost.materialId}

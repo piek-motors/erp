@@ -127,6 +127,7 @@ export namespace DB {
       dur: number
       executor_name?: string
       date?: string
+      defected?: number | null
     }[]
   }
 

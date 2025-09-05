@@ -11,6 +11,10 @@ export class Step {
   name!: string
   dur!: number
   executor_name: string = ''
+  defected?: number | null = null
+  setDefected(defected?: number | null) {
+    this.defected = defected
+  }
   setExecutor(name: string) {
     this.executor_name = name
   }
@@ -26,6 +30,7 @@ export class Step {
     this.dur = 0
     this.executor_name = ''
     this.date = ''
+    this.defected = null
   }
 }
 
@@ -61,8 +66,8 @@ export class DetailState {
     this.name = name
   }
   description?: string
-  setDescription(description: string) {
-    this.description = description
+  setDescription(description?: string | null) {
+    this.description = description ?? ''
   }
   groupId?: number | null
   setGroupId(groupId: number | null) {
@@ -78,7 +83,7 @@ export class DetailState {
   }
 
   technicalParameters?: TechicalParameters | null = null
-  setTechnicalParameters(params: TechicalParameters | null) {
+  setTechnicalParameters(params?: TechicalParameters | null) {
     this.technicalParameters = params
   }
   updatedAt?: Date
@@ -110,9 +115,9 @@ export class DetailState {
     this.setId(d.id!)
     this.setName(d.name!)
     this.setDrawingNumber(d.part_code!)
-    this.setGroupId(d.logical_group_id ?? null)
-    this.setTechnicalParameters(d.params ?? null)
-    this.setDescription(d.description ?? '')
+    this.setGroupId(d.logical_group_id)
+    this.setTechnicalParameters(d.params)
+    this.setDescription(d.description)
     this.warehouse.setStock(d.stock)
     this.setUpdatedAt(d.updated_at ? new Date(d.updated_at) : undefined)
     this.processingRoute.init(
@@ -122,6 +127,7 @@ export class DetailState {
             step.name = s.name
             step.dur = s.dur
             step.executor_name = s.executor_name ?? ''
+            step.setDefected(s.defected)
             return step
           })
         : []
@@ -171,7 +177,8 @@ export class DetailState {
               this.processingRoute.steps?.map(s => ({
                 name: s.name?.trim(),
                 dur: +s.dur,
-                executor_name: s.executor_name?.trim() ?? ''
+                executor_name: s.executor_name?.trim() ?? '',
+                defected: s.defected ? Number(s.defected) : null
               })) ?? null
           }
         : null,

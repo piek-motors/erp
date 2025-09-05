@@ -18,6 +18,7 @@ export class OrderState {
       step.dur = s.dur
       step.executor_name = s.executor_name ?? ''
       step.date = s.date ?? ''
+      step.setDefected(s.defected ?? null)
       return step
     })
     this.processingRoute.init(steps ?? [])
