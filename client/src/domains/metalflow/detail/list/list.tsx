@@ -49,7 +49,7 @@ const columnList: Column<DetailState>[] = [
   },
   {
     Header: 'Остаток',
-    accessor: r => r.warehouse.stock
+    accessor: r => r.warehouse.stock ?? ''
   }
 ]
 
