@@ -1,7 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import styled from '@emotion/styled'
-import { Container } from '@mui/joy'
-import { NavigationBar } from 'components/navigation_bar'
+import { FactoryPage } from 'components/factory_page'
 import { Context } from 'index'
 import {
   Box,
@@ -117,9 +116,8 @@ export function MentionList() {
   })
 
   return (
-    <Container>
-      <NavigationBar t="Упоминания" />
-      <Stack direction={'column'} gap={2}>
+    <FactoryPage title="Упоминания">
+      <Stack direction={'column'} gap={2} maxWidth={'500px'}>
         {/* unreaderd notifs */}
         {notifications.unviewed.length ? (
           <Stack gap={1}>
@@ -156,7 +154,7 @@ export function MentionList() {
             ))}
         </Stack>
       </Stack>
-    </Container>
+    </FactoryPage>
   )
 }
 

@@ -207,7 +207,7 @@ const Wrapper = observer(
 
     return (
       <FactoryPage
-        pageTitle={t.ordersTitle}
+        title={t.ordersTitle}
         header={<AddResourceButton onClick={() => insertNewOrder()} />}
       >
         <Tabs

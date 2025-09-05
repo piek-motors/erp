@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
-import { Box, Card, Stack } from '@mui/joy'
-import { NavigationBar } from 'components/navigation_bar'
+import { Box, Card } from '@mui/joy'
+import { FactoryPage } from 'components/factory_page'
 import { AddResourceButton, Loading, P, Pre } from 'lib/index'
 import { openOrderDetailPage, routeMap } from 'lib/routes'
 import { RouteConfig } from 'lib/types/global'
@@ -158,20 +158,21 @@ const ReclamationPage = observer(() => {
   }, [])
 
   return (
-    <Stack>
-      <NavigationBar t="Рекламация">
+    <FactoryPage
+      title="Рекламация"
+      header={
         <AddResourceButton
-          onClick={() => {
+          onClick={() =>
             navigate(routeMap.order.new, { state: { reclamation: true } })
-          }}
+          }
         />
-      </NavigationBar>
-
+      }
+    >
       <Box>
         {reclamationStore.loading && <Loading />}
         <Reclamation />
       </Box>
-    </Stack>
+    </FactoryPage>
   )
 })
 

@@ -10,7 +10,7 @@ import { InputPositionModal } from '../positions/input.modal'
 
 export const WebLayout = () => {
   return (
-    <FactoryPage pageTitle={'Детали заказа'} header={<PageHeader />}>
+    <FactoryPage title={'Детали заказа'} header={<PageHeader />}>
       <WebOnly display="block">
         <Grid
           container

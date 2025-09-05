@@ -7,7 +7,7 @@ import { AttendanceReportComponent } from './report'
 import { store } from './store'
 
 const Attendance = observer(() => (
-  <FactoryPage pageTitle={'Рабочее время'}>
+  <FactoryPage title={'Рабочее время'}>
     <WebOnly>
       <ReportConfigurator />
     </WebOnly>
