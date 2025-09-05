@@ -1,11 +1,11 @@
 /** @jsxImportSource @emotion/react */
-import { Button, Container } from '@mui/joy'
+import { Button } from '@mui/joy'
+import { FactoryPage } from 'components/factory_page'
 import { useAppContext } from 'hooks'
 import { P } from 'lib/index'
 import { routeMap } from 'lib/routes'
 import { RouteConfig } from 'lib/types/global'
 import { useNavigate } from 'react-router-dom'
-import { NavigationBar } from './components/navigation_bar'
 
 function Settings() {
   const { store } = useAppContext()
@@ -17,18 +17,19 @@ function Settings() {
   }
 
   return (
-    <Container maxWidth="sm">
-      <NavigationBar t="Аккаунт" />
+    <FactoryPage title="Аккаунт">
       <P>{store.user?.fullName}</P>
       <P>Роль: {store.user?.role}</P>
       <P>Email: {store.user?.email}</P>
-      <P level="body-sm">
-        Data provider: https://{process.env.REACT_APP_HASURA_ENDPOINT}
-      </P>
-      <Button onClick={handleLogout} sx={{ mt: '10px' }}>
+      <Button
+        onClick={handleLogout}
+        sx={{ mt: '10px' }}
+        color="danger"
+        variant="soft"
+      >
         Выйти
       </Button>
-    </Container>
+    </FactoryPage>
   )
 }
 

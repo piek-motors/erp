@@ -71,6 +71,7 @@ function Mention({ data }: INotificationProps) {
             <Stack justifyContent={'flex-end'}>
               <Button
                 size="sm"
+                variant="soft"
                 onClick={toOrderDetailPageHandler}
                 color="primary"
               >
@@ -117,7 +118,7 @@ export function MentionList() {
 
   return (
     <FactoryPage title="Упоминания">
-      <Stack direction={'column'} gap={2} maxWidth={'500px'}>
+      <Stack direction={'column'} gap={2} maxWidth={'700px'}>
         {/* unreaderd notifs */}
         {notifications.unviewed.length ? (
           <Stack gap={1}>

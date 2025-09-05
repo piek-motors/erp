@@ -112,12 +112,7 @@ export const UniversalDetailsModalSelect = observer(() => {
   }
 
   const openButton = (
-    <Button
-      variant="soft"
-      color="neutral"
-      size="sm"
-      sx={{ whiteSpace: 'pre-wrap' }}
-    >
+    <Button size="sm" sx={{ whiteSpace: 'pre-wrap' }}>
       Расширить
     </Button>
   )
