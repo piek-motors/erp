@@ -21,6 +21,29 @@ interface DetailGroupsLayoutProps {
   children?: ReactNode
 }
 
+const Detauls = observer(() => {
+  if (crud.targetGroupLoading.loading) return <Loading />
+  if (!crud.store.targetGroup) return null
+  return (
+    <Box>
+      <ScrollableWindow
+        staticContent={
+          <Row p={0.4}>
+            <UpdateGroupNameModal />
+            <GroupActions />
+          </Row>
+        }
+        scrollableContent={
+          <Stack p={1} px={2}>
+            <TargetGroupDetailList />
+          </Stack>
+        }
+        refreshTrigger={null}
+      />
+    </Box>
+  )
+})
+
 const DetailGroupsLayout = observer((props: DetailGroupsLayoutProps) => (
   <RowButColumsAtSm>
     {/* Group list */}
@@ -30,30 +53,10 @@ const DetailGroupsLayout = observer((props: DetailGroupsLayoutProps) => (
           <GroupSelectModal />
         </MobileOnly>
       </MetalPageTitle>
-
       <DesktopGroupList />
     </Box>
     {/* Group details */}
-    {crud.loading.loading ? (
-      <Loading />
-    ) : (
-      <Box>
-        <ScrollableWindow
-          staticContent={
-            <Row p={0.4}>
-              <UpdateGroupNameModal />
-              <GroupActions />
-            </Row>
-          }
-          scrollableContent={
-            <Stack p={1} px={2}>
-              <TargetGroupDetailList />
-            </Stack>
-          }
-          refreshTrigger={null}
-        />
-      </Box>
-    )}
+    <Detauls />
   </RowButColumsAtSm>
 ))
 

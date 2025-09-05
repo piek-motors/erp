@@ -1,4 +1,4 @@
-import { Button, Divider } from '@mui/joy'
+import { Button } from '@mui/joy'
 import { ScrollableWindow, Search } from 'components/inputs'
 import { InModal } from 'components/modal'
 import { SearchResults } from 'components/search-paginated'
@@ -49,7 +49,10 @@ const columnList: Column<DetailState>[] = [
   },
   {
     Header: 'Остаток',
-    accessor: r => r.warehouse.stock ?? ''
+    accessor: r => {
+      if (!r.warehouse.stock) return ''
+      return r.warehouse.stock
+    }
   }
 ]
 
@@ -97,7 +100,6 @@ export const DetailsListPage = observer(() => (
     scrollableContent={
       <Box p={1}>
         <DetailSearchArguments />
-        <Divider sx={{ mt: 1 }} />
         <DetailsList />
       </Box>
     }
@@ -144,7 +146,6 @@ const DetailSearchArguments = observer(() => {
   return (
     <>
       <AlphabetIndex />
-      <Divider sx={{ my: 1 }} />
       <RowButColumsAtSm>
         <Inp
           size="sm"
@@ -166,7 +167,7 @@ const DetailSearchArguments = observer(() => {
       </RowButColumsAtSm>
 
       <Link to="https://planner.piek.ru/f6980fc4-c15b-4eb3-9dab-ad70125f65e6/details_register_help">
-        <P level="body-sm" color="primary" p={1}>
+        <P level="body-xs" color="primary">
           Инструкция по ведению реестра
         </P>
       </Link>
