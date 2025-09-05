@@ -5,7 +5,7 @@ import { useAppContext } from 'hooks'
 import { P } from 'lib/index'
 import { routeMap } from 'lib/routes'
 import { RouteConfig } from 'lib/types/global'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router'
 
 function Settings() {
   const { store } = useAppContext()

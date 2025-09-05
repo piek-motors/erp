@@ -10,7 +10,7 @@ import {
   useEffect
 } from 'lib/index'
 import { ReactNode } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams } from 'react-router'
 import { crud } from './api'
 import { GroupActions, TargetGroupDetailList } from './detail_list'
 import { DesktopGroupList, GroupSelectModal } from './group_list'

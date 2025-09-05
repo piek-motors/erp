@@ -3,7 +3,7 @@ import { Button, Stack } from '@mui/joy'
 import { InModal } from 'components/modal'
 import { DesktopOnly, observer, P, UseIcon, useState } from 'lib/index'
 import { openPage, routeMap } from 'lib/routes'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 import { crud } from './api'
 import { CreateGroupModal } from './group_name.modal'
 

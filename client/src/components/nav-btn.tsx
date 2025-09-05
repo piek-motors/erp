@@ -1,5 +1,5 @@
 import { Button, ButtonProps } from '@mui/joy'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 
 export const NavBtn = (
   props: { to: string; children: React.ReactNode } & ButtonProps

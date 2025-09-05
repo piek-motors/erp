@@ -36,11 +36,11 @@ import {
 import { useIsDesktop, useIsMobile } from 'hooks/use-media-query'
 import { observer } from 'mobx-react-lite'
 import React, { JSX } from 'react'
-import { Link as ReactLink, useNavigate } from 'react-router-dom'
+import { Link as ReactLink, useNavigate } from 'react-router'
 import { notifier } from './store/notifier.store'
 export { observer, Observer } from 'mobx-react-lite'
 export { useCallback, useEffect, useMemo, useState } from 'react'
-export { useLocation, useNavigate, useParams } from 'react-router-dom'
+export { useLocation, useNavigate, useParams } from 'react-router'
 export { openPage, routeMap } from './routes'
 export {
   Box,

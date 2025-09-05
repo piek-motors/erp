@@ -3,7 +3,7 @@ import { HoverReveal, WithHiddenLinkButton } from 'components/hidden_button'
 import { cache } from 'domains/metalflow/cache/root'
 import { Box, Button, Row, observer } from 'lib/index'
 import { openPage, routeMap } from 'lib/routes'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 import { DetailInfoPopup } from './detail_info.popup'
 
 interface Detail {

@@ -14,7 +14,7 @@ import { P, Row, UseIcon } from 'lib/index'
 import { routeMap } from 'lib/routes'
 import { useCountUnresolvedNotificationsQuery } from 'lib/types/graphql-shema'
 import { useContext } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router'
 
 export const links = [
   {

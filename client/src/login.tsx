@@ -7,7 +7,7 @@ import { Inp, P } from 'lib/index'
 import { AuthService } from 'lib/services/auth.service'
 import { ServerErrorResponse } from 'lib/types/global'
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router'
 
 export const LoginForm = () => {
   const [email, setEmail] = useState('')

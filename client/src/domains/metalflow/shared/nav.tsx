@@ -2,7 +2,7 @@ import { UilPlusCircle } from '@iconscout/react-unicons'
 import { Box, Button, ButtonProps, IconButton, Stack } from '@mui/joy'
 import { NavigationBar } from 'components/navigation_bar'
 import { UseIcon } from 'lib/index'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation } from 'react-router'
 import { Action, actions } from '../nav.links'
 
 export function NavigationSideBar() {

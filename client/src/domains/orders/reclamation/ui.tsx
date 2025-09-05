@@ -8,7 +8,7 @@ import { observer } from 'mobx-react-lite'
 import { Order } from 'models'
 import { useEffect } from 'react'
 import * as dnd from 'react-beautiful-dnd'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router'
 import { ColocatedStateKey, reclamationStore } from './store'
 
 interface Props {

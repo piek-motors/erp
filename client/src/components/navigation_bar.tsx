@@ -3,7 +3,7 @@ import { Box, IconButton, Stack } from '@mui/joy'
 import { SxProperty } from 'lib/constants'
 import { routeMap } from 'lib/routes'
 import React, { ReactNode } from 'react'
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 import { MobileOnly, P, Row, UseIcon } from '../lib'
 
 export interface Props {

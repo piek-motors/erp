@@ -1,5 +1,5 @@
 import { routeMap } from 'lib/routes'
-import { Navigate, Route, Routes } from 'react-router-dom'
+import { Navigate, Route, Routes } from 'react-router'
 import { protectedRoutes } from 'routes'
 import { LoginForm } from '../../login'
 import RequireAuth from './PrivateRoute'
