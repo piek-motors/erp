@@ -4,6 +4,7 @@ import { ExtraSmallIconButton } from 'components/buttons'
 import { cache } from 'domains/metalflow/cache/root'
 import { Label, observer, P, useState } from 'lib/index'
 import { DetailApi } from './api'
+import { TechParamsDisplay } from './components'
 
 interface DetailParamsPopupProps {
   detailId: number
@@ -61,28 +62,7 @@ export const DetailInfoPopup = observer(
             label="Группа"
             value={cache.detailGroups.getGroupName(api.detail.groupId)}
           />
-          {api.detail.technicalParameters &&
-            api.detail.technicalParameters?.arr?.length > 0 && (
-              <MenuItem>
-                <Stack>
-                  <Label color="warning" level="body-xs">
-                    Тех. параметры
-                  </Label>
-                  {api.detail.technicalParameters.arr.map(
-                    ({ key, value }, idx) => (
-                      <P
-                        key={key + idx}
-                        level="body-xs"
-                        color="neutral"
-                        sx={{ ml: 0.5 }}
-                      >
-                        {key}: {String(value)}
-                      </P>
-                    )
-                  )}
-                </Stack>
-              </MenuItem>
-            )}
+          <TechParamsDisplay level="body-xs" />
         </Menu>
       </Dropdown>
     )

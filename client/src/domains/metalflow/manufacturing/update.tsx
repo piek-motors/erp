@@ -24,6 +24,7 @@ import {
 import { formatDateWithTime } from 'lib/utils/formatting'
 import { EnManufacturingOrderStatus, uiManufacturingOrderStatus } from 'models'
 import { Column } from 'react-table'
+import { TechParamsDisplay } from '../detail/components'
 import { Step } from '../detail/detail.state'
 import { MaterialCost } from '../detail/warehouse/cost.store'
 import { api } from './api'
@@ -95,6 +96,7 @@ export const ManufacturingUpdatePage = observer(() => {
       )}
       <Cost />
       <DetailDescription />
+      <TechParamsDisplay level="body-sm" />
       <ProductionRoute />
 
       <WebOnly>

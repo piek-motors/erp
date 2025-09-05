@@ -1,11 +1,11 @@
 /** @jsxImportSource @emotion/react */
-import { AccordionGroup, Stack } from '@mui/joy'
+import { AccordionGroup, MenuItem, Stack, TypographySystem } from '@mui/joy'
 import { AccordionCard } from 'components/accordion_card'
 import { ArrayJsonEditor } from 'components/array-json-editor'
 import { BaseAutocomplete, BaseOption } from 'components/base-autocomplete'
 import { cache } from 'domains/metalflow/cache/root'
 import { TextEditor } from 'domains/orders/one/comments/text-editor'
-import { Box, Inp, Label, MyInputProps, observer } from 'lib/index'
+import { Box, Inp, Label, MyInputProps, observer, P } from 'lib/index'
 import { MaterialAutocomplete } from '../shared/material_autocomplete'
 import { api } from './api'
 import { AutomaticWriteoffAccordion } from './warehouse/cost'
@@ -158,3 +158,30 @@ export const ProcessingRouteAccordion = observer(() => (
     />
   </AccordionCard>
 ))
+
+export const TechParamsDisplay = observer(
+  (props: { level: keyof TypographySystem }) => (
+    <>
+      {api.detail.technicalParameters &&
+        api.detail.technicalParameters?.arr?.length > 0 && (
+          <MenuItem>
+            <Stack>
+              <Label color="warning" level={props.level}>
+                Тех. параметры
+              </Label>
+              {api.detail.technicalParameters.arr.map(({ key, value }, idx) => (
+                <P
+                  key={key + idx}
+                  level={props.level}
+                  color="neutral"
+                  sx={{ ml: 0.5 }}
+                >
+                  {key}: {String(value)}
+                </P>
+              ))}
+            </Stack>
+          </MenuItem>
+        )}
+    </>
+  )
+)
