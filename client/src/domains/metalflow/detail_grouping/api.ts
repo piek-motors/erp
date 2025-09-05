@@ -19,10 +19,8 @@ export class DetailGroupingApi {
   }
 
   async loadGroupWithDetails(groupId: number) {
-    return this.async.run(async () => {
-      const groupData = await rpc.metal.detailGroups.get.query({ groupId })
-      this.store.setTargetGroup(groupData)
-    })
+    const groupData = await rpc.metal.detailGroups.get.query({ groupId })
+    this.store.setTargetGroup(groupData)
   }
 
   async loadAvailableUniversalDetails() {
