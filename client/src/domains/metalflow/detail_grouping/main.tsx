@@ -2,6 +2,7 @@ import { ScrollableWindow } from 'components/inputs'
 import { MetalPageTitle } from 'domains/metalflow/shared/basic'
 import {
   Box,
+  Loading,
   MobileOnly,
   observer,
   Row,
@@ -33,22 +34,26 @@ const DetailGroupsLayout = observer((props: DetailGroupsLayoutProps) => (
       <DesktopGroupList />
     </Box>
     {/* Group details */}
-    <Box>
-      <ScrollableWindow
-        staticContent={
-          <Row p={0.4}>
-            <UpdateGroupNameModal />
-            <GroupActions />
-          </Row>
-        }
-        scrollableContent={
-          <Stack p={1} px={2}>
-            <TargetGroupDetailList />
-          </Stack>
-        }
-        refreshTrigger={null}
-      />
-    </Box>
+    {crud.loading.loading ? (
+      <Loading />
+    ) : (
+      <Box>
+        <ScrollableWindow
+          staticContent={
+            <Row p={0.4}>
+              <UpdateGroupNameModal />
+              <GroupActions />
+            </Row>
+          }
+          scrollableContent={
+            <Stack p={1} px={2}>
+              <TargetGroupDetailList />
+            </Stack>
+          }
+          refreshTrigger={null}
+        />
+      </Box>
+    )}
   </RowButColumsAtSm>
 ))
 

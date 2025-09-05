@@ -21,7 +21,6 @@ export interface GroupWithDetails {
 
 export class DetailGroupStore {
   readonly groupNameState = new GroupNameState()
-
   targetGroup: GroupWithDetails | null = null
   setTargetGroup(group: GroupWithDetails | null) {
     this.targetGroup = group

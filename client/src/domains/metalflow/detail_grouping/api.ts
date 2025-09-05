@@ -7,6 +7,7 @@ import { DetailGroupStore } from './group.store'
 export class DetailGroupingApi {
   readonly async = new AsyncStoreController()
   readonly store = new DetailGroupStore()
+  readonly loading = new AsyncStoreController()
 
   constructor() {
     makeAutoObservable(this)
@@ -19,8 +20,10 @@ export class DetailGroupingApi {
   }
 
   async loadGroupWithDetails(groupId: number) {
-    const groupData = await rpc.metal.detailGroups.get.query({ groupId })
-    this.store.setTargetGroup(groupData)
+    return this.loading.run(async () => {
+      const groupData = await rpc.metal.detailGroups.get.query({ groupId })
+      this.store.setTargetGroup(groupData)
+    })
   }
 
   async loadAvailableUniversalDetails() {

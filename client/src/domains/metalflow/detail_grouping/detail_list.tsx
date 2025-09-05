@@ -30,10 +30,6 @@ export const GroupActions = observer(() => {
 })
 
 export const TargetGroupDetailList = observer(() => {
-  if (crud.store.targetGroup == null) {
-    return <EmptyState />
-  }
-
   if (crud.store.targetGroup?.details.length === 0) {
     return (
       <P level="body-sm" color="neutral">
