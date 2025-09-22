@@ -25,27 +25,25 @@ export function WorkPage(props: ContainerProps) {
 }
 
 export function MaterialUnitSelect(props: {
-  value: EnUnit
+  value?: EnUnit
   onChange: (e: EnUnit) => void
 }) {
   return (
     <Stack>
       <Label label="Ед. измерения" />
       <ToggleButtonGroup
-        variant="plain"
+        variant="outlined"
         color="primary"
-        value={props.value.toString()}
+        value={props.value ? Object.keys(EnUnit)[props.value] : null}
         onChange={(e, v) => {
           props.onChange(parseInt(v as any))
         }}
       >
-        {Object.entries(UiUnit).map(([key, value]) => {
-          return (
-            <Button value={key} key={key} color="neutral">
-              {value}
-            </Button>
-          )
-        })}
+        {Object.entries(UiUnit).map(([key, value]) => (
+          <Button value={key} key={key} color="neutral">
+            {value}
+          </Button>
+        ))}
       </ToggleButtonGroup>
     </Stack>
   )
@@ -100,6 +98,7 @@ export function AlloyAutocomplete(props: {
   )
 }
 
+import { SxProps } from '@mui/joy/styles/types'
 import { DeleteConfirmDialog } from 'components/delete_confirm_dialog'
 import {
   NavigationBar,
@@ -120,15 +119,17 @@ export const SaveAndDelete = (props: {
   itemName: string
   handleDelete: () => Promise<unknown>
   handleSave: () => Promise<unknown>
+  sx?: SxProps
 }) => {
   return (
-    <Row alignItems={'end'}>
+    <Row alignItems={'end'} gap={2} sx={props.sx}>
       <DeleteConfirmDialog
         title={props.itemName}
         handleDelete={() => props.handleDelete()}
         button={<DeleteResourceButton />}
       />
       <ExecuteAction
+        fullWidth
         onSubmit={() => props.handleSave()}
         stackProps={{ sx: { flexGrow: 1 } }}
         buttonProps={{

@@ -12,7 +12,7 @@ import { z } from 'zod'
 export const createMaterial = publicProcedure
   .input(
     z.object({
-      unit: z.nativeEnum(EnUnit),
+      unit: z.nativeEnum(EnUnit).nullable(),
       shape: z.nativeEnum(EnMaterialShape),
       label: z.string().nonempty(),
       shape_data: z.any(),
@@ -32,6 +32,7 @@ export const createMaterial = publicProcedure
       .insertInto('metal_flow.materials')
       .values({
         ...input,
+        unit: input.unit ?? EnUnit.M,
         label,
         stock: 0,
         linear_mass: input.linear_mass,

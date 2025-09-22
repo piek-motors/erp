@@ -5,7 +5,7 @@ import { MobileNavigationLinks } from './shared/nav'
 export function UsageInstruction() {
   return (
     <Container maxWidth="md">
-      <Stack spacing={4}>
+      <Stack spacing={4} p={2}>
         <MobileOnly>
           <MobileNavigationLinks />
         </MobileOnly>

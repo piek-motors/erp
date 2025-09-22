@@ -10,10 +10,10 @@ export const updateMaterial = publicProcedure
       label: z.string(),
       shape: z.nativeEnum(EnMaterialShape),
       shape_data: z.any(),
-      unit: z.nativeEnum(EnUnit),
+      unit: z.nativeEnum(EnUnit).nullable(),
       linear_mass: z.number(),
       alloy: z.string().nullable(),
-      safety_stock: z.number()
+      safety_stock: z.number().nullable()
     })
   )
   .mutation(async ({ input }) => {
@@ -23,10 +23,10 @@ export const updateMaterial = publicProcedure
         label: input.label,
         shape: input.shape,
         shape_data: input.shape_data,
-        unit: input.unit,
+        unit: input.unit ?? EnUnit.M,
         linear_mass: input.linear_mass,
         alloy: input.alloy,
-        safety_stock: input.safety_stock
+        safety_stock: input.safety_stock ?? 0
       })
       .where('id', '=', input.id)
       .executeTakeFirstOrThrow()

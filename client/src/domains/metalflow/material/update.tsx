@@ -5,11 +5,8 @@ import {
   RowButColumsAtSm,
   Stack,
   useEffect,
-  useNavigate,
   useParams
 } from 'lib/index'
-import { openPage, routeMap } from 'lib/routes'
-import { SaveAndDelete } from '../shared/basic'
 import { api } from './api'
 import { DetailsMadeOfMaterialModal } from './details_made_of_that_material'
 import { MaterialFormFields } from './form-fields'
@@ -19,7 +16,6 @@ export const MaterialUpdatePage = observer(() => {
   const { id } = useParams<{ id: string }>()
   if (!id) throw new Error('No id')
   const materialId = Number(id)
-  const navigate = useNavigate()
 
   useEffect(() => {
     api.reset()
@@ -45,18 +41,7 @@ export const MaterialUpdatePage = observer(() => {
           <MaterialWarehouse />
           <DetailsMadeOfMaterialModal />
         </Stack>
-        <Stack gap={1}>
-          <MaterialFormFields />
-          <SaveAndDelete
-            itemName={`Материал (${api.s.id}) - ${api.s.label}`}
-            handleDelete={() =>
-              api.delete().then(() => {
-                navigate(openPage(routeMap.metalflow.materials))
-              })
-            }
-            handleSave={() => api.update()}
-          />
-        </Stack>
+        <MaterialFormFields />
       </RowButColumsAtSm>
     </Stack>
   )

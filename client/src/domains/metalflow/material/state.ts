@@ -12,19 +12,8 @@ import { MaterialWarehouseStore } from './warehouse/store'
 export class MaterialState {
   readonly loadingWall = new AsyncStoreController()
   readonly warehouse = new MaterialWarehouseStore()
-  constructor(
-    init: {
-      id?: number
-      label?: string
-      stock?: number
-      safety_stock?: number
-    } = {}
-  ) {
+  constructor() {
     makeAutoObservable(this)
-    this.id = init.id
-    this.label = init.label
-    this.warehouse.setStock(init.stock || 0)
-    this.safetyStock = init.safety_stock?.toString() || ''
   }
 
   list = new ListState()
@@ -53,7 +42,7 @@ export class MaterialState {
   setLabel(label: string) {
     this.label = label
   }
-  unit: EnUnit = EnUnit.Kg
+  unit?: EnUnit
   setUnit(unit: EnUnit) {
     this.unit = unit
   }
@@ -97,7 +86,6 @@ export class MaterialState {
   syncState(material: Material) {
     this.id = material.id
     this.label = material.label
-    this.unit = material.unit
     this.shape = material.shape
     this.material = material
     this.getShapeState(this.shape).sync(material)

@@ -7,7 +7,7 @@ import { Action, actions } from '../nav.links'
 
 export function NavigationSideBar() {
   return (
-    <Stack gap={1} p={0.5}>
+    <Stack gap={1} p={1}>
       <NavigationBar t="Материаловедение" />
       {actions.map(each => (
         <RenderAction action={each} key={each.href} size="sm" />
