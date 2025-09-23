@@ -54,6 +54,16 @@ export const AttendanceReportComponent = (props: {
                     {formatTimeToHoursAndMinutes(data.total_dur)}
                   </Time>
                 )}
+                {data.broken && (
+                  <P
+                    color="danger"
+                    variant="solid"
+                    textAlign={'center'}
+                    level="body-xs"
+                  >
+                    error
+                  </P>
+                )}
               </Box>
             </Stack>
           )

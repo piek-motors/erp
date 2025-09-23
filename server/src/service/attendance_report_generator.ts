@@ -25,7 +25,7 @@ export interface AttendanceEmployee {
   workDays: number
   totalIntervalsCount: number
   days: {
-    [day: number]: { intervals: Interval[]; total_dur: number }
+    [day: number]: { intervals: Interval[]; total_dur: number; broken: boolean }
   }
 }
 
@@ -68,10 +68,11 @@ export class AttendanceReportGenerator {
       const daysMap = days.reduce((acc, day) => {
         acc[day] = {
           intervals: [],
-          total_dur: 0
+          total_dur: 0,
+          broken: false
         }
         return acc
-      }, {} as Record<number, { intervals: Interval[]; total_dur: number }>)
+      }, {} as Record<number, { intervals: Interval[]; total_dur: number; broken: boolean }>)
 
       const employee: AttendanceEmployee = {
         totalIntervalsCount: userRelatedIntervals.length,
@@ -97,9 +98,11 @@ export class AttendanceReportGenerator {
           i.ext = interval.ext
         }
 
-        const dayInMonth = new Date(interval.ent).getDate()
-        daysMap[dayInMonth].intervals.push(i)
-        daysMap[dayInMonth].total_dur += i.dur - dailyTimeRetention
+        const dayOfMonth = new Date(interval.ent).getDate()
+        daysMap[dayOfMonth].intervals.push(i)
+        if (i.dur) {
+          daysMap[dayOfMonth].total_dur += i.dur - dailyTimeRetention
+        }
       }
 
       employee.total = Object.values(employee.days).reduce(
@@ -110,6 +113,9 @@ export class AttendanceReportGenerator {
       for (const day of Object.values(employee.days)) {
         if (day.total_dur > 0) {
           employee.workDays += 1
+        }
+        if (day.intervals.length === 1 && !day.total_dur) {
+          day.broken = true
         }
       }
 
