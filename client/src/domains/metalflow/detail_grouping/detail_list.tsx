@@ -55,11 +55,3 @@ export const TargetGroupDetailList = observer(() => {
     </Stack>
   )
 })
-
-function EmptyState() {
-  return (
-    <Stack alignItems="center" justifyContent="center" sx={{ height: '400px' }}>
-      <P color="neutral">Выберите группу для управления</P>
-    </Stack>
-  )
-}

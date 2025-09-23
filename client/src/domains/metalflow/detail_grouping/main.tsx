@@ -23,7 +23,6 @@ interface DetailGroupsLayoutProps {
 
 const Detauls = observer(() => {
   if (crud.targetGroupLoading.loading) return <Loading />
-  if (!crud.store.targetGroup) return null
   return (
     <Box>
       <ScrollableWindow

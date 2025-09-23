@@ -277,8 +277,8 @@ export function LoadingHint(props: { show: boolean }) {
 
 export function Loading() {
   return (
-    <Box>
-      <LinearProgress size="sm" color="warning" />
+    <Box sx={{ minWidth: '-webkit-fill-available' }}>
+      <LinearProgress size="sm" color="danger" />
     </Box>
   )
 }
