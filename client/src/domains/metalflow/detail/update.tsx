@@ -16,7 +16,7 @@ import {
   useNavigate,
   useParams
 } from 'lib/index'
-import { formatDetailDate, formatDetailDateTime } from 'lib/utils/formatting'
+import { formatDate, formatDetailDateTime } from 'lib/utils/formatting'
 import { CreateDetailOrder } from '../warehouse/create_order'
 import { api } from './api'
 import { DetailAttachmentList } from './attachment/list'
@@ -118,7 +118,7 @@ function Metadata(props: {
       )}
       {props.updatedAt && (
         <P level="body-xs" color="neutral" sx={{ whiteSpace: 'nowrap' }}>
-          <b>Обновлено:</b> {formatDetailDate(props.updatedAt)}
+          <b>Обновлено:</b> {formatDate(props.updatedAt)}
         </P>
       )}
     </Stack>

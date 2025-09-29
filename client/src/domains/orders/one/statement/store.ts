@@ -5,6 +5,7 @@ import {
 } from 'components/utilities/conditional-display'
 import { apolloClient } from 'lib/api'
 import * as gql from 'lib/types/graphql-shema'
+import { formatDate } from 'lib/utils/formatting'
 import { makeAutoObservable } from 'mobx'
 import { Order, OrderStatus } from 'models'
 import moment from 'moment'
@@ -223,11 +224,11 @@ export class StatementStore {
       },
       {
         label: 'В очередности с',
-        view: this.order?.acceptanceDateString()
+        view: formatDate(this.order?.acceptanceDate)
       },
       {
         label: 'Отгружен',
-        view: this.order?.actualShippingDateString()
+        view: formatDate(this.order?.actualShippingDate)
       },
       {
         label: 'Комментарий',

@@ -67,10 +67,11 @@ export function formatDetailDateTime(date: Date): string {
   })
 }
 
-export function formatDetailDate(date: Date): string {
-  return date.toLocaleString('ru-RU', {
-    day: '2-digit',
-    month: 'long',
+export function formatDate(date?: Date | null): string {
+  if (!date) return ''
+  return Intl.DateTimeFormat('ru-RU', {
+    day: 'numeric',
+    month: 'short',
     year: '2-digit'
-  })
+  }).format(new Date(date))
 }
