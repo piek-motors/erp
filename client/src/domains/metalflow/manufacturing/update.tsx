@@ -96,11 +96,12 @@ export const ManufacturingUpdatePage = observer(() => {
           </Row>
         )}
       </Row>
-      <Row gap={2} alignContent={'flex-start'} alignItems={'flex-start'}>
+      <Row gap={3} alignContent={'flex-start'} alignItems={'flex-start'}>
         <TechParamsDisplay
           level="body-md"
           params={api.s.detail.technicalParameters}
         />
+        <Divider orientation="vertical" />
         <Cost />
       </Row>
 
@@ -142,7 +143,7 @@ export const Cost = observer(() => {
     <Stack gap={2}>
       {!!materils.length ? (
         <Stack>
-          <Label label="Материалы к потреблению" />
+          <Label label="Материалы к потреблению" color="warning" />
           <Stack gap={0.5}>
             {materils.map((cost, index) => (
               <DetailMaterialInfo key={index} cost={cost} />
@@ -178,7 +179,7 @@ const DetailDescription = observer(() => {
   if (!api.s.detail.description) return null
   return (
     <Stack>
-      <Label label="Примечания детали" />
+      <Label label="Примечание" />
       <div
         contentEditable="false"
         key={api.s.detail.id}
@@ -227,7 +228,7 @@ const columnList: Column<Step>[] = [
     Header: 'Приемка ОТК',
     columns: [
       {
-        Header: 'Отбраковано',
+        Header: 'Брак',
         accessor: step => <DefectCell step={step} />
       },
       {
@@ -244,6 +245,7 @@ const columnList: Column<Step>[] = [
 
 const DefectCell = observer((props: { step: Step }) => (
   <Inp
+    sx={{ width: '60px' }}
     variant="plain"
     value={props.step.defected ?? ''}
     onChange={v => props.step.setDefected(v == '' ? null : Number(v))}
@@ -252,6 +254,7 @@ const DefectCell = observer((props: { step: Step }) => (
 
 const ExecutorCell = observer((props: { step: Step }) => (
   <Inp
+    sx={{ width: '100px' }}
     variant="plain"
     value={props.step.executor_name}
     onChange={v => {
@@ -262,6 +265,7 @@ const ExecutorCell = observer((props: { step: Step }) => (
 
 const DateCell = observer((props: { step: Step }) => (
   <Inp
+    sx={{ width: '60px' }}
     variant="plain"
     value={props.step.date}
     onChange={v => {
@@ -380,7 +384,7 @@ const DetailMaterialInfo = observer((props: { cost: MaterialCost }) => {
       {api.s.qty && (
         <>
           <P level="body-sm" color="primary">
-            Потребное количество: {roundAndTrim(totalConsumedAmount)} м
+            Потребное кол-во: {roundAndTrim(totalConsumedAmount)} м
           </P>
 
           <P level="body-sm" color="neutral">

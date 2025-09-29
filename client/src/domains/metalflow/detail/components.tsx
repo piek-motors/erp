@@ -169,7 +169,7 @@ export const TechParamsDisplay = observer(
       {props.params?.arr?.length && props.params.arr.length > 0 && (
         <Row>
           <Stack>
-            <Label>Тех. параметры</Label>
+            <Label color="warning">Тех. параметры</Label>
             {props.params?.arr.map(({ key, value }, idx) => (
               <P key={key + idx} level={props.level} sx={{ ml: 0.5 }}>
                 {key}: {String(value)}
