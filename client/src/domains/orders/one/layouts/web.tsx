@@ -1,33 +1,23 @@
-import Grid from '@mui/joy/Grid'
 import { FactoryPage } from 'components/factory_page'
+import { DoubleScrollWindow } from 'components/utilities'
 import { WebOnly } from 'components/utilities/conditional-display'
-import {
-  OrderLeftPanel,
-  OrderRightPanel,
-  PageHeader
-} from '../high-level-blocks'
+import { OrderActions } from '../header'
+import { OrderLeftPanel, OrderRightPanel } from '../high-level-blocks'
 import { InputPositionModal } from '../positions/input.modal'
 
 export const WebLayout = () => {
   return (
-    <FactoryPage title={'Детали заказа'} header={<PageHeader />}>
-      <WebOnly display="block">
-        <Grid
-          container
-          direction={'row'}
-          sx={{
-            height: {
-              xs: 'auto',
-              md: '100vh'
-            },
-            overflow: 'clip'
-          }}
-        >
-          <InputPositionModal />
-          <OrderLeftPanel />
-          <OrderRightPanel />
-        </Grid>
-      </WebOnly>
-    </FactoryPage>
+    <WebOnly display="block">
+      <DoubleScrollWindow
+        firstFlexGrow={2}
+        first={
+          <FactoryPage title={'Детали заказа'} header={<OrderActions />}>
+            <InputPositionModal />
+            <OrderLeftPanel />
+          </FactoryPage>
+        }
+        second={<OrderRightPanel />}
+      />
+    </WebOnly>
   )
 }

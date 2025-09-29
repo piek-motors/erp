@@ -1,20 +1,16 @@
 /** @jsxImportSource @emotion/react */
 import { Box, Divider, Sheet, Stack } from '@mui/joy'
-import Grid from '@mui/joy/Grid'
 import { useAppContext } from 'hooks'
 import { Chip, P, Row, text } from 'lib/index'
 import { orderStatus } from 'lib/utils/orderColorIndication'
 import { observer } from 'mobx-react-lite'
 import { CommentInputViewPort, CommentListViewPort } from './comments/ui'
-import { OrderActions } from './header'
 import { OrderAttachmentList } from './order-attachment-list'
 import { Paymnets } from './payments/ui'
 import { PositionsList } from './positions/ui'
-import { orderInfoPrintStyle, orderPositionsStyle } from './prints.styles'
+import { orderInfoPrintStyle } from './prints.styles'
 import { OrderStatementInput, StatementView } from './statement/ui'
 import { orderStore } from './stores/order.store'
-
-export const PageHeader = () => <OrderActions />
 
 // Order metadata component showing entity, city and status chips
 export const OrderMetadata = observer(() => {
@@ -91,51 +87,22 @@ export const OrderCommentsSection = observer(() => {
 
 // Left panel with positions and order info
 export const OrderLeftPanel = observer(() => (
-  <Grid
-    xs={12}
-    md={7}
-    flexGrow={1}
-    css={orderPositionsStyle}
-    sx={{
-      overflowY: 'scroll',
-      height: {
-        xs: 'auto',
-        md: '100vh'
-      }
-    }}
-  >
-    <Stack display={'flex'} flexGrow={1} flexShrink={0}>
-      <Sheet sx={{ borderRadius: 'sm', p: 2 }}>
-        <Stack gap={3}>
-          <OrderMetadata />
-          <Box>
-            <PositionsList />
-          </Box>
-          <Divider />
-          <OrderInfoSection />
-        </Stack>
-      </Sheet>
+  <Sheet sx={{ borderRadius: 'sm', p: 2 }}>
+    <Stack gap={3}>
+      <OrderMetadata />
+      <Box>
+        <PositionsList />
+      </Box>
+      <Divider />
+      <OrderInfoSection />
     </Stack>
-  </Grid>
+  </Sheet>
 ))
 
 // Right panel with docs and comments
 export const OrderRightPanel = observer(() => (
-  <Grid xs={12} md={5} direction={'column'} container>
-    <Grid
-      sx={{
-        p: 2,
-        overflowY: {
-          xs: 'scroll'
-        },
-        height: {
-          xs: 'auto',
-          md: 'auto'
-        }
-      }}
-    >
-      <OrderAttachmentList orderId={orderStore.order!.id} />
-      <OrderCommentsSection />
-    </Grid>
-  </Grid>
+  <Box p={1}>
+    <OrderAttachmentList orderId={orderStore.order!.id} />
+    <OrderCommentsSection />
+  </Box>
 ))

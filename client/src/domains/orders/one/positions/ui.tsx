@@ -17,7 +17,11 @@ export const PositionsList = observer(() => {
     <Stack gap={1}>
       {orderStore.positions.items.map((position, index) => (
         <Box key={index}>
-          <Row justifyContent="space-between" css={orderPositionsItemStyle}>
+          <Row
+            justifyContent="space-between"
+            css={orderPositionsItemStyle}
+            gap={4}
+          >
             <P fontFamily={'monospace'} fontSize={'1.2rem'}>
               {position.name}
             </P>

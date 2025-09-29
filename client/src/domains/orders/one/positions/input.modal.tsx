@@ -17,11 +17,6 @@ export const InputPositionModal = observer(() => {
       onClose={() => {
         orderStore.positions.closeDialog()
       }}
-      onKeyDown={e => {
-        if (e.key === 'Enter') {
-          orderStore.positions.save(orderStore.order!.id)
-        }
-      }}
     >
       <ModalDialog minWidth={600}>
         <ModalClose />

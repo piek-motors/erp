@@ -1,5 +1,6 @@
 import { Box, Stack } from '@mui/joy'
-import { P, text } from 'lib/index'
+import { WebOnly } from 'components/utilities/conditional-display'
+import { Label, P, text } from 'lib/index'
 import { Attachment } from 'models'
 import { InputFiles } from '../input-files'
 import { AttachmentComponent } from './attachment'
@@ -29,7 +30,7 @@ export const AttachmentList = ({
 }: AttachmentListProps) => {
   return (
     <Stack gap={1}>
-      <P fontWeight={500}>{title}</P>
+      <Label>{title}</Label>
       <Stack gap={1}>
         {attachments.map(attachment => (
           <AttachmentComponent
@@ -58,12 +59,14 @@ export const AttachmentList = ({
           ))}
       </Stack>
       {onUpload && (
-        <InputFiles
-          size={uploadInputProps.size || 'sm'}
-          variant={uploadInputProps.variant || 'outlined'}
-          sx={{ fontSize: '.8rem', ...uploadInputProps.sx }}
-          upload={onUpload}
-        />
+        <WebOnly>
+          <InputFiles
+            size={uploadInputProps.size || 'sm'}
+            variant={uploadInputProps.variant || 'outlined'}
+            sx={{ fontSize: '.8rem', ...uploadInputProps.sx }}
+            upload={onUpload}
+          />
+        </WebOnly>
       )}
     </Stack>
   )

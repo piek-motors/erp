@@ -44,6 +44,7 @@ export function Comment({ data, userID }: ICommentProps) {
     const isYourComment = userID === data.user.id
     return isYourComment ? (
       <div
+        style={{ padding: '5px' }}
         contentEditable="true"
         key={data.id}
         suppressContentEditableWarning={true}
@@ -117,20 +118,18 @@ export function CommentListViewPort({ user, orderId }: ICommentsListProps) {
 
   return (
     <Box>
-      <Box sx={{ overflow: 'scroll' }}>
-        {sortedComments.length > visibleComments && (
-          <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
-            <Button variant="soft" onClick={handleShowMore} size="sm">
-              {text.showMore}
-            </Button>
-          </Box>
-        )}
+      {sortedComments.length > visibleComments && (
+        <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
+          <Button variant="soft" onClick={handleShowMore} size="sm">
+            {text.showMore}
+          </Button>
+        </Box>
+      )}
 
-        {!loading &&
-          commentsToShow.map(comment => (
-            <Comment data={comment} key={comment.id} userID={user.id} />
-          ))}
-      </Box>
+      {!loading &&
+        commentsToShow.map(comment => (
+          <Comment data={comment} key={comment.id} userID={user.id} />
+        ))}
     </Box>
   )
 }
@@ -138,14 +137,18 @@ export function CommentListViewPort({ user, orderId }: ICommentsListProps) {
 export const CommentInputViewPort = observer(
   ({ user, orderId }: ICommentsListProps) => {
     return (
-      <Box sx={{ overflow: 'scroll' }}>
+      <Card
+        variant="soft"
+        sx={{ p: 1, pt: 0, position: 'sticky', bottom: 8 }}
+        size="sm"
+      >
         <TextEditor
           placeholder="Начините обсуждение"
           onSubmit={content => {
             return commentsStore.insertComment(content, orderId, user.id)
           }}
         />
-      </Box>
+      </Card>
     )
   }
 )

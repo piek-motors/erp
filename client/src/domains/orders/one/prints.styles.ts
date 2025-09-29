@@ -10,12 +10,6 @@ export const orderInfoPrintStyle = css`
   }
 `
 
-export const orderPositionsStyle = css`
-  @media print {
-    width: 100%;
-  }
-`
-
 export const orderPositionsItemStyle = css`
   @media print {
     * {

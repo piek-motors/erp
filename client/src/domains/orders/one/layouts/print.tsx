@@ -1,7 +1,6 @@
-import { Box, Divider, Grid, Stack } from '@mui/joy'
-
+import { Box, Grid, Stack } from '@mui/joy'
 import { PrintOnly } from 'components/utilities/conditional-display'
-import { P } from 'lib/index'
+import { Label, P } from 'lib/index'
 import { formatOnlyDate } from 'lib/utils/formatting'
 import { observer } from 'mobx-react-lite'
 import { OrderAttachmentList } from '../order-attachment-list'
@@ -16,22 +15,21 @@ export const PrintLayout = observer(() => {
     <PrintOnly>
       <Stack gap={1}>
         <Box sx={{ mb: 3 }}>
-          <P level="h3" sx={{ mb: 1 }}>
+          <Label>Заказ №{order.id}</Label>
+          <P level="h3">
             {order.contractor} - {order.city}
           </P>
         </Box>
 
-        <Box sx={{ mb: 4 }}>
+        <Box sx={{ mb: 1 }}>
           <PositionsList />
         </Box>
 
-        <Divider sx={{ my: 3 }} />
-
         <Grid container spacing={3}>
-          <Grid xs={12} md={6}>
+          <Grid xs={12} md={8}>
             <StatementView />
           </Grid>
-          <Grid xs={12} md={6}>
+          <Grid xs={12} md={4}>
             <OrderAttachmentList orderId={order.id} />
           </Grid>
         </Grid>

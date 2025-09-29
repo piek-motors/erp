@@ -7,6 +7,7 @@ import {
   UilPen
 } from '@iconscout/react-unicons'
 import { Button, Dropdown, Menu, MenuButton, MenuItem, Stack } from '@mui/joy'
+import { WebOnly } from 'components/utilities/conditional-display'
 import { DeleteResourceButton, Inp, P, Row, UseIcon, useState } from 'lib/index'
 import { Attachment } from 'models'
 
@@ -40,30 +41,32 @@ export const AttachmentComponent = (props: {
         <FileLink attachment={props.attachment} />
       )}
 
-      {editMode === false && (
-        <Dropdown>
-          <MenuButton variant="plain" size="sm">
-            <UseIcon icon={UilEllipsisH} />
-          </MenuButton>
-          <Menu size="sm" sx={{ gap: 1, p: 0.5 }}>
-            <MenuItem
-              onClick={() => {
-                setEditMode(true)
-              }}
-            >
-              <UseIcon icon={UilPen} />
-            </MenuItem>
+      <WebOnly>
+        {editMode === false && (
+          <Dropdown>
+            <MenuButton variant="plain" size="sm">
+              <UseIcon icon={UilEllipsisH} />
+            </MenuButton>
+            <Menu size="sm" sx={{ gap: 1, p: 0.5 }}>
+              <MenuItem
+                onClick={() => {
+                  setEditMode(true)
+                }}
+              >
+                <UseIcon icon={UilPen} />
+              </MenuItem>
 
-            {props.handleDelete && (
-              <>
-                <DeleteResourceButton
-                  onClick={() => props.handleDelete!(props.attachment)}
-                />
-              </>
-            )}
-          </Menu>
-        </Dropdown>
-      )}
+              {props.handleDelete && (
+                <>
+                  <DeleteResourceButton
+                    onClick={() => props.handleDelete!(props.attachment)}
+                  />
+                </>
+              )}
+            </Menu>
+          </Dropdown>
+        )}
+      </WebOnly>
     </Row>
   )
 }
