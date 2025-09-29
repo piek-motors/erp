@@ -48,7 +48,7 @@ export function Table({ columns, data }: ITableProps) {
                       {...cell.getCellProps()}
                       style={{
                         border: '1px solid #d3cbcb',
-                        padding: '0px 4px'
+                        padding: '0px 1px'
                       }}
                     >
                       {cell.render('Cell')}

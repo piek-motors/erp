@@ -17,12 +17,14 @@ export const AttendanceReportComponent = (props: {
     {
       Header: 'Фамилия Имя',
       accessor: data => (
-        <P>{data.name.replace(/\d+/g, '').replace(/\s+/g, ' ').trim()}</P>
+        <Box sx={{ width: 'min-content', p: 0.5 }}>
+          {removeCardNumber(data.name)}
+        </Box>
       )
     },
     {
       Header: '∑',
-      Cell: props => sec2hours(props.row.original.total)
+      Cell: props => <Box p={0.2}>{sec2hours(props.row.original.total)}</Box>
     },
     ...Array.from({ length: props.report.daysInMonth }).map<
       Column<AttendanceEmployee>
@@ -38,12 +40,14 @@ export const AttendanceReportComponent = (props: {
                 <>
                   {interval.ent && (
                     <Time>
-                      -&gt;{formatTimeToHoursAndMinutes(interval.ent)}
+                      {ArrowRight()}
+                      {formatTimeToHoursAndMinutes(interval.ent)}
                     </Time>
                   )}
                   {interval.ext && (
                     <Time>
-                      &lt;-{formatTimeToHoursAndMinutes(interval.ext)}
+                      {ArrowLeft()}
+                      {formatTimeToHoursAndMinutes(interval.ext)}
                     </Time>
                   )}
                 </>
@@ -56,8 +60,9 @@ export const AttendanceReportComponent = (props: {
                 )}
                 {data.broken && (
                   <P
+                    mx={0.1}
                     color="danger"
-                    variant="solid"
+                    variant="soft"
                     textAlign={'center'}
                     level="body-xs"
                   >
@@ -116,4 +121,16 @@ function Time(props: { children: React.ReactNode; sx?: BoxProps }) {
       <div>{props.children}</div>
     </Box>
   )
+}
+
+function ArrowLeft() {
+  return <span>{'\u2190'}</span> // ←
+}
+
+function ArrowRight() {
+  return <span>{'\u2192'}</span> // →
+}
+
+function removeCardNumber(attendacneName: string) {
+  return attendacneName.replace(/\d+/g, '').replace(/\s+/g, ' ').trim()
 }
