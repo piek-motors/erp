@@ -25,7 +25,7 @@ export const PrintLayout = observer(() => {
           <PositionsList />
         </Box>
 
-        <Grid container spacing={3}>
+        <Grid container>
           <Grid xs={12} md={8}>
             <StatementView />
           </Grid>

@@ -1,6 +1,7 @@
-import { Box } from '@mui/joy'
+import { Box, Grid } from '@mui/joy'
 import { PrintOnly, WebOnly } from 'components/utilities/conditional-display'
-import { ExecuteAction, InputStack, P } from 'lib/index'
+import { useMediaQuery } from 'hooks/use-media-query'
+import { ExecuteAction, InputStack, Label } from 'lib/index'
 import { observer } from 'mobx-react-lite'
 import { orderStore } from '../stores/order.store'
 import { RenderInput } from './render-input'
@@ -14,15 +15,17 @@ export const OrderStatementInput = observer(
           {columns.map((column, idx) => (
             <RenderInput key={idx} column={column} idx={idx} />
           ))}
-          <ExecuteAction
-            onSubmit={() => mutation()}
-            stackProps={{
-              sx: {
-                mt: 2,
-                width: 'max-content'
-              }
-            }}
-          />
+          <Box py={2} width={'min-content'}>
+            <ExecuteAction
+              onSubmit={() => mutation()}
+              stackProps={{
+                sx: {
+                  mt: 2,
+                  width: 'max-content'
+                }
+              }}
+            />
+          </Box>
         </InputStack>
       </form>
     )
@@ -31,48 +34,38 @@ export const OrderStatementInput = observer(
 
 export const StatementView = observer(() => {
   const columns = orderStore.statment.getcolumns()
-  return columns
+  const isPrinting = useMediaQuery('print')
+
+  const rows = columns
     .map((column, idx) => {
       const { value, view, layout } = column
       if (!value && !view) return null
       const v = view ?? value
-      const content = (
-        <Box
-          key={column.label}
-          style={{
-            display: 'flex',
-            alignItems: 'baseline'
-          }}
-          sx={{ gap: 1 }}
-        >
-          <P style={{ whiteSpace: 'nowrap' }}>{column.label}</P>
-          <div
-            style={{
-              flex: 1,
-              borderBottom: '1px dashed #aaa',
-              height: 1
-            }}
-          />
-          <P style={{ whiteSpace: 'normal' }}>{v}</P>
-        </Box>
+
+      if (isPrinting && layout === WebOnly) return null
+      if (!isPrinting && layout === PrintOnly) return null
+
+      return (
+        <>
+          <Grid>
+            <Label width={'auto'}>{column.label}</Label>
+          </Grid>
+          <Grid>{v}</Grid>
+        </>
       )
-
-      if (layout === PrintOnly) {
-        return (
-          <PrintOnly key={idx} display="block">
-            {content}
-          </PrintOnly>
-        )
-      }
-      if (layout === WebOnly) {
-        return (
-          <WebOnly key={idx} display="block">
-            {content}
-          </WebOnly>
-        )
-      }
-
-      return content
     })
     .filter(Boolean)
+
+  return (
+    <Box
+      sx={{
+        py: 1,
+        columnGap: 3,
+        display: 'grid',
+        gridTemplateColumns: 'auto 1fr'
+      }}
+    >
+      {rows.map(e => e)}
+    </Box>
+  )
 })

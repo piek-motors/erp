@@ -222,7 +222,7 @@ export class StatementStore {
         }
       },
       {
-        label: 'Добавлен в очередность',
+        label: 'В очередности с',
         view: this.order?.acceptanceDateString()
       },
       {
