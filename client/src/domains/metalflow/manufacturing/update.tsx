@@ -23,12 +23,11 @@ import {
 } from 'lib/index'
 import { roundAndTrim } from 'lib/utils/formatting'
 import { EnManufacturingOrderStatus, uiManufacturingOrderStatus } from 'models'
-import { Column } from 'react-table'
 import { TechParamsDisplay } from '../detail/components'
-import { Step } from '../detail/detail.state'
 import { MaterialCost } from '../detail/warehouse/cost.store'
 import { api } from './api'
 import { formatDate } from './list/list'
+import { columns } from './tech_passport/columns'
 
 export const ManufacturingUpdatePage = observer(() => {
   const { id } = useParams<{ id: string }>()
@@ -193,94 +192,13 @@ const DetailDescription = observer(() => {
   )
 })
 
-const columnList: Column<Step>[] = [
-  {
-    Header: 'Операция',
-    columns: [
-      {
-        Header: '№',
-        accessor: (_, index) => index + 1
-      },
-      {
-        accessor: 'name',
-        Header: 'Операция'
-      }
-    ]
-  },
-  {
-    Header: 'Исполнитель',
-    columns: [
-      {
-        Header: 'ФИ',
-        accessor: step => <ExecutorCell step={step} />
-      },
-      {
-        Header: 'Дата',
-        accessor: step => <DateCell step={step} />
-      },
-      {
-        Header: 'Подпись',
-        accessor: step => <Box />
-      }
-    ]
-  },
-  {
-    Header: 'Приемка ОТК',
-    columns: [
-      {
-        Header: 'Брак',
-        accessor: step => <DefectCell step={step} />
-      },
-      {
-        Header: 'Штамп',
-        accessor: step => <Box />
-      },
-      {
-        Header: 'Примечание',
-        accessor: step => <Box />
-      }
-    ]
-  }
-]
-
-const DefectCell = observer((props: { step: Step }) => (
-  <Inp
-    sx={{ width: '60px' }}
-    variant="plain"
-    value={props.step.defected ?? ''}
-    onChange={v => props.step.setDefected(v == '' ? null : Number(v))}
-  />
-))
-
-const ExecutorCell = observer((props: { step: Step }) => (
-  <Inp
-    sx={{ width: '100px' }}
-    variant="plain"
-    value={props.step.executor_name}
-    onChange={v => {
-      props.step.setExecutor(v ?? '')
-    }}
-  />
-))
-
-const DateCell = observer((props: { step: Step }) => (
-  <Inp
-    sx={{ width: '60px' }}
-    variant="plain"
-    value={props.step.date}
-    onChange={v => {
-      props.step.setDate(v ?? '')
-    }}
-  />
-))
-
 const ProductionRoute = observer(() => {
   if (api.s.processingRoute.steps.length === 0) return null
   return (
     <Stack>
       <Label label="Маршрут производства" />
       <Sheet sx={{ borderRadius: 'sm', p: 1 }}>
-        <Table columns={columnList} data={api.s.processingRoute.steps} />
+        <Table columns={columns} data={api.s.processingRoute.steps} />
         <WebOnly>
           <Box width="min-content" mt={1} ml="auto">
             <ExecuteAction

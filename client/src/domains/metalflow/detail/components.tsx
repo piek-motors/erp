@@ -155,7 +155,7 @@ export const ProcessingRouteAccordion = observer(() => (
       }}
       onChange={steps => api.detail.processingRoute.init(steps ?? [])}
       placeholders={['Операция', 'мин']}
-      width={[80, 20]}
+      width={[90, 10]}
     />
   </AccordionCard>
 ))
