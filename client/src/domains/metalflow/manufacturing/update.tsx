@@ -1,9 +1,7 @@
-import { Box, Divider, Sheet } from '@mui/joy'
-import { Table } from 'components/table.impl'
+import { Box, Divider } from '@mui/joy'
 import { WebOnly } from 'components/utilities/conditional-display'
 import { DetailName } from 'domains/metalflow/detail/name'
 import { MaterialName } from 'domains/metalflow/shared'
-import { ComplexTitle, MetalPageTitle } from 'domains/metalflow/shared/basic'
 import {
   Button,
   DeleteResourceButton,
@@ -22,12 +20,11 @@ import {
   useParams
 } from 'lib/index'
 import { roundAndTrim } from 'lib/utils/formatting'
-import { EnManufacturingOrderStatus, uiManufacturingOrderStatus } from 'models'
-import { TechParamsDisplay } from '../detail/components'
+import { EnManufacturingOrderStatus } from 'models'
 import { MaterialCost } from '../detail/warehouse/cost.store'
 import { api } from './api'
-import { formatDate } from './list/list'
-import { columns } from './tech_passport/columns'
+import { DetailTechPassportTable } from './tech_passport/passport_table'
+import { DetailProductionRouteTable } from './tech_passport/production_route_table'
 
 export const ManufacturingUpdatePage = observer(() => {
   const { id } = useParams<{ id: string }>()
@@ -53,8 +50,8 @@ export const ManufacturingUpdatePage = observer(() => {
     return <Loading />
   }
   return (
-    <Stack p={1} gap={1}>
-      <MetalPageTitle
+    <Stack py={3} gap={1}>
+      {/* <MetalPageTitle
         t={
           <ComplexTitle
             subtitle="Заказ"
@@ -102,9 +99,10 @@ export const ManufacturingUpdatePage = observer(() => {
         />
         <Divider orientation="vertical" />
         <Cost />
-      </Row>
+      </Row> */}
 
-      <DetailDescription />
+      <DetailTechPassportTable order={api.s} />
+      {/* <DetailDescription /> */}
       <ProductionRoute />
 
       <WebOnly>
@@ -197,17 +195,12 @@ const ProductionRoute = observer(() => {
   return (
     <Stack>
       <Label label="Маршрут производства" />
-      <Sheet sx={{ borderRadius: 'sm', p: 1 }}>
-        <Table columns={columns} data={api.s.processingRoute.steps} />
-        <WebOnly>
-          <Box width="min-content" mt={1} ml="auto">
-            <ExecuteAction
-              onSubmit={() => api.save()}
-              buttonLabel="Сохранить"
-            />
-          </Box>
-        </WebOnly>
-      </Sheet>
+      <DetailProductionRouteTable data={api.s.processingRoute.steps} />
+      <WebOnly>
+        <Box width="min-content" mt={1} ml="auto">
+          <ExecuteAction onSubmit={() => api.save()} buttonLabel="Сохранить" />
+        </Box>
+      </WebOnly>
     </Stack>
   )
 })

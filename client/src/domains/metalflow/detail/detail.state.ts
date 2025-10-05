@@ -7,20 +7,12 @@ import { DetailWarehouseStore } from './warehouse/store'
 type DetailResponse = RouterOutput['metal']['details']['get']['detail']
 type UpdateDetailRequest = RouterInput['metal']['details']['update']
 
-export class Step {
+export class Operation {
   name!: string
   dur!: number
   executor_name: string = ''
-  defected?: number | null = null
-  setDefected(defected?: number | null) {
-    this.defected = defected
-  }
   setExecutor(name: string) {
     this.executor_name = name
-  }
-  date: string = ''
-  setDate(d: string) {
-    this.date = d
   }
   constructor() {
     makeAutoObservable(this)
@@ -29,14 +21,12 @@ export class Step {
     this.name = ''
     this.dur = 0
     this.executor_name = ''
-    this.date = ''
-    this.defected = null
   }
 }
 
 export class ProcessingRoute {
-  steps: Step[] = []
-  init(steps: Step[]) {
+  steps: Operation[] = []
+  init(steps: Operation[]) {
     this.steps = steps
   }
   constructor() {
@@ -123,11 +113,10 @@ export class DetailState {
     this.processingRoute.init(
       d.processing_route && d.processing_route.steps
         ? d.processing_route.steps.map(s => {
-            const step = new Step()
+            const step = new Operation()
             step.name = s.name
             step.dur = s.dur
             step.executor_name = s.executor_name ?? ''
-            step.setDefected(s.defected)
             return step
           })
         : []
@@ -177,8 +166,7 @@ export class DetailState {
               this.processingRoute.steps?.map(s => ({
                 name: s.name?.trim(),
                 dur: +s.dur,
-                executor_name: s.executor_name?.trim() ?? '',
-                defected: s.defected ? Number(s.defected) : null
+                executor_name: s.executor_name?.trim() ?? ''
               })) ?? null
           }
         : null,

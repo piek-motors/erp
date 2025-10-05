@@ -1,7 +1,7 @@
 import { AsyncStoreController } from 'lib/async-store.controller'
 import { makeAutoObservable } from 'mobx'
 import { RouterOutput } from 'srv/lib/trpc'
-import { DetailState, ProcessingRoute, Step } from '../detail/detail.state'
+import { DetailState, Operation, ProcessingRoute } from '../detail/detail.state'
 
 export type ManufacturingOrderOutput =
   RouterOutput['metal']['manufacturing']['get']
@@ -13,12 +13,10 @@ export class OrderState {
   setOrder(order: ManufacturingOrderOutput) {
     this.order = order
     const steps = order.data?.processing_route?.steps.map(s => {
-      const step = new Step()
+      const step = new Operation()
       step.name = s.name
       step.dur = s.dur
       step.executor_name = s.executor_name ?? ''
-      step.date = s.date ?? ''
-      step.setDefected(s.defected ?? null)
       return step
     })
     this.processingRoute.init(steps ?? [])
