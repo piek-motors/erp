@@ -25,6 +25,7 @@ import {
 } from 'lib/index'
 import { formatDate, roundAndTrim } from 'lib/utils/formatting'
 import { EnManufacturingOrderStatus, uiManufacturingOrderStatus } from 'models'
+import { TechParamsDisplay } from '../detail/components'
 import { MaterialCost } from '../detail/warehouse/cost.store'
 import { api } from './api'
 import { DetailTechPassportTable } from './tech_passport/passport_table'
@@ -97,6 +98,13 @@ export const ManufacturingUpdatePage = observer(() => {
               )}
             </Stack>
             <Cost />
+          </Row>
+          <Row gap={2}>
+            <TechParamsDisplay
+              params={api.s.detail.technicalParameters}
+              level="body-xs"
+            />
+            <DetailDescription />
           </Row>
         </Stack>
       </WebOnly>
@@ -219,6 +227,14 @@ const QuantityInput = observer(() => {
           api.s.setQty(v)
         }}
       />
+    )
+  }
+  if (api.s.order.status === EnManufacturingOrderStatus.Production) {
+    return (
+      <Row gap={1}>
+        <Label label="Кол-во" />
+        <P>{api.s.order.qty}</P>
+      </Row>
     )
   }
   return null
