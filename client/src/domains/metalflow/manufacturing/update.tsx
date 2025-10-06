@@ -1,4 +1,4 @@
-import { Box, Divider } from '@mui/joy'
+import { Box, Card, Divider } from '@mui/joy'
 import { WebOnly } from 'components/utilities/conditional-display'
 import { DetailName } from 'domains/metalflow/detail/name'
 import { MaterialName } from 'domains/metalflow/shared'
@@ -19,8 +19,8 @@ import {
   useNavigate,
   useParams
 } from 'lib/index'
-import { roundAndTrim } from 'lib/utils/formatting'
-import { EnManufacturingOrderStatus } from 'models'
+import { formatDate, roundAndTrim } from 'lib/utils/formatting'
+import { EnManufacturingOrderStatus, uiManufacturingOrderStatus } from 'models'
 import { MaterialCost } from '../detail/warehouse/cost.store'
 import { api } from './api'
 import { DetailTechPassportTable } from './tech_passport/passport_table'
@@ -70,38 +70,35 @@ export const ManufacturingUpdatePage = observer(() => {
           />
         }
       />
-
-      <Row>
-        <QuantityInput />
-        <WebOnly>
-          <Row gap={1}>
-            <Label label="Статус" />
-            <P>{uiManufacturingOrderStatus(api.s.order.status)}</P>
-          </Row>
-        </WebOnly>
-
-        <Row>
-          <Label label="от" />
-          <P>{formatDate(new Date(api.s.order.started_at))}</P>
-        </Row>
-
-        {api.s.order.finished_at && (
-          <Row>
-            <Label label="завершен" />
-            <P>{formatDate(new Date(api.s.order.finished_at))}</P>
-          </Row>
-        )}
-      </Row>
-      <Row gap={3} alignContent={'flex-start'} alignItems={'flex-start'}>
-        <TechParamsDisplay
-          level="body-md"
-          params={api.s.detail.technicalParameters}
-        />
-        <Divider orientation="vertical" />
-        <Cost />
-      </Row> */}
+*/}
 
       <DetailTechPassportTable order={api.s} />
+
+      <WebOnly>
+        <Row gap={2}>
+          <Stack>
+            <QuantityInput />
+            <Row gap={1}>
+              <Label label="Статус" />
+              <P>{uiManufacturingOrderStatus(api.s.order.status)}</P>
+            </Row>
+
+            <Row>
+              <Label label="Создан" />
+              <P>{formatDate(new Date(api.s.order.started_at))}</P>
+            </Row>
+
+            {api.s.order.finished_at && (
+              <Row>
+                <Label label="завершен" />
+                <P>{formatDate(new Date(api.s.order.finished_at))}</P>
+              </Row>
+            )}
+          </Stack>
+          <Cost />
+        </Row>
+      </WebOnly>
+
       {/* <DetailDescription /> */}
       <ProductionRoute />
 
@@ -137,20 +134,20 @@ export const Cost = observer(() => {
   const materils = api.s.detail.autoWriteoff.materialsCost
   const details = api.s.detail.autoWriteoff.detailsCost
   return (
-    <Stack gap={2}>
+    <Row>
       {!!materils.length ? (
-        <Stack>
-          <Label label="Материалы к потреблению" color="warning" />
+        <Card size="sm">
+          <Label label="Материалы к потреблению" />
           <Stack gap={0.5}>
             {materils.map((cost, index) => (
               <DetailMaterialInfo key={index} cost={cost} />
             ))}
           </Stack>
-        </Stack>
+        </Card>
       ) : null}
 
       {!!details.length ? (
-        <Stack>
+        <Card size="sm">
           <Label label="Детали к потреблению" />
           <Stack gap={0.5}>
             {details.map((cost, index) => (
@@ -166,9 +163,9 @@ export const Cost = observer(() => {
               </Row>
             ))}
           </Stack>
-        </Stack>
+        </Card>
       ) : null}
-    </Stack>
+    </Row>
   )
 })
 
@@ -194,7 +191,7 @@ const ProductionRoute = observer(() => {
   if (api.s.processingRoute.steps.length === 0) return null
   return (
     <Stack>
-      <Label label="Маршрут производства" />
+      <Label label="Маршрут" />
       <DetailProductionRouteTable data={api.s.processingRoute.steps} />
       <WebOnly>
         <Box width="min-content" mt={1} ml="auto">
@@ -218,14 +215,6 @@ const QuantityInput = observer(() => {
           api.s.setQty(v)
         }}
       />
-    )
-  }
-  if (api.s.order.status === EnManufacturingOrderStatus.Production) {
-    return (
-      <Row gap={1}>
-        <Label label="Кол-во" />
-        <P>{api.s.order.qty}</P>
-      </Row>
     )
   }
   return null

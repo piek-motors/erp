@@ -1,10 +1,9 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import { Box } from '@mui/joy'
-import { capitalize } from 'domains/metalflow/shared'
-import { Label, P } from 'lib/index'
+import { DetailName } from 'domains/metalflow/detail/name'
+import { Label, observer, P, Row } from 'lib/index'
 import { ReactNode } from 'react'
-import { formatDate } from '../list/list'
 import { OrderState } from '../order.state'
 import { tableStyles } from './shared'
 type Props = {
@@ -17,17 +16,20 @@ const L = (props: { children: ReactNode }) => (
   <Label level={'body-xs'}>{props.children}</Label>
 )
 
-export function DetailTechPassportTable(props: Props) {
+export const DetailTechPassportTable = observer((props: Props) => {
   const s = props.order
-  const orderId = s.order?.id || ''
-  const startedAt = s.order ? formatDate(new Date(s.order.started_at)) : ''
-  const cost = s.detail.autoWriteoff.materialsCost[0]
+  const materialCost = s.detail.autoWriteoff.materialsCost.find(e => e)
+  const blankLength = s.detail.technicalParameters?.arr.find(
+    p => p.key.trim() === 'L'
+  )?.value
+
+  if (!s.order) return
   return (
     <table css={css(tableStyles)} style={{ textAlign: 'center' }}>
       <tbody>
         <tr>
           <td>ООО ПЭК</td>
-          <td colSpan={9}>Технологический паспорт №{s.detail.id}</td>
+          <td colSpan={9}>Технологический паспорт № </td>
           <td>ОП</td>
           <td>Взрыв</td>
           <td>
@@ -42,19 +44,28 @@ export function DetailTechPassportTable(props: Props) {
           </td>
           <td colSpan={3}>
             <L>Наименование детали</L>
-            <P fontWeight={600} level="body-md" color="primary">
-              {capitalize(s.detail?.name)}
-            </P>
-            {cost && (
+            <Row justifyContent={'center'}>
+              <DetailName
+                withLink
+                withParamsButton
+                detail={{
+                  id: s.order.detail_id,
+                  name: s.order.detail_name,
+                  group_id: s.order.group_id || null
+                }}
+              />
+            </Row>
+            {materialCost && (
               <Box>
-                Заготовка {cost.material?.label} - <b>{cost.length} мм</b>
+                Заготовка {materialCost.material?.label} -{' '}
+                {blankLength && <b>{blankLength} мм</b>}
               </Box>
             )}
           </td>
+          <td width={70}>Заказ № {square}</td>
           <td width={70}>
-            Заказ № <div>{s.order?.id}</div>
+            Кол. дет. в партии <P>{s.order?.qty || ''}</P>
           </td>
-          <td width={70}>Кол. дет. в партии {square}</td>
 
           <td colSpan={6} style={{ padding: 0 }}>
             <L>Поступление на склад</L>
@@ -86,4 +97,4 @@ export function DetailTechPassportTable(props: Props) {
       </tbody>
     </table>
   )
-}
+})

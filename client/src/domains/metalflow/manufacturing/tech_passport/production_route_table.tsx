@@ -2,7 +2,7 @@
 import { css } from '@emotion/react'
 import { Operation } from 'domains/metalflow/detail/detail.state'
 import { observer } from 'mobx-react-lite'
-import { CellInput, tableStyles } from './shared'
+import { tableStyles } from './shared'
 
 type Props = {
   data: Operation[]
@@ -17,7 +17,6 @@ export const DetailProductionRouteTable = observer((props: Props) => {
     <table css={css(tableStyles)}>
       <thead>
         <tr>
-          <th rowSpan={2}>№ п/п</th>
           <th rowSpan={2}>№ опер</th>
           <th rowSpan={2}>Наименование операции</th>
           <th colSpan={4}>Исполнитель</th>
@@ -39,14 +38,8 @@ export const DetailProductionRouteTable = observer((props: Props) => {
         {props.data.map((step, i) => (
           <tr key={i}>
             <td width={'1%'}>{i + 1}</td>
-            <td width={'1%'}>{i + 1}</td>
             <td width={'1%'}>{step.name}</td>
-            <td width={150}>
-              <CellInput
-                value={step.executor_name}
-                onChange={v => step.setExecutor(v ?? '')}
-              />
-            </td>
+            <td width={150} />
             <td width={qtyInpW} />
             <td width={dateW} />
             <td width={signW} />
