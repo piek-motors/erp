@@ -88,17 +88,19 @@ export const DetailTechPassportTable = observer((props: Props) => {
           </td>
         </tr>
         <tr>
-          <td colSpan={3}>
+          <td colSpan={4}>
             <L>Тех. параметры</L>
             <TechParamsDisplay
               level="body-xs"
               params={s.detail.technicalParameters}
             />
           </td>
-          <td colSpan={10}>
-            <L>Примечание</L>
-            <Box>{s.detail.description}</Box>
-          </td>
+          {s.detail.description && (
+            <td colSpan={9}>
+              <L>Примечание</L>
+              <Box>{s.detail.description}</Box>
+            </td>
+          )}
         </tr>
       </tbody>
     </table>
