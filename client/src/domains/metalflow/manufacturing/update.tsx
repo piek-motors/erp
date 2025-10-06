@@ -10,7 +10,6 @@ import {
   Button,
   DeleteResourceButton,
   ErrorHint,
-  ExecuteAction,
   Inp,
   Label,
   Loading,
@@ -28,12 +27,18 @@ import { EnManufacturingOrderStatus, uiManufacturingOrderStatus } from 'models'
 import { TechParamsDisplay } from '../detail/components'
 import { MaterialCost } from '../detail/warehouse/cost.store'
 import { api } from './api'
+import { ManufacturingOrderState } from './order.state'
 import { DetailTechPassportTable } from './tech_passport/passport_table'
-import { DetailProductionRouteTable } from './tech_passport/production_route_table'
+import { ProductionRoute } from './tech_passport/production_route_table'
+import { DetailDescription } from './tech_passport/shared'
+
+const deletionAllowed = [
+  EnManufacturingOrderStatus.Waiting,
+  EnManufacturingOrderStatus.MaterialPreparation
+]
 
 export const ManufacturingUpdatePage = observer(() => {
   const { id } = useParams<{ id: string }>()
-
   useEffect(() => {
     if (id) {
       api.load(Number(id))
@@ -44,18 +49,12 @@ export const ManufacturingUpdatePage = observer(() => {
     return <div>Заказ не найден</div>
   }
 
-  const deletionAllowed = [
-    EnManufacturingOrderStatus.Waiting,
-    EnManufacturingOrderStatus.MaterialPreparation
-  ]
-
   const isDeletionAllowed = deletionAllowed.includes(api.s.order.status)
-
   if (api.status.loading) {
     return <Loading />
   }
   return (
-    <Stack py={3} gap={1}>
+    <Stack py={2} gap={1}>
       <WebOnly>
         <Stack gap={1}>
           <MetalPageTitle
@@ -100,33 +99,41 @@ export const ManufacturingUpdatePage = observer(() => {
             <Cost />
           </Row>
           <Row gap={2}>
-            <TechParamsDisplay
-              params={api.s.detail.technicalParameters}
-              level="body-xs"
-            />
-            <DetailDescription />
+            <Stack display={'flex'} alignSelf={'start'}>
+              <Label label="Тех. параметры" />
+              <TechParamsDisplay
+                params={api.s.detail.technicalParameters}
+                level="body-xs"
+              />
+            </Stack>
+            <Divider orientation="vertical" />
+            <DetailDescription htmlContent={api.s.detail.description} />
+          </Row>
+
+          <Row mt={1}>
+            {api.status.loading && <Loading />}
+            <ErrorHint e={api.status.error} />
+            <ActionButton status={api.s.order.status} />
+            {isDeletionAllowed && <DeleteOrderButton />}
           </Row>
         </Stack>
       </WebOnly>
 
       <PrintOnly display="block">
-        <DetailTechPassportTable order={api.s} />
-        <ProductionRoute />
+        <PrintingPageVerion order={api.s} />
       </PrintOnly>
-
-      <WebOnly>
-        <Row mt={1}>
-          {api.status.loading && <Loading />}
-          <ErrorHint e={api.status.error} />
-          <ActionButton status={api.s.order.status} />
-          {isDeletionAllowed && <DeleteButton />}
-        </Row>
-      </WebOnly>
     </Stack>
   )
 })
 
-const DeleteButton = observer(() => {
+const PrintingPageVerion = (props: { order: ManufacturingOrderState }) => (
+  <>
+    <DetailTechPassportTable order={props.order} />
+    <ProductionRoute />
+  </>
+)
+
+const DeleteOrderButton = observer(() => {
   const navigate = useNavigate()
   return (
     <DeleteResourceButton
@@ -178,39 +185,6 @@ export const Cost = observer(() => {
         </Card>
       ) : null}
     </Row>
-  )
-})
-
-const DetailDescription = observer(() => {
-  if (!api.s.detail.description) return null
-  return (
-    <Stack>
-      <Label label="Примечание" />
-      <div
-        contentEditable="false"
-        key={api.s.detail.id}
-        suppressContentEditableWarning={true}
-        dangerouslySetInnerHTML={{
-          __html: api.s.detail.description || ''
-        }}
-      />
-      <Divider />
-    </Stack>
-  )
-})
-
-const ProductionRoute = observer(() => {
-  if (api.s.processingRoute.steps.length === 0) return null
-  return (
-    <Stack>
-      <Label label="Маршрут" />
-      <DetailProductionRouteTable data={api.s.processingRoute.steps} />
-      <WebOnly>
-        <Box width="min-content" mt={1} ml="auto">
-          <ExecuteAction onSubmit={() => api.save()} buttonLabel="Сохранить" />
-        </Box>
-      </WebOnly>
-    </Stack>
   )
 })
 
@@ -315,7 +289,7 @@ const DetailMaterialInfo = observer((props: { cost: MaterialCost }) => {
             EnManufacturingOrderStatus.MaterialPreparation && (
             <P
               color={
-                remainingAmount > 0
+                remainingAmount >= 0
                   ? 'success'
                   : remainingAmount < 0
                   ? 'danger'

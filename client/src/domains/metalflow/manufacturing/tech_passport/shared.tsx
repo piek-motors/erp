@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
-import { Input } from 'lib/index'
+import { Label, Stack } from 'lib/index'
 import { observer } from 'mobx-react-lite'
 
 export const border = '1px solid #7c7c7c'
@@ -25,14 +25,19 @@ export const tableStyles = css({
   }
 })
 
-export const CellInput = observer(
-  (props: { value: string; onChange: (v: string) => void }) => (
-    <Input
-      size="sm"
-      sx={{ width: 'inherit' }}
-      variant="plain"
-      value={props.value}
-      onChange={e => props.onChange(e.target.value ?? '')}
-    />
+export const DetailDescription = observer((props: { htmlContent?: string }) => {
+  if (!props.htmlContent) return null
+  return (
+    <Stack>
+      <Label label="Примечание" level="body-sm" />
+      <div
+        style={{ fontSize: 12 }}
+        contentEditable="false"
+        suppressContentEditableWarning={true}
+        dangerouslySetInnerHTML={{
+          __html: props.htmlContent || ''
+        }}
+      />
+    </Stack>
   )
-)
+})

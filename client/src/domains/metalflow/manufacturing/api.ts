@@ -3,11 +3,11 @@ import { rpc } from 'lib/rpc.client'
 import { notifier } from 'lib/store/notifier.store'
 import { makeAutoObservable } from 'mobx'
 import { map } from '../mappers'
-import { OrderState } from './order.state'
+import { ManufacturingOrderState } from './order.state'
 
 export class ManufacturingApi {
   readonly status = new AsyncStoreController()
-  readonly s = new OrderState()
+  readonly s = new ManufacturingOrderState()
   constructor() {
     makeAutoObservable(this)
   }

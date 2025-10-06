@@ -5,13 +5,14 @@ import { TechParamsDisplay } from 'domains/metalflow/detail/components'
 import { DetailName } from 'domains/metalflow/detail/name'
 import { Label, observer, P, Row } from 'lib/index'
 import { ReactNode } from 'react'
-import { OrderState } from '../order.state'
-import { tableStyles } from './shared'
+import { ManufacturingOrderState } from '../order.state'
+import { DetailDescription, tableStyles } from './shared'
+
 type Props = {
-  order: OrderState
+  order: ManufacturingOrderState
 }
 
-const square = <Box width={30} height={30} />
+const emptySpace = <Box width={30} height={30} />
 
 const L = (props: { children: ReactNode }) => (
   <Label level={'body-xs'}>{props.children}</Label>
@@ -63,7 +64,7 @@ export const DetailTechPassportTable = observer((props: Props) => {
               </Box>
             )}
           </td>
-          <td width={70}>Заказ № {square}</td>
+          <td width={70}>Заказ № {emptySpace}</td>
           <td width={70}>
             Кол. дет. в партии <P>{s.order?.qty || ''}</P>
           </td>
@@ -74,13 +75,13 @@ export const DetailTechPassportTable = observer((props: Props) => {
               <tbody>
                 <tr>
                   <td>
-                    <L>Дата</L> {square}
+                    <L>Дата</L> {emptySpace}
                   </td>
                   <td width={'20%'}>
-                    <L>Кол.</L> {square}
+                    <L>Кол.</L> {emptySpace}
                   </td>
                   <td>
-                    <L>Принял</L> {square}
+                    <L>Принял</L> {emptySpace}
                   </td>
                 </tr>
               </tbody>
@@ -97,8 +98,7 @@ export const DetailTechPassportTable = observer((props: Props) => {
           </td>
           {s.detail.description && (
             <td colSpan={9}>
-              <L>Примечание</L>
-              <Box>{s.detail.description}</Box>
+              <DetailDescription htmlContent={s.detail.description} />
             </td>
           )}
         </tr>

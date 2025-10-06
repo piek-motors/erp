@@ -6,7 +6,7 @@ import { DetailState, Operation, ProcessingRoute } from '../detail/detail.state'
 export type ManufacturingOrderOutput =
   RouterOutput['metal']['manufacturing']['get']
 
-export class OrderState {
+export class ManufacturingOrderState {
   readonly async = new AsyncStoreController()
   readonly processingRoute = new ProcessingRoute()
   order: ManufacturingOrderOutput | null = null
