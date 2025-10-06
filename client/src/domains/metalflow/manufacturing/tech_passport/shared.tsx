@@ -19,7 +19,7 @@ export const tableStyles = css({
     padding: '5px'
   },
   td: {
-    padding: '5px',
+    padding: '10px 5px',
     fontSize: 12,
     border
   }

@@ -51,29 +51,7 @@ export const ManufacturingUpdatePage = observer(() => {
   }
   return (
     <Stack py={3} gap={1}>
-      {/* <MetalPageTitle
-        t={
-          <ComplexTitle
-            subtitle="Заказ"
-            title={
-              <DetailName
-                withLink
-                withParamsButton
-                detail={{
-                  id: api.s.order.detail_id,
-                  name: api.s.order.detail_name,
-                  group_id: api.s.order.group_id || null
-                }}
-              />
-            }
-            index={api.s.order.id}
-          />
-        }
-      />
-*/}
-
       <DetailTechPassportTable order={api.s} />
-
       <WebOnly>
         <Row gap={2}>
           <Stack>
@@ -90,7 +68,7 @@ export const ManufacturingUpdatePage = observer(() => {
 
             {api.s.order.finished_at && (
               <Row>
-                <Label label="завершен" />
+                <Label label="Завершен" />
                 <P>{formatDate(new Date(api.s.order.finished_at))}</P>
               </Row>
             )}
@@ -98,8 +76,6 @@ export const ManufacturingUpdatePage = observer(() => {
           <Cost />
         </Row>
       </WebOnly>
-
-      {/* <DetailDescription /> */}
       <ProductionRoute />
 
       <WebOnly>

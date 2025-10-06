@@ -5,7 +5,7 @@ import { ArrayJsonEditor } from 'components/array-json-editor'
 import { BaseAutocomplete, BaseOption } from 'components/base-autocomplete'
 import { cache } from 'domains/metalflow/cache/root'
 import { TextEditor } from 'domains/orders/one/comments/text-editor'
-import { Box, Inp, Label, MyInputProps, observer, P, Row } from 'lib/index'
+import { Box, Inp, Label, MyInputProps, observer, P } from 'lib/index'
 import { MaterialAutocomplete } from '../shared/material_autocomplete'
 import { api } from './api'
 import { TechicalParameters } from './detail.state'
@@ -167,16 +167,13 @@ export const TechParamsDisplay = observer(
   }) => (
     <>
       {props.params?.arr?.length && props.params.arr.length > 0 && (
-        <Row>
-          <Stack>
-            <Label color="warning">Тех. параметры</Label>
-            {props.params?.arr.map(({ key, value }, idx) => (
-              <P key={key + idx} level={props.level} sx={{ ml: 0.5 }}>
-                {key}: {String(value)}
-              </P>
-            ))}
-          </Stack>
-        </Row>
+        <Stack>
+          {props.params?.arr.map(({ key, value }, idx) => (
+            <P key={key + idx} level={props.level} sx={{ ml: 0.5 }}>
+              {key}: {String(value)}
+            </P>
+          ))}
+        </Stack>
       )}
     </>
   )

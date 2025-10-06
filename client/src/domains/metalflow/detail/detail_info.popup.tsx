@@ -63,6 +63,9 @@ export const DetailInfoPopup = observer(
             value={cache.detailGroups.getGroupName(api.detail.groupId)}
           />
           <Box p={1}>
+            <Label color="warning" level="body-xs">
+              Тех. параметры
+            </Label>
             <TechParamsDisplay
               level="body-xs"
               params={api.detail.technicalParameters}

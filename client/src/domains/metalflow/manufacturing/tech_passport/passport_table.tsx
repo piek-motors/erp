@@ -1,6 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import { Box } from '@mui/joy'
+import { TechParamsDisplay } from 'domains/metalflow/detail/components'
 import { DetailName } from 'domains/metalflow/detail/name'
 import { Label, observer, P, Row } from 'lib/index'
 import { ReactNode } from 'react'
@@ -88,7 +89,14 @@ export const DetailTechPassportTable = observer((props: Props) => {
         </tr>
         {s.detail.description && (
           <tr>
-            <td colSpan={13}>
+            <td colSpan={3}>
+              <L>Тех. параметры</L>
+              <TechParamsDisplay
+                level="body-xs"
+                params={s.detail.technicalParameters}
+              />
+            </td>
+            <td colSpan={10}>
               <L>Примечание</L>
               <Box>{s.detail.description}</Box>
             </td>
