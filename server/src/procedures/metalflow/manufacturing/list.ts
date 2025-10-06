@@ -1,4 +1,5 @@
 import { db, procedure } from '#root/deps.js'
+import { EnManufacturingOrderStatus } from 'models'
 
 const FinishedLimit = 10
 
@@ -12,6 +13,7 @@ export const listManufacturing = procedure.query(async () => {
   const [inProduction, finished] = await Promise.all([
     query
       .where('m.finished_at', 'is', null)
+      .where('m.status', '!=', EnManufacturingOrderStatus.Collected)
       .orderBy('m.started_at', 'asc')
       .execute(),
     query
