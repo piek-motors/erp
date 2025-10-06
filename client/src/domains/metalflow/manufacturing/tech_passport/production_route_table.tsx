@@ -20,8 +20,8 @@ export const DetailProductionRouteTable = observer((props: Props) => {
           <th rowSpan={2}>№ п/п</th>
           <th rowSpan={2}>№ опер</th>
           <th rowSpan={2}>Наименование операции</th>
-          <th colSpan={6}>Исполнитель</th>
-          <th colSpan={3}>Приемка ОТК</th>
+          <th colSpan={4}>Исполнитель</th>
+          <th colSpan={6}>Приемка ОТК</th>
         </tr>
         <tr>
           <th>Ф.И.О</th>
