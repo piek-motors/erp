@@ -1,7 +1,11 @@
 import { Box, Card, Divider } from '@mui/joy'
-import { WebOnly } from 'components/utilities/conditional-display'
+import { PrintOnly, WebOnly } from 'components/utilities/conditional-display'
 import { DetailName } from 'domains/metalflow/detail/name'
-import { MaterialName } from 'domains/metalflow/shared'
+import {
+  ComplexTitle,
+  MaterialName,
+  MetalPageTitle
+} from 'domains/metalflow/shared'
 import {
   Button,
   DeleteResourceButton,
@@ -51,32 +55,56 @@ export const ManufacturingUpdatePage = observer(() => {
   }
   return (
     <Stack py={3} gap={1}>
-      <DetailTechPassportTable order={api.s} />
       <WebOnly>
-        <Row gap={2}>
-          <Stack>
-            <QuantityInput />
-            <Row gap={1}>
-              <Label label="Статус" />
-              <P>{uiManufacturingOrderStatus(api.s.order.status)}</P>
-            </Row>
-
-            <Row>
-              <Label label="Создан" />
-              <P>{formatDate(new Date(api.s.order.started_at))}</P>
-            </Row>
-
-            {api.s.order.finished_at && (
-              <Row>
-                <Label label="Завершен" />
-                <P>{formatDate(new Date(api.s.order.finished_at))}</P>
+        <Stack gap={1}>
+          <MetalPageTitle
+            t={
+              <ComplexTitle
+                subtitle="Заказ"
+                title={
+                  <DetailName
+                    withLink
+                    withParamsButton
+                    detail={{
+                      id: api.s.order.detail_id,
+                      name: api.s.order.detail_name,
+                      group_id: api.s.order.group_id || null
+                    }}
+                  />
+                }
+                index={api.s.order.id}
+              />
+            }
+          />
+          <Row gap={2}>
+            <Stack>
+              <QuantityInput />
+              <Row gap={1}>
+                <Label label="Статус" />
+                <P>{uiManufacturingOrderStatus(api.s.order.status)}</P>
               </Row>
-            )}
-          </Stack>
-          <Cost />
-        </Row>
+
+              <Row>
+                <Label label="Создан" />
+                <P>{formatDate(new Date(api.s.order.started_at))}</P>
+              </Row>
+
+              {api.s.order.finished_at && (
+                <Row>
+                  <Label label="Завершен" />
+                  <P>{formatDate(new Date(api.s.order.finished_at))}</P>
+                </Row>
+              )}
+            </Stack>
+            <Cost />
+          </Row>
+        </Stack>
       </WebOnly>
-      <ProductionRoute />
+
+      <PrintOnly display="block">
+        <DetailTechPassportTable order={api.s} />
+        <ProductionRoute />
+      </PrintOnly>
 
       <WebOnly>
         <Row mt={1}>
