@@ -18,8 +18,10 @@ export const TextEditor = (props: {
   placeholder?: string
   onSubmit?: (content: string) => Promise<void>
   onChange?: (content: string) => void
+  editable?: boolean
 }) => {
   const [key, setKey] = useState(0)
+  const editable = props.editable === undefined ? true : props.editable
 
   const handleChange = () => {
     props.onChange?.(editor?.getHTML() ?? '')
@@ -44,7 +46,8 @@ export const TextEditor = (props: {
         suggestion
       })
     ],
-    content: '',
+    content: props.defaultValue,
+    editable,
     shouldRerenderOnTransaction: false
   })
 
@@ -70,66 +73,74 @@ export const TextEditor = (props: {
     if (props.defaultValue) {
       editor?.commands.setContent(props.defaultValue)
     }
-  }, [])
+  }, [editor])
 
   if (!editor) return null
   return (
     <Stack gap={1} key={key} css={styles} sx={{ position: 'relative' }}>
       <Sheet sx={{ borderRadius: 'md', p: 1 }}>
-        <Row>
-          <TextFormatButton
-            editor={editor}
-            color={editor.isActive('bold') ? 'primary' : 'neutral'}
-            onClick={() => {
-              editor.chain().focus().toggleBold().run()
-              handleChange()
-            }}
-          >
-            Жир
-          </TextFormatButton>
-          <TextFormatButton
-            editor={editor}
-            defaultValue={props.defaultValue}
-            color={editor.isActive('highlight') ? 'primary' : 'neutral'}
-            onClick={() => {
-              editor.chain().focus().toggleHighlight().run()
-              handleChange()
-            }}
-          >
-            Выделить
-          </TextFormatButton>
-          <Box sx={{ display: 'flex', gap: 0.5 }}>
+        {editable && (
+          <Row>
             <TextFormatButton
               editor={editor}
-              color={
-                editor.isActive('heading', { level: 3 }) ? 'primary' : 'neutral'
-              }
+              color={editor.isActive('bold') ? 'primary' : 'neutral'}
               onClick={() => {
-                editor.chain().focus().toggleHeading({ level: 3 }).run()
+                editor.chain().focus().toggleBold().run()
                 handleChange()
               }}
             >
-              H1
+              Жир
             </TextFormatButton>
             <TextFormatButton
               editor={editor}
-              color={
-                editor.isActive('heading', { level: 4 }) ? 'primary' : 'neutral'
-              }
+              defaultValue={props.defaultValue}
+              color={editor.isActive('highlight') ? 'primary' : 'neutral'}
               onClick={() => {
-                editor.chain().focus().toggleHeading({ level: 4 }).run()
+                editor.chain().focus().toggleHighlight().run()
                 handleChange()
               }}
             >
-              H2
+              Выделить
             </TextFormatButton>
-          </Box>
-        </Row>
+            <Box sx={{ display: 'flex', gap: 0.5 }}>
+              <TextFormatButton
+                editor={editor}
+                color={
+                  editor.isActive('heading', { level: 3 })
+                    ? 'primary'
+                    : 'neutral'
+                }
+                onClick={() => {
+                  editor.chain().focus().toggleHeading({ level: 3 }).run()
+                  handleChange()
+                }}
+              >
+                H1
+              </TextFormatButton>
+              <TextFormatButton
+                editor={editor}
+                color={
+                  editor.isActive('heading', { level: 4 })
+                    ? 'primary'
+                    : 'neutral'
+                }
+                onClick={() => {
+                  editor.chain().focus().toggleHeading({ level: 4 }).run()
+                  handleChange()
+                }}
+              >
+                H2
+              </TextFormatButton>
+            </Box>
+          </Row>
+        )}
         <EditorContent
+          disabled={!editable}
           editor={editor}
-          onInput={() => handleChange()}
+          onInput={() => editable && handleChange()}
           css={css`
             .tiptap {
+              padding: 5px;
             }
             .tiptap p {
               font-size: 14px;

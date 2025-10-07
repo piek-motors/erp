@@ -75,7 +75,7 @@ const DetailDrawingNameInput = observer(() => (
 
 const DetailDescriptionInput = observer(() => (
   <Box>
-    <Label>Примечания в свободной форме</Label>
+    <Label>Примечание</Label>
     <TextEditor
       defaultValue={api.detail.description}
       onChange={content => {
@@ -167,7 +167,7 @@ export const TechParamsDisplay = observer(
   }) => (
     <>
       {!!props.params?.arr?.length && props.params.arr.length > 0 && (
-        <Stack>
+        <Stack width={'max-content'}>
           {props.params?.arr.map(({ key, value }, idx) => (
             <P key={key + idx} level={props.level} sx={{ ml: 0.5 }}>
               {key}: {String(value)}

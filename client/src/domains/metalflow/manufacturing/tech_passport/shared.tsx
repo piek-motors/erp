@@ -1,5 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
+import { TextEditor } from 'domains/orders/one/comments/text-editor'
 import { Label, Stack } from 'lib/index'
 import { observer } from 'mobx-react-lite'
 
@@ -29,16 +30,9 @@ export const tableStyles = css({
 export const DetailDescription = observer((props: { htmlContent?: string }) => {
   if (!props.htmlContent) return null
   return (
-    <Stack>
+    <Stack minWidth={'max-content'}>
       <Label label="Примечание" level="body-sm" />
-      <div
-        style={{ fontSize: 12 }}
-        contentEditable="false"
-        suppressContentEditableWarning={true}
-        dangerouslySetInnerHTML={{
-          __html: props.htmlContent || ''
-        }}
-      />
+      <TextEditor defaultValue={props.htmlContent} editable={false} />
     </Stack>
   )
 })
