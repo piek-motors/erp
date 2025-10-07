@@ -19,7 +19,7 @@ export const ProductionRoute = observer(() => {
   if (api.s.processingRoute.steps.length === 0) return null
   return (
     <Stack>
-      <Label label="Маршрут" />
+      <Label label="Маршрут" level="body-xs" />
       <DetailProductionRouteTable data={api.s.processingRoute.steps} />
     </Stack>
   )
@@ -48,7 +48,14 @@ const DetailProductionRouteTable = observer((props: Props) => (
     </thead>
     <tbody>
       {props.data.map((step, i) => (
-        <tr key={i}>
+        <tr
+          key={i}
+          css={css({
+            td: {
+              padding: '10px 5px'
+            }
+          })}
+        >
           <td width={'1%'}>{i + 1}</td>
           <td width={'1%'}>{step.name}</td>
           <td width={150} />

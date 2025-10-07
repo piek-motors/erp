@@ -19,7 +19,8 @@ export const tableStyles = css({
     padding: '5px'
   },
   td: {
-    padding: '10px 5px',
+    verticalAlign: 'top',
+    padding: '5px 5px',
     fontSize: 12,
     border
   }

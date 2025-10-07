@@ -100,7 +100,7 @@ export const ManufacturingUpdatePage = observer(() => {
           </Row>
           <Row gap={2}>
             <Stack display={'flex'} alignSelf={'start'}>
-              <Label label="Тех. параметры" />
+              <Label label="Заготовка" />
               <TechParamsDisplay
                 params={api.s.detail.technicalParameters}
                 level="body-xs"

@@ -1,12 +1,12 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import { Box } from '@mui/joy'
-import { TechParamsDisplay } from 'domains/metalflow/detail/components'
-import { DetailName } from 'domains/metalflow/detail/name'
-import { Label, observer, P, Row } from 'lib/index'
+import { TechParamsRowDisplay } from 'domains/metalflow/detail/components'
+import { capitalize } from 'domains/metalflow/shared'
+import { Label, observer, P } from 'lib/index'
 import { ReactNode } from 'react'
 import { ManufacturingOrderState } from '../order.state'
-import { DetailDescription, tableStyles } from './shared'
+import { tableStyles } from './shared'
 
 type Props = {
   order: ManufacturingOrderState
@@ -21,52 +21,41 @@ const L = (props: { children: ReactNode }) => (
 export const DetailTechPassportTable = observer((props: Props) => {
   const s = props.order
   const materialCost = s.detail.autoWriteoff.materialsCost.find(e => e)
-  const blankLength = s.detail.technicalParameters?.arr.find(
-    p => p.key.trim() === 'L'
-  )?.value
-
   if (!s.order) return
   return (
     <table css={css(tableStyles)} style={{ textAlign: 'center' }}>
       <tbody>
         <tr>
-          <td>ООО ПЭК</td>
-          <td colSpan={9}>Технологический паспорт № </td>
-          <td>ОП</td>
-          <td>Взрыв</td>
+          <td>
+            <L>Обозначение детали</L>
+            <P fontSize={14}>{s.detail.drawingNumber}</P>
+            <P fontSize={14}>{s.detail.drawingName}</P>
+          </td>
+          <td>Технологический паспорт № </td>
+          <td width={70}>Заказ № {emptySpace}</td>
+          <td width={70}>
+            Кол. дет. в партии <P>{s.order?.qty || ''}</P>
+          </td>
+          <td width={50}>ОП</td>
+          <td width={50}>Взрыв</td>
           <td>
             <L>Дата запуска в производство</L>
             <Box width={50} height={30}></Box>
           </td>
         </tr>
+
         <tr>
-          <td colSpan={3}>
-            <L>Обозначение детали</L>
-            <Box>{s.detail.drawingNumber}</Box>
+          <td>
+            <L>Заготовка</L>
+            <P fontSize={12}>{materialCost?.material?.label}</P>
+            <TechParamsRowDisplay
+              fontSize={12}
+              params={s.detail.technicalParameters}
+            />
           </td>
           <td colSpan={3}>
             <L>Наименование детали</L>
-            <Row justifyContent={'center'}>
-              <DetailName
-                withLink
-                withParamsButton
-                detail={{
-                  id: s.order.detail_id,
-                  name: s.order.detail_name,
-                  group_id: s.order.group_id || null
-                }}
-              />
-            </Row>
-            {materialCost && (
-              <Box>
-                Заготовка {materialCost.material?.label} -{' '}
-                {blankLength && <b>{blankLength} мм</b>}
-              </Box>
-            )}
-          </td>
-          <td width={70}>Заказ № {emptySpace}</td>
-          <td width={70}>
-            Кол. дет. в партии <P>{s.order?.qty || ''}</P>
+            <P>{capitalize(s.detail.name)}</P>
           </td>
 
           <td colSpan={6} style={{ padding: 0 }}>
@@ -74,33 +63,19 @@ export const DetailTechPassportTable = observer((props: Props) => {
             <table css={css(tableStyles)} style={{ border: 'none' }}>
               <tbody>
                 <tr>
-                  <td>
+                  <td style={{ borderBottom: 'none', borderLeft: 'none' }}>
                     <L>Дата</L> {emptySpace}
                   </td>
-                  <td width={'20%'}>
+                  <td width={'20%'} style={{ borderBottom: 'none' }}>
                     <L>Кол.</L> {emptySpace}
                   </td>
-                  <td>
+                  <td style={{ borderBottom: 'none', borderRight: 'none' }}>
                     <L>Принял</L> {emptySpace}
                   </td>
                 </tr>
               </tbody>
             </table>
           </td>
-        </tr>
-        <tr>
-          <td colSpan={4}>
-            <L>Тех. параметры</L>
-            <TechParamsDisplay
-              level="body-xs"
-              params={s.detail.technicalParameters}
-            />
-          </td>
-          {s.detail.description && (
-            <td colSpan={9}>
-              <DetailDescription htmlContent={s.detail.description} />
-            </td>
-          )}
         </tr>
       </tbody>
     </table>

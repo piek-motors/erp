@@ -5,7 +5,7 @@ import { ArrayJsonEditor } from 'components/array-json-editor'
 import { BaseAutocomplete, BaseOption } from 'components/base-autocomplete'
 import { cache } from 'domains/metalflow/cache/root'
 import { TextEditor } from 'domains/orders/one/comments/text-editor'
-import { Box, Inp, Label, MyInputProps, observer, P } from 'lib/index'
+import { Box, Inp, Label, MyInputProps, observer, P, Row } from 'lib/index'
 import { MaterialAutocomplete } from '../shared/material_autocomplete'
 import { api } from './api'
 import { TechicalParameters } from './detail.state'
@@ -130,7 +130,7 @@ export const DetailGroupInput = observer(() => {
 })
 
 export const DetailParamsInput = observer(() => (
-  <AccordionCard title="Тех. параметры" defaultExpanded>
+  <AccordionCard title="Заготовка" defaultExpanded>
     <ArrayJsonEditor
       value={api.detail.technicalParameters?.arr ?? null}
       onChange={parameters =>
@@ -166,7 +166,7 @@ export const TechParamsDisplay = observer(
     level: keyof TypographySystem
   }) => (
     <>
-      {props.params?.arr?.length && props.params.arr.length > 0 && (
+      {!!props.params?.arr?.length && props.params.arr.length > 0 && (
         <Stack>
           {props.params?.arr.map(({ key, value }, idx) => (
             <P key={key + idx} level={props.level} sx={{ ml: 0.5 }}>
@@ -174,6 +174,27 @@ export const TechParamsDisplay = observer(
             </P>
           ))}
         </Stack>
+      )}
+    </>
+  )
+)
+
+export const TechParamsRowDisplay = observer(
+  (props: {
+    params?: TechicalParameters | null
+    level?: keyof TypographySystem
+    fontSize?: number
+  }) => (
+    <>
+      {!!props.params?.arr?.length && props.params.arr.length > 0 && (
+        <Row justifyContent={'center'}>
+          {props.params?.arr.map(({ key, value }, idx) => (
+            <P key={key + idx} level={props.level} fontSize={props.fontSize}>
+              {key}: {String(value)}{' '}
+              {idx < props.params!.arr.length - 1 ? ', ' : ''}
+            </P>
+          ))}
+        </Row>
       )}
     </>
   )

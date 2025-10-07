@@ -64,7 +64,7 @@ export const DetailInfoPopup = observer(
           />
           <Box p={1}>
             <Label color="warning" level="body-xs">
-              Тех. параметры
+              Заготовка
             </Label>
             <TechParamsDisplay
               level="body-xs"
