@@ -4,13 +4,13 @@ import { MobileNavigationLinks } from './shared/nav'
 
 export function UsageInstruction() {
   return (
-    <Container maxWidth="md">
-      <Stack spacing={4} p={2}>
-        <MobileOnly>
-          <MobileNavigationLinks />
-        </MobileOnly>
+    <Stack spacing={4}>
+      <MobileOnly>
+        <MobileNavigationLinks />
+      </MobileOnly>
 
-        <Stack spacing={3}>
+      <Container maxWidth="sm">
+        <Stack spacing={3} p={2}>
           <P>
             1. <strong>Внесение материалов:</strong> Когда приходит материал на
             предприятие, сразу вносите его в систему через телефон, чтобы не
@@ -27,7 +27,7 @@ export function UsageInstruction() {
             почту <P fontWeight={700}>loseev5@gmail.com</P>
           </P>
         </Stack>
-      </Stack>
-    </Container>
+      </Container>
+    </Stack>
   )
 }

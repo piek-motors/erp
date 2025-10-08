@@ -9,7 +9,11 @@ function Wrapper(props: {
   useSheet: boolean
 }) {
   if (props.useSheet)
-    return <Sheet sx={{ ...props.sx }}>{props.children}</Sheet>
+    return (
+      <Sheet sx={{ ...props.sx, width: '100%', minWidth: 'fit-content' }}>
+        {props.children}
+      </Sheet>
+    )
   return <Box sx={{ ...props.sx }}>{props.children}</Box>
 }
 
@@ -54,7 +58,7 @@ export const ScrollableWindow = (props: {
   } as SxProps
   return (
     <Stack sx={outerSx}>
-      {props.staticContent}
+      <Box sx={{ p: { xs: 0.75, sm: 0 } }}>{props.staticContent}</Box>
       <ScrollComponent refreshTrigger={props.refreshTrigger} sx={scrollSx}>
         <Wrapper
           sx={{ width: '100%', ...props.contentSx, borderRadius: 'sm' }}

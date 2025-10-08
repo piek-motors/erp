@@ -1,5 +1,5 @@
 import { UilPlusCircle } from '@iconscout/react-unicons'
-import { Box, Button, ButtonProps, IconButton, Stack } from '@mui/joy'
+import { Box, Button, ButtonProps, Card, IconButton, Stack } from '@mui/joy'
 import { NavigationBar } from 'components/navigation_bar'
 import { UseIcon } from 'lib/index'
 import { Link, useLocation } from 'react-router'
@@ -18,12 +18,12 @@ export function NavigationSideBar() {
 
 export function MobileNavigationLinks() {
   return (
-    <Stack gap={1} py={1}>
+    <Card size="sm" sx={{ p: 1 }}>
       <NavigationBar t="ПДО" />
       {actions.map(each => (
         <RenderAction action={each} key={each.href} size="lg" />
       ))}
-    </Stack>
+    </Card>
   )
 }
 
@@ -37,7 +37,6 @@ function RenderAction(props: { action: Action; size: ButtonProps['size'] }) {
       sx={{ cursor: 'pointer' }}
     >
       <MenuButton href={action.href} name={action.name} size={size} />
-
       <Box>
         {action.endBlock?.length && (
           <Stack>

@@ -5,10 +5,11 @@ import { DetailRow } from './detail_row'
 import { UniversalDetailsModalSelect } from './detail_selection'
 
 export const GroupActions = observer(() => {
+  const openedGroup = crud.store.targetGroup
   return (
     <Stack direction="row" alignItems="center" gap={1}>
-      <UniversalDetailsModalSelect />
-      {crud.store.selectedDetailIds.length > 0 && (
+      {openedGroup && <UniversalDetailsModalSelect />}
+      {openedGroup && crud.store.selectedDetailIds.length > 0 && (
         <Button
           size="sm"
           variant="soft"

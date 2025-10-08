@@ -23,6 +23,7 @@ interface DetailGroupsLayoutProps {
 
 const Detauls = observer(() => {
   if (crud.targetGroupLoading.loading) return <Loading />
+  const openedGroup = crud.store.targetGroup
   return (
     <Box>
       <ScrollableWindow
@@ -33,9 +34,11 @@ const Detauls = observer(() => {
           </Row>
         }
         scrollableContent={
-          <Stack p={1} px={2}>
-            <TargetGroupDetailList />
-          </Stack>
+          openedGroup && (
+            <Stack p={1} px={2}>
+              <TargetGroupDetailList />
+            </Stack>
+          )
         }
         refreshTrigger={null}
       />
@@ -44,7 +47,7 @@ const Detauls = observer(() => {
 })
 
 const DetailGroupsLayout = observer((props: DetailGroupsLayoutProps) => (
-  <RowButColumsAtSm>
+  <RowButColumsAtSm sx={{ gap: 1, p: 1 }}>
     {/* Group list */}
     <Box>
       <MetalPageTitle t="Группы">
