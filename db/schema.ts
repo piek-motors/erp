@@ -172,6 +172,7 @@ export namespace DB {
     detail_id: number | null
     data: JSONColumnType<any, any, any> | null
     timestamp?: Generated<Date>
+    manufacturing_order_id: number | null
   }
 
   export interface OrderPaymentsTable {

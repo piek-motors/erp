@@ -101,7 +101,7 @@ export class Manufacturing {
           stock: material.stock
         },
         qty,
-        order.detail_id
+        order
       )
     }
 
@@ -153,14 +153,10 @@ export class Manufacturing {
 
   async deleteOrder(manufacturingId: number): Promise<void> {
     const manufacturing = await this.getOrder(manufacturingId)
-    const allowedStatuses = [
-      EnManufacturingOrderStatus.Waiting,
-      EnManufacturingOrderStatus.MaterialPreparation
-    ]
 
-    if (!allowedStatuses.includes(manufacturing.status)) {
-      throw new ErrCannotDeleteStartedOrder(
-        `Cannot delete manufacturing order that has already started`
+    if (manufacturing.status === EnManufacturingOrderStatus.Collected) {
+      throw Error(
+        `Cannot delete manufacturing order that has already been collected`
       )
     }
 
@@ -178,7 +174,7 @@ export class Manufacturing {
       label: string
     },
     qty: number,
-    detail_id: number
+    order: Selectable<DB.ManufacturingTable>
   ) {
     const { material_id, label } = material
     const totalCost = (material.data.materialCostLength * qty) / 1000
@@ -201,7 +197,8 @@ export class Manufacturing {
         material.material_id,
         totalCost,
         EnWriteoffReason.UsedInProduction,
-        detail_id
+        order.detail_id,
+        order.id
       )
       .then(res => ({
         material_id: material.material_id,
@@ -212,7 +209,9 @@ export class Manufacturing {
       }))
   }
 
-  private async getOrder(orderId: number) {
+  private async getOrder(
+    orderId: number
+  ): Promise<Selectable<DB.ManufacturingTable>> {
     const order = await this.trx
       .selectFrom('metal_flow.manufacturing')
       .where('id', '=', orderId)

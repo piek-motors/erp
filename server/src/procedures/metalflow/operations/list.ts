@@ -1,4 +1,16 @@
 import { db, publicProcedure, z } from '#root/deps.js'
+import { matrixEncoder } from '#root/lib/matrix_encoder.js'
+import type { DB, Selectable } from 'db'
+
+export interface OperationListItem
+  extends Omit<Selectable<DB.OperationsTable>, 'timestamp'> {
+  timestamp: string
+  detail_name: string | null
+  logical_group_id: number | null
+  material_label: string | null
+  manufacturing_order_id: number | null
+  manufacturing_order_qty: number | null
+}
 
 export const listOperations = publicProcedure
   .input(
@@ -22,9 +34,16 @@ export const listOperations = publicProcedure
       .select('d.name as detail_name')
       .select('d.logical_group_id as logical_group_id')
       .select('m.label as material_label')
+      .leftJoin(
+        'metal_flow.manufacturing as manuf',
+        'manufacturing_order_id',
+        'manuf.id'
+      )
+      .select('o.manufacturing_order_id as manufacturing_order_id')
+      .select('manuf.qty as manufacturing_order_qty')
       .orderBy('o.id', 'desc')
-      .limit(100)
+      .limit(300)
       .execute()
 
-    return operations
+    return matrixEncoder(operations)
   })

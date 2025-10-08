@@ -34,7 +34,8 @@ export class Warehouse {
     id: number,
     qty: number,
     reason: EnWriteoffReason,
-    detail_id?: number
+    detail_id?: number,
+    manufacturing_order_id?: number
   ) {
     const current_stock = await this.trx
       .selectFrom('metal_flow.materials')
@@ -56,7 +57,8 @@ export class Warehouse {
         material_id: id,
         detail_id,
         qty,
-        reason
+        reason,
+        manufacturing_order_id
       })
       .returning(['id'])
       .executeTakeFirstOrThrow()

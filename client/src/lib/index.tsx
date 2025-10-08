@@ -139,6 +139,21 @@ export function RowButColumsAtSm(
   return <Stack gap={1} direction={{ xs: 'column', md: 'row' }} {...props} />
 }
 
+export function StackButRowAtSm(
+  props: {
+    children: React.ReactNode
+  } & StackProps
+) {
+  return (
+    <Stack
+      gap={1}
+      direction={{ xs: 'row', md: 'column' }}
+      sx={{ flexWrap: 'wrap' }}
+      {...props}
+    />
+  )
+}
+
 export function CancelButton(props: { onClick: () => void }) {
   return (
     <Btn variant="plain" color="neutral" onClick={props.onClick}>
@@ -316,6 +331,7 @@ export const ExecuteAction = observer(
     buttonProps?: ButtonProps
     stackProps?: StackProps
     fullWidth?: boolean
+    width?: string
   }) => {
     const [loading, setLoading] = React.useState(false)
     const [error, setError] = React.useState<Error>()
@@ -339,7 +355,7 @@ export const ExecuteAction = observer(
       <Stack
         gap={1}
         {...props.stackProps}
-        sx={{ width: props.fullWidth ? '100%' : 'auto' }}
+        sx={{ width: props.fullWidth ? '100%' : props.width || 'auto' }}
       >
         {error && <ErrorText e={error} />}
         <SavedHint data={mutationResult} />

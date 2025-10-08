@@ -2,8 +2,6 @@
 import { css } from '@emotion/react'
 import { UilMessage } from '@iconscout/react-unicons'
 import { Box, Button, ButtonProps, Sheet, Stack } from '@mui/joy'
-import Bold from '@tiptap/extension-bold'
-import Heading from '@tiptap/extension-heading'
 import Highlight from '@tiptap/extension-highlight'
 import Mention from '@tiptap/extension-mention'
 import Placeholder from '@tiptap/extension-placeholder'
@@ -33,9 +31,7 @@ export const TextEditor = (props: {
       Placeholder.configure({
         placeholder: props.placeholder
       }),
-      Bold,
       Highlight,
-      Heading,
       Mention.configure({
         HTMLAttributes: {
           class: 'mention'

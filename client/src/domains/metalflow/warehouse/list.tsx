@@ -3,7 +3,7 @@ import { ScrollableWindow } from 'components/inputs/scrollable_window'
 import { Table } from 'components/table.impl'
 import { DetailName } from 'domains/metalflow/detail/name'
 import { MetalPageTitle } from 'domains/metalflow/shared/basic'
-import { Box, P } from 'lib/index'
+import { Box, Label, P } from 'lib/index'
 import { formatOnlyDate } from 'lib/utils/formatting'
 import { observer } from 'mobx-react-lite'
 import {
@@ -44,20 +44,29 @@ function getColumns(props: {
       accessor: data => <P>{data.qty}</P>
     },
     {
-      Header: 'Деталь',
+      Header: 'Деталь/Заказ',
       accessor: data => {
         if (!data.detail_id) return null
         return (
-          <DetailName
-            detail={{
-              id: data.detail_id,
-              name: data.detail_name!,
-              group_id: data.logical_group_id!
-            }}
-            withLink
-            withGroupLink
-            withParamsButton
-          />
+          <>
+            {data.manufacturing_order_id && (
+              <Label>
+                Заказ {data.manufacturing_order_id}
+                {' ⇥ '}
+                {data.manufacturing_order_qty} шт.
+              </Label>
+            )}
+            <DetailName
+              detail={{
+                id: data.detail_id,
+                name: data.detail_name!,
+                group_id: data.logical_group_id!
+              }}
+              withLink
+              withGroupLink
+              withParamsButton
+            />
+          </>
         )
       }
     },

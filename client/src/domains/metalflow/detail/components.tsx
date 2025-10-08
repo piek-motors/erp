@@ -196,7 +196,7 @@ export const TechParamsRowDisplay = observer(
   }) => (
     <>
       {!!props.params?.arr?.length && props.params.arr.length > 0 && (
-        <Row flexWrap={'wrap'} maxWidth={300}>
+        <Row flexWrap={'wrap'} maxWidth={'200px'}>
           {props.params?.arr.map(({ key, value }, idx) => (
             <Box
               key={key + idx}

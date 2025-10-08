@@ -11,10 +11,11 @@ export const CreateDetailOrder = observer(() => {
   const navigate = useNavigate()
   return (
     <ExecuteAction
-      stackProps={{ width: 'min-content' }}
-      buttonLabel="Запуск в производство"
+      width="fit-content"
+      buttonLabel="В производство"
       buttonProps={{
-        variant: 'soft'
+        variant: 'solid',
+        color: 'success'
       }}
       onSubmit={() =>
         api.createManufacturingOrder().then(r => {

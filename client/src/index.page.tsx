@@ -26,7 +26,7 @@ export const links = [
   {
     href: routeMap.metalflow.index,
     icon: UilCalculatorAlt,
-    name: 'Материаловедение'
+    name: 'ПДО'
   },
   {
     href: routeMap.attendance,

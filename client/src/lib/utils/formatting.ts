@@ -19,7 +19,7 @@ type FormatTime = {
   (date: string | moment.Moment): string | null
 }
 
-export const formatOnlyDate = (date: string) => {
+export const formatOnlyDate = (date?: string | null) => {
   if (!date) return null
   return moment(date).format('DD.MM.YY')
 }

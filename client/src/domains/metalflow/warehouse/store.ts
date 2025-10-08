@@ -1,9 +1,10 @@
 import { cache } from 'domains/metalflow/cache/root'
+import { matrixDecoder } from 'lib/matrix_decoder'
 import { rpc } from 'lib/rpc.client'
 import { makeAutoObservable } from 'mobx'
-import { RouterOutput } from 'srv/lib/trpc'
+import { OperationListItem } from 'srv/procedures/metalflow/operations/list'
 
-export type Operation = RouterOutput['metal']['operations']['list'][number]
+export type Operation = OperationListItem
 
 class OperationsStore {
   operations: Operation[] = []
@@ -20,11 +21,11 @@ class OperationsStore {
     return true
   }
   async load(materialId?: number, detailId?: number) {
-    const operations = await rpc.metal.operations.list.query({
+    const operationsRaw = await rpc.metal.operations.list.query({
       materialId,
       detailId
     })
-    console.log(operations)
+    const operations = matrixDecoder<Operation>(operationsRaw)
     this.setOperations(operations)
   }
 }

@@ -1,4 +1,4 @@
-import { Sheet, Stack } from '@mui/joy'
+import { Card, Sheet, Stack } from '@mui/joy'
 import {
   ComplexTitle,
   MetalPageTitle,
@@ -12,6 +12,7 @@ import {
   routeMap,
   Row,
   RowButColumsAtSm,
+  StackButRowAtSm,
   useEffect,
   useNavigate,
   useParams
@@ -45,10 +46,16 @@ export const UpdateDetailPage = observer(() => {
         }
       />
       <RowButColumsAtSm gap={1} flexGrow={4}>
-        <Stack gap={1} sx={{ flex: 0 }}>
-          <DetailWarehouse />
+        <Stack gap={1}>
+          <StackButRowAtSm gap={1} sx={{ flex: 0 }}>
+            <DetailWarehouse />
+            <Card size="sm" sx={{ width: 'min-content' }}>
+              <DetailAttachmentList detailId={Number(id)} />
+            </Card>
+          </StackButRowAtSm>
           <CreateDetailOrder />
         </Stack>
+
         <Stack gap={2} sx={{ flex: 1 }}>
           <DetailInputs />
           <Metadata
@@ -57,11 +64,6 @@ export const UpdateDetailPage = observer(() => {
             lastManufacturingQty={api.detail.lastManufacturingQty}
           />
           <SaveFloatingButton />
-        </Stack>
-        <Stack gap={1} sx={{ flex: 0 }}>
-          <Sheet sx={{ p: 1, borderRadius: 'sm' }}>
-            <DetailAttachmentList detailId={Number(id)} />
-          </Sheet>
         </Stack>
       </RowButColumsAtSm>
     </Stack>

@@ -16,7 +16,7 @@ export const WarehouseCard = (props: Props) => {
     <Card
       variant="plain"
       size="sm"
-      sx={{ width: 'fit-content', gap: 1.2, height: 'fit-content' }}
+      sx={{ width: '-webkit-fill-available', gap: 1.2, height: 'inherit' }}
     >
       <Row justifyContent={'center'}>
         <Box

@@ -34,7 +34,8 @@ import { DetailDescription } from './tech_passport/shared'
 
 const deletionAllowed = [
   EnManufacturingOrderStatus.Waiting,
-  EnManufacturingOrderStatus.MaterialPreparation
+  EnManufacturingOrderStatus.MaterialPreparation,
+  EnManufacturingOrderStatus.Production
 ]
 
 export const ManufacturingUpdatePage = observer(() => {
@@ -139,7 +140,11 @@ const DeleteOrderButton = observer(() => {
     <DeleteResourceButton
       onClick={e => {
         e.stopPropagation()
-        if (window.confirm(`Удалить заказ?`)) {
+        if (
+          window.confirm(
+            `Удалить заказ?\nEсли заказ находится в состоянии "Производство" - значит материал уже был списан. В этом случае необходимо вручную скорректировать остатки через поставку.`
+          )
+        ) {
           api.delete().then(() => {
             navigate(routeMap.metalflow.manufacturing_orders)
           })
@@ -286,11 +291,11 @@ const DetailMaterialInfo = observer((props: { cost: MaterialCost }) => {
       {api.s.qty && (
         <>
           <P level="body-sm" color="primary">
-            Потребное кол-во: {roundAndTrim(totalConsumedAmount)} м
+            Потребное кол-во: {roundAndTrim(totalConsumedAmount) || 0} м
           </P>
 
           <P level="body-sm" color="neutral">
-            Остаток: {roundAndTrim(cost.material?.stock)} м
+            Остаток: {roundAndTrim(cost.material?.stock) || 0} м
           </P>
 
           {api.s.order?.status ===
