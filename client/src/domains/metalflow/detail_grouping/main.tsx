@@ -6,7 +6,6 @@ import {
   MobileOnly,
   observer,
   Row,
-  RowButColumsAtSm,
   Stack,
   useEffect
 } from 'lib/index'
@@ -47,7 +46,19 @@ const Detauls = observer(() => {
 })
 
 const DetailGroupsLayout = observer((props: DetailGroupsLayoutProps) => (
-  <RowButColumsAtSm sx={{ gap: 1, p: 1 }}>
+  <Stack
+    direction={{
+      xs: 'column',
+      sm: 'row'
+    }}
+    sx={{
+      gap: 1,
+      p: {
+        xs: 1,
+        sm: 0
+      }
+    }}
+  >
     {/* Group list */}
     <Box>
       <MetalPageTitle t="Группы">
@@ -59,7 +70,7 @@ const DetailGroupsLayout = observer((props: DetailGroupsLayoutProps) => (
     </Box>
     {/* Group details */}
     <Detauls />
-  </RowButColumsAtSm>
+  </Stack>
 ))
 
 export const DetailGroupById = observer(() => {
