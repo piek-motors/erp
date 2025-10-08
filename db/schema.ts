@@ -144,7 +144,8 @@ export namespace DB {
     detail_id: number
     qty: number
     finished_at: Date | null
-    started_at: GeneratedAlways<Date>
+    started_at: Date | null
+    created_at: GeneratedAlways<Date>
     material_writeoffs: JSONColumnType<
       MetarialWiteoffData,
       MetarialWiteoffData,

@@ -5,6 +5,7 @@ import { cache } from 'domains/metalflow/cache/root'
 import { TechParamsRowDisplay } from 'domains/metalflow/detail/components'
 import { capitalize } from 'domains/metalflow/shared'
 import { Label, observer, P } from 'lib/index'
+import { formatDate } from 'lib/utils/formatting'
 import { ReactNode } from 'react'
 import { ManufacturingOrderState } from '../order.state'
 import { tableStyles } from './shared'
@@ -41,14 +42,16 @@ export const DetailTechPassportTable = observer((props: Props) => {
           <td width={50}>Взрыв</td>
           <td>
             <L>Дата запуска в производство</L>
-            <Box width={50} height={30}></Box>
+            {s.order.started_at && (
+              <P>{formatDate(new Date(s.order.started_at))}</P>
+            )}
           </td>
         </tr>
 
         <tr>
           <td>
             <L>Заготовка</L>
-            <P fontSize={12}>
+            <P fontSize={14} pb={1}>
               {materialCost?.materialId
                 ? cache.materials.getLabel(materialCost.materialId)
                 : ''}

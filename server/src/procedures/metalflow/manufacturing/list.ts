@@ -14,7 +14,7 @@ export const listManufacturing = procedure.query(async () => {
     query
       .where('m.finished_at', 'is', null)
       .where('m.status', '!=', EnManufacturingOrderStatus.Collected)
-      .orderBy('m.started_at', 'asc')
+      .orderBy('m.started_at', 'desc')
       .execute(),
     query
       .where('m.finished_at', 'is not', null)

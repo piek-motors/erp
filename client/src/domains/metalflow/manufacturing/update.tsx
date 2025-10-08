@@ -86,7 +86,7 @@ export const ManufacturingUpdatePage = observer(() => {
 
               <Row>
                 <Label label="Создан" />
-                <P>{formatDate(new Date(api.s.order.started_at))}</P>
+                <P>{formatDate(new Date(api.s.order.created_at))}</P>
               </Row>
 
               {api.s.order.finished_at && (

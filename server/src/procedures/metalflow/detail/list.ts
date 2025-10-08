@@ -28,7 +28,6 @@ export const getDetailList = publicProcedure
         'd.logical_group_id',
         'd.stock'
       ])
-      .groupBy('d.id')
       .orderBy('d.id', 'desc')
       .execute()
     return matrixEncoder(result)

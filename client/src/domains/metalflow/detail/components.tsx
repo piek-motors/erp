@@ -144,9 +144,7 @@ const DetailGroupInput = observer(() => {
 
 const BlankSpecInput = observer(() => (
   <AccordionCard title="Заготовка" defaultExpanded>
-    <Label level="body-xs">
-      Материал для заготовки должен указываться в секции "Расход"
-    </Label>
+    <Label level="body-xs">ﾍ(･_| Материал заготовки указывать не нужно</Label>
     <ArrayJsonEditor
       value={api.detail.blankSpec?.arr ?? null}
       onChange={parameters =>
@@ -198,12 +196,17 @@ export const TechParamsRowDisplay = observer(
   }) => (
     <>
       {!!props.params?.arr?.length && props.params.arr.length > 0 && (
-        <Row justifyContent={'center'}>
+        <Row flexWrap={'wrap'} maxWidth={300}>
           {props.params?.arr.map(({ key, value }, idx) => (
-            <P key={key + idx} level={props.level} fontSize={props.fontSize}>
-              {key}: {String(value)}{' '}
-              {idx < props.params!.arr.length - 1 ? ', ' : ''}
-            </P>
+            <Box
+              key={key + idx}
+              fontSize={props.fontSize}
+              whiteSpace={'nowrap'}
+              sx={{ lineHeight: 0.8 }}
+            >
+              {key}: {String(value)}
+              {idx < props.params!.arr.length - 1 ? ',' : ''}
+            </Box>
           ))}
         </Row>
       )}

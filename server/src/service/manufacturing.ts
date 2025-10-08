@@ -109,6 +109,7 @@ export class Manufacturing {
       .updateTable('metal_flow.manufacturing')
       .set({
         qty,
+        started_at: new Date(),
         status: EnManufacturingOrderStatus.Production
       })
       .where('id', '=', orderId)
