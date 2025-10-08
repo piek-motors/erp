@@ -39,7 +39,6 @@ export namespace DB {
     ['metal_flow.materials']: MaterialTable
     ['metal_flow.details']: DetailTable
     ['metal_flow.detail_attachments']: DetailAttachmentTable
-    ['metal_flow.detail_materials']: DetailMaterialsTable // TODO: remove this table
     ['metal_flow.operations']: OperationsTable
     ['metal_flow.manufacturing']: ManufacturingTable
     ['metal_flow.detail_group']: DetailGroupTable
@@ -95,7 +94,7 @@ export namespace DB {
     logical_group_id: number | null
     part_code: string | null
     stock: number
-    params: JSONColumnType<any, any, any>
+    blank_spec: JSONColumnType<any, any, any>
     updated_at: Date
     processing_route: JSONColumnType<
       ProcessingRoute,
@@ -108,13 +107,14 @@ export namespace DB {
       DetailAutomaticWriteoffData,
       DetailAutomaticWriteoffData
     > | null
+    recommended_batch_size: number | null
   }
 
   export interface DetailAutomaticWriteoffData {
-    materials: Array<{
+    material: {
       material_id: number
       length: number // meters
-    }>
+    } | null
     details: Array<{
       detail_id: number
       qty: number
@@ -159,20 +159,6 @@ export namespace DB {
 
   export interface ManufacturingData {
     processing_route: ProcessingRoute
-  }
-
-  export interface DetailMaterialJsonData {
-    length: number // mm
-  }
-
-  export interface DetailMaterialsTable {
-    material_id: number
-    detail_id: number
-    data: JSONColumnType<
-      DetailMaterialJsonData,
-      DetailMaterialJsonData,
-      DetailMaterialJsonData
-    >
   }
 
   export interface OperationsTable {

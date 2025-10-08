@@ -6,11 +6,7 @@ export async function up(db: KDB): Promise<void> {
     .addColumn('automatic_writeoff', 'jsonb')
     .execute()
 
-  const detailMaterials = await db
-    .selectFrom('metal_flow.detail_materials')
-    .selectAll()
-    .execute()
-
+  const detailMaterials: any[] = []
   // Group all materials for each detail_id
   const materialsByDetail: Record<
     number,
@@ -26,20 +22,20 @@ export async function up(db: KDB): Promise<void> {
     })
   }
 
-  for (const detailIdStr of Object.keys(materialsByDetail)) {
-    const detailId = Number(detailIdStr)
-    const materials = materialsByDetail[detailId]
-    await db
-      .updateTable('metal_flow.details')
-      .set({
-        automatic_writeoff: {
-          materials,
-          details: []
-        }
-      })
-      .where('id', '=', detailId)
-      .execute()
-  }
+  // for (const detailIdStr of Object.keys(materialsByDetail)) {
+  //   const detailId = Number(detailIdStr)
+  //   const materials = materialsByDetail[detailId]
+  //   await db
+  //     .updateTable('metal_flow.details')
+  //     .set({
+  //       automatic_writeoff: {
+  //         materials,
+  //         details: []
+  //       }
+  //     })
+  //     .where('id', '=', detailId)
+  //     .execute()
+  // }
 }
 
 export async function down(db: KDB): Promise<void> {

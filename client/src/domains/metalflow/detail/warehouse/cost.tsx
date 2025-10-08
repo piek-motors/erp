@@ -28,7 +28,7 @@ interface CostRowProps {
 }
 
 const CostRow = ({ children, onDelete, qtyInput: input }: CostRowProps) => (
-  <Row justifyContent={'space-between'}>
+  <Row>
     <Row gap={0.5}>{children}</Row>
     <Row>
       {input}
@@ -39,57 +39,57 @@ const CostRow = ({ children, onDelete, qtyInput: input }: CostRowProps) => (
   </Row>
 )
 
-export const MaterialCostInputs = observer(() => (
-  <Base
-    label="Расход материалов"
-    handleAdd={() => {
-      api.detail.autoWriteoff.insertMaterialCost()
-    }}
-    hideAddButton={api.detail.autoWriteoff.materialsCost.length >= 1}
-  >
-    {api.detail.autoWriteoff.materialsCost.map((materialCost, index) => (
-      <CostRow
-        key={materialCost.materialId}
-        onDelete={() =>
-          api.detail.autoWriteoff.deleteMaterial(materialCost.materialId)
-        }
-        qtyInput={
-          <QtyInputWithUnit
-            size="sm"
-            placeholder="Расход"
-            sx={{ width: '80px' }}
-            unitId={EnUnit.MilliMeter}
-            value={materialCost.length}
-            setValue={v => {
-              materialCost.setLength(v)
-            }}
-          />
-        }
-      >
-        <Row>
-          <MaterialSelect
-            value={materialCost}
-            index={index}
-            onChange={cost => {
-              api.detail.autoWriteoff.updateMaterial(
-                index,
-                cost.materialId,
-                cost.length
-              )
-            }}
-          />
-          <ExtraSmallIconButton
-            link={openPage(
-              routeMap.metalflow.material.edit,
-              materialCost.materialId
-            )}
-            icon={UilLink}
-          />
-        </Row>
-      </CostRow>
-    ))}
-  </Base>
-))
+export const MaterialCostInputs = observer(() => {
+  const materialCost = api.detail.autoWriteoff.materialCost
+  return (
+    <Base
+      label="Расход материала"
+      handleAdd={() => {
+        api.detail.autoWriteoff.insertMaterialCost()
+      }}
+      hideAddButton={!!materialCost}
+    >
+      {materialCost && (
+        <CostRow
+          key={materialCost.materialId}
+          onDelete={() => api.detail.autoWriteoff.setMaterialCost(null)}
+          qtyInput={
+            <QtyInputWithUnit
+              size="sm"
+              placeholder="Расход"
+              sx={{ width: '80px' }}
+              unitId={EnUnit.MilliMeter}
+              value={materialCost.length}
+              setValue={v => {
+                materialCost.setLength(v)
+              }}
+            />
+          }
+        >
+          <Row>
+            <MaterialSelect
+              value={materialCost}
+              index={0}
+              onChange={cost => {
+                api.detail.autoWriteoff.updateMaterial(
+                  cost.materialId,
+                  cost.length
+                )
+              }}
+            />
+            <ExtraSmallIconButton
+              link={openPage(
+                routeMap.metalflow.material.edit,
+                materialCost.materialId
+              )}
+              icon={UilLink}
+            />
+          </Row>
+        </CostRow>
+      )}
+    </Base>
+  )
+})
 
 export const AutomaticWriteoffAccordion = observer(() => (
   <AccordionCard title="Расход" defaultExpanded>

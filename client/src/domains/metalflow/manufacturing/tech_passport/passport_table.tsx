@@ -1,6 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import { Box } from '@mui/joy'
+import { cache } from 'domains/metalflow/cache/root'
 import { TechParamsRowDisplay } from 'domains/metalflow/detail/components'
 import { capitalize } from 'domains/metalflow/shared'
 import { Label, observer, P } from 'lib/index'
@@ -20,7 +21,7 @@ const L = (props: { children: ReactNode }) => (
 
 export const DetailTechPassportTable = observer((props: Props) => {
   const s = props.order
-  const materialCost = s.detail.autoWriteoff.materialsCost.find(e => e)
+  const materialCost = s.detail.autoWriteoff.materialCost
   if (!s.order) return
   return (
     <table css={css(tableStyles)} style={{ textAlign: 'center' }}>
@@ -47,11 +48,12 @@ export const DetailTechPassportTable = observer((props: Props) => {
         <tr>
           <td>
             <L>Заготовка</L>
-            <P fontSize={12}>{materialCost?.material?.label}</P>
-            <TechParamsRowDisplay
-              fontSize={12}
-              params={s.detail.technicalParameters}
-            />
+            <P fontSize={12}>
+              {materialCost?.materialId
+                ? cache.materials.getLabel(materialCost.materialId)
+                : ''}
+            </P>
+            <TechParamsRowDisplay fontSize={12} params={s.detail.blankSpec} />
           </td>
           <td colSpan={3}>
             <L>Наименование детали</L>

@@ -17,12 +17,13 @@ export const createDetail = procedure
         part_code: input.partCode,
         stock: 0,
         logical_group_id: input.groupId,
-        params: input.technicalParams || null,
+        blank_spec: input.blankSpec || null,
         processing_route: input.processingRoute || null,
         drawing_name: input.drawingName || null,
         automatic_writeoff: input.automaticWriteoff,
         updated_at: new Date(),
-        unit: EnUnit.Countable
+        unit: EnUnit.Countable,
+        recommended_batch_size: input.recommendedBatchSize || null
       })
       .returning('id')
       .executeTakeFirstOrThrow()

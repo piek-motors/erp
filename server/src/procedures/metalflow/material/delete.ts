@@ -12,10 +12,6 @@ export const deleteMaterial = publicProcedure
         .deleteFrom('metal_flow.operations')
         .where('material_id', '=', id)
         .execute()
-      await trx
-        .deleteFrom('metal_flow.detail_materials')
-        .where('material_id', '=', id)
-        .execute()
       const { label } = await trx
         .deleteFrom('metal_flow.materials')
         .where('id', '=', id)

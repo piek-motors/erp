@@ -56,13 +56,13 @@ export class ManufacturingApi {
     await this.status.run(async () => {
       if (!this.s.order) throw new Error('Заказ не найден')
       if (!this.s.qty) throw new Error('Кол-во не может быть 0')
-      const writeoffs =
+      const writeoff =
         await rpc.metal.manufacturing.startProductionPhase.mutate({
           orderId: this.s.order.id,
           qty: parseInt(this.s.qty)
         })
       await this.load(this.s.order.id)
-      for (const writeoff of writeoffs) {
+      if (writeoff) {
         notifier.notify(
           'info',
           `Списано ${writeoff.totalCost} м ${writeoff.material_name}, остаток ${writeoff.stock} м`

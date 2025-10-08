@@ -76,7 +76,7 @@ export const ManufacturingUpdatePage = observer(() => {
               />
             }
           />
-          <Row gap={2}>
+          <Row gap={1}>
             <Stack>
               <QuantityInput />
               <Row gap={1}>
@@ -102,7 +102,7 @@ export const ManufacturingUpdatePage = observer(() => {
             <Stack display={'flex'} alignSelf={'start'}>
               <Label label="Заготовка" />
               <TechParamsDisplay
-                params={api.s.detail.technicalParameters}
+                params={api.s.detail.blankSpec}
                 level="body-xs"
               />
             </Stack>
@@ -150,17 +150,15 @@ const DeleteOrderButton = observer(() => {
 })
 
 export const Cost = observer(() => {
-  const materils = api.s.detail.autoWriteoff.materialsCost
+  const materialCost = api.s.detail.autoWriteoff.materialCost
   const details = api.s.detail.autoWriteoff.detailsCost
   return (
-    <Row>
-      {!!materils.length ? (
+    <Row alignItems={'start'}>
+      {!!materialCost ? (
         <Card size="sm">
-          <Label label="Материалы к потреблению" />
+          <Label label="Материал к потреблению" />
           <Stack gap={0.5}>
-            {materils.map((cost, index) => (
-              <DetailMaterialInfo key={index} cost={cost} />
-            ))}
+            <DetailMaterialInfo cost={materialCost} />
           </Stack>
         </Card>
       ) : null}
@@ -191,16 +189,26 @@ export const Cost = observer(() => {
 const QuantityInput = observer(() => {
   if (!api.s.order) return null
   if (api.s.order.status === EnManufacturingOrderStatus.MaterialPreparation) {
+    const recBatchSize = api.s.detail.recommendedBatchSize
     return (
-      <Inp
-        label="Кол-во"
-        sx={{ maxWidth: 70 }}
-        value={api.s.qty}
-        variant="plain"
-        onChange={v => {
-          api.s.setQty(v)
-        }}
-      />
+      <Card size="sm" variant="outlined">
+        <Stack>
+          {recBatchSize && (
+            <P level="body-sm" color="primary">
+              Рекомендуемый размер партии - {recBatchSize} шт
+            </P>
+          )}
+          <Inp
+            label="Кол-во"
+            sx={{ maxWidth: 70 }}
+            value={api.s.qty || ''}
+            variant="solid"
+            onChange={v => {
+              api.s.setQty(v)
+            }}
+          />
+        </Stack>
+      </Card>
     )
   }
   if (api.s.order.status === EnManufacturingOrderStatus.Production) {

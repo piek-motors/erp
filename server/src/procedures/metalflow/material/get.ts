@@ -1,7 +1,7 @@
 import { db } from '#root/deps.js'
 import { publicProcedure } from '#root/lib/trpc/trpc.js'
 import { DB } from 'db'
-import { Kysely } from 'kysely'
+import { Kysely, sql } from 'kysely'
 import { z } from 'zod'
 
 export type SelectableMaterial = Kysely<DB.MaterialTable>
@@ -16,8 +16,10 @@ export const getMaterial = publicProcedure
       .executeTakeFirstOrThrow()
 
     const detailCount = await db
-      .selectFrom('metal_flow.detail_materials')
-      .where('material_id', '=', input.id)
+      .selectFrom('metal_flow.details')
+      .where(
+        sql<boolean>`(automatic_writeoff->'material'->>'material_id')::int = ${input.id}`
+      )
       .select(eb => eb.fn.countAll().as('count'))
       .executeTakeFirstOrThrow()
 

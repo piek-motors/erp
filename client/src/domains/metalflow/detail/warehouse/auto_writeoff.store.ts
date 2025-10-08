@@ -7,9 +7,9 @@ export class DetailAutomaticWriteoffStore {
   setDetailCost(details?: DetailCost[]) {
     this.detailsCost = details || []
   }
-  materialsCost: MaterialCost[] = []
-  setMaterialCost(materials?: MaterialCost[]) {
-    this.materialsCost = materials || []
+  materialCost: MaterialCost | null = null
+  setMaterialCost(material?: MaterialCost | null) {
+    this.materialCost = material || null
   }
 
   constructor() {
@@ -18,7 +18,7 @@ export class DetailAutomaticWriteoffStore {
 
   init(init: DetailAutomaticWriteoffData) {
     this.setDetailCost(init.details.map(d => new DetailCost(d)))
-    this.setMaterialCost(init.materials.map(m => new MaterialCost(m)))
+    this.setMaterialCost(init.material ? new MaterialCost(init.material) : null)
   }
 
   get payload(): DetailAutomaticWriteoffData {
@@ -27,34 +27,36 @@ export class DetailAutomaticWriteoffStore {
         detail_id: d.detailId,
         qty: +d.qty
       })),
-      materials: this.materialsCost.map(m => ({
-        material_id: m.materialId,
-        length: +m.length
-      }))
+      material: this.materialCost
+        ? {
+            material_id: this.materialCost.materialId,
+            length: +this.materialCost.length
+          }
+        : null
     }
   }
 
   reset() {
     this.detailsCost = []
-    this.materialsCost = []
+    this.materialCost = null
   }
 
   insertMaterialCost() {
-    this.materialsCost.push(new MaterialCost())
+    this.materialCost = new MaterialCost()
   }
 
   insertDetail() {
     this.detailsCost.push(new DetailCost())
   }
 
-  updateMaterial(index: number, materialId: number, length: string) {
-    const m = this.materialsCost[index]
-    if (!m) {
+  updateMaterial(materialId: number, length: string) {
+    if (!this.materialCost) {
       this.insertMaterialCost()
-      return
     }
-    m.materialId = materialId
-    m.length = length
+    if (this.materialCost) {
+      this.materialCost.materialId = materialId
+      this.materialCost.length = length
+    }
   }
 
   updateDetail(index: number, detailId: number, qty: string) {
@@ -63,12 +65,6 @@ export class DetailAutomaticWriteoffStore {
       this.insertDetail()
       return
     }
-  }
-
-  async deleteMaterial(materialId: number) {
-    this.setMaterialCost(
-      this.materialsCost.filter(m => m.materialId !== materialId)
-    )
   }
 
   async deleteDetail(detailId: number) {

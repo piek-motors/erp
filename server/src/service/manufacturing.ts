@@ -4,6 +4,14 @@ import { Selectable } from 'kysely'
 import { EnManufacturingOrderStatus, EnWriteoffReason } from 'models'
 import { Warehouse } from './warehouse.js'
 
+type MaterialWriteoff = {
+  material_id: number
+  material_name: string
+  writeoff_id: number
+  stock: number
+  totalCost: number
+} | null
+
 export class Manufacturing {
   private readonly warehouse: Warehouse
 
@@ -66,28 +74,36 @@ export class Manufacturing {
   async startProductionPhase(
     orderId: number,
     qty: number
-  ): Promise<
-    Array<{
-      material_id: number
-      material_name: string
-      writeoff_id: number
-      stock: number
-      totalCost: number
-    }>
-  > {
+  ): Promise<MaterialWriteoff> {
     const order = await this.getOrder(orderId)
-    const materials = await this.trx
-      .selectFrom('metal_flow.detail_materials')
-      .innerJoin('metal_flow.materials', 'material_id', 'id')
-      .where('detail_id', '=', order.detail_id)
-      .select(['material_id', 'data', 'stock', 'label', 'unit'])
-      .execute()
+    const detail = await this.trx
+      .selectFrom('metal_flow.details')
+      .where('id', '=', order.detail_id)
+      .select('automatic_writeoff')
+      .executeTakeFirstOrThrow()
 
-    const writeoffs = await Promise.all(
-      materials.map(material =>
-        this.subtractMaterials(material, qty, order.detail_id)
+    const materialCost = detail.automatic_writeoff?.material
+    let writeoff: MaterialWriteoff = null
+
+    if (materialCost) {
+      const material = await this.trx
+        .selectFrom('metal_flow.materials')
+        .where('id', '=', materialCost.material_id)
+        .selectAll()
+        .executeTakeFirstOrThrow()
+      writeoff = await this.subtractMaterials(
+        {
+          material_id: material.id,
+          data: {
+            materialCostLength: materialCost.length
+          },
+          label: material.label,
+          stock: material.stock
+        },
+        qty,
+        order.detail_id
       )
-    )
+    }
 
     await this.trx
       .updateTable('metal_flow.manufacturing')
@@ -97,8 +113,7 @@ export class Manufacturing {
       })
       .where('id', '=', orderId)
       .execute()
-
-    return writeoffs
+    return writeoff
   }
 
   async finishOrder(orderId: number): Promise<{
@@ -157,7 +172,7 @@ export class Manufacturing {
   private async subtractMaterials(
     material: {
       material_id: number
-      data: { length: number }
+      data: { materialCostLength: number }
       stock: number
       label: string
     },
@@ -165,7 +180,7 @@ export class Manufacturing {
     detail_id: number
   ) {
     const { material_id, label } = material
-    const totalCost = (material.data.length * qty) / 1000
+    const totalCost = (material.data.materialCostLength * qty) / 1000
 
     if (material.stock < totalCost) {
       throw new ErrNotEnoughMaterial(

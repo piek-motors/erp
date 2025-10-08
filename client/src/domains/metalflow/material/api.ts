@@ -98,7 +98,7 @@ export class MaterialApi {
     const res = await rpc.metal.details.listByMaterialId.query({ material_id })
     this.s.setDetailsMadeFromThisMaterial(
       res.map(e => ({
-        id: e.detail_id,
+        id: e.id,
         name: e.name,
         group_id: e.logical_group_id
       }))

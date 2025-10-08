@@ -3,7 +3,6 @@ import { router } from '#root/lib/trpc/trpc.js'
 import { deleteFile } from '#root/procedures/attachment/delete_file.rpc.js'
 import { createDetail } from '#root/procedures/metalflow/detail/create.js'
 import { deleteDetail } from '#root/procedures/metalflow/detail/delete.js'
-import { deleteDetailMaterial } from '#root/procedures/metalflow/detail/delete_material.js'
 import { getDetail } from '#root/procedures/metalflow/detail/get.js'
 import { assignDetailsToGroup } from '#root/procedures/metalflow/detail/grouping/assign_details.js'
 import { createDetailGroup } from '#root/procedures/metalflow/detail/grouping/create.js'
@@ -18,6 +17,7 @@ import { deleteMaterial } from '#root/procedures/metalflow/material/delete.js'
 import { getMaterial } from '#root/procedures/metalflow/material/get.js'
 import { listMaterials } from '#root/procedures/metalflow/material/list.js'
 import { updateMaterial } from '#root/procedures/metalflow/material/update.js'
+import { sql } from 'kysely'
 import z from 'zod'
 import { getDetailShortInfo } from './detail/get_short.js'
 import { getDetailInTheGroup } from './detail/grouping/get.js'
@@ -54,16 +54,16 @@ export const metalFlowRouter = router({
       .input(z.object({ material_id: z.number() }))
       .query(async ({ input }) =>
         db
-          .selectFrom('metal_flow.detail_materials')
-          .where('material_id', '=', input.material_id)
-          .innerJoin('metal_flow.details', 'detail_id', 'id')
+          .selectFrom('metal_flow.details')
+          .where(
+            sql<boolean>`(automatic_writeoff->'material'->>'material_id')::int = ${input.material_id}`
+          )
           .selectAll()
           .execute()
       ),
     delete: deleteDetail,
     update: updateDetail,
     create: createDetail,
-    deleteMaterialRelation: deleteDetailMaterial,
     writeoff: createDetailWriteoff,
     supply: createDetailSupply
   }),

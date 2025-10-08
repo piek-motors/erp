@@ -37,7 +37,7 @@ export class ProcessingRoute {
   }
 }
 
-export type TechicalParameters = {
+export type BlankSpec = {
   arr: { key: string; value: any }[]
 }
 
@@ -72,9 +72,9 @@ export class DetailState {
     this.drawingNumber = drawingNumber
   }
 
-  technicalParameters?: TechicalParameters | null = null
-  setTechnicalParameters(params?: TechicalParameters | null) {
-    this.technicalParameters = params
+  blankSpec?: BlankSpec | null = null
+  setBlankSpec(params?: BlankSpec | null) {
+    this.blankSpec = params
   }
   updatedAt?: Date
   setUpdatedAt(date: Date | undefined) {
@@ -96,6 +96,10 @@ export class DetailState {
   setRecentlyUpdated(id: number) {
     this.recentlyUpdated = id
   }
+  recommendedBatchSize?: string | null
+  setRecommendedBatchSize(size: string | null) {
+    this.recommendedBatchSize = size
+  }
 
   constructor() {
     makeAutoObservable(this)
@@ -106,7 +110,7 @@ export class DetailState {
     this.setName(d.name!)
     this.setDrawingNumber(d.part_code!)
     this.setGroupId(d.logical_group_id)
-    this.setTechnicalParameters(d.params)
+    this.setBlankSpec(d.blank_spec)
     this.setDescription(d.description)
     this.warehouse.setStock(d.stock)
     this.setUpdatedAt(d.updated_at ? new Date(d.updated_at) : undefined)
@@ -125,6 +129,7 @@ export class DetailState {
     if (d.automatic_writeoff) {
       this.autoWriteoff.init(d.automatic_writeoff)
     }
+    this.setRecommendedBatchSize(d.recommended_batch_size?.toString() ?? null)
   }
 
   reset() {
@@ -135,7 +140,7 @@ export class DetailState {
     this.recentlyUpdated = undefined
     this.groupId = undefined
     this.drawingNumber = ''
-    this.technicalParameters = null
+    this.blankSpec = null
     this.updatedAt = undefined
     this.lastManufacturingDate = undefined
     this.lastManufacturingQty = undefined
@@ -146,7 +151,7 @@ export class DetailState {
 
   createPayload(): UpdateDetailRequest {
     const technicalParams =
-      this.technicalParameters?.arr?.map(({ key, value }) => ({
+      this.blankSpec?.arr?.map(({ key, value }) => ({
         key: key?.trim(),
         value: value?.trim()
       })) || []
@@ -157,9 +162,10 @@ export class DetailState {
       name: this.name ?? '',
       partCode: this.drawingNumber ?? null,
       groupId: this.groupId ?? null,
-      technicalParams: {
+      blankSpec: {
         arr: technicalParams ?? []
       },
+      recommendedBatchSize: Number(this.recommendedBatchSize) ?? null,
       processingRoute: this.processingRoute
         ? {
             steps:

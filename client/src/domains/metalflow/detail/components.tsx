@@ -8,7 +8,7 @@ import { TextEditor } from 'domains/orders/one/comments/text-editor'
 import { Box, Inp, Label, MyInputProps, observer, P, Row } from 'lib/index'
 import { MaterialAutocomplete } from '../shared/material_autocomplete'
 import { api } from './api'
-import { TechicalParameters } from './detail.state'
+import { BlankSpec } from './detail.state'
 import { AutomaticWriteoffAccordion } from './warehouse/cost'
 import { MaterialCost } from './warehouse/cost.store'
 
@@ -18,9 +18,10 @@ export const DetailInputs = () => (
     <DetailDrawingNameInput />
     <DetailPartCodeInput />
     <DetailGroupInput />
+    <DetailRecommendedBatchSizeInput />
     <DetailDescriptionInput />
     <AccordionGroup>
-      <DetailParamsInput />
+      <BlankSpecInput />
       <ProcessingRouteAccordion />
       <AutomaticWriteoffAccordion />
     </AccordionGroup>
@@ -85,6 +86,18 @@ const DetailDescriptionInput = observer(() => (
   </Box>
 ))
 
+const DetailRecommendedBatchSizeInput = observer(() => (
+  <Input
+    label="Рекомендуемый размер партии"
+    type="number"
+    sx={{ width: '100px' }}
+    value={api.detail.recommendedBatchSize}
+    onChange={v => {
+      api.detail.setRecommendedBatchSize(v)
+    }}
+  />
+))
+
 const DetailPartCodeInput = observer(() => (
   <Input
     label="Номер чертежа"
@@ -103,7 +116,7 @@ const Input = (props: MyInputProps) => (
   <Inp variant="plain" color="neutral" fullWidth {...props} />
 )
 
-export const DetailGroupInput = observer(() => {
+const DetailGroupInput = observer(() => {
   const groupOptions: BaseOption[] = cache.detailGroups
     .getGroups()
     .map(group => ({
@@ -129,14 +142,15 @@ export const DetailGroupInput = observer(() => {
   )
 })
 
-export const DetailParamsInput = observer(() => (
+const BlankSpecInput = observer(() => (
   <AccordionCard title="Заготовка" defaultExpanded>
+    <Label level="body-xs">
+      Материал для заготовки должен указываться в секции "Расход"
+    </Label>
     <ArrayJsonEditor
-      value={api.detail.technicalParameters?.arr ?? null}
+      value={api.detail.blankSpec?.arr ?? null}
       onChange={parameters =>
-        api.detail.setTechnicalParameters(
-          parameters ? { arr: parameters } : null
-        )
+        api.detail.setBlankSpec(parameters ? { arr: parameters } : null)
       }
       newItem={{ key: '', value: '' }}
       placeholders={['Параметр', 'Значение']}
@@ -145,7 +159,7 @@ export const DetailParamsInput = observer(() => (
   </AccordionCard>
 ))
 
-export const ProcessingRouteAccordion = observer(() => (
+const ProcessingRouteAccordion = observer(() => (
   <AccordionCard title="Маршрут обработки" defaultExpanded>
     <ArrayJsonEditor
       value={api.detail.processingRoute.steps ?? null}
@@ -161,10 +175,7 @@ export const ProcessingRouteAccordion = observer(() => (
 ))
 
 export const TechParamsDisplay = observer(
-  (props: {
-    params?: TechicalParameters | null
-    level: keyof TypographySystem
-  }) => (
+  (props: { params?: BlankSpec | null; level: keyof TypographySystem }) => (
     <>
       {!!props.params?.arr?.length && props.params.arr.length > 0 && (
         <Stack width={'max-content'}>
@@ -181,7 +192,7 @@ export const TechParamsDisplay = observer(
 
 export const TechParamsRowDisplay = observer(
   (props: {
-    params?: TechicalParameters | null
+    params?: BlankSpec | null
     level?: keyof TypographySystem
     fontSize?: number
   }) => (

@@ -30,7 +30,7 @@ export const tableStyles = css({
 export const DetailDescription = observer((props: { htmlContent?: string }) => {
   if (!props.htmlContent) return null
   return (
-    <Stack minWidth={'max-content'}>
+    <Stack minWidth={'max-content'} maxWidth={600}>
       <Label label="Примечание" level="body-sm" />
       <TextEditor defaultValue={props.htmlContent} editable={false} />
     </Stack>

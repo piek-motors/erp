@@ -30,7 +30,7 @@ export const processingRouteSchema = z.object({
   )
 })
 
-export const technicalParametersSchema = z.object({
+export const blankSpecSchema = z.object({
   arr: z.array(
     z.object({
       key: z.string(),
@@ -46,12 +46,12 @@ export const automaticWriteoffSchema = z.object({
       qty: z.number()
     })
   ),
-  materials: z.array(
-    z.object({
+  material: z
+    .object({
       material_id: z.number(),
       length: z.number()
     })
-  )
+    .nullable()
 })
 
 export const detailBaseSchema = z.object({
@@ -59,10 +59,11 @@ export const detailBaseSchema = z.object({
   description: z.string().nullable(),
   partCode: z.string().nullable(),
   groupId: z.number().nullable(),
-  technicalParams: technicalParametersSchema.nullable(),
+  blankSpec: blankSpecSchema.nullable(),
   processingRoute: processingRouteSchema.nullable(),
   drawingName: z.string().nullable(),
-  automaticWriteoff: automaticWriteoffSchema.nullable()
+  automaticWriteoff: automaticWriteoffSchema.nullable(),
+  recommendedBatchSize: z.number().nullable()
 })
 
 export const detailDto = detailBaseSchema

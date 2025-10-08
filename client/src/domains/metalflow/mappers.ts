@@ -65,7 +65,8 @@ class DetailMapper {
       description: detail.description || '',
       drawing_name: detail.drawing_name ?? '',
       updated_at: detail.updated_at?.toString() ?? '',
-      params: detail.params,
+      blank_spec: detail.blank_spec,
+      recommended_batch_size: detail.recommended_batch_size ?? null,
       processing_route: detail.processing_route ?? null,
       automatic_writeoff: detail.automatic_writeoff ?? null,
       unit: detail.unit ?? EnUnit.Countable

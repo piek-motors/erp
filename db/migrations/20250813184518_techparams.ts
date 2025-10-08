@@ -3,16 +3,16 @@ import { type KDB } from '../schema'
 export async function up(db: KDB): Promise<void> {
   const details = await db
     .selectFrom('metal_flow.details')
-    .select(['id', 'params'])
+    .select(['id', 'blank_spec'])
     .execute()
 
   for (const detail of details) {
-    if (detail.params && typeof detail.params === 'object') {
+    if (detail.blank_spec && typeof detail.blank_spec === 'object') {
       await db
         .updateTable('metal_flow.details')
         .set({
-          params: {
-            arr: Object.entries(detail.params).map(([key, value]) => ({
+          blank_spec: {
+            arr: Object.entries(detail.blank_spec).map(([key, value]) => ({
               key,
               value
             }))
