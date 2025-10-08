@@ -11,6 +11,7 @@ export interface TabProps {
   handleChange?: (newVal: any) => void
   value?: string
   tabs: TabConfig
+  p?: number
 }
 
 export function Tabs(props: TabProps) {
@@ -37,7 +38,7 @@ export function Tabs(props: TabProps) {
         ))}
       </TabList>
       {props.tabs.map(({ value, component }, idx) => (
-        <TabPanel key={value} value={value}>
+        <TabPanel key={value} value={value} sx={{ p: props.p }}>
           {component}
         </TabPanel>
       ))}

@@ -16,7 +16,7 @@ export const MaterialAddPage = observer(() => {
     api.reset()
   }, [])
   return (
-    <Stack gap={1}>
+    <Stack gap={1} p={1}>
       <MetalPageTitle t={'Добавить материал'} />
       <Stack gap={1}>
         <MaterialFormFields showTabs />
