@@ -5,7 +5,6 @@ import { SearchResults } from 'components/search-paginated'
 import { Table } from 'components/table.impl'
 import { MetalPageTitle } from 'domains/metalflow/shared/basic'
 import {
-  AddResourceButton,
   Box,
   ErrorHint,
   Inp,
@@ -92,9 +91,9 @@ export const DetailsListPage = observer(() => (
     refreshTrigger={false}
     staticContent={
       <MetalPageTitle t={'Детали'}>
-        <AddResourceButton
+        {/* <AddResourceButton
           navigateTo={openPage(routeMap.metalflow.detail.new)}
-        />
+        /> */}
       </MetalPageTitle>
     }
     scrollableContent={

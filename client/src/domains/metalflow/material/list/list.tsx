@@ -3,16 +3,7 @@ import { SxProps } from '@mui/joy/styles/types'
 import { ScrollableWindow, Search } from 'components/inputs'
 import { Table } from 'components/table.impl'
 import { MetalPageTitle } from 'domains/metalflow/shared/basic'
-import {
-  AddResourceButton,
-  Box,
-  Inp,
-  observer,
-  P,
-  Row,
-  Stack,
-  useNavigate
-} from 'lib/index'
+import { Box, Inp, observer, P, Row, Stack, useNavigate } from 'lib/index'
 import { openPage, routeMap } from 'lib/routes'
 import { roundAndTrim } from 'lib/utils/formatting'
 import { EnMaterialShape } from 'models'
@@ -110,9 +101,9 @@ export const MaterialListPage = observer((props: MaterialsTableProps) => {
       staticContent={
         <Stack p={0.5} gap={0.5}>
           <MetalPageTitle t={t.MaterialsList}>
-            <AddResourceButton
+            {/* <AddResourceButton
               navigateTo={openPage(routeMap.metalflow.material.new)}
-            />
+            /> */}
           </MetalPageTitle>
           <Row>
             <Inp

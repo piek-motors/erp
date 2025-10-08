@@ -46,16 +46,19 @@ export const MaterialUpdatePage = observer(() => {
           <MaterialWarehouse />
           <DetailsMadeOfMaterialModal />
         </Stack>
-        <MaterialFormFields />
-        <SaveAndDelete
-          itemName={`Материал (${api.s.id}) - ${api.s.label}`}
-          handleDelete={() =>
-            api.delete().then(() => {
-              navigate(openPage(routeMap.metalflow.materials))
-            })
-          }
-          handleSave={() => api.update()}
-        />
+        <Stack gap={1}>
+          <MaterialFormFields />
+          <SaveAndDelete
+            sx={{ width: 'fit-content' }}
+            itemName={`Материал (${api.s.id}) - ${api.s.label}`}
+            handleDelete={() =>
+              api.delete().then(() => {
+                navigate(openPage(routeMap.metalflow.materials))
+              })
+            }
+            handleSave={() => api.update()}
+          />
+        </Stack>
       </RowButColumsAtSm>
     </Stack>
   )

@@ -20,7 +20,7 @@ export const MaterialAddPage = observer(() => {
       <MetalPageTitle t={'Добавить материал'} />
       <Stack gap={1}>
         <MaterialFormFields showTabs />
-        <ExecuteAction onSubmit={() => api.insert()} />
+        <ExecuteAction onSubmit={() => api.insert()} width="fit-content" />
         {api.s.insertedMaterialId && (
           <TakeLookHint
             text={t.RecentlyNewMaterialAdded}
