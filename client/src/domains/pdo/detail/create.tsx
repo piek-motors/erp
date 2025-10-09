@@ -28,7 +28,7 @@ export const CreateDetailPage = observer(() => {
           return (
             <TakeLookHint
               text={t.RecentlyNewDetailAdded}
-              link={openPage(routeMap.metalflow.detail.edit, res.id)}
+              link={openPage(routeMap.pdo.detail.edit, res.id)}
             />
           )
         }}

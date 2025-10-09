@@ -161,7 +161,7 @@ export function MetalPageTitle(props: PageTitleProps) {
   return (
     <NavigationBar
       {...props}
-      homeUrl={routeMap.metalflow.index}
+      homeUrl={routeMap.pdo.index}
       hideIcon
       spaceBetween
     />

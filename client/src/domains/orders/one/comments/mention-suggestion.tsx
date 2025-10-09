@@ -1,10 +1,4 @@
 import { ReactRenderer } from '@tiptap/react'
-import { apolloClient } from 'lib/api'
-import {
-  GetAllUsersDocument,
-  GetAllUsersQuery,
-  GetAllUsersQueryVariables
-} from 'lib/types/graphql-shema'
 import tippy from 'tippy.js'
 import { MentionSelectUser } from './mention-user-list'
 

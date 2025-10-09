@@ -53,7 +53,7 @@ export const MaterialUpdatePage = observer(() => {
             itemName={`Материал (${api.s.id}) - ${api.s.label}`}
             handleDelete={() =>
               api.delete().then(() => {
-                navigate(openPage(routeMap.metalflow.materials))
+                navigate(openPage(routeMap.pdo.materials))
               })
             }
             handleSave={() => api.update()}

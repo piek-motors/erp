@@ -15,11 +15,7 @@ import {
 } from 'lib/index'
 import { openOrderDetailPage } from 'lib/routes'
 import { rpc } from 'lib/rpc.client'
-import { TNotification } from 'lib/types/global'
-import {
-  useGetNotificationsSubscription,
-  useUpdateNotificationSeenMutation
-} from 'lib/types/graphql-shema'
+
 import moment from 'moment'
 import { useContext } from 'react'
 

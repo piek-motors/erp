@@ -25,7 +25,7 @@ export const MaterialAddPage = observer(() => {
           <TakeLookHint
             text={t.RecentlyNewMaterialAdded}
             link={openPage(
-              routeMap.metalflow.material.edit,
+              routeMap.pdo.material.edit,
               api.s.insertedMaterialId
             )}
           />

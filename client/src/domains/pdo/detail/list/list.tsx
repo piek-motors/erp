@@ -79,7 +79,7 @@ const DetailList = observer((props: DetailsTableProps) => {
         if (props.onRowClick) {
           props.onRowClick(row)
         } else {
-          navigate(openPage(routeMap.metalflow.detail.edit, row.id))
+          navigate(openPage(routeMap.pdo.detail.edit, row.id))
         }
       }}
     />

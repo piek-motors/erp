@@ -24,7 +24,7 @@ export const links = [
   },
   { href: routeMap.reclamation, icon: UilWrench, name: 'Рекламации' },
   {
-    href: routeMap.metalflow.index,
+    href: routeMap.pdo.index,
     icon: UilCalculatorAlt,
     name: 'ПДО'
   },

@@ -13,7 +13,7 @@ export const MaterialName = observer(
     if (withLink && materialId) {
       return (
         <WithHiddenLinkButton
-          linkTo={openPage(routeMap.metalflow.material.edit, materialId)}
+          linkTo={openPage(routeMap.pdo.material.edit, materialId)}
         >
           {materialLabel}
         </WithHiddenLinkButton>

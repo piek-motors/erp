@@ -1,5 +1,4 @@
 import { MonthSelectStore } from 'components/inputs/month-select'
-import { apolloClient } from 'lib/api'
 import {
   GetOrdersArchivedByIntervalDocument,
   GetOrdersArchivedByIntervalQuery,

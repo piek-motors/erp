@@ -1,4 +1,4 @@
-import { $api } from 'lib/api'
+import { $api } from 'lib/axios'
 
 export class AuthService {
   static async login(email: string, password: string) {

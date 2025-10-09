@@ -49,7 +49,7 @@ export const DetailName = observer((props: Props) => {
   // Final content with optional link button
   if (withLink) {
     const editLink = detail.id
-      ? openPage(routeMap.metalflow.detail.edit, detail.id)
+      ? openPage(routeMap.pdo.detail.edit, detail.id)
       : '#'
 
     return (
@@ -66,7 +66,7 @@ export const DetailName = observer((props: Props) => {
 const GroupLink = observer(({ groupId }: { groupId: number | null }) => {
   if (!groupId) return null
   const groupName = cache.detailGroups.getGroupName(groupId)
-  const groupLink = openPage(routeMap.metalflow.detailGroup, groupId)
+  const groupLink = openPage(routeMap.pdo.detailGroup, groupId)
   return (
     <Link to={groupLink} style={{ textDecoration: 'none' }}>
       <Button

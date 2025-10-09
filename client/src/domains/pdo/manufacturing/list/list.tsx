@@ -108,7 +108,7 @@ export const ManufacturingList = observer(() => {
   }, [])
 
   const onRowClick = (row: ManufactoringListOutput) => {
-    navigate(openPage(routeMap.metalflow.manufacturing_order.edit, row.id))
+    navigate(openPage(routeMap.pdo.manufacturing_order.edit, row.id))
   }
 
   const [query, setQuery] = useState('')

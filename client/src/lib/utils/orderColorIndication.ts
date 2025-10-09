@@ -1,4 +1,3 @@
-import { TOrder, TReclamationOrder } from 'lib/types/global'
 import { Order, OrderStatus } from 'models'
 
 export function orderStatus(order: Order) {

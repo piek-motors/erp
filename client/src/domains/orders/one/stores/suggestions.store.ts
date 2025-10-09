@@ -1,4 +1,3 @@
-import { apolloClient } from 'lib/api/apollo-client'
 import { rpc } from 'lib/rpc.client'
 import * as gql from 'lib/types/graphql-shema'
 import { makeAutoObservable } from 'mobx'
