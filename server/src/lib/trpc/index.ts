@@ -1,4 +1,4 @@
-import { trpcRouter } from '#root/procedures/trpc-router.js'
+import { trpcRouter } from '#root/rpc/trpc-router.js'
 import type { inferRouterInputs, inferRouterOutputs } from '@trpc/server'
 export * from '#root/lib/trpc/trpc.js'
 
