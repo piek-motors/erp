@@ -1,4 +1,4 @@
-import { AsyncStoreController } from 'lib/async-store.controller'
+import { LoadingController } from 'lib/loading_controller'
 import { rpc } from 'lib/rpc.client'
 import { notifier } from 'lib/store/notifier.store'
 import { makeAutoObservable } from 'mobx'
@@ -6,7 +6,7 @@ import { map } from '../mappers'
 import { ManufacturingOrderState } from './order.state'
 
 export class ManufacturingApi {
-  readonly status = new AsyncStoreController()
+  readonly status = new LoadingController()
   readonly s = new ManufacturingOrderState()
   constructor() {
     makeAutoObservable(this)

@@ -1,6 +1,6 @@
 import { TOrderColumnData } from 'lib/types/global'
 import { OrderStatus } from 'models'
-import keywordComparator from '../lib/utils/comparators'
+import keywordComparator from '../../lib/utils/comparators'
 
 interface UseApplyFiltersProps {
   orders: TOrderColumnData[]

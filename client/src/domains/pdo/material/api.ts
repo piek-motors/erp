@@ -1,5 +1,5 @@
-import { AsyncStoreController } from 'lib/async-store.controller'
 import { rpc } from 'lib/deps'
+import { LoadingController } from 'lib/loading_controller'
 import { makeAutoObservable } from 'mobx'
 import { getMaterialConstructor, MaterialShapeAbstractionLayer } from 'models'
 import { cache } from '../cache/root'
@@ -7,7 +7,7 @@ import { map } from '../mappers'
 import { MaterialState } from './state'
 
 export class MaterialApi {
-  readonly status = new AsyncStoreController()
+  readonly status = new LoadingController()
   s: MaterialState = new MaterialState()
   reset() {
     this.s = new MaterialState()

@@ -1,13 +1,13 @@
 import { cache } from 'domains/pdo/cache/root'
-import { AsyncStoreController } from 'lib/async-store.controller'
+import { LoadingController } from 'lib/loading_controller'
 import { rpc } from 'lib/rpc.client'
 import { makeAutoObservable } from 'mobx'
 import { DetailGroupStore } from './group.store'
 
 export class DetailGroupingApi {
-  readonly groupsLoading = new AsyncStoreController()
+  readonly groupsLoading = new LoadingController()
   readonly store = new DetailGroupStore()
-  readonly targetGroupLoading = new AsyncStoreController()
+  readonly targetGroupLoading = new LoadingController()
 
   constructor() {
     makeAutoObservable(this)

@@ -1,5 +1,5 @@
-import { AsyncStoreController } from 'lib/async-store.controller'
 import { rpc } from 'lib/deps'
+import { LoadingController } from 'lib/loading_controller'
 import { makeAutoObservable } from 'mobx'
 import { RouterOutput } from 'srv/lib/trpc'
 
@@ -7,7 +7,7 @@ export type ManufactoringListOutput =
   RouterOutput['metal']['manufacturing']['list'][number]
 
 export class ManufacturingListStore {
-  readonly async = new AsyncStoreController()
+  readonly async = new LoadingController()
 
   orders: ManufactoringListOutput[] = []
   setOrders(orders: ManufactoringListOutput[]) {

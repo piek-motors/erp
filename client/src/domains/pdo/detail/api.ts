@@ -1,4 +1,4 @@
-import { AsyncStoreController } from 'lib/async-store.controller'
+import { LoadingController } from 'lib/loading_controller'
 import { rpc } from 'lib/rpc.client'
 import { makeAutoObservable } from 'mobx'
 import { Attachment } from 'models'
@@ -6,7 +6,7 @@ import { cache } from '../cache/root'
 import { DetailState } from './detail.state'
 
 export class DetailApi {
-  readonly status = new AsyncStoreController()
+  readonly status = new LoadingController()
   readonly detail = new DetailState()
   constructor() {
     makeAutoObservable(this)
