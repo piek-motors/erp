@@ -4,7 +4,7 @@ import { RouterOutput } from 'srv/lib/trpc'
 import { DetailState, Operation, ProcessingRoute } from '../detail/detail.state'
 
 export type ManufacturingOrderOutput =
-  RouterOutput['metal']['manufacturing']['get']
+  RouterOutput['pdo']['manufacturing']['get']
 
 export class ManufacturingOrderState {
   readonly async = new LoadingController()

@@ -105,7 +105,7 @@ export const OperationsList = observer((props: Props) => {
           <Table
             columns={columns}
             data={store.operations}
-            trStyleCallback={op => {
+            rowStyleCb={op => {
               const type = Number(op.original.operation_type)
               if (type === EnOperationType.Writeoff) {
                 return {

@@ -1,4 +1,4 @@
-import { config } from '#root/config.js'
+import { config } from '#root/env.js'
 import { connect } from 'db'
 
 if (!config.PG_CONN_STR) {

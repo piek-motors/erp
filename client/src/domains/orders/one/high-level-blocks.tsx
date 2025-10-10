@@ -1,16 +1,16 @@
 /** @jsxImportSource @emotion/react */
 import { Box, Divider, Sheet, Stack } from '@mui/joy'
+import { orderStatus } from 'domains/orders/color_indication'
 import { useAppContext } from 'hooks'
 import { Chip, P, Row, text } from 'lib/index'
-import { orderStatus } from 'lib/utils/orderColorIndication'
 import { observer } from 'mobx-react-lite'
 import { CommentInputViewPort, CommentListViewPort } from './comments/ui'
 import { OrderAttachmentList } from './order-attachment-list'
+import { orderStore } from './order.store'
 import { Paymnets } from './payments/ui'
 import { PositionsList } from './positions/ui'
 import { orderInfoPrintStyle } from './prints.styles'
 import { OrderStatementInput, StatementView } from './statement/ui'
-import { orderStore } from './stores/order.store'
 
 // Order metadata component showing entity, city and status chips
 export const OrderMetadata = observer(() => {
@@ -33,14 +33,14 @@ export const OrderMetadata = observer(() => {
         chipProps={{
           color: 'warning'
         }}
-        if={orderStore.order?.awatingDispatch ?? false}
+        if={orderStore.order?.awaiting_dispatch ?? false}
         text={text.orderReadyForDispatch}
       />
       <Chip
         chipProps={{
           color: 'danger'
         }}
-        if={orderStore.order?.needAttention ?? false}
+        if={!!orderStore.order?.need_attention}
         text={text.orderRequiresSpectialAttention}
       />
     </Row>
@@ -55,7 +55,11 @@ export const OrderInfoSection = observer(() => {
   return (
     <Box>
       {orderStore.editMode ? (
-        <OrderStatementInput mutation={() => orderStore.update()} />
+        <OrderStatementInput
+          mutation={() =>
+            orderStore.update().then(() => orderStore.switchEditMode())
+          }
+        />
       ) : (
         <Stack css={orderInfoPrintStyle}>
           <StatementView />

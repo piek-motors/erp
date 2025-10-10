@@ -67,7 +67,7 @@ const DetailList = observer((props: DetailsTableProps) => {
     <Table
       columns={columnList}
       data={state.displayedResults}
-      trStyleCallback={row => {
+      rowStyleCb={row => {
         if (props.highlight) {
           return props.highlight(row.original)
             ? { backgroundColor: props.highlightColor }

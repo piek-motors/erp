@@ -1,4 +1,4 @@
-import { LoadingHint } from 'lib/index'
+import { Loading } from 'lib/index'
 import { routeMap } from 'lib/routes'
 import { RouteConfig } from 'lib/types/global'
 import { observer } from 'mobx-react-lite'
@@ -8,8 +8,7 @@ import { useParams } from 'react-router'
 import { CreateOrder } from './create'
 import { PrintLayout } from './layouts/print'
 import { WebLayout } from './layouts/web'
-import { orderStore } from './stores/order.store'
-import { suggestionsStore } from './stores/suggestions.store'
+import { orderStore } from './order.store'
 
 const OrderDetail = observer(() => {
   const queryParams = useParams<{ id: string }>()
@@ -20,7 +19,6 @@ const OrderDetail = observer(() => {
 
   useEffect(() => {
     orderStore.openOrder(orderId)
-    suggestionsStore.init()
   }, [])
 
   const { getRootProps } = useDropzone({
@@ -30,7 +28,7 @@ const OrderDetail = observer(() => {
   })
 
   if (!orderStore.order) {
-    return <LoadingHint show={true} />
+    return <Loading />
   }
 
   return (

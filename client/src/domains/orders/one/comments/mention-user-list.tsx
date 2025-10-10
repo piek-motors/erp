@@ -9,24 +9,20 @@ export const MentionSelectUser = (props: {
   command: (arg: SuggestionItem) => void
 }) => {
   const [selectedIndex, setSelectedIndex] = useState(0)
-
   const selectItem = index => {
     const item = props.items[index]
     if (item) {
       props.command(item)
     }
   }
-
   const upHandler = () => {
     setSelectedIndex(
       (selectedIndex + props.items.length - 1) % props.items.length
     )
   }
-
   const downHandler = () => {
     setSelectedIndex((selectedIndex + 1) % props.items.length)
   }
-
   const enterHandler = () => {
     selectItem(selectedIndex)
   }
@@ -39,17 +35,14 @@ export const MentionSelectUser = (props: {
         upHandler()
         return true
       }
-
       if (event.key === 'ArrowDown') {
         downHandler()
         return true
       }
-
       if (event.key === 'Enter') {
         enterHandler()
         return true
       }
-
       return false
     }
   }))

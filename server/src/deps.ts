@@ -1,4 +1,4 @@
-export { config } from '#root/config.js'
+export { config } from '#root/env.js'
 export { db } from '#root/ioc/db.js'
 export { s3 } from '#root/ioc/s3.js'
 export {

@@ -4,13 +4,12 @@ import {
   Material,
   MaterialShapeAbstractionLayer
 } from 'models'
-
-// @ts-ignore
 import { RouterOutput } from 'srv/lib/trpc'
 import { SelectableDetail } from 'srv/rpc/pdo/detail/get'
 import { Material as MaterialListDto } from 'srv/rpc/pdo/material/list'
 import { DetailState } from './detail/detail.state'
-type GetMaterialsOutput = RouterOutput['metal']['material']['get']
+
+type GetMaterialsOutput = RouterOutput['pdo']['material']['get']
 
 class MaterialMapper {
   fromDto(dto: GetMaterialsOutput): Material {

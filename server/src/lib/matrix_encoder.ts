@@ -1,3 +1,4 @@
+export type Matrix<T extends object> = (keyof T | T[keyof T])[][]
 /**
  * Encodes an array of objects into a matrix with a typed header row.
  * @param data The array of objects to encode.

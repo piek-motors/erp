@@ -4,16 +4,17 @@ import { JSX } from '@emotion/react/jsx-runtime'
 import { Box, Button, Dropdown, Menu, MenuButton, Stack, Table } from '@mui/joy'
 import { DateInput } from 'components/inputs/date_input'
 import { MoneyInput } from 'components/inputs/money-input'
+import { UnpackedOrder } from 'domains/orders/api'
 import { useAppContext } from 'hooks'
-import { DeleteResourceButton, P, Row } from 'lib/index'
-import { GetOrderPaymentsQuery } from 'lib/types/graphql-shema'
+import { DeleteResourceButton, Label, P, Row } from 'lib/index'
 import { formatMoney, formatOnlyDate, percentage } from 'lib/utils/formatting'
 import { observer } from 'mobx-react-lite'
-import { Order, UserRole } from 'models'
+import { UserRole } from 'models'
 import { useState } from 'react'
-import { orderStore, orderStore as os } from '../stores/order.store'
+import { Payment } from 'srv/rpc/orders/payments'
+import { orderStore, orderStore as os } from '../order.store'
 
-export const Paymnets = observer(({ order }: { order: Order }) => {
+export const Paymnets = observer(({ order }: { order: UnpackedOrder }) => {
   const { store }: any = useAppContext()
 
   const isHaveFullRight = [
@@ -22,11 +23,16 @@ export const Paymnets = observer(({ order }: { order: Order }) => {
     UserRole.Bookkeeper
   ].includes(store?.user?.role)
 
-  const paymentHistoryContent = order.totalAmount ? (
+  const paymentHistoryContent = order.total_amount ? (
     <PaymentsTable
-      data={os.payments.payments}
+      data={os.payments.payments.map(p => ({
+        id: p.id,
+        order_id: order.id,
+        amount: p.amount,
+        date: p.date
+      }))}
       onDelete={ID => os.payments.deletePayment(ID)}
-      totalAmount={order.totalAmount}
+      totalAmount={order.total_amount}
       loading={os.payments.loading}
       footerComponent={
         <Box>{isHaveFullRight && <NewPaymentInput order={order} />}</Box>
@@ -40,9 +46,7 @@ export const Paymnets = observer(({ order }: { order: Order }) => {
 
   return (
     <Box my={1}>
-      <P>
-        Платежи <P level="body-xs">[{os.payments.payments.length}]</P>
-      </P>
+      <Label>Платежи</Label>
       {paymentHistoryContent}
     </Box>
   )
@@ -50,7 +54,7 @@ export const Paymnets = observer(({ order }: { order: Order }) => {
 
 const PaymentsTable = observer(
   (props: {
-    data: GetOrderPaymentsQuery['orders_order_payments']
+    data: Payment[]
     totalAmount: number
     loading: boolean
     onDelete?: (ID: number) => void
@@ -59,7 +63,7 @@ const PaymentsTable = observer(
     const { totalAmount } = props
 
     const totalPaid = props.data.reduce((acc, payment) => {
-      return acc + payment.amount
+      return acc + Number(payment.amount)
     }, 0)
 
     const totalPaidPercent = percentage(totalPaid, totalAmount)
@@ -90,7 +94,7 @@ const PaymentsTable = observer(
                 <tr key={payment.id}>
                   <td>{percentage(payment.amount, totalAmount)}</td>
                   <td>{formatMoney(payment.amount)}</td>
-                  <td>{formatOnlyDate(payment.date)}</td>
+                  <td>{formatOnlyDate(payment.date.toISOString())}</td>
                   {orderStore.editMode && (
                     <td>
                       <DeleteResourceButton
@@ -104,7 +108,7 @@ const PaymentsTable = observer(
           <tfoot>
             <tr>
               <td> {totalPaidPercent}</td>
-              <td>{!!totalPaid && formatMoney(totalPaid)}</td>
+              <td>Σ {!!totalPaid && formatMoney(totalPaid)}</td>
               {props.footerComponent && <td>{props.footerComponent}</td>}
             </tr>
           </tfoot>
@@ -115,7 +119,7 @@ const PaymentsTable = observer(
 )
 
 interface NewPaymentInputProps {
-  order: Order
+  order: UnpackedOrder
 }
 
 const NewPaymentInput = observer((props: NewPaymentInputProps) => {
@@ -179,14 +183,22 @@ const NewPaymentInput = observer((props: NewPaymentInputProps) => {
             value={os.payments.date || ''}
             onChange={v => os.payments.setDate(v)}
           />
-          <Row gap={1}>
+          <Row gap={1} alignItems={'end'}>
             <MoneyInput
               label="Сумма платежа"
               onChange={handleAmountChange}
               value={os.payments.amount}
               autoFocus
             />
-            <P>из {formatMoney(props.order.totalAmount)}</P>
+            <Button
+              variant="outlined"
+              color="neutral"
+              onClick={() => {
+                os.payments.setAmount(props.order.total_amount ?? 0)
+              }}
+            >
+              <P>из {formatMoney(props.order.total_amount ?? 0)}</P>
+            </Button>
           </Row>
           {os.payments.error && (
             <P color="danger" level="body-sm">

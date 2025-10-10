@@ -6,18 +6,16 @@ interface IOrderTypeFilterProps {
   onChange: (e: any) => void
 }
 
-export function OrderTypeFilter({ value, onChange }: IOrderTypeFilterProps) {
-  return (
-    <FormControl>
-      <Select
-        name="managerFilter"
-        value={value as string}
-        onChange={onChange}
-        placeholder="Тип заказа"
-      >
-        <Option value={OrderStatus.Archived}>Заказы</Option>
-        <Option value={OrderStatus.ReclamationArchived}>Рекламации</Option>
-      </Select>
-    </FormControl>
-  )
-}
+export const OrderTypeFilter = ({ value, onChange }: IOrderTypeFilterProps) => (
+  <FormControl>
+    <Select
+      name="managerFilter"
+      value={value as string}
+      onChange={(e, v) => onChange(v)}
+      placeholder="Тип заказа"
+    >
+      <Option value={OrderStatus.Archived}>Заказы</Option>
+      <Option value={OrderStatus.ReclamationArchived}>Рекламации</Option>
+    </Select>
+  </FormControl>
+)

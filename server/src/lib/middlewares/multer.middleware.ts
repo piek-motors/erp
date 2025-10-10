@@ -1,4 +1,4 @@
-import { config } from '#root/config.js'
+import { config } from '#root/env.js'
 import { s3 } from '#root/ioc/s3.js'
 import multer from 'multer'
 import multerS3, { AUTO_CONTENT_TYPE } from 'multer-s3'

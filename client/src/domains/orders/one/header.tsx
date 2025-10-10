@@ -7,7 +7,7 @@ import React from 'react'
 import { useNavigate } from 'react-router'
 import { DeleteOrderDialog } from './dialogs/delete-order-dialog'
 import { TransferOrderDialog } from './dialogs/transfer-order.dialog'
-import { orderStore } from './stores/order.store'
+import { orderStore } from './order.store'
 
 export type ActionButton = {
   tip: string
@@ -50,6 +50,9 @@ const ActionButton = observer((props: { buttons: ActionButton[] }) => {
 })
 
 const SwitchOrderStatusBtn = observer(() => {
+  const status = orderStore.order?.status
+  if (!status) return null
+
   const statusButtons: ActionButton[] = [
     {
       tip: text.orderRequiresSpectialAttention,
@@ -63,7 +66,7 @@ const SwitchOrderStatusBtn = observer(() => {
       hidden: ![
         OrderStatus.InProduction,
         OrderStatus.ReclamationInProduction
-      ].includes(orderStore.order?.status)
+      ].includes(status)
     }
   ]
 
@@ -73,6 +76,8 @@ const SwitchOrderStatusBtn = observer(() => {
 export const OrderActions = observer(() => {
   const navigate = useNavigate()
   const status = orderStore.order?.status
+  if (!status) return null
+
   const buttons: ActionButton[] = [
     {
       tip: text.moveToPriority,
@@ -85,7 +90,7 @@ export const OrderActions = observer(() => {
       dialogHandler: () => orderStore.moveToArchive(OrderStatus.Archived),
       tip: text.orderCompleted,
       icon: icons.UilTruck,
-      hidden: ![OrderStatus.InProduction].includes(orderStore.order?.status)
+      hidden: ![OrderStatus.InProduction].includes(status)
     },
     {
       dialog: TransferOrderDialog,

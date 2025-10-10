@@ -1,9 +1,7 @@
 import { AttachmentList } from 'components/attachments/attachment-list'
 import { observer } from 'mobx-react-lite'
 import { Attachment } from 'models'
-import { useEffect } from 'react'
-import { ordersApi } from '../orders.api'
-import { orderStore } from './stores/order.store'
+import { orderStore } from './order.store'
 
 interface OrderAttachmentListProps {
   orderId: number
@@ -12,14 +10,6 @@ interface OrderAttachmentListProps {
 
 export const OrderAttachmentList = observer(
   ({ orderId, onDelete }: OrderAttachmentListProps) => {
-    useEffect(() => {
-      if (orderId) {
-        ordersApi.loadAttachments(orderId).then(attachments => {
-          orderStore.attachments.setFiles(attachments)
-        })
-      }
-    }, [orderId])
-
     const handleDelete =
       onDelete ||
       ((attachment: any) => {

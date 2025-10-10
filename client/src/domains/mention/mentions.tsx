@@ -13,36 +13,31 @@ import {
   useNavigate,
   useState
 } from 'lib/index'
+import { matrixDecoder } from 'lib/matrix_decoder'
 import { openOrderDetailPage } from 'lib/routes'
 import { rpc } from 'lib/rpc.client'
-
 import moment from 'moment'
-import { useContext } from 'react'
+import { useContext, useEffect } from 'react'
+import { Mention } from 'srv/rpc/orders/mentions'
 
-interface INotificationProps {
-  data: TNotification
-}
-
-function Mention({ data }: INotificationProps) {
+function MentionComponent({ data }: { data: Mention }) {
   const navigate = useNavigate()
-  const [updateViewedMutration] = useUpdateNotificationSeenMutation()
-
   const CommentContentWrapper = styled.div`
     a,
     p,
     div,
     span {
       font-size: 1rem !important;
+      margin: 0;
     }
   `
-
-  function toOrderDetailPageHandler() {
-    navigate(openOrderDetailPage(data.order?.id ?? 0))
-    updateViewedMutration({ variables: { ID: data.id, Seen: true } })
+  function handleMentionCheck() {
+    navigate(openOrderDetailPage(data.order_id ?? 0))
+    rpc.orders.mentions.checked.mutate({
+      id: data.id
+    })
   }
-
-  if (!data.order) return <>Не удалось найти заказ</>
-
+  if (!data.order_id) return <>Не удалось найти заказ</>
   return (
     <Stack>
       <Sheet
@@ -52,23 +47,20 @@ function Mention({ data }: INotificationProps) {
         <Box sx={{ display: 'grid' }}>
           <Stack direction={'row'} gap={1}>
             <P fontWeight={500} color="neutral">
-              {data.comment.user.first_name} {data.comment.user.last_name}
+              {data.first_name} {data.last_name}
             </P>
-            <P>
-              упомянул вас{' '}
-              {moment(data.comment.created_at).format('DD MMM H:mm')}{' '}
-            </P>
+            <P>упомянул вас {moment(data.created_at).format('DD MMM H:mm')} </P>
           </Stack>
 
           <Row justifyContent={'space-between'}>
             <P fontWeight={600}>
-              {data.order.contractor}__{data.order.city}
+              {data.contractor}__{data.city}
             </P>
             <Stack justifyContent={'flex-end'}>
               <Button
                 size="sm"
                 variant="soft"
-                onClick={toOrderDetailPageHandler}
+                onClick={handleMentionCheck}
                 color="primary"
               >
                 Посмотреть
@@ -76,10 +68,9 @@ function Mention({ data }: INotificationProps) {
             </Stack>
           </Row>
         </Box>
-
         <Box p={0.1}>
           <CommentContentWrapper
-            dangerouslySetInnerHTML={{ __html: data.comment.text }}
+            dangerouslySetInnerHTML={{ __html: data.text }}
           ></CommentContentWrapper>
         </Box>
       </Sheet>
@@ -89,65 +80,65 @@ function Mention({ data }: INotificationProps) {
 
 export function MentionList() {
   const { store }: any = useContext(Context)
-
   const [notifications, setNotifications] = useState<{
-    unviewed: TNotification[]
-    viewed: TNotification[]
-  }>({ unviewed: [], viewed: [] })
+    unseen: Mention[]
+    seen: Mention[]
+  }>({ unseen: [], seen: [] })
 
-  const { loading } = useGetNotificationsSubscription({
-    onData(options) {
-      if (!options.data.data) throw Error(options.data.error?.stack)
-
-      const data = options.data.data.orders_notifications
-
-      setNotifications({
-        unviewed: data.filter(e => !e.seen),
-        viewed: data.filter(e => e.seen)
+  const [loading, setLoading] = useState(false)
+  useEffect(() => {
+    if (!store?.user?.id) return
+    setLoading(true)
+    rpc.orders.mentions.list
+      .query({
+        user_id: store.user.id
       })
-    },
-    variables: {
-      _eq: store?.user?.id,
-      limit: 100
-    }
-  })
+      .then(res => {
+        const unseen = matrixDecoder<Mention>(res.unseen)
+        const seen = matrixDecoder<Mention>(res.seen)
+        setNotifications({
+          unseen,
+          seen
+        })
+      })
+      .finally(() => setLoading(false))
+  }, [])
 
   return (
     <FactoryPage title="Упоминания">
-      <Stack direction={'column'} gap={2} maxWidth={'700px'}>
+      <Stack direction={'column'} maxWidth={'800px'} margin={'0 auto'}>
         {/* unreaderd notifs */}
-        {notifications.unviewed.length ? (
+        {notifications.unseen.length ? (
           <Stack gap={1}>
             <SectionTitle title="Новые" />
             <Box>
               <ExecuteAction
-                disabled={notifications.unviewed.length === 0}
+                disabled={notifications.unseen.length === 0}
                 buttonProps={{
                   color: 'neutral',
                   variant: 'soft',
                   size: 'sm'
                 }}
                 buttonLabel="Прочитать все"
-                onSubmit={() => {
-                  return rpc.markAllNotificationsAsRead.mutate({
+                onSubmit={() =>
+                  rpc.markAllNotificationsAsRead.mutate({
                     userId: store?.user?.id
                   })
-                }}
+                }
               />
             </Box>
             {!loading &&
-              notifications?.unviewed.map((e, index) => (
-                <Mention key={index} data={e} />
+              notifications?.unseen.map((e, index) => (
+                <MentionComponent key={index} data={e} />
               ))}
           </Stack>
         ) : null}
-
         {/* viewed notifs */}
         <Stack gap={1}>
           <SectionTitle title="Просмотренные" />
           {!loading &&
-            notifications?.viewed.map((mention, index) => (
-              <Mention data={mention} key={index} />
+            notifications?.seen.map((mention, index) => (
+              <MentionComponent data={mention} key={index} />
             ))}
         </Stack>
       </Stack>

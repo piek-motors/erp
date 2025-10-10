@@ -5,21 +5,22 @@ import { AddResourceButton, Loading, P, Pre } from 'lib/index'
 import { openOrderDetailPage, routeMap } from 'lib/routes'
 import { RouteConfig } from 'lib/types/global'
 import { observer } from 'mobx-react-lite'
-import { Order } from 'models'
 import { useEffect } from 'react'
 import * as dnd from 'react-beautiful-dnd'
 import { useNavigate } from 'react-router'
+import { UnpackedOrder } from '../api'
+import { getBackgroundColor } from '../utils'
 import { ColocatedStateKey, reclamationStore } from './store'
 
 interface Props {
-  order: Order
+  order: UnpackedOrder
 }
 
 function ReclamationItem({ order }: Props) {
   const navigate = useNavigate()
   return (
     <Card
-      sx={{ my: 1, backgroundColor: order.getBackgroundColor() }}
+      sx={{ my: 1, backgroundColor: getBackgroundColor(order) }}
       variant="outlined"
       onDoubleClick={() => navigate(openOrderDetailPage(order.id))}
     >
@@ -27,8 +28,8 @@ function ReclamationItem({ order }: Props) {
         {order.contractor}__{order.city}
       </P>
       <div>
-        {order.items.length ? (
-          order.items.map(item => (
+        {order.positions.length ? (
+          order.positions.map(item => (
             <div key={item.id}>
               <Pre>- {item.name}</Pre>
             </div>
@@ -44,7 +45,7 @@ function ReclamationItem({ order }: Props) {
 export interface IDroppableContainerProps {
   columnName: string
   droppableId: ColocatedStateKey
-  data: Order[]
+  data: UnpackedOrder[]
 }
 
 function DroppableContainer({

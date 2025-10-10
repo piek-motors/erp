@@ -2,7 +2,7 @@ import { MonthSelectStore } from 'components/inputs/month-select'
 import { LoadingController } from 'lib/loading_controller'
 import { rpc } from 'lib/rpc.client'
 import { makeAutoObservable } from 'mobx'
-import { AttendanceReport } from 'srv/service/attendance_report_generator'
+import { AttendanceReport } from 'srv/service/attendance_report.generator'
 
 export class AttendanceStore {
   async = new LoadingController()

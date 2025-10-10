@@ -1,15 +1,15 @@
-import * as gql from 'lib/types/graphql-shema'
+import { UnpackedOrder } from 'domains/orders/api'
+import { rpc } from 'lib/deps'
 import { makeAutoObservable } from 'mobx'
-import { Order, Payment } from 'models'
+import { Payment } from 'models'
 import moment from 'moment'
-import { PaymentsApi } from './api'
 
 export class PaymentStore {
   modalOpen = false
   orderId: number | null = null
   date: string | null = null
   amount: number | null = null
-  payments: gql.GetOrderPaymentsQuery['orders_order_payments'] = []
+  payments: Payment[] = []
   loading = false
   error: Error | null = null
 
@@ -19,7 +19,6 @@ export class PaymentStore {
 
   init(orderId: number) {
     this.orderId = orderId
-    this.loadPayments()
     this.setDate(moment().local().format('DD.MM.YY'))
   }
 
@@ -35,7 +34,7 @@ export class PaymentStore {
   setError(error: Error | null) {
     this.error = error
   }
-  setPayments(payments: gql.GetOrderPaymentsQuery['orders_order_payments']) {
+  setPayments(payments: Payment[]) {
     this.payments = payments
   }
   openModal() {
@@ -53,15 +52,7 @@ export class PaymentStore {
     this.error = null
   }
 
-  async loadPayments() {
-    this.assertOrderId()
-    return this.withStateManagement(async () => {
-      const payments = await PaymentsApi.load(this.orderId)
-      this.setPayments(payments)
-    })
-  }
-
-  async insertPayment(order: Order) {
+  async insertPayment(order: UnpackedOrder) {
     this.assertOrderId()
 
     return this.withStateManagement(async () => {
@@ -69,38 +60,38 @@ export class PaymentStore {
         throw Error('Invalid input: date, and amount are required')
       }
 
-      if (this.amount > order.totalAmount) {
+      if (order.total_amount && this.amount > order.total_amount) {
         throw Error('Amount is greater than total amount')
       }
 
-      const paymentDate = moment(this.date, 'DD.MM.YY').utc(true)
-      if (!paymentDate.isValid()) {
+      const date = moment(this.date, 'DD.MM.YY').utc(true)
+      if (!date.isValid()) {
         throw Error('Invalid date format')
       }
 
-      const paymentId = await PaymentsApi.insert({
+      const { id } = await rpc.orders.payments.insert.mutate({
         order_id: this.orderId,
-        date: paymentDate.toISOString(),
-        amount: this.amount
+        date: date.valueOf(),
+        amount: Number(this.amount)
       })
 
       this.setPayments([
         ...this.payments,
         new Payment({
-          id: paymentId,
+          id,
           amount: this.amount,
-          date: paymentDate.toDate()
+          date: date.toDate()
         })
       ])
 
       this.closeModal()
-      return paymentId
+      return id
     })
   }
 
   async deletePayment(paymentId: number) {
     return this.withStateManagement(async () => {
-      await PaymentsApi.delete(paymentId)
+      await rpc.orders.payments.delete.mutate({ id: paymentId })
       this.setPayments(this.payments.filter(p => p.id !== paymentId))
     })
   }

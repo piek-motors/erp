@@ -35,7 +35,7 @@ export class DetailCache {
     makeAutoObservable(this)
   }
   async load() {
-    const detailsRaw = await rpc.metal.details.list.query({})
+    const detailsRaw = await rpc.pdo.details.list.query({})
     const details = matrixDecoder<ListDetailsOutput>(detailsRaw)
     this.setDetails(details.map(each => map.detail.fromDto(each)))
   }

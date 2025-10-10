@@ -28,6 +28,7 @@ export namespace DB {
     ['refresh_tokens']: RefreshTokenTable
 
     ['orders.orders']: OrderTable
+    ['orders.comments']: OrderCommentsTable
     ['orders.order_attachments']: OrderAttachmentTable
     ['orders.order_payments']: OrderPaymentsTable
     ['orders.order_items']: OrderItemsTable
@@ -64,11 +65,11 @@ export namespace DB {
 
   export interface UserTable {
     id: GeneratedAlways<number>
-    first_name: string | null
-    last_name: string | null
-    email: string | null
+    first_name: string
+    last_name: string
+    email: string
     role: UserRole
-    password: string | null
+    password: string
     is_deleted: boolean
   }
 
@@ -177,12 +178,9 @@ export namespace DB {
 
   export interface OrderPaymentsTable {
     id: GeneratedAlways<number>
-    order_id: number
     amount: number
+    order_id: number
     date: Date
-    payment_method: string
-    status: string
-    transaction_id: string
   }
 
   export interface OrderTable {
@@ -253,6 +251,14 @@ export namespace DB {
     firstname: string
     lastname: string
     card: string
+    created_at: GeneratedAlways<Date>
+  }
+
+  export interface OrderCommentsTable {
+    id: GeneratedAlways<number>
+    order_id: number
+    user_id: number
+    text: string
     created_at: GeneratedAlways<Date>
   }
 }

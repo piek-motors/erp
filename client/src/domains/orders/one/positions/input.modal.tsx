@@ -2,7 +2,7 @@ import { Box, Button, Modal, ModalClose, ModalDialog } from '@mui/joy'
 import { CancelButton, Inp, MultilineInput, P, Row } from 'lib/index'
 import { observer } from 'mobx-react-lite'
 import { useEffect } from 'react'
-import { orderStore } from '../stores/order.store'
+import { orderStore } from '../order.store'
 
 export const InputPositionModal = observer(() => {
   useEffect(() => {
@@ -48,23 +48,27 @@ export const InputPositionModal = observer(() => {
         <Row gap={2}>
           {!orderStore.positions.editedOrderItem?.id ? (
             <Button
-              onClick={() => orderStore.positions.save(orderStore.order!.id)}
+              onClick={() =>
+                orderStore.positions
+                  .save(orderStore.order!.id)
+                  .then(() => orderStore.loadOrder(orderStore.order!.id))
+              }
               disabled={!orderStore.positions.canSave}
             >
               Добавить
             </Button>
           ) : (
             <Button
-              onClick={() => orderStore.positions.save(orderStore.order!.id)}
+              onClick={() =>
+                orderStore.positions
+                  .save(orderStore.order!.id)
+                  .then(() => orderStore.loadOrder(orderStore.order!.id))
+              }
             >
               Сохранить
             </Button>
           )}
-          <CancelButton
-            onClick={() => {
-              orderStore.positions.closeDialog()
-            }}
-          />
+          <CancelButton onClick={() => orderStore.positions.closeDialog()} />
         </Row>
       </ModalDialog>
     </Modal>

@@ -100,7 +100,9 @@ function FileLink(props: { attachment: Attachment }) {
         sx={{ fontSize: '1rem', textAlign: 'left', fontWeight: 'normal' }}
         color="primary"
         size="sm"
-        startDecorator={getformatAssociatedIcon(props.attachment.name)}
+        startDecorator={
+          <WebOnly>{getformatAssociatedIcon(props.attachment.name)}</WebOnly>
+        }
       >
         <P>{props.attachment.name}</P>
       </Button>

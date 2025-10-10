@@ -4,8 +4,8 @@ import { RouterInput, RouterOutput } from 'srv/lib/trpc'
 import { DetailAutomaticWriteoffStore } from './warehouse/auto_writeoff.store'
 import { DetailWarehouseStore } from './warehouse/store'
 
-type DetailResponse = RouterOutput['metal']['details']['get']['detail']
-type UpdateDetailRequest = RouterInput['metal']['details']['update']
+type DetailResponse = RouterOutput['pdo']['details']['get']['detail']
+type UpdateDetailRequest = RouterInput['pdo']['details']['update']
 
 export class Operation {
   name!: string

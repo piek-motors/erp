@@ -82,7 +82,7 @@ export const MaterialList = observer((props: MaterialsTableProps) => {
           navigate(openPage(routeMap.pdo.material.edit, row.id))
         }
       }}
-      trStyleCallback={row => {
+      rowStyleCb={row => {
         if (props.highlight) {
           return props.highlight(row.original)
             ? { backgroundColor: props.highlightColor }

@@ -33,7 +33,7 @@ export class MaterialCache {
     makeAutoObservable(this)
   }
   async load() {
-    const materials = await rpc.metal.material.list.query()
+    const materials = await rpc.pdo.material.list.query()
     const decodedMaterials = matrixDecoder<Material>(materials)
     this.setMaterials(decodedMaterials)
   }

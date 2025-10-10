@@ -16,7 +16,7 @@ export const t = {
   quantity: 'Кол-во',
   recentlyPaidOrders: 'Недавно оплаченные',
   report: 'Отчет',
-  searchInArchive: 'Поиск в архиве',
+  searchInArchive: 'Архив',
   shipmentsInTheCurrentMonth: 'Отгрузка в текущем месяце',
   today: 'Сегодня',
   yesterday: 'Вчера'
