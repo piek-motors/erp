@@ -45,6 +45,7 @@ export const StatementView = observer(() => {
       if (isPrinting && layout === WebOnly) return null
       if (!isPrinting && layout === PrintOnly) return null
       if (column.hidden) return null
+      if (column.render && !column.render()) return null
 
       return (
         <>
