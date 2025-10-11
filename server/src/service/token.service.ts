@@ -1,9 +1,18 @@
+import { log } from '#root/ioc/log.js'
+import { Day } from '#root/lib/constants.js'
 import jwt from 'jsonwebtoken'
 import { config } from '../env.js'
 import { TokenRepository } from '../repositories/token.js'
 
 export class TokenService {
   constructor(private readonly tokenRepo: TokenRepository) {}
+
+  initCron() {
+    this.revokeOutdatedTokens()
+    setInterval(() => {
+      this.revokeOutdatedTokens()
+    }, Day)
+  }
 
   generateTokenPair(payload: any) {
     return {
@@ -33,8 +42,11 @@ export class TokenService {
   async revoke(token: string) {
     return this.tokenRepo.delete(token)
   }
-  async deleteOutdatedTokens(userId: number, maxAgeInDays: number) {
-    return this.tokenRepo.deleteOutdatedTokens(userId, maxAgeInDays)
+  async revokeOutdatedTokens(): Promise<void> {
+    log.info('Deleting outdated tokens')
+    const tokens = await this.tokenRepo.getOutdatedTokens()
+    const deleted = await this.tokenRepo.deleteTokens(tokens)
+    log.info(`Deleted ${deleted.length} outdated tokens`)
   }
   private secret(type: 'access' | 'refresh') {
     return type === 'access'

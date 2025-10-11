@@ -1,5 +1,6 @@
-import { IDB } from '#root/deps.js'
+import { config, IDB } from '#root/deps.js'
 import { ApiError } from '#root/lib/api.error.js'
+import { Day } from '#root/lib/constants.js'
 import { Errcode } from '#root/lib/error-code.js'
 import { UserRepository } from './user.js'
 
@@ -25,7 +26,7 @@ export class TokenRepository {
     }
   }
 
-  async update(oldToken: string, newToken: string) {
+  update(oldToken: string, newToken: string) {
     return this.db
       .updateTable('refresh_tokens')
       .set({ token: newToken, created_at: new Date() })
@@ -34,7 +35,7 @@ export class TokenRepository {
       .executeTakeFirst()
   }
 
-  async insert(user_id: number, token: string) {
+  insert(user_id: number, token: string) {
     return this.db
       .insertInto('refresh_tokens')
       .values({
@@ -45,7 +46,7 @@ export class TokenRepository {
       .executeTakeFirst()
   }
 
-  async delete(token: string) {
+  delete(token: string) {
     return this.db
       .deleteFrom('refresh_tokens')
       .where('token', '=', token)
@@ -53,14 +54,18 @@ export class TokenRepository {
       .executeTakeFirst()
   }
 
-  async deleteOutdatedTokens(userId: number, maxAgeInDays: number) {
-    const cutoffDate = new Date()
-    cutoffDate.setDate(cutoffDate.getDate() - maxAgeInDays)
+  getOutdatedTokens() {
+    const tokenMaxAgeInMs = parseInt(config.JWT_REFRESH_SECRET_EXPIRES) * Day
+    const created_at = new Date(Date.now() - tokenMaxAgeInMs)
     return this.db
-      .deleteFrom('refresh_tokens')
-      .where('user_id', '=', userId)
-      .where('created_at', '<', cutoffDate)
-      .returning(['id'])
+      .selectFrom('refresh_tokens')
+      .select('id')
+      .where('created_at', '<', created_at)
       .execute()
+      .then(res => res.map(r => r.id))
+  }
+
+  deleteTokens(ids: number[]) {
+    return this.db.deleteFrom('refresh_tokens').where('id', 'in', ids).execute()
   }
 }

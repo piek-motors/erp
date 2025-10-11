@@ -11,6 +11,8 @@ const userRepo = new UserRepository(db)
 const tokenRepo = new TokenRepository(userRepo, db)
 
 export const tokenService = new TokenService(tokenRepo)
+tokenService.initCron()
+
 const authService = new AuthSevice(tokenService, userRepo)
 export const attachmentService = new AttachmentService(db)
 export const attendanceReportGenerator = new AttendanceReportGenerator(db)
