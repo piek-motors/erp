@@ -56,11 +56,11 @@ export class TokenRepository {
 
   getOutdatedTokens() {
     const tokenMaxAgeInMs = parseInt(config.JWT_REFRESH_SECRET_EXPIRES) * Day
-    const created_at = new Date(Date.now() - tokenMaxAgeInMs)
+    const cutoffDate = new Date(Date.now() - tokenMaxAgeInMs)
     return this.db
       .selectFrom('refresh_tokens')
       .select('id')
-      .where('created_at', '<', created_at)
+      .where('created_at', '<', cutoffDate)
       .execute()
       .then(res => res.map(r => r.id))
   }
