@@ -5,7 +5,7 @@ import { P } from 'lib/index'
 import { formatMoney } from 'lib/utils/formatting'
 import { observer } from 'mobx-react-lite'
 import { useEffect } from 'react'
-import { OrdersTable } from '../columns'
+import { columns, OrdersTable, withActualShippingDate } from '../columns'
 import { report } from './report.store'
 
 export const RequestReportPage = observer(() => {
@@ -34,7 +34,10 @@ export const RequestReportPage = observer(() => {
           <P level="body-sm" py={1}>
             Общая выручка: {formatMoney(report.totalIncome)}
           </P>
-          <OrdersTable data={report.data} />
+          <OrdersTable
+            data={report.data}
+            columns={withActualShippingDate(columns)}
+          />
         </>
       )}
     </>

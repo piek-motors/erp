@@ -17,7 +17,7 @@ import moment from 'moment'
 import { useEffect, useMemo, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router'
 import { ordersApi, UnpackedOrder } from './api'
-import { OrdersTable } from './columns'
+import { columns, OrdersTable, withActualShippingDate } from './columns'
 import { orderListPageStore as store } from './list.store'
 import { ManagerFilter } from './manager-filter'
 import { RequestReportPage } from './report/report.page'
@@ -158,7 +158,10 @@ const Archive = observer(() => {
           onChange={e => store.orderTypeFilterHandler(e)}
         />
       </Search>
-      <OrdersTable data={filteredOrders} />
+      <OrdersTable
+        data={filteredOrders}
+        columns={withActualShippingDate(columns)}
+      />
     </>
   )
 })

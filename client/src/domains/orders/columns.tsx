@@ -16,7 +16,7 @@ export const columns: Column<UnpackedOrder>[] = [
     accessor: order => order.id
   },
   {
-    Header: 'Содержимое',
+    Header: 'Позиции',
     accessor: order => {
       if (order.positions.length === 0)
         return (
@@ -76,13 +76,33 @@ export const columns: Column<UnpackedOrder>[] = [
   }
 ]
 
+export const withActualShippingDate = (columns: Column<UnpackedOrder>[]) => {
+  const idx = 3 // План. отгрузка - обычно 3-й индекс (нумерация с нуля)
+  const actualShippingColumn: Column<UnpackedOrder> = {
+    Header: 'Факт. отгрузка',
+    accessor: order => {
+      if (!order.actual_shipping_date) return ''
+      return moment(order.actual_shipping_date).format('DD.MM.YY')
+    }
+  }
+  return [
+    ...columns.slice(0, idx + 1),
+    actualShippingColumn,
+    ...columns.slice(idx + 1)
+  ]
+}
+
 export const OrdersTable = observer(
-  (props: { data: UnpackedOrder[]; enableRowStyling?: boolean }) => {
+  (props: {
+    data: UnpackedOrder[]
+    enableRowStyling?: boolean
+    columns?: Column<UnpackedOrder>[]
+  }) => {
     const navigate = useNavigate()
     const handleRowClick = (order: UnpackedOrder) => {
       navigate(openOrderDetailPage(order.id))
     }
-    const memoizedColumns = useMemo(() => columns, [])
+    const memoizedColumns = useMemo(() => props.columns || columns, [])
     const rowStyleCb = row => {
       return {
         background: getBackgroundColor(row.original)
