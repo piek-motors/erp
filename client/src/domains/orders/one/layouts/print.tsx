@@ -4,9 +4,9 @@ import { Label, P } from 'lib/index'
 import { formatOnlyDate } from 'lib/utils/formatting'
 import { observer } from 'mobx-react-lite'
 import { OrderAttachmentList } from '../order-attachment-list'
+import { orderStore } from '../order.store'
 import { PositionsList } from '../positions/ui'
 import { StatementView } from '../statement/ui'
-import { orderStore } from '../stores/order.store'
 
 export const PrintLayout = observer(() => {
   const order = orderStore.order

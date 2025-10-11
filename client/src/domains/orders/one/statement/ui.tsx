@@ -3,7 +3,7 @@ import { PrintOnly, WebOnly } from 'components/utilities/conditional-display'
 import { useMediaQuery } from 'hooks/use-media-query'
 import { ExecuteAction, InputStack, Label } from 'lib/index'
 import { observer } from 'mobx-react-lite'
-import { orderStore } from '../stores/order.store'
+import { orderStore } from '../order.store'
 import { RenderInput } from './render-input'
 
 export const OrderStatementInput = observer(
@@ -15,7 +15,7 @@ export const OrderStatementInput = observer(
           {columns.map((column, idx) => (
             <RenderInput key={idx} column={column} idx={idx} />
           ))}
-          <Box py={2} width={'min-content'}>
+          <Box mt={2} width={'min-content'}>
             <ExecuteAction
               onSubmit={() => mutation()}
               stackProps={{
@@ -39,18 +39,19 @@ export const StatementView = observer(() => {
   const rows = columns
     .map((column, idx) => {
       const { value, view, layout } = column
-      if (!value && !view) return null
+      if (!value && !view && !column.render) return null
       const v = view ?? value
 
       if (isPrinting && layout === WebOnly) return null
       if (!isPrinting && layout === PrintOnly) return null
+      if (column.hidden) return null
 
       return (
         <>
           <Grid>
             <Label width={'auto'}>{column.label}</Label>
           </Grid>
-          <Grid>{v}</Grid>
+          <Grid>{column.render ? column.render() : v}</Grid>
         </>
       )
     })

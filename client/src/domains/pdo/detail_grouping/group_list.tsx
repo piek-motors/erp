@@ -26,7 +26,7 @@ const SharedGroupList = observer(
                 props.onLinkClick?.(false)
               }}
               key={group.id}
-              to={openPage(routeMap.metalflow.detailGroup, group.id)}
+              to={openPage(routeMap.pdo.detailGroup, group.id)}
               style={{ textDecoration: 'none' }}
             >
               <Button

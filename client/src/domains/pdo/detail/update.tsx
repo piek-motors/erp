@@ -92,7 +92,7 @@ function SaveFloatingButton() {
           itemName={`Деталь (${api.detail.id}) - ${api.detail.name}`}
           handleDelete={() =>
             api.delete().then(() => {
-              navigate(openPage(routeMap.metalflow.details))
+              navigate(openPage(routeMap.pdo.details))
             })
           }
           handleSave={() => api.update()}

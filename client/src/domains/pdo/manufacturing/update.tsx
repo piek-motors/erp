@@ -142,7 +142,7 @@ const DeleteOrderButton = observer(() => {
           )
         ) {
           api.delete().then(() => {
-            navigate(routeMap.metalflow.manufacturing_orders)
+            navigate(routeMap.pdo.manufacturing_orders)
           })
         }
       }}

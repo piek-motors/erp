@@ -67,7 +67,7 @@ const DetailList = observer((props: DetailsTableProps) => {
     <Table
       columns={columnList}
       data={state.displayedResults}
-      trStyleCallback={row => {
+      rowStyleCb={row => {
         if (props.highlight) {
           return props.highlight(row.original)
             ? { backgroundColor: props.highlightColor }
@@ -79,7 +79,7 @@ const DetailList = observer((props: DetailsTableProps) => {
         if (props.onRowClick) {
           props.onRowClick(row)
         } else {
-          navigate(openPage(routeMap.metalflow.detail.edit, row.id))
+          navigate(openPage(routeMap.pdo.detail.edit, row.id))
         }
       }}
     />

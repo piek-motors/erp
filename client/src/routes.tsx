@@ -1,4 +1,4 @@
-import { MentionList } from 'domains/mention/mentions'
+import { MentionList } from 'domains/mentions'
 import orders from 'domains/orders/main'
 import order_detail from 'domains/orders/one/main'
 import reclamations from 'domains/orders/reclamation/ui'

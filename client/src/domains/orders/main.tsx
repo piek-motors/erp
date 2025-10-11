@@ -10,30 +10,26 @@ import { SxProperty } from 'lib/constants'
 import { AddResourceButton } from 'lib/index'
 import { routeMap } from 'lib/routes'
 import { RouteConfig } from 'lib/types/global'
-import {
-  useGetOrdersArchivedBySearchKeywordQuery,
-  useGetOrdersByStatusQuery
-} from 'lib/types/graphql-shema'
 import { formatOnlyDate } from 'lib/utils/formatting'
 import { observer } from 'mobx-react-lite'
 import { OrderStatus } from 'models'
 import moment from 'moment'
-import { useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router'
+import { ordersApi, UnpackedOrder } from './api'
 import { OrdersTable } from './columns'
+import { orderListPageStore as store } from './list.store'
 import { ManagerFilter } from './manager-filter'
 import { RequestReportPage } from './report/report.page'
-import { orderListPageStore as store } from './stores/state'
 import { t } from './text'
 
 const PriorityList = observer(() => {
-  const { data } = useGetOrdersByStatusQuery({
-    variables: {
-      order_status: OrderStatus.InProduction
-    }
-  })
-  const orders = useFilter({
-    orders: data?.orders_orders || [],
+  const [orders, setOrders] = useState<UnpackedOrder[]>([])
+  useEffect(() => {
+    ordersApi.loadOrders(OrderStatus.InProduction).then(setOrders)
+  }, [])
+  const filteredOrders = useFilter({
+    orders,
     options: {
       managerId: store.managerId,
       searchKeyword: store.searchTerm
@@ -52,21 +48,19 @@ const PriorityList = observer(() => {
             onChange={userId => store.managerFilterHandler(userId)}
           />
         </Search>
-
-        <OrdersTable data={orders} />
+        <OrdersTable data={filteredOrders} enableRowStyling />
       </Sheet>
     )
   )
 })
 
 const RegistrationList = observer(() => {
-  const { data } = useGetOrdersByStatusQuery({
-    variables: {
-      order_status: OrderStatus.PreOrder
-    }
-  })
-  const orders = useFilter({
-    orders: data?.orders_orders || [],
+  const [orders, setOrders] = useState<UnpackedOrder[]>([])
+  useEffect(() => {
+    ordersApi.loadOrders(OrderStatus.PreOrder).then(setOrders)
+  }, [])
+  const filteredOrders = useFilter({
+    orders,
     options: {
       managerId: store.managerId,
       searchKeyword: store.searchTerm
@@ -84,15 +78,16 @@ const RegistrationList = observer(() => {
           onChange={userId => store.managerFilterHandler(userId)}
         />
       </Search>
-      <OrdersTable data={orders} />
+      <OrdersTable data={filteredOrders} />
     </>
   )
 })
 
 const NewOrderList = observer(() => {
-  const { data } = useGetOrdersByStatusQuery({
-    variables: { order_status: OrderStatus.InProduction }
-  })
+  const [orders, setOrders] = useState<UnpackedOrder[]>([])
+  useEffect(() => {
+    ordersApi.loadOrders(OrderStatus.InProduction).then(setOrders)
+  }, [])
 
   const { todayDate, yesterdayDate } = useMemo(() => {
     const today = moment()
@@ -104,8 +99,6 @@ const NewOrderList = observer(() => {
   }, [])
 
   const { ordersByToday, ordersByYesterday } = useMemo(() => {
-    const orders = data?.orders_orders || []
-
     return {
       ordersByToday: orders.filter(
         each => formatOnlyDate(each.acceptance_date) === todayDate
@@ -114,7 +107,7 @@ const NewOrderList = observer(() => {
         each => formatOnlyDate(each.acceptance_date) === yesterdayDate
       )
     }
-  }, [data?.orders_orders, todayDate, yesterdayDate])
+  }, [orders, todayDate, yesterdayDate])
 
   return (
     <>
@@ -133,14 +126,16 @@ const Archive = observer(() => {
     if (store.searchTerm === '/all') return '%%'
     else return '%' + store.searchTerm + '%'
   }
-  const { data } = useGetOrdersArchivedBySearchKeywordQuery({
-    variables: {
-      keyword: keyword(),
-      order_status: store.orderStatusId
+  const [orders, setOrders] = useState<UnpackedOrder[]>([])
+  useEffect(() => {
+    if (!store.orderStatusId) {
+      return
     }
-  })
-  const orders = useFilter({
-    orders: data?.orders_orders || [],
+    ordersApi.searchArchived(keyword(), store.orderStatusId).then(setOrders)
+  }, [store.searchTerm, store.orderStatusId])
+
+  const filteredOrders = useFilter({
+    orders,
     options: {
       managerId: store.managerId,
       orderStatusId: store.orderStatusId
@@ -162,7 +157,7 @@ const Archive = observer(() => {
           onChange={e => store.orderTypeFilterHandler(e)}
         />
       </Search>
-      <OrdersTable data={orders} />
+      <OrdersTable data={filteredOrders} />
     </>
   )
 })

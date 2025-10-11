@@ -2,38 +2,35 @@
 import { css } from '@emotion/react'
 import { Box, Button, Card, Divider } from '@mui/joy'
 import { DeleteResourceButton, P, Row, text } from 'lib/index'
-import { TComment } from 'lib/types/global'
-import * as gql from 'lib/types/graphql-shema'
+import { rpc } from 'lib/rpc.client'
 import { observer } from 'mobx-react-lite'
 import { User } from 'models'
 import moment from 'moment'
 import { useState } from 'react'
-import { orderStore } from '../stores/order.store'
-import { commentsStore } from './store'
+import { OrderComment } from 'srv/rpc/orders/comments'
+import { orderStore } from '../order.store'
 import { TextEditor } from './text-editor'
 
 interface ICommentProps {
-  data: TComment
+  data: OrderComment
   userID: number
   showDelete?: boolean
 }
 
 export function Comment({ data, userID }: ICommentProps) {
-  const [deleteMutation] = gql.useDeleteCommentMutation()
-  const [updateMutation] = gql.useUpdateCommentMutation()
   function updateComment(id: number, newText: string) {
-    updateMutation({
-      variables: {
-        CommentID: id,
-        Text: newText.trim()
-      }
+    rpc.orders.comments.update.mutate({
+      id,
+      text: newText.trim()
     })
   }
   function handleDelete() {
-    deleteMutation({ variables: { CommentID: data.id } })
+    rpc.orders.comments.delete.mutate({
+      id: data.id
+    })
   }
   function sender() {
-    return `${data.user.first_name} ${data.user.last_name}`
+    return `${data.first_name} ${data.last_name}`
   }
 
   function timestamp() {
@@ -41,7 +38,7 @@ export function Comment({ data, userID }: ICommentProps) {
     return date.format('MMM D') + ' at ' + date.format('hh:mm')
   }
   function getCommentContent() {
-    const isYourComment = userID === data.user.id
+    const isYourComment = userID === data.user_id
     return isYourComment ? (
       <div
         style={{ padding: '5px' }}
@@ -62,7 +59,7 @@ export function Comment({ data, userID }: ICommentProps) {
   }
 
   function actions() {
-    if (orderStore.editMode && userID === data.user.id)
+    if (orderStore.editMode && userID === data.user_id)
       return <DeleteResourceButton onClick={handleDelete} />
   }
 
@@ -82,6 +79,7 @@ export function Comment({ data, userID }: ICommentProps) {
         css={css`
           p {
             margin: 0;
+            font-size: 14px;
           }
         `}
       >
@@ -96,43 +94,38 @@ interface ICommentsListProps {
   orderId: number
 }
 
-export function CommentListViewPort({ user, orderId }: ICommentsListProps) {
-  const { data, loading } = gql.useCommentsSubscription({
-    variables: { OrderID: orderId }
-  })
-  const [visibleComments, setVisibleComments] = useState(5)
+export const CommentListViewPort = observer(
+  ({ user, orderId }: ICommentsListProps) => {
+    const [visibleComments, setVisibleComments] = useState(5)
 
-  // Sort comments from oldest to newest
-  const sortedComments =
-    data?.orders_comments.sort(
-      (a, b) =>
-        new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
-    ) || []
-
-  // Always show the latest comments at the bottom
-  const commentsToShow = sortedComments.slice(-visibleComments)
-
-  const handleShowMore = () => {
-    setVisibleComments(prev => prev + 15)
+    const sortedComments =
+      orderStore.comments.comments
+        .slice()
+        .sort(
+          (a, b) =>
+            new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+        ) || []
+    const commentsToShow = sortedComments.slice(-visibleComments)
+    const handleShowMore = () => {
+      setVisibleComments(prev => prev + 15)
+    }
+    return (
+      <Box>
+        {sortedComments.length > visibleComments && (
+          <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
+            <Button variant="soft" onClick={handleShowMore} size="sm">
+              {text.showMore}
+            </Button>
+          </Box>
+        )}
+        {!orderStore.comments.loading &&
+          commentsToShow.map(comment => (
+            <Comment data={comment} key={comment.id} userID={user.id} />
+          ))}
+      </Box>
+    )
   }
-
-  return (
-    <Box>
-      {sortedComments.length > visibleComments && (
-        <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
-          <Button variant="soft" onClick={handleShowMore} size="sm">
-            {text.showMore}
-          </Button>
-        </Box>
-      )}
-
-      {!loading &&
-        commentsToShow.map(comment => (
-          <Comment data={comment} key={comment.id} userID={user.id} />
-        ))}
-    </Box>
-  )
-}
+)
 
 export const CommentInputViewPort = observer(
   ({ user, orderId }: ICommentsListProps) => {
@@ -144,9 +137,13 @@ export const CommentInputViewPort = observer(
       >
         <TextEditor
           placeholder="Начините обсуждение"
-          onSubmit={content => {
-            return commentsStore.insertComment(content, orderId, user.id)
-          }}
+          onSubmit={content =>
+            orderStore.comments
+              .insertComment(content, orderId, user.id)
+              .then(() => {
+                orderStore.loadOrder(orderId)
+              })
+          }
         />
       </Card>
     )

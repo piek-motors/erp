@@ -19,3 +19,8 @@ export const formatTimeToHoursAndMinutes = (
   }
   return moment(payload).format('H:mm')
 }
+
+export function fromMs(date?: number | null): Date | null {
+  if (!date) return null
+  return new Date(date)
+}

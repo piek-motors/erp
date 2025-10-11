@@ -79,7 +79,7 @@ export const MaterialCostInputs = observer(() => {
             />
             <ExtraSmallIconButton
               link={openPage(
-                routeMap.metalflow.material.edit,
+                routeMap.pdo.material.edit,
                 materialCost.materialId
               )}
               icon={UilLink}

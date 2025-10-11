@@ -27,7 +27,7 @@ export class MaterialSupplyStore {
     const length = this.length
     if (!length) throw Error('Длина не указана')
 
-    const res = await rpc.metal.material.supply.mutate({
+    const res = await rpc.pdo.material.supply.mutate({
       material_id: materialId,
       lengthMeters: Number(length),
       reason: this.reason

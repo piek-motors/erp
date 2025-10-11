@@ -5,21 +5,22 @@ import { AddResourceButton, Loading, P, Pre } from 'lib/index'
 import { openOrderDetailPage, routeMap } from 'lib/routes'
 import { RouteConfig } from 'lib/types/global'
 import { observer } from 'mobx-react-lite'
-import { Order } from 'models'
 import { useEffect } from 'react'
 import * as dnd from 'react-beautiful-dnd'
 import { useNavigate } from 'react-router'
-import { ColocatedStateKey, reclamationStore } from './store'
+import { UnpackedOrder } from '../api'
+import { getBackgroundColor } from '../utils'
+import { ColocatedStateKey, store } from './store'
 
 interface Props {
-  order: Order
+  order: UnpackedOrder
 }
 
 function ReclamationItem({ order }: Props) {
   const navigate = useNavigate()
   return (
     <Card
-      sx={{ my: 1, backgroundColor: order.getBackgroundColor() }}
+      sx={{ my: 1, backgroundColor: getBackgroundColor(order) }}
       variant="outlined"
       onDoubleClick={() => navigate(openOrderDetailPage(order.id))}
     >
@@ -27,8 +28,8 @@ function ReclamationItem({ order }: Props) {
         {order.contractor}__{order.city}
       </P>
       <div>
-        {order.items.length ? (
-          order.items.map(item => (
+        {order.positions.length ? (
+          order.positions.map(item => (
             <div key={item.id}>
               <Pre>- {item.name}</Pre>
             </div>
@@ -44,7 +45,7 @@ function ReclamationItem({ order }: Props) {
 export interface IDroppableContainerProps {
   columnName: string
   droppableId: ColocatedStateKey
-  data: Order[]
+  data: UnpackedOrder[]
 }
 
 function DroppableContainer({
@@ -54,7 +55,7 @@ function DroppableContainer({
 }: IDroppableContainerProps) {
   return (
     <Box key={droppableId} sx={{ height: '100%', width: '100%' }}>
-      <P color="neutral" level="h4">
+      <P color="neutral" level="body-md">
         {columnName}
       </P>
       <dnd.Droppable
@@ -112,7 +113,7 @@ const Reclamation = observer(() => {
     const { source, destination, draggableId } = result
     if (!destination) return
 
-    reclamationStore.handleDragEnd(
+    store.handleDragEnd(
       source as { droppableId: ColocatedStateKey; index: number },
       destination as { droppableId: ColocatedStateKey; index: number },
       draggableId
@@ -133,17 +134,17 @@ const Reclamation = observer(() => {
         <DroppableContainer
           columnName="Входящие"
           droppableId="inbox"
-          data={reclamationStore.state.inbox}
+          data={store.state.inbox}
         />
         <DroppableContainer
           columnName="Принятие решения"
           droppableId="decision"
-          data={reclamationStore.state.decision}
+          data={store.state.decision}
         />
         <DroppableContainer
           columnName="В производстве"
           droppableId="inproduction"
-          data={reclamationStore.state.inproduction}
+          data={store.state.inproduction}
         />
       </Box>
     </dnd.DragDropContext>
@@ -152,11 +153,10 @@ const Reclamation = observer(() => {
 
 const ReclamationPage = observer(() => {
   const navigate = useNavigate()
-
   useEffect(() => {
-    reclamationStore.load()
+    store.load()
   }, [])
-
+  if (store.loading) return <Loading />
   return (
     <FactoryPage
       title="Рекламация"
@@ -169,7 +169,6 @@ const ReclamationPage = observer(() => {
       }
     >
       <Box>
-        {reclamationStore.loading && <Loading />}
         <Reclamation />
       </Box>
     </FactoryPage>

@@ -4,9 +4,9 @@ moment.locale('ru')
 
 export function formatMoney(value: number): string {
   if (!value) return ''
-  return value.toLocaleString('ru-RU', {
+  return Intl.NumberFormat('ru-RU', {
     style: 'decimal'
-  })
+  }).format(value)
 }
 
 export function percentage(value: number, whole: number) {
@@ -19,7 +19,7 @@ type FormatTime = {
   (date: string | moment.Moment): string | null
 }
 
-export const formatOnlyDate = (date?: string | null) => {
+export const formatOnlyDate = (date?: string | Date | null) => {
   if (!date) return null
   return moment(date).format('DD.MM.YY')
 }
@@ -67,7 +67,7 @@ export function formatDetailDateTime(date: Date): string {
   })
 }
 
-export function formatDate(date?: Date | null): string {
+export function formatDate(date?: Date | string | null): string {
   if (!date) return ''
   return Intl.DateTimeFormat('ru-RU', {
     day: 'numeric',

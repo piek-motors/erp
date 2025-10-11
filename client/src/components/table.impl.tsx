@@ -1,6 +1,5 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
-import { UilArrowDown, UilArrowUp } from '@iconscout/react-unicons'
 import { Table as MuiTable, Sheet, Stack } from '@mui/joy'
 import { SxProps } from '@mui/joy/styles/types'
 import { P } from 'lib/index'
@@ -9,7 +8,7 @@ import { Row, TableOptions, useSortBy, useTable } from 'react-table'
 type Props<T extends object> = TableOptions<T> & {
   onRowClick?: (row: T) => void
   onDoubleRowClick?: (row: T) => void
-  trStyleCallback?: (row: Row<T>) => React.CSSProperties
+  rowStyleCb?: (row: Row<T>) => React.CSSProperties
   small?: boolean
   sx?: SxProps
 }
@@ -42,19 +41,9 @@ export function Table<T extends object>(props: Props<T>) {
               {headerGroup.headers.map((column, i) => {
                 const col = column as any
                 return (
-                  <th
-                    {...column.getHeaderProps({
-                      ...(column as any).getSortByToggleProps(),
-                      width: 'min-content'
-                    })}
-                    key={i}
-                  >
+                  <th key={i}>
                     <Stack direction={'row'} alignItems={'center'}>
                       <P>{column.render('Header')}</P>
-                      <SortingState
-                        isSorted={col.isSorted}
-                        isSortedDesc={col.isSortedDesc}
-                      />
                     </Stack>
                   </th>
                 )
@@ -83,9 +72,7 @@ export function Table<T extends object>(props: Props<T>) {
                     }
                   `)}
                   style={{
-                    ...(props.trStyleCallback
-                      ? props.trStyleCallback(row)
-                      : undefined),
+                    ...(props.rowStyleCb ? props.rowStyleCb(row) : undefined),
                     cursor: cursor
                   }}
                   onClick={() => {
@@ -111,27 +98,5 @@ export function Table<T extends object>(props: Props<T>) {
         )}
       </MuiTable>
     </Sheet>
-  )
-}
-
-export function SortingState(props: {
-  isSorted: boolean
-  isSortedDesc: boolean
-}) {
-  const size = 13
-  return (
-    <span>
-      {props.isSorted ? (
-        props.isSortedDesc ? (
-          <UilArrowDown width={size} height={size} />
-        ) : (
-          <UilArrowUp width={size} height={size} />
-        )
-      ) : (
-        <div style={{ opacity: 0, visibility: 'hidden' }}>
-          <UilArrowUp width={size} height={size} />
-        </div>
-      )}
-    </span>
   )
 }

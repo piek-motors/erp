@@ -6,7 +6,7 @@ import { Column } from 'react-table'
 import {
   AttendanceEmployee,
   AttendanceReport
-} from 'srv/service/attendance_report_generator'
+} from 'srv/service/attendance_report.generator'
 import { store } from './store'
 import { Table } from './table'
 

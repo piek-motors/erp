@@ -6,31 +6,12 @@ services:
     volumes:
       - db_data:/var/lib/postgresql/data
     ports:
-      - '60100:5432'
+      - "60100:5432"
     environment:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_DB: ${POSTGRES_DB}
     networks: [infra]
-
-  hasura:
-    container_name: erp-hasura
-    image: hasura/graphql-engine:v2.36.10
-    ports:
-      - '60101:8080'
-    depends_on:
-      - 'postgres'
-    restart: unless-stopped
-    networks: [infra]
-    environment:
-      HASURA_GRAPHQL_METADATA_DATABASE_URL: ${PG_DATABASE_URL}
-      PG_DATABASE_URL: ${PG_DATABASE_URL}
-      HASURA_GRAPHQL_ENABLE_CONSOLE: 'true'
-      HASURA_GRAPHQL_DEV_MODE: 'true'
-      HASURA_GRAPHQL_ENABLED_LOG_TYPES: startup, http-log, webhook-log, websocket-log, query-log
-      HASURA_GRAPHQL_ADMIN_SECRET: ${HASURA_ADMIN_SECRET}
-      HASURA_GRAPHQL_JWT_SECRET: '{"type":"HS256", "key": "${JWT_ACCESS_SECRET}"}'
-      HASURA_GRAPHQL_LOG_LEVEL: warn
 
   backup:
     image: mazzolino/restic
@@ -40,11 +21,11 @@ services:
     env_file: restic.env
     networks: [infra]
     environment:
-      BACKUP_CRON: '0 2 * * *'
-      RUN_ON_STARTUP: 'true'
+      BACKUP_CRON: "0 2 * * *"
+      RUN_ON_STARTUP: "true"
       TZ: Europe/Moscow
-      RESTIC_BACKUP_ARGS: '--verbose'
-      RESTIC_FORGET_ARGS: '--keep-daily 30'
+      RESTIC_BACKUP_ARGS: "--verbose"
+      RESTIC_FORGET_ARGS: "--keep-daily 30"
       PRE_COMMANDS: |-
         mkdir -p /data/
         docker exec erp-postgres pg_dumpall -U postgres --clean > /data/factory_piek.sql

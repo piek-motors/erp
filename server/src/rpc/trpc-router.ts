@@ -3,16 +3,28 @@ import { db } from '#root/ioc/db.js'
 import { router } from '#root/lib/trpc/trpc.js'
 import { UserRole } from 'models'
 import z from 'zod'
-import { attachmentRouter } from './attachment/router.js'
-import { attendanceRouter } from './attendance/router.js'
+import {
+  deleteFile,
+  getAttachmentByKey,
+  getDetailAttachments,
+  updateName
+} from './attachment.js'
+import { getAttendanceList } from './attendance.js'
 import { ordersRouter } from './orders/router.js'
-import { metalFlowRouter } from './pdo/router.js'
+import { metalFlowRouter as pdoRouter } from './pdo/router.js'
 
 export const trpcRouter = router({
   orders: ordersRouter,
-  metal: metalFlowRouter,
-  attachments: attachmentRouter,
-  attendance: attendanceRouter,
+  pdo: pdoRouter,
+  attachments: router({
+    updateName,
+    deleteFile,
+    getDetailAttachments,
+    getAttachmentByKey
+  }),
+  attendance: router({
+    getAttendanceList: getAttendanceList
+  }),
   userList: procedure
     .input(
       z.object({

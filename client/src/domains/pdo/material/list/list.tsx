@@ -79,10 +79,10 @@ export const MaterialList = observer((props: MaterialsTableProps) => {
           return
         } else {
           if (!row.id) throw Error('Material id is null')
-          navigate(openPage(routeMap.metalflow.material.edit, row.id))
+          navigate(openPage(routeMap.pdo.material.edit, row.id))
         }
       }}
-      trStyleCallback={row => {
+      rowStyleCb={row => {
         if (props.highlight) {
           return props.highlight(row.original)
             ? { backgroundColor: props.highlightColor }

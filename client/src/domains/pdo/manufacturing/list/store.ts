@@ -1,13 +1,13 @@
-import { AsyncStoreController } from 'lib/async-store.controller'
 import { rpc } from 'lib/deps'
+import { LoadingController } from 'lib/loading_controller'
 import { makeAutoObservable } from 'mobx'
 import { RouterOutput } from 'srv/lib/trpc'
 
 export type ManufactoringListOutput =
-  RouterOutput['metal']['manufacturing']['list'][number]
+  RouterOutput['pdo']['manufacturing']['list'][number]
 
 export class ManufacturingListStore {
-  readonly async = new AsyncStoreController()
+  readonly async = new LoadingController()
 
   orders: ManufactoringListOutput[] = []
   setOrders(orders: ManufactoringListOutput[]) {
@@ -20,18 +20,18 @@ export class ManufacturingListStore {
 
   async load() {
     this.async.run(async () => {
-      const orders = await rpc.metal.manufacturing.list.query()
+      const orders = await rpc.pdo.manufacturing.list.query()
       this.setOrders(orders)
     })
   }
 
   async finishManufacturing(id: number) {
-    await rpc.metal.manufacturing.finish.mutate({ id })
+    await rpc.pdo.manufacturing.finish.mutate({ id })
     this.load()
   }
 
   async deleteOrder(id: number) {
-    await rpc.metal.manufacturing.delete.mutate({ id })
+    await rpc.pdo.manufacturing.delete.mutate({ id })
     this.load()
   }
 }

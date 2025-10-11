@@ -1,51 +1,57 @@
 import { useFilter } from 'hooks'
-import { useGetOrdersArchivedByIntervalQuery } from 'lib/types/graphql-shema'
+import { matrixDecoder } from 'lib/matrix_decoder'
+import { rpc } from 'lib/rpc.client'
+import { OrderStatus } from 'models'
 import moment from 'moment'
-import { orderListPageStore as store } from '../stores/state'
+import { useEffect, useState } from 'react'
+import { UnpackedOrder } from '../api'
+import { orderListPageStore as store } from '../list.store'
 
 export function useReport() {
-  const startOfMonth = moment().startOf('month').format('YYYY-MM-DD HH:mm')
-  const endOfMonth = moment().endOf('month').format('YYYY-MM-DD HH:mm')
+  const [ordersCurrentMounth, setOrdersCurrentMounth] = useState<
+    UnpackedOrder[]
+  >([])
+  const [ordersAccountingMonth, setOrdersAccountingMonth] = useState<
+    UnpackedOrder[]
+  >([])
 
-  const prevStartOfMonth = moment()
-    .subtract(1, 'months')
-    .startOf('month')
-    .format('YYYY-MM-DD HH:mm')
-  const prevEndOfMonth = moment()
-    .subtract(1, 'months')
-    .endOf('month')
-    .format('YYYY-MM-DD HH:mm')
-
-  const { data: ordersCurrentMounth } = useGetOrdersArchivedByIntervalQuery({
-    variables: {
-      _gte: startOfMonth,
-      _lte: endOfMonth
-    }
-  })
-
-  const { data: ordersAccountingMonth } = useGetOrdersArchivedByIntervalQuery({
-    variables: {
-      _gte: prevStartOfMonth,
-      _lte: prevEndOfMonth
-    }
-  })
-
+  useEffect(() => {
+    rpc.orders.list
+      .query({
+        status: OrderStatus.Archived,
+        shipped_before: moment().startOf('month').valueOf(),
+        shipped_after: moment().endOf('month').valueOf()
+      })
+      .then(matrix =>
+        setOrdersCurrentMounth(matrixDecoder<UnpackedOrder>(matrix))
+      )
+    rpc.orders.list
+      .query({
+        status: OrderStatus.Archived,
+        shipped_before: moment()
+          .subtract(1, 'months')
+          .startOf('month')
+          .valueOf(),
+        shipped_after: moment().subtract(1, 'months').endOf('month').valueOf()
+      })
+      .then(matrix =>
+        setOrdersAccountingMonth(matrixDecoder<UnpackedOrder>(matrix))
+      )
+  }, [])
   const ordersCurrentMonthFiltered = useFilter({
-    orders: ordersCurrentMounth?.orders_orders || [],
+    orders: ordersCurrentMounth || [],
     options: {
       managerId: store.managerId,
       searchKeyword: store.searchTerm
     }
   })
-
   const ordersAccountingMonthFiltered = useFilter({
-    orders: ordersAccountingMonth?.orders_orders || [],
+    orders: ordersAccountingMonth || [],
     options: {
       managerId: store.managerId,
       searchKeyword: store.searchTerm
     }
   })
-
   return {
     data: {
       loading: !Boolean(

@@ -14,7 +14,7 @@ import { Narrow } from './shared/basic'
 import { UsageInstruction } from './usage-instuction'
 import { OperationsList } from './warehouse/list'
 
-const { metalflow } = routeMap
+const { pdo: metalflow } = routeMap
 
 function wrapEachRoute(route: RouteConfig) {
   return {

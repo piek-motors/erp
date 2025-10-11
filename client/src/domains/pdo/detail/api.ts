@@ -1,4 +1,4 @@
-import { AsyncStoreController } from 'lib/async-store.controller'
+import { LoadingController } from 'lib/loading_controller'
 import { rpc } from 'lib/rpc.client'
 import { makeAutoObservable } from 'mobx'
 import { Attachment } from 'models'
@@ -6,7 +6,7 @@ import { cache } from '../cache/root'
 import { DetailState } from './detail.state'
 
 export class DetailApi {
-  readonly status = new AsyncStoreController()
+  readonly status = new LoadingController()
   readonly detail = new DetailState()
   constructor() {
     makeAutoObservable(this)
@@ -14,7 +14,7 @@ export class DetailApi {
 
   async loadFull(detailId: number) {
     return this.status.run(async () => {
-      const res = await rpc.metal.details.get.query({ id: detailId })
+      const res = await rpc.pdo.details.get.query({ id: detailId })
       this.detail.init(res.detail)
       this.detail.setLastManufacturingDate(
         res.last_manufacturing?.date
@@ -37,14 +37,14 @@ export class DetailApi {
   }
 
   async loadShort(detailId: number) {
-    const res = await rpc.metal.details.getShort.query({ id: detailId })
+    const res = await rpc.pdo.details.getShort.query({ id: detailId })
     this.detail.init(res)
   }
 
   async delete() {
     const id = this.detail.id
     if (!id) throw new Error('Detail id is not set')
-    await rpc.metal.details.delete.mutate({ id })
+    await rpc.pdo.details.delete.mutate({ id })
     cache.details.removeDetail(id)
     this.detail.reset()
   }
@@ -52,21 +52,21 @@ export class DetailApi {
   async createManufacturingOrder() {
     const id = this.detail.id
     if (!id) throw new Error('Detail id is not set')
-    return rpc.metal.manufacturing.create.mutate({
+    return rpc.pdo.manufacturing.create.mutate({
       detailId: id
     })
   }
 
   async insert() {
     const payload = this.detail.createPayload()
-    const res = await rpc.metal.details.create.mutate(payload)
+    const res = await rpc.pdo.details.create.mutate(payload)
     await cache.details.load()
     return res
   }
 
   async update() {
     const payload = this.detail.createPayload()
-    const res = await rpc.metal.details.update.mutate(payload)
+    const res = await rpc.pdo.details.update.mutate(payload)
     await cache.details.load()
     this.detail.setUpdatedAt(new Date())
     return res

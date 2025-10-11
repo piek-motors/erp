@@ -18,7 +18,7 @@ export const routeMap = {
     archiveSearch: '/orders/archive'
   },
 
-  metalflow: {
+  pdo: {
     index: '/metalflow',
 
     materials: '/metalflow/materials',

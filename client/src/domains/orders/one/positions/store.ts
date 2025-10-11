@@ -1,7 +1,6 @@
 import { rpc } from 'lib/rpc.client'
 import { notifier } from 'lib/store/notifier.store'
 import { makeAutoObservable } from 'mobx'
-import { ordersApi } from '../../orders.api'
 
 export class OrderItem {
   id!: number
@@ -61,23 +60,6 @@ export class PositionsStore {
     this.items = [...items].sort((a, b) => a.id - b.id)
   }
 
-  async load(order_id: number) {
-    const positions = await rpc.orders.positions.list.query({
-      order_id: order_id
-    })
-    this.setItems(
-      positions.map(p => {
-        const item = new OrderItem()
-        item.id = p.id
-        item.name = p.name
-        item.description = p.description
-        item.quantity = p.quantity
-        item.assembler_name = p.assembler_name ?? null
-        return item
-      })
-    )
-  }
-
   async save(orderId: number) {
     if (!this.canSave) throw new Error('No data to save')
 
@@ -131,8 +113,8 @@ export class PositionsStore {
     this.items.push(item)
   }
 
-  async delete(orderItemId: number, orderId: number) {
-    await ordersApi.deleteOrderItem(orderItemId)
-    this.setItems(this.items.filter(item => item.id !== orderItemId))
+  async delete(positionId: number) {
+    await rpc.orders.positions.delete.mutate({ id: positionId })
+    this.setItems(this.items.filter(item => item.id !== positionId))
   }
 }

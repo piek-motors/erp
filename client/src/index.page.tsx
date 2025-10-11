@@ -12,8 +12,8 @@ import { Badge, IconButton, Stack } from '@mui/joy'
 import { Context } from 'index'
 import { P, Row, UseIcon } from 'lib/index'
 import { routeMap } from 'lib/routes'
-import { useCountUnresolvedNotificationsQuery } from 'lib/types/graphql-shema'
-import { useContext } from 'react'
+import { rpc } from 'lib/rpc.client'
+import { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
 
 export const links = [
@@ -24,7 +24,7 @@ export const links = [
   },
   { href: routeMap.reclamation, icon: UilWrench, name: 'Рекламации' },
   {
-    href: routeMap.metalflow.index,
+    href: routeMap.pdo.index,
     icon: UilCalculatorAlt,
     name: 'ПДО'
   },
@@ -51,29 +51,24 @@ export function IndexPage() {
     throw Error('user not found')
   }
 
-  const { data } = useCountUnresolvedNotificationsQuery({
-    variables: {
-      userId: store?.user?.id
-    },
-    refetchWritePolicy: 'overwrite',
-    fetchPolicy: 'network-only'
-  })
+  const [count, setCount] = useState(0)
+  useEffect(() => {
+    if (!store?.user?.id) return
+
+    rpc.orders.mentions.count
+      .query({
+        user_id: store.user.id
+      })
+      .then(setCount)
+  }, [])
 
   return (
     <Stack py={3} gap={2} p={2}>
       {links.map((each, idx) => {
         if (each.name === 'Упоминания') {
           return (
-            <BadgeWrapper
-              content={
-                data?.orders_notifications_aggregate?.aggregate?.count ?? 1
-              }
-            >
-              <Element
-                key={idx}
-                {...each}
-                count={data?.orders_notifications_aggregate?.aggregate?.count}
-              />
+            <BadgeWrapper content={count}>
+              <Element key={idx} {...each} count={count} />
             </BadgeWrapper>
           )
         }

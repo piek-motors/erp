@@ -1,12 +1,12 @@
 import { cache } from 'domains/pdo/cache/root'
-import { AsyncStoreController } from 'lib/async-store.controller'
+import { LoadingController } from 'lib/loading_controller'
 import { makeAutoObservable } from 'mobx'
 import { EnMaterialShape } from 'models'
 import { Material } from 'srv/rpc/pdo/material/list'
 import { MaterialSupplyStore } from '../warehouse/supply'
 
 export class MaterialListStore {
-  readonly async = new AsyncStoreController()
+  readonly async = new LoadingController()
   supply = new MaterialSupplyStore()
   searchResult: number[] = []
   searchId: string = ''

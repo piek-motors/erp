@@ -1,13 +1,13 @@
-import { AsyncStoreController } from 'lib/async-store.controller'
+import { LoadingController } from 'lib/loading_controller'
 import { makeAutoObservable } from 'mobx'
 import { RouterOutput } from 'srv/lib/trpc'
 import { DetailState, Operation, ProcessingRoute } from '../detail/detail.state'
 
 export type ManufacturingOrderOutput =
-  RouterOutput['metal']['manufacturing']['get']
+  RouterOutput['pdo']['manufacturing']['get']
 
 export class ManufacturingOrderState {
-  readonly async = new AsyncStoreController()
+  readonly async = new LoadingController()
   readonly processingRoute = new ProcessingRoute()
   order: ManufacturingOrderOutput | null = null
   setOrder(order: ManufacturingOrderOutput) {

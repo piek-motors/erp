@@ -1,16 +1,14 @@
 import { MonthSelectStore } from 'components/inputs/month-select'
-import { apolloClient } from 'lib/api'
-import {
-  GetOrdersArchivedByIntervalDocument,
-  GetOrdersArchivedByIntervalQuery,
-  GetOrdersArchivedByIntervalQueryVariables,
-  OrderFragment
-} from 'lib/types/graphql-shema'
+import { matrixDecoder } from 'lib/matrix_decoder'
+import { rpc } from 'lib/rpc.client'
 import { makeAutoObservable } from 'mobx'
+import { OrderStatus } from 'models'
 import moment from 'moment'
+import { ClientOrder, OrderPosition } from 'srv/rpc/orders/router'
+import { UnpackedOrder } from '../api'
 
 class ReportPageStore {
-  data: OrderFragment[] = []
+  data: UnpackedOrder[] = []
   dataLabel = ''
   monthSelect: MonthSelectStore
 
@@ -31,34 +29,26 @@ class ReportPageStore {
     this.monthSelect.isLoading = true
     this.totalIncome = 0
     try {
-      const gte = moment()
-        .set('month', m)
-        .set('year', y)
-        .startOf('month')
-        .toISOString()
-      const lte = moment()
-        .set('month', m)
-        .set('year', y)
-        .endOf('month')
-        .toISOString()
-      const res = await apolloClient.query<
-        GetOrdersArchivedByIntervalQuery,
-        GetOrdersArchivedByIntervalQueryVariables
-      >({
-        query: GetOrdersArchivedByIntervalDocument,
-        variables: {
-          _gte: gte,
-          _lte: lte
-        }
+      const res = await rpc.orders.list.query({
+        shipped_before: moment()
+          .set('month', m)
+          .set('year', y)
+          .startOf('month')
+          .utc(true)
+          .valueOf(),
+        shipped_after: moment()
+          .set('month', m)
+          .set('year', y)
+          .endOf('month')
+          .utc(true)
+          .valueOf(),
+        status: OrderStatus.Archived
       })
-
-      if (res.errors) {
-        console.error('Error fetching orders:', res.errors)
-        this.data = []
-      } else {
-        this.data = res.data?.orders_orders || []
-        this.dataLabel = `Отгруженные заказы за ${this.monthSelect.getMonthLabel()}`
-      }
+      this.data = matrixDecoder<ClientOrder>(res).map(order => ({
+        ...order,
+        positions: matrixDecoder<OrderPosition>(order.positions)
+      }))
+      this.dataLabel = `Отгруженные заказы за ${this.monthSelect.getMonthLabel()}`
     } catch (error) {
       console.log('Error fetching orders:', error)
       this.data = []
@@ -67,7 +57,7 @@ class ReportPageStore {
     }
 
     for (const order of this.data) {
-      this.totalIncome += order.total_amount
+      this.totalIncome += Number(order.total_amount) ?? 0
     }
   }
 }

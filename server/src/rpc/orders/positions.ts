@@ -1,23 +1,6 @@
 import { db, procedure, router, z } from '#root/deps.js'
 
 export const positionRouter = router({
-  list: procedure
-    .input(
-      z.object({
-        order_id: z.number()
-      })
-    )
-    .query(async ({ input }) => {
-      const positions = await db
-        .selectFrom('orders.order_items')
-        .selectAll()
-        .where('order_id', '=', input.order_id)
-        .orderBy('id', 'asc')
-        .execute()
-
-      return positions
-    }),
-
   insert: procedure
     .input(
       z.object({
@@ -27,8 +10,8 @@ export const positionRouter = router({
         quantity: z.number().default(1)
       })
     )
-    .mutation(async ({ input }) => {
-      const result = await db
+    .mutation(async ({ input }) =>
+      db
         .insertInto('orders.order_items')
         .values({
           order_id: input.order_id,
@@ -36,12 +19,10 @@ export const positionRouter = router({
           description: input.description,
           quantity: input.quantity
         })
-        .returningAll()
+        .returning('id')
         .executeTakeFirstOrThrow()
-
-      return result
-    }),
-
+    ),
+  //
   update: procedure
     .input(
       z.object({
@@ -51,8 +32,8 @@ export const positionRouter = router({
         description: z.string()
       })
     )
-    .mutation(async ({ input }) => {
-      const result = await db
+    .mutation(async ({ input }) =>
+      db
         .updateTable('orders.order_items')
         .set({
           name: input.name,
@@ -60,25 +41,21 @@ export const positionRouter = router({
           quantity: input.quantity
         })
         .where('id', '=', input.id)
-        .returningAll()
+        .returning('id')
         .executeTakeFirstOrThrow()
-
-      return result
-    }),
-
+    ),
+  //
   delete: procedure
     .input(
       z.object({
         id: z.number()
       })
     )
-    .mutation(async ({ input }) => {
-      const result = await db
+    .mutation(async ({ input }) =>
+      db
         .deleteFrom('orders.order_items')
         .where('id', '=', input.id)
-        .returningAll()
+        .returning('id')
         .executeTakeFirstOrThrow()
-
-      return result
-    })
+    )
 })

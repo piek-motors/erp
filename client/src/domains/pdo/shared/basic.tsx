@@ -52,14 +52,12 @@ export function MaterialUnitSelect(props: {
 import { BaseAutocomplete, BaseOption } from 'components/base-autocomplete'
 import {
   DeleteResourceButton,
-  ErrorHint,
   ExecuteAction,
   Label,
   P,
   routeMap,
   Row
 } from 'lib/index'
-import { useGetPossibleAlloysQuery } from 'lib/types/graphql-shema'
 import { t } from '../text'
 
 export function AlloyAutocomplete(props: {
@@ -67,19 +65,21 @@ export function AlloyAutocomplete(props: {
   alloy?: string
 }) {
   const { setAlloy, alloy } = props
-  const { data, loading, error } = useGetPossibleAlloysQuery()
+  const [alloys, setAlloys] = useState<string[]>([])
+  useEffect(() => {
+    rpc.pdo.material.getDistinctAlloys
+      .query()
+      .then(alloys => setAlloys(alloys.filter(Boolean) as string[]))
+  }, [])
 
   const options: BaseOption[] =
-    Array.from(new Set(data?.metal_flow_materials?.map(e => e.shape_data)))
-      .filter(Boolean)
-      .map(alloy => ({
-        label: alloy,
-        value: alloy
-      })) || []
+    alloys.filter(Boolean).map(alloy => ({
+      label: alloy,
+      value: alloy
+    })) || []
 
   return (
     <>
-      <ErrorHint e={error} />
       <BaseAutocomplete
         label={t.Alloy}
         options={options}
@@ -92,7 +92,7 @@ export function AlloyAutocomplete(props: {
           }
         }}
         freeSolo
-        loading={loading}
+        loading={alloys.length === 0}
       />
     </>
   )
@@ -104,7 +104,8 @@ import {
   NavigationBar,
   Props as PageTitleProps
 } from 'components/navigation_bar'
-import { ReactNode } from 'react'
+import { rpc } from 'lib/rpc.client'
+import { ReactNode, useEffect, useState } from 'react'
 
 /** Narrow container */
 export function Narrow(props: ContainerProps) {
@@ -161,7 +162,7 @@ export function MetalPageTitle(props: PageTitleProps) {
   return (
     <NavigationBar
       {...props}
-      homeUrl={routeMap.metalflow.index}
+      homeUrl={routeMap.pdo.index}
       hideIcon
       spaceBetween
     />

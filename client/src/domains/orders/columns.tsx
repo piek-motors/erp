@@ -2,35 +2,35 @@ import { Stack } from '@mui/joy'
 import { Table } from 'components/table.impl'
 import { P, Pre } from 'lib/index'
 import { openOrderDetailPage } from 'lib/routes'
-import { TOrderColumnData } from 'lib/types/global'
 import { observer } from 'mobx-react-lite'
-import { Order } from 'models'
+import moment from 'moment'
 import { useMemo } from 'react'
 import { Link, useNavigate } from 'react-router'
 import { Column } from 'react-table'
-import { map } from './order.mappers'
+import { UnpackedOrder } from './api'
 import { t } from './text'
+import { getBackgroundColor } from './utils'
 
-export const columnsList: Column<Order>[] = [
+export const columns: Column<UnpackedOrder>[] = [
   {
     Header: t.id,
-    accessor: (_row, counter) => counter + 1
+    accessor: order => order.id
   },
   {
     Header: t.name,
-    accessor: o => {
-      if (o.items.length === 0)
+    accessor: order => {
+      if (order.positions.length === 0)
         return (
-          <Link to={openOrderDetailPage(o.id)}>
+          <Link to={openOrderDetailPage(order.id)}>
             <P>{t.noContent}</P>
           </Link>
         )
       else {
         return (
           <Stack gap={1}>
-            {o.items.map(item => (
+            {order.positions.map(item => (
               <div key={item.id}>
-                <Pre>{item.name.trim()}</Pre>
+                <Pre>{item.name?.trim()}</Pre>
               </div>
             ))}
           </Stack>
@@ -40,9 +40,9 @@ export const columnsList: Column<Order>[] = [
   },
   {
     Header: t.quantity,
-    accessor: o => (
+    accessor: order => (
       <Stack gap={1}>
-        {o.items.map(item => (
+        {order.positions.map(item => (
           <Pre key={item.id}>{item.quantity}</Pre>
         ))}
       </Stack>
@@ -50,52 +50,52 @@ export const columnsList: Column<Order>[] = [
   },
   {
     Header: t.plannedShipping,
-    accessor: o => o.shippingDateString()
+    accessor: order => {
+      if (!order.shipping_date) return ''
+      return moment(order.shipping_date).format('DD.MM.YY')
+    }
   },
   {
     Header: t.invoice,
-    accessor: o => o.invoiceNumber
+    accessor: order => order.invoice_number
   },
   {
     Header: t.payment,
-    accessor: o => o.paidPercentage()
+    accessor: order => {
+      if (!order.total_amount) return ''
+      if (!order.total_paid) return ''
+      return `${((order.total_paid / order.total_amount) * 100).toFixed(0)}%`
+    }
   },
   {
     Header: t.contractor,
-    accessor: o => o.contractor
+    accessor: order => order.contractor
   },
   {
     Header: t.city,
-    accessor: o => o.city
-  },
-  {
-    Header: t.manager,
-    accessor: o => o.manager.firstName
+    accessor: order => order.city
   }
 ]
 
-export const OrdersTable = observer((props: { data: TOrderColumnData[] }) => {
-  const navigate = useNavigate()
-  const onRowClick = (order: Order) => {
-    navigate(openOrderDetailPage(order.id))
+export const OrdersTable = observer(
+  (props: { data: UnpackedOrder[]; enableRowStyling?: boolean }) => {
+    const navigate = useNavigate()
+    const handleRowClick = (order: UnpackedOrder) => {
+      navigate(openOrderDetailPage(order.id))
+    }
+    const memoizedColumns = useMemo(() => columns, [])
+    const rowStyleCb = row => {
+      return {
+        background: getBackgroundColor(row.original)
+      }
+    }
+    return (
+      <Table
+        rowStyleCb={props.enableRowStyling ? rowStyleCb : undefined}
+        columns={memoizedColumns}
+        data={props.data}
+        onRowClick={handleRowClick}
+      />
+    )
   }
-  const columns = useMemo(() => columnsList, [])
-
-  const mappedData = useMemo(
-    () => props.data.map(e => map.order.fromDto(e)),
-    [props.data]
-  )
-
-  return (
-    <Table
-      trStyleCallback={row => {
-        return {
-          background: row.original?.getBackgroundColor()
-        }
-      }}
-      columns={columns}
-      data={mappedData}
-      onRowClick={onRowClick}
-    />
-  )
-})
+)

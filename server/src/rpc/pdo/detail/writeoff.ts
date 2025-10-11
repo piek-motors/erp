@@ -1,6 +1,6 @@
 import { db } from '#root/deps.js'
 import { publicProcedure } from '#root/lib/trpc/trpc.js'
-import { Warehouse } from '#root/service/warehouse.js'
+import { Warehouse } from '#root/service/warehouse.service.js'
 import { EnWriteoffReason } from 'models'
 import { z } from 'zod'
 

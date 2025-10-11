@@ -10,32 +10,32 @@ export type Action = {
 export const actions: Action[] = [
   {
     name: 'Материалы',
-    href: routeMap.metalflow.materials,
+    href: routeMap.pdo.materials,
     endBlock: [
       {
-        href: routeMap.metalflow.material.new
+        href: routeMap.pdo.material.new
       }
     ]
   },
   {
     name: 'Детали',
-    href: routeMap.metalflow.details,
+    href: routeMap.pdo.details,
     endBlock: [
       {
-        href: routeMap.metalflow.detail.new
+        href: routeMap.pdo.detail.new
       }
     ]
   },
   {
     name: 'Группы',
-    href: routeMap.metalflow.detailGroups
+    href: routeMap.pdo.detailGroups
   },
   {
     name: 'Производство',
-    href: routeMap.metalflow.manufacturing_orders
+    href: routeMap.pdo.manufacturing_orders
   },
   {
     name: 'Журнал операций',
-    href: routeMap.metalflow.operations
+    href: routeMap.pdo.operations
   }
 ]

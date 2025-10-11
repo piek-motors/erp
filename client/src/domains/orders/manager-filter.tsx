@@ -1,5 +1,5 @@
 import { FormControl, Option, Select } from '@mui/joy'
-import { suggestionsStore } from 'domains/orders/one/stores/suggestions.store'
+import { suggestionsStore } from 'domains/orders/one/suggestions.store'
 import { observer } from 'lib/deps'
 import { useEffect } from 'react'
 
@@ -11,7 +11,7 @@ interface IManagerFilterProps {
 export const ManagerFilter = observer(
   ({ value, onChange }: IManagerFilterProps) => {
     useEffect(() => {
-      suggestionsStore.getManagers()
+      suggestionsStore.init()
     }, [])
     return (
       <FormControl>

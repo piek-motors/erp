@@ -3,14 +3,14 @@ import {
   SearchFilters
 } from 'components/search-paginated'
 import { cache } from 'domains/pdo/cache/root'
-import { AsyncStoreController } from 'lib/async-store.controller'
+import { LoadingController } from 'lib/loading_controller'
 import { action, makeObservable, observable, runInAction } from 'mobx'
 import { DetailState } from '../detail.state'
 
 export const alphabet = 'АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ'.split('')
 
 export class DetailList {
-  readonly async = new AsyncStoreController()
+  readonly async = new LoadingController()
   searchPartCode: string = ''
   indexLetter: string | null = null
 

@@ -1,6 +1,6 @@
 import { db, procedure } from '#root/deps.js'
 import { router } from '#root/lib/trpc/trpc.js'
-import { deleteFile } from '#root/rpc/attachment/delete_file.rpc.js'
+import { deleteFile } from '#root/rpc/attachment.js'
 import { createDetail } from '#root/rpc/pdo/detail/create.js'
 import { deleteDetail } from '#root/rpc/pdo/detail/delete.js'
 import { getDetail } from '#root/rpc/pdo/detail/get.js'
@@ -44,7 +44,15 @@ export const metalFlowRouter = router({
     delete: deleteMaterial,
     update: updateMaterial,
     supply: createMaterialSupply,
-    writeoff: writeoffMaterial
+    writeoff: writeoffMaterial,
+    getDistinctAlloys: procedure.query(async () =>
+      db
+        .selectFrom('metal_flow.materials')
+        .select('alloy')
+        .distinct()
+        .execute()
+        .then(res => res.map(e => e.alloy))
+    )
   }),
   details: router({
     get: getDetail,

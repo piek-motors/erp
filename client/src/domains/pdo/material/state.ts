@@ -1,5 +1,5 @@
-import { AsyncStoreController } from 'lib/async-store.controller'
 import { makeAutoObservable } from 'lib/deps'
+import { LoadingController } from 'lib/loading_controller'
 import { EnMaterialShape, EnUnit, Material } from 'models'
 import { HexagonBarState } from './shape/hexagon_bar.state'
 import { ListState } from './shape/list_state'
@@ -10,7 +10,7 @@ import { IMaterialShapeState } from './shape_state.interface'
 import { MaterialWarehouseStore } from './warehouse/store'
 
 export class MaterialState {
-  readonly loadingWall = new AsyncStoreController()
+  readonly loadingWall = new LoadingController()
   readonly warehouse = new MaterialWarehouseStore()
   constructor() {
     makeAutoObservable(this)

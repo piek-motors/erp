@@ -2,22 +2,7 @@ import moment from 'moment'
 import 'moment/locale/ru'
 moment.locale('ru')
 
-export const getPreviousMonth = () => moment().subtract(1, 'months').month()
-
 export class NullTimeError extends Error {}
-
-export function monthAdd(date: Date, month: number) {
-  // функция используется для корректного вычитания месяцев в chooseMonth
-  var temp = date
-  temp = new Date(date.getFullYear(), date.getMonth(), 1)
-  temp.setMonth(temp.getMonth() + (month + 1))
-  temp.setDate(temp.getDate() - 1)
-
-  if (date.getDate() < temp.getDate()) {
-    temp.setDate(date.getDate())
-  }
-  return temp
-}
 
 export function timedeltaInSeconds(
   time1: string | null | undefined,

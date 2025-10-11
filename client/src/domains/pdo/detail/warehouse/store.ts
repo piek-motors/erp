@@ -41,7 +41,7 @@ export class DetailWarehouseStore {
   }
 
   async insertSupply(detailId: number) {
-    const res = await rpc.metal.details.supply.mutate({
+    const res = await rpc.pdo.details.supply.mutate({
       detailId,
       qty: this.qty,
       reason: this.supply.reason
@@ -51,7 +51,7 @@ export class DetailWarehouseStore {
     return res.stock
   }
   async insertWriteoff(detailId: number) {
-    const res = await rpc.metal.details.writeoff.mutate({
+    const res = await rpc.pdo.details.writeoff.mutate({
       detailId,
       qty: this.qty,
       reason: this.writeoff.reason

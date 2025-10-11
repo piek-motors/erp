@@ -1,5 +1,5 @@
-import { AsyncStoreController } from 'lib/async-store.controller'
 import { rpc } from 'lib/deps'
+import { LoadingController } from 'lib/loading_controller'
 import { makeAutoObservable } from 'mobx'
 import { getMaterialConstructor, MaterialShapeAbstractionLayer } from 'models'
 import { cache } from '../cache/root'
@@ -7,7 +7,7 @@ import { map } from '../mappers'
 import { MaterialState } from './state'
 
 export class MaterialApi {
-  readonly status = new AsyncStoreController()
+  readonly status = new LoadingController()
   s: MaterialState = new MaterialState()
   reset() {
     this.s = new MaterialState()
@@ -19,7 +19,7 @@ export class MaterialApi {
   async load(id?: number) {
     if (!id) throw new Error('Material id is not set')
     return this.status.run(async () => {
-      const res = await rpc.metal.material.get.query({ id })
+      const res = await rpc.pdo.material.get.query({ id })
       this.s.setLinearMass(res.material.linear_mass.toString())
       this.s.setAlloy(res.material.alloy || '')
       this.s.setSafetyStock(res.material.safety_stock?.toString())
@@ -39,7 +39,7 @@ export class MaterialApi {
     )
     const label = material.deriveLabel()
     if (!label) throw new Error('Material label is not set')
-    const res = await rpc.metal.material.create.mutate({
+    const res = await rpc.pdo.material.create.mutate({
       label,
       shape: this.s.shape,
       shape_data: this.s.getShapeState(this.s.shape).export(),
@@ -64,7 +64,7 @@ export class MaterialApi {
     )
     this.s.material.alloy = this.s.alloy || ''
 
-    return rpc.metal.material.update
+    return rpc.pdo.material.update
       .mutate({
         id: this.s.id,
         shape: this.s.shape,
@@ -85,7 +85,7 @@ export class MaterialApi {
 
   async delete() {
     if (!this.s.id) throw new Error('Material id is not set')
-    await rpc.metal.material.delete.mutate({ id: this.s.id })
+    await rpc.pdo.material.delete.mutate({ id: this.s.id })
     const materialToRemove = cache.materials
       .getMaterials()
       .find(m => m.id === this.s.id)
@@ -95,7 +95,7 @@ export class MaterialApi {
   }
 
   async loadDetailsMadeFromThatMaterial(material_id: number) {
-    const res = await rpc.metal.details.listByMaterialId.query({ material_id })
+    const res = await rpc.pdo.details.listByMaterialId.query({ material_id })
     this.s.setDetailsMadeFromThisMaterial(
       res.map(e => ({
         id: e.id,

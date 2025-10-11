@@ -19,7 +19,7 @@ export const CreateDetailOrder = observer(() => {
       }}
       onSubmit={() =>
         api.createManufacturingOrder().then(r => {
-          navigate(openPage(routeMap.metalflow.manufacturing_order.edit, r.id))
+          navigate(openPage(routeMap.pdo.manufacturing_order.edit, r.id))
         })
       }
     />

@@ -1,11 +1,11 @@
 import { MonthSelectStore } from 'components/inputs/month-select'
-import { AsyncStoreController } from 'lib/async-store.controller'
+import { LoadingController } from 'lib/loading_controller'
 import { rpc } from 'lib/rpc.client'
 import { makeAutoObservable } from 'mobx'
-import { AttendanceReport } from 'srv/service/attendance_report_generator'
+import { AttendanceReport } from 'srv/service/attendance_report.generator'
 
 export class AttendanceStore {
-  async = new AsyncStoreController()
+  async = new LoadingController()
   monthSelect = new MonthSelectStore()
 
   timeRetention: number = 30

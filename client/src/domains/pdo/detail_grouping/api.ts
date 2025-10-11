@@ -1,13 +1,13 @@
 import { cache } from 'domains/pdo/cache/root'
-import { AsyncStoreController } from 'lib/async-store.controller'
+import { LoadingController } from 'lib/loading_controller'
 import { rpc } from 'lib/rpc.client'
 import { makeAutoObservable } from 'mobx'
 import { DetailGroupStore } from './group.store'
 
 export class DetailGroupingApi {
-  readonly groupsLoading = new AsyncStoreController()
+  readonly groupsLoading = new LoadingController()
   readonly store = new DetailGroupStore()
-  readonly targetGroupLoading = new AsyncStoreController()
+  readonly targetGroupLoading = new LoadingController()
 
   constructor() {
     makeAutoObservable(this)
@@ -21,14 +21,14 @@ export class DetailGroupingApi {
 
   async loadGroupWithDetails(groupId: number) {
     return this.targetGroupLoading.run(async () => {
-      const groupData = await rpc.metal.detailGroups.get.query({ groupId })
+      const groupData = await rpc.pdo.detailGroups.get.query({ groupId })
       this.store.setTargetGroup(groupData)
     })
   }
 
   async loadAvailableUniversalDetails() {
     return this.groupsLoading.run(async () => {
-      const details = await rpc.metal.details.list.query({
+      const details = await rpc.pdo.details.list.query({
         onlyUniversalDetails: true
       })
       this.store.setAvailableDetails(
@@ -44,7 +44,7 @@ export class DetailGroupingApi {
 
   async createGroup(name: string) {
     return this.groupsLoading.run(async () => {
-      const newGroup = await rpc.metal.detailGroups.create.mutate({ name })
+      const newGroup = await rpc.pdo.detailGroups.create.mutate({ name })
       await cache.detailGroups.load()
       return newGroup
     })
@@ -52,7 +52,7 @@ export class DetailGroupingApi {
 
   async updateGroup(id: number, name: string) {
     return this.groupsLoading.run(async () => {
-      const updatedGroup = await rpc.metal.detailGroups.update.mutate({
+      const updatedGroup = await rpc.pdo.detailGroups.update.mutate({
         id,
         name
       })
@@ -66,7 +66,7 @@ export class DetailGroupingApi {
 
   async addDetailsToGroup(groupId: number, detailIds: number[]) {
     return this.groupsLoading.run(async () => {
-      await rpc.metal.detailGroups.addDetails.mutate({ groupId, detailIds })
+      await rpc.pdo.detailGroups.addDetails.mutate({ groupId, detailIds })
       await this.loadGroupWithDetails(groupId)
       this.store.clearSelection()
     })
@@ -74,7 +74,7 @@ export class DetailGroupingApi {
 
   async removeDetailsFromGroup(groupId: number, detailIds: number[]) {
     return this.groupsLoading.run(async () => {
-      await rpc.metal.detailGroups.removeDetails.mutate({ groupId, detailIds })
+      await rpc.pdo.detailGroups.removeDetails.mutate({ groupId, detailIds })
       await this.loadGroupWithDetails(groupId)
       this.store.clearSelection()
     })

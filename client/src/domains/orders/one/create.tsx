@@ -7,9 +7,9 @@ import { observer } from 'mobx-react-lite'
 import { OrderStatus } from 'models'
 import { useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router'
+import { orderStore } from './order.store'
 import { OrderStatementInput } from './statement/ui'
-import { orderStore } from './stores/order.store'
-import { suggestionsStore } from './stores/suggestions.store'
+import { suggestionsStore } from './suggestions.store'
 
 export const CreateOrder = observer(() => {
   const navigate = useNavigate()

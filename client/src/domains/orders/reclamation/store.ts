@@ -1,11 +1,12 @@
-import { apolloClient } from 'lib/api'
-import * as gql from 'lib/types/graphql-shema'
+import { matrixDecoder } from 'lib/matrix_decoder'
+import { rpc } from 'lib/rpc.client'
 import { makeAutoObservable } from 'mobx'
-import { Order, OrderStatus } from 'models'
-import { map } from '../order.mappers'
+import { OrderStatus } from 'models'
+import { ClientOrder, OrderPosition } from 'srv/rpc/orders/router'
+import { UnpackedOrder } from '../api'
 
 export type ColocatedStateKey = 'inbox' | 'decision' | 'inproduction'
-type State = Record<ColocatedStateKey, Order[]>
+type State = Record<ColocatedStateKey, UnpackedOrder[]>
 
 export class ReclamationStore {
   state: State = {
@@ -46,20 +47,16 @@ export class ReclamationStore {
     this.state = state
   }
 
-  private reorder(
-    list: Order[],
-    startIndex: number,
-    endIndex: number
-  ): Order[] {
+  private reorder<T>(list: T[], startIndex: number, endIndex: number): T[] {
     const result = Array.from(list)
     const [removed] = result.splice(startIndex, 1)
     result.splice(endIndex, 0, removed)
     return result
   }
 
-  private move(
-    source: Order[],
-    destination: Order[],
+  private move<T>(
+    source: T[],
+    destination: T[],
     droppableSource: { droppableId: ColocatedStateKey; index: number },
     droppableDestination: { droppableId: ColocatedStateKey; index: number }
   ) {
@@ -77,15 +74,18 @@ export class ReclamationStore {
   async load() {
     this.setLoading(true)
     try {
-      const res = await apolloClient.query<
-        gql.GetReclamationOrdersQuery,
-        gql.GetReclamationOrdersQueryVariables
-      >({
-        query: gql.GetReclamationOrdersDocument,
-        fetchPolicy: 'network-only'
+      const res = await rpc.orders.list.query({
+        statuses: [
+          OrderStatus.ReclamationIncoming,
+          OrderStatus.ReclamationDecision,
+          OrderStatus.ReclamationInProduction
+        ]
       })
 
-      const orders = (res.data?.orders_orders || []).map(map.order.fromDto)
+      const orders = matrixDecoder<ClientOrder>(res).map(order => ({
+        ...order,
+        positions: matrixDecoder<OrderPosition>(order.positions)
+      }))
 
       this.setState({
         inbox: orders.filter(
@@ -150,16 +150,9 @@ export class ReclamationStore {
           [dInd]: result[dInd]
         })
 
-        // Update the backend
-        await apolloClient.mutate<
-          gql.UpdateOrderStatusMutation,
-          gql.UpdateOrderStatusMutationVariables
-        >({
-          mutation: gql.UpdateOrderStatusDocument,
-          variables: {
-            id: orderId,
-            status: newStatus
-          }
+        await rpc.orders.update.mutate({
+          id: orderId,
+          status: newStatus
         })
       }
     } catch (error) {
@@ -170,4 +163,4 @@ export class ReclamationStore {
   }
 }
 
-export const reclamationStore = new ReclamationStore()
+export const store = new ReclamationStore()
