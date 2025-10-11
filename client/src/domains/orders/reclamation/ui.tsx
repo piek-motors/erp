@@ -10,7 +10,7 @@ import * as dnd from 'react-beautiful-dnd'
 import { useNavigate } from 'react-router'
 import { UnpackedOrder } from '../api'
 import { getBackgroundColor } from '../utils'
-import { ColocatedStateKey, reclamationStore } from './store'
+import { ColocatedStateKey, store } from './store'
 
 interface Props {
   order: UnpackedOrder
@@ -55,7 +55,7 @@ function DroppableContainer({
 }: IDroppableContainerProps) {
   return (
     <Box key={droppableId} sx={{ height: '100%', width: '100%' }}>
-      <P color="neutral" level="h4">
+      <P color="neutral" level="body-md">
         {columnName}
       </P>
       <dnd.Droppable
@@ -113,7 +113,7 @@ const Reclamation = observer(() => {
     const { source, destination, draggableId } = result
     if (!destination) return
 
-    reclamationStore.handleDragEnd(
+    store.handleDragEnd(
       source as { droppableId: ColocatedStateKey; index: number },
       destination as { droppableId: ColocatedStateKey; index: number },
       draggableId
@@ -134,17 +134,17 @@ const Reclamation = observer(() => {
         <DroppableContainer
           columnName="Входящие"
           droppableId="inbox"
-          data={reclamationStore.state.inbox}
+          data={store.state.inbox}
         />
         <DroppableContainer
           columnName="Принятие решения"
           droppableId="decision"
-          data={reclamationStore.state.decision}
+          data={store.state.decision}
         />
         <DroppableContainer
           columnName="В производстве"
           droppableId="inproduction"
-          data={reclamationStore.state.inproduction}
+          data={store.state.inproduction}
         />
       </Box>
     </dnd.DragDropContext>
@@ -153,11 +153,10 @@ const Reclamation = observer(() => {
 
 const ReclamationPage = observer(() => {
   const navigate = useNavigate()
-
   useEffect(() => {
-    reclamationStore.load()
+    store.load()
   }, [])
-
+  if (store.loading) return <Loading />
   return (
     <FactoryPage
       title="Рекламация"
@@ -170,7 +169,6 @@ const ReclamationPage = observer(() => {
       }
     >
       <Box>
-        {reclamationStore.loading && <Loading />}
         <Reclamation />
       </Box>
     </FactoryPage>

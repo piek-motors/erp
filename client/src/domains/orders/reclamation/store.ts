@@ -163,4 +163,4 @@ export class ReclamationStore {
   }
 }
 
-export const reclamationStore = new ReclamationStore()
+export const store = new ReclamationStore()

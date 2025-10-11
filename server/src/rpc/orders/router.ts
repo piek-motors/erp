@@ -38,7 +38,7 @@ const insertOrderSchema = z.object({
   invoice_number: z.string().optional(),
   order_number: z.string().optional(),
   shipping_date: z.number().nullish(),
-  total_amount: z.number().optional(),
+  total_amount: z.number().nullish(),
   comment: z.string().optional()
 })
 
