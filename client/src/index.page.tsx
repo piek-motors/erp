@@ -20,7 +20,7 @@ export const links = [
   {
     href: routeMap.orders.priorityList,
     icon: UilListOl,
-    name: 'Очередность выполнения'
+    name: 'Заказы & Очередность'
   },
   { href: routeMap.reclamation, icon: UilWrench, name: 'Рекламации' },
   {
