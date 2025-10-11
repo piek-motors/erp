@@ -24,7 +24,12 @@ export class TokenService {
     }
   }
   verifyAccess(token: string) {
-    return jwt.verify(token, this.secret('access')) as { id: number }
+    return jwt.verify(token, this.secret('access')) as {
+      id: number
+      first_name: string
+      last_name: string
+      role: string
+    }
   }
   verifyRefresh(token: string) {
     return jwt.verify(token, this.secret('refresh'))

@@ -1,5 +1,6 @@
 import { db, procedure, TRPCError, z } from '#root/deps.js'
 import { attachmentService } from '#root/ioc/index.js'
+import { log } from '#root/ioc/log.js'
 import { Matrix, matrixEncoder } from '#root/lib/matrix_encoder.js'
 import { fromMs } from '#root/lib/time.js'
 import { router } from '#root/lib/trpc/trpc.js'
@@ -128,19 +129,27 @@ export const ordersRouter = router({
       .executeTakeFirstOrThrow()
   }),
   //
-  update: procedure.input(updateOrderSchema).mutation(async ({ input }) => {
-    return db
-      .updateTable('orders.orders')
-      .set({
-        ...input,
-        shipping_date: fromMs(input.shipping_date),
-        acceptance_date: fromMs(input.acceptance_date),
-        actual_shipping_date: fromMs(input.actual_shipping_date)
-      })
-      .where('id', '=', input.id)
-      .returning('id')
-      .executeTakeFirstOrThrow()
-  }),
+  update: procedure
+    .input(updateOrderSchema)
+    .mutation(async ({ input, ctx }) => {
+      return db
+        .updateTable('orders.orders')
+        .set({
+          ...input,
+          shipping_date: fromMs(input.shipping_date),
+          acceptance_date: fromMs(input.acceptance_date),
+          actual_shipping_date: fromMs(input.actual_shipping_date)
+        })
+        .where('id', '=', input.id)
+        .returning('id')
+        .executeTakeFirstOrThrow()
+        .then(r => {
+          log.info(
+            `Client order ${input.id} updated by ${ctx.user.first_name} ${ctx.user.last_name}`
+          )
+          return r
+        })
+    }),
   //
   list: procedure
     .input(
@@ -211,12 +220,18 @@ export const ordersRouter = router({
   //
   delete: procedure
     .input(z.object({ id: z.number() }))
-    .mutation(async ({ input }) =>
+    .mutation(async ({ input, ctx }) =>
       db
         .deleteFrom('orders.orders')
         .where('id', '=', input.id)
         .returning('id')
         .executeTakeFirstOrThrow()
+        .then(r => {
+          log.info(
+            `Client order ${input.id} deleted by ${ctx.user.first_name} ${ctx.user.last_name}`
+          )
+          return r
+        })
     ),
   //
   suggestions: procedure.query(async () => {
