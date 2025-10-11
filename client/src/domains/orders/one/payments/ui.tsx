@@ -89,7 +89,7 @@ const PaymentsTable = observer(
           style={{ tableLayout: 'auto' }}
         >
           <tbody>
-            {props.data.length > 1 &&
+            {!!props.data.length &&
               props.data.map(payment => (
                 <tr key={payment.id}>
                   <td>{percentage(payment.amount, totalAmount)}</td>
@@ -108,7 +108,9 @@ const PaymentsTable = observer(
           <tfoot>
             <tr>
               <td> {totalPaidPercent}</td>
-              <td>Σ {!!totalPaid && formatMoney(totalPaid)}</td>
+              <td>
+                {!!totalPaid && 'Σ'} {!!totalPaid && formatMoney(totalPaid)}
+              </td>
               {props.footerComponent && <td>{props.footerComponent}</td>}
             </tr>
           </tfoot>

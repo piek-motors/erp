@@ -28,10 +28,10 @@ export type ClientOrder = Selectable<DB.OrderTable> & {
 
 const insertOrderSchema = z.object({
   id: z.number(),
-  status: z.nativeEnum(OrderStatus),
-  manager_id: z.number().optional(),
+  status: z.enum(OrderStatus),
+  manager_id: z.number().nullish(),
   contractor: z.string().optional(),
-  city: z.string().optional(),
+  city: z.string().nullish(),
   awaiting_dispatch: z.boolean().optional(),
   is_reclamation: z.boolean().optional(),
   need_attention: z.string().optional().nullable(),

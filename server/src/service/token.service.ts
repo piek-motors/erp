@@ -1,4 +1,3 @@
-import { log } from '#root/ioc/log.js'
 import { Day } from '#root/lib/constants.js'
 import jwt from 'jsonwebtoken'
 import { config } from '../env.js'
@@ -44,15 +43,11 @@ export class TokenService {
   }
   async revokeOutdatedTokens(): Promise<void> {
     try {
-      log.info('Deleting outdated tokens')
       const tokens = await this.tokenRepo.getOutdatedTokens()
       if (tokens.length === 0) {
-        log.info('No outdated tokens to delete')
         return
       }
-      log.info(`Deleting ${tokens.length} outdated tokens`)
-      const deleted = await this.tokenRepo.deleteTokens(tokens)
-      log.info(`Deleted ${deleted.length} outdated tokens`)
+      await this.tokenRepo.deleteTokens(tokens)
     } catch (e) {
       throw Error(`Failed to delete outdated tokens: ${e}`)
     }
