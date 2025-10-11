@@ -42,14 +42,13 @@ export const ManufacturingUpdatePage = observer(() => {
     }
   }, [id])
 
-  if (!api.s.order) {
-    return <div>Заказ не найден</div>
-  }
-
-  const isDeletionAllowed = deletionAllowed.includes(api.s.order.status)
   if (api.status.loading) {
     return <Loading />
   }
+  if (!api.s.order) {
+    return <div>Заказ не найден</div>
+  }
+  const isDeletionAllowed = deletionAllowed.includes(api.s.order.status)
   return (
     <Stack py={2} gap={1}>
       <WebOnly>

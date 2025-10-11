@@ -173,7 +173,7 @@ const tabs: TabConfig = [
   },
   {
     value: routeMap.orders.priorityList,
-    label: 'Очередность',
+    label: 'Заказы & Очередность',
     component: <PriorityList />
   },
   {
