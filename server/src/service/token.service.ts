@@ -43,10 +43,14 @@ export class TokenService {
     return this.tokenRepo.delete(token)
   }
   async revokeOutdatedTokens(): Promise<void> {
-    log.info('Deleting outdated tokens')
-    const tokens = await this.tokenRepo.getOutdatedTokens()
-    const deleted = await this.tokenRepo.deleteTokens(tokens)
-    log.info(`Deleted ${deleted.length} outdated tokens`)
+    try {
+      log.info('Deleting outdated tokens')
+      const tokens = await this.tokenRepo.getOutdatedTokens()
+      const deleted = await this.tokenRepo.deleteTokens(tokens)
+      log.info(`Deleted ${deleted.length} outdated tokens`)
+    } catch (e) {
+      throw Error(`Failed to delete outdated tokens: ${e}`)
+    }
   }
   private secret(type: 'access' | 'refresh') {
     return type === 'access'

@@ -13,7 +13,10 @@ import './lib/trpc/index.js'
 const clientBuild = config.BUILD_PATH
 
 process.on('unhandledRejection', (reason, p) => {
-  log.error('Unhandled Rejection at: Promise', p, 'reason:', reason)
+  log.error('Unhandled Rejection at:', {
+    promise: p,
+    reason: reason instanceof Error ? reason.stack || reason.message : reason
+  })
 })
 
 express()
