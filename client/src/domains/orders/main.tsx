@@ -58,7 +58,7 @@ const PriorityList = observer(() => {
 const RegistrationList = observer(() => {
   const [orders, setOrders] = useState<UnpackedOrder[]>([])
   useEffect(() => {
-    ordersApi.loadOrders(OrderStatus.PreOrder).then(setOrders)
+    ordersApi.loadOrders(OrderStatus.PreOrder, 'desc').then(setOrders)
   }, [])
   const filteredOrders = useFilter({
     orders,

@@ -45,7 +45,7 @@ const insertOrderSchema = z.object({
 
 const updateOrderSchema = insertOrderSchema.extend({
   id: z.number(),
-  status: z.nativeEnum(OrderStatus).optional(),
+  status: z.enum(OrderStatus).optional(),
   acceptance_date: z.number().optional(),
   actual_shipping_date: z.number().optional()
 })
@@ -154,10 +154,11 @@ export const ordersRouter = router({
   list: procedure
     .input(
       z.object({
-        status: z.nativeEnum(OrderStatus).optional(),
-        statuses: z.array(z.nativeEnum(OrderStatus)).optional(),
+        status: z.enum(OrderStatus).optional(),
+        statuses: z.array(z.enum(OrderStatus)).optional(),
         shipped_before: z.number().optional(),
-        shipped_after: z.number().optional()
+        shipped_after: z.number().optional(),
+        ordering: z.enum(['asc', 'desc']).optional()
       })
     )
     .query(async ({ input }) => {
@@ -184,6 +185,9 @@ export const ordersRouter = router({
       if (input.shipped_after) {
         q = q.where('actual_shipping_date', '<=', new Date(input.shipped_after))
       }
+      if (input.ordering) {
+        q = q.orderBy('id', input.ordering)
+      }
       const orders = await q.selectAll().execute()
       const enriched = await enrichOrders(orders)
       return matrixEncoder(enriched)
@@ -193,7 +197,7 @@ export const ordersRouter = router({
     .input(
       z.object({
         keyword: z.string(),
-        order_status: z.nativeEnum(OrderStatus)
+        order_status: z.enum(OrderStatus)
       })
     )
     .query(async ({ input }) => {
