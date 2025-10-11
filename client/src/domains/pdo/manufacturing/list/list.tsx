@@ -47,7 +47,6 @@ const columnList: Column<ManufactoringListOutput>[] = [
   {
     Header: 'Старт',
     accessor: m => {
-      if (!m.started_at) return '-'
       return <P>{formatDate(new Date(m.created_at))}</P>
     }
   }

@@ -1,4 +1,5 @@
 import { config, IDB } from '#root/deps.js'
+import { log } from '#root/ioc/log.js'
 import { ApiError } from '#root/lib/api.error.js'
 import { Day } from '#root/lib/constants.js'
 import { Errcode } from '#root/lib/error-code.js'
@@ -40,7 +41,8 @@ export class TokenRepository {
       .insertInto('refresh_tokens')
       .values({
         user_id,
-        token: token
+        token: token,
+        created_at: new Date()
       })
       .returning(['id', 'created_at'])
       .executeTakeFirst()
@@ -57,10 +59,13 @@ export class TokenRepository {
   getOutdatedTokens() {
     const tokenMaxAgeInMs = parseInt(config.JWT_REFRESH_SECRET_EXPIRES) * Day
     const cutoffDate = new Date(Date.now() - tokenMaxAgeInMs)
+    log.info(`Cutoff date: ${cutoffDate}`)
     return this.db
       .selectFrom('refresh_tokens')
       .select('id')
-      .where('created_at', '<', cutoffDate)
+      .where(qb =>
+        qb.or([qb('created_at', '<', cutoffDate), qb('created_at', 'is', null)])
+      )
       .execute()
       .then(res => res.map(r => r.id))
   }
