@@ -28,7 +28,6 @@ export type ClientOrder = Selectable<DB.OrderTable> & {
 }
 
 const insertOrderSchema = z.object({
-  id: z.number(),
   status: z.enum(OrderStatus),
   manager_id: z.number().nullish(),
   contractor: z.string().optional(),

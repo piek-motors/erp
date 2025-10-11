@@ -122,7 +122,9 @@ export class StatementStore {
     this.totalAmount = o.total_amount?.toString() ?? ''
     this.comment = o.comment ?? ''
   }
-  prepareForUpdate(orderId: number): RouterInput['orders']['update'] {
+  prepareForUpdate(
+    orderId: number
+  ): RouterInput['orders']['update'] | RouterInput['orders']['insert'] {
     const fields: Partial<OrderUpdateInput> = {}
 
     fields.invoice_number = this.invoiceNumber

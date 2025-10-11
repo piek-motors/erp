@@ -176,7 +176,7 @@ const tabs: TabConfig = [
   },
   {
     value: routeMap.orders.priorityList,
-    label: 'Заказы & Очередность',
+    label: 'Очередность',
     component: <PriorityList />
   },
   {
@@ -206,7 +206,7 @@ const Wrapper = observer(
 
     return (
       <FactoryPage
-        title={'Очередность'}
+        title={'Заказы'}
         header={<AddResourceButton onClick={() => insertNewOrder()} />}
       >
         <Tabs

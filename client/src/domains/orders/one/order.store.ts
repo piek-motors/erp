@@ -114,6 +114,9 @@ export class OrderStore {
       throw new Error('Order id is not set')
     }
     const payload = this.statment.prepareForUpdate(id)
+    if (!('id' in payload)) {
+      throw new Error('Order id is not set')
+    }
     const res = await this.try(() => rpc.orders.update.mutate(payload))
     await this.loadOrder(id)
     return res
@@ -124,6 +127,7 @@ export class OrderStore {
     if (!data) {
       throw new Error('No data to insert')
     }
+    delete data['id']
     const res = await this.try(() =>
       rpc.orders.insert.mutate({
         ...data,
