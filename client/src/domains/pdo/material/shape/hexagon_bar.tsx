@@ -1,4 +1,3 @@
-import { t } from 'domains/pdo/text'
 import { observer } from 'lib/deps'
 import { Inp, InputStack } from 'lib/index'
 import { EnUnit, uiUnit } from 'models'
@@ -8,7 +7,7 @@ export const HexagonBarMaterialInputBase = observer(() => {
   return (
     <InputStack>
       <Inp
-        label={t.Diameter}
+        label={'Диаметр'}
         unit={uiUnit(EnUnit.MilliMeter)}
         value={api.s.hexagon.diameter}
         onChange={v => {

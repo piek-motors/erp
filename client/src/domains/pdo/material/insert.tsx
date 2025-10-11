@@ -7,7 +7,6 @@ import {
   useEffect
 } from 'lib/index'
 import { openPage, routeMap } from 'lib/routes'
-import { t } from '../text'
 import { api } from './api'
 import { MaterialFormFields } from './form-fields'
 
@@ -23,7 +22,7 @@ export const MaterialAddPage = observer(() => {
         <ExecuteAction onSubmit={() => api.insert()} width="fit-content" />
         {api.s.insertedMaterialId && (
           <TakeLookHint
-            text={t.RecentlyNewMaterialAdded}
+            text={'Добавлен новый материал'}
             link={openPage(
               routeMap.pdo.material.edit,
               api.s.insertedMaterialId

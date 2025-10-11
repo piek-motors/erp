@@ -256,6 +256,7 @@ export class StatementStore {
           this.setComment(v)
         },
         render: () => {
+          if (!this.comment) return null
           return (
             <Textarea
               readOnly

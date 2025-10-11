@@ -9,7 +9,6 @@ import { roundAndTrim } from 'lib/utils/formatting'
 import { EnMaterialShape } from 'models'
 import { Column } from 'react-table'
 import { Material } from 'srv/rpc/pdo/material/list'
-import { t } from '../../text'
 import { MaterialShapeFilter } from './shape_filter'
 import { materialListStore } from './store'
 
@@ -100,7 +99,7 @@ export const MaterialListPage = observer((props: MaterialsTableProps) => {
       refreshTrigger={false}
       staticContent={
         <Stack p={0.5} gap={0.5}>
-          <MetalPageTitle t={t.MaterialsList}>
+          <MetalPageTitle t={'Материалы'}>
             {/* <AddResourceButton
               navigateTo={openPage(routeMap.metalflow.material.new)}
             /> */}

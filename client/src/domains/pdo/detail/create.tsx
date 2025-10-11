@@ -7,7 +7,6 @@ import {
   useEffect
 } from 'lib/index'
 import { openPage, routeMap } from 'lib/routes'
-import { t } from '../text'
 import { api } from './api'
 import { DetailInputs } from './components'
 
@@ -19,7 +18,7 @@ export const CreateDetailPage = observer(() => {
   }, [])
   return (
     <Stack gap={2} p={1}>
-      <MetalPageTitle t={t.AddDetail} />
+      <MetalPageTitle t={'Добавить деталь'} />
       <DetailInputs />
       <ExecuteAction
         onSubmit={() => api.insert()}
@@ -27,7 +26,7 @@ export const CreateDetailPage = observer(() => {
           if (!res) return null
           return (
             <TakeLookHint
-              text={t.RecentlyNewDetailAdded}
+              text={'Добавлена новая деталь'}
               link={openPage(routeMap.pdo.detail.edit, res.id)}
             />
           )

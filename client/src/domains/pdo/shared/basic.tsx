@@ -58,7 +58,6 @@ import {
   routeMap,
   Row
 } from 'lib/index'
-import { t } from '../text'
 
 export function AlloyAutocomplete(props: {
   setAlloy: (alloy: string) => void
@@ -81,7 +80,7 @@ export function AlloyAutocomplete(props: {
   return (
     <>
       <BaseAutocomplete
-        label={t.Alloy}
+        label={'Сплав'}
         options={options}
         value={alloy ? { label: alloy, value: alloy } : null}
         onChange={newValue => {

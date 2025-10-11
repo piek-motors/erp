@@ -1,4 +1,3 @@
-import { t } from 'domains/pdo/text'
 import {
   Button,
   Inp,
@@ -15,7 +14,7 @@ export const RoundBarInputBase = observer(() => {
   return (
     <InputStack>
       <Inp
-        label={t.Diameter}
+        label={'Диаметр'}
         value={api.s.round.diameter}
         onChange={v => {
           api.s.round.setDiameter(v)

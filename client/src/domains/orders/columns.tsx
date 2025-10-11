@@ -8,21 +8,20 @@ import { useMemo } from 'react'
 import { Link, useNavigate } from 'react-router'
 import { Column } from 'react-table'
 import { UnpackedOrder } from './api'
-import { t } from './text'
 import { getBackgroundColor } from './utils'
 
 export const columns: Column<UnpackedOrder>[] = [
   {
-    Header: t.id,
+    Header: 'ID',
     accessor: order => order.id
   },
   {
-    Header: t.name,
+    Header: 'Содержимое',
     accessor: order => {
       if (order.positions.length === 0)
         return (
           <Link to={openOrderDetailPage(order.id)}>
-            <P>{t.noContent}</P>
+            <P>{'Заказ пуст'}</P>
           </Link>
         )
       else {
@@ -39,7 +38,7 @@ export const columns: Column<UnpackedOrder>[] = [
     }
   },
   {
-    Header: t.quantity,
+    Header: 'Кол.',
     accessor: order => (
       <Stack gap={1}>
         {order.positions.map(item => (
@@ -49,18 +48,18 @@ export const columns: Column<UnpackedOrder>[] = [
     )
   },
   {
-    Header: t.plannedShipping,
+    Header: 'План. отгрузка',
     accessor: order => {
       if (!order.shipping_date) return ''
       return moment(order.shipping_date).format('DD.MM.YY')
     }
   },
   {
-    Header: t.invoice,
+    Header: 'Счет',
     accessor: order => order.invoice_number
   },
   {
-    Header: t.payment,
+    Header: 'Оплачено',
     accessor: order => {
       if (!order.total_amount) return ''
       if (!order.total_paid) return ''
@@ -68,11 +67,11 @@ export const columns: Column<UnpackedOrder>[] = [
     }
   },
   {
-    Header: t.contractor,
+    Header: 'Контрагент',
     accessor: order => order.contractor
   },
   {
-    Header: t.city,
+    Header: 'Город',
     accessor: order => order.city
   }
 ]

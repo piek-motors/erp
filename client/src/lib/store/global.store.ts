@@ -21,27 +21,6 @@ export class GlobalStore {
     makeAutoObservable(this)
   }
 
-  async login(email: string, password: string) {
-    try {
-      const res = await AuthService.login(email, password)
-      if (res.status === 200) {
-        this.setInMemoryToken(res.data.accessToken)
-        this.setUser(
-          new User(
-            res.data.user.id,
-            res.data.user.role,
-            res.data.user.first_name!,
-            res.data.user.last_name,
-            res.data.user.email
-          )
-        )
-        return res
-      }
-    } catch (e) {
-      console.log(e)
-    }
-  }
-
   async logout() {
     try {
       await AuthService.logout()

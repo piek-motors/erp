@@ -21,7 +21,8 @@ import { OrdersTable } from './columns'
 import { orderListPageStore as store } from './list.store'
 import { ManagerFilter } from './manager-filter'
 import { RequestReportPage } from './report/report.page'
-import { t } from './text'
+
+const searchPlaceholder = 'Счет, контрагент'
 
 const PriorityList = observer(() => {
   const [orders, setOrders] = useState<UnpackedOrder[]>([])
@@ -41,7 +42,7 @@ const PriorityList = observer(() => {
         <Search
           value={store.searchTerm}
           onChange={e => store.searchInputHandler(e)}
-          placeholder={t.inputPlaceholder}
+          placeholder={searchPlaceholder}
         >
           <ManagerFilter
             value={store.managerId}
@@ -71,7 +72,7 @@ const RegistrationList = observer(() => {
       <Search
         value={store.searchTerm}
         onChange={e => store.searchInputHandler(e)}
-        placeholder={t.inputPlaceholder}
+        placeholder={searchPlaceholder}
       >
         <ManagerFilter
           value={store.managerId}
@@ -111,10 +112,10 @@ const NewOrderList = observer(() => {
 
   return (
     <>
-      <TableName name={t.today} />
+      <TableName name={'Сегодня'} />
       <OrdersTable data={ordersByToday} />
 
-      <TableName name={t.yesterday} />
+      <TableName name={'Вчера'} />
       <OrdersTable data={ordersByYesterday} />
     </>
   )
@@ -146,7 +147,7 @@ const Archive = observer(() => {
       <Search
         value={store.searchTerm}
         onChange={e => store.searchInputHandler(e)}
-        placeholder={t.inputPlaceholder}
+        placeholder={searchPlaceholder}
       >
         <ManagerFilter
           value={store.managerId}
@@ -167,27 +168,27 @@ const { orders } = routeMap
 const tabs: TabConfig = [
   {
     value: routeMap.orders.preOrders,
-    label: t.preOrders,
+    label: 'Предзаказы',
     component: <RegistrationList />
   },
   {
     value: routeMap.orders.priorityList,
-    label: t.priorityList,
+    label: 'Очередность',
     component: <PriorityList />
   },
   {
     value: routeMap.orders.recentlyPaid,
-    label: t.recentlyPaidOrders,
+    label: 'Недавно оплаченные',
     component: <NewOrderList />
   },
   {
     value: routeMap.orders.report,
-    label: t.report,
+    label: 'Отчет',
     component: <RequestReportPage />
   },
   {
     value: routeMap.orders.archiveSearch,
-    label: t.searchInArchive,
+    label: 'Архив',
     component: <Archive />
   }
 ]
@@ -202,7 +203,7 @@ const Wrapper = observer(
 
     return (
       <FactoryPage
-        title={t.ordersTitle}
+        title={'Очередность'}
         header={<AddResourceButton onClick={() => insertNewOrder()} />}
       >
         <Tabs
@@ -222,27 +223,27 @@ const exportRoutes = (
   [
     {
       path: orders.preOrders,
-      title: t.preOrders,
+      title: 'Предзаказы',
       element: <RegistrationList />
     },
     {
       path: orders.priorityList,
-      title: t.priorityList,
+      title: 'Очередность',
       element: <PriorityList />
     },
     {
       path: orders.recentlyPaid,
-      title: t.recentlyPaidOrders,
+      title: 'Недавно оплаченные',
       element: <NewOrderList />
     },
     {
       path: orders.report,
-      title: t.report,
+      title: 'Отчет',
       element: <RequestReportPage />
     },
     {
       path: orders.archiveSearch,
-      title: t.searchInArchive,
+      title: 'Архив',
       element: <Archive />
     }
   ] as const

@@ -1,4 +1,3 @@
-import { t } from 'domains/pdo/text'
 import { Inp, InputStack, observer } from 'lib/index'
 import { EnUnit, uiUnit } from 'models'
 import { api } from '../api'
@@ -7,7 +6,7 @@ export const PipeMaterialInputBase = observer(() => {
   return (
     <InputStack>
       <Inp
-        label={t.Diameter}
+        label={'Диаметр'}
         value={api.s.pipe.diameter}
         onChange={v => {
           api.s.pipe.setDiameter(v)
