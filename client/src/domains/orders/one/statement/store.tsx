@@ -243,6 +243,10 @@ export class StatementStore {
         hidden: true
       },
       {
+        label: 'Создан',
+        view: formatDate(this.order?.created_at)
+      },
+      {
         label: 'В очередности с',
         view: formatDate(this.order?.acceptance_date)
       },
