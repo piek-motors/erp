@@ -214,6 +214,7 @@ export const ordersRouter = router({
       }
       const orders = await q
         .selectAll()
+        .where('actual_shipping_date', 'is not', null)
         .orderBy('actual_shipping_date', 'desc')
         .limit(200)
         .execute()

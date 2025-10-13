@@ -79,7 +79,7 @@ const RegistrationList = observer(() => {
           onChange={userId => store.managerFilterHandler(userId)}
         />
       </Search>
-      <OrdersTable data={filteredOrders} />
+      <OrdersTable data={filteredOrders} enableRowStyling />
     </>
   )
 })
