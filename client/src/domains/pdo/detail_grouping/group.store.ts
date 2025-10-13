@@ -37,6 +37,7 @@ export class DetailGroupStore {
     this.targetGroup = group
     this.targetGroup?.details.sort((a, b) => a.name.localeCompare(b.name))
     this.groupNameState.setName(group?.group.name || '')
+    this.colorSegmentation.clear()
   }
   availableDetails: Detail[] = []
   setAvailableDetails(details: Detail[]) {
