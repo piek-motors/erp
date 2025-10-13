@@ -14,6 +14,7 @@ export function InModal(props: {
   onClose?: () => void
   layout?: 'fullscreen' | 'center'
   size?: ModalDialogProps['size']
+  width?: string
 }) {
   // Use provided layout or default to responsive behavior
   const mobileLayout = props.layout || 'fullscreen'
@@ -40,7 +41,11 @@ export function InModal(props: {
 
           {/* Desktop Modal */}
           <Box sx={{ display: { xs: 'none', md: 'block' } }}>
-            <ModalDialog layout={desktopLayout} size={props.size}>
+            <ModalDialog
+              layout={desktopLayout}
+              size={'lg'}
+              sx={{ width: props.width }}
+            >
               <ModalClose variant="soft" color="warning" />
               <Box>{props.children}</Box>
             </ModalDialog>

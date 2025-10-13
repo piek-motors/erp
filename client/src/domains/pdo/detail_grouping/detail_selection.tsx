@@ -14,12 +14,15 @@ const UniversalDetailSelection = observer(() => {
   // Convert details to BaseOption format, excluding already selected ones
   const availableOptions: BaseOption[] = crud.store.availableDetails
     .filter(detail => !crud.store.selectedDetailIds.includes(detail.id))
-    .map(detail => ({
-      label: detail.part_code
-        ? `${detail.name} (${detail.part_code})`
-        : detail.name,
-      value: detail.id
-    }))
+    .map(detail => {
+      const baseLabel = `${detail.id} - ${detail.name}`
+      return {
+        label: detail.part_code
+          ? `${baseLabel} (${detail.part_code})`
+          : baseLabel,
+        value: detail.id
+      }
+    })
 
   // Get selected detail options for display
   const selectedOptions = crud.store.selectedDetailIds.filter(id =>
@@ -119,6 +122,7 @@ export const UniversalDetailsModalSelect = observer(() => {
 
   return (
     <InModal
+      width={'700px'}
       openButton={openButton}
       open={open}
       setOpen={v => {

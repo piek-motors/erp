@@ -30,5 +30,6 @@ ssh "$TARGET" <<EOF
     echo "Process not found. Starting..."
     npx pm2 start npm --name "erp" -- run "start"
   fi
-
+  echo "Deployment complete. Showing logs (Ctrl+C to exit)..."
+  npx pm2 logs "$PM2_PROCESS_NAME"
 EOF
