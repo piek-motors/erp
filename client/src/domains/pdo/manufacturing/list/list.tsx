@@ -2,13 +2,11 @@ import { AccordionGroup } from '@mui/joy'
 import { AccordionCard } from 'components/accordion_card'
 import { ScrollableWindow, Search } from 'components/inputs'
 import { Table } from 'components/table.impl'
-import { DetailName } from 'domains/pdo/detail/name'
 import { MetalPageTitle } from 'domains/pdo/shared/basic'
 import { observer } from 'lib/deps'
 import {
   Loading,
   openPage,
-  P,
   routeMap,
   Row,
   Stack,
@@ -17,67 +15,8 @@ import {
   useState
 } from 'lib/index'
 import { EnManufacturingOrderStatus, uiManufacturingOrderStatus } from 'models'
-import { Column } from 'react-table'
+import { getColumns } from './columns'
 import { listStore, ManufactoringListOutput } from './store'
-
-const columnList: Column<ManufactoringListOutput>[] = [
-  {
-    Header: '№',
-    accessor: 'id'
-  },
-  {
-    Header: 'Деталь',
-    accessor: d => (
-      <DetailName
-        detail={{
-          id: d.detail_id,
-          name: d.detail_name,
-          group_id: d.group_id
-        }}
-        withLink
-        withGroupLink
-        withParamsButton
-      />
-    )
-  },
-  {
-    Header: 'Кол-во',
-    accessor: m => {
-      if (!m.qty) return ''
-      return <P>{m.qty}</P>
-    }
-  },
-  {
-    Header: 'Старт',
-    accessor: m => {
-      return <P>{formatDate(new Date(m.created_at))}</P>
-    }
-  }
-]
-
-const finishColumns = columnList.concat([
-  {
-    Header: 'Финиш',
-    accessor: m => {
-      if (!m.finished_at) return ''
-      return <P>{formatDate(new Date(m.finished_at!))}</P>
-    }
-  },
-  {
-    Header: 'Дельта',
-    accessor: m => {
-      if (!m.started_at || !m.finished_at) return ''
-      const ms =
-        new Date(m.finished_at).getTime() - new Date(m.started_at).getTime()
-      if (ms <= 0) return ''
-      const totalMinutes = Math.floor(ms / 60000)
-      const days = Math.floor(totalMinutes / 1440)
-      const hours = Math.floor((totalMinutes % 1440) / 60)
-      const value = days > 0 ? `${days}д ${hours}ч` : `${hours}ч`
-      return <P>{value}</P>
-    }
-  }
-])
 
 function StatusAccordion(props: {
   status: EnManufacturingOrderStatus
@@ -92,11 +31,7 @@ function StatusAccordion(props: {
     >
       <Table
         data={props.data}
-        columns={
-          props.status === EnManufacturingOrderStatus.Collected
-            ? finishColumns
-            : columnList
-        }
+        columns={getColumns(props.status)}
         onRowClick={props.onRowClick}
       />
     </AccordionCard>

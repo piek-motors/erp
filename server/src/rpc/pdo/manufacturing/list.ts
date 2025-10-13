@@ -1,7 +1,7 @@
 import { db, procedure } from '#root/deps.js'
 import { EnManufacturingOrderStatus } from 'models'
 
-const FinishedLimit = 10
+const FinishedLimit = 20
 
 const query = db
   .selectFrom('metal_flow.manufacturing as m')
