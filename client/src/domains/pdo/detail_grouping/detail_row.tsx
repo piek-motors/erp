@@ -1,5 +1,7 @@
+import { Grid } from '@mui/joy'
 import { Row } from 'lib/index'
 import { DetailName } from '../detail/name'
+import { ColorSegmentation } from './color_segmentation'
 import { Detail } from './group.store'
 
 interface DetailRowProps {
@@ -13,33 +15,35 @@ export function DetailRow({
   isSelected
 }: DetailRowProps & { isSelected: boolean }) {
   return (
-    <Row
-      sx={{
-        alignItems: 'center',
-        display: 'flex',
-        p: 0,
-        mb: 0,
-        backgroundColor: isSelected ? '#e7b6be' : 'transparent',
-        '&:hover .detail-arrow': {
-          opacity: 1
-        }
-      }}
-    >
-      <Row
-        sx={{ cursor: detail.group_id === null ? 'pointer' : 'default' }}
-        alignItems="center"
-        onClick={() => detail.group_id === null && onToggle(detail.id)}
-      >
-        <DetailName
-          detail={{
-            id: detail.id,
-            name: detail.name,
-            group_id: detail.group_id || null
+    <>
+      <ColorSegmentation detail={detail} />
+      <Grid>
+        <Row
+          sx={{
+            alignItems: 'center',
+            display: 'flex',
+            p: 0,
+            mb: 0,
+            backgroundColor: isSelected ? '#e7b6be' : 'transparent',
+            '&:hover .detail-arrow': {
+              opacity: 1
+            },
+            cursor: detail.group_id === null ? 'pointer' : 'default'
           }}
-          withLink
-          withParamsButton
-        />
-      </Row>
-    </Row>
+          alignItems="center"
+          onClick={() => detail.group_id === null && onToggle(detail.id)}
+        >
+          <DetailName
+            detail={{
+              id: detail.id,
+              name: detail.name,
+              group_id: detail.group_id || null
+            }}
+            withLink
+            withParamsButton
+          />
+        </Row>
+      </Grid>
+    </>
   )
 }

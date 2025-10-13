@@ -43,3 +43,12 @@ export enum EnManufacturingOrderStatus {
   Production = 2,
   Collected = 3
 }
+
+export enum Color {
+  Red = 0,
+  Orange = 1,
+  Green = 2,
+  Blue = 3,
+  Indigo = 4,
+  Violet = 5
+}

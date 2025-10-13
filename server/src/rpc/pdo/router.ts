@@ -21,6 +21,7 @@ import { sql } from 'kysely'
 import z from 'zod'
 import { getDetailShortInfo } from './detail/get_short.js'
 import { getDetailInTheGroup } from './detail/grouping/get.js'
+import { setColorAnnotation } from './detail/grouping/set_color_annotation.js'
 import { createDetailSupply } from './detail/supply.js'
 import { createDetailWriteoff } from './detail/writeoff.js'
 import { createManufacturingOrder } from './manufacturing/create.js'
@@ -81,8 +82,9 @@ export const metalFlowRouter = router({
     create: createDetailGroup,
     update: updateDetailGroup,
     delete: deleteDetailGroup,
-    addDetails: assignDetailsToGroup,
-    removeDetails: removeDetailsFromGroup
+    add_details: assignDetailsToGroup,
+    remove_details: removeDetailsFromGroup,
+    set_сolor_annotation: setColorAnnotation
   }),
   operations: router({
     list: listOperations,

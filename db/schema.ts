@@ -7,6 +7,7 @@ import {
   type Updateable as KyselyUpdateable
 } from 'kysely'
 import {
+  Color,
   EnManufacturingOrderStatus,
   EnMaterialShape,
   EnOperationType,
@@ -44,6 +45,7 @@ export namespace DB {
     ['metal_flow.manufacturing']: ManufacturingTable
     ['metal_flow.detail_group']: DetailGroupTable
     ['metal_flow.detail_group_details']: DetailGroupDetailsTable
+    ['metal_flow.detail_group_color_annotations']: DetailGroupColorAnnotationsTable
   }
 
   export interface RefreshTokenTable {
@@ -61,6 +63,12 @@ export namespace DB {
   export interface DetailGroupDetailsTable {
     group_id: number
     detail_id: number
+  }
+
+  export interface DetailGroupColorAnnotationsTable {
+    group_id: number
+    detail_id: number
+    colors: Color[]
   }
 
   export interface UserTable {

@@ -1,5 +1,7 @@
 import { cache } from 'domains/pdo/cache/root'
 import { makeAutoObservable } from 'mobx'
+import { Color } from 'models'
+import { ColorSegmentation } from './color_segmentation.store'
 import { GroupNameState } from './group_name.state'
 
 export interface Group {
@@ -7,11 +9,18 @@ export interface Group {
   name: string
 }
 
-export interface Detail {
-  id: number
-  name: string
-  part_code: string | null
-  group_id: number | null
+export class Detail {
+  id!: number
+  name!: string
+  part_code!: string | null
+  group_id!: number | null
+  colors?: Color[]
+  setColors(colors: Color[]) {
+    this.colors = colors
+  }
+  constructor() {
+    makeAutoObservable(this)
+  }
 }
 
 export interface GroupWithDetails {
@@ -21,6 +30,8 @@ export interface GroupWithDetails {
 
 export class DetailGroupStore {
   readonly groupNameState = new GroupNameState()
+  readonly colorSegmentation = new ColorSegmentation()
+
   targetGroup: GroupWithDetails | null = null
   setTargetGroup(group: GroupWithDetails | null) {
     this.targetGroup = group
