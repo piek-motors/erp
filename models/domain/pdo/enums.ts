@@ -50,5 +50,7 @@ export enum Color {
   Green = 2,
   Blue = 3,
   Indigo = 4,
-  Violet = 5
+  Violet = 5,
+  Black = 6,
+  Grey = 7
 }

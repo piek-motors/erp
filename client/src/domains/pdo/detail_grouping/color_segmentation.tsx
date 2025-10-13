@@ -12,13 +12,21 @@ const map = {
   [Color.Green]: 'green',
   [Color.Blue]: '#0049ff',
   [Color.Indigo]: 'indigo',
-  [Color.Violet]: 'violet'
+  [Color.Violet]: 'violet',
+  [Color.Black]: 'black',
+  [Color.Grey]: 'grey'
 }
 
 export const ColorSegmentation = observer((props: { detail: Detail }) => (
   <Button
     variant="plain"
-    sx={{ p: 0.1, m: 0.1, width: '-webkit-fill-available', minWidth: 20 }}
+    sx={{
+      p: 0.1,
+      m: 0.1,
+      width: '-webkit-fill-available',
+      minWidth: 20,
+      justifyContent: 'start'
+    }}
     size="sm"
     color="neutral"
     onClick={e => {
@@ -43,8 +51,8 @@ export const ColorSegmentation = observer((props: { detail: Detail }) => (
             key={color}
             sx={{
               backgroundColor: map[color],
-              height: 10,
-              width: 10,
+              height: 15,
+              width: 15,
               borderRadius: 10
             }}
           />
