@@ -18,9 +18,27 @@ export const CreateDetailOrder = observer(() => {
         color: 'success'
       }}
       onSubmit={() =>
-        api.createManufacturingOrder().then(r => {
-          navigate(openPage(routeMap.pdo.manufacturing_order.edit, r.id))
-        })
+        api
+          .createManufacturingOrder()
+          .then(r => {
+            navigate(openPage(routeMap.pdo.manufacturing_order.edit, r.id))
+          })
+          .catch(e => {
+            if (
+              e.data?.code === 'BAD_REQUEST' &&
+              e.message.includes('already exists')
+            ) {
+              const existingOrderId = parseInt(e.message.split('order_id=')[1])
+              if (existingOrderId) {
+                navigate(
+                  openPage(
+                    routeMap.pdo.manufacturing_order.edit,
+                    existingOrderId
+                  )
+                )
+              }
+            }
+          })
       }
     />
   )

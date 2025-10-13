@@ -13,11 +13,13 @@ import {
   P,
   routeMap,
   Row,
+  SaveIconButton,
   Stack,
   useEffect,
   useNavigate,
   useParams
 } from 'lib/index'
+import { notifier } from 'lib/store/notifier.store'
 import { formatDate, roundAndTrim } from 'lib/utils/formatting'
 import { EnManufacturingOrderStatus, uiManufacturingOrderStatus } from 'models'
 import { TechParamsDisplay } from '../detail/components'
@@ -72,7 +74,8 @@ export const ManufacturingUpdatePage = observer(() => {
               />
             }
           />
-          <Row gap={1}>
+          <TechPassportButton />
+          <Row gap={1} alignItems={'start'}>
             <Stack>
               <QuantityInput />
               <Row gap={1}>
@@ -121,6 +124,19 @@ export const ManufacturingUpdatePage = observer(() => {
     </Stack>
   )
 })
+
+const TechPassportButton = () => {
+  if (api.s.order?.status !== EnManufacturingOrderStatus.Production) {
+    return null
+  }
+  return (
+    <Box>
+      <Button onClick={() => window.print()} color="neutral" variant="soft">
+        Тех. паспорт
+      </Button>
+    </Box>
+  )
+}
 
 const PrintingPageVerion = (props: { order: ManufacturingOrderState }) => (
   <>
@@ -192,21 +208,31 @@ const QuantityInput = observer(() => {
     const recBatchSize = api.s.detail.recommendedBatchSize
     return (
       <Card size="sm" variant="outlined">
+        <Label>Кол-во</Label>
         <Stack>
           {recBatchSize && (
             <P level="body-sm" color="primary">
               Рекомендуемый размер партии - {recBatchSize} шт
             </P>
           )}
-          <Inp
-            label="Кол-во"
-            sx={{ maxWidth: 70 }}
-            value={api.s.qty || ''}
-            variant="solid"
-            onChange={v => {
-              api.s.setQty(v)
-            }}
-          />
+          <Row alignItems={'end'}>
+            <Inp
+              sx={{ maxWidth: 70 }}
+              value={api.s.qty || ''}
+              variant="solid"
+              color="neutral"
+              onChange={v => {
+                api.s.setQty(v)
+              }}
+            />
+            <SaveIconButton
+              onClick={() =>
+                api.save().then(() => {
+                  notifier.notify('info', 'Кол-во установлено')
+                })
+              }
+            />
+          </Row>
         </Stack>
       </Card>
     )

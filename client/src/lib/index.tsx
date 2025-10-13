@@ -5,6 +5,7 @@ import {
   UilLink,
   UilPen,
   UilPlusCircle,
+  UilSave,
   UilTrashAlt
 } from '@iconscout/react-unicons'
 import {
@@ -30,6 +31,7 @@ import {
   Textarea,
   TextareaProps,
   ToggleButtonGroup,
+  Tooltip,
   Typography,
   TypographyProps
 } from '@mui/joy'
@@ -79,6 +81,7 @@ export type MyInputProps = {
   size?: InputProps['size']
   variant?: InputProps['variant']
   color?: InputProps['color']
+  onBlur?: InputProps['onBlur']
 }
 
 export function Inp(props: MyInputProps) {
@@ -103,6 +106,7 @@ export function Inp(props: MyInputProps) {
             size={props.size}
             sx={props.sx}
             variant={props.variant}
+            onBlur={props.onBlur}
           />
           {props.unit && <P>{props.unit}</P>}
         </Row>
@@ -465,3 +469,11 @@ export function DesktopOnly(props: {
     </Box>
   )
 }
+
+export const SaveIconButton = (props: IconButtonProps) => (
+  <Tooltip title="Сохранить">
+    <IconButton variant="solid" color="primary" {...props}>
+      <UseIcon icon={UilSave} invert />
+    </IconButton>
+  </Tooltip>
+)

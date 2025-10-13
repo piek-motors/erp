@@ -214,7 +214,7 @@ export const ordersRouter = router({
       }
       const orders = await q
         .selectAll()
-        .orderBy('id', 'desc')
+        .orderBy('actual_shipping_date', 'desc')
         .limit(200)
         .execute()
       const enriched = await enrichOrders(orders)

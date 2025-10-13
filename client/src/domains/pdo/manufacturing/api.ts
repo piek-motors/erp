@@ -47,7 +47,6 @@ export class ManufacturingApi {
     if (!this.s.order) throw new Error('Заказ не найден')
     return rpc.pdo.manufacturing.update.mutate({
       orderId: this.s.order.id,
-      processingRoute: this.s.processingRoute,
       qty: parseInt(this.s.qty)
     })
   }

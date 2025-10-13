@@ -35,6 +35,23 @@ export class Manufacturing {
     if (detail.processing_route) {
       data.processing_route.steps = detail.processing_route.steps
     }
+
+    // deduplication check:  if order created some already
+    const existingOrder = await this.trx
+      .selectFrom('metal_flow.manufacturing')
+      .where('detail_id', '=', detail_id)
+      .where('status', 'in', [
+        EnManufacturingOrderStatus.Waiting,
+        EnManufacturingOrderStatus.MaterialPreparation
+      ])
+      .select('id')
+      .executeTakeFirst()
+    if (existingOrder) {
+      throw new ErrManufacturingOrderAlreadyExists(
+        `Order for detail=${detail_id} already exists: order_id=${existingOrder.id}`
+      )
+    }
+
     return await this.trx
       .insertInto('metal_flow.manufacturing')
       .values({
@@ -264,7 +281,7 @@ class ErrManufacturingOrderInvalidStatusTransition extends TRPCError {
   }
 }
 
-class ErrCannotDeleteStartedOrder extends TRPCError {
+class ErrManufacturingOrderAlreadyExists extends TRPCError {
   constructor(message: string) {
     super({
       code: 'BAD_REQUEST',

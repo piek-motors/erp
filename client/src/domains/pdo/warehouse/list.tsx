@@ -107,11 +107,7 @@ export const OperationsList = observer((props: Props) => {
             data={store.operations}
             rowStyleCb={op => {
               const type = Number(op.original.operation_type)
-              if (type === EnOperationType.Writeoff) {
-                return {
-                  backgroundColor: '#f8d6d6b4'
-                }
-              } else if (type === EnOperationType.Supply) {
+              if (type === EnOperationType.Supply) {
                 return {
                   backgroundColor: '#c6e7c3b9'
                 }

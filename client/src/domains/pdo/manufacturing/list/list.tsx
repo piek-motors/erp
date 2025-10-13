@@ -42,7 +42,10 @@ const columnList: Column<ManufactoringListOutput>[] = [
   },
   {
     Header: 'Кол-во',
-    accessor: 'qty'
+    accessor: m => {
+      if (!m.qty) return ''
+      return <P>{m.qty}</P>
+    }
   },
   {
     Header: 'Старт',
