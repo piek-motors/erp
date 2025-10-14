@@ -1,10 +1,10 @@
 import { rpc } from 'lib/deps'
 import { LoadingController } from 'lib/loading_controller'
+import { matrixDecoder } from 'lib/matrix_decoder'
 import { makeAutoObservable } from 'mobx'
-import { RouterOutput } from 'srv/lib/trpc'
+import { ListManufacturingOutput } from 'srv/rpc/pdo/manufacturing/list'
 
-export type ManufactoringListOutput =
-  RouterOutput['pdo']['manufacturing']['list'][number]
+export type ManufactoringListOutput = ListManufacturingOutput
 
 export class ManufacturingListStore {
   readonly async = new LoadingController()
@@ -20,7 +20,8 @@ export class ManufacturingListStore {
 
   async load() {
     this.async.run(async () => {
-      const orders = await rpc.pdo.manufacturing.list.query()
+      const encodedOrders = await rpc.pdo.manufacturing.list.query()
+      const orders = matrixDecoder<ManufactoringListOutput>(encodedOrders)
       this.setOrders(orders)
     })
   }

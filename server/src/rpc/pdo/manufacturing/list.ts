@@ -1,11 +1,32 @@
 import { db, procedure } from '#root/deps.js'
+import { matrixEncoder } from '#root/lib/matrix_encoder.js'
 import { EnManufacturingOrderStatus } from 'models'
 
 const FinishedLimit = 20
 
+export interface ListManufacturingOutput {
+  id: number
+  detail_id: number
+  detail_name: string
+  qty: number
+  group_id: number | null
+  status: EnManufacturingOrderStatus
+  created_at: string
+  started_at: string | null
+  finished_at: string | null
+}
+
 const query = db
   .selectFrom('metal_flow.manufacturing as m')
-  .selectAll('m')
+  .select([
+    'm.id',
+    'm.status',
+    'm.detail_id',
+    'm.qty',
+    'm.finished_at',
+    'm.created_at',
+    'm.started_at'
+  ])
   .innerJoin('metal_flow.details as d', 'm.detail_id', 'd.id')
   .select(['d.name as detail_name', 'd.logical_group_id as group_id'])
 
@@ -22,7 +43,7 @@ export const listManufacturing = procedure.query(async () => {
       .limit(FinishedLimit)
       .execute()
   ])
-  return [
+  const result = [
     ...inProduction.map(e => ({
       ...e,
       material_writeoffs: undefined
@@ -32,4 +53,6 @@ export const listManufacturing = procedure.query(async () => {
       material_writeoffs: undefined
     }))
   ]
+
+  return matrixEncoder(result)
 })
