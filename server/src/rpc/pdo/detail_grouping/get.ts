@@ -1,6 +1,15 @@
 import { db, procedure, TRPCError } from '#root/deps.js'
+import { matrixEncoder } from '#root/lib/matrix_encoder.js'
 import { Color } from 'models'
 import { z } from 'zod'
+
+export interface DetailInTheGroup {
+  id: number
+  name: string
+  part_code: string | null
+  group_id: number | null
+  colors: Color[]
+}
 
 export const getDetailInTheGroup = procedure
   .input(
@@ -43,15 +52,19 @@ export const getDetailInTheGroup = procedure
       })
     }
 
-    return {
-      group,
-      details: [...directDetails, ...details].map(d => ({
+    const detailsData: DetailInTheGroup[] = [...directDetails, ...details].map(
+      d => ({
         id: d.id as number,
         name: d.name as string,
         part_code: d.part_code as string | null,
         group_id: d.logical_group_id as number | null,
         colors: colorAnnotations.find(ca => ca.detail_id === d.id)
           ?.colors as Color[]
-      }))
+      })
+    )
+
+    return {
+      group,
+      details: matrixEncoder(detailsData)
     }
   })

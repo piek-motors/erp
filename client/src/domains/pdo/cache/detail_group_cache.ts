@@ -2,7 +2,7 @@ import { rpc } from 'lib/rpc.client'
 import { makeAutoObservable } from 'mobx'
 import { RouterOutput } from 'srv/lib/trpc'
 
-export type DetailGroup = RouterOutput['pdo']['detailGroups']['list'][number]
+export type DetailGroup = RouterOutput['pdo']['detail_groups']['list'][number]
 
 export class DetailGroupCache {
   private groups: DetailGroup[] = []
@@ -29,7 +29,7 @@ export class DetailGroupCache {
     makeAutoObservable(this)
   }
   async load() {
-    const groups = await rpc.pdo.detailGroups.list.query()
+    const groups = await rpc.pdo.detail_groups.list.query()
     this.setGroups(groups)
     return groups
   }

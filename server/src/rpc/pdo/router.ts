@@ -76,7 +76,7 @@ export const metalFlowRouter = router({
     writeoff: createDetailWriteoff,
     supply: createDetailSupply
   }),
-  detailGroups: router({
+  detail_groups: router({
     get: getDetailInTheGroup,
     list: listDetailGroups,
     create: createDetailGroup,
