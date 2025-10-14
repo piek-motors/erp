@@ -1,5 +1,6 @@
 import { db, procedure } from '#root/deps.js'
 import { matrixEncoder } from '#root/lib/matrix_encoder.js'
+import { formatDate, timedeltaInSeconds } from '#root/lib/time.js'
 import { EnManufacturingOrderStatus } from 'models'
 
 const FinishedLimit = 20
@@ -14,6 +15,7 @@ export interface ListManufacturingOutput {
   created_at: string
   started_at: string | null
   finished_at: string | null
+  time_delta: number | null
 }
 
 const query = db
@@ -43,16 +45,16 @@ export const listManufacturing = procedure.query(async () => {
       .limit(FinishedLimit)
       .execute()
   ])
-  const result = [
-    ...inProduction.map(e => ({
-      ...e,
-      material_writeoffs: undefined
-    })),
-    ...finished.map(e => ({
-      ...e,
-      material_writeoffs: undefined
-    }))
-  ]
+  const result = [...inProduction, ...finished].map(o => ({
+    ...o,
+    created_at: formatDate(o.created_at),
+    started_at: formatDate(o.started_at),
+    finished_at: formatDate(o.finished_at),
+    time_delta:
+      o.finished_at && o.started_at
+        ? timedeltaInSeconds(o.finished_at, o.started_at)
+        : null
+  }))
 
   return matrixEncoder(result)
 })

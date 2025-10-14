@@ -24,3 +24,13 @@ export function fromMs(date?: number | null): Date | null {
   if (!date) return null
   return new Date(date)
 }
+
+export const formatDate = (date?: Date | null) => {
+  if (!date) return null
+  return Intl.DateTimeFormat('ru-RU', {
+    month: 'short',
+    day: 'numeric'
+  })
+    .format(date)
+    .replace(/\.$/, '')
+}

@@ -2,7 +2,6 @@ import { DetailName } from 'domains/pdo/detail/name'
 import { P } from 'lib/index'
 import { EnManufacturingOrderStatus as Status } from 'models'
 import { Column } from 'react-table'
-import { formatDate } from './list'
 import { ManufactoringListOutput } from './store'
 
 const commonColumns: Column<ManufactoringListOutput>[] = [
@@ -37,46 +36,32 @@ const commonColumns: Column<ManufactoringListOutput>[] = [
 const preparationColumns = commonColumns.concat([
   {
     Header: 'Создан',
-    accessor: m => {
-      return <P>{formatDate(new Date(m.created_at))}</P>
-    }
+    accessor: 'created_at'
   }
 ])
 
 const productionColumns = commonColumns.concat([
   {
     Header: 'Старт',
-    accessor: m => {
-      if (!m.started_at) return ''
-      return <P>{formatDate(new Date(m.started_at))}</P>
-    }
+    accessor: 'started_at'
   }
 ])
 
 const finishColumns = commonColumns.concat([
   {
     Header: 'Создан',
-    accessor: m => {
-      return <P>{formatDate(new Date(m.created_at))}</P>
-    }
+    accessor: 'created_at'
   },
   {
     Header: 'Финиш',
-    accessor: m => {
-      if (!m.finished_at) return ''
-      return <P>{formatDate(new Date(m.finished_at!))}</P>
-    }
+    accessor: 'finished_at'
   },
   {
     Header: 'Дельта',
     accessor: m => {
-      if (!m.started_at || !m.finished_at) return ''
-      const ms =
-        new Date(m.finished_at).getTime() - new Date(m.started_at).getTime()
-      if (ms <= 0) return ''
-      const totalMinutes = Math.floor(ms / 60000)
-      const days = Math.floor(totalMinutes / 1440)
-      return <P>{days} д.</P>
+      if (!m.time_delta) return ''
+      const totalDays = Math.round(m.time_delta / (3600 * 24))
+      return <P>{totalDays} д.</P>
     }
   }
 ])
