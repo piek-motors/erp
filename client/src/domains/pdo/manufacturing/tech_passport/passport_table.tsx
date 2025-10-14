@@ -49,18 +49,20 @@ export const DetailTechPassportTable = observer((props: Props) => {
         </tr>
 
         <tr>
-          <td>
+          <td style={{ maxWidth: '30%', width: '20%' }}>
             <L>Заготовка</L>
-            <P fontSize={14} pb={1}>
+            <P fontSize={14} pb={0.5} fontWeight={500}>
               {materialCost?.materialId
                 ? cache.materials.getLabel(materialCost.materialId)
                 : ''}
             </P>
-            <TechParamsRowDisplay fontSize={12} params={s.detail.blankSpec} />
+            <TechParamsRowDisplay fontSize={14} params={s.detail.blankSpec} />
           </td>
           <td colSpan={3}>
             <L>Наименование детали</L>
-            <P>{capitalize(s.detail.name)}</P>
+            <P fontWeight={500} fontSize={16}>
+              {capitalize(s.detail.name)}
+            </P>
           </td>
 
           <td colSpan={6} style={{ padding: 0 }}>

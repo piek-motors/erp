@@ -12,7 +12,7 @@ const t = initTRPC.context<Context>().create({
       return
     }
 
-    log.error(`[${error.name}] ${error.message}`)
+    log.error(error, `[${error.name}] ${error.message}`)
     return shape
   }
 })

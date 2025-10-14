@@ -5,7 +5,7 @@ import { Column } from 'react-table'
 import { formatDate } from './list'
 import { ManufactoringListOutput } from './store'
 
-const columnList: Column<ManufactoringListOutput>[] = [
+const commonColumns: Column<ManufactoringListOutput>[] = [
   {
     Header: '№',
     accessor: 'id'
@@ -34,7 +34,7 @@ const columnList: Column<ManufactoringListOutput>[] = [
   }
 ]
 
-const preparationColumns = columnList.concat([
+const preparationColumns = commonColumns.concat([
   {
     Header: 'Создан',
     accessor: m => {
@@ -43,7 +43,7 @@ const preparationColumns = columnList.concat([
   }
 ])
 
-const productionColumns = columnList.concat([
+const productionColumns = commonColumns.concat([
   {
     Header: 'Старт',
     accessor: m => {
@@ -53,7 +53,13 @@ const productionColumns = columnList.concat([
   }
 ])
 
-const finishColumns = columnList.concat(preparationColumns).concat([
+const finishColumns = commonColumns.concat([
+  {
+    Header: 'Создан',
+    accessor: m => {
+      return <P>{formatDate(new Date(m.created_at))}</P>
+    }
+  },
   {
     Header: 'Финиш',
     accessor: m => {
@@ -85,6 +91,6 @@ export function getColumns(status: Status) {
     case Status.Collected:
       return finishColumns
     default:
-      return columnList
+      return commonColumns
   }
 }
