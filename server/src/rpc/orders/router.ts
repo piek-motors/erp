@@ -157,7 +157,12 @@ export const ordersRouter = router({
         statuses: z.array(z.enum(OrderStatus)).optional(),
         shipped_before: z.number().optional(),
         shipped_after: z.number().optional(),
-        ordering: z.enum(['asc', 'desc']).optional()
+        ordering: z
+          .object({
+            column: z.enum(['id', 'actual_shipping_date', 'shipping_date']),
+            type: z.enum(['asc', 'desc'])
+          })
+          .optional()
       })
     )
     .query(async ({ input }) => {
@@ -185,7 +190,7 @@ export const ordersRouter = router({
         q = q.where('actual_shipping_date', '<=', new Date(input.shipped_after))
       }
       if (input.ordering) {
-        q = q.orderBy('id', input.ordering)
+        q = q.orderBy(input.ordering.column, input.ordering.type)
       }
       const orders = await q.selectAll().execute()
       const enriched = await enrichOrders(orders)

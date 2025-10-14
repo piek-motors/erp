@@ -42,7 +42,8 @@ class ReportPageStore {
           .endOf('month')
           .utc(true)
           .valueOf(),
-        status: OrderStatus.Archived
+        status: OrderStatus.Archived,
+        ordering: { column: 'actual_shipping_date', type: 'desc' }
       })
       this.data = matrixDecoder<ClientOrder>(res).map(order => ({
         ...order,

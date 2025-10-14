@@ -27,7 +27,12 @@ const searchPlaceholder = 'Счет, контрагент'
 const PriorityList = observer(() => {
   const [orders, setOrders] = useState<UnpackedOrder[]>([])
   useEffect(() => {
-    ordersApi.loadOrders(OrderStatus.InProduction).then(setOrders)
+    ordersApi
+      .loadOrders(OrderStatus.InProduction, {
+        column: 'shipping_date',
+        type: 'desc'
+      })
+      .then(setOrders)
   }, [])
   const filteredOrders = useFilter({
     orders,
@@ -58,7 +63,9 @@ const PriorityList = observer(() => {
 const RegistrationList = observer(() => {
   const [orders, setOrders] = useState<UnpackedOrder[]>([])
   useEffect(() => {
-    ordersApi.loadOrders(OrderStatus.PreOrder, 'desc').then(setOrders)
+    ordersApi
+      .loadOrders(OrderStatus.PreOrder, { column: 'id', type: 'desc' })
+      .then(setOrders)
   }, [])
   const filteredOrders = useFilter({
     orders,
