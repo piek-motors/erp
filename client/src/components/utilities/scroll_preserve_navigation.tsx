@@ -81,9 +81,6 @@ export const ScrollPreservNavigation = ({
       requestAnimationFrame(() => {
         if (containerRef.current) {
           containerRef.current.scrollTop = parseInt(savedPosition, 10)
-          console.log(
-            `📜 Restored scroll position for ${location.pathname}: ${savedPosition}px`
-          )
         }
       })
     }

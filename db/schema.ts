@@ -100,7 +100,7 @@ export namespace DB {
     name: string
     unit: EnUnit // defailt Countable
     description: string | null
-    logical_group_id: number | null
+    logical_group_id: number | null // hash index
     part_code: string | null
     stock: number
     blank_spec: JSONColumnType<any, any, any>
