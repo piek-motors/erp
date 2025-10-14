@@ -33,13 +33,15 @@ export const AccordionCard: React.FC<AccordionCardProps> = ({
   }, [expandedProp])
 
   return (
-    <Sheet sx={{ borderRadius: 'sm', overflow: 'hidden', ...sx }}>
+    <Sheet sx={{ borderRadius: 'sm', ...sx }}>
       <Accordion
         expanded={expanded}
         onChange={(_, isExpanded) => setExpanded(isExpanded)}
       >
         <AccordionSummary>{title}</AccordionSummary>
-        <AccordionDetails>{children}</AccordionDetails>
+        <AccordionDetails slotProps={{ content: { sx: { overflow: 'auto' } } }}>
+          {children}
+        </AccordionDetails>
       </Accordion>
     </Sheet>
   )
