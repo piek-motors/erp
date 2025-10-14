@@ -8,6 +8,10 @@ import type { Context } from './context.ts'
 
 const t = initTRPC.context<Context>().create({
   errorFormatter({ shape, error }) {
+    if (error.message === 'jwt expired') {
+      return
+    }
+
     log.error(`[${error.name}] ${error.message}`)
     return shape
   }

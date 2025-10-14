@@ -53,7 +53,7 @@ const productionColumns = columnList.concat([
   }
 ])
 
-const finishColumns = columnList.concat([
+const finishColumns = columnList.concat(preparationColumns).concat([
   {
     Header: 'Финиш',
     accessor: m => {
