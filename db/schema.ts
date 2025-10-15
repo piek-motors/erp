@@ -38,14 +38,14 @@ export namespace DB {
     ['attendance.intervals']: AttendanceIntervalTable
     ['attendance.users']: AttendanceUserTable
 
-    ['metal_flow.materials']: MaterialTable
-    ['metal_flow.details']: DetailTable
-    ['metal_flow.detail_attachments']: DetailAttachmentTable
-    ['metal_flow.operations']: OperationsTable
-    ['metal_flow.manufacturing']: ManufacturingTable
-    ['metal_flow.detail_group']: DetailGroupTable
-    ['metal_flow.detail_group_details']: DetailGroupDetailsTable
-    ['metal_flow.detail_group_color_annotations']: DetailGroupColorAnnotationsTable
+    ['pdo.materials']: MaterialTable
+    ['pdo.details']: DetailTable
+    ['pdo.detail_attachments']: DetailAttachmentTable
+    ['pdo.operations']: OperationsTable
+    ['pdo.manufacturing']: ManufacturingTable
+    ['pdo.detail_group']: DetailGroupTable
+    ['pdo.detail_group_details']: DetailGroupDetailsTable
+    ['pdo.detail_group_color_annotations']: DetailGroupColorAnnotationsTable
   }
 
   export interface RefreshTokenTable {

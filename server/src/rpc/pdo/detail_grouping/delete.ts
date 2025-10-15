@@ -10,7 +10,7 @@ export const deleteDetailGroup = procedure
   .mutation(async ({ input }) => {
     // First check if the group exists
     const group = await db
-      .selectFrom('metal_flow.detail_group')
+      .selectFrom('pdo.detail_group')
       .where('id', '=', input.id)
       .select(['id', 'name'])
       .executeTakeFirst()
@@ -26,13 +26,13 @@ export const deleteDetailGroup = procedure
     await db.transaction().execute(async trx => {
       // First delete all detail associations
       await trx
-        .deleteFrom('metal_flow.detail_group_details')
+        .deleteFrom('pdo.detail_group_details')
         .where('group_id', '=', input.id)
         .execute()
 
       // Then delete the group itself
       await trx
-        .deleteFrom('metal_flow.detail_group')
+        .deleteFrom('pdo.detail_group')
         .where('id', '=', input.id)
         .execute()
     })

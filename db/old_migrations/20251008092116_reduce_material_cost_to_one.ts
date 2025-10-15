@@ -2,11 +2,11 @@ import { sql } from 'kysely'
 import { type KDB } from '../schema'
 
 export async function up(db: KDB): Promise<void> {
-  await sql`DROP TABLE IF EXISTS metal_flow.detail_materials`.execute(db)
+  await sql`DROP TABLE IF EXISTS pdo.detail_materials`.execute(db)
 
   // Transform materials array to single material object
   await sql`
-    UPDATE metal_flow.details
+    UPDATE pdo.details
     SET automatic_writeoff = 
       CASE 
         WHEN automatic_writeoff->'materials' IS NOT NULL 
@@ -21,7 +21,7 @@ export async function up(db: KDB): Promise<void> {
   // Create index for efficient material_id lookups
   await sql`
     CREATE INDEX idx_details_automatic_writeoff_material_id 
-    ON metal_flow.details 
+    ON pdo.details 
     USING btree (((automatic_writeoff->'material'->>'material_id')::int))
     WHERE automatic_writeoff->'material' IS NOT NULL
   `.execute(db)
@@ -30,12 +30,12 @@ export async function up(db: KDB): Promise<void> {
 export async function down(db: KDB): Promise<void> {
   // Drop the index
   await sql`
-    DROP INDEX metal_flow.idx_details_automatic_writeoff_material_id
+    DROP INDEX pdo.idx_details_automatic_writeoff_material_id
   `.execute(db)
 
   // Transform single material object back to materials array
   await sql`
-    UPDATE metal_flow.details
+    UPDATE pdo.details
     SET automatic_writeoff = 
       CASE 
         WHEN automatic_writeoff->'material' IS NOT NULL

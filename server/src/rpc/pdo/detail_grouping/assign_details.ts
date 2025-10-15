@@ -13,7 +13,7 @@ export const assignDetailsToGroup = procedure
   .mutation(async ({ input }) => {
     // First check if the group exists
     const group = await db
-      .selectFrom('metal_flow.detail_group')
+      .selectFrom('pdo.detail_group')
       .where('id', '=', input.groupId)
       .selectAll()
       .executeTakeFirst()
@@ -27,7 +27,7 @@ export const assignDetailsToGroup = procedure
 
     // Check if all details exist
     const details = await db
-      .selectFrom('metal_flow.details')
+      .selectFrom('pdo.details')
       .where('id', 'in', input.detailIds)
       .select(['id'])
       .execute()
@@ -43,7 +43,7 @@ export const assignDetailsToGroup = procedure
       // Insert the associations, ignoring duplicates
       const insertPromises = input.detailIds.map(detailId =>
         db
-          .insertInto('metal_flow.detail_group_details')
+          .insertInto('pdo.detail_group_details')
           .values({
             group_id: input.groupId,
             detail_id: detailId

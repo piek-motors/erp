@@ -28,7 +28,7 @@ export const deleteWriteoff = publicProcedure
   .mutation(async ({ input }) => {
     return await db.transaction().execute(async trx => {
       await trx
-        .deleteFrom('metal_flow.operations')
+        .deleteFrom('pdo.operations')
         .where('id', '=', input.id)
         .execute()
     })

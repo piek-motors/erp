@@ -2,14 +2,14 @@ import { type KDB } from '../schema'
 
 export async function up(db: KDB): Promise<void> {
   const details = await db
-    .selectFrom('metal_flow.details')
+    .selectFrom('pdo.details')
     .select(['id', 'blank_spec'])
     .execute()
 
   for (const detail of details) {
     if (detail.blank_spec && typeof detail.blank_spec === 'object') {
       await db
-        .updateTable('metal_flow.details')
+        .updateTable('pdo.details')
         .set({
           blank_spec: {
             arr: Object.entries(detail.blank_spec).map(([key, value]) => ({

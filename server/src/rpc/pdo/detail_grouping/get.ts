@@ -21,25 +21,25 @@ export const getDetailInTheGroup = procedure
     const [group, details, directDetails, colorAnnotations] = await Promise.all(
       [
         db
-          .selectFrom('metal_flow.detail_group')
+          .selectFrom('pdo.detail_group')
           .where('id', '=', input.groupId)
           .select(['id', 'name'])
           .executeTakeFirst(),
         db
-          .selectFrom('metal_flow.detail_group_details as dgd')
+          .selectFrom('pdo.detail_group_details as dgd')
           .where('dgd.group_id', '=', input.groupId)
-          .leftJoin('metal_flow.details as d', 'd.id', 'dgd.detail_id')
+          .leftJoin('pdo.details as d', 'd.id', 'dgd.detail_id')
           .where('d.logical_group_id', 'is', null)
           .select(['d.id', 'd.name', 'd.part_code', 'd.logical_group_id'])
           .orderBy('d.name', 'asc')
           .execute(),
         db
-          .selectFrom('metal_flow.details')
+          .selectFrom('pdo.details')
           .select(['id', 'name', 'part_code', 'logical_group_id'])
           .where('logical_group_id', '=', input.groupId)
           .execute(),
         db
-          .selectFrom('metal_flow.detail_group_color_annotations')
+          .selectFrom('pdo.detail_group_color_annotations')
           .where('group_id', '=', input.groupId)
           .select(['detail_id', 'colors'])
           .execute()

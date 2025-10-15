@@ -19,7 +19,7 @@ export interface ListManufacturingOutput {
 }
 
 const query = db
-  .selectFrom('metal_flow.manufacturing as m')
+  .selectFrom('pdo.manufacturing as m')
   .select([
     'm.id',
     'm.status',
@@ -29,7 +29,7 @@ const query = db
     'm.created_at',
     'm.started_at'
   ])
-  .innerJoin('metal_flow.details as d', 'm.detail_id', 'd.id')
+  .innerJoin('pdo.details as d', 'm.detail_id', 'd.id')
   .select(['d.name as detail_name', 'd.logical_group_id as group_id'])
 
 export const listManufacturing = procedure.query(async () => {

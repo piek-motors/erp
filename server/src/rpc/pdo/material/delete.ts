@@ -9,11 +9,11 @@ export const deleteMaterial = publicProcedure
     const { id } = input
     await db.transaction().execute(async trx => {
       await trx
-        .deleteFrom('metal_flow.operations')
+        .deleteFrom('pdo.operations')
         .where('material_id', '=', id)
         .execute()
       const { label } = await trx
-        .deleteFrom('metal_flow.materials')
+        .deleteFrom('pdo.materials')
         .where('id', '=', id)
         .returning(['label'])
         .executeTakeFirstOrThrow()

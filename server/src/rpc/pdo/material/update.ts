@@ -18,7 +18,7 @@ export const updateMaterial = publicProcedure
   )
   .mutation(async ({ input }) => {
     await db
-      .updateTable('metal_flow.materials')
+      .updateTable('pdo.materials')
       .set({
         label: input.label,
         shape: input.shape,

@@ -11,7 +11,7 @@ export const updateDetailGroup = procedure
   .mutation(async ({ input }) => {
     try {
       const result = await db
-        .updateTable('metal_flow.detail_group')
+        .updateTable('pdo.detail_group')
         .set({
           name: input.name
         })

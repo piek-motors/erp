@@ -29,7 +29,7 @@ export const createMaterial = publicProcedure
     )
     const label = materialModel.deriveLabel()
     const material = await db
-      .insertInto('metal_flow.materials')
+      .insertInto('pdo.materials')
       .values({
         ...input,
         unit: input.unit ?? EnUnit.M,

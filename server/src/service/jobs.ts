@@ -16,7 +16,7 @@ export class Jobs {
   private async removeOutdatedManufacturingOrders() {
     const cutoffDate = new Date(Date.now() - OutdatedOrderDays * Day)
     const result = await db
-      .deleteFrom('metal_flow.manufacturing')
+      .deleteFrom('pdo.manufacturing')
       .where('created_at', '<', cutoffDate)
       .where('status', 'in', [
         EnManufacturingOrderStatus.Waiting,

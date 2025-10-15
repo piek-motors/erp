@@ -6,7 +6,7 @@ export class Warehouse {
 
   async addMaterial(id: number, qty: number, reason: EnSupplyReason) {
     const operation = await this.trx
-      .insertInto('metal_flow.operations')
+      .insertInto('pdo.operations')
       .values({
         operation_type: EnOperationType.Supply,
         user_id: this.userId,
@@ -17,7 +17,7 @@ export class Warehouse {
       .returning(['id'])
       .executeTakeFirstOrThrow()
     const res = await this.trx
-      .updateTable('metal_flow.materials')
+      .updateTable('pdo.materials')
       .set(eb => ({
         stock: eb('stock', '+', qty)
       }))
@@ -38,7 +38,7 @@ export class Warehouse {
     manufacturing_order_id?: number
   ) {
     const current_stock = await this.trx
-      .selectFrom('metal_flow.materials')
+      .selectFrom('pdo.materials')
       .select(['stock', 'label'])
       .where('id', '=', id)
       .executeTakeFirstOrThrow()
@@ -50,7 +50,7 @@ export class Warehouse {
     }
 
     const operation = await this.trx
-      .insertInto('metal_flow.operations')
+      .insertInto('pdo.operations')
       .values({
         operation_type: EnOperationType.Writeoff,
         user_id: this.userId,
@@ -64,7 +64,7 @@ export class Warehouse {
       .executeTakeFirstOrThrow()
 
     const res = await this.trx
-      .updateTable('metal_flow.materials')
+      .updateTable('pdo.materials')
       .set(eb => ({
         stock: eb('stock', '-', qty)
       }))
@@ -80,7 +80,7 @@ export class Warehouse {
 
   async addDetail(id: number, qty: number, reason: EnSupplyReason) {
     const operation = await this.trx
-      .insertInto('metal_flow.operations')
+      .insertInto('pdo.operations')
       .values({
         operation_type: EnOperationType.Supply,
         user_id: this.userId,
@@ -91,7 +91,7 @@ export class Warehouse {
       .returning(['id'])
       .executeTakeFirstOrThrow()
     const detail = await this.trx
-      .updateTable('metal_flow.details')
+      .updateTable('pdo.details')
       .set(eb => ({
         stock: eb('stock', '+', qty)
       }))
@@ -107,7 +107,7 @@ export class Warehouse {
 
   async subtractDetail(id: number, qty: number, reason: EnWriteoffReason) {
     const current_stock = await this.trx
-      .selectFrom('metal_flow.details')
+      .selectFrom('pdo.details')
       .select(['stock'])
       .where('id', '=', id)
       .executeTakeFirstOrThrow()
@@ -117,7 +117,7 @@ export class Warehouse {
     }
 
     const detail = await this.trx
-      .updateTable('metal_flow.details')
+      .updateTable('pdo.details')
       .set(eb => ({
         stock: eb('stock', '-', qty)
       }))
@@ -126,7 +126,7 @@ export class Warehouse {
       .executeTakeFirstOrThrow()
 
     const operation = await this.trx
-      .insertInto('metal_flow.operations')
+      .insertInto('pdo.operations')
       .values({
         operation_type: EnOperationType.Writeoff,
         user_id: this.userId,

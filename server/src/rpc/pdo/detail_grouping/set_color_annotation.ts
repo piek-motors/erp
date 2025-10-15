@@ -11,7 +11,7 @@ export const setColorAnnotation = procedure
   )
   .mutation(async ({ input }) => {
     await db
-      .insertInto('metal_flow.detail_group_color_annotations')
+      .insertInto('pdo.detail_group_color_annotations')
       .values(input)
       .onConflict(oc =>
         oc.columns(['group_id', 'detail_id']).doUpdateSet(input)

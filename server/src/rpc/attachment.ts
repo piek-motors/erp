@@ -84,7 +84,7 @@ export const deleteFile = publicProcedure
         break
       case 'detail':
         await db
-          .deleteFrom('metal_flow.detail_attachments')
+          .deleteFrom('pdo.detail_attachments')
           .where('attachment_id', '=', attachmentId.id)
           .execute()
         break

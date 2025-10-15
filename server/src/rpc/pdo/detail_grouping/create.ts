@@ -10,7 +10,7 @@ export const createDetailGroup = procedure
   .mutation(async ({ input }) => {
     try {
       const result = await db
-        .insertInto('metal_flow.detail_group')
+        .insertInto('pdo.detail_group')
         .values({
           name: input.name
         })

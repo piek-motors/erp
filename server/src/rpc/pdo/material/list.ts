@@ -7,7 +7,7 @@ export type Material = DB.Material
 
 export const listMaterials = publicProcedure.query(async () => {
   const materials = await db
-    .selectFrom('metal_flow.materials as m')
+    .selectFrom('pdo.materials as m')
     .selectAll()
     .orderBy('m.label')
     .execute()

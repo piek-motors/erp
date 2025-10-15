@@ -7,22 +7,11 @@ export const deleteDetail = publicProcedure
   .input(z.object({ id: z.number() }))
   .mutation(async ({ input }) =>
     db.transaction().execute(async trx => {
-      await trx
-        .deleteFrom('metal_flow.manufacturing')
-        .where('detail_id', '=', input.id)
-        .execute()
-      await trx
-        .deleteFrom('metal_flow.operations')
-        .where('detail_id', '=', input.id)
-        .execute()
-      await trx
-        .deleteFrom('metal_flow.detail_group_details')
-        .where('detail_id', '=', input.id)
-        .execute()
-      await trx
-        .deleteFrom('metal_flow.details')
-        .where('id', '=', input.id)
-        .execute()
+      // CASCADE constraints will automatically delete related records from:
+      // - pdo.manufacturing
+      // - pdo.operations
+      // - pdo.detail_group_details
+      await trx.deleteFrom('pdo.details').where('id', '=', input.id).execute()
       log.warn(`Detail deleted: ${input.id}`)
       return {
         success: true

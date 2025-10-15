@@ -16,7 +16,7 @@ export const getDetail = publicProcedure
   .query(async ({ input }) => {
     const [detail, attachments, lastManufacturing] = await Promise.all([
       db
-        .selectFrom('metal_flow.details')
+        .selectFrom('pdo.details')
         .where('id', '=', input.id)
         .selectAll()
         .executeTakeFirstOrThrow()
@@ -27,13 +27,13 @@ export const getDetail = publicProcedure
           })
         }),
       db
-        .selectFrom('metal_flow.detail_attachments')
+        .selectFrom('pdo.detail_attachments')
         .leftJoin('attachments', join => join.onRef('attachment_id', '=', 'id'))
         .where('detail_id', '=', input.id)
         .selectAll()
         .execute(),
       db
-        .selectFrom('metal_flow.manufacturing')
+        .selectFrom('pdo.manufacturing')
         .select(['finished_at', 'qty'])
         .where('detail_id', '=', input.id)
         .where('finished_at', 'is not', null)

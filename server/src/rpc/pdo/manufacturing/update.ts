@@ -13,7 +13,7 @@ export const updateManufacturing = publicProcedure
   )
   .mutation(async ({ input, ctx }) => {
     const existing = await db
-      .selectFrom('metal_flow.manufacturing')
+      .selectFrom('pdo.manufacturing')
       .where('id', '=', input.orderId)
       .select('data')
       .executeTakeFirstOrThrow()
@@ -31,7 +31,7 @@ export const updateManufacturing = publicProcedure
 
     return await db.transaction().execute(async trx => {
       await trx
-        .updateTable('metal_flow.manufacturing')
+        .updateTable('pdo.manufacturing')
         .set(update)
         .where('id', '=', input.orderId)
         .execute()

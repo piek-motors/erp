@@ -25,9 +25,9 @@ export async function up(db: KDB): Promise<void> {
     .execute()
 
   await db.schema
-    .createTable('metal_flow.detail_attachments')
+    .createTable('pdo.detail_attachments')
     .addColumn('detail_id', 'integer', col =>
-      col.references('metal_flow.details.id').onDelete('cascade').notNull()
+      col.references('pdo.details.id').onDelete('cascade').notNull()
     )
     .addColumn('attachment_id', 'integer', col =>
       col.references('attachments.id').onDelete('cascade').notNull()
@@ -76,7 +76,7 @@ export async function up(db: KDB): Promise<void> {
 }
 
 export async function down(db: KDB): Promise<void> {
-  await db.schema.dropTable('metal_flow.detail_attachments').execute()
+  await db.schema.dropTable('pdo.detail_attachments').execute()
   await db.schema.dropTable('orders.order_attachments').execute()
   await db.schema.dropTable('attachments').execute()
 }

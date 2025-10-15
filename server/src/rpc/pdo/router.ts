@@ -48,7 +48,7 @@ export const metalFlowRouter = router({
     writeoff: writeoffMaterial,
     getDistinctAlloys: procedure.query(async () =>
       db
-        .selectFrom('metal_flow.materials')
+        .selectFrom('pdo.materials')
         .select('alloy')
         .distinct()
         .execute()
@@ -63,7 +63,7 @@ export const metalFlowRouter = router({
       .input(z.object({ material_id: z.number() }))
       .query(async ({ input }) =>
         db
-          .selectFrom('metal_flow.details')
+          .selectFrom('pdo.details')
           .where(
             sql<boolean>`(automatic_writeoff->'material'->>'material_id')::int = ${input.material_id}`
           )

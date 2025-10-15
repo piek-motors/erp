@@ -10,7 +10,7 @@ export const updateDetail = publicProcedure
   .input(updateDetailDto)
   .mutation(async ({ input }) => {
     await db
-      .updateTable('metal_flow.details')
+      .updateTable('pdo.details')
       .set({
         name: input.name,
         description: input.description,

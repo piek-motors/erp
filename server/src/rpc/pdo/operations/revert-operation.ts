@@ -2,7 +2,7 @@ import { db, procedure, z } from '#root/deps.js'
 import { EnOperationType } from 'models'
 
 interface StockUpdate {
-  table: 'metal_flow.materials' | 'metal_flow.details'
+  table: 'pdo.materials' | 'pdo.details'
   id: number
   quantity: number
   isSupply: boolean
@@ -30,7 +30,7 @@ export const revertOperation = procedure
 type Operation = Awaited<ReturnType<typeof getOperation>>
 async function getOperation(id: number) {
   const operation = await db
-    .selectFrom('metal_flow.operations')
+    .selectFrom('pdo.operations')
     .where('id', '=', id)
     .selectAll()
     .executeTakeFirst()
@@ -49,7 +49,7 @@ function buildStockUpdates(operation: Operation): StockUpdate[] {
   // Add material stock update if operation affects materials
   if (operation.material_id) {
     updates.push({
-      table: 'metal_flow.materials',
+      table: 'pdo.materials',
       id: operation.material_id,
       quantity: operation.qty!,
       isSupply
@@ -59,7 +59,7 @@ function buildStockUpdates(operation: Operation): StockUpdate[] {
   // Add detail stock update if operation affects details
   if (operation.detail_id) {
     updates.push({
-      table: 'metal_flow.details',
+      table: 'pdo.details',
       id: operation.detail_id,
       quantity: operation.qty!,
       isSupply
@@ -84,5 +84,5 @@ async function updateStockLevels(updates: StockUpdate[]) {
 }
 
 async function deleteOperation(id: number) {
-  await db.deleteFrom('metal_flow.operations').where('id', '=', id).execute()
+  await db.deleteFrom('pdo.operations').where('id', '=', id).execute()
 }

@@ -10,13 +10,13 @@ export const getMaterial = publicProcedure
   .input(z.object({ id: z.number() }))
   .query(async ({ input }) => {
     const material = await db
-      .selectFrom('metal_flow.materials')
+      .selectFrom('pdo.materials')
       .selectAll()
       .where('id', '=', input.id)
       .executeTakeFirstOrThrow()
 
     const detailCount = await db
-      .selectFrom('metal_flow.details')
+      .selectFrom('pdo.details')
       .where(
         sql<boolean>`(automatic_writeoff->'material'->>'material_id')::int = ${input.id}`
       )

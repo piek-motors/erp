@@ -10,7 +10,7 @@ export const getDetailShortInfo = publicProcedure
   )
   .query(async ({ input }) => {
     return await db
-      .selectFrom('metal_flow.details')
+      .selectFrom('pdo.details')
       .where('id', '=', input.id)
       .selectAll()
       .executeTakeFirstOrThrow()

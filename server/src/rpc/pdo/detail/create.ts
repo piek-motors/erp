@@ -10,7 +10,7 @@ export const createDetail = procedure
   .input(detailDto)
   .mutation(async ({ input }) => {
     const detail = await db
-      .insertInto('metal_flow.details')
+      .insertInto('pdo.details')
       .values({
         name: input.name,
         description: input.description,

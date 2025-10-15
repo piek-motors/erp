@@ -55,7 +55,7 @@ export class AttachmentService {
     detailId: number
   ): Promise<void> {
     await this.db
-      .insertInto('metal_flow.detail_attachments')
+      .insertInto('pdo.detail_attachments')
       .values(
         attachments.map(attachment => ({
           detail_id: detailId,
@@ -114,7 +114,7 @@ export class AttachmentService {
     detailId: number
   ): Promise<Selectable<DB.AttachmentTable>[]> {
     return await this.db
-      .selectFrom('metal_flow.detail_attachments as da')
+      .selectFrom('pdo.detail_attachments as da')
       .innerJoin('attachments as a', 'da.attachment_id', 'a.id')
       .selectAll('a')
       .where('da.detail_id', '=', detailId)

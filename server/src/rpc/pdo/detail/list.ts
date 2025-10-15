@@ -17,7 +17,7 @@ export const getDetailList = publicProcedure
   )
   .query(async ({ input }) => {
     const result = await db
-      .selectFrom('metal_flow.details as d')
+      .selectFrom('pdo.details as d')
       .$if(input.onlyUniversalDetails === true, qb =>
         qb.where('d.logical_group_id', 'is', null)
       )

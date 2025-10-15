@@ -3,7 +3,7 @@ import { type KDB } from '../schema'
 
 export async function up(db: KDB): Promise<void> {
   await sql`
-    ALTER TABLE metal_flow.details
+    ALTER TABLE pdo.details
     DROP COLUMN processing_route,
     ADD COLUMN processing_route jsonb
   `.execute(db)

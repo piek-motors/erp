@@ -24,21 +24,21 @@ export const listOperations = publicProcedure
   )
   .query(async ({ ctx, input }) => {
     const operations = await db
-      .selectFrom('metal_flow.operations as o')
+      .selectFrom('pdo.operations as o')
       .$if(input.materialId != null, qb =>
         qb.where('o.material_id', '=', input.materialId!)
       )
       .$if(input.detailId != null, qb =>
         qb.where('o.detail_id', '=', input.detailId!)
       )
-      .leftJoin('metal_flow.materials as m', 'o.material_id', 'm.id')
-      .leftJoin('metal_flow.details as d', 'o.detail_id', 'd.id')
+      .leftJoin('pdo.materials as m', 'o.material_id', 'm.id')
+      .leftJoin('pdo.details as d', 'o.detail_id', 'd.id')
       .selectAll(['o'])
       .select('d.name as detail_name')
       .select('d.logical_group_id as detail_group_id')
       .select('m.label as material_label')
       .leftJoin(
-        'metal_flow.manufacturing as manuf',
+        'pdo.manufacturing as manuf',
         'manufacturing_order_id',
         'manuf.id'
       )

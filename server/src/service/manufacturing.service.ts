@@ -23,7 +23,7 @@ export class Manufacturing {
     detail_id: number
   ): Promise<Selectable<DB.ManufacturingTable>> {
     const detail = await this.trx
-      .selectFrom('metal_flow.details')
+      .selectFrom('pdo.details')
       .where('id', '=', detail_id)
       .select('processing_route')
       .executeTakeFirstOrThrow()
@@ -38,7 +38,7 @@ export class Manufacturing {
 
     // deduplication check:  if order created some already
     const existingOrder = await this.trx
-      .selectFrom('metal_flow.manufacturing')
+      .selectFrom('pdo.manufacturing')
       .where('detail_id', '=', detail_id)
       .where('status', 'in', [
         EnManufacturingOrderStatus.Waiting,
@@ -53,7 +53,7 @@ export class Manufacturing {
     }
 
     return await this.trx
-      .insertInto('metal_flow.manufacturing')
+      .insertInto('pdo.manufacturing')
       .values({
         detail_id,
         qty: 0,
@@ -79,7 +79,7 @@ export class Manufacturing {
     }
 
     await this.trx
-      .updateTable('metal_flow.manufacturing')
+      .updateTable('pdo.manufacturing')
       .set({ status: EnManufacturingOrderStatus.MaterialPreparation })
       .where('id', '=', orderId)
       .execute()
@@ -94,7 +94,7 @@ export class Manufacturing {
   ): Promise<MaterialWriteoff> {
     const order = await this.getOrder(orderId)
     const detail = await this.trx
-      .selectFrom('metal_flow.details')
+      .selectFrom('pdo.details')
       .where('id', '=', order.detail_id)
       .select('automatic_writeoff')
       .executeTakeFirstOrThrow()
@@ -104,7 +104,7 @@ export class Manufacturing {
 
     if (materialCost) {
       const material = await this.trx
-        .selectFrom('metal_flow.materials')
+        .selectFrom('pdo.materials')
         .where('id', '=', materialCost.material_id)
         .selectAll()
         .executeTakeFirstOrThrow()
@@ -123,7 +123,7 @@ export class Manufacturing {
     }
 
     await this.trx
-      .updateTable('metal_flow.manufacturing')
+      .updateTable('pdo.manufacturing')
       .set({
         qty,
         started_at: new Date(),
@@ -142,7 +142,7 @@ export class Manufacturing {
     material_writeoffs: any
   }> {
     const manufacturing = await this.trx
-      .updateTable('metal_flow.manufacturing')
+      .updateTable('pdo.manufacturing')
       .set({
         finished_at: new Date(),
         status: EnManufacturingOrderStatus.Collected
@@ -158,7 +158,7 @@ export class Manufacturing {
     }
 
     await this.trx
-      .updateTable('metal_flow.details')
+      .updateTable('pdo.details')
       .set(eb => ({
         stock: eb('stock', '+', manufacturing.qty)
       }))
@@ -177,13 +177,9 @@ export class Manufacturing {
       )
     }
 
+    // ON DELETE SET NULL constraint will automatically set operations.manufacturing_order_id to null
     await this.trx
-      .updateTable('metal_flow.operations')
-      .set({ detail_id: null })
-      .where('id', '=', manufacturingId)
-      .execute()
-    await this.trx
-      .deleteFrom('metal_flow.manufacturing')
+      .deleteFrom('pdo.manufacturing')
       .where('id', '=', manufacturingId)
       .execute()
   }
@@ -235,7 +231,7 @@ export class Manufacturing {
     orderId: number
   ): Promise<Selectable<DB.ManufacturingTable>> {
     const order = await this.trx
-      .selectFrom('metal_flow.manufacturing')
+      .selectFrom('pdo.manufacturing')
       .where('id', '=', orderId)
       .selectAll()
       .executeTakeFirst()

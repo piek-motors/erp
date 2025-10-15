@@ -20,10 +20,7 @@ function main() {
 }
 
 export async function recalculateMaterialLabels(db: KDB) {
-  const materials = await db
-    .selectFrom('metal_flow.materials')
-    .selectAll()
-    .execute()
+  const materials = await db.selectFrom('pdo.materials').selectAll().execute()
 
   const updateBuffer: Material[] = []
 
@@ -43,7 +40,7 @@ export async function recalculateMaterialLabels(db: KDB) {
   }
 
   await db
-    .updateTable('metal_flow.materials')
+    .updateTable('pdo.materials')
     .from(
       updateBuffer
         .reduce((qb, material) => {
@@ -59,7 +56,7 @@ export async function recalculateMaterialLabels(db: KDB) {
     .set(eb => ({
       label: eb.ref('data_table.label')
     }))
-    .whereRef('metal_flow.materials.id', '=', 'data_table.id')
+    .whereRef('pdo.materials.id', '=', 'data_table.id')
     .execute()
 
   console.log('done')

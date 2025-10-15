@@ -2,7 +2,7 @@ import { type KDB } from '../schema'
 
 export async function up(db: KDB): Promise<void> {
   await db.schema
-    .alterTable('metal_flow.details')
+    .alterTable('pdo.details')
     .addColumn('automatic_writeoff', 'jsonb')
     .execute()
 
@@ -26,7 +26,7 @@ export async function up(db: KDB): Promise<void> {
   //   const detailId = Number(detailIdStr)
   //   const materials = materialsByDetail[detailId]
   //   await db
-  //     .updateTable('metal_flow.details')
+  //     .updateTable('pdo.details')
   //     .set({
   //       automatic_writeoff: {
   //         materials,
@@ -40,7 +40,7 @@ export async function up(db: KDB): Promise<void> {
 
 export async function down(db: KDB): Promise<void> {
   await db.schema
-    .alterTable('metal_flow.details')
+    .alterTable('pdo.details')
     .dropColumn('automatic_writeoff')
     .execute()
 }

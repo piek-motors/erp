@@ -3,12 +3,12 @@ import { type KDB } from '../schema'
 
 export async function up(db: KDB): Promise<void> {
   await sql`
-  ALTER TABLE metal_flow.details
+  ALTER TABLE pdo.details
   ADD COLUMN recommended_batch_size integer
   `.execute(db)
 
   await sql`
-  ALTER TABLE metal_flow.details
+  ALTER TABLE pdo.details
   RENAME COLUMN params TO blank_spec
   `.execute(db)
 }

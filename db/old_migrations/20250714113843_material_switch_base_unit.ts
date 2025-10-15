@@ -2,17 +2,17 @@ import { EnUnit } from 'models'
 import { type KDB } from '../schema'
 
 export async function up(db: KDB): Promise<void> {
-  await db.deleteFrom('metal_flow.operations').execute()
-  await db.deleteFrom('metal_flow.manufacturing').execute()
+  await db.deleteFrom('pdo.operations').execute()
+  await db.deleteFrom('pdo.manufacturing').execute()
   await db
-    .updateTable('metal_flow.materials')
+    .updateTable('pdo.materials')
     .set({
       stock: 0,
       unit: EnUnit.MilliMeter
     })
     .execute()
   await db
-    .updateTable('metal_flow.details')
+    .updateTable('pdo.details')
     .set({
       stock: 0
     })
