@@ -20,11 +20,11 @@ export class Jobs {
       .where('created_at', '<', cutoffDate)
       .where('status', 'in', [
         EnManufacturingOrderStatus.Waiting,
-        EnManufacturingOrderStatus.MaterialPreparation
+        EnManufacturingOrderStatus.Preparation
       ])
       .returning('id')
       .execute()
-    log.info(
+    log.debug(
       `Removed ${result.length} outdated orders created before ${cutoffDate}`
     )
   }

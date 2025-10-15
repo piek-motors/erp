@@ -75,3 +75,10 @@ export function formatDate(date?: Date | string | null): string {
     year: '2-digit'
   }).format(new Date(date))
 }
+
+export function dayAndMonth(date: Date) {
+  return Intl.DateTimeFormat('ru-RU', {
+    month: 'short',
+    day: 'numeric'
+  }).format(date)
+}

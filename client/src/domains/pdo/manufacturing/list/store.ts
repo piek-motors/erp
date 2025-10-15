@@ -37,4 +37,4 @@ export class ManufacturingListStore {
   }
 }
 
-export const listStore = new ManufacturingListStore()
+export const s = new ManufacturingListStore()

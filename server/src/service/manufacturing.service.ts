@@ -42,7 +42,7 @@ export class Manufacturing {
       .where('detail_id', '=', detail_id)
       .where('status', 'in', [
         EnManufacturingOrderStatus.Waiting,
-        EnManufacturingOrderStatus.MaterialPreparation
+        EnManufacturingOrderStatus.Preparation
       ])
       .select('id')
       .executeTakeFirst()
@@ -80,11 +80,11 @@ export class Manufacturing {
 
     await this.trx
       .updateTable('pdo.manufacturing')
-      .set({ status: EnManufacturingOrderStatus.MaterialPreparation })
+      .set({ status: EnManufacturingOrderStatus.Preparation })
       .where('id', '=', orderId)
       .execute()
 
-    order.status = EnManufacturingOrderStatus.MaterialPreparation
+    order.status = EnManufacturingOrderStatus.Preparation
     return order
   }
 

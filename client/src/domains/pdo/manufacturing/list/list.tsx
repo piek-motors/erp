@@ -16,7 +16,14 @@ import {
 } from 'lib/index'
 import { EnManufacturingOrderStatus, uiManufacturingOrderStatus } from 'models'
 import { getColumns } from './columns'
-import { listStore, ManufactoringListOutput } from './store'
+import { ManufactoringListOutput, s } from './store'
+
+const STATUSES = [
+  EnManufacturingOrderStatus.Collected,
+  EnManufacturingOrderStatus.Production,
+  EnManufacturingOrderStatus.Preparation,
+  EnManufacturingOrderStatus.Waiting
+]
 
 function StatusAccordion(props: {
   status: EnManufacturingOrderStatus
@@ -41,7 +48,7 @@ function StatusAccordion(props: {
 export const ManufacturingList = observer(() => {
   const navigate = useNavigate()
   useEffect(() => {
-    listStore.load()
+    s.load()
   }, [])
 
   const onRowClick = (row: ManufactoringListOutput) => {
@@ -51,18 +58,18 @@ export const ManufacturingList = observer(() => {
   const [query, setQuery] = useState('')
   const q = query.trim().toLowerCase()
   const filtered = q
-    ? listStore.orders.filter(o => {
+    ? s.orders.filter(o => {
         const idMatch = String(o.id).includes(q)
         const nameMatch = o.detail_name?.toLowerCase().includes(q)
         const groupMatch = String(o.group_id || '').includes(q)
         return idMatch || nameMatch || groupMatch
       })
-    : listStore.orders
+    : s.orders
 
   const hasInStatus = (s: EnManufacturingOrderStatus) =>
     filtered.some(o => o.status === s)
 
-  if (listStore.async.loading) return <Loading />
+  if (s.async.loading) return <Loading />
   return (
     <ScrollableWindow
       refreshTrigger={false}
@@ -75,12 +82,7 @@ export const ManufacturingList = observer(() => {
       scrollableContent={
         <Stack gap={1}>
           <AccordionGroup>
-            {[
-              EnManufacturingOrderStatus.Collected,
-              EnManufacturingOrderStatus.Production,
-              EnManufacturingOrderStatus.MaterialPreparation,
-              EnManufacturingOrderStatus.Waiting
-            ].map(s => (
+            {STATUSES.map(s => (
               <StatusAccordion
                 key={s}
                 status={s}
@@ -95,10 +97,3 @@ export const ManufacturingList = observer(() => {
     />
   )
 })
-
-export function formatDate(date: Date) {
-  return Intl.DateTimeFormat('ru-RU', {
-    month: 'short',
-    day: 'numeric'
-  }).format(date)
-}

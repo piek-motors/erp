@@ -32,7 +32,7 @@ import { DetailDescription } from './tech_passport/shared'
 
 const deletionAllowed = [
   EnManufacturingOrderStatus.Waiting,
-  EnManufacturingOrderStatus.MaterialPreparation,
+  EnManufacturingOrderStatus.Preparation,
   EnManufacturingOrderStatus.Production
 ]
 
@@ -204,7 +204,7 @@ export const Cost = observer(() => {
 
 const QuantityInput = observer(() => {
   if (!api.s.order) return null
-  if (api.s.order.status === EnManufacturingOrderStatus.MaterialPreparation) {
+  if (api.s.order.status === EnManufacturingOrderStatus.Preparation) {
     const recBatchSize = api.s.detail.recommendedBatchSize
     return (
       <Card size="sm" variant="outlined">
@@ -263,7 +263,7 @@ const ActionButton = observer(
             Начать подготовку материалов
           </Button>
         )
-      case EnManufacturingOrderStatus.MaterialPreparation:
+      case EnManufacturingOrderStatus.Preparation:
         return (
           <Button
             size="sm"
@@ -319,8 +319,7 @@ const DetailMaterialInfo = observer((props: { cost: MaterialCost }) => {
             Остаток: {roundAndTrim(cost.material?.stock) || 0} м
           </P>
 
-          {api.s.order?.status ===
-            EnManufacturingOrderStatus.MaterialPreparation && (
+          {api.s.order?.status === EnManufacturingOrderStatus.Preparation && (
             <P
               color={
                 remainingAmount >= 0

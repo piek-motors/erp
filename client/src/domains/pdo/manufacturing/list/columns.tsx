@@ -69,7 +69,7 @@ const finishColumns = commonColumns.concat([
 export function getColumns(status: Status) {
   switch (status) {
     case Status.Waiting:
-    case Status.MaterialPreparation:
+    case Status.Preparation:
       return preparationColumns
     case Status.Production:
       return productionColumns

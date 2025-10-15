@@ -64,7 +64,7 @@ export function uiWriteoffType(type: EnWriteoffType) {
 
 export const UiManufacturingOrderStatus = {
   [EnManufacturingOrderStatus.Waiting]: 'Ожидание',
-  [EnManufacturingOrderStatus.MaterialPreparation]: 'Подготовка',
+  [EnManufacturingOrderStatus.Preparation]: 'Подготовка',
   [EnManufacturingOrderStatus.Production]: 'Производство',
   [EnManufacturingOrderStatus.Collected]: 'Завершен'
 }

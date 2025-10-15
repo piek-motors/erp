@@ -39,7 +39,7 @@ export enum EnOperationType {
 
 export enum EnManufacturingOrderStatus {
   Waiting = 0,
-  MaterialPreparation = 1,
+  Preparation = 1,
   Production = 2,
   Collected = 3
 }
