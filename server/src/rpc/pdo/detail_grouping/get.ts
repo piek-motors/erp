@@ -35,7 +35,7 @@ export const getDetailInTheGroup = procedure
           .execute(),
         db
           .selectFrom('metal_flow.details')
-          .selectAll()
+          .select(['id', 'name', 'part_code', 'logical_group_id'])
           .where('logical_group_id', '=', input.groupId)
           .execute(),
         db

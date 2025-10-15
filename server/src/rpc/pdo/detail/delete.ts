@@ -8,6 +8,10 @@ export const deleteDetail = publicProcedure
   .mutation(async ({ input }) =>
     db.transaction().execute(async trx => {
       await trx
+        .deleteFrom('metal_flow.manufacturing')
+        .where('detail_id', '=', input.id)
+        .execute()
+      await trx
         .deleteFrom('metal_flow.operations')
         .where('detail_id', '=', input.id)
         .execute()

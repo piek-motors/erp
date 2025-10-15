@@ -178,6 +178,11 @@ export class Manufacturing {
     }
 
     await this.trx
+      .updateTable('metal_flow.operations')
+      .set({ detail_id: null })
+      .where('id', '=', manufacturingId)
+      .execute()
+    await this.trx
       .deleteFrom('metal_flow.manufacturing')
       .where('id', '=', manufacturingId)
       .execute()

@@ -42,11 +42,12 @@ export const getBinaryFile = async (
   res: Response,
   next: NextFunction
 ) => {
+  const key = req.params.key
   try {
     const data = await s3
       .getObject({
         Bucket: config.S3_BUCKET,
-        Key: req.params.key
+        Key: key
       })
       .promise()
     const fileName = encodeURI(data.Metadata?.originalname ?? '')
@@ -54,7 +55,7 @@ export const getBinaryFile = async (
     res.set('Content-Disposition', `inline;filename*=utf-8''${fileName}`)
     res.send(data.Body)
   } catch (error) {
-    log.error(error, 'Error getting binary file')
+    log.error(error, `Error getting binary file with key ${key}`)
     next(error)
   }
 }
