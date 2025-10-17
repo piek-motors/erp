@@ -12,9 +12,7 @@ import { DetailInputs } from './components'
 
 export const CreateDetailPage = observer(() => {
   useEffect(() => {
-    return () => {
-      api.detail.reset()
-    }
+    api.detail.reset()
   }, [])
   return (
     <Stack gap={2} p={1}>

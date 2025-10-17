@@ -133,10 +133,7 @@ export namespace DB {
   export interface ProcessingRoute {
     steps: {
       name: string
-      dur: number
-      executor_name?: string
-      date?: string
-      defected?: number | null
+      dur?: number | null
     }[]
   }
 
@@ -159,11 +156,6 @@ export namespace DB {
       MetarialWiteoffData,
       MetarialWiteoffData,
       MetarialWiteoffData
-    >
-    data: JSONColumnType<
-      ManufacturingData,
-      ManufacturingData,
-      ManufacturingData
     >
   }
 

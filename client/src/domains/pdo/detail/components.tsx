@@ -144,7 +144,7 @@ const DetailGroupInput = observer(() => {
 
 const BlankSpecInput = observer(() => (
   <AccordionCard title="Заготовка" defaultExpanded>
-    <Label level="body-xs">ﾍ(･_| Материал заготовки указывать не нужно</Label>
+    <Label level="body-xs">Материал заготовки указывать не нужно</Label>
     <ArrayJsonEditor
       value={api.detail.blankSpec?.arr ?? null}
       onChange={parameters =>
@@ -162,8 +162,7 @@ const ProcessingRouteAccordion = observer(() => (
     <ArrayJsonEditor
       value={api.detail.processingRoute.steps ?? null}
       newItem={{
-        name: '',
-        dur: null
+        name: ''
       }}
       onChange={steps => api.detail.processingRoute.init(steps ?? [])}
       placeholders={['Операция', 'мин']}

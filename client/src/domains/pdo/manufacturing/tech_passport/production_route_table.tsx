@@ -16,11 +16,12 @@ const signW = 100
 const dateW = 80
 
 export const ProductionRoute = observer(() => {
-  if (api.s.processingRoute.steps.length === 0) return null
+  const steps = api.s.detail.processingRoute.steps
+  if (steps.length === 0) return null
   return (
     <Stack>
       <Label label="Маршрут" level="body-xs" />
-      <DetailProductionRouteTable data={api.s.processingRoute.steps} />
+      <DetailProductionRouteTable data={steps} />
     </Stack>
   )
 })

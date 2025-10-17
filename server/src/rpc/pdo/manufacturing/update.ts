@@ -10,12 +10,6 @@ export const updateManufacturing = publicProcedure
     })
   )
   .mutation(async ({ input, ctx }) => {
-    const existing = await db
-      .selectFrom('pdo.manufacturing')
-      .where('id', '=', input.orderId)
-      .select('data')
-      .executeTakeFirstOrThrow()
-
     const update: Updateable<DB.ManufacturingTable> = {}
     if (input.qty != null) {
       update.qty = input.qty

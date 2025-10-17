@@ -108,7 +108,7 @@ export const ArrayJsonEditor = observer((props: ArrayJsonEditorProps) => {
                                 placeholder={
                                   props.placeholders?.[keyIdx] ?? key
                                 }
-                                value={String((item as any)[key] ?? '')}
+                                value={String((item as any)[key] || '')}
                                 onChange={e =>
                                   updateItemProp(index, key, e.target.value)
                                 }

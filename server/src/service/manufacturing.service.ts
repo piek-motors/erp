@@ -22,20 +22,6 @@ export class Manufacturing {
   async createOrder(
     detail_id: number
   ): Promise<Selectable<DB.ManufacturingTable>> {
-    const detail = await this.trx
-      .selectFrom('pdo.details')
-      .where('id', '=', detail_id)
-      .select('processing_route')
-      .executeTakeFirstOrThrow()
-    const data: DB.ManufacturingData = {
-      processing_route: {
-        steps: []
-      }
-    }
-    if (detail.processing_route) {
-      data.processing_route.steps = detail.processing_route.steps
-    }
-
     // deduplication check:  if order created some already
     const existingOrder = await this.trx
       .selectFrom('pdo.manufacturing')
@@ -61,7 +47,6 @@ export class Manufacturing {
         material_writeoffs: {
           writeoffs: []
         },
-        data,
         status: EnManufacturingOrderStatus.Waiting
       })
       .returningAll()
