@@ -3,16 +3,25 @@ import { initTRPC } from '@trpc/server'
 import type { Context } from './context.ts'
 
 const t = initTRPC.context<Context>().create({
-  errorFormatter({ shape, error, input }) {
+  errorFormatter({ shape, error, input, path, type }) {
     if (error.message === 'jwt expired') {
       return
     }
-    log.error(
-      {
-        input
-      },
-      `${error.name} rpc=${shape.data.path} code=${shape.data.code}: ${error.message}`
-    )
+
+    const code = shape.data.code
+    const logMessage = `${code} rpc=${path}: ${error.message}`
+
+    if (code === 'BAD_REQUEST') {
+      log.warn(
+        {
+          input: JSON.stringify(input)
+        },
+        logMessage
+      )
+    } else {
+      log.error(logMessage)
+    }
+
     return shape
   }
 })

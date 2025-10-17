@@ -29,10 +29,10 @@ export function NavigationBar(props: Props) {
       {!props.hideIcon && (
         <Link to={routeMap.index}>
           <IconButton
-            variant="outlined"
+            variant="soft"
             size="sm"
             sx={{
-              background: isDev ? 'red' : 'transparent'
+              background: isDev ? 'red' : undefined
             }}
           >
             <img src={'/favicon.ico'} width={20} height={20} />
