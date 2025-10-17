@@ -7,12 +7,21 @@ import type { Context } from './context.ts'
  */
 
 const t = initTRPC.context<Context>().create({
-  errorFormatter({ shape, error }) {
+  errorFormatter({ shape, error, path, type, input }) {
     if (error.message === 'jwt expired') {
       return
     }
-
-    log.error(error, `[${error.name}] ${error.message}`)
+    const procedurePath = path ? `${type}.${path}` : 'unknown'
+    const inputData = input
+      ? JSON.stringify(input, null, 2).substring(0, 500)
+      : 'N/A'
+    const errorDetails = [
+      `[${error.name}] ${error.message}`,
+      `Procedure: ${procedurePath}`,
+      `Input: ${inputData}`,
+      `Stack: ${error.stack || 'N/A'}`
+    ].join('\n')
+    log.error(error, errorDetails)
     return shape
   }
 })

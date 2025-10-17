@@ -9,9 +9,9 @@ export const startManufacturing = publicProcedure
     })
   )
   .mutation(async ({ input, ctx }) => {
-    return await db.transaction().execute(async trx => {
+    return db.transaction().execute(async trx => {
       const manufacturing = new Manufacturing(trx, ctx.user.id)
-      return await manufacturing.createOrder(input.detailId).then(res => ({
+      return manufacturing.createOrder(input.detailId).then(res => ({
         writeoffs: res.material_writeoffs.writeoffs.map(m => ({
           material_id: m.material_id,
           writeoff_id: m.writeoff_id,
