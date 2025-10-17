@@ -17,7 +17,7 @@ export const updateManufacturing = publicProcedure
       .executeTakeFirstOrThrow()
 
     const update: Updateable<DB.ManufacturingTable> = {}
-    if (input.qty) {
+    if (input.qty != null) {
       update.qty = input.qty
     }
 
