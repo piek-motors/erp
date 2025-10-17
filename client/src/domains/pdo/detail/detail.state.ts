@@ -9,18 +9,13 @@ type UpdateDetailRequest = RouterInput['pdo']['details']['update']
 
 export class Operation {
   name!: string
-  dur!: number
-  executor_name: string = ''
-  setExecutor(name: string) {
-    this.executor_name = name
-  }
+  dur?: number | null
   constructor() {
     makeAutoObservable(this)
   }
   reset() {
     this.name = ''
     this.dur = 0
-    this.executor_name = ''
   }
 }
 
@@ -120,7 +115,6 @@ export class DetailState {
             const step = new Operation()
             step.name = s.name
             step.dur = s.dur
-            step.executor_name = s.executor_name ?? ''
             return step
           })
         : []
@@ -171,8 +165,7 @@ export class DetailState {
             steps:
               this.processingRoute.steps?.map(s => ({
                 name: s.name?.trim(),
-                dur: +s.dur,
-                executor_name: s.executor_name?.trim() ?? ''
+                dur: s.dur ? +s.dur : null
               })) ?? null
           }
         : null,
