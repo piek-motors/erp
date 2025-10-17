@@ -195,7 +195,7 @@ export class Manufacturing {
     order: Selectable<DB.ManufacturingTable>
   ) {
     const { material_id, label } = material
-    const totalCost = (material.data.materialCostLength * qty) / 1000
+    const totalCost = (material?.data?.materialCostLength * qty) / 1000
 
     if (material.stock < totalCost) {
       throw new ErrNotEnoughMaterial(
