@@ -1,9 +1,10 @@
 import { db, procedure } from '#root/deps.js'
+import { Day } from '#root/lib/constants.js'
 import { matrixEncoder } from '#root/lib/matrix_encoder.js'
 import { formatDate, timedeltaInSeconds } from '#root/lib/time.js'
 import { EnManufacturingOrderStatus } from 'models'
 
-const FinishedLimit = 20
+const ShowFinishedOrders = 14 * Day
 
 export interface ListManufacturingOutput {
   id: number
@@ -33,6 +34,7 @@ const query = db
   .select(['d.name as detail_name', 'd.logical_group_id as group_id'])
 
 export const listManufacturing = procedure.query(async () => {
+  const cutoffDate = new Date(Date.now() - ShowFinishedOrders)
   const [inProduction, finished] = await Promise.all([
     query
       .where('m.finished_at', 'is', null)
@@ -40,9 +42,8 @@ export const listManufacturing = procedure.query(async () => {
       .orderBy('m.created_at', 'desc')
       .execute(),
     query
-      .where('m.finished_at', 'is not', null)
+      .where('m.finished_at', '>=', cutoffDate)
       .orderBy('m.finished_at', 'desc')
-      .limit(FinishedLimit)
       .execute()
   ])
   const result = [...inProduction, ...finished].map(o => ({

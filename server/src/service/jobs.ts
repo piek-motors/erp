@@ -3,7 +3,7 @@ import { log } from '#root/ioc/log.js'
 import { Day } from '#root/lib/constants.js'
 import { EnManufacturingOrderStatus } from 'models'
 
-const OutdatedOrderDays = 14
+const OutdatedManufacturingOrderDeletionAfter = 7 * Day
 
 export class Jobs {
   initCron() {
@@ -14,7 +14,9 @@ export class Jobs {
   }
 
   private async removeOutdatedManufacturingOrders() {
-    const cutoffDate = new Date(Date.now() - OutdatedOrderDays * Day)
+    const cutoffDate = new Date(
+      Date.now() - OutdatedManufacturingOrderDeletionAfter
+    )
     const result = await db
       .deleteFrom('pdo.manufacturing')
       .where('created_at', '<', cutoffDate)
