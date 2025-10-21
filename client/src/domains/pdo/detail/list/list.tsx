@@ -8,9 +8,7 @@ import {
   Box,
   ErrorHint,
   Inp,
-  Link,
   Loading,
-  P,
   RowButColumsAtSm,
   Stack,
   observer,
@@ -164,12 +162,6 @@ const DetailSearchArguments = observer(() => {
           value={state.searchPartCode || ''}
         />
       </RowButColumsAtSm>
-
-      <Link to="https://planner.piek.ru/f6980fc4-c15b-4eb3-9dab-ad70125f65e6/details_register_help">
-        <P level="body-xs" color="primary">
-          Инструкция по ведению реестра
-        </P>
-      </Link>
     </>
   )
 })

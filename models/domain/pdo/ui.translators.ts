@@ -19,7 +19,7 @@ export function uiWriteoffReason(reason?: EnWriteoffReason | null) {
 }
 
 export const UiSupplyReason = {
-  [EnSupplyReason.FromSupplier]: 'Внешняя поставка',
+  [EnSupplyReason.FromSupplier]: 'Поставка',
   [EnSupplyReason.InternalProduction]: 'Собственное производство',
   [EnSupplyReason.InventoryAdjustment]: 'Инвентаризация'
 }

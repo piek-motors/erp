@@ -1,4 +1,4 @@
-import { Label, P } from 'lib/index'
+import { Button, Link, openPage, P, routeMap } from 'lib/index'
 import {
   EnOperationType,
   EnSupplyReason,
@@ -31,29 +31,42 @@ export const columns: Column<Operation>[] = [
     accessor: data => <P>{data.qty}</P>
   },
   {
-    Header: 'Деталь/Заказ',
+    Header: 'Заказ',
+    accessor: data =>
+      data.manufacturing_order_id && (
+        <Link
+          to={openPage(
+            routeMap.pdo.manufacturing_order.edit,
+            data.manufacturing_order_id
+          )}
+        >
+          <Button
+            variant="outlined"
+            size="sm"
+            color="neutral"
+            sx={{ fontWeight: 'normal', fontSize: '0.8rem' }}
+          >
+            №{data.manufacturing_order_id} {' ⇥ '}
+            {data.manufacturing_order_qty} шт.
+          </Button>
+        </Link>
+      )
+  },
+  {
+    Header: 'Деталь',
     accessor: data => {
       if (!data.detail_id) return null
       return (
-        <>
-          {data.manufacturing_order_id && (
-            <Label>
-              Заказ {data.manufacturing_order_id}
-              {' ⇥ '}
-              {data.manufacturing_order_qty} шт.
-            </Label>
-          )}
-          <DetailName
-            detail={{
-              id: data.detail_id,
-              name: data.detail_name!,
-              group_id: data.detail_group_id!
-            }}
-            withLink
-            withGroupLink
-            withParamsButton
-          />
-        </>
+        <DetailName
+          detail={{
+            id: data.detail_id,
+            name: data.detail_name!,
+            group_id: data.detail_group_id!
+          }}
+          withLink
+          withGroupLink
+          withParamsButton
+        />
       )
     }
   },
