@@ -88,6 +88,13 @@ export const ManufacturingUpdatePage = observer(() => {
                 <P>{formatDate(new Date(api.s.order.created_at))}</P>
               </Row>
 
+              {api.s.order.started_at && (
+                <Row>
+                  <Label label="Старт" />
+                  <P>{formatDate(new Date(api.s.order.started_at))}</P>
+                </Row>
+              )}
+
               {api.s.order.finished_at && (
                 <Row>
                   <Label label="Завершен" />
@@ -282,7 +289,7 @@ const ActionButton = observer(
             disabled={api.status.loading}
             size="sm"
             variant="soft"
-            color="danger"
+            color="success"
           >
             Завершить заказ
           </Button>

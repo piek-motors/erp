@@ -49,8 +49,8 @@ const productionColumns = commonColumns.concat([
 
 const finishColumns = commonColumns.concat([
   {
-    Header: 'Создан',
-    accessor: 'created_at'
+    Header: 'Старт',
+    accessor: 'started_at'
   },
   {
     Header: 'Финиш',
