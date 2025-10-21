@@ -8,8 +8,8 @@ const t = initTRPC.context<Context>().create({
       return
     }
 
-    const code = shape.data.code
-    const logMessage = `${code} rpc=${path}: ${error.message}`
+    const code = shape.data?.code ?? 'UNKNOWN'
+    const logMessage = `${code} ${path ?? ''}: ${error.message}`
 
     if (code === 'BAD_REQUEST') {
       log.warn(
@@ -19,7 +19,7 @@ const t = initTRPC.context<Context>().create({
         logMessage
       )
     } else {
-      log.error(logMessage)
+      log.error(path == null ? error : logMessage, logMessage)
     }
 
     return shape
