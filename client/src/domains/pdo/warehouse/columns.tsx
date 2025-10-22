@@ -44,7 +44,12 @@ export const columns: Column<Operation>[] = [
             variant="outlined"
             size="sm"
             color="neutral"
-            sx={{ fontWeight: 'normal', fontSize: '0.8rem' }}
+            sx={{
+              fontWeight: 'normal',
+              fontSize: '0.7rem',
+              whiteSpace: 'nowrap',
+              p: 0.5
+            }}
           >
             №{data.manufacturing_order_id} {' ⇥ '}
             {data.manufacturing_order_qty} шт.
@@ -58,6 +63,7 @@ export const columns: Column<Operation>[] = [
       if (!data.detail_id) return null
       return (
         <DetailName
+          sx={{ whiteSpace: 'wrap', width: 'auto' }}
           detail={{
             id: data.detail_id,
             name: data.detail_name!,

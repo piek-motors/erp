@@ -28,7 +28,9 @@ export function MetalFlowRootLayout(props: { children?: React.ReactNode }) {
         </WebOnly>
       </DesktopOnly>
       {props.children && (
-        <Stack sx={{ flexGrow: 1, gap: 1 }}>{props.children}</Stack>
+        <Stack sx={{ flexGrow: 1, gap: 1, overflowX: 'auto' }}>
+          {props.children}
+        </Stack>
       )}
     </Box>
   )

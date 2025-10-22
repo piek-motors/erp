@@ -1,4 +1,5 @@
 /** @jsxImportSource @emotion/react */
+import { SxProps } from '@mui/joy/styles/types'
 import { HoverReveal, WithHiddenLinkButton } from 'components/hidden_button'
 import { cache } from 'domains/pdo/cache/root'
 import { Box, Button, Row, observer } from 'lib/index'
@@ -17,6 +18,7 @@ interface Props {
   withLink?: boolean
   withGroupLink?: boolean
   withParamsButton?: boolean
+  sx?: SxProps
 }
 
 const capitalizeFirstLetter = (str: string): string => {
@@ -30,7 +32,7 @@ export const DetailName = observer((props: Props) => {
   // Main content: detail name + optional group link
   const mainContent = (
     <>
-      <Box sx={{ width: 'min-content', whiteSpace: 'nowrap' }}>
+      <Box sx={{ width: 'min-content', whiteSpace: 'nowrap', ...props.sx }}>
         {capitalizeFirstLetter(detail.name)}
       </Box>
       {withGroupLink && <GroupLink groupId={detail.group_id} />}
