@@ -1,13 +1,13 @@
 import { UilBars } from '@iconscout/react-unicons'
 import { Button, Stack } from '@mui/joy'
 import { InModal } from 'components/modal'
-import { DesktopOnly, observer, P, UseIcon, useState } from 'lib/index'
+import { observer, P, UseIcon, useState } from 'lib/index'
 import { openPage, routeMap } from 'lib/routes'
 import { Link } from 'react-router'
 import { crud } from './api'
 import { CreateGroupModal } from './group_name.modal'
 
-const SharedGroupList = observer(
+export const SharedGroupList = observer(
   (props: { onLinkClick?: (open: boolean) => void }) => {
     if (crud.store.groups.length === 0) {
       return (
@@ -17,7 +17,7 @@ const SharedGroupList = observer(
       )
     }
     return (
-      <Stack py={1} gap={0.5}>
+      <Stack p={1} gap={0}>
         {crud.store.groups.map(group => {
           const isSelected = crud.store.targetGroup?.group.id === group.id
           return (
@@ -44,14 +44,6 @@ const SharedGroupList = observer(
     )
   }
 )
-
-export const DesktopGroupList = observer(() => {
-  return (
-    <DesktopOnly>
-      <SharedGroupList />
-    </DesktopOnly>
-  )
-})
 
 export const GroupSelectModal = observer(() => {
   const [open, setOpen] = useState(false)

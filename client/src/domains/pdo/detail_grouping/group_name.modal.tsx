@@ -100,7 +100,7 @@ export const UpdateGroupNameModal = observer(() => {
         <P
           fontWeight={600}
           sx={{
-            cursor: 'pointer',
+            cursor: 'text',
             '&:hover': {
               textDecoration: 'underline',
               color: 'primary.500'

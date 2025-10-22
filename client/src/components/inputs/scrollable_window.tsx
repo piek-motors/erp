@@ -20,7 +20,7 @@ function Wrapper(props: {
 export const ScrollableWindow = (props: {
   staticContent?: React.ReactNode
   scrollableContent: React.ReactNode
-  refreshTrigger: any
+  refreshTrigger?: any
   useSheet?: boolean
   preserveScrollAcrossNavigation?: boolean
   height?: string | number
@@ -57,8 +57,10 @@ export const ScrollableWindow = (props: {
     ...props.scrollSx
   } as SxProps
   return (
-    <Stack sx={outerSx}>
-      <Box sx={{ p: { xs: 0.75, sm: 0 } }}>{props.staticContent}</Box>
+    <Stack sx={{ ...outerSx, overflowX: 'scroll', width: '100%' }}>
+      {props.staticContent && (
+        <Box sx={{ p: { xs: 0.75, sm: 0 } }}>{props.staticContent}</Box>
+      )}
       <ScrollComponent refreshTrigger={props.refreshTrigger} sx={scrollSx}>
         <Wrapper
           sx={{ width: '100%', ...props.contentSx, borderRadius: 'sm' }}
@@ -67,7 +69,6 @@ export const ScrollableWindow = (props: {
           <Box sx={{ width: '100%' }}>{props.scrollableContent}</Box>
         </Wrapper>
       </ScrollComponent>
-      <Box p={0.5}></Box>
     </Stack>
   )
 }

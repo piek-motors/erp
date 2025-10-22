@@ -70,7 +70,6 @@ export const columns: Column<Operation>[] = [
             group_id: data.detail_group_id!
           }}
           withLink
-          withGroupLink
           withParamsButton
         />
       )

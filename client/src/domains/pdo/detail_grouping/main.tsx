@@ -1,7 +1,9 @@
+import { Divider } from '@mui/joy'
 import { ScrollableWindow } from 'components/inputs'
 import { MetalPageTitle } from 'domains/pdo/shared/basic'
 import {
   Box,
+  DesktopOnly,
   Loading,
   MobileOnly,
   observer,
@@ -13,7 +15,7 @@ import { ReactNode } from 'react'
 import { useParams } from 'react-router'
 import { crud } from './api'
 import { GroupActions, TargetGroupDetailList } from './detail_list'
-import { DesktopGroupList, GroupSelectModal } from './group_list'
+import { GroupSelectModal, SharedGroupList } from './group_list'
 import { UpdateGroupNameModal } from './group_name.modal'
 
 interface DetailGroupsLayoutProps {
@@ -26,15 +28,14 @@ const Detauls = observer(() => {
   return (
     <Box>
       <ScrollableWindow
-        staticContent={
-          <Row p={0.4}>
-            <UpdateGroupNameModal />
-            <GroupActions />
-          </Row>
-        }
         scrollableContent={
           openedGroup && (
-            <Stack p={1} px={2}>
+            <Stack p={1}>
+              <Row>
+                <UpdateGroupNameModal />
+                <GroupActions />
+              </Row>
+              <Divider sx={{ my: 0.5 }} />
               <TargetGroupDetailList />
             </Stack>
           )
@@ -52,7 +53,7 @@ const DetailGroupsLayout = observer((props: DetailGroupsLayoutProps) => (
       sm: 'row'
     }}
     sx={{
-      gap: 1,
+      gap: 0.5,
       p: {
         xs: 1,
         sm: 0
@@ -61,12 +62,14 @@ const DetailGroupsLayout = observer((props: DetailGroupsLayoutProps) => (
   >
     {/* Group list */}
     <Box>
-      <MetalPageTitle t="Группы">
-        <MobileOnly>
+      <MobileOnly>
+        <MetalPageTitle t="Группы">
           <GroupSelectModal />
-        </MobileOnly>
-      </MetalPageTitle>
-      <DesktopGroupList />
+        </MetalPageTitle>
+      </MobileOnly>
+      <DesktopOnly>
+        <ScrollableWindow scrollableContent={<SharedGroupList />} />
+      </DesktopOnly>
     </Box>
     {/* Group details */}
     <Detauls />

@@ -60,7 +60,7 @@ function MenuButton(props: {
   return (
     <Link to={props.href} key={props.href}>
       <Button
-        sx={{ textAlign: 'left', lineHeight: 1 }}
+        sx={{ textAlign: 'left', lineHeight: 1, width: 'min-content' }}
         variant="plain"
         color="neutral"
         size={props.size}

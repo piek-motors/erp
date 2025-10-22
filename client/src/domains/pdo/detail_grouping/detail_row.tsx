@@ -40,7 +40,6 @@ export function DetailRow({
               group_id: detail.group_id || null
             }}
             withLink
-            withParamsButton
           />
         </Row>
       </Grid>
