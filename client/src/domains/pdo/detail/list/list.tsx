@@ -8,6 +8,7 @@ import {
   Box,
   ErrorHint,
   Inp,
+  Label,
   Loading,
   RowButColumsAtSm,
   Stack,
@@ -26,7 +27,7 @@ import { detailListStore as state } from './store'
 const columnList: Column<DetailState>[] = [
   {
     Header: '№',
-    accessor: 'id'
+    accessor: d => <Label xs>{d.id}</Label>
   },
   {
     Header: 'Наименование',

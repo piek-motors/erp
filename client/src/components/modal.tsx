@@ -3,11 +3,13 @@ import {
   ModalClose,
   ModalDialog,
   ModalDialogProps,
-  Modal as MuiModal
+  Modal as MuiModal,
+  Stack
 } from '@mui/joy'
+import { useIsMobile } from 'hooks/use-media-query'
 
 export function InModal(props: {
-  openButton: React.ReactNode
+  openButton?: React.ReactNode
   children: React.ReactNode
   open: boolean
   setOpen: (open: boolean) => void
@@ -20,9 +22,13 @@ export function InModal(props: {
   const mobileLayout = props.layout || 'fullscreen'
   const desktopLayout = props.layout || 'center'
 
+  const isMobile = useIsMobile()
+  const layout = isMobile ? mobileLayout : desktopLayout
   return (
     <>
-      <Box onClick={() => props.setOpen(true)}>{props.openButton}</Box>
+      {props.openButton && (
+        <Box onClick={() => props.setOpen(true)}>{props.openButton}</Box>
+      )}
       <MuiModal
         open={props.open}
         onClose={() => {
@@ -30,27 +36,14 @@ export function InModal(props: {
           props.onClose?.()
         }}
       >
-        <>
-          {/* Mobile Modal */}
-          <Box sx={{ display: { xs: 'block', md: 'none' } }}>
-            <ModalDialog layout={mobileLayout} size={props.size}>
-              <ModalClose variant="soft" color="warning" />
-              <Box>{props.children}</Box>
-            </ModalDialog>
-          </Box>
-
-          {/* Desktop Modal */}
-          <Box sx={{ display: { xs: 'none', md: 'block' } }}>
-            <ModalDialog
-              layout={desktopLayout}
-              size={'lg'}
-              sx={{ width: props.width }}
-            >
-              <ModalClose variant="soft" color="warning" />
-              <Box>{props.children}</Box>
-            </ModalDialog>
-          </Box>
-        </>
+        <ModalDialog
+          layout={layout}
+          size={'lg'}
+          sx={{ width: props.width, pr: 6 }}
+        >
+          <ModalClose variant="soft" color="warning" />
+          <Stack>{props.children}</Stack>
+        </ModalDialog>
       </MuiModal>
     </>
   )

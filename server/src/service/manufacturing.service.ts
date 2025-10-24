@@ -75,7 +75,8 @@ export class Manufacturing {
 
   async startProductionPhase(
     orderId: number,
-    qty: number
+    qty: number,
+    force?: boolean
   ): Promise<MaterialWriteoff> {
     const order = await this.getOrder(orderId)
     const detail = await this.trx
@@ -83,6 +84,22 @@ export class Manufacturing {
       .where('id', '=', order.detail_id)
       .select('automatic_writeoff')
       .executeTakeFirstOrThrow()
+
+    // deduplication check:  if order already started production
+    if (!force) {
+      const existingOrder = await this.trx
+        .selectFrom('pdo.manufacturing')
+        .where('detail_id', '=', order.detail_id)
+        .where('status', '=', EnManufacturingOrderStatus.Production)
+        .select('id')
+        .executeTakeFirst()
+      if (existingOrder) {
+        throw new TRPCError({
+          code: 'CONFLICT',
+          message: `Order already in production order_id=${existingOrder.id}, detail_id=${order.detail_id}, qty=${qty}`
+        })
+      }
+    }
 
     const materialCost = detail.automatic_writeoff?.material
     let writeoff: MaterialWriteoff = null

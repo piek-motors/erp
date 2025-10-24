@@ -6,9 +6,21 @@ import { DetailState } from '../detail/detail.state'
 export type ManufacturingOrderOutput =
   RouterOutput['pdo']['manufacturing']['get']
 
+type OrderAlreadyInProductionModal = {
+  manufacturingId: number
+  detailId: number
+  qty: number
+} | null
+
 export class ManufacturingOrderState {
   readonly async = new LoadingController()
   order: ManufacturingOrderOutput | null = null
+
+  orderAlreadyInProductionModal: OrderAlreadyInProductionModal = null
+  setOrderAlreadyInProductionModal(modal: OrderAlreadyInProductionModal) {
+    this.orderAlreadyInProductionModal = modal
+  }
+
   setOrder(order: ManufacturingOrderOutput) {
     this.order = order
     this.qty = order.qty.toString()

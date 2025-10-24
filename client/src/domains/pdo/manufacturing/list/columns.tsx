@@ -1,5 +1,5 @@
 import { DetailName } from 'domains/pdo/detail/name'
-import { P } from 'lib/index'
+import { Label, P } from 'lib/index'
 import { EnManufacturingOrderStatus as Status } from 'models'
 import { Column } from 'react-table'
 import { ManufactoringListOutput } from './store'
@@ -7,7 +7,7 @@ import { ManufactoringListOutput } from './store'
 const commonColumns: Column<ManufactoringListOutput>[] = [
   {
     Header: '№',
-    accessor: 'id'
+    accessor: m => <Label xs>{m.id}</Label>
   },
   {
     Header: 'Деталь',

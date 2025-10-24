@@ -35,7 +35,7 @@ export const MaterialFormFields = observer((props: { showTabs?: boolean }) => (
         unit="кг/м"
       />
       <Inp
-        label={'Безопасный остаток'}
+        label={'Норм. остаток'}
         value={api.s.safetyStock}
         onChange={v => {
           api.s.setSafetyStock(v)

@@ -3,7 +3,10 @@ import { rpc } from 'lib/rpc.client'
 import { notifier } from 'lib/store/notifier.store'
 import { makeAutoObservable } from 'mobx'
 import { map } from '../mappers'
-import { ManufacturingOrderState } from './order.state'
+import {
+  ManufacturingOrderOutput,
+  ManufacturingOrderState
+} from './order.state'
 
 export class ManufacturingApi {
   readonly status = new LoadingController()
@@ -16,6 +19,7 @@ export class ManufacturingApi {
     this.status.run(async () => {
       const order = await rpc.pdo.manufacturing.get.query({ id })
       this.s.setOrder(order)
+      this.s.setOrderAlreadyInProductionModal(null)
       // Load detail materials if we have a detail_id
       if (order.detail_id) {
         const { detail } = await rpc.pdo.details.get.query({
@@ -51,20 +55,45 @@ export class ManufacturingApi {
     })
   }
 
-  async startProductionPhase() {
+  async startProductionPhase(force?: boolean) {
     await this.status.run(async () => {
       if (!this.s.order) throw new Error('Заказ не найден')
       if (!this.s.qty) throw new Error('Кол-во не может быть 0')
-      const writeoff = await rpc.pdo.manufacturing.startProductionPhase.mutate({
-        orderId: this.s.order.id,
-        qty: parseInt(this.s.qty)
-      })
-      await this.load(this.s.order.id)
-      if (writeoff) {
-        notifier.notify(
-          'info',
-          `Списано ${writeoff.totalCost} м ${writeoff.material_name}, остаток ${writeoff.stock} м`
-        )
+      try {
+        const writeoff =
+          await rpc.pdo.manufacturing.startProductionPhase.mutate({
+            orderId: this.s.order.id,
+            qty: parseInt(this.s.qty),
+            force
+          })
+        await this.load(this.s.order.id)
+        if (writeoff) {
+          notifier.notify(
+            'info',
+            `Списано ${writeoff.totalCost} м ${writeoff.material_name}, остаток ${writeoff.stock} м`
+          )
+        }
+      } catch (e: any) {
+        if (
+          e.data?.code === 'CONFLICT' &&
+          e.message.includes('Order already in production')
+        ) {
+          const manufacturingId = parseInt(e.message.split('order_id=')[1])
+          const detailId = parseInt(e.message.split('detail_id=')[1])
+          const qty = parseInt(e.message.split('qty=')[1])
+          if (manufacturingId == null || detailId == null || qty == null) {
+            throw new Error(
+              `Failed to parse order id or detail id ${e.message}`
+            )
+          }
+          this.s.setOrderAlreadyInProductionModal({
+            manufacturingId,
+            detailId,
+            qty
+          })
+          return
+        }
+        throw e
       }
     })
   }
@@ -77,11 +106,8 @@ export class ManufacturingApi {
     })
   }
 
-  async delete() {
-    await this.status.run(async () => {
-      if (!this.s.order) throw new Error('Заказ не найден')
-      await rpc.pdo.manufacturing.delete.mutate({ id: this.s.order.id })
-    })
+  delete(id: ManufacturingOrderOutput['id']) {
+    return rpc.pdo.manufacturing.delete.mutate({ id })
   }
 }
 

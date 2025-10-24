@@ -1,4 +1,5 @@
 import { Box, Card, Divider } from '@mui/joy'
+import { InModal } from 'components/modal'
 import { PrintOnly, WebOnly } from 'components/utilities/conditional-display'
 import { DetailName } from 'domains/pdo/detail/name'
 import { ComplexTitle, MaterialName, MetalPageTitle } from 'domains/pdo/shared'
@@ -10,6 +11,7 @@ import {
   Label,
   Loading,
   observer,
+  openPage,
   P,
   routeMap,
   Row,
@@ -20,8 +22,9 @@ import {
   useParams
 } from 'lib/index'
 import { notifier } from 'lib/store/notifier.store'
-import { formatDate, roundAndTrim } from 'lib/utils/formatting'
+import { dayAndMonth, roundAndTrim } from 'lib/utils/formatting'
 import { EnManufacturingOrderStatus, uiManufacturingOrderStatus } from 'models'
+import { cache } from '../cache/root'
 import { TechParamsDisplay } from '../detail/components'
 import { MaterialCost } from '../detail/warehouse/cost.store'
 import { api } from './api'
@@ -52,7 +55,7 @@ export const ManufacturingUpdatePage = observer(() => {
   }
   const isDeletionAllowed = deletionAllowed.includes(api.s.order.status)
   return (
-    <Stack py={2} gap={1}>
+    <Stack p={1} gap={1}>
       <WebOnly>
         <Stack gap={1}>
           <MetalPageTitle
@@ -82,25 +85,6 @@ export const ManufacturingUpdatePage = observer(() => {
                 <Label label="Статус" />
                 <P>{uiManufacturingOrderStatus(api.s.order.status)}</P>
               </Row>
-
-              <Row>
-                <Label label="Создан" />
-                <P>{formatDate(new Date(api.s.order.created_at))}</P>
-              </Row>
-
-              {api.s.order.started_at && (
-                <Row>
-                  <Label label="Старт" />
-                  <P>{formatDate(new Date(api.s.order.started_at))}</P>
-                </Row>
-              )}
-
-              {api.s.order.finished_at && (
-                <Row>
-                  <Label label="Завершен" />
-                  <P>{formatDate(new Date(api.s.order.finished_at))}</P>
-                </Row>
-              )}
             </Stack>
             <Cost />
           </Row>
@@ -122,13 +106,48 @@ export const ManufacturingUpdatePage = observer(() => {
             <ActionButton status={api.s.order.status} />
             {isDeletionAllowed && <DeleteOrderButton />}
           </Row>
+          <Dates />
         </Stack>
+        <DuplicationCheckModal />
       </WebOnly>
 
       <PrintOnly display="block">
         <PrintingPageVerion order={api.s} />
       </PrintOnly>
     </Stack>
+  )
+})
+
+const Dates = observer(() => {
+  if (!api.s.order) return null
+  const createdAt = dayAndMonth(new Date(api.s.order.created_at))
+  const startedAt = api.s.order.started_at
+    ? dayAndMonth(new Date(api.s.order.started_at))
+    : null
+  const finishedAt = api.s.order.finished_at
+    ? dayAndMonth(new Date(api.s.order.finished_at))
+    : null
+  return (
+    <Row gap={1}>
+      <>
+        <Label xs label="Создан" />
+        <P level="body-xs">{createdAt}</P>
+      </>
+
+      {startedAt && (
+        <>
+          <Label xs label="Старт" />
+          <P level="body-xs">{startedAt}</P>
+        </>
+      )}
+
+      {finishedAt && (
+        <>
+          <Label xs label="Завершен" />
+          <P level="body-xs">{finishedAt}</P>
+        </>
+      )}
+    </Row>
   )
 })
 
@@ -163,7 +182,7 @@ const DeleteOrderButton = observer(() => {
             `Удалить заказ?\nEсли заказ находится в состоянии "Производство" - значит материал уже был списан. В этом случае необходимо вручную скорректировать остатки через поставку.`
           )
         ) {
-          api.delete().then(() => {
+          api.delete(api.s.order!.id).then(() => {
             navigate(routeMap.pdo.manufacturing_orders)
           })
         }
@@ -262,7 +281,6 @@ const ActionButton = observer(
         return (
           <Button
             size="sm"
-            variant="soft"
             color="success"
             onClick={() => api.startMaterialPreparationPhase()}
             disabled={api.status.loading}
@@ -274,8 +292,7 @@ const ActionButton = observer(
         return (
           <Button
             size="sm"
-            variant="soft"
-            color="success"
+            color="primary"
             onClick={() => api.startProductionPhase()}
             disabled={api.status.loading || !api.s.qty}
           >
@@ -288,7 +305,6 @@ const ActionButton = observer(
             onClick={() => api.finish()}
             disabled={api.status.loading}
             size="sm"
-            variant="soft"
             color="success"
           >
             Завершить заказ
@@ -299,6 +315,59 @@ const ActionButton = observer(
     }
   }
 )
+
+export const DuplicationCheckModal = observer(() => {
+  const navigate = useNavigate()
+  if (!api.s.orderAlreadyInProductionModal) return null
+  const detail = cache.details.get(api.s.orderAlreadyInProductionModal.detailId)
+  if (!detail) return null
+  const order = api.s.orderAlreadyInProductionModal
+  return (
+    <InModal
+      size="lg"
+      open={Boolean(api.s.orderAlreadyInProductionModal)}
+      setOpen={() => api.s.setOrderAlreadyInProductionModal(null)}
+      onClose={() => api.s.setOrderAlreadyInProductionModal(null)}
+    >
+      <P>
+        Заказ на производство{' '}
+        <b>
+          {detail.name} - {order.qty} шт
+        </b>{' '}
+        уже в производстве под номером <b>{order.manufacturingId}</b>
+      </P>
+      <Stack gap={1} mt={3}>
+        <Button
+          size="sm"
+          onClick={async () => {
+            navigate(
+              openPage(
+                routeMap.pdo.manufacturing_order.edit,
+                order.manufacturingId
+              )
+            )
+            api.s.setOrderAlreadyInProductionModal(null)
+            await api.delete(api.s.order!.id)
+          }}
+        >
+          Открыть существующий заказ и удалить текущий
+        </Button>
+        <Button
+          size="sm"
+          color="danger"
+          variant="soft"
+          onClick={async () => {
+            api.s.setOrderAlreadyInProductionModal(null)
+            await api.startProductionPhase(true)
+          }}
+          disabled={api.status.loading}
+        >
+          Запустить новый заказ
+        </Button>
+      </Stack>
+    </InModal>
+  )
+})
 
 const DetailMaterialInfo = observer((props: { cost: MaterialCost }) => {
   const { cost } = props

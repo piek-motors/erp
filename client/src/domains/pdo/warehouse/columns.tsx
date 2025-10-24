@@ -1,4 +1,4 @@
-import { Button, Link, openPage, P, routeMap } from 'lib/index'
+import { Button, Label, Link, openPage, P, routeMap } from 'lib/index'
 import {
   EnOperationType,
   EnSupplyReason,
@@ -14,7 +14,7 @@ import { Operation } from './store'
 export const columns: Column<Operation>[] = [
   {
     Header: '№',
-    accessor: 'id'
+    accessor: o => <Label xs>{o.id}</Label>
   },
 
   {

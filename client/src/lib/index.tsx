@@ -57,12 +57,18 @@ export {
 }
 export const Btn = Button
 export const P = (props: TypographyProps) => <Typography {...props} />
-export const Label = (props: TypographyProps & { label?: string }) =>
-  Boolean(props.label || props.children) && (
-    <Typography level="body-sm" sx={{ p: 0, m: 0 }} {...props}>
-      {props.label || props.children}
-    </Typography>
+export const Label = (
+  props: TypographyProps & { label?: string; xs?: boolean }
+) => {
+  const level = props.xs ? 'body-xs' : 'body-sm'
+  return (
+    Boolean(props.label || props.children) && (
+      <Typography level={level} sx={{ p: 0, m: 0 }} {...props}>
+        {props.label || props.children}
+      </Typography>
+    )
   )
+}
 
 export type MyInputProps = {
   label?: string

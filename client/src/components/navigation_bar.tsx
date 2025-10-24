@@ -24,7 +24,7 @@ export function NavigationBar(props: Props) {
       direction="row"
       gap={2}
       alignItems="center"
-      sx={{ minHeight: '36px' }}
+      sx={{ minHeight: '36px', ...props.sx }}
     >
       {!props.hideIcon && (
         <Link to={routeMap.index}>
