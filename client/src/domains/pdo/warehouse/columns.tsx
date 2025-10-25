@@ -13,11 +13,6 @@ import { Operation } from './store'
 
 export const columns: Column<Operation>[] = [
   {
-    Header: '№',
-    accessor: o => <Label xs>{o.id}</Label>
-  },
-
-  {
     Header: 'Дата',
     accessor: data => <P whiteSpace={'nowrap'}>{data.timestamp}</P>
   },
@@ -83,5 +78,9 @@ export const columns: Column<Operation>[] = [
         ? uiSupplyReason(data?.reason as EnSupplyReason)
         : uiWriteoffReason(data?.reason as EnWriteoffReason)
     }
+  },
+  {
+    Header: '№',
+    accessor: o => <Label xs>{o.id}</Label>
   }
 ]
