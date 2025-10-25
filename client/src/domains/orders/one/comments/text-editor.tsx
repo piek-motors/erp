@@ -1,13 +1,13 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
-import { UilMessage } from '@iconscout/react-unicons'
-import { Box, Button, ButtonProps, Sheet, Stack } from '@mui/joy'
+import { UilBold, UilMessage, UilPaintTool } from '@iconscout/react-unicons'
+import { Box, Button, Sheet, Stack } from '@mui/joy'
 import Highlight from '@tiptap/extension-highlight'
 import Mention from '@tiptap/extension-mention'
 import Placeholder from '@tiptap/extension-placeholder'
 import { Editor, EditorContent, useEditor } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
-import { Row, UseIcon } from 'lib/index'
+import { Row, TooltipIconButton, UseIcon } from 'lib/index'
 import { useEffect, useState } from 'react'
 import { suggestion } from './mention-suggestion'
 
@@ -77,29 +77,26 @@ export const TextEditor = (props: {
       <Sheet sx={{ borderRadius: 'md', p: 1 }}>
         {editable && (
           <Row>
-            <TextFormatButton
-              editor={editor}
+            <TooltipIconButton
+              icon={UilBold}
+              variant={editor.isActive('bold') ? 'soft' : 'outlined'}
               color={editor.isActive('bold') ? 'primary' : 'neutral'}
               onClick={() => {
                 editor.chain().focus().toggleBold().run()
                 handleChange()
               }}
-            >
-              Жир
-            </TextFormatButton>
-            <TextFormatButton
-              editor={editor}
-              defaultValue={props.defaultValue}
+            />
+            <TooltipIconButton
+              icon={UilPaintTool}
+              variant={editor.isActive('highlight') ? 'soft' : 'outlined'}
               color={editor.isActive('highlight') ? 'primary' : 'neutral'}
               onClick={() => {
                 editor.chain().focus().toggleHighlight().run()
                 handleChange()
               }}
-            >
-              Выделить
-            </TextFormatButton>
-            <Box sx={{ display: 'flex', gap: 0.5 }}>
-              <TextFormatButton
+            />
+            {/* <Box sx={{ display: 'flex', gap: 0.5 }}>
+              <TooltipIconButton
                 editor={editor}
                 color={
                   editor.isActive('heading', { level: 3 })
@@ -112,7 +109,7 @@ export const TextEditor = (props: {
                 }}
               >
                 H1
-              </TextFormatButton>
+              </TooltipIconButton>
               <TextFormatButton
                 editor={editor}
                 color={
@@ -127,7 +124,7 @@ export const TextEditor = (props: {
               >
                 H2
               </TextFormatButton>
-            </Box>
+            </Box> */}
           </Row>
         )}
         <EditorContent
@@ -149,18 +146,6 @@ export const TextEditor = (props: {
         <PublishButton editor={editor} onSubmit={props.onSubmit} />
       )}
     </Stack>
-  )
-}
-
-function TextFormatButton(
-  props: {
-    editor: Editor
-  } & ButtonProps
-) {
-  return (
-    <Button variant="soft" size="sm" onClick={props.onClick} {...props}>
-      {props.children}
-    </Button>
   )
 }
 

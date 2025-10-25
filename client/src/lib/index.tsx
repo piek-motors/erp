@@ -483,3 +483,22 @@ export const SaveIconButton = (props: IconButtonProps) => (
     </IconButton>
   </Tooltip>
 )
+
+export const TooltipIconButton = (props: {
+  icon: Icon
+  tooltip?: string
+  variant?: IconButtonProps['variant']
+  color?: IconButtonProps['color']
+  onClick: () => void
+}) => (
+  <Tooltip title={props.tooltip}>
+    <IconButton
+      size="sm"
+      variant={props.variant}
+      color={props.color}
+      onClick={props.onClick}
+    >
+      <UseIcon icon={props.icon} invert={props.variant === 'solid'} />
+    </IconButton>
+  </Tooltip>
+)
