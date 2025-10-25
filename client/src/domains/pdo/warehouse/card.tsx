@@ -1,6 +1,7 @@
-import { Box, Card } from '@mui/joy'
+import { Box, Card, Stack } from '@mui/joy'
 import { P, Row } from 'lib/index'
-import { OperationsListModal, SupplyModal, WriteoffModal } from './modals'
+import { MetalPageTitle } from '../shared'
+import { OperationModal, OperationsListModal } from './modals'
 
 interface Props {
   materialId?: number
@@ -13,7 +14,7 @@ interface Props {
 
 export const WarehouseCard = (props: Props) => (
   <Card
-    variant="plain"
+    variant="outlined"
     size="sm"
     sx={{ width: '-webkit-fill-available', gap: 1.2, height: 'inherit' }}
   >
@@ -37,8 +38,19 @@ export const WarehouseCard = (props: Props) => (
         {props.stock.toFixed(0)} {props.unit}
       </P>
     </Row>
-    <SupplyModal>{props.supplyModal}</SupplyModal>
-    <WriteoffModal>{props.writeoffModal}</WriteoffModal>
+    <OperationModal buttonLabel="Поставка" buttonColor="success">
+      <MetalPageTitle t="Поставка" />
+      <Stack gap={1} my={1}>
+        {props.supplyModal}
+      </Stack>
+    </OperationModal>
+
+    <OperationModal buttonLabel="Списание" buttonColor="danger">
+      <MetalPageTitle t="Списание" />
+      <Stack gap={1} my={1}>
+        {props.writeoffModal}
+      </Stack>
+    </OperationModal>
     <OperationsListModal
       materialId={props.materialId}
       detailId={props.detailId}

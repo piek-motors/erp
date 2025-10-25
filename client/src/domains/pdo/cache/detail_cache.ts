@@ -22,6 +22,9 @@ export class DetailCache {
   getDetails() {
     return this.details
   }
+  getUniversalDetails() {
+    return this.details.filter(d => d.groupId == null)
+  }
   removeDetail(id: number) {
     this.setDetails(this.details.filter(d => d.id !== id))
   }
@@ -35,7 +38,7 @@ export class DetailCache {
     makeAutoObservable(this)
   }
   async load() {
-    const detailsRaw = await rpc.pdo.details.list.query({})
+    const detailsRaw = await rpc.pdo.details.list.query()
     const details = matrixDecoder<ListDetailsOutput>(detailsRaw)
     this.setDetails(details.map(each => map.detail.fromDto(each)))
   }

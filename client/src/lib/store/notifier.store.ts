@@ -1,6 +1,7 @@
 import { makeAutoObservable, runInAction } from 'mobx'
 
-const RempvalTime = 10_000
+const ErrMsgTime = 10_000
+const OkMsgTime = 3_000
 
 type Notification = {
   id: string
@@ -15,7 +16,7 @@ class NotifierStore {
     makeAutoObservable(this)
   }
 
-  notify(level: Notification['level'], msg: string) {
+  notify(level: Notification['level'], msg: string, timeout?: number) {
     const id = crypto.randomUUID()
 
     // Add notification immediately
@@ -28,7 +29,7 @@ class NotifierStore {
       runInAction(() => {
         this.notifications = this.notifications.filter(each => each.id !== id)
       })
-    }, RempvalTime)
+    }, timeout || ErrMsgTime)
   }
 
   all() {
@@ -36,11 +37,11 @@ class NotifierStore {
   }
 
   ok(msg: string) {
-    this.notify('info', msg)
+    this.notify('info', msg, OkMsgTime)
   }
 
   err(msg: string) {
-    this.notify('err', msg)
+    this.notify('err', msg, ErrMsgTime)
   }
 }
 export const notifier = new NotifierStore()

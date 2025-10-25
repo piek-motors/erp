@@ -1,7 +1,6 @@
 import { Button } from '@mui/joy'
 import { InModal } from 'components/modal'
-import { MetalPageTitle } from 'domains/pdo/shared'
-import { Btn, Stack } from 'lib/index'
+import { Btn } from 'lib/index'
 import { observer } from 'mobx-react-lite'
 import { useCallback, useState } from 'react'
 import { useEscapeClose } from '../../../hooks/use-escape-close'
@@ -13,7 +12,7 @@ type OperationModalProps = {
   buttonColor: 'danger' | 'success'
 }
 
-const OperationModal = observer(
+export const OperationModal = observer(
   ({ children, buttonLabel, buttonColor }: OperationModalProps) => {
     const [open, setOpen] = useState(false)
     const handleClose = useCallback(() => {
@@ -65,23 +64,3 @@ export const OperationsListModal = observer(
     )
   }
 )
-
-export const WriteoffModal = observer(
-  (props: { children: React.ReactNode }) => (
-    <OperationModal buttonLabel="Списание" buttonColor="danger">
-      <MetalPageTitle t="Списание" />
-      <Stack gap={1} my={1}>
-        {props.children}
-      </Stack>
-    </OperationModal>
-  )
-)
-
-export const SupplyModal = observer((props: { children: React.ReactNode }) => (
-  <OperationModal buttonLabel="Поставка" buttonColor="success">
-    <MetalPageTitle t="Поставка" />
-    <Stack gap={1} my={1}>
-      {props.children}
-    </Stack>
-  </OperationModal>
-))

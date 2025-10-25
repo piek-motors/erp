@@ -123,11 +123,6 @@ export const SaveAndDelete = (props: {
 }) => {
   return (
     <Row alignItems={'end'} gap={2} sx={props.sx}>
-      <DeleteConfirmDialog
-        title={props.itemName}
-        handleDelete={() => props.handleDelete()}
-        button={<DeleteResourceButton />}
-      />
       <ExecuteAction
         fullWidth
         onSubmit={() => props.handleSave()}
@@ -135,6 +130,11 @@ export const SaveAndDelete = (props: {
         buttonProps={{
           size: 'sm'
         }}
+      />
+      <DeleteConfirmDialog
+        title={props.itemName}
+        handleDelete={() => props.handleDelete()}
+        button={<DeleteResourceButton />}
       />
     </Row>
   )

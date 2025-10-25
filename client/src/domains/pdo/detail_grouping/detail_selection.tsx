@@ -3,22 +3,25 @@ import { Box, Button, IconButton, Stack } from '@mui/joy'
 import { BaseAutocomplete, BaseOption } from 'components/base-autocomplete'
 import { InModal } from 'components/modal'
 import { observer, P, Row, UseIcon, useState } from 'lib/index'
+import { cache } from '../cache/root'
 import { DetailName } from '../detail/name'
 import { crud } from './api'
 
 const UniversalDetailSelection = observer(() => {
-  if (crud.store.availableDetails.length === 0) {
-    throw new Error('No available details')
+  const universalDetails = cache.details.getUniversalDetails()
+
+  if (!universalDetails.length) {
+    return null
   }
 
   // Convert details to BaseOption format, excluding already selected ones
-  const availableOptions: BaseOption[] = crud.store.availableDetails
-    .filter(detail => !crud.store.selectedDetailIds.includes(detail.id))
+  const availableOptions: BaseOption[] = universalDetails
+    .filter(detail => !crud.store.selectedDetailIds.includes(detail.id!))
     .map(detail => {
       const baseLabel = `${detail.id} - ${detail.name}`
       return {
-        label: detail.part_code
-          ? `${baseLabel} (${detail.part_code})`
+        label: detail.drawingNumber
+          ? `${baseLabel} (${detail.drawingNumber})`
           : baseLabel,
         value: detail.id
       }
@@ -50,7 +53,7 @@ const UniversalDetailSelection = observer(() => {
               Детали к добавлению:
             </P>
             {selectedOptions.map(id => {
-              const detail = crud.store.availableDetails.find(d => d.id === id)
+              const detail = cache.details.get(id)
               if (!detail) return null
               return (
                 <Stack
@@ -59,7 +62,14 @@ const UniversalDetailSelection = observer(() => {
                   justifyContent="space-between"
                   alignItems="center"
                 >
-                  <DetailName detail={detail} withLink />
+                  <DetailName
+                    detail={{
+                      id: detail.id!,
+                      name: detail.name,
+                      group_id: detail.groupId ?? null
+                    }}
+                    withLink
+                  />
                   <IconButton
                     variant="soft"
                     color="danger"
@@ -135,7 +145,7 @@ export const UniversalDetailsModalSelect = observer(() => {
       <Stack sx={{ flex: 1 }} gap={1}>
         <P>
           Доступные универсальные детали [
-          {crud.store.filteredAvailableDetails.length}]
+          {cache.details.getUniversalDetails().length}]
         </P>
         <UniversalDetailSelection />
         <Box>

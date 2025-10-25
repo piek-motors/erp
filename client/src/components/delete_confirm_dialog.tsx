@@ -38,7 +38,7 @@ export function DeleteConfirmDialog(props: ConfirmDialogProps) {
             <Row mt={2} gap={2}>
               <Button
                 onClick={() => handleClose()}
-                variant="soft"
+                variant="solid"
                 color="neutral"
               >
                 Отмена

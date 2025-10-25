@@ -9,22 +9,26 @@ export const NotifierOverlay = observer(() => {
       <Box
         sx={{
           position: 'fixed',
-          top: 10,
+          bottom: 10,
           right: 10,
           zIndex: 1000
         }}
       >
         <Stack gap={1}>
-          {notifier.all().map(each => (
-            <Alert
-              key={each.id}
-              variant="solid"
-              color={each.level === 'err' ? 'danger' : 'success'}
-            >
-              {' '}
-              <Container maxWidth="sm">{each.msg}</Container>
-            </Alert>
-          ))}
+          {notifier
+            .all()
+            .toReversed()
+            .map(each => (
+              <Alert
+                key={each.id}
+                variant="solid"
+                size="sm"
+                color={each.level === 'err' ? 'danger' : 'success'}
+              >
+                {' '}
+                <Container maxWidth="sm">{each.msg}</Container>
+              </Alert>
+            ))}
         </Stack>
       </Box>
     </WebOnly>

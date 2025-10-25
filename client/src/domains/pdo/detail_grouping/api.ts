@@ -40,25 +40,6 @@ export class DetailGroupingApi {
     })
   }
 
-  async loadAvailableUniversalDetails() {
-    return this.groupsLoading.run(async () => {
-      const details = await rpc.pdo.details.list.query({
-        onlyUniversalDetails: true
-      })
-      this.store.setAvailableDetails(
-        details.map(detail => {
-          const d = new Detail()
-          d.id = detail[0] as number
-          d.name = detail[1] as string
-          d.part_code = detail[2] as string
-          d.group_id = detail[4] as number | null
-          d.colors = []
-          return d
-        })
-      )
-    })
-  }
-
   async createGroup(name: string) {
     return this.groupsLoading.run(async () => {
       const newGroup = await rpc.pdo.detail_groups.create.mutate({ name })

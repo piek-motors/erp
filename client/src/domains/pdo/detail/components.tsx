@@ -3,6 +3,7 @@ import { AccordionGroup, Stack, TypographySystem } from '@mui/joy'
 import { AccordionCard } from 'components/accordion_card'
 import { ArrayJsonEditor } from 'components/array-json-editor'
 import { BaseAutocomplete, BaseOption } from 'components/base-autocomplete'
+import { NumberInput } from 'components/inputs/number_input'
 import { TextEditor } from 'domains/orders/one/comments/text-editor'
 import { cache } from 'domains/pdo/cache/root'
 import { Box, Inp, Label, MyInputProps, observer, P, Row } from 'lib/index'
@@ -56,6 +57,10 @@ export const MaterialSelect = observer(
 
 const DetailNameInput = observer(() => (
   <Input
+    size="lg"
+    variant="plain"
+    color="primary"
+    sx={{ fontWeight: 500 }}
     label="Название со склада"
     onChange={v => {
       api.detail.setName(v)
@@ -87,10 +92,8 @@ const DetailDescriptionInput = observer(() => (
 ))
 
 const DetailRecommendedBatchSizeInput = observer(() => (
-  <Input
+  <NumberInput
     label="Рекомендуемый размер партии"
-    type="number"
-    sx={{ width: '100px' }}
     value={api.detail.recommendedBatchSize}
     onChange={v => {
       api.detail.setRecommendedBatchSize(v)

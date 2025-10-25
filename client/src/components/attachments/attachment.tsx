@@ -1,14 +1,17 @@
-import {
-  UilCheck,
-  UilEllipsisH,
-  UilFile,
-  UilFileAlt,
-  UilImage,
-  UilPen
-} from '@iconscout/react-unicons'
-import { Button, Dropdown, Menu, MenuButton, MenuItem, Stack } from '@mui/joy'
+/** @jsxImportSource @emotion/react */
+import { css } from '@emotion/react'
+import { UilEllipsisV, UilPen } from '@iconscout/react-unicons'
+import { Dropdown, IconButton, Menu, MenuButton, Stack } from '@mui/joy'
 import { WebOnly } from 'components/utilities/conditional-display'
-import { DeleteResourceButton, Inp, P, Row, UseIcon, useState } from 'lib/index'
+import {
+  DeleteResourceButton,
+  Inp,
+  P,
+  Row,
+  SaveIconButton,
+  UseIcon,
+  useState
+} from 'lib/index'
 import { Attachment } from 'models'
 
 export const AttachmentComponent = (props: {
@@ -38,75 +41,55 @@ export const AttachmentComponent = (props: {
           />
         </Stack>
       ) : (
-        <FileLink attachment={props.attachment} />
+        <P>
+          <a
+            css={css`
+              color: inherit;
+            `}
+            href={`${process.env.REACT_APP_API_URL}/s3/${props.attachment.key}`}
+            target="_blank"
+            rel="noreferrer"
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              textDecoration: 'none',
+              fontWeight: 'normal'
+            }}
+          >
+            {props.attachment.name}
+          </a>
+        </P>
       )}
 
       <WebOnly>
         {editMode === false && (
           <Dropdown>
             <MenuButton variant="plain" size="sm">
-              <UseIcon icon={UilEllipsisH} />
+              <UseIcon icon={UilEllipsisV} small />
             </MenuButton>
             <Menu size="sm" sx={{ gap: 1, p: 0.5 }}>
-              <MenuItem
-                onClick={() => {
-                  setEditMode(true)
-                }}
-              >
-                <UseIcon icon={UilPen} />
-              </MenuItem>
+              <Row>
+                <IconButton
+                  onClick={() => {
+                    setEditMode(true)
+                  }}
+                >
+                  <UseIcon icon={UilPen} />
+                </IconButton>
 
-              {props.handleDelete && (
-                <>
-                  <DeleteResourceButton
-                    onClick={() => props.handleDelete!(props.attachment)}
-                  />
-                </>
-              )}
+                {props.handleDelete && (
+                  <>
+                    <DeleteResourceButton
+                      onClick={() => props.handleDelete!(props.attachment)}
+                    />
+                  </>
+                )}
+              </Row>
             </Menu>
           </Dropdown>
         )}
       </WebOnly>
     </Row>
-  )
-}
-
-function getformatAssociatedIcon(filename: string) {
-  const fileExtension = filename.split('.')[filename.split('.').length - 1]
-  if (['png', 'jpg', 'jpeg'].includes(fileExtension)) {
-    return <UseIcon icon={UilImage} />
-  } else if (['pdf', 'doc', 'docx'].includes(fileExtension)) {
-    return <UseIcon icon={UilFileAlt} />
-  } else {
-    return <UseIcon icon={UilFile} />
-  }
-}
-
-function FileLink(props: { attachment: Attachment }) {
-  return (
-    <a
-      href={`${process.env.REACT_APP_API_URL}/s3/${props.attachment.key}`}
-      target="_blank"
-      rel="noreferrer"
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        textDecoration: 'none',
-        fontWeight: 'normal'
-      }}
-    >
-      <Button
-        variant="plain"
-        sx={{ fontSize: '1rem', textAlign: 'left', fontWeight: 'normal' }}
-        color="primary"
-        size="sm"
-        startDecorator={
-          <WebOnly>{getformatAssociatedIcon(props.attachment.name)}</WebOnly>
-        }
-      >
-        <P>{props.attachment.name}</P>
-      </Button>
-    </a>
   )
 }
 
@@ -124,11 +107,7 @@ function FileNameInput(props: {
   }
 
   return (
-    <Row
-      display={'flex'}
-      justifyContent={'space-between'}
-      onKeyDown={handleKeyDown}
-    >
+    <Row display={'flex'} onKeyDown={handleKeyDown}>
       <Inp
         fullWidth
         value={name}
@@ -136,9 +115,11 @@ function FileNameInput(props: {
         variant="plain"
         sx={{ maxWidth: '100%', minWidth: '100%' }}
       />
-      <Button variant="soft" size="sm" onClick={() => props.onSave(name)}>
-        <UseIcon icon={UilCheck} />
-      </Button>
+      <SaveIconButton
+        onClick={() => props.onSave(name)}
+        variant="soft"
+        color="success"
+      />
     </Row>
   )
 }

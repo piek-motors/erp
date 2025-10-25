@@ -1,9 +1,5 @@
 import { Card, Sheet, Stack } from '@mui/joy'
-import {
-  ComplexTitle,
-  MetalPageTitle,
-  SaveAndDelete
-} from 'domains/pdo/shared/basic'
+import { MetalPageTitle, SaveAndDelete } from 'domains/pdo/shared/basic'
 import {
   Loading,
   observer,
@@ -17,6 +13,7 @@ import {
   useNavigate,
   useParams
 } from 'lib/index'
+import { notifier } from 'lib/store/notifier.store'
 import { formatDate, formatDetailDateTime } from 'lib/utils/formatting'
 import { CreateDetailOrder } from '../warehouse/create_order'
 import { api } from './api'
@@ -35,14 +32,12 @@ export const UpdateDetailPage = observer(() => {
 
   if (api.status.loading) return <Loading />
   return (
-    <Stack gap={1} p={1}>
+    <Stack>
       <MetalPageTitle
         t={
-          <ComplexTitle
-            subtitle="Деталь"
-            title={api.detail.name}
-            index={api.detail.id!}
-          />
+          <P level="body-sm" whiteSpace={'nowrap'}>
+            Деталь № {id}
+          </P>
         }
       />
       <RowButColumsAtSm gap={1} flexGrow={4}>
@@ -75,9 +70,7 @@ function SaveFloatingButton() {
   return (
     <Sheet
       sx={{
-        border: '2px dashed',
-        borderColor: 'divider',
-        borderRadius: 'md',
+        borderRadius: 'sm',
         backgroundColor: 'lightblue',
         position: 'sticky',
         bottom: 0,
@@ -95,7 +88,9 @@ function SaveFloatingButton() {
               navigate(openPage(routeMap.pdo.details))
             })
           }
-          handleSave={() => api.update()}
+          handleSave={() =>
+            api.update().then(() => notifier.ok('Деталь обновлена'))
+          }
         />
       </Row>
     </Sheet>

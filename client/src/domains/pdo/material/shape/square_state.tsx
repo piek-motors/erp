@@ -3,8 +3,8 @@ import { SquareBar, SquareBarShapeData } from 'models'
 import { IMaterialShapeState } from '../shape_state.interface'
 
 export class SquareState implements IMaterialShapeState {
-  length!: string
-  setLength(length: string) {
+  length!: number
+  setLength(length: number) {
     this.length = length
   }
   constructor() {
@@ -16,9 +16,9 @@ export class SquareState implements IMaterialShapeState {
     } satisfies SquareBarShapeData
   }
   sync(material: SquareBar): void {
-    this.length = material.length?.toString() || ''
+    this.length = material.length || 0
   }
   reset(): void {
-    this.length = ''
+    this.length = 0
   }
 }

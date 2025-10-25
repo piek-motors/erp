@@ -91,8 +91,8 @@ export class DetailState {
   setRecentlyUpdated(id: number) {
     this.recentlyUpdated = id
   }
-  recommendedBatchSize?: string | null
-  setRecommendedBatchSize(size: string | null) {
+  recommendedBatchSize?: number | null
+  setRecommendedBatchSize(size: number | null) {
     this.recommendedBatchSize = size
   }
 
@@ -123,7 +123,7 @@ export class DetailState {
     if (d.automatic_writeoff) {
       this.autoWriteoff.init(d.automatic_writeoff)
     }
-    this.setRecommendedBatchSize(d.recommended_batch_size?.toString() ?? null)
+    this.setRecommendedBatchSize(d.recommended_batch_size ?? null)
   }
 
   reset() {

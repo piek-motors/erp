@@ -39,10 +39,7 @@ export class DetailGroupStore {
     this.groupNameState.setName(group?.group.name || '')
     this.colorSegmentation.clear()
   }
-  availableDetails: Detail[] = []
-  setAvailableDetails(details: Detail[]) {
-    this.availableDetails = details
-  }
+
   selectedDetailIds: number[] = []
   setSelectedDetailIds(ids: number[]) {
     this.selectedDetailIds = ids
@@ -70,22 +67,8 @@ export class DetailGroupStore {
     this.selectedDetailIds = []
   }
 
-  get filteredAvailableDetails() {
-    if (!this.targetGroup) return this.availableDetails
-
-    const groupDetailIds = this.targetGroup.details.map(d => d.id)
-    return this.availableDetails
-      .filter(
-        // remove details that are already in the group
-        detail => !groupDetailIds.includes(detail.id)
-        // remove detaild which binded to specific group
-      )
-      .filter(detail => detail.group_id == null)
-  }
-
   clear() {
     this.targetGroup = null
-    this.availableDetails = []
     this.selectedDetailIds = []
   }
 }

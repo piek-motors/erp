@@ -17,7 +17,8 @@ export interface TabProps {
 export function Tabs(props: TabProps) {
   return (
     <MuiTabs
-      sx={{ borderRadius: 'sm' }}
+      variant="outlined"
+      sx={{ borderRadius: 'sm', minWidth: 'fit-content' }}
       value={props.value}
       onChange={(e, v) => {
         if (v == null) return

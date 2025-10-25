@@ -217,6 +217,7 @@ const Wrapper = observer(
         header={<AddResourceButton onClick={() => insertNewOrder()} />}
       >
         <Tabs
+          p={0.5}
           tabs={tabs}
           value={currentTab}
           handleChange={(v: number) => {

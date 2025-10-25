@@ -83,7 +83,6 @@ export const DetailGroupById = observer(() => {
       const groupId = parseInt(id, 10)
       if (!isNaN(groupId)) {
         crud.loadGroupWithDetails(groupId)
-        crud.loadAvailableUniversalDetails()
       }
     }
     return () => {
@@ -97,7 +96,6 @@ export const DetailGroupById = observer(() => {
 export const DetailGroupListPage = observer(() => {
   useEffect(() => {
     crud.loadGroups()
-    crud.loadAvailableUniversalDetails()
     return () => {
       crud.store.clear()
     }

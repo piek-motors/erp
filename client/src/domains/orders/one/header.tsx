@@ -26,8 +26,8 @@ const ActionButton = observer((props: { buttons: ActionButton[] }) => {
       const btnComponent = (
         <Tooltip title={btn.tip} key={btn.tip}>
           <IconButton
-            variant="soft"
-            color="neutral"
+            variant="outlined"
+            color="primary"
             data-tip={btn.tip}
             onClick={btn.handler}
           >

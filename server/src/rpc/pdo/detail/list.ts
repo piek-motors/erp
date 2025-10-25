@@ -1,4 +1,4 @@
-import { db, publicProcedure, z } from '#root/deps.js'
+import { db, procedure } from '#root/deps.js'
 import { matrixEncoder } from '#root/lib/matrix_encoder.js'
 
 export interface ListDetailsOutput {
@@ -9,26 +9,11 @@ export interface ListDetailsOutput {
   stock: number
 }
 
-export const getDetailList = publicProcedure
-  .input(
-    z.object({
-      onlyUniversalDetails: z.boolean().optional()
-    })
-  )
-  .query(async ({ input }) => {
-    const result = await db
-      .selectFrom('pdo.details as d')
-      .$if(input.onlyUniversalDetails === true, qb =>
-        qb.where('d.logical_group_id', 'is', null)
-      )
-      .select([
-        'd.id',
-        'd.name',
-        'd.part_code',
-        'd.logical_group_id',
-        'd.stock'
-      ])
-      .orderBy('d.id', 'desc')
-      .execute()
-    return matrixEncoder(result)
-  })
+export const getDetailList = procedure.query(async () => {
+  const result = await db
+    .selectFrom('pdo.details as d')
+    .select(['d.id', 'd.name', 'd.part_code', 'd.logical_group_id', 'd.stock'])
+    .orderBy('d.id', 'desc')
+    .execute()
+  return matrixEncoder(result)
+})

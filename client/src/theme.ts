@@ -5,7 +5,7 @@ const theme = extendTheme({
     light: {
       palette: {
         background: {
-          body: '#e3e1e1',
+          body: '#ededed',
           surface: '#f6f2f2' // White surface
         }
       }
