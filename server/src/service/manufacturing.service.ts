@@ -197,6 +197,9 @@ export class Manufacturing {
     order: Selectable<DB.ManufacturingTable>
   ) {
     const { material_id, label } = material
+    if (!material.data) {
+      throw new Error('Material cost data is missing')
+    }
     const totalCost = (material?.data?.materialCostLength * qty) / 1000
 
     if (material.stock < totalCost) {
