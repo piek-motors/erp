@@ -16,7 +16,7 @@ const signW = 100
 const dateW = 80
 
 export const ProductionRoute = observer(() => {
-  const steps = api.s.detail.processingRoute.steps
+  const steps = api.detailApi.detail.processingRoute.steps
   if (steps.length === 0) return null
   return (
     <Stack>

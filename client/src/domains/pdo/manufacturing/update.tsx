@@ -1,4 +1,5 @@
 import { Box, Card, Divider } from '@mui/joy'
+import { AttachmentComponent } from 'components/attachments/attachment'
 import { InModal } from 'components/modal'
 import { PrintOnly, WebOnly } from 'components/utilities/conditional-display'
 import { DetailName } from 'domains/pdo/detail/name'
@@ -88,16 +89,17 @@ export const ManufacturingUpdatePage = observer(() => {
             </Stack>
             <Cost />
           </Row>
-          <Row gap={2}>
+          <Row gap={2} alignItems={'start'}>
             <Stack display={'flex'} alignSelf={'start'}>
               <Label label="Заготовка" />
               <TechParamsDisplay
-                params={api.s.detail.blankSpec}
+                params={api.detailApi.detail.blankSpec}
                 level="body-xs"
               />
             </Stack>
             <Divider orientation="vertical" />
-            <DetailDescription htmlContent={api.s.detail.description} />
+            <DetailDescription htmlContent={api.detailApi.detail.description} />
+            <DetailAttachments />
           </Row>
 
           <Row mt={1}>
@@ -117,6 +119,15 @@ export const ManufacturingUpdatePage = observer(() => {
     </Stack>
   )
 })
+
+const DetailAttachments = observer(() => (
+  <Stack>
+    <Label label="Файлы" level="body-xs" />
+    {api.detailApi.detail.attachments.files.map(file => (
+      <AttachmentComponent key={file.key} attachment={file} editable={false} />
+    ))}
+  </Stack>
+))
 
 const Dates = observer(() => {
   if (!api.s.order) return null
@@ -192,8 +203,8 @@ const DeleteOrderButton = observer(() => {
 })
 
 export const Cost = observer(() => {
-  const materialCost = api.s.detail.autoWriteoff.materialCost
-  const details = api.s.detail.autoWriteoff.detailsCost
+  const materialCost = api.detailApi.detail.autoWriteoff.materialCost
+  const details = api.detailApi.detail.autoWriteoff.detailsCost
   return (
     <Row alignItems={'start'}>
       {!!materialCost ? (
@@ -231,7 +242,7 @@ export const Cost = observer(() => {
 const QuantityInput = observer(() => {
   if (!api.s.order) return null
   if (api.s.order.status === EnManufacturingOrderStatus.Preparation) {
-    const recBatchSize = api.s.detail.recommendedBatchSize
+    const recBatchSize = api.detailApi.detail.recommendedBatchSize
     return (
       <Card size="sm" variant="outlined">
         <Label>Кол-во</Label>

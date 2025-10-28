@@ -15,7 +15,7 @@ export const updateManufacturing = publicProcedure
       update.qty = input.qty
     }
 
-    return await db.transaction().execute(async trx => {
+    return db.transaction().execute(async trx => {
       await trx
         .updateTable('pdo.manufacturing')
         .set(update)

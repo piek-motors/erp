@@ -18,8 +18,10 @@ export const AttachmentComponent = (props: {
   attachment: Attachment
   handleDelete?: (attachment: Attachment) => void
   handleRename?: (attachment: Attachment, name: string) => void
+  editable?: boolean
 }) => {
   const [editMode, setEditMode] = useState(false)
+  const editable = props.editable ?? true
   return (
     <Row display={'flex'}>
       {editMode ? (
@@ -62,7 +64,7 @@ export const AttachmentComponent = (props: {
       )}
 
       <WebOnly>
-        {editMode === false && (
+        {editable && editMode === false && (
           <Dropdown>
             <MenuButton variant="plain" size="sm">
               <UseIcon icon={UilEllipsisV} small />

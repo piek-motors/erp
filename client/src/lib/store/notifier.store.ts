@@ -19,9 +19,8 @@ class NotifierStore {
   notify(level: Notification['level'], msg: string, timeout?: number) {
     const id = crypto.randomUUID()
 
-    // Add notification immediately
     runInAction(() => {
-      this.notifications.push({ msg, level, id })
+      this.notifications.unshift({ msg, level, id })
     })
 
     // Remove notification after timeout

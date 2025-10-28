@@ -2,7 +2,7 @@ import { LoadingController } from 'lib/loading_controller'
 import { rpc } from 'lib/rpc.client'
 import { notifier } from 'lib/store/notifier.store'
 import { makeAutoObservable } from 'mobx'
-import { map } from '../mappers'
+import { DetailApi } from '../detail/api'
 import {
   ManufacturingOrderOutput,
   ManufacturingOrderState
@@ -11,6 +11,7 @@ import {
 export class ManufacturingApi {
   readonly status = new LoadingController()
   readonly s = new ManufacturingOrderState()
+  readonly detailApi = new DetailApi()
   constructor() {
     makeAutoObservable(this)
   }
@@ -22,17 +23,7 @@ export class ManufacturingApi {
       this.s.setOrderAlreadyInProductionModal(null)
       // Load detail materials if we have a detail_id
       if (order.detail_id) {
-        const { detail } = await rpc.pdo.details.get.query({
-          id: order.detail_id
-        })
-        this.s.setDetail(
-          map.detail.fromDto({
-            ...detail,
-            updated_at: detail.updated_at
-              ? new Date(detail.updated_at)
-              : undefined
-          })
-        )
+        await this.detailApi.loadFull(order.detail_id)
       }
     })
   }
