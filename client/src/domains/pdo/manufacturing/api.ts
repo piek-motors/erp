@@ -3,6 +3,7 @@ import { rpc } from 'lib/rpc.client'
 import { notifier } from 'lib/store/notifier.store'
 import { makeAutoObservable } from 'mobx'
 import { DetailApi } from '../detail/api'
+import { DetailState } from '../detail/detail.state'
 import {
   ManufacturingOrderOutput,
   ManufacturingOrderState
@@ -16,15 +17,20 @@ export class ManufacturingApi {
     makeAutoObservable(this)
   }
 
-  async load(id: number) {
-    this.status.run(async () => {
+  async load(
+    id: number
+  ): Promise<{ detail: DetailState; order: ManufacturingOrderOutput }> {
+    return this.status.run(async () => {
       const order = await rpc.pdo.manufacturing.get.query({ id })
       this.s.setOrder(order)
       this.s.setOrderAlreadyInProductionModal(null)
       // Load detail materials if we have a detail_id
-      if (order.detail_id) {
-        await this.detailApi.loadFull(order.detail_id)
+      if (!order.detail_id) {
+        throw new Error('Заказ не содержит детали')
       }
+
+      const detail = await this.detailApi.loadFull(order.detail_id)
+      return { detail, order }
     })
   }
 

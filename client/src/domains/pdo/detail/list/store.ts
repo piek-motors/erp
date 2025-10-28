@@ -106,6 +106,7 @@ export class DetailList {
   private clearSearchArguments() {
     runInAction(() => {
       this.searchPartCode = ''
+      this.searchStore.clear()
       this.indexLetter = null
     })
   }

@@ -8,23 +8,22 @@ import { TextEditor } from 'domains/orders/one/comments/text-editor'
 import { cache } from 'domains/pdo/cache/root'
 import { Box, Inp, Label, MyInputProps, observer, P, Row } from 'lib/index'
 import { MaterialAutocomplete } from '../shared/material_autocomplete'
-import { api } from './api'
-import { BlankSpec } from './detail.state'
+import { BlankSpec, DetailState } from './detail.state'
 import { AutomaticWriteoffAccordion } from './warehouse/cost'
 import { MaterialCost } from './warehouse/cost.store'
 
-export const DetailInputs = () => (
+export const DetailInputs = ({ detail: d }: { detail: DetailState }) => (
   <Stack gap={0.5}>
-    <DetailNameInput />
-    <DetailDrawingNameInput />
-    <DetailPartCodeInput />
-    <DetailGroupInput />
-    <DetailRecommendedBatchSizeInput />
-    <DetailDescriptionInput />
+    <DetailNameInput detail={d} />
+    <DetailDrawingNameInput detail={d} />
+    <DetailPartCodeInput detail={d} />
+    <DetailGroupInput detail={d} />
+    <DetailRecommendedBatchSizeInput detail={d} />
+    <DetailDescriptionInput detail={d} />
     <AccordionGroup>
-      <BlankSpecInput />
-      <ProcessingRouteAccordion />
-      <AutomaticWriteoffAccordion />
+      <BlankSpecInput detail={d} />
+      <ProcessingRouteAccordion detail={d} />
+      <AutomaticWriteoffAccordion detail={d} />
     </AccordionGroup>
   </Stack>
 )
@@ -55,7 +54,7 @@ export const MaterialSelect = observer(
   }
 )
 
-const DetailNameInput = observer(() => (
+const DetailNameInput = observer(({ detail }: { detail: DetailState }) => (
   <Input
     size="lg"
     variant="plain"
@@ -63,55 +62,61 @@ const DetailNameInput = observer(() => (
     sx={{ fontWeight: 500 }}
     label="Название со склада"
     onChange={v => {
-      api.detail.setName(v)
+      detail.setName(v)
     }}
-    value={api.detail.name}
+    value={detail.name}
   />
 ))
 
-const DetailDrawingNameInput = observer(() => (
-  <Input
-    label="Название чертежа"
-    onChange={v => {
-      api.detail.setDrawingName(v)
-    }}
-    value={api.detail.drawingName}
-  />
-))
+const DetailDrawingNameInput = observer(
+  ({ detail }: { detail: DetailState }) => (
+    <Input
+      label="Название чертежа"
+      onChange={v => {
+        detail.setDrawingName(v)
+      }}
+      value={detail.drawingName}
+    />
+  )
+)
 
-const DetailDescriptionInput = observer(() => (
-  <Box>
-    <Label>Примечание</Label>
-    <TextEditor
-      defaultValue={api.detail.description}
-      onChange={content => {
-        api.detail.setDescription(content)
+const DetailDescriptionInput = observer(
+  ({ detail }: { detail: DetailState }) => (
+    <Box>
+      <Label>Примечание</Label>
+      <TextEditor
+        defaultValue={detail.description}
+        onChange={content => {
+          detail.setDescription(content)
+        }}
+      />
+    </Box>
+  )
+)
+
+const DetailRecommendedBatchSizeInput = observer(
+  ({ detail }: { detail: DetailState }) => (
+    <NumberInput
+      label="Рекомендуемый размер партии"
+      value={detail.recommendedBatchSize}
+      onChange={v => {
+        detail.setRecommendedBatchSize(v)
       }}
     />
-  </Box>
-))
+  )
+)
 
-const DetailRecommendedBatchSizeInput = observer(() => (
-  <NumberInput
-    label="Рекомендуемый размер партии"
-    value={api.detail.recommendedBatchSize}
-    onChange={v => {
-      api.detail.setRecommendedBatchSize(v)
-    }}
-  />
-))
-
-const DetailPartCodeInput = observer(() => (
+const DetailPartCodeInput = observer(({ detail }: { detail: DetailState }) => (
   <Input
     label="Номер чертежа"
     onChange={v => {
-      api.detail.setDrawingNumber(v)
+      detail.setDrawingNumber(v)
 
       if (v.startsWith('ВЗИС')) {
         alert('Впишите конструкторский номер без приставки "ВЗИС"')
       }
     }}
-    value={api.detail.drawingNumber}
+    value={detail.drawingNumber}
   />
 ))
 
@@ -119,7 +124,7 @@ const Input = (props: MyInputProps) => (
   <Inp variant="plain" color="neutral" fullWidth {...props} />
 )
 
-const DetailGroupInput = observer(() => {
+const DetailGroupInput = observer(({ detail }: { detail: DetailState }) => {
   const groupOptions: BaseOption[] = cache.detailGroups
     .getGroups()
     .map(group => ({
@@ -128,7 +133,7 @@ const DetailGroupInput = observer(() => {
     }))
 
   const selectedGroup =
-    groupOptions.find(option => option.value === api.detail.groupId) || null
+    groupOptions.find(option => option.value === detail.groupId) || null
 
   return (
     <Stack>
@@ -138,20 +143,20 @@ const DetailGroupInput = observer(() => {
         options={groupOptions}
         value={selectedGroup}
         onChange={group => {
-          api.detail.setGroupId(group?.value || null)
+          detail.setGroupId(group?.value || null)
         }}
       />
     </Stack>
   )
 })
 
-const BlankSpecInput = observer(() => (
+const BlankSpecInput = observer(({ detail }: { detail: DetailState }) => (
   <AccordionCard title="Заготовка" defaultExpanded>
     <Label level="body-xs">Материал заготовки указывать не нужно</Label>
     <ArrayJsonEditor
-      value={api.detail.blankSpec?.arr ?? null}
+      value={detail.blankSpec?.arr ?? null}
       onChange={parameters =>
-        api.detail.setBlankSpec(parameters ? { arr: parameters } : null)
+        detail.setBlankSpec(parameters ? { arr: parameters } : null)
       }
       newItem={{ key: '', value: '' }}
       placeholders={['Параметр', 'Значение']}
@@ -160,19 +165,21 @@ const BlankSpecInput = observer(() => (
   </AccordionCard>
 ))
 
-const ProcessingRouteAccordion = observer(() => (
-  <AccordionCard title="Маршрут обработки" defaultExpanded>
-    <ArrayJsonEditor
-      value={api.detail.processingRoute.steps ?? null}
-      newItem={{
-        name: ''
-      }}
-      onChange={steps => api.detail.processingRoute.init(steps ?? [])}
-      placeholders={['Операция', 'мин']}
-      width={[90, 10]}
-    />
-  </AccordionCard>
-))
+const ProcessingRouteAccordion = observer(
+  ({ detail }: { detail: DetailState }) => (
+    <AccordionCard title="Маршрут обработки" defaultExpanded>
+      <ArrayJsonEditor
+        value={detail.processingRoute.steps ?? null}
+        newItem={{
+          name: ''
+        }}
+        onChange={steps => detail.processingRoute.init(steps ?? [])}
+        placeholders={['Операция', 'мин']}
+        width={[90, 10]}
+      />
+    </AccordionCard>
+  )
+)
 
 export const TechParamsDisplay = observer(
   (props: { params?: BlankSpec | null; level: keyof TypographySystem }) => (

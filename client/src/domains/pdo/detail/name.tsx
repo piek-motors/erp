@@ -5,7 +5,6 @@ import { cache } from 'domains/pdo/cache/root'
 import { Box, Button, Row, observer } from 'lib/index'
 import { openPage, routeMap } from 'lib/routes'
 import { Link } from 'react-router'
-import { DetailInfoPopup } from './detail_info.popup'
 
 interface Detail {
   id: number
@@ -41,9 +40,7 @@ export const DetailName = observer((props: Props) => {
 
   // Content with optional hover popup
   const contentWithPopup = withParamsButton ? (
-    <HoverReveal hidden={<DetailInfoPopup detailId={detail.id} />}>
-      {mainContent}
-    </HoverReveal>
+    <HoverReveal hidden={<></>}>{mainContent}</HoverReveal>
   ) : (
     <Row>{mainContent}</Row>
   )

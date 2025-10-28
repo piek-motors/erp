@@ -4,10 +4,7 @@ import { ExtraSmallIconButton } from 'components/buttons'
 import { cache } from 'domains/pdo/cache/root'
 import { Label, observer, P, useState } from 'lib/index'
 import { DetailApi } from './api'
-
-interface DetailParamsPopupProps {
-  detailId: number
-}
+import { DetailState } from './detail.state'
 
 const Pair = (props: { label?: string; value?: string | null }) => {
   if (!props.value) return null
@@ -26,19 +23,19 @@ const Pair = (props: { label?: string; value?: string | null }) => {
 }
 
 export const DetailInfoPopup = observer(
-  ({ detailId }: DetailParamsPopupProps) => {
+  ({ detail: d }: { detail: DetailState }) => {
     const [api] = useState(() => new DetailApi())
     return (
       <Dropdown>
         <MenuButton
-          loading={api.status.loading}
+          loading={api.loader.loading}
           slots={{ root: Box }}
           slotProps={{
             root: {
               onClick: e => {
                 e.stopPropagation()
-                api.detail.reset()
-                api.loadShort(detailId)
+                d.reset()
+                api.loadShort(d.id!)
               }
             }
           }}
@@ -55,11 +52,11 @@ export const DetailInfoPopup = observer(
             maxWidth: '500px'
           }}
         >
-          <Pair value={api.detail.name} />
-          <Pair label="Номер чертежа" value={api.detail.drawingNumber} />
+          <Pair value={d.name} />
+          <Pair label="Номер чертежа" value={d.drawingNumber} />
           <Pair
             label="Группа"
-            value={cache.detailGroups.getGroupName(api.detail.groupId)}
+            value={cache.detailGroups.getGroupName(d.groupId!)}
           />
         </Menu>
       </Dropdown>

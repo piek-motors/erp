@@ -42,7 +42,7 @@ export class DetailState {
   readonly autoWriteoff = new DetailAutomaticWriteoffStore()
   readonly processingRoute = new ProcessingRoute()
 
-  id?: number
+  id: number = 0
   setId(id: number) {
     this.id = id
   }
@@ -127,7 +127,7 @@ export class DetailState {
   }
 
   reset() {
-    this.id = undefined
+    this.id = 0
     this.name = ''
     this.description = ''
     this.recentlyAdded = undefined

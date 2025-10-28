@@ -20,16 +20,21 @@ import {
   Stack,
   useEffect,
   useNavigate,
-  useParams
+  useParams,
+  useState
 } from 'lib/index'
 import { notifier } from 'lib/store/notifier.store'
 import { dayAndMonth, roundAndTrim } from 'lib/utils/formatting'
 import { EnManufacturingOrderStatus, uiManufacturingOrderStatus } from 'models'
 import { cache } from '../cache/root'
 import { TechParamsDisplay } from '../detail/components'
+import { DetailState } from '../detail/detail.state'
 import { MaterialCost } from '../detail/warehouse/cost.store'
 import { api } from './api'
-import { ManufacturingOrderState } from './order.state'
+import {
+  ManufacturingOrderOutput,
+  ManufacturingOrderState
+} from './order.state'
 import { DetailTechPassportTable } from './tech_passport/passport_table'
 import { ProductionRoute } from './tech_passport/production_route_table'
 import { DetailDescription } from './tech_passport/shared'
@@ -42,9 +47,14 @@ const deletionAllowed = [
 
 export const ManufacturingUpdatePage = observer(() => {
   const { id } = useParams<{ id: string }>()
+  const [detail, setDetail] = useState<DetailState | null>(null)
+  const [order, setOrder] = useState<ManufacturingOrderOutput | null>(null)
   useEffect(() => {
     if (id) {
-      api.load(Number(id))
+      api.load(Number(id)).then(({ detail, order }) => {
+        setDetail(detail)
+        setOrder(order)
+      })
     }
   }, [id])
 
@@ -55,6 +65,7 @@ export const ManufacturingUpdatePage = observer(() => {
     return <div>Заказ не найден</div>
   }
   const isDeletionAllowed = deletionAllowed.includes(api.s.order.status)
+  if (!detail || !order) return <Loading />
   return (
     <Stack p={1} gap={1}>
       <WebOnly>
@@ -81,25 +92,22 @@ export const ManufacturingUpdatePage = observer(() => {
           <TechPassportButton />
           <Row gap={1} alignItems={'start'}>
             <Stack>
-              <QuantityInput />
+              <QuantityInput detail={detail} />
               <Row gap={1}>
                 <Label label="Статус" />
                 <P>{uiManufacturingOrderStatus(api.s.order.status)}</P>
               </Row>
             </Stack>
-            <Cost />
+            <Cost detail={detail} />
           </Row>
           <Row gap={2} alignItems={'start'}>
             <Stack display={'flex'} alignSelf={'start'}>
               <Label label="Заготовка" />
-              <TechParamsDisplay
-                params={api.detailApi.detail.blankSpec}
-                level="body-xs"
-              />
+              <TechParamsDisplay params={detail?.blankSpec} level="body-xs" />
             </Stack>
             <Divider orientation="vertical" />
-            <DetailDescription htmlContent={api.detailApi.detail.description} />
-            <DetailAttachments />
+            <DetailDescription htmlContent={detail.description} />
+            <DetailAttachments detail={detail} />
           </Row>
 
           <Row mt={1}>
@@ -114,16 +122,16 @@ export const ManufacturingUpdatePage = observer(() => {
       </WebOnly>
 
       <PrintOnly display="block">
-        <PrintingPageVerion order={api.s} />
+        <PrintingPageVerion order={api.s} detail={detail} />
       </PrintOnly>
     </Stack>
   )
 })
 
-const DetailAttachments = observer(() => (
+const DetailAttachments = observer(({ detail }: { detail: DetailState }) => (
   <Stack>
     <Label label="Файлы" level="body-xs" />
-    {api.detailApi.detail.attachments.files.map(file => (
+    {detail.attachments.files.map(file => (
       <AttachmentComponent key={file.key} attachment={file} editable={false} />
     ))}
   </Stack>
@@ -175,10 +183,13 @@ const TechPassportButton = () => {
   )
 }
 
-const PrintingPageVerion = (props: { order: ManufacturingOrderState }) => (
+const PrintingPageVerion = (props: {
+  order: ManufacturingOrderState
+  detail: DetailState
+}) => (
   <>
-    <DetailTechPassportTable order={props.order} />
-    <ProductionRoute />
+    <DetailTechPassportTable order={props.order} detail={props.detail} />
+    <ProductionRoute detail={props.detail} />
   </>
 )
 
@@ -202,9 +213,9 @@ const DeleteOrderButton = observer(() => {
   )
 })
 
-export const Cost = observer(() => {
-  const materialCost = api.detailApi.detail.autoWriteoff.materialCost
-  const details = api.detailApi.detail.autoWriteoff.detailsCost
+export const Cost = observer(({ detail }: { detail: DetailState }) => {
+  const materialCost = detail.autoWriteoff.materialCost
+  const details = detail.autoWriteoff.detailsCost
   return (
     <Row alignItems={'start'}>
       {!!materialCost ? (
@@ -239,10 +250,10 @@ export const Cost = observer(() => {
   )
 })
 
-const QuantityInput = observer(() => {
+const QuantityInput = observer(({ detail }: { detail: DetailState }) => {
   if (!api.s.order) return null
   if (api.s.order.status === EnManufacturingOrderStatus.Preparation) {
-    const recBatchSize = api.detailApi.detail.recommendedBatchSize
+    const recBatchSize = detail.recommendedBatchSize
     return (
       <Card size="sm" variant="outlined">
         <Label>Кол-во</Label>

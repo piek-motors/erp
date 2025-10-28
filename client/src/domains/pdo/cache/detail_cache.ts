@@ -7,6 +7,8 @@ import { map } from '../mappers'
 
 const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
 
+const alphabet = 'АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ'.split('')
+
 export class DetailCache {
   private details: DetailState[] = []
   setDetails(details: DetailState[]) {
@@ -21,6 +23,19 @@ export class DetailCache {
   }
   getDetails() {
     return this.details
+  }
+  getFirstLetterIndex(): string[] {
+    const index = new Set<string>()
+    for (const detail of this.details) {
+      const firstLetter = detail.name.charAt(0).toUpperCase()
+      index.add(firstLetter)
+    }
+
+    const arr = Array.from(index).filter(
+      letter => letter && alphabet.includes(letter)
+    )
+    arr.sort()
+    return arr
   }
   getUniversalDetails() {
     return this.details.filter(d => d.groupId == null)

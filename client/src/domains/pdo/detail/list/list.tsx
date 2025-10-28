@@ -1,4 +1,5 @@
-import { Button } from '@mui/joy'
+import { Button, Divider } from '@mui/joy'
+import { SxProps } from '@mui/joy/styles/types'
 import { ScrollableWindow, Search } from 'components/inputs'
 import { InModal } from 'components/modal'
 import { SearchResults } from 'components/search-paginated'
@@ -10,6 +11,7 @@ import {
   Inp,
   Label,
   Loading,
+  Row,
   RowButColumsAtSm,
   Stack,
   observer,
@@ -58,12 +60,14 @@ interface DetailsTableProps {
   onRowClick?: (row: DetailState) => void
   highlight?: (row: DetailState) => boolean
   highlightColor?: string
+  sx?: SxProps
 }
 
 const DetailList = observer((props: DetailsTableProps) => {
   const navigate = useNavigate()
   return (
     <Table
+      sx={props.sx}
       columns={columnList}
       data={state.displayedResults}
       rowStyleCb={row => {
@@ -86,22 +90,21 @@ const DetailList = observer((props: DetailsTableProps) => {
 })
 
 export const DetailsListPage = observer(() => (
-  <ScrollableWindow
-    refreshTrigger={false}
-    staticContent={
-      <MetalPageTitle t={'Детали'}>
-        {/* <AddResourceButton
-          navigateTo={openPage(routeMap.metalflow.detail.new)}
-        /> */}
-      </MetalPageTitle>
-    }
-    scrollableContent={
-      <Box p={1}>
-        <DetailSearchArguments />
-        <DetailsList />
-      </Box>
-    }
-  />
+  <Row alignItems={'start'}>
+    <ScrollableWindow
+      staticContent={<MetalPageTitle t={'Детали'} />}
+      scrollableContent={
+        <Stack p={0.5} gap={0.5}>
+          <DetailSearchArguments />
+          <Row alignItems="start" gap={0.5}>
+            <AlphabetIndex sx={{ position: 'sticky', top: 0, zIndex: 1 }} />
+            <Divider orientation="vertical" />
+            <DetailList />
+          </Row>
+        </Stack>
+      }
+    />
+  </Row>
 ))
 
 interface DetailSelectModalProps {
@@ -143,7 +146,6 @@ export const DetailSelectModal = observer((props: DetailSelectModalProps) => {
 const DetailSearchArguments = observer(() => {
   return (
     <>
-      <AlphabetIndex />
       <RowButColumsAtSm>
         <Inp
           size="sm"
@@ -169,15 +171,17 @@ const DetailSearchArguments = observer(() => {
 
 const DetailsList = observer((props: DetailsTableProps) => {
   return (
-    <Stack gap={1}>
+    <Stack gap={1} sx={props.sx}>
       <ErrorHint e={state.async.error} />
       {state.async.loading && <Loading />}
       <SearchResults store={state.searchStore} emptyMessage="Детали не найдены">
-        <DetailList
-          highlight={props.highlight}
-          highlightColor={props.highlightColor}
-          onRowClick={props.onRowClick}
-        />
+        <Row alignItems="start" gap={1}>
+          <DetailList
+            highlight={props.highlight}
+            highlightColor={props.highlightColor}
+            onRowClick={props.onRowClick}
+          />
+        </Row>
       </SearchResults>
     </Stack>
   )

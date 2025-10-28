@@ -16,7 +16,7 @@ const UniversalDetailSelection = observer(() => {
 
   // Convert details to BaseOption format, excluding already selected ones
   const availableOptions: BaseOption[] = universalDetails
-    .filter(detail => !crud.store.selectedDetailIds.includes(detail.id!))
+    .filter(detail => !crud.store.selectedDetailIds.includes(detail.id))
     .map(detail => {
       const baseLabel = `${detail.id} - ${detail.name}`
       return {
@@ -64,7 +64,7 @@ const UniversalDetailSelection = observer(() => {
                 >
                   <DetailName
                     detail={{
-                      id: detail.id!,
+                      id: detail.id,
                       name: detail.name,
                       group_id: detail.groupId ?? null
                     }}

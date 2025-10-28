@@ -11,7 +11,8 @@ import {
   StackButRowAtSm,
   useEffect,
   useNavigate,
-  useParams
+  useParams,
+  useState
 } from 'lib/index'
 import { notifier } from 'lib/store/notifier.store'
 import { formatDate, formatDetailDateTime } from 'lib/utils/formatting'
@@ -19,18 +20,23 @@ import { CreateDetailOrder } from '../warehouse/create_order'
 import { api } from './api'
 import { DetailAttachmentList } from './attachment/list'
 import { DetailInputs } from './components'
+import { DetailState } from './detail.state'
 import { DetailWarehouse } from './warehouse/ui'
 
 export const UpdateDetailPage = observer(() => {
   const { id } = useParams<{ id: string }>()
-  if (!id) throw new Error('No id')
+  if (!id) {
+    throw new Error('Invalid page params; id is required')
+  }
+  const [detail, setDetail] = useState<DetailState | null>(null)
 
   useEffect(() => {
-    api.reset()
-    api.loadFull(Number(id))
+    api.loadFull(Number(id)).then(d => {
+      setDetail(d)
+    })
   }, [id])
 
-  if (api.status.loading) return <Loading />
+  if (api.loader.loading || !detail) return <Loading />
   return (
     <Stack>
       <MetalPageTitle
@@ -43,29 +49,29 @@ export const UpdateDetailPage = observer(() => {
       <RowButColumsAtSm gap={1} flexGrow={4}>
         <Stack gap={1}>
           <StackButRowAtSm gap={1} sx={{ flex: 0 }}>
-            <DetailWarehouse />
+            <DetailWarehouse detail={detail} />
             <Card size="sm" sx={{ width: 'min-content' }}>
-              <DetailAttachmentList detailId={Number(id)} />
+              <DetailAttachmentList detail={detail} />
             </Card>
           </StackButRowAtSm>
-          <CreateDetailOrder />
+          <CreateDetailOrder detailId={detail.id} />
         </Stack>
 
         <Stack gap={2} sx={{ flex: 1 }}>
-          <DetailInputs />
+          <DetailInputs detail={detail} />
           <Metadata
-            updatedAt={api.detail.updatedAt}
-            lastManufacturingDate={api.detail.lastManufacturingDate}
-            lastManufacturingQty={api.detail.lastManufacturingQty}
+            updatedAt={detail.updatedAt}
+            lastManufacturingDate={detail.lastManufacturingDate}
+            lastManufacturingQty={detail.lastManufacturingQty}
           />
-          <SaveFloatingButton />
+          <SaveFloatingButton detail={detail} />
         </Stack>
       </RowButColumsAtSm>
     </Stack>
   )
 })
 
-function SaveFloatingButton() {
+function SaveFloatingButton({ detail }: { detail: DetailState }) {
   const navigate = useNavigate()
   return (
     <Sheet
@@ -82,14 +88,14 @@ function SaveFloatingButton() {
     >
       <Row>
         <SaveAndDelete
-          itemName={`Деталь (${api.detail.id}) - ${api.detail.name}`}
+          itemName={`Деталь (${detail.id}) - ${detail.name}`}
           handleDelete={() =>
-            api.delete().then(() => {
+            api.delete(detail.id).then(() => {
               navigate(openPage(routeMap.pdo.details))
             })
           }
           handleSave={() =>
-            api.update().then(() => notifier.ok('Деталь обновлена'))
+            api.update(detail).then(() => notifier.ok('Деталь обновлена'))
           }
         />
       </Row>

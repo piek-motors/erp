@@ -3,16 +3,17 @@ import { css } from '@emotion/react'
 import { Box } from '@mui/joy'
 import { cache } from 'domains/pdo/cache/root'
 import { TechParamsRowDisplay } from 'domains/pdo/detail/components'
+import { DetailState } from 'domains/pdo/detail/detail.state'
 import { capitalize } from 'domains/pdo/shared'
 import { Label, observer, P } from 'lib/index'
 import { formatDate } from 'lib/utils/formatting'
 import { ReactNode } from 'react'
-import { api } from '../api'
 import { ManufacturingOrderState } from '../order.state'
 import { tableStyles } from './shared'
 
 type Props = {
   order: ManufacturingOrderState
+  detail: DetailState
 }
 
 const emptySpace = <Box width={30} height={30} />
@@ -21,9 +22,9 @@ const L = (props: { children: ReactNode }) => (
   <Label level={'body-xs'}>{props.children}</Label>
 )
 
-export const DetailTechPassportTable = observer((props: Props) => {
-  const s = props.order
-  const materialCost = api.detailApi.detail.autoWriteoff.materialCost
+export const DetailTechPassportTable = observer(({ order, detail }: Props) => {
+  const s = order
+  const materialCost = detail.autoWriteoff.materialCost
   if (!s.order) return
   return (
     <table css={css(tableStyles)} style={{ textAlign: 'center' }}>
@@ -31,8 +32,8 @@ export const DetailTechPassportTable = observer((props: Props) => {
         <tr>
           <td>
             <L>Обозначение детали</L>
-            <P fontSize={14}>{api.detailApi.detail.drawingNumber}</P>
-            <P fontSize={14}>{api.detailApi.detail.drawingName}</P>
+            <P fontSize={14}>{detail.drawingNumber}</P>
+            <P fontSize={14}>{detail.drawingName}</P>
           </td>
           <td>Технологический паспорт № </td>
           <td width={70}>Заказ № {emptySpace}</td>
@@ -57,15 +58,12 @@ export const DetailTechPassportTable = observer((props: Props) => {
                 ? cache.materials.getLabel(materialCost.materialId)
                 : ''}
             </P>
-            <TechParamsRowDisplay
-              fontSize={14}
-              params={api.detailApi.detail.blankSpec}
-            />
+            <TechParamsRowDisplay fontSize={14} params={detail.blankSpec} />
           </td>
           <td colSpan={3}>
             <L>Наименование детали</L>
             <P fontWeight={500} fontSize={16}>
-              {capitalize(api.detailApi.detail.name)}
+              {capitalize(detail.name)}
             </P>
           </td>
 

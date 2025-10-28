@@ -1,10 +1,9 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import { Stack } from '@mui/joy'
-import { Operation } from 'domains/pdo/detail/detail.state'
+import { DetailState, Operation } from 'domains/pdo/detail/detail.state'
 import { Label } from 'lib/index'
 import { observer } from 'mobx-react-lite'
-import { api } from '../api'
 import { tableStyles } from './shared'
 
 type Props = {
@@ -15,16 +14,18 @@ const qtyInpW = 50
 const signW = 100
 const dateW = 80
 
-export const ProductionRoute = observer(() => {
-  const steps = api.detailApi.detail.processingRoute.steps
-  if (steps.length === 0) return null
-  return (
-    <Stack>
-      <Label label="Маршрут" level="body-xs" />
-      <DetailProductionRouteTable data={steps} />
-    </Stack>
-  )
-})
+export const ProductionRoute = observer(
+  ({ detail }: { detail: DetailState }) => {
+    const steps = detail.processingRoute.steps
+    if (steps.length === 0) return null
+    return (
+      <Stack>
+        <Label label="Маршрут" level="body-xs" />
+        <DetailProductionRouteTable data={steps} />
+      </Stack>
+    )
+  }
+)
 
 const DetailProductionRouteTable = observer((props: Props) => (
   <table css={css(tableStyles)}>

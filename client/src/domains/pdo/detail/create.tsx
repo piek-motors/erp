@@ -1,23 +1,16 @@
 import { MetalPageTitle } from 'domains/pdo/shared/basic'
-import {
-  ExecuteAction,
-  observer,
-  Stack,
-  TakeLookHint,
-  useEffect
-} from 'lib/index'
+import { ExecuteAction, observer, Stack, TakeLookHint } from 'lib/index'
 import { openPage, routeMap } from 'lib/routes'
 import { api } from './api'
 import { DetailInputs } from './components'
+import { DetailState } from './detail.state'
 
 export const CreateDetailPage = observer(() => {
-  useEffect(() => {
-    api.detail.reset()
-  }, [])
+  const detail = new DetailState()
   return (
     <Stack gap={2} p={1}>
       <MetalPageTitle t={'Добавить деталь'} />
-      <DetailInputs />
+      <DetailInputs detail={detail} />
       <ExecuteAction
         onSubmit={() => api.insert()}
         additionals={(err, res) => {
