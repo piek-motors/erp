@@ -17,6 +17,9 @@ export class PaginatedSearchStore<T extends SearchableItem> {
   searchResult: T[] = []
   displayedResults: T[] = []
   isSearching: boolean = false
+  setIsSearching(value: boolean) {
+    this.isSearching = value
+  }
 
   // Pagination properties
   pageSize: number = 50
@@ -24,7 +27,6 @@ export class PaginatedSearchStore<T extends SearchableItem> {
   hasMore: boolean = false
 
   private searchTimeout: NodeJS.Timeout | null = null
-  private searchStartTime: number = 0
   private getItemsFn: () => T[]
   private customFilterFn?: (items: T[], filters: SearchFilters) => T[]
 
@@ -46,6 +48,7 @@ export class PaginatedSearchStore<T extends SearchableItem> {
       searchResult: observable,
       displayedResults: observable,
       isSearching: observable,
+      setIsSearching: action,
       pageSize: observable,
       currentPage: observable,
       hasMore: observable,
@@ -62,6 +65,7 @@ export class PaginatedSearchStore<T extends SearchableItem> {
     reaction(
       () => this.searchFilters,
       () => {
+        this.setIsSearching(true)
         if (this.searchTimeout) {
           clearTimeout(this.searchTimeout)
         }
@@ -110,24 +114,18 @@ export class PaginatedSearchStore<T extends SearchableItem> {
   }
 
   search() {
-    const searchStartTime = performance.now()
     const items = this.getItemsFn()
 
     if (items.length === 0) {
       runInAction(() => {
         this.searchResult = []
-        this.isSearching = false
+        this.setIsSearching(false)
         this.resetPagination()
       })
       return
     }
 
-    runInAction(() => {
-      this.isSearching = true
-      this.resetPagination()
-    })
-
-    this.searchStartTime = searchStartTime
+    this.resetPagination()
     if (items.length > 500) {
       this.searchInChunks(items)
     } else {
@@ -141,7 +139,7 @@ export class PaginatedSearchStore<T extends SearchableItem> {
 
     runInAction(() => {
       this.searchResult = sorted
-      this.isSearching = false
+      this.setIsSearching(false)
       this.updateDisplayedResults()
     })
   }
@@ -164,20 +162,9 @@ export class PaginatedSearchStore<T extends SearchableItem> {
         requestAnimationFrame(processChunk)
       } else {
         const sorted = this.sortItems(filteredResults)
-        // statistics
-        const searchEndTime = performance.now()
-        const totalDuration = searchEndTime - this.searchStartTime
-        console.debug('⏱️ Search completed (chunked)', {
-          totalDuration: `${totalDuration.toFixed(2)}ms`,
-          itemsProcessed: items.length,
-          resultCount: sorted.length,
-          displayedCount: Math.min(sorted.length, this.pageSize),
-          chunksProcessed: Math.ceil(items.length / chunkSize)
-        })
-
         runInAction(() => {
           this.searchResult = sorted
-          this.isSearching = false
+          this.setIsSearching(false)
           this.updateDisplayedResults()
         })
       }
@@ -226,7 +213,7 @@ export class PaginatedSearchStore<T extends SearchableItem> {
     }
     this.clearFilters()
     this.searchResult = []
-    this.isSearching = false
+    this.setIsSearching(false)
     this.resetPagination()
   }
 }

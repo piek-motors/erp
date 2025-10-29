@@ -4,17 +4,11 @@ import {
 } from 'components/search-paginated'
 import { cache } from 'domains/pdo/cache/root'
 import { LoadingController } from 'lib/loading_controller'
-import { action, makeObservable, observable, runInAction } from 'mobx'
+import { makeAutoObservable, runInAction } from 'mobx'
 import { DetailState } from '../detail.state'
-
-export const alphabet = 'АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ'.split('')
 
 export class DetailList {
   readonly async = new LoadingController()
-  searchPartCode: string = ''
-  indexLetter: string | null = null
-
-  // Composition: embed the paginated search store
   readonly searchStore: PaginatedSearchStore<DetailState>
 
   constructor() {
@@ -25,40 +19,38 @@ export class DetailList {
         customFilter: this.filterDetails.bind(this)
       }
     )
-
-    makeObservable(this, {
-      searchPartCode: observable,
-      indexLetter: observable,
-      setSearchPartCode: action,
-      searchByFirstLetter: action
-    })
+    makeAutoObservable(this)
   }
+
+  drawingNumber: string = ''
+  indexLetter: string | null = null
 
   init() {
     this.searchStore.search()
   }
 
-  // Delegate search methods to the embedded store
-  setSearchKeyword(keyword: string) {
+  setKeyword(keyword: string) {
     this.clearSearchArguments()
     this.searchStore.setSearchKeyword(keyword)
   }
 
-  setSearchId(id: string) {
+  setId(id: string) {
     this.clearSearchArguments()
     this.searchStore.setSearchId(id)
   }
 
-  setSearchPartCode(partCode: string) {
+  setDrawingNumber(partCode: string) {
     this.clearSearchArguments()
-    this.searchPartCode = partCode
-    this.searchStore.search() // Trigger search when part code changes
+    this.drawingNumber = partCode
   }
 
-  searchByFirstLetter(letter: string) {
+  setIndexLetter(letter: string) {
+    if (this.indexLetter === letter) {
+      this.indexLetter = null
+      return
+    }
     this.clearSearchArguments()
     this.indexLetter = letter
-    this.searchStore.search() // Trigger search when letter changes
   }
 
   // Custom filter function for the search store
@@ -66,6 +58,7 @@ export class DetailList {
     details: DetailState[],
     filters: SearchFilters
   ): DetailState[] {
+    this.searchStore.setIsSearching(true)
     // Handle built-in filters first (keyword, id)
     if (filters.keyword) {
       const keyword = filters.keyword.toLowerCase()
@@ -79,8 +72,8 @@ export class DetailList {
     }
 
     // Handle custom filters (partCode, indexLetter)
-    if (this.searchPartCode) {
-      const partCode = this.searchPartCode.toLowerCase()
+    if (this.drawingNumber) {
+      const partCode = this.drawingNumber.toLowerCase()
       return details.filter(
         detail =>
           detail.drawingNumber &&
@@ -97,35 +90,16 @@ export class DetailList {
     return details
   }
 
-  clear() {
-    this.searchStore.clear()
-    this.clearSearchArguments()
-    this.async.reset()
-  }
-
   private clearSearchArguments() {
     runInAction(() => {
-      this.searchPartCode = ''
+      this.drawingNumber = ''
       this.searchStore.clear()
       this.indexLetter = null
     })
   }
 
-  // Getters to expose search store properties
-  get searchResult() {
-    return this.searchStore.searchResult
-  }
-
   get displayedResults() {
     return this.searchStore.displayedResults
-  }
-
-  get isSearching() {
-    return this.searchStore.isSearching
-  }
-
-  get hasMore() {
-    return this.searchStore.hasMore
   }
 
   get searchKeyword() {

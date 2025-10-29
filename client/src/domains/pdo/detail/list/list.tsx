@@ -7,7 +7,6 @@ import { Table } from 'components/table.impl'
 import { MetalPageTitle } from 'domains/pdo/shared/basic'
 import {
   Box,
-  ErrorHint,
   Inp,
   Label,
   Loading,
@@ -87,23 +86,21 @@ const DetailList = observer((props: DetailsTableProps) => {
   )
 })
 
-export const DetailsListPage = observer(() => (
-  <Row alignItems={'start'}>
-    <ScrollableWindow
-      staticContent={<MetalPageTitle t={'Детали'} />}
-      scrollableContent={
-        <Stack p={0.5} gap={0.5}>
-          <DetailSearchArguments />
-          <Row alignItems="start" gap={0.5}>
-            <AlphabetIndex sx={{ position: 'sticky', top: 0, zIndex: 1 }} />
-            <Divider orientation="vertical" />
-            <DetailList />
-          </Row>
-        </Stack>
-      }
-    />
-  </Row>
-))
+export const DetailsListPage = () => (
+  <ScrollableWindow
+    staticContent={<MetalPageTitle t={'Детали'} />}
+    scrollableContent={
+      <Stack p={0.5} gap={0.5}>
+        <DetailSearchArguments />
+        <Row alignItems="start" gap={0.5}>
+          <AlphabetIndex sx={{ position: 'sticky', top: 0, zIndex: 1 }} />
+          <Divider orientation="vertical" />
+          <DetailsList sx={{ width: '100%' }} />
+        </Row>
+      </Stack>
+    }
+  />
+)
 
 interface DetailSelectModalProps {
   value?: DetailState
@@ -147,20 +144,20 @@ const DetailSearchArguments = observer(() => {
       <RowButColumsAtSm>
         <Inp
           size="sm"
-          sx={{ width: '80px' }}
+          sx={{ width: '60px' }}
           placeholder="ID"
           value={state.searchId}
-          onChange={v => state.setSearchId(v)}
+          onChange={v => state.setId(v)}
         />
         <Search
           placeholder="Название"
-          onChange={e => state.setSearchKeyword(e.target.value)}
+          onChange={e => state.setKeyword(e.target.value)}
           value={state.searchKeyword || ''}
         />
         <Search
           placeholder="Номер чертежа"
-          onChange={e => state.setSearchPartCode(e.target.value)}
-          value={state.searchPartCode || ''}
+          onChange={e => state.setDrawingNumber(e.target.value)}
+          value={state.drawingNumber || ''}
         />
       </RowButColumsAtSm>
     </>
@@ -170,16 +167,13 @@ const DetailSearchArguments = observer(() => {
 const DetailsList = observer((props: DetailsTableProps) => {
   return (
     <Stack gap={1} sx={props.sx}>
-      <ErrorHint e={state.async.error} />
       {state.async.loading && <Loading />}
       <SearchResults store={state.searchStore} emptyMessage="Детали не найдены">
-        <Row alignItems="start" gap={1}>
-          <DetailList
-            highlight={props.highlight}
-            highlightColor={props.highlightColor}
-            onRowClick={props.onRowClick}
-          />
-        </Row>
+        <DetailList
+          highlight={props.highlight}
+          highlightColor={props.highlightColor}
+          onRowClick={props.onRowClick}
+        />
       </SearchResults>
     </Stack>
   )

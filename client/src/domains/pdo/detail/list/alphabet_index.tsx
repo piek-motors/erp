@@ -19,7 +19,7 @@ export const AlphabetIndex = observer(({ sx }: { sx?: SxProps }) => {
           }}
           color={isActive(letter) ? 'primary' : 'neutral'}
           variant={isActive(letter) ? 'solid' : 'plain'}
-          onClick={() => detailListStore.searchByFirstLetter(letter)}
+          onClick={() => detailListStore.setIndexLetter(letter)}
         >
           {letter}
         </Button>
