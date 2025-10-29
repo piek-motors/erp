@@ -1,17 +1,17 @@
 import { observer } from 'mobx-react-lite'
-import { EnWriteoffReason, UiWriteoffReason, uiWriteoffReason } from 'models'
+import { UiWriteoffReason, uiWriteoffReason, WriteoffReason } from 'models'
 import { ReasonSelect } from './reason-select'
 
 interface WriteoffReasonSelectProps {
-  reason: EnWriteoffReason
-  setReason: (reason: EnWriteoffReason) => void
+  reason: WriteoffReason
+  setReason: (reason: WriteoffReason) => void
 }
 
 export const WriteoffReasonSelect = observer(
   (props: WriteoffReasonSelectProps) => (
     <ReasonSelect
       label={'Тип списания'}
-      enum={EnWriteoffReason}
+      enum={WriteoffReason}
       enumTranslationEnum={UiWriteoffReason}
       value={{
         label: uiWriteoffReason(props.reason),

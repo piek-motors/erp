@@ -1,13 +1,13 @@
 import { rpc } from 'lib/rpc.client'
 import { makeAutoObservable } from 'mobx'
-import { EnSupplyReason, EnWriteoffReason } from 'models'
+import { SupplyReason, WriteoffReason } from 'models'
 
 class Supply {
   constructor() {
     makeAutoObservable(this)
   }
-  reason: EnSupplyReason = EnSupplyReason.FromSupplier
-  setReason(reason: EnSupplyReason) {
+  reason: SupplyReason = SupplyReason.FromSupplier
+  setReason(reason: SupplyReason) {
     this.reason = reason
   }
 }
@@ -16,8 +16,8 @@ class Writeoff {
   constructor() {
     makeAutoObservable(this)
   }
-  reason: EnWriteoffReason = EnWriteoffReason.UsedInProduction
-  setReason(reason: EnWriteoffReason) {
+  reason: WriteoffReason = WriteoffReason.UsedInProduction
+  setReason(reason: WriteoffReason) {
     this.reason = reason
   }
 }

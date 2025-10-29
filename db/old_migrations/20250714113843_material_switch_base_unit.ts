@@ -1,4 +1,4 @@
-import { EnUnit } from 'models'
+import { Unit } from 'models'
 import { type KDB } from '../schema'
 
 export async function up(db: KDB): Promise<void> {
@@ -8,7 +8,7 @@ export async function up(db: KDB): Promise<void> {
     .updateTable('pdo.materials')
     .set({
       stock: 0,
-      unit: EnUnit.MilliMeter
+      unit: Unit.MilliMeter
     })
     .execute()
   await db

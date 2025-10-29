@@ -1,8 +1,21 @@
 import { Label, P, Row } from 'lib/index'
 import { roundAndTrim } from 'lib/utils/formatting'
+import { Unit, uiUnit } from 'models'
 import { Column } from 'react-table'
 import { Material } from 'srv/rpc/pdo/material/list'
 import { ShapeNameToIconMap } from './list'
+
+function balanceWithUnit(stock: number, unit: Unit) {
+  if (!stock) return ''
+  const roundedStock = roundAndTrim(stock, 0)
+  if (!roundedStock || roundedStock === '0') return ''
+  return (
+    <Row gap={0.5}>
+      <P>{roundedStock}</P>
+      <P level="body-xs">{uiUnit(unit)}</P>
+    </Row>
+  )
+}
 
 export const columns: Column<Material>[] = [
   {
@@ -33,11 +46,11 @@ export const columns: Column<Material>[] = [
     width: '95%'
   },
   {
-    Header: 'Остаток, м',
-    accessor: m => <>{roundAndTrim(m.stock)}</>
+    Header: 'Остаток',
+    accessor: m => balanceWithUnit(m.stock, m.unit)
   },
   {
-    Header: 'Норм. остаток, м',
-    accessor: m => <>{roundAndTrim(m.safety_stock)}</>
+    Header: 'Норм. остаток',
+    accessor: m => balanceWithUnit(m.safety_stock, m.unit)
   }
 ]

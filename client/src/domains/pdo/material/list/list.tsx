@@ -5,18 +5,18 @@ import { Table } from 'components/table.impl'
 import { MetalPageTitle } from 'domains/pdo/shared/basic'
 import { Box, Inp, observer, Row, Stack, useNavigate } from 'lib/index'
 import { openPage, routeMap } from 'lib/routes'
-import { EnMaterialShape } from 'models'
+import { MaterialShape } from 'models'
 import { Material } from 'srv/rpc/pdo/material/list'
 import { columns } from './columns'
 import { MaterialShapeFilter } from './shape_filter'
 import { materialListStore } from './store'
 
 export const ShapeNameToIconMap = {
-  [EnMaterialShape.SquareBar]: '/icons/square.svg',
-  [EnMaterialShape.RoundBar]: '/icons/circle.svg',
-  [EnMaterialShape.Pipe]: '/icons/pipe.svg',
-  [EnMaterialShape.List]: '/icons/list.svg',
-  [EnMaterialShape.HexagonBar]: '/icons/hexagon.svg'
+  [MaterialShape.SquareBar]: '/icons/square.svg',
+  [MaterialShape.RoundBar]: '/icons/circle.svg',
+  [MaterialShape.Pipe]: '/icons/pipe.svg',
+  [MaterialShape.List]: '/icons/list.svg',
+  [MaterialShape.HexagonBar]: '/icons/hexagon.svg'
 }
 
 interface MaterialsTableProps {

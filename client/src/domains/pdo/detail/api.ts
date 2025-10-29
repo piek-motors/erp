@@ -55,12 +55,11 @@ export class DetailApi {
     })
   }
 
-  async insert() {
-    const detail = new DetailState()
+  async insert(detail: DetailState) {
     const payload = detail.createPayload()
     const res = await rpc.pdo.details.create.mutate(payload)
     await cache.details.load()
-    return detail
+    return res.id
   }
 
   async update(detail: DetailState) {

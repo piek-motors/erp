@@ -1,4 +1,5 @@
 import {
+  Arbitrary,
   HexagonBar,
   List,
   Material,
@@ -7,6 +8,7 @@ import {
   SquareBar
 } from '../materials'
 import {
+  ArbitraryShapeData,
   HexagonBarShapeData,
   ListShapeData,
   PipeShapeData,
@@ -22,12 +24,12 @@ export class MaterialShapeAbstractionLayer {
     | ListShapeData
     | PipeShapeData
     | SquareBarShapeData
-    | HexagonBarShapeData {
+    | HexagonBarShapeData
+    | ArbitraryShapeData {
     if (material instanceof RoundBar) {
       return {
         diameter: material.diameter,
-        calibrated: material.calibrated,
-        density: material.density
+        calibrated: material.calibrated
       } satisfies RoundBarShapeData
     } else if (material instanceof List) {
       return {
@@ -47,6 +49,10 @@ export class MaterialShapeAbstractionLayer {
       return {
         diameter: material.diameter
       } satisfies HexagonBarShapeData
+    } else if (material instanceof Arbitrary) {
+      return {
+        name: material.name
+      } satisfies ArbitraryShapeData
     } else {
       throw new ErrNotImplemented()
     }
@@ -58,7 +64,6 @@ export class MaterialShapeAbstractionLayer {
 
       material.diameter = d.diameter
       material.calibrated = d.calibrated
-      material.density = d.density || 0
 
       return material
     } else if (material instanceof List) {
@@ -85,6 +90,12 @@ export class MaterialShapeAbstractionLayer {
       const d = data as HexagonBarShapeData
 
       material.diameter = d.diameter
+
+      return material
+    } else if (material instanceof Arbitrary) {
+      const d = data as ArbitraryShapeData
+
+      material.name = d.name
 
       return material
     } else {

@@ -1,8 +1,8 @@
 import {
-  EnUnit,
   getMaterialConstructor,
   Material,
-  MaterialShapeAbstractionLayer
+  MaterialShapeAbstractionLayer,
+  Unit
 } from 'models'
 import { RouterOutput } from 'srv/lib/trpc'
 import { SelectableDetail } from 'srv/rpc/pdo/detail/get'
@@ -68,7 +68,7 @@ class DetailMapper {
       recommended_batch_size: detail.recommended_batch_size ?? null,
       processing_route: detail.processing_route ?? null,
       automatic_writeoff: detail.automatic_writeoff ?? null,
-      unit: detail.unit ?? EnUnit.Countable
+      unit: detail.unit ?? Unit.Countable
     })
     return res
   }

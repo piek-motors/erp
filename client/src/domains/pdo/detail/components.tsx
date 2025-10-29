@@ -8,24 +8,52 @@ import { TextEditor } from 'domains/orders/one/comments/text-editor'
 import { cache } from 'domains/pdo/cache/root'
 import { Box, Inp, Label, MyInputProps, observer, P, Row } from 'lib/index'
 import { MaterialAutocomplete } from '../shared/material_autocomplete'
+import { DetailAttachmentList } from './attachment/list'
 import { BlankSpec, DetailState } from './detail.state'
 import { AutomaticWriteoffAccordion } from './warehouse/cost'
 import { MaterialCost } from './warehouse/cost.store'
 
-export const DetailInputs = ({ detail: d }: { detail: DetailState }) => (
-  <Stack gap={0.5}>
-    <DetailNameInput detail={d} />
-    <DetailDrawingNameInput detail={d} />
-    <DetailPartCodeInput detail={d} />
-    <DetailGroupInput detail={d} />
-    <DetailRecommendedBatchSizeInput detail={d} />
-    <DetailDescriptionInput detail={d} />
-    <AccordionGroup>
-      <BlankSpecInput detail={d} />
-      <ProcessingRouteAccordion detail={d} />
-      <AutomaticWriteoffAccordion detail={d} />
-    </AccordionGroup>
-  </Stack>
+export const DetailInputs = observer(
+  ({ detail: d }: { detail: DetailState }) => (
+    <Stack gap={0} pr={{ xs: 0, md: 4 }}>
+      <Input
+        fullWidth
+        sx={{ fontWeight: 500 }}
+        label="Название со склада"
+        onChange={v => {
+          d.setName(v)
+        }}
+        value={d.name}
+      />
+      <Input
+        fullWidth
+        label="Название чертежа"
+        onChange={v => {
+          d.setDrawingName(v)
+        }}
+        value={d.drawingName}
+      />
+      <Input
+        label="Номер чертежа"
+        onChange={v => {
+          d.setDrawingNumber(v)
+          if (v.startsWith('ВЗИС')) {
+            alert('Впишите конструкторский номер без приставки "ВЗИС"')
+          }
+        }}
+        value={d.drawingNumber}
+      />
+      <DetailGroupInput detail={d} />
+      <DetailRecommendedBatchSizeInput detail={d} />
+      <DetailDescriptionInput detail={d} />
+      <AccordionGroup sx={{ my: 1 }}>
+        <DetailAttachmentInput detail={d} />
+        <BlankSpecInput detail={d} />
+        <ProcessingRouteAccordion detail={d} />
+        <AutomaticWriteoffAccordion detail={d} />
+      </AccordionGroup>
+    </Stack>
+  )
 )
 
 export const MaterialSelect = observer(
@@ -54,32 +82,6 @@ export const MaterialSelect = observer(
   }
 )
 
-const DetailNameInput = observer(({ detail }: { detail: DetailState }) => (
-  <Input
-    size="lg"
-    variant="plain"
-    color="primary"
-    sx={{ fontWeight: 500 }}
-    label="Название со склада"
-    onChange={v => {
-      detail.setName(v)
-    }}
-    value={detail.name}
-  />
-))
-
-const DetailDrawingNameInput = observer(
-  ({ detail }: { detail: DetailState }) => (
-    <Input
-      label="Название чертежа"
-      onChange={v => {
-        detail.setDrawingName(v)
-      }}
-      value={detail.drawingName}
-    />
-  )
-)
-
 const DetailDescriptionInput = observer(
   ({ detail }: { detail: DetailState }) => (
     <Box>
@@ -106,22 +108,8 @@ const DetailRecommendedBatchSizeInput = observer(
   )
 )
 
-const DetailPartCodeInput = observer(({ detail }: { detail: DetailState }) => (
-  <Input
-    label="Номер чертежа"
-    onChange={v => {
-      detail.setDrawingNumber(v)
-
-      if (v.startsWith('ВЗИС')) {
-        alert('Впишите конструкторский номер без приставки "ВЗИС"')
-      }
-    }}
-    value={detail.drawingNumber}
-  />
-))
-
 const Input = (props: MyInputProps) => (
-  <Inp variant="plain" color="neutral" fullWidth {...props} />
+  <Inp variant="outlined" color="neutral" {...props} />
 )
 
 const DetailGroupInput = observer(({ detail }: { detail: DetailState }) => {
@@ -139,7 +127,7 @@ const DetailGroupInput = observer(({ detail }: { detail: DetailState }) => {
     <Stack>
       <Label>Группа детали. Для универсальных деталей оставьте пустым.</Label>
       <BaseAutocomplete
-        variant="plain"
+        variant="outlined"
         options={groupOptions}
         value={selectedGroup}
         onChange={group => {
@@ -149,6 +137,14 @@ const DetailGroupInput = observer(({ detail }: { detail: DetailState }) => {
     </Stack>
   )
 })
+
+const DetailAttachmentInput = observer(
+  ({ detail }: { detail: DetailState }) => (
+    <AccordionCard title="Файлы" defaultExpanded>
+      <DetailAttachmentList detail={detail} />
+    </AccordionCard>
+  )
+)
 
 const BlankSpecInput = observer(({ detail }: { detail: DetailState }) => (
   <AccordionCard title="Заготовка" defaultExpanded>

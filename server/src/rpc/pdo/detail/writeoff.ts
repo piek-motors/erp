@@ -1,7 +1,7 @@
 import { db } from '#root/deps.js'
 import { publicProcedure } from '#root/lib/trpc/trpc.js'
 import { Warehouse } from '#root/service/warehouse.service.js'
-import { EnWriteoffReason } from 'models'
+import { WriteoffReason } from 'models'
 import { z } from 'zod'
 
 export const createDetailWriteoff = publicProcedure
@@ -9,7 +9,7 @@ export const createDetailWriteoff = publicProcedure
     z.object({
       detailId: z.number(),
       qty: z.number().gt(0),
-      reason: z.nativeEnum(EnWriteoffReason)
+      reason: z.nativeEnum(WriteoffReason)
     })
   )
   .mutation(async ({ input, ctx }) =>

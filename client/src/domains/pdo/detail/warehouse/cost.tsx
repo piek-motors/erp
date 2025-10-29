@@ -15,7 +15,7 @@ import {
   routeMap
 } from 'lib/index'
 import { openPage } from 'lib/routes'
-import { EnUnit } from 'models'
+import { Unit } from 'models'
 import { MaterialSelect } from '../components'
 import { DetailState } from '../detail.state'
 import { DetailSelectModal } from '../list/list'
@@ -59,7 +59,7 @@ export const MaterialCostInputs = observer(
                 size="sm"
                 placeholder="Расход"
                 sx={{ width: '80px' }}
-                unitId={EnUnit.MilliMeter}
+                unitId={Unit.MilliMeter}
                 value={materialCost.length}
                 setValue={v => {
                   materialCost.setLength(v)

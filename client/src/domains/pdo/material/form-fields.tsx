@@ -1,47 +1,50 @@
-import { Card } from '@mui/joy'
+import { NumberInput } from 'components/inputs/number_input'
 import { Tabs } from 'components/tabs'
 import { AlloyAutocomplete, MaterialUnitSelect } from 'domains/pdo/shared/basic'
-import { Inp, Stack, observer } from 'lib/index'
-import { EnMaterialShape } from 'models'
-import { api } from './api'
-import { tabList } from './tabs-config'
+import { Stack, observer } from 'lib/index'
+import { MaterialShape } from 'models'
+import { MaterialState } from './state'
+import { tabsConfig } from './tabs-config'
 
-export const MaterialFormFields = observer((props: { showTabs?: boolean }) => (
-  <Card variant="outlined" size="sm">
-    <Stack gap={1}>
-      {props.showTabs ? (
-        <Tabs
-          p={0}
-          tabs={tabList}
-          handleChange={value => {
-            api.s.setShape(value as unknown as EnMaterialShape)
+export const MaterialFormFields = observer(
+  ({ showTabs, m }: { showTabs?: boolean; m: MaterialState }) => {
+    const tabs = tabsConfig(m)
+    return (
+      <Stack>
+        {showTabs ? (
+          <Tabs
+            p={0}
+            tabs={tabs}
+            handleChange={value => {
+              m.setShape(value as unknown as MaterialShape)
+            }}
+          />
+        ) : (
+          tabs.find(t => t.value === m.shape)?.component
+        )}
+        <AlloyAutocomplete
+          setAlloy={alloy => {
+            m.setAlloy(alloy)
+          }}
+          alloy={m.alloy}
+        />
+        {/* <Inp
+          label={'Линейная масса'}
+          value={m.linearMass}
+          onChange={v => {
+            m.setLinearMass(v)
+          }}
+          unit="кг/м"
+        /> */}
+        <NumberInput
+          label={'Норм. остаток'}
+          value={m.safetyStock}
+          onChange={v => {
+            m.setSafetyStock(v)
           }}
         />
-      ) : (
-        tabList.find(t => t.value === api.s.shape)?.component
-      )}
-      <AlloyAutocomplete
-        setAlloy={alloy => {
-          api.s.setAlloy(alloy)
-        }}
-        alloy={api.s.alloy}
-      />
-      <Inp
-        label={'Линейная масса'}
-        value={api.s.linearMass}
-        onChange={v => {
-          api.s.setLinearMass(v)
-        }}
-        unit="кг/м"
-      />
-      <Inp
-        label={'Норм. остаток'}
-        value={api.s.safetyStock}
-        onChange={v => {
-          api.s.setSafetyStock(v)
-        }}
-      />
-      <MaterialUnitSelect value={api.s.unit} onChange={v => api.s.setUnit(v)} />
-    </Stack>
-  </Card>
-))
+        <MaterialUnitSelect value={m.unit} onChange={v => m.setUnit(v)} />
+      </Stack>
+    )
+  }
+)

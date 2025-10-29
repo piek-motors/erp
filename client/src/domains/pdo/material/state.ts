@@ -1,6 +1,7 @@
 import { makeAutoObservable } from 'lib/deps'
 import { LoadingController } from 'lib/loading_controller'
-import { EnMaterialShape, EnUnit, Material } from 'models'
+import { Material, MaterialShape, Unit } from 'models'
+import { ArbitraryState } from './shape/arbitrary.state'
 import { HexagonBarState } from './shape/hexagon_bar.state'
 import { ListState } from './shape/list_state'
 import { PipeState } from './shape/pipe_state'
@@ -21,16 +22,18 @@ export class MaterialState {
   square = new SquareState()
   pipe = new PipeState()
   hexagon = new HexagonBarState()
+  arbitrary = new ArbitraryState()
 
   shapeState = {
-    [EnMaterialShape.RoundBar]: this.round,
-    [EnMaterialShape.SquareBar]: this.square,
-    [EnMaterialShape.Pipe]: this.pipe,
-    [EnMaterialShape.List]: this.list,
-    [EnMaterialShape.HexagonBar]: this.hexagon
+    [MaterialShape.RoundBar]: this.round,
+    [MaterialShape.SquareBar]: this.square,
+    [MaterialShape.Pipe]: this.pipe,
+    [MaterialShape.List]: this.list,
+    [MaterialShape.HexagonBar]: this.hexagon,
+    [MaterialShape.Arbitrary]: this.arbitrary
   } as const
 
-  getShapeState(shape: EnMaterialShape): IMaterialShapeState {
+  getShapeState(shape: MaterialShape): IMaterialShapeState {
     return this.shapeState[shape]
   }
 
@@ -42,12 +45,12 @@ export class MaterialState {
   setLabel(label: string) {
     this.label = label
   }
-  unit?: EnUnit
-  setUnit(unit: EnUnit) {
+  unit?: Unit
+  setUnit(unit: Unit) {
     this.unit = unit
   }
-  shape: EnMaterialShape = EnMaterialShape.RoundBar
-  setShape(shape: EnMaterialShape) {
+  shape: MaterialShape = MaterialShape.RoundBar
+  setShape(shape: MaterialShape) {
     this.shape = shape
   }
   linearMass = ''
@@ -78,11 +81,10 @@ export class MaterialState {
     this.detailsMadeFromThisMaterial = []
   }
 
-  safetyStock = ''
-  setSafetyStock(safetyStock: string) {
+  safetyStock = 0
+  setSafetyStock(safetyStock: number) {
     this.safetyStock = safetyStock
   }
-  insertedMaterialId?: number
   syncState(material: Material) {
     this.id = material.id
     this.label = material.label

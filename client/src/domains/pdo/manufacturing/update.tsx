@@ -1,9 +1,9 @@
-import { Box, Card, Divider } from '@mui/joy'
+import { Box, Card, Chip, ChipProps } from '@mui/joy'
 import { AttachmentComponent } from 'components/attachments/attachment'
 import { InModal } from 'components/modal'
 import { PrintOnly, WebOnly } from 'components/utilities/conditional-display'
 import { DetailName } from 'domains/pdo/detail/name'
-import { ComplexTitle, MaterialName, MetalPageTitle } from 'domains/pdo/shared'
+import { MaterialName, MetalPageTitle } from 'domains/pdo/shared'
 import {
   Button,
   DeleteResourceButton,
@@ -25,10 +25,10 @@ import {
 } from 'lib/index'
 import { notifier } from 'lib/store/notifier.store'
 import { dayAndMonth, roundAndTrim } from 'lib/utils/formatting'
-import { EnManufacturingOrderStatus, uiManufacturingOrderStatus } from 'models'
+import { ManufacturingOrderStatus, uiManufacturingOrderStatus } from 'models'
 import { cache } from '../cache/root'
 import { TechParamsDisplay } from '../detail/components'
-import { DetailState } from '../detail/detail.state'
+import { BlankSpec, DetailState } from '../detail/detail.state'
 import { MaterialCost } from '../detail/warehouse/cost.store'
 import { api } from './api'
 import {
@@ -40,9 +40,9 @@ import { ProductionRoute } from './tech_passport/production_route_table'
 import { DetailDescription } from './tech_passport/shared'
 
 const deletionAllowed = [
-  EnManufacturingOrderStatus.Waiting,
-  EnManufacturingOrderStatus.Preparation,
-  EnManufacturingOrderStatus.Production
+  ManufacturingOrderStatus.Waiting,
+  ManufacturingOrderStatus.Preparation,
+  ManufacturingOrderStatus.Production
 ]
 
 export const ManufacturingUpdatePage = observer(() => {
@@ -72,42 +72,37 @@ export const ManufacturingUpdatePage = observer(() => {
         <Stack gap={1}>
           <MetalPageTitle
             t={
-              <ComplexTitle
-                subtitle="Заказ"
-                title={
-                  <DetailName
-                    withLink
-                    withParamsButton
-                    detail={{
-                      id: api.s.order.detail_id,
-                      name: api.s.order.detail_name,
-                      group_id: api.s.order.group_id || null
-                    }}
-                  />
-                }
-                index={api.s.order.id}
-              />
+              <Box>
+                <Row>
+                  <P level="body-sm" whiteSpace={'nowrap'}>
+                    Заказ №{api.s.order.id}
+                  </P>
+                  <StatusDisplay status={api.s.order.status} />
+                </Row>
+                <DetailName
+                  detail={{
+                    id: detail.id,
+                    name: detail.name,
+                    group_id: detail.groupId || null
+                  }}
+                  withLink
+                  withGroupLink
+                />
+              </Box>
             }
           />
-          <TechPassportButton />
+
           <Row gap={1} alignItems={'start'}>
             <Stack>
               <QuantityInput detail={detail} />
-              <Row gap={1}>
-                <Label label="Статус" />
-                <P>{uiManufacturingOrderStatus(api.s.order.status)}</P>
-              </Row>
+              <TechPassportButton />
             </Stack>
             <Cost detail={detail} />
           </Row>
-          <Row gap={2} alignItems={'start'}>
-            <Stack display={'flex'} alignSelf={'start'}>
-              <Label label="Заготовка" />
-              <TechParamsDisplay params={detail?.blankSpec} level="body-xs" />
-            </Stack>
-            <Divider orientation="vertical" />
-            <DetailDescription htmlContent={detail.description} />
+          <Row gap={2} alignItems={'start'} flexWrap={'wrap'}>
+            <BlankSpecDisplay blankSpec={detail?.blankSpec} />
             <DetailAttachments detail={detail} />
+            <DetailDescription htmlContent={detail.description} />
           </Row>
 
           <Row mt={1}>
@@ -128,14 +123,54 @@ export const ManufacturingUpdatePage = observer(() => {
   )
 })
 
-const DetailAttachments = observer(({ detail }: { detail: DetailState }) => (
-  <Stack>
-    <Label label="Файлы" level="body-xs" />
-    {detail.attachments.files.map(file => (
-      <AttachmentComponent key={file.key} attachment={file} editable={false} />
-    ))}
-  </Stack>
-))
+const StatusDisplay = observer(
+  ({ status }: { status: ManufacturingOrderStatus }) => {
+    let color: ChipProps['color'] = 'neutral'
+
+    switch (status) {
+      case ManufacturingOrderStatus.Production:
+        color = 'primary'
+        break
+      case ManufacturingOrderStatus.Collected:
+        color = 'success'
+        break
+    }
+
+    return (
+      <Chip color={color} variant="solid" size="sm">
+        {uiManufacturingOrderStatus(status)}
+      </Chip>
+    )
+  }
+)
+
+const BlankSpecDisplay = observer(
+  ({ blankSpec }: { blankSpec?: BlankSpec | null }) => {
+    if (blankSpec == null || blankSpec.arr.length === 0) return null
+    return (
+      <Stack display={'flex'} alignSelf={'start'}>
+        <Label label="Заготовка" />
+        <TechParamsDisplay params={blankSpec} level="body-xs" />
+      </Stack>
+    )
+  }
+)
+
+const DetailAttachments = observer(({ detail }: { detail: DetailState }) => {
+  if (detail.attachments.files.length === 0) return null
+  return (
+    <Stack>
+      <Label label="Файлы" />
+      {detail.attachments.files.map(file => (
+        <AttachmentComponent
+          key={file.key}
+          attachment={file}
+          editable={false}
+        />
+      ))}
+    </Stack>
+  )
+})
 
 const Dates = observer(() => {
   if (!api.s.order) return null
@@ -171,15 +206,18 @@ const Dates = observer(() => {
 })
 
 const TechPassportButton = () => {
-  if (api.s.order?.status !== EnManufacturingOrderStatus.Production) {
+  if (api.s.order?.status !== ManufacturingOrderStatus.Production) {
     return null
   }
   return (
-    <Box>
-      <Button onClick={() => window.print()} color="neutral" variant="soft">
-        Тех. паспорт
-      </Button>
-    </Box>
+    <Button
+      onClick={() => window.print()}
+      color="neutral"
+      variant="outlined"
+      sx={{ width: 'fit-content' }}
+    >
+      Тех. паспорт
+    </Button>
   )
 }
 
@@ -219,7 +257,7 @@ export const Cost = observer(({ detail }: { detail: DetailState }) => {
   return (
     <Row alignItems={'start'}>
       {!!materialCost ? (
-        <Card size="sm">
+        <Card size="sm" variant="plain">
           <Label label="Материал к потреблению" />
           <Stack gap={0.5}>
             <DetailMaterialInfo cost={materialCost} />
@@ -252,7 +290,7 @@ export const Cost = observer(({ detail }: { detail: DetailState }) => {
 
 const QuantityInput = observer(({ detail }: { detail: DetailState }) => {
   if (!api.s.order) return null
-  if (api.s.order.status === EnManufacturingOrderStatus.Preparation) {
+  if (api.s.order.status === ManufacturingOrderStatus.Preparation) {
     const recBatchSize = detail.recommendedBatchSize
     return (
       <Card size="sm" variant="outlined">
@@ -285,7 +323,7 @@ const QuantityInput = observer(({ detail }: { detail: DetailState }) => {
       </Card>
     )
   }
-  if (api.s.order.status === EnManufacturingOrderStatus.Production) {
+  if (api.s.order.status === ManufacturingOrderStatus.Production) {
     return (
       <Row gap={1}>
         <Label label="Кол-во" />
@@ -296,47 +334,45 @@ const QuantityInput = observer(({ detail }: { detail: DetailState }) => {
   return null
 })
 
-const ActionButton = observer(
-  (props: { status: EnManufacturingOrderStatus }) => {
-    switch (props.status) {
-      case EnManufacturingOrderStatus.Waiting:
-        return (
-          <Button
-            size="sm"
-            color="success"
-            onClick={() => api.startMaterialPreparationPhase()}
-            disabled={api.status.loading}
-          >
-            Начать подготовку материалов
-          </Button>
-        )
-      case EnManufacturingOrderStatus.Preparation:
-        return (
-          <Button
-            size="sm"
-            color="primary"
-            onClick={() => api.startProductionPhase()}
-            disabled={api.status.loading || !api.s.qty}
-          >
-            Начать производство
-          </Button>
-        )
-      case EnManufacturingOrderStatus.Production:
-        return (
-          <Button
-            onClick={() => api.finish()}
-            disabled={api.status.loading}
-            size="sm"
-            color="success"
-          >
-            Завершить заказ
-          </Button>
-        )
-      default:
-        return null
-    }
+const ActionButton = observer((props: { status: ManufacturingOrderStatus }) => {
+  switch (props.status) {
+    case ManufacturingOrderStatus.Waiting:
+      return (
+        <Button
+          size="sm"
+          color="success"
+          onClick={() => api.startMaterialPreparationPhase()}
+          disabled={api.status.loading}
+        >
+          Начать подготовку материалов
+        </Button>
+      )
+    case ManufacturingOrderStatus.Preparation:
+      return (
+        <Button
+          size="sm"
+          color="primary"
+          onClick={() => api.startProductionPhase()}
+          disabled={api.status.loading || !api.s.qty}
+        >
+          Начать производство
+        </Button>
+      )
+    case ManufacturingOrderStatus.Production:
+      return (
+        <Button
+          onClick={() => api.finish()}
+          disabled={api.status.loading}
+          size="sm"
+          color="success"
+        >
+          Завершить заказ
+        </Button>
+      )
+    default:
+      return null
   }
-)
+})
 
 export const DuplicationCheckModal = observer(() => {
   const navigate = useNavigate()
@@ -417,7 +453,7 @@ const DetailMaterialInfo = observer((props: { cost: MaterialCost }) => {
             Остаток: {roundAndTrim(cost.material?.stock) || 0} м
           </P>
 
-          {api.s.order?.status === EnManufacturingOrderStatus.Preparation && (
+          {api.s.order?.status === ManufacturingOrderStatus.Preparation && (
             <P
               color={
                 remainingAmount >= 0

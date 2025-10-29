@@ -1,13 +1,13 @@
 import { db, procedure, publicProcedure, z } from '#root/deps.js'
 import { Warehouse } from '#root/service/warehouse.service.js'
-import { EnWriteoffReason } from 'models'
+import { WriteoffReason } from 'models'
 
 export const writeoffMaterial = procedure
   .input(
     z.object({
       material_id: z.number(),
       lengthMeters: z.number().gt(0),
-      reason: z.nativeEnum(EnWriteoffReason),
+      reason: z.nativeEnum(WriteoffReason),
       type_data: z.any()
     })
   )

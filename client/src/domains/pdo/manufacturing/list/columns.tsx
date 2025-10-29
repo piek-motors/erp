@@ -1,6 +1,6 @@
 import { DetailName } from 'domains/pdo/detail/name'
 import { Label, P } from 'lib/index'
-import { EnManufacturingOrderStatus as Status } from 'models'
+import { ManufacturingOrderStatus as Status } from 'models'
 import { Column } from 'react-table'
 import { ManufactoringListOutput } from './store'
 

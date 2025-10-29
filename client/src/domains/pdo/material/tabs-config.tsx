@@ -1,35 +1,42 @@
 import { TabConfig } from 'components/tabs'
-import { EnMaterialShape, UiMaterialShape } from 'models'
+import { MaterialShape, UiMaterialShape } from 'models'
+import { ArbitraryInputBase } from './shape/arbitrary'
 import { HexagonBarMaterialInputBase } from './shape/hexagon_bar'
 import { ListMaterialInputBase } from './shape/list'
 import { PipeMaterialInputBase } from './shape/pipe'
 import { RoundBarInputBase } from './shape/round_bar'
 import { SquareMaterialInputBase } from './shape/square'
+import { MaterialState } from './state'
 
-export const tabList: TabConfig = [
-  {
-    value: EnMaterialShape.RoundBar,
-    label: UiMaterialShape[EnMaterialShape.RoundBar],
-    component: <RoundBarInputBase />
-  },
-  {
-    value: EnMaterialShape.List,
-    label: UiMaterialShape[EnMaterialShape.List],
-    component: <ListMaterialInputBase />
-  },
-  {
-    value: EnMaterialShape.Pipe,
-    label: UiMaterialShape[EnMaterialShape.Pipe],
-    component: <PipeMaterialInputBase />
-  },
-  {
-    value: EnMaterialShape.SquareBar,
-    label: UiMaterialShape[EnMaterialShape.SquareBar],
-    component: <SquareMaterialInputBase />
-  },
-  {
-    value: EnMaterialShape.HexagonBar,
-    label: UiMaterialShape[EnMaterialShape.HexagonBar],
-    component: <HexagonBarMaterialInputBase />
-  }
-] as const
+export const tabsConfig = (m: MaterialState): TabConfig =>
+  (
+    [
+      {
+        value: MaterialShape.RoundBar,
+        component: <RoundBarInputBase m={m} />
+      },
+      {
+        value: MaterialShape.List,
+        component: <ListMaterialInputBase m={m} />
+      },
+      {
+        value: MaterialShape.Pipe,
+        component: <PipeMaterialInputBase m={m} />
+      },
+      {
+        value: MaterialShape.SquareBar,
+        component: <SquareMaterialInputBase m={m} />
+      },
+      {
+        value: MaterialShape.HexagonBar,
+        component: <HexagonBarMaterialInputBase m={m} />
+      },
+      {
+        value: MaterialShape.Arbitrary,
+        component: <ArbitraryInputBase m={m} />
+      }
+    ] as const
+  ).map(each => ({
+    ...each,
+    label: UiMaterialShape[each.value]
+  }))

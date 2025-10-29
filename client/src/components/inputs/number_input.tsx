@@ -18,7 +18,9 @@ export function NumberInput(props: Props) {
       value={props.value == null ? '' : props.value}
       onChange={v => {
         const num = Number(v)
-        if (isNaN(num)) return
+        if (Number.isNaN(num)) {
+          return
+        }
         props.onChange(num)
       }}
       unit={props.unit}

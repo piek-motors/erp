@@ -1,4 +1,4 @@
-import { EnMaterialShape, EnUnit } from './enums'
+import { MaterialShape, Unit } from './enums'
 import { uiMaterialShape, uiUnit } from './ui.translators'
 
 export abstract class Material {
@@ -16,8 +16,8 @@ export abstract class Material {
    * Used for material identification and properties lookup.
    */
   alloy: string = ''
-  abstract readonly unit: EnUnit
-  abstract readonly shape: EnMaterialShape
+  abstract readonly unit: Unit
+  abstract readonly shape: MaterialShape
   constructor(id: number, label: string = '', alloy?: string | null) {
     this.id = id
     this.label = label
@@ -33,8 +33,8 @@ export abstract class Material {
 }
 
 export class RoundBar extends Material {
-  unit = EnUnit.M
-  shape = EnMaterialShape.RoundBar
+  unit = Unit.M
+  shape = MaterialShape.RoundBar
   /**
    * Diameter of the round bar in millimeters (mm).
    * This is the primary dimension used for identification and calculations.
@@ -63,8 +63,8 @@ export class RoundBar extends Material {
 }
 
 export class List extends Material {
-  unit = EnUnit.M
-  shape = EnMaterialShape.List
+  unit = Unit.M
+  shape = MaterialShape.List
   /**
    * Thickness of the sheet in millimeters (mm).
    * This is the primary dimension used for identification and calculations.
@@ -86,8 +86,8 @@ export class List extends Material {
 }
 
 export class Pipe extends Material {
-  unit = EnUnit.M
-  shape = EnMaterialShape.Pipe
+  unit = Unit.M
+  shape = MaterialShape.Pipe
   /**
    * Outer diameter of the pipe in millimeters (mm).
    * This is the primary dimension used for identification and calculations.
@@ -108,8 +108,8 @@ export class Pipe extends Material {
 }
 
 export class SquareBar extends Material {
-  unit = EnUnit.M
-  shape = EnMaterialShape.SquareBar
+  unit = Unit.M
+  shape = MaterialShape.SquareBar
   /**
    * Side length of the square bar in millimeters (mm).
    * This is the primary dimension used for identification and calculations.
@@ -124,23 +124,33 @@ export class SquareBar extends Material {
 }
 
 export class HexagonBar extends Material {
-  unit = EnUnit.M
-  shape = EnMaterialShape.HexagonBar
+  unit = Unit.M
+  shape = MaterialShape.HexagonBar
   diameter!: number
   deriveLabel(): string {
     return `${this.shapeUI} ${this.diameter} ${this.alloy || ''}`.trim()
   }
 }
 
-export const MaterialConstructorMap = {
-  [EnMaterialShape.RoundBar]: RoundBar,
-  [EnMaterialShape.List]: List,
-  [EnMaterialShape.Pipe]: Pipe,
-  [EnMaterialShape.SquareBar]: SquareBar,
-  [EnMaterialShape.HexagonBar]: HexagonBar
+export class Arbitrary extends Material {
+  unit = Unit.M
+  shape = MaterialShape.Arbitrary
+  name!: string
+  deriveLabel(): string {
+    return `${this.name} ${this.alloy || ''}`.trim()
+  }
 }
 
-export function getMaterialConstructor<T extends EnMaterialShape>(
+export const MaterialConstructorMap = {
+  [MaterialShape.RoundBar]: RoundBar,
+  [MaterialShape.List]: List,
+  [MaterialShape.Pipe]: Pipe,
+  [MaterialShape.SquareBar]: SquareBar,
+  [MaterialShape.HexagonBar]: HexagonBar,
+  [MaterialShape.Arbitrary]: Arbitrary
+}
+
+export function getMaterialConstructor<T extends MaterialShape>(
   shape: T
 ): (typeof MaterialConstructorMap)[T] {
   const c = MaterialConstructorMap[shape]

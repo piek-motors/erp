@@ -8,14 +8,14 @@ import {
 } from 'kysely'
 import {
   Color,
-  EnManufacturingOrderStatus,
-  EnMaterialShape,
-  EnOperationType,
-  EnSupplyReason,
-  EnUnit,
-  EnWriteoffReason,
+  ManufacturingOrderStatus,
+  MaterialShape,
+  OperationType,
   OrderStatus,
-  UserRole
+  SupplyReason,
+  Unit,
+  UserRole,
+  WriteoffReason
 } from 'models'
 
 export type KDB = Kysely<DB.Schema>
@@ -83,9 +83,9 @@ export namespace DB {
 
   export interface MaterialTable {
     id: Generated<number>
-    unit: EnUnit
+    unit: Unit
     label: string // unique
-    shape: EnMaterialShape
+    shape: MaterialShape
     shape_data: JSONColumnType<any, any, any>
     stock: number
     safety_stock: number
@@ -98,7 +98,7 @@ export namespace DB {
   export interface DetailTable {
     id: Generated<number>
     name: string
-    unit: EnUnit // defailt Countable
+    unit: Unit // defailt Countable
     description: string | null
     logical_group_id: number | null // hash index
     part_code: string | null
@@ -146,7 +146,7 @@ export namespace DB {
   }
   export interface ManufacturingTable {
     id: GeneratedAlways<number>
-    status: EnManufacturingOrderStatus
+    status: ManufacturingOrderStatus
     detail_id: number
     qty: number
     finished_at: Date | null
@@ -165,8 +165,8 @@ export namespace DB {
 
   export interface OperationsTable {
     id: GeneratedAlways<number>
-    operation_type: EnOperationType
-    reason: EnSupplyReason | EnWriteoffReason
+    operation_type: OperationType
+    reason: SupplyReason | WriteoffReason
     user_id: number
     material_id: number | null
     qty: number | null

@@ -14,19 +14,19 @@ import {
   useNavigate,
   useState
 } from 'lib/index'
-import { EnManufacturingOrderStatus, uiManufacturingOrderStatus } from 'models'
+import { ManufacturingOrderStatus, uiManufacturingOrderStatus } from 'models'
 import { getColumns } from './columns'
 import { ManufactoringListOutput, s } from './store'
 
 const STATUSES = [
-  EnManufacturingOrderStatus.Collected,
-  EnManufacturingOrderStatus.Production,
-  EnManufacturingOrderStatus.Preparation,
-  EnManufacturingOrderStatus.Waiting
+  ManufacturingOrderStatus.Collected,
+  ManufacturingOrderStatus.Production,
+  ManufacturingOrderStatus.Preparation,
+  ManufacturingOrderStatus.Waiting
 ]
 
 function StatusAccordion(props: {
-  status: EnManufacturingOrderStatus
+  status: ManufacturingOrderStatus
   onRowClick: (row: ManufactoringListOutput) => void
   expanded?: boolean
   data: ManufactoringListOutput[]
@@ -66,7 +66,7 @@ export const ManufacturingList = observer(() => {
       })
     : s.orders
 
-  const hasInStatus = (s: EnManufacturingOrderStatus) =>
+  const hasInStatus = (s: ManufacturingOrderStatus) =>
     filtered.some(o => o.status === s)
 
   if (s.async.loading) return <Loading />

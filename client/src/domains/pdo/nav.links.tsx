@@ -35,7 +35,7 @@ export const actions: Action[] = [
     href: routeMap.pdo.manufacturing_orders
   },
   {
-    name: 'Журнал операций',
+    name: 'Журнал',
     href: routeMap.pdo.operations
   }
 ]

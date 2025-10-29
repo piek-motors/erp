@@ -3,15 +3,7 @@ import { css } from '@emotion/react'
 import { UilEllipsisV, UilPen } from '@iconscout/react-unicons'
 import { Dropdown, IconButton, Menu, MenuButton, Stack } from '@mui/joy'
 import { WebOnly } from 'components/utilities/conditional-display'
-import {
-  DeleteResourceButton,
-  Inp,
-  P,
-  Row,
-  SaveIconButton,
-  UseIcon,
-  useState
-} from 'lib/index'
+import { DeleteResourceButton, Inp, P, Row, UseIcon, useState } from 'lib/index'
 import { Attachment } from 'models'
 
 export const AttachmentComponent = (props: {
@@ -46,17 +38,18 @@ export const AttachmentComponent = (props: {
         <P>
           <a
             css={css`
+              display: flex;
+              flex-direction: column;
+              text-decoration: none;
+              font-weight: normal;
               color: inherit;
+              &:hover {
+                text-decoration: underline;
+              }
             `}
             href={`${process.env.REACT_APP_API_URL}/s3/${props.attachment.key}`}
             target="_blank"
             rel="noreferrer"
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              textDecoration: 'none',
-              fontWeight: 'normal'
-            }}
           >
             {props.attachment.name}
           </a>
@@ -72,6 +65,7 @@ export const AttachmentComponent = (props: {
             <Menu size="sm" sx={{ gap: 1, p: 0.5 }}>
               <Row>
                 <IconButton
+                  size="sm"
                   onClick={() => {
                     setEditMode(true)
                   }}
@@ -109,18 +103,13 @@ function FileNameInput(props: {
   }
 
   return (
-    <Row display={'flex'} onKeyDown={handleKeyDown}>
+    <Row onKeyDown={handleKeyDown}>
       <Inp
         fullWidth
         value={name}
         onChange={e => setName(e)}
         variant="plain"
         sx={{ maxWidth: '100%', minWidth: '100%' }}
-      />
-      <SaveIconButton
-        onClick={() => props.onSave(name)}
-        variant="soft"
-        color="success"
       />
     </Row>
   )

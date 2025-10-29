@@ -1,7 +1,7 @@
 import { IDB, TRPCError } from '#root/deps.js'
 import { DB } from 'db'
 import { Selectable } from 'kysely'
-import { EnManufacturingOrderStatus, EnWriteoffReason } from 'models'
+import { ManufacturingOrderStatus, WriteoffReason } from 'models'
 import { Warehouse } from './warehouse.service.js'
 
 type MaterialWriteoff = {
@@ -27,8 +27,8 @@ export class Manufacturing {
       .selectFrom('pdo.manufacturing')
       .where('detail_id', '=', detail_id)
       .where('status', 'in', [
-        EnManufacturingOrderStatus.Waiting,
-        EnManufacturingOrderStatus.Preparation
+        ManufacturingOrderStatus.Waiting,
+        ManufacturingOrderStatus.Preparation
       ])
       .select('id')
       .executeTakeFirst()
@@ -47,7 +47,7 @@ export class Manufacturing {
         material_writeoffs: {
           writeoffs: []
         },
-        status: EnManufacturingOrderStatus.Waiting
+        status: ManufacturingOrderStatus.Waiting
       })
       .returningAll()
       .executeTakeFirstOrThrow()
@@ -57,7 +57,7 @@ export class Manufacturing {
     orderId: number
   ): Promise<Selectable<DB.ManufacturingTable>> {
     const order = await this.getOrder(orderId)
-    if (order.status !== EnManufacturingOrderStatus.Waiting) {
+    if (order.status !== ManufacturingOrderStatus.Waiting) {
       throw new ErrManufacturingOrderInvalidStatusTransition(
         `Manufacturing with id ${orderId} not waiting`
       )
@@ -65,11 +65,11 @@ export class Manufacturing {
 
     await this.trx
       .updateTable('pdo.manufacturing')
-      .set({ status: EnManufacturingOrderStatus.Preparation })
+      .set({ status: ManufacturingOrderStatus.Preparation })
       .where('id', '=', orderId)
       .execute()
 
-    order.status = EnManufacturingOrderStatus.Preparation
+    order.status = ManufacturingOrderStatus.Preparation
     return order
   }
 
@@ -90,7 +90,7 @@ export class Manufacturing {
       const existingOrder = await this.trx
         .selectFrom('pdo.manufacturing')
         .where('detail_id', '=', order.detail_id)
-        .where('status', '=', EnManufacturingOrderStatus.Production)
+        .where('status', '=', ManufacturingOrderStatus.Production)
         .select('id')
         .executeTakeFirst()
       if (existingOrder) {
@@ -129,7 +129,7 @@ export class Manufacturing {
       .set({
         qty,
         started_at: new Date(),
-        status: EnManufacturingOrderStatus.Production
+        status: ManufacturingOrderStatus.Production
       })
       .where('id', '=', orderId)
       .execute()
@@ -147,7 +147,7 @@ export class Manufacturing {
       .updateTable('pdo.manufacturing')
       .set({
         finished_at: new Date(),
-        status: EnManufacturingOrderStatus.Collected
+        status: ManufacturingOrderStatus.Collected
       })
       .where('id', '=', orderId)
       .returningAll()
@@ -173,7 +173,7 @@ export class Manufacturing {
   async deleteOrder(manufacturingId: number): Promise<void> {
     const manufacturing = await this.getOrder(manufacturingId)
 
-    if (manufacturing.status === EnManufacturingOrderStatus.Collected) {
+    if (manufacturing.status === ManufacturingOrderStatus.Collected) {
       throw Error(
         `Cannot delete manufacturing order that has already been collected`
       )
@@ -219,7 +219,7 @@ export class Manufacturing {
       .subtractMaterial(
         material.material_id,
         totalCost,
-        EnWriteoffReason.UsedInProduction,
+        WriteoffReason.UsedInProduction,
         order.detail_id,
         order.id
       )

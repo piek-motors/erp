@@ -1,54 +1,123 @@
 import { SupplyReasonSelect } from 'domains/pdo/shared/supply-reason-select'
 import { WriteoffReasonSelect } from 'domains/pdo/shared/writeoff-reason-select'
-import { WarehouseCard } from 'domains/pdo/warehouse/card'
+import {
+  SupplyCompletedText,
+  WarehouseCard,
+  WriteoffCompletedText
+} from 'domains/pdo/warehouse/card'
+import { OperationsListModal } from 'domains/pdo/warehouse/modals'
 import { observer, useParams } from 'lib/index'
+import { notifier } from 'lib/store/notifier.store'
 import { uiUnit } from 'models'
-import { api } from '../api'
-import { CreateWarehouseMaterialOperation } from './create_operation'
+import { MaterialState } from '../state'
 
-export const MaterialWarehouse = observer(() => {
+import { Stack } from '@mui/joy'
+import { QtyInputWithUnit } from 'domains/pdo/shared'
+import { modalState } from 'domains/pdo/warehouse/modals.store'
+import { ActionButton, Label, P, Row } from 'lib/index'
+import { Unit } from 'models'
+
+interface Props {
+  materialLabel?: string
+  lengthValue: string
+  lengthSetValue: (value: string) => void
+  reasonComponent: React.ReactNode
+  submitDisabled: boolean
+  onSubmit: () => Promise<unknown>
+  stock?: string
+}
+
+const CreateWarehouseMaterialOperation = observer((props: Props) => (
+  <Stack spacing={1} p={1}>
+    <Row sx={{ fontSize: 20 }}>
+      <Label>Материал: </Label>
+      <P fontWeight={600} color="primary">
+        {props.materialLabel || <P color="neutral">Не выбран</P>}
+      </P>
+    </Row>
+    {props.stock && <P level="body-sm">{props.stock}</P>}
+    <QtyInputWithUnit
+      autoFocus
+      unitId={Unit.M}
+      value={props.lengthValue}
+      setValue={props.lengthSetValue}
+      label={'Длина'}
+    />
+    {props.reasonComponent}
+    <ActionButton disabled={props.submitDisabled} onClick={props.onSubmit} />
+  </Stack>
+))
+
+export const MaterialWarehouse = observer(({ m }: { m: MaterialState }) => {
   const { id } = useParams<{ id: string }>()
   if (!id) throw new Error('No id')
   const materialId = Number(id)
-  const stock = api.s.warehouse.stock.toFixed(0)
-  const stockMsg = `Остаток: ${stock} ${uiUnit(api.s.unit)}`
+  const stock = m.warehouse.stock.toFixed(0)
+  const stockMsg = `Остаток: ${stock} ${uiUnit(m.unit)}`
   return (
     <WarehouseCard
-      materialId={materialId}
-      stock={api.s.warehouse.stock}
-      unit="м"
-      supplyModal={
+      stock={m.warehouse.stock}
+      unit={uiUnit(m.unit)}
+      supply={
         <CreateWarehouseMaterialOperation
-          materialLabel={api.s.label}
-          lengthValue={api.s.warehouse.supply.length}
-          lengthSetValue={value => api.s.warehouse.supply.setLength(value)}
+          materialLabel={m.label}
+          lengthValue={m.warehouse.supply.length}
+          lengthSetValue={value => m.warehouse.supply.setLength(value)}
           reasonComponent={
             <SupplyReasonSelect
-              reason={api.s.warehouse.supply.reason}
-              setReason={reason => api.s.warehouse.supply.setReason(reason)}
+              reason={m.warehouse.supply.reason}
+              setReason={reason => m.warehouse.supply.setReason(reason)}
             />
           }
-          submitDisabled={api.s.warehouse.supply.disabled()}
-          onSubmit={() => api.s.warehouse.insertSupply(api.s.id!)}
+          submitDisabled={m.warehouse.supply.disabled()}
+          onSubmit={() =>
+            m.warehouse
+              .insertSupply(m.id!)
+              .then(() => {
+                notifier.ok(SupplyCompletedText)
+              })
+              .catch(e => {
+                notifier.err(`Ошибка зачисления поставки: ${e.message}`)
+                throw e
+              })
+              .finally(() => {
+                modalState.setSupply(false)
+              })
+          }
           stock={stockMsg}
         />
       }
-      writeoffModal={
+      writeoff={
         <CreateWarehouseMaterialOperation
-          materialLabel={api.s.label}
-          lengthValue={api.s.warehouse.writeoff.length}
-          lengthSetValue={value => api.s.warehouse.writeoff.setLength(value)}
+          materialLabel={m.label}
+          lengthValue={m.warehouse.writeoff.length}
+          lengthSetValue={value => m.warehouse.writeoff.setLength(value)}
           reasonComponent={
             <WriteoffReasonSelect
-              reason={api.s.warehouse.writeoff.reason}
-              setReason={reason => api.s.warehouse.writeoff.setReason(reason)}
+              reason={m.warehouse.writeoff.reason}
+              setReason={reason => m.warehouse.writeoff.setReason(reason)}
             />
           }
-          submitDisabled={api.s.warehouse.writeoff.disabled()}
-          onSubmit={() => api.s.warehouse.insertWriteoff(api.s.id!)}
+          submitDisabled={m.warehouse.writeoff.disabled()}
+          onSubmit={() =>
+            m.warehouse
+              .insertWriteoff(m.id!)
+              .then(() => {
+                notifier.ok(WriteoffCompletedText)
+              })
+              .catch(e => {
+                notifier.err(`Ошибка списания: ${e.message}`)
+                throw e
+              })
+              .finally(() => {
+                modalState.setWriteoff(false)
+              })
+          }
           stock={stockMsg}
         />
       }
-    />
+    >
+      <OperationsListModal materialId={materialId} />
+    </WarehouseCard>
   )
 })

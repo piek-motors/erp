@@ -8,7 +8,7 @@ export const MaterialShapeFilter = observer(() => {
   return (
     <ToggleButtonGroup
       size="sm"
-      variant="soft"
+      variant="outlined"
       value={value}
       sx={{ overflow: 'hidden' }}
       onChange={(_, value) => {

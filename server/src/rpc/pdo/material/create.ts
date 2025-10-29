@@ -1,22 +1,23 @@
-import { db } from '#root/deps.js'
+import { db, TRPCError } from '#root/deps.js'
+import { isDuplicateKeyError } from '#root/lib/kysely.js'
 import { publicProcedure } from '#root/lib/trpc/trpc.js'
 import { info } from 'console'
 import {
-  EnMaterialShape,
-  EnUnit,
   MaterialConstructorMap,
-  MaterialShapeAbstractionLayer
+  MaterialShape,
+  MaterialShapeAbstractionLayer,
+  Unit
 } from 'models'
 import { z } from 'zod'
 
 export const createMaterial = publicProcedure
   .input(
     z.object({
-      unit: z.nativeEnum(EnUnit).nullable(),
-      shape: z.nativeEnum(EnMaterialShape),
+      unit: z.enum(Unit).nullable(),
+      shape: z.enum(MaterialShape),
       label: z.string().nonempty(),
       shape_data: z.any(),
-      linear_mass: z.number(),
+      // linear_mass: z.number(),
       alloy: z.string().nullable()
     })
   )
@@ -32,15 +33,24 @@ export const createMaterial = publicProcedure
       .insertInto('pdo.materials')
       .values({
         ...input,
-        unit: input.unit ?? EnUnit.M,
+        unit: input.unit ?? Unit.M,
         label,
         stock: 0,
-        linear_mass: input.linear_mass,
+        linear_mass: 0,
         alloy: input.alloy,
         safety_stock: 0
       })
       .returningAll()
       .executeTakeFirstOrThrow()
+      .catch(e => {
+        if (isDuplicateKeyError(e)) {
+          throw new TRPCError({
+            code: 'CONFLICT',
+            message: 'Материал с таким названием уже существует'
+          })
+        }
+        throw e
+      })
 
     info(`New material created: ${label}`)
     return material

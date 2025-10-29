@@ -3,8 +3,8 @@ import { HexagonBar, HexagonBarShapeData } from 'models'
 import { IMaterialShapeState } from '../shape_state.interface'
 
 export class HexagonBarState implements IMaterialShapeState {
-  diameter!: string
-  setDiameter(diameter: string) {
+  diameter!: number
+  setDiameter(diameter: number) {
     this.diameter = diameter
   }
   constructor() {
@@ -16,9 +16,9 @@ export class HexagonBarState implements IMaterialShapeState {
     } satisfies HexagonBarShapeData
   }
   sync(material: HexagonBar): void {
-    this.diameter = material.diameter?.toString() || ''
+    this.diameter = material.diameter
   }
   reset(): void {
-    this.diameter = ''
+    this.diameter = 0
   }
 }

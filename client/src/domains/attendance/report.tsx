@@ -110,9 +110,11 @@ export const formatTimeToHoursAndMinutes = (
 ): string => {
   if (!payload) return ''
   if (typeof payload === 'number') {
-    return moment.utc(payload * 1000).format('H:mm')
+    return moment(payload * 1000)
+      .utcOffset(0, false)
+      .format('H:mm')
   }
-  return moment(payload).format('H:mm')
+  return moment(payload).utcOffset(0, false).format('H:mm')
 }
 
 function Time(props: { children: React.ReactNode; sx?: BoxProps }) {

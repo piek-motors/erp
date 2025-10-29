@@ -4,7 +4,7 @@ import {
   ErrDetailPartCodeUnique,
   isDetailPertCodeUniqueError
 } from '#root/rpc/pdo/detail/shared.js'
-import { EnUnit } from 'models'
+import { Unit } from 'models'
 
 export const createDetail = procedure
   .input(detailDto)
@@ -22,7 +22,7 @@ export const createDetail = procedure
         drawing_name: input.drawingName || null,
         automatic_writeoff: input.automaticWriteoff,
         updated_at: new Date(),
-        unit: EnUnit.Countable,
+        unit: Unit.Countable,
         recommended_batch_size: input.recommendedBatchSize || null
       })
       .returning('id')

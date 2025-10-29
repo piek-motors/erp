@@ -7,102 +7,97 @@ import { map } from '../mappers'
 import { MaterialState } from './state'
 
 export class MaterialApi {
-  readonly status = new LoadingController()
-  s: MaterialState = new MaterialState()
-  reset() {
-    this.s = new MaterialState()
-  }
+  readonly loader = new LoadingController()
   constructor() {
     makeAutoObservable(this)
   }
 
-  async load(id?: number) {
-    if (!id) throw new Error('Material id is not set')
-    return this.status.run(async () => {
+  async load(id: number) {
+    const m = new MaterialState()
+    return this.loader.run(async () => {
       const res = await rpc.pdo.material.get.query({ id })
-      this.s.setLinearMass(res.material.linear_mass.toString())
-      this.s.setAlloy(res.material.alloy || '')
-      this.s.setSafetyStock(res.material.safety_stock?.toString())
-      this.s.setUnit(res.material.unit)
-      this.s.syncState(map.material.fromDto(res))
-      this.s.setDetailCount(Number(res.detailCount))
-      return res
+      m.syncState(map.material.fromDto(res))
+      m.setLabel(res.material.label)
+      m.setLinearMass(res.material.linear_mass.toString())
+      m.setAlloy(res.material.alloy || '')
+      m.setSafetyStock(res.material.safety_stock)
+      m.setUnit(res.material.unit)
+      m.setDetailCount(Number(res.detailCount))
+      return m
     })
   }
 
-  async insert() {
-    const MaterialConstructor = getMaterialConstructor(this.s.shape)
+  async insert(m: MaterialState) {
+    const MaterialConstructor = getMaterialConstructor(m.shape)
     const material = new MaterialConstructor(0)
     MaterialShapeAbstractionLayer.importShapeData(
       material,
-      this.s.getShapeState(this.s.shape).export()
+      m.getShapeState(m.shape).export()
     )
     const label = material.deriveLabel()
     if (!label) throw new Error('Material label is not set')
     const res = await rpc.pdo.material.create.mutate({
       label,
-      shape: this.s.shape,
-      shape_data: this.s.getShapeState(this.s.shape).export(),
-      unit: this.s.unit || null,
-      linear_mass: Number(this.s.linearMass),
-      alloy: this.s.alloy || null
+      shape: m.shape,
+      shape_data: m.getShapeState(m.shape).export(),
+      unit: m.unit || null,
+      // linear_mass: Number(m.linearMass),
+      alloy: m.alloy || null
     })
-    this.s = new MaterialState()
-    this.s.insertedMaterialId = res.id
+    m = new MaterialState()
     await cache.materials.load()
     return res.id
   }
 
-  async update() {
-    if (!this.s.id) throw new Error('Material id is not set')
-    if (!this.s.material) throw new Error('Material is not set')
-    if (!this.s.unit) throw new Error('Material unit is not set')
+  async update(m: MaterialState) {
+    if (!m.id) throw new Error('Material id is not set')
+    if (m.material == null) throw new Error('Material is not set')
+    if (m.unit == null) throw new Error('Material unit is not set')
 
     MaterialShapeAbstractionLayer.importShapeData(
-      this.s.material,
-      this.s.getShapeState(this.s.shape).export()
+      m.material,
+      m.getShapeState(m.shape).export()
     )
-    this.s.material.alloy = this.s.alloy || ''
+    m.material.alloy = m.alloy || ''
 
     return rpc.pdo.material.update
       .mutate({
-        id: this.s.id,
-        shape: this.s.shape,
-        shape_data: this.s.getShapeState(this.s.shape).export(),
-        label: this.s.material?.deriveLabel(),
-        unit: this.s.unit,
-        linear_mass: Number(this.s.linearMass),
-        alloy: this.s.alloy || null,
-        safety_stock: Number(this.s.safetyStock)
+        id: m.id,
+        shape: m.shape,
+        shape_data: m.getShapeState(m.shape).export(),
+        label: m.material?.deriveLabel(),
+        unit: m.unit,
+        // linear_mass: Number(m.linearMass),
+        alloy: m.alloy || null,
+        safety_stock: Number(m.safetyStock)
       })
       .then(async res => {
-        if (!this.s.id) throw new Error('Material id is not set')
-        this.load(this.s.id)
-        await cache.materials.load()
-        return res
+        if (!m.id) throw new Error('Material id is not set')
+        const updated = await this.load(m.id)
+        cache.materials.load()
+        return updated
       })
   }
 
-  async delete() {
-    if (!this.s.id) throw new Error('Material id is not set')
-    await rpc.pdo.material.delete.mutate({ id: this.s.id })
+  async delete(id: number) {
+    await rpc.pdo.material.delete.mutate({ id })
     const materialToRemove = cache.materials
       .getMaterials()
-      .find(m => m.id === this.s.id)
+      .find(m => m.id === id)
     if (materialToRemove) {
       cache.materials.removeMaterial(materialToRemove)
     }
   }
 
   async loadDetailsMadeFromThatMaterial(material_id: number) {
-    const res = await rpc.pdo.details.listByMaterialId.query({ material_id })
-    this.s.setDetailsMadeFromThisMaterial(
-      res.map(e => ({
-        id: e.id,
-        name: e.name,
-        group_id: e.logical_group_id
-      }))
-    )
+    const res = await rpc.pdo.details.listByMaterialId.query({
+      material_id
+    })
+    return res.map(e => ({
+      id: e.id,
+      name: e.name,
+      group_id: e.logical_group_id
+    }))
   }
 }
 

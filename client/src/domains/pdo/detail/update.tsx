@@ -1,4 +1,4 @@
-import { Card, Sheet, Stack } from '@mui/joy'
+import { Sheet, Stack } from '@mui/joy'
 import { MetalPageTitle, SaveAndDelete } from 'domains/pdo/shared/basic'
 import {
   Loading,
@@ -8,7 +8,6 @@ import {
   routeMap,
   Row,
   RowButColumsAtSm,
-  StackButRowAtSm,
   useEffect,
   useNavigate,
   useParams,
@@ -18,7 +17,6 @@ import { notifier } from 'lib/store/notifier.store'
 import { formatDate, formatDetailDateTime } from 'lib/utils/formatting'
 import { CreateDetailOrder } from '../warehouse/create_order'
 import { api } from './api'
-import { DetailAttachmentList } from './attachment/list'
 import { DetailInputs } from './components'
 import { DetailState } from './detail.state'
 import { DetailWarehouse } from './warehouse/ui'
@@ -47,13 +45,8 @@ export const UpdateDetailPage = observer(() => {
         }
       />
       <RowButColumsAtSm gap={1} flexGrow={4}>
-        <Stack gap={1}>
-          <StackButRowAtSm gap={1} sx={{ flex: 0 }}>
-            <DetailWarehouse detail={detail} />
-            <Card size="sm" sx={{ width: 'min-content' }}>
-              <DetailAttachmentList detail={detail} />
-            </Card>
-          </StackButRowAtSm>
+        <Stack gap={1} alignItems={'center'}>
+          <DetailWarehouse detail={detail} />
           <CreateDetailOrder detailId={detail.id} />
         </Stack>
 
@@ -95,7 +88,7 @@ function SaveFloatingButton({ detail }: { detail: DetailState }) {
             })
           }
           handleSave={() =>
-            api.update(detail).then(() => notifier.ok('Деталь обновлена'))
+            api.update(detail).then(() => notifier.ok(`Деталь обновлена`))
           }
         />
       </Row>

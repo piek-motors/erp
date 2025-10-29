@@ -1,19 +1,20 @@
+import { NumberInput } from 'components/inputs/number_input'
 import { observer } from 'lib/deps'
-import { Inp, InputStack } from 'lib/index'
-import { EnUnit, uiUnit } from 'models'
-import { api } from '../api'
+import { InputStack } from 'lib/index'
+import { Unit, uiUnit } from 'models'
+import { MaterialState } from '../state'
 
-export const HexagonBarMaterialInputBase = observer(() => {
-  return (
+export const HexagonBarMaterialInputBase = observer(
+  ({ m }: { m: MaterialState }) => (
     <InputStack>
-      <Inp
+      <NumberInput
         label={'Диаметр'}
-        unit={uiUnit(EnUnit.MilliMeter)}
-        value={api.s.hexagon.diameter}
+        unit={uiUnit(Unit.MilliMeter)}
+        value={m.hexagon.diameter}
         onChange={v => {
-          api.s.hexagon.setDiameter(v)
+          m.hexagon.setDiameter(v)
         }}
       />
     </InputStack>
   )
-})
+)

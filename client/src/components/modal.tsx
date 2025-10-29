@@ -31,6 +31,7 @@ export function InModal(props: {
       )}
       <MuiModal
         open={props.open}
+        sx={{ overflow: 'auto' }}
         onClose={() => {
           props.setOpen(false)
           props.onClose?.()
@@ -39,7 +40,11 @@ export function InModal(props: {
         <ModalDialog
           layout={layout}
           size={'lg'}
-          sx={{ width: props.width, pr: 6 }}
+          sx={{
+            width: props.width,
+            pr: 6,
+            overflowY: 'auto'
+          }}
         >
           <ModalClose variant="soft" color="warning" />
           <Stack>{props.children}</Stack>

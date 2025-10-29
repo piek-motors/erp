@@ -1,5 +1,5 @@
 import { db, procedure, z } from '#root/deps.js'
-import { EnOperationType } from 'models'
+import { OperationType } from 'models'
 
 interface StockUpdate {
   table: 'pdo.materials' | 'pdo.details'
@@ -44,7 +44,7 @@ async function getOperation(id: number) {
 
 function buildStockUpdates(operation: Operation): StockUpdate[] {
   const updates: StockUpdate[] = []
-  const isSupply = Number(operation.operation_type) === EnOperationType.Supply
+  const isSupply = Number(operation.operation_type) === OperationType.Supply
 
   // Add material stock update if operation affects materials
   if (operation.material_id) {

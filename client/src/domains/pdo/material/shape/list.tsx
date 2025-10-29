@@ -1,18 +1,17 @@
-import { Inp, InputStack, observer } from 'lib/index'
-import { EnUnit, uiUnit } from 'models'
-import { api } from '../api'
+import { NumberInput } from 'components/inputs/number_input'
+import { InputStack, observer } from 'lib/index'
+import { Unit, uiUnit } from 'models'
+import { MaterialState } from '../state'
 
-export const ListMaterialInputBase = observer(() => {
-  return (
-    <InputStack>
-      <Inp
-        label={'Толщина'}
-        value={api.s.list.thickness}
-        onChange={v => {
-          api.s.list.setThickness(v)
-        }}
-        unit={uiUnit(EnUnit.MilliMeter)}
-      />
-    </InputStack>
-  )
-})
+export const ListMaterialInputBase = observer(({ m }: { m: MaterialState }) => (
+  <InputStack>
+    <NumberInput
+      label={'Толщина'}
+      value={m.list.thickness}
+      onChange={v => {
+        m.list.setThickness(v)
+      }}
+      unit={uiUnit(Unit.MilliMeter)}
+    />
+  </InputStack>
+))

@@ -1,17 +1,19 @@
 import { NumberInput } from 'components/inputs/number_input'
 import { InputStack, observer } from 'lib/index'
-import { EnUnit, uiUnit } from 'models'
-import { api } from '../api'
+import { Unit, uiUnit } from 'models'
+import { MaterialState } from '../state'
 
-export const SquareMaterialInputBase = observer(() => (
-  <InputStack>
-    <NumberInput
-      label="Ширина"
-      value={api.s.square.length}
-      onChange={v => {
-        api.s.square.setLength(v)
-      }}
-      unit={uiUnit(EnUnit.MilliMeter)}
-    />
-  </InputStack>
-))
+export const SquareMaterialInputBase = observer(
+  ({ m }: { m: MaterialState }) => (
+    <InputStack>
+      <NumberInput
+        label="Ширина"
+        value={m.square.length}
+        onChange={v => {
+          m.square.setLength(v)
+        }}
+        unit={uiUnit(Unit.MilliMeter)}
+      />
+    </InputStack>
+  )
+)

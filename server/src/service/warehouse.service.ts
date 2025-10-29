@@ -1,14 +1,14 @@
 import { IDB, TRPCError } from '#root/deps.js'
-import { EnOperationType, EnSupplyReason, EnWriteoffReason } from 'models'
+import { OperationType, SupplyReason, WriteoffReason } from 'models'
 
 export class Warehouse {
   constructor(private readonly trx: IDB, private readonly userId: number) {}
 
-  async addMaterial(id: number, qty: number, reason: EnSupplyReason) {
+  async addMaterial(id: number, qty: number, reason: SupplyReason) {
     const operation = await this.trx
       .insertInto('pdo.operations')
       .values({
-        operation_type: EnOperationType.Supply,
+        operation_type: OperationType.Supply,
         user_id: this.userId,
         material_id: id,
         qty,
@@ -33,7 +33,7 @@ export class Warehouse {
   async subtractMaterial(
     id: number,
     qty: number,
-    reason: EnWriteoffReason,
+    reason: WriteoffReason,
     detail_id?: number,
     manufacturing_order_id?: number
   ) {
@@ -52,7 +52,7 @@ export class Warehouse {
     const operation = await this.trx
       .insertInto('pdo.operations')
       .values({
-        operation_type: EnOperationType.Writeoff,
+        operation_type: OperationType.Writeoff,
         user_id: this.userId,
         material_id: id,
         detail_id,
@@ -78,11 +78,11 @@ export class Warehouse {
     }
   }
 
-  async addDetail(id: number, qty: number, reason: EnSupplyReason) {
+  async addDetail(id: number, qty: number, reason: SupplyReason) {
     const operation = await this.trx
       .insertInto('pdo.operations')
       .values({
-        operation_type: EnOperationType.Supply,
+        operation_type: OperationType.Supply,
         user_id: this.userId,
         detail_id: id,
         qty,
@@ -105,7 +105,7 @@ export class Warehouse {
     }
   }
 
-  async subtractDetail(id: number, qty: number, reason: EnWriteoffReason) {
+  async subtractDetail(id: number, qty: number, reason: WriteoffReason) {
     const current_stock = await this.trx
       .selectFrom('pdo.details')
       .select(['stock'])
@@ -128,7 +128,7 @@ export class Warehouse {
     const operation = await this.trx
       .insertInto('pdo.operations')
       .values({
-        operation_type: EnOperationType.Writeoff,
+        operation_type: OperationType.Writeoff,
         user_id: this.userId,
         detail_id: id,
         qty,

@@ -1,13 +1,13 @@
 import { makeAutoObservable, rpc } from 'lib/deps'
-import { EnWriteoffReason, WriteoffDirectUnit } from 'models'
+import { WriteoffDirectUnit, WriteoffReason } from 'models'
 
 export class MaterialWriteoffState {
   length = ''
   setLength(length: string) {
     this.length = length
   }
-  reason: EnWriteoffReason = EnWriteoffReason.UsedInProduction
-  setReason(reason: EnWriteoffReason) {
+  reason: WriteoffReason = WriteoffReason.UsedInProduction
+  setReason(reason: WriteoffReason) {
     this.reason = reason
   }
   constructor() {

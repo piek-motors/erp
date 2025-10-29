@@ -1,6 +1,6 @@
 import { Box, Stack } from '@mui/joy'
 import { WebOnly } from 'components/utilities/conditional-display'
-import { Label, P, text } from 'lib/index'
+import { Label, Loading } from 'lib/index'
 import { Attachment } from 'models'
 import { InputFiles } from '../input-files'
 import { AttachmentComponent } from './attachment'
@@ -44,7 +44,6 @@ export const AttachmentList = ({
         {Boolean(uploadingFiles.length) &&
           uploadingFiles.map(file => (
             <Box key={file.name}>
-              <P level="body-sm">{text.loading}</P>
               <AttachmentComponent
                 attachment={
                   new Attachment(
@@ -55,6 +54,7 @@ export const AttachmentList = ({
                   )
                 }
               />
+              <Loading />
             </Box>
           ))}
       </Stack>

@@ -1,14 +1,14 @@
 import { db, z } from '#root/deps.js'
 import { publicProcedure } from '#root/lib/trpc/trpc.js'
 import { Warehouse } from '#root/service/warehouse.service.js'
-import { EnSupplyReason } from 'models'
+import { SupplyReason } from 'models'
 
 export const createMaterialSupply = publicProcedure
   .input(
     z.object({
       material_id: z.number(),
       lengthMeters: z.number().gt(0),
-      reason: z.nativeEnum(EnSupplyReason)
+      reason: z.nativeEnum(SupplyReason)
     })
   )
   .mutation(async ({ input, ctx }) => {

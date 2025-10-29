@@ -3,12 +3,12 @@ import { Pipe, PipeShapeData } from 'models'
 import { IMaterialShapeState } from '../shape_state.interface'
 
 export class PipeState implements IMaterialShapeState {
-  diameter!: string
-  setDiameter(diameter: string) {
+  diameter!: number
+  setDiameter(diameter: number) {
     this.diameter = diameter
   }
-  thickness!: string
-  setThickness(thickness: string) {
+  thickness!: number
+  setThickness(thickness: number) {
     this.thickness = thickness
   }
   constructor() {
@@ -21,11 +21,11 @@ export class PipeState implements IMaterialShapeState {
     } satisfies PipeShapeData
   }
   sync(material: Pipe): void {
-    this.diameter = material.diameter?.toString() || ''
-    this.thickness = material.thickness?.toString() || ''
+    this.diameter = material.diameter
+    this.thickness = material.thickness
   }
   reset(): void {
-    this.diameter = ''
-    this.thickness = ''
+    this.diameter = 0
+    this.thickness = 0
   }
 }

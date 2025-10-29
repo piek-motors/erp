@@ -1,10 +1,11 @@
 import { Button, Label, Link, openPage, P, routeMap } from 'lib/index'
 import {
-  EnOperationType,
-  EnSupplyReason,
-  EnWriteoffReason,
+  OperationType,
+  SupplyReason,
   uiSupplyReason,
-  uiWriteoffReason
+  uiUnit,
+  uiWriteoffReason,
+  WriteoffReason
 } from 'models'
 import { Column } from 'react-table'
 import { DetailName } from '../detail/name'
@@ -23,7 +24,14 @@ export const columns: Column<Operation>[] = [
   },
   {
     Header: 'Кол-во',
-    accessor: data => <P>{data.qty}</P>
+    accessor: data => {
+      const unit = data.material_id != null ? uiUnit(data.unit) : ''
+      return (
+        <P>
+          {data.qty} {unit}
+        </P>
+      )
+    }
   },
   {
     Header: 'Заказ',
@@ -73,10 +81,10 @@ export const columns: Column<Operation>[] = [
   {
     Header: 'Тип операции',
     accessor: data => {
-      const isSupply = Number(data.operation_type) === EnOperationType.Supply
+      const isSupply = Number(data.operation_type) === OperationType.Supply
       return isSupply
-        ? uiSupplyReason(data?.reason as EnSupplyReason)
-        : uiWriteoffReason(data?.reason as EnWriteoffReason)
+        ? uiSupplyReason(data?.reason as SupplyReason)
+        : uiWriteoffReason(data?.reason as WriteoffReason)
     }
   },
   {

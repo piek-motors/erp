@@ -1,74 +1,75 @@
 import {
-  EnManufacturingOrderStatus,
-  EnMaterialShape,
-  EnSupplyReason,
-  EnUnit,
-  EnWriteoffReason,
-  EnWriteoffType
+  ManufacturingOrderStatus,
+  MaterialShape,
+  SupplyReason,
+  Unit,
+  WriteoffReason,
+  WriteoffType
 } from './enums'
 
 export const UiWriteoffReason = {
-  [EnWriteoffReason.UsedInProduction]: 'Производство',
-  [EnWriteoffReason.Defective]: 'Брак продукта',
-  [EnWriteoffReason.InventoryAdjustment]: 'Инвентаризация',
-  [EnWriteoffReason.Sell]: 'Продажа'
+  [WriteoffReason.UsedInProduction]: 'Производство',
+  [WriteoffReason.Defective]: 'Брак продукта',
+  [WriteoffReason.InventoryAdjustment]: 'Инвентаризация',
+  [WriteoffReason.Sell]: 'Продажа'
 }
-export function uiWriteoffReason(reason?: EnWriteoffReason | null) {
+export function uiWriteoffReason(reason?: WriteoffReason | null) {
   if (reason == null) return '-'
   return UiWriteoffReason[reason]
 }
 
 export const UiSupplyReason = {
-  [EnSupplyReason.FromSupplier]: 'Поставка',
-  [EnSupplyReason.InternalProduction]: 'Собственное производство',
-  [EnSupplyReason.InventoryAdjustment]: 'Инвентаризация'
+  [SupplyReason.FromSupplier]: 'Поставка',
+  [SupplyReason.InternalProduction]: 'Собственное производство',
+  [SupplyReason.InventoryAdjustment]: 'Инвентаризация'
 }
-export function uiSupplyReason(reason?: EnSupplyReason | null) {
+export function uiSupplyReason(reason?: SupplyReason | null) {
   if (reason == null) return '-'
   return UiSupplyReason[reason]
 }
 
 export const UiMaterialShape = {
-  [EnMaterialShape.RoundBar]: 'Круг',
-  [EnMaterialShape.List]: 'Лист',
-  [EnMaterialShape.Pipe]: 'Труба',
-  [EnMaterialShape.SquareBar]: 'Квадрат',
-  [EnMaterialShape.HexagonBar]: 'Шестигранник'
+  [MaterialShape.RoundBar]: 'Круг',
+  [MaterialShape.List]: 'Лист',
+  [MaterialShape.Pipe]: 'Труба',
+  [MaterialShape.SquareBar]: 'Квадрат',
+  [MaterialShape.HexagonBar]: 'Шестигранник',
+  [MaterialShape.Arbitrary]: 'Произвольный'
 }
 
-export function uiMaterialShape(shape: EnMaterialShape) {
+export function uiMaterialShape(shape: MaterialShape) {
   return UiMaterialShape[shape]
 }
 
 export const UiUnit = {
-  [EnUnit.Kg]: 'кг',
-  [EnUnit.M]: 'м',
-  [EnUnit.MilliMeter]: 'мм',
-  [EnUnit.Gram]: 'гр',
-  [EnUnit.Countable]: 'шт'
+  [Unit.Kg]: 'кг',
+  [Unit.M]: 'м',
+  [Unit.MilliMeter]: 'мм',
+  [Unit.Gram]: 'гр',
+  [Unit.Countable]: 'шт'
 }
 
-export function uiUnit(unit?: EnUnit) {
+export function uiUnit(unit?: Unit) {
   if (unit == null) return '-'
   return UiUnit[unit]
 }
 
 export const UiWriteoffType = {
-  [EnWriteoffType.ThroughDetail]: 'Через деталь',
-  [EnWriteoffType.ThroughMaterial]: 'Прямо в единицу'
+  [WriteoffType.ThroughDetail]: 'Через деталь',
+  [WriteoffType.ThroughMaterial]: 'Прямо в единицу'
 }
 
-export function uiWriteoffType(type: EnWriteoffType) {
+export function uiWriteoffType(type: WriteoffType) {
   return UiWriteoffType[type]
 }
 
 export const UiManufacturingOrderStatus = {
-  [EnManufacturingOrderStatus.Waiting]: 'Ожидание',
-  [EnManufacturingOrderStatus.Preparation]: 'Подготовка',
-  [EnManufacturingOrderStatus.Production]: 'Производство',
-  [EnManufacturingOrderStatus.Collected]: 'Завершен'
+  [ManufacturingOrderStatus.Waiting]: 'Ожидание',
+  [ManufacturingOrderStatus.Preparation]: 'Подготовка',
+  [ManufacturingOrderStatus.Production]: 'Производство',
+  [ManufacturingOrderStatus.Collected]: 'Завершен'
 }
 
-export function uiManufacturingOrderStatus(status: EnManufacturingOrderStatus) {
+export function uiManufacturingOrderStatus(status: ManufacturingOrderStatus) {
   return UiManufacturingOrderStatus[status]
 }

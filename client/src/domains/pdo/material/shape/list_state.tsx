@@ -3,12 +3,12 @@ import { List, ListShapeData } from 'models'
 import { IMaterialShapeState } from '../shape_state.interface'
 
 export class ListState implements IMaterialShapeState {
-  thickness!: string
-  setThickness(thickness: string) {
+  thickness!: number
+  setThickness(thickness: number) {
     this.thickness = thickness
   }
-  width!: string
-  setWidth(width: string) {
+  width!: number
+  setWidth(width: number) {
     this.width = width
   }
   constructor() {
@@ -21,11 +21,11 @@ export class ListState implements IMaterialShapeState {
     } satisfies ListShapeData
   }
   sync(material: List): void {
-    this.thickness = material.thickness?.toString() || ''
-    this.width = material.width?.toString() || ''
+    this.thickness = material.thickness
+    this.width = material.width || 0
   }
   reset(): void {
-    this.thickness = ''
-    this.width = ''
+    this.thickness = 0
+    this.width = 0
   }
 }

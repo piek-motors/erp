@@ -1,25 +1,26 @@
-export enum EnWriteoffReason {
+export enum WriteoffReason {
   UsedInProduction = 0,
   Defective = 1,
   InventoryAdjustment = 2,
   Sell = 3
 }
 
-export enum EnSupplyReason {
+export enum SupplyReason {
   FromSupplier = 0,
   InternalProduction = 1,
   InventoryAdjustment = 2
 }
 
-export enum EnMaterialShape {
+export enum MaterialShape {
   RoundBar = 0,
   List = 1,
   Pipe = 2,
   SquareBar = 3,
-  HexagonBar = 4
+  HexagonBar = 4,
+  Arbitrary = 5
 }
 
-export enum EnUnit {
+export enum Unit {
   Kg = 0,
   M = 1,
   MilliMeter = 2,
@@ -27,17 +28,17 @@ export enum EnUnit {
   Countable = 4
 }
 
-export enum EnWriteoffType {
+export enum WriteoffType {
   ThroughDetail = 0,
   ThroughMaterial = 1
 }
 
-export enum EnOperationType {
+export enum OperationType {
   Writeoff = 0,
   Supply = 1
 }
 
-export enum EnManufacturingOrderStatus {
+export enum ManufacturingOrderStatus {
   Waiting = 0,
   Preparation = 1,
   Production = 2,

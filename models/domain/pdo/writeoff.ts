@@ -1,18 +1,18 @@
-import { EnUnit, EnWriteoffReason, EnWriteoffType } from './enums'
+import { Unit, WriteoffReason, WriteoffType } from './enums'
 
 interface Material {
   id: number
   label: string
-  unit: EnUnit
+  unit: Unit
 }
 
 export class Writeoff {
   id!: number
   date!: Date
   qty!: number
-  reason!: EnWriteoffReason
+  reason!: WriteoffReason
   material!: Material
-  type!: EnWriteoffType
+  type!: WriteoffType
   typeData!: WriteoffTroughDetail | WriteoffDirectUnit
 }
 

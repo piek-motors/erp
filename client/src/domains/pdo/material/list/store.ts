@@ -1,7 +1,7 @@
 import { cache } from 'domains/pdo/cache/root'
 import { LoadingController } from 'lib/loading_controller'
 import { makeAutoObservable } from 'mobx'
-import { EnMaterialShape } from 'models'
+import { MaterialShape } from 'models'
 import { Material } from 'srv/rpc/pdo/material/list'
 import { MaterialSupplyStore } from '../warehouse/supply'
 
@@ -11,7 +11,7 @@ export class MaterialListStore {
   searchResult: number[] = []
   searchId: string = ''
   filterKeyword: string = ''
-  filterShape?: EnMaterialShape | null
+  filterShape?: MaterialShape | null
   constructor() {
     makeAutoObservable(this)
   }
@@ -53,7 +53,7 @@ export class MaterialListStore {
   setSearchId(id: string) {
     this.searchId = id
   }
-  setFilterShape(shape?: EnMaterialShape) {
+  setFilterShape(shape?: MaterialShape) {
     this.filterShape = shape
   }
   clear() {

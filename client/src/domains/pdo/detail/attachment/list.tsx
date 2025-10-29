@@ -25,7 +25,7 @@ export const DetailAttachmentList = observer(
       onUpload={(files: FileList) => {
         detail.attachments.onDrop(Array.from(files), detail.id, 'detail')
       }}
-      title="Файлы"
+      title=""
     />
   )
 )

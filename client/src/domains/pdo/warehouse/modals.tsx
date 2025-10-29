@@ -1,20 +1,23 @@
-import { Button } from '@mui/joy'
+import { Box, Button, ButtonProps } from '@mui/joy'
 import { InModal } from 'components/modal'
 import { Btn } from 'lib/index'
 import { observer } from 'mobx-react-lite'
 import { useCallback, useState } from 'react'
 import { useEscapeClose } from '../../../hooks/use-escape-close'
-import { OperationsList } from './list'
+import { OperationsTable, OperationsTitle } from './list'
 
 type OperationModalProps = {
   children: React.ReactNode
-  buttonLabel: string
-  buttonColor: 'danger' | 'success'
+  btn: {
+    label: string
+    color: ButtonProps['color']
+  }
+  open: boolean
+  setOpen: (open: boolean) => void
 }
 
 export const OperationModal = observer(
-  ({ children, buttonLabel, buttonColor }: OperationModalProps) => {
-    const [open, setOpen] = useState(false)
+  ({ children, btn, open, setOpen }: OperationModalProps) => {
     const handleClose = useCallback(() => {
       setOpen(false)
     }, [])
@@ -23,12 +26,12 @@ export const OperationModal = observer(
       <InModal
         size="sm"
         openButton={
-          <Btn variant="soft" color={buttonColor} fullWidth>
-            {buttonLabel}
+          <Btn variant="outlined" color={btn.color} fullWidth>
+            {btn.label}
           </Btn>
         }
         open={open}
-        setOpen={setOpen}
+        setOpen={o => setOpen(o)}
       >
         {children}
       </InModal>
@@ -45,21 +48,23 @@ export const OperationsListModal = observer(
     useEscapeClose(open, handleClose)
     return (
       <InModal
-        size="sm"
         open={open}
         setOpen={open => {
           setOpen(open)
         }}
         openButton={
-          <Button variant="soft" color="neutral" fullWidth>
-            Журнал операций
+          <Button fullWidth variant="outlined" color="neutral">
+            Журнал
           </Button>
         }
       >
-        <OperationsList
-          materialId={props.materialId}
-          detailId={props.detailId}
-        />
+        <Box>
+          <OperationsTitle />
+          <OperationsTable
+            materialId={props.materialId}
+            detailId={props.detailId}
+          />
+        </Box>
       </InModal>
     )
   }

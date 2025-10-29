@@ -3,9 +3,9 @@ import styled from '@emotion/styled'
 import { FactoryPage } from 'components/factory_page'
 import { Context } from 'index'
 import {
+  ActionButton,
   Box,
   Button,
-  ExecuteAction,
   P,
   Row,
   Sheet,
@@ -112,15 +112,15 @@ export function MentionList() {
           <Stack gap={1}>
             <SectionTitle title="Новые" />
             <Box>
-              <ExecuteAction
+              <ActionButton
                 disabled={notifications.unseen.length === 0}
-                buttonProps={{
+                props={{
                   color: 'neutral',
                   variant: 'soft',
                   size: 'sm'
                 }}
-                buttonLabel="Прочитать все"
-                onSubmit={() =>
+                label="Прочитать все"
+                onClick={() =>
                   rpc.markAllNotificationsAsRead.mutate({
                     userId: store?.user?.id
                   })

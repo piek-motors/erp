@@ -37,9 +37,8 @@ import {
 } from '@mui/joy'
 import { useIsDesktop, useIsMobile } from 'hooks/use-media-query'
 import { observer } from 'mobx-react-lite'
-import React, { JSX } from 'react'
+import React from 'react'
 import { Link as ReactLink, useNavigate } from 'react-router'
-import { notifier } from './store/notifier.store'
 export { observer, Observer } from 'mobx-react-lite'
 export { useCallback, useEffect, useMemo, useState } from 'react'
 export { useLocation, useNavigate, useParams } from 'react-router'
@@ -310,77 +309,47 @@ export function Loading() {
 
 export function TakeLookHint(props: { text: string; link: string }) {
   const navigate = useNavigate()
-
   return (
-    <Stack direction={'row'} alignItems={'center'} gap={2} pt={2}>
-      <P
-        sx={{
-          p: 0
-        }}
-      >
-        {props.text}
-      </P>
-      <Btn
-        onClick={() => navigate(props.link)}
-        variant="outlined"
-        color="success"
-        startDecorator={<UseIcon icon={UilLink} small />}
-      >
-        Посмотреть
-      </Btn>
-    </Stack>
+    <Btn
+      onClick={() => navigate(props.link)}
+      variant="solid"
+      sx={{ width: 'fit-content' }}
+      color="neutral"
+      startDecorator={<UseIcon icon={UilLink} invert small />}
+    >
+      {props.text}
+    </Btn>
   )
 }
 
-export const ExecuteAction = observer(
+export const ActionButton = observer(
   (props: {
     disabled?: boolean
-    onSubmit: () => Promise<any>
-    buttonLabel?: string
-    additionals?: (error?: Error, mutationResult?: any) => JSX.Element | null
-    buttonProps?: ButtonProps
-    stackProps?: StackProps
+    onClick: () => Promise<any>
+    label?: string
+    props?: ButtonProps
     fullWidth?: boolean
-    width?: string
   }) => {
     const [loading, setLoading] = React.useState(false)
-    const [error, setError] = React.useState<Error>()
-    const [mutationResult, setMutationResult] = React.useState<any>()
-
     const handleSubmit = async () => {
       setLoading(true)
-      setError(undefined)
-      setMutationResult(undefined)
       try {
-        const result = await props.onSubmit()
-        setMutationResult(result)
-      } catch (e: any) {
-        notifier.notify('err', e.message || e)
-        setError(e.message || e)
+        await props.onClick()
       } finally {
         setLoading(false)
       }
     }
     return (
-      <Stack
-        gap={1}
-        {...props.stackProps}
-        sx={{ width: props.fullWidth ? '100%' : props.width || 'auto' }}
+      <Button
+        fullWidth={props.fullWidth}
+        onClick={handleSubmit}
+        disabled={props.disabled}
+        loading={loading}
+        sx={{ width: 'fit-content', ...props.props?.sx }}
+        {...props.props}
       >
-        {error && <ErrorText e={error} />}
-        <SavedHint data={mutationResult} />
-        <Button
-          fullWidth={props.fullWidth}
-          onClick={async () => handleSubmit()}
-          disabled={props.disabled}
-          loading={loading}
-          {...props.buttonProps}
-        >
-          {props.buttonLabel ?? 'Сохранить'}
-        </Button>
-        {(mutationResult || error) &&
-          props.additionals?.(error, mutationResult)}
-      </Stack>
+        {props.label ?? 'Сохранить'}
+      </Button>
     )
   }
 )

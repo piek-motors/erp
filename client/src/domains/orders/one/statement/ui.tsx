@@ -1,7 +1,7 @@
 import { Box, Grid } from '@mui/joy'
 import { PrintOnly, WebOnly } from 'components/utilities/conditional-display'
 import { useMediaQuery } from 'hooks/use-media-query'
-import { ExecuteAction, InputStack, Label } from 'lib/index'
+import { ActionButton, InputStack, Label } from 'lib/index'
 import { observer } from 'mobx-react-lite'
 import { orderStore } from '../order.store'
 import { RenderInput } from './render-input'
@@ -15,17 +15,7 @@ export const OrderStatementInput = observer(
           {columns.map((column, idx) => (
             <RenderInput key={idx} column={column} idx={idx} />
           ))}
-          <Box mt={2} width={'min-content'}>
-            <ExecuteAction
-              onSubmit={() => mutation()}
-              stackProps={{
-                sx: {
-                  mt: 2,
-                  width: 'max-content'
-                }
-              }}
-            />
-          </Box>
+          <ActionButton onClick={() => mutation()} props={{ sx: { mt: 2 } }} />
         </InputStack>
       </form>
     )

@@ -1,9 +1,8 @@
-import { EnMaterialShape } from '../enums'
+import { MaterialShape } from '../enums'
 
 export class RoundBarShapeData {
   diameter!: number
   calibrated!: boolean
-  density?: number
 }
 
 export class ListShapeData {
@@ -24,22 +23,29 @@ export class SquareBarShapeData {
   length!: number
 }
 
+export class ArbitraryShapeData {
+  name!: string
+}
+
 type ShapeDataFactory =
   | typeof RoundBarShapeData
   | typeof ListShapeData
   | typeof PipeShapeData
   | typeof SquareBarShapeData
+  | typeof ArbitraryShapeData
 
-export function getShapeDataFactory(shape: EnMaterialShape): ShapeDataFactory {
+export function getShapeDataFactory(shape: MaterialShape): ShapeDataFactory {
   switch (shape) {
-    case EnMaterialShape.RoundBar:
+    case MaterialShape.RoundBar:
       return RoundBarShapeData
-    case EnMaterialShape.List:
+    case MaterialShape.List:
       return ListShapeData
-    case EnMaterialShape.Pipe:
+    case MaterialShape.Pipe:
       return PipeShapeData
-    case EnMaterialShape.SquareBar:
+    case MaterialShape.SquareBar:
       return SquareBarShapeData
+    case MaterialShape.Arbitrary:
+      return ArbitraryShapeData
     default:
       throw new Error(`Unknown shape: ${shape}`)
   }

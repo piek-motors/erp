@@ -1,59 +1,71 @@
 import { Box, Card, Stack } from '@mui/joy'
-import { P, Row } from 'lib/index'
+import { observer, P, Row } from 'lib/index'
 import { MetalPageTitle } from '../shared'
-import { OperationModal, OperationsListModal } from './modals'
+import { OperationModal } from './modals'
+import { modalState } from './modals.store'
 
 interface Props {
-  materialId?: number
-  detailId?: number
+  children: React.ReactNode
   stock: number
   unit: string
-  supplyModal: React.ReactNode
-  writeoffModal: React.ReactNode
+  supply: React.ReactNode
+  writeoff: React.ReactNode
 }
 
-export const WarehouseCard = (props: Props) => (
-  <Card
-    variant="outlined"
-    size="sm"
-    sx={{ width: '-webkit-fill-available', gap: 1.2, height: 'inherit' }}
-  >
-    <Row justifyContent={'center'}>
-      <Box
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          gap: 1
+export const SupplyCompletedText = 'Поставка зарегистрирована'
+export const WriteoffCompletedText = 'Списание зарегистрировано'
+
+export const WarehouseCard = observer((props: Props) => {
+  return (
+    <Card
+      variant="outlined"
+      size="sm"
+      sx={{ width: 'fit-content', gap: 0.5, height: 'inherit' }}
+    >
+      <Row justifyContent={'center'}>
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: 1
+          }}
+        >
+          <img
+            src="/icons/warehouse.svg"
+            width={20}
+            height={20}
+            style={{ opacity: 0.5 }}
+          />
+        </Box>
+        <P textAlign={'center'}>
+          {props.stock.toFixed(0)} {props.unit}
+        </P>
+      </Row>
+      <OperationModal
+        btn={{ label: 'Поставка', color: 'success' }}
+        open={modalState.supply}
+        setOpen={o => {
+          modalState.setSupply(o)
         }}
       >
-        <img
-          src="/icons/warehouse.svg"
-          width={20}
-          height={20}
-          style={{ opacity: 0.5 }}
-        />
-      </Box>
-      <P textAlign={'center'}>
-        {props.stock.toFixed(0)} {props.unit}
-      </P>
-    </Row>
-    <OperationModal buttonLabel="Поставка" buttonColor="success">
-      <MetalPageTitle t="Поставка" />
-      <Stack gap={1} my={1}>
-        {props.supplyModal}
-      </Stack>
-    </OperationModal>
+        <MetalPageTitle t="Поставка" />
+        <Stack gap={1} my={1}>
+          {props.supply}
+        </Stack>
+      </OperationModal>
 
-    <OperationModal buttonLabel="Списание" buttonColor="danger">
-      <MetalPageTitle t="Списание" />
-      <Stack gap={1} my={1}>
-        {props.writeoffModal}
-      </Stack>
-    </OperationModal>
-    <OperationsListModal
-      materialId={props.materialId}
-      detailId={props.detailId}
-    />
-  </Card>
-)
+      <OperationModal
+        btn={{ label: 'Списание', color: 'warning' }}
+        open={modalState.writeoff}
+        setOpen={o => modalState.setWriteoff(o)}
+      >
+        <MetalPageTitle t="Списание" />
+        <Stack gap={1} my={1}>
+          {props.writeoff}
+        </Stack>
+      </OperationModal>
+      {props.children}
+    </Card>
+  )
+})

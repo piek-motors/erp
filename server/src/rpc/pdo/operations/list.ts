@@ -2,6 +2,7 @@ import { db, publicProcedure, z } from '#root/deps.js'
 import { matrixEncoder } from '#root/lib/matrix_encoder.js'
 import { formatDate } from '#root/lib/time.js'
 import type { DB, Selectable } from 'db'
+import { Unit } from 'models'
 
 const Limit = 300
 
@@ -13,6 +14,7 @@ export interface OperationListItem
   material_label: string | null
   manufacturing_order_id: number | null
   manufacturing_order_qty: number | null
+  unit: Unit
 }
 
 export const listOperations = publicProcedure
@@ -44,6 +46,7 @@ export const listOperations = publicProcedure
       )
       .select('o.manufacturing_order_id as manufacturing_order_id')
       .select('manuf.qty as manufacturing_order_qty')
+      .select('m.unit as unit')
       .orderBy('o.id', 'desc')
       .limit(Limit)
       .execute()

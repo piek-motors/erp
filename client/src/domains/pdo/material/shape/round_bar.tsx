@@ -1,35 +1,33 @@
+import { NumberInput } from 'components/inputs/number_input'
 import {
   Button,
-  Inp,
   InputStack,
   Label,
   observer,
   Stack,
   ToggleButtonGroup
 } from 'lib/index'
-import { EnUnit, uiUnit } from 'models'
-import { api } from '../api'
+import { uiUnit, Unit } from 'models'
+import { MaterialState } from '../state'
 
-export const RoundBarInputBase = observer(() => {
-  return (
-    <InputStack>
-      <Inp
-        label={'Диаметр'}
-        value={api.s.round.diameter}
-        onChange={v => {
-          api.s.round.setDiameter(v)
-        }}
-        unit={uiUnit(EnUnit.MilliMeter)}
-      />
-      <MaterialCalibration
-        value={api.s.round.calibrated}
-        setValue={v => {
-          api.s.round.setCalibrated(v)
-        }}
-      />
-    </InputStack>
-  )
-})
+export const RoundBarInputBase = observer(({ m }: { m: MaterialState }) => (
+  <InputStack>
+    <NumberInput
+      label={'Диаметр'}
+      value={m.round.diameter}
+      onChange={v => {
+        m.round.setDiameter(v)
+      }}
+      unit={uiUnit(Unit.MilliMeter)}
+    />
+    <MaterialCalibration
+      value={m.round.calibrated}
+      setValue={v => {
+        m.round.setCalibrated(v)
+      }}
+    />
+  </InputStack>
+))
 
 function MaterialCalibration(props: {
   value: boolean

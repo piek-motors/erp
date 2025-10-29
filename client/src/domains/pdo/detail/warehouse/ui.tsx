@@ -1,7 +1,14 @@
 import { SupplyReasonSelect } from 'domains/pdo/shared/supply-reason-select'
 import { WriteoffReasonSelect } from 'domains/pdo/shared/writeoff-reason-select'
-import { WarehouseCard } from 'domains/pdo/warehouse/card'
-import { ExecuteAction, Inp, Label, observer, P } from 'lib/index'
+import {
+  SupplyCompletedText,
+  WarehouseCard,
+  WriteoffCompletedText
+} from 'domains/pdo/warehouse/card'
+import { OperationsListModal } from 'domains/pdo/warehouse/modals'
+import { modalState } from 'domains/pdo/warehouse/modals.store'
+import { ActionButton, Inp, Label, observer, P } from 'lib/index'
+import { notifier } from 'lib/store/notifier.store'
 import { DetailState } from '../detail.state'
 
 const CreateWarehouseDetailOperation = observer(
@@ -28,7 +35,10 @@ const CreateWarehouseDetailOperation = observer(
           onChange={val => detail.warehouse.setQty(Number(val))}
         />
         {props.reasonComponent}
-        <ExecuteAction onSubmit={() => props.onSubmit()} />
+        <ActionButton
+          onClick={() => props.onSubmit()}
+          disabled={!detail.warehouse.qty}
+        />
       </>
     )
   }
@@ -38,10 +48,9 @@ export const DetailWarehouse = observer(
   ({ detail }: { detail: DetailState }) => {
     return (
       <WarehouseCard
-        detailId={detail.id}
         stock={detail.warehouse.stock}
         unit="шт"
-        writeoffModal={
+        writeoff={
           <CreateWarehouseDetailOperation
             detail={detail}
             reasonComponent={
@@ -52,10 +61,23 @@ export const DetailWarehouse = observer(
                 }
               />
             }
-            onSubmit={() => detail.warehouse.insertWriteoff(detail.id)}
+            onSubmit={() =>
+              detail.warehouse
+                .insertWriteoff(detail.id)
+                .then(() => {
+                  notifier.ok(WriteoffCompletedText)
+                })
+                .catch(e => {
+                  notifier.err(`Ошибка списания детали: ${e.message}`)
+                  throw e
+                })
+                .finally(() => {
+                  modalState.setWriteoff(false)
+                })
+            }
           />
         }
-        supplyModal={
+        supply={
           <CreateWarehouseDetailOperation
             detail={detail}
             reasonComponent={
@@ -64,10 +86,25 @@ export const DetailWarehouse = observer(
                 setReason={reason => detail.warehouse.supply.setReason(reason)}
               />
             }
-            onSubmit={() => detail.warehouse.insertSupply(detail.id)}
+            onSubmit={() =>
+              detail.warehouse
+                .insertSupply(detail.id)
+                .then(() => {
+                  notifier.ok(SupplyCompletedText)
+                })
+                .catch(e => {
+                  notifier.err(`Ошибка при регистрации поставки: ${e.message}`)
+                  throw e
+                })
+                .finally(() => {
+                  modalState.setSupply(false)
+                })
+            }
           />
         }
-      />
+      >
+        <OperationsListModal detailId={detail.id} />
+      </WarehouseCard>
     )
   }
 )

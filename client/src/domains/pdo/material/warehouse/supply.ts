@@ -1,14 +1,14 @@
 import { rpc } from 'lib/rpc.client'
 import { makeAutoObservable } from 'mobx'
-import { EnSupplyReason } from 'models'
+import { SupplyReason } from 'models'
 
 export class MaterialSupplyStore {
   length: string = ''
   setLength(length: string) {
     this.length = length
   }
-  reason: EnSupplyReason = EnSupplyReason.FromSupplier
-  setReason(reason: EnSupplyReason) {
+  reason: SupplyReason = SupplyReason.FromSupplier
+  setReason(reason: SupplyReason) {
     this.reason = reason
   }
   constructor() {

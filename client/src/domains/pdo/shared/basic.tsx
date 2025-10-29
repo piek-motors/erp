@@ -1,32 +1,25 @@
+import { Button, Stack, ToggleButtonGroup } from '@mui/joy'
+import { SxProps } from '@mui/joy/styles/types'
+import { BaseAutocomplete, BaseOption } from 'components/base-autocomplete'
+import { DeleteConfirmDialog } from 'components/delete_confirm_dialog'
 import {
-  Box,
-  Button,
-  Container,
-  ContainerProps,
-  Stack,
-  ToggleButtonGroup
-} from '@mui/joy'
-import { EnUnit, UiUnit } from 'models'
-
-export function WorkPage(props: ContainerProps) {
-  return (
-    <Container
-      {...props}
-      sx={{
-        ...props.sx,
-        m: 0,
-        overflow: 'scroll',
-        px: '0px!important'
-      }}
-    >
-      {props.children}
-    </Container>
-  )
-}
+  NavigationBar,
+  Props as PageTitleProps
+} from 'components/navigation_bar'
+import {
+  ActionButton,
+  DeleteResourceButton,
+  Label,
+  routeMap,
+  Row
+} from 'lib/index'
+import { rpc } from 'lib/rpc.client'
+import { UiUnit, Unit } from 'models'
+import { useEffect, useState } from 'react'
 
 export function MaterialUnitSelect(props: {
-  value?: EnUnit
-  onChange: (e: EnUnit) => void
+  value?: Unit
+  onChange: (e: Unit) => void
 }) {
   return (
     <Stack>
@@ -34,7 +27,7 @@ export function MaterialUnitSelect(props: {
       <ToggleButtonGroup
         variant="outlined"
         color="primary"
-        value={props.value ? Object.keys(EnUnit)[props.value] : null}
+        value={props.value != null ? Object.keys(Unit)[props.value] : null}
         onChange={(e, v) => {
           props.onChange(parseInt(v as any))
         }}
@@ -48,16 +41,6 @@ export function MaterialUnitSelect(props: {
     </Stack>
   )
 }
-
-import { BaseAutocomplete, BaseOption } from 'components/base-autocomplete'
-import {
-  DeleteResourceButton,
-  ExecuteAction,
-  Label,
-  P,
-  routeMap,
-  Row
-} from 'lib/index'
 
 export function AlloyAutocomplete(props: {
   setAlloy: (alloy: string) => void
@@ -97,24 +80,6 @@ export function AlloyAutocomplete(props: {
   )
 }
 
-import { SxProps } from '@mui/joy/styles/types'
-import { DeleteConfirmDialog } from 'components/delete_confirm_dialog'
-import {
-  NavigationBar,
-  Props as PageTitleProps
-} from 'components/navigation_bar'
-import { rpc } from 'lib/rpc.client'
-import { ReactNode, useEffect, useState } from 'react'
-
-/** Narrow container */
-export function Narrow(props: ContainerProps) {
-  return (
-    <Container maxWidth="xs" sx={{ m: 0, p: 0 }} {...props}>
-      {props.children}
-    </Container>
-  )
-}
-
 export const SaveAndDelete = (props: {
   itemName: string
   handleDelete: () => Promise<unknown>
@@ -123,11 +88,10 @@ export const SaveAndDelete = (props: {
 }) => {
   return (
     <Row alignItems={'end'} gap={2} sx={props.sx}>
-      <ExecuteAction
+      <ActionButton
         fullWidth
-        onSubmit={() => props.handleSave()}
-        stackProps={{ sx: { flexGrow: 1 } }}
-        buttonProps={{
+        onClick={() => props.handleSave()}
+        props={{
           size: 'sm'
         }}
       />
@@ -136,23 +100,6 @@ export const SaveAndDelete = (props: {
         handleDelete={() => props.handleDelete()}
         button={<DeleteResourceButton />}
       />
-    </Row>
-  )
-}
-
-export function WarehouseOperationsLinks(props: {
-  onSupplyClick: () => void
-  onWriteoffClick: () => void
-}) {
-  const { onSupplyClick, onWriteoffClick } = props
-  return (
-    <Row gap={1}>
-      <Button color="primary" variant="soft" onClick={onSupplyClick}>
-        Поставка
-      </Button>
-      <Button color="danger" variant="soft" onClick={onWriteoffClick}>
-        Списание
-      </Button>
     </Row>
   )
 }
@@ -171,23 +118,4 @@ export function MetalPageTitle(props: PageTitleProps) {
 export function capitalize(text: string) {
   if (!text) return ''
   return text[0].toUpperCase() + text.slice(1)
-}
-
-export function ComplexTitle(props: {
-  subtitle: string
-  title: string | ReactNode
-  index: number
-}) {
-  return (
-    <Box>
-      <P level="body-sm" whiteSpace={'nowrap'}>
-        {props.subtitle} №{props.index}
-      </P>
-      <P whiteSpace={'nowrap'} color="primary" fontWeight={700} level="body-lg">
-        {typeof props.title === 'string'
-          ? capitalize(props.title)
-          : props.title}
-      </P>
-    </Box>
-  )
 }

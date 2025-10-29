@@ -6,13 +6,12 @@ import { UpdateDetailPage } from './detail/update'
 import { DetailGroupById, DetailGroupListPage } from './detail_grouping/main'
 import { ManufacturingList } from './manufacturing/list/list'
 import { ManufacturingUpdatePage } from './manufacturing/update'
-import { MaterialAddPage } from './material/insert'
+import { CreateMaterialPage } from './material/create'
 import { MaterialListPage } from './material/list/list'
 import { MaterialUpdatePage } from './material/update'
 import { MetalFlowRootLayout } from './metalflow_root'
-import { Narrow } from './shared/basic'
 import { UsageInstruction } from './usage-instuction'
-import { OperationsList } from './warehouse/list'
+import { OperationsScrollableWindow } from './warehouse/list'
 
 const { pdo: metalflow } = routeMap
 
@@ -33,11 +32,7 @@ const innerRoutes = [
     path: metalflow.materials
   },
   {
-    element: (
-      <Narrow>
-        <MaterialAddPage />
-      </Narrow>
-    ),
+    element: <CreateMaterialPage />,
     path: metalflow.material.new
   },
   {
@@ -50,11 +45,7 @@ const innerRoutes = [
     path: metalflow.details
   },
   {
-    element: (
-      <Narrow maxWidth="md">
-        <CreateDetailPage />
-      </Narrow>
-    ),
+    element: <CreateDetailPage />,
     path: metalflow.detail.new
   },
   {
@@ -70,7 +61,7 @@ const innerRoutes = [
     path: metalflow.detailGroup
   },
   {
-    element: <OperationsList />,
+    element: <OperationsScrollableWindow />,
     path: metalflow.operations
   },
   {
@@ -78,11 +69,7 @@ const innerRoutes = [
     path: metalflow.manufacturing_orders
   },
   {
-    element: (
-      <Narrow maxWidth="xl">
-        <ManufacturingUpdatePage />
-      </Narrow>
-    ),
+    element: <ManufacturingUpdatePage />,
     path: metalflow.manufacturing_order.edit
   }
 ] as RouteConfig[]

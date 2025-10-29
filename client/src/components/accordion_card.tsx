@@ -1,4 +1,4 @@
-import { Accordion, AccordionDetails, AccordionSummary, Sheet } from '@mui/joy'
+import { Accordion, AccordionDetails, AccordionSummary } from '@mui/joy'
 import React, { useEffect, useState } from 'react'
 
 export interface AccordionCardProps {
@@ -33,16 +33,15 @@ export const AccordionCard: React.FC<AccordionCardProps> = ({
   }, [expandedProp])
 
   return (
-    <Sheet sx={{ borderRadius: 'sm', ...sx }}>
-      <Accordion
-        expanded={expanded}
-        onChange={(_, isExpanded) => setExpanded(isExpanded)}
-      >
-        <AccordionSummary>{title}</AccordionSummary>
-        <AccordionDetails slotProps={{ content: { sx: { overflow: 'auto' } } }}>
-          {children}
-        </AccordionDetails>
-      </Accordion>
-    </Sheet>
+    <Accordion
+      variant="outlined"
+      expanded={expanded}
+      onChange={(_, isExpanded) => setExpanded(isExpanded)}
+    >
+      <AccordionSummary>{title}</AccordionSummary>
+      <AccordionDetails slotProps={{ content: { sx: { overflow: 'auto' } } }}>
+        {children}
+      </AccordionDetails>
+    </Accordion>
   )
 }
