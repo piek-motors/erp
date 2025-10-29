@@ -13,7 +13,7 @@ export class DetailList {
 
   constructor() {
     this.searchStore = new PaginatedSearchStore<DetailState>(
-      () => cache.details.getDetails(),
+      () => cache.details.details,
       {
         pageSize: 50,
         customFilter: this.filterDetails.bind(this)

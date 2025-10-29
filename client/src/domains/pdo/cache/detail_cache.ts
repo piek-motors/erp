@@ -10,23 +10,23 @@ const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
 const alphabet = 'АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ'.split('')
 
 export class DetailCache {
-  private details: DetailState[] = []
+  private _details: DetailState[] = []
   setDetails(details: DetailState[]) {
-    this.details = details
+    this._details = details
   }
   get(id: number): DetailState | undefined {
-    return this.details.find(detail => detail.id === id)
+    return this._details.find(detail => detail.id === id)
   }
   getLabel(id: number): string | null {
     const detail = this.get(id)
     return detail ? capitalize(detail.name) : null
   }
-  getDetails() {
-    return this.details
+  get details() {
+    return this._details
   }
   getFirstLetterIndex(): string[] {
     const index = new Set<string>()
-    for (const detail of this.details) {
+    for (const detail of this._details) {
       const firstLetter = detail.name.charAt(0).toUpperCase()
       index.add(firstLetter)
     }
@@ -38,16 +38,16 @@ export class DetailCache {
     return arr
   }
   getUniversalDetails() {
-    return this.details.filter(d => d.groupId == null)
+    return this._details.filter(d => d.groupId == null)
   }
   removeDetail(id: number) {
-    this.setDetails(this.details.filter(d => d.id !== id))
+    this.setDetails(this._details.filter(d => d.id !== id))
   }
   addDetail(detail: DetailState) {
-    this.setDetails([...this.details, detail])
+    this.setDetails([...this._details, detail])
   }
   updateDetail(detail: DetailState) {
-    this.setDetails(this.details.map(d => (d.id === detail.id ? detail : d)))
+    this.setDetails(this._details.map(d => (d.id === detail.id ? detail : d)))
   }
   constructor() {
     makeAutoObservable(this)
@@ -56,5 +56,8 @@ export class DetailCache {
     const detailsRaw = await rpc.pdo.details.list.query()
     const details = matrixDecoder<ListDetailsOutput>(detailsRaw)
     this.setDetails(details.map(each => map.detail.fromDto(each)))
+  }
+  count() {
+    return this._details.length
   }
 }

@@ -4,6 +4,7 @@ import { makeAutoObservable } from 'mobx'
 import { Attachment } from 'models'
 import { cache } from '../cache/root'
 import { DetailState } from './detail.state'
+import { detailListStore } from './list/store'
 
 export class DetailApi {
   readonly loader = new LoadingController()
@@ -47,6 +48,7 @@ export class DetailApi {
   async delete(id: number) {
     await rpc.pdo.details.delete.mutate({ id })
     cache.details.removeDetail(id)
+    detailListStore.searchStore.search()
   }
 
   async createManufacturingOrder(id: number) {
