@@ -22,8 +22,8 @@ const ReportConfigurator = observer(() => {
         </Row>
       </Row>
       <Checkbox
-        variant="soft"
-        label="Показывать время прихода и ухода"
+        variant="outlined"
+        label="Время прихода и ухода"
         checked={store.showFullInfo}
         onClick={() => {
           store.setShowFullInfo(!store.showFullInfo)

@@ -1,3 +1,4 @@
+import { Hour, Minute } from '#root/lib/constants.js'
 import { timedeltaInSeconds } from '#root/lib/time.js'
 import { KDB } from 'db'
 
@@ -105,7 +106,21 @@ export class AttendanceReportGenerator {
         }
       }
 
-      employee.total = Object.values(employee.days).reduce(
+      // fake overtime correction
+      // if employee worked more then 8:00 hours, but less then 8:54 hours, we should round it as 8:00 hours
+      const RoundingStartRange = (8 * Hour) / 1000
+      const RoundingEndRange = (8 * Hour + 54 * Minute) / 1000
+      const corrected = Object.values(employee.days).map(day => {
+        if (
+          day.total_dur > RoundingStartRange &&
+          day.total_dur <= RoundingEndRange
+        ) {
+          day.total_dur = RoundingStartRange
+        }
+        return day
+      })
+
+      employee.total = Object.values(corrected).reduce(
         (acc, day) => acc + day.total_dur,
         0
       )

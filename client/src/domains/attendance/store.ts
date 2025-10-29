@@ -13,7 +13,7 @@ export class AttendanceStore {
     this.timeRetention = parseInt(timeRetention)
   }
 
-  showFullInfo: boolean = false
+  showFullInfo: boolean = true
   setShowFullInfo(showFullInfo: boolean) {
     this.showFullInfo = showFullInfo
   }
