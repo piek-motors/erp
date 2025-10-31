@@ -20,7 +20,7 @@ export const getAttachmentByKey = publicProcedure
     })
   )
   .query(async ({ input }) => {
-    return await attachmentService.getAttachmentByKey(input.key)
+    return await attachmentService.get(input.key)
   })
 
 export const updateName = procedure

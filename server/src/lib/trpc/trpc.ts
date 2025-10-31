@@ -5,7 +5,7 @@ import type { Context } from './context.ts'
 const t = initTRPC.context<Context>().create({
   errorFormatter({ shape, error, input, path, type }) {
     if (error.message === 'jwt expired') {
-      return
+      return shape
     }
 
     const code = shape?.data?.code ?? 'UNKNOWN'

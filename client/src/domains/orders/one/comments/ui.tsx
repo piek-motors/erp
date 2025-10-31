@@ -35,7 +35,7 @@ export function Comment({ data, userID }: ICommentProps) {
 
   function timestamp() {
     const date = moment(data.created_at)
-    return date.format('MMM D') + ' at ' + date.format('hh:mm')
+    return date.format('D MMM YY') + ' ' + date.format('hh:mm')
   }
   function getCommentContent() {
     const isYourComment = userID === data.user_id

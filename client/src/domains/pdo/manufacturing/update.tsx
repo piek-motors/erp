@@ -24,7 +24,7 @@ import {
   useState
 } from 'lib/index'
 import { notifier } from 'lib/store/notifier.store'
-import { dayAndMonth, roundAndTrim } from 'lib/utils/formatting'
+import { dayAndMonth, formatDate, roundAndTrim } from 'lib/utils/formatting'
 import { ManufacturingOrderStatus, uiManufacturingOrderStatus } from 'models'
 import { cache } from '../cache/root'
 import { TechParamsDisplay } from '../detail/components'
@@ -174,7 +174,7 @@ const DetailAttachments = observer(({ detail }: { detail: DetailState }) => {
 
 const Dates = observer(() => {
   if (!api.s.order) return null
-  const createdAt = dayAndMonth(new Date(api.s.order.created_at))
+  const createdAt = formatDate(new Date(api.s.order.created_at))
   const startedAt = api.s.order.started_at
     ? dayAndMonth(new Date(api.s.order.started_at))
     : null

@@ -47,6 +47,7 @@ export class DetailList {
   setIndexLetter(letter: string) {
     if (this.indexLetter === letter) {
       this.indexLetter = null
+      this.searchStore.search()
       return
     }
     this.clearSearchArguments()

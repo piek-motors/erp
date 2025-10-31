@@ -18,7 +18,6 @@ export class AttachmentService {
     if (files.length === 0) {
       throw Error('No files to insert')
     }
-
     const attachments = await this.db
       .insertInto('attachments')
       .values(
@@ -73,29 +72,21 @@ export class AttachmentService {
     if (!orderId && !detailId) {
       throw ApiError.BadRequest(Errcode.MISSING_ORDERID_HEADER)
     }
-
-    // Create attachments
     const attachments = await this.insertAttachmentMetadata(files)
-
-    // Link attachments to order or detail
     if (orderId) {
       await this.linkAttachmentsToOrder(attachments, orderId)
     } else if (detailId) {
       await this.linkAttachmentsToDetail(attachments, detailId)
     }
-
     return attachments
   }
 
-  async getAttachmentByKey(
-    key: string
-  ): Promise<Selectable<DB.AttachmentTable> | null> {
+  async get(key: string): Promise<Selectable<DB.AttachmentTable> | null> {
     const result = await this.db
       .selectFrom('attachments')
       .selectAll()
       .where('key', '=', key)
       .executeTakeFirst()
-
     return result || null
   }
 
