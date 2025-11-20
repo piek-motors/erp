@@ -36,32 +36,56 @@ const commonColumns: Column<ManufactoringListOutput>[] = [
 const preparationColumns = commonColumns.concat([
   {
     Header: 'Создан',
-    accessor: 'created_at'
+    accessor: m => (
+      <P noWrap level="body-xs">
+        {m.created_at}
+      </P>
+    )
   }
 ])
 
 const productionColumns = commonColumns.concat([
   {
-    Header: 'Старт',
-    accessor: 'started_at'
+    Header: 'Запуск',
+    accessor: m => (
+      <P noWrap level="body-xs">
+        {m.started_at}
+      </P>
+    )
+  },
+  {
+    Header: 'Этап',
+    accessor: m => <P level="body-xs">{m.current_operation}</P>
   }
 ])
 
 const finishColumns = commonColumns.concat([
   {
-    Header: 'Старт',
-    accessor: 'started_at'
+    Header: 'Запуск',
+    accessor: m => (
+      <P noWrap level="body-xs">
+        {m.started_at}
+      </P>
+    )
   },
   {
     Header: 'Финиш',
-    accessor: 'finished_at'
+    accessor: m => (
+      <P noWrap level="body-xs">
+        {m.finished_at}
+      </P>
+    )
   },
   {
     Header: 'Дельта',
     accessor: m => {
       if (!m.time_delta) return ''
       const totalDays = Math.round(m.time_delta / (3600 * 24))
-      return <P>{totalDays} д.</P>
+      return (
+        <P noWrap level="body-xs">
+          {totalDays} д.
+        </P>
+      )
     }
   }
 ])

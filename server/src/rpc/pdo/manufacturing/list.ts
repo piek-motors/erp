@@ -16,6 +16,7 @@ export interface ListManufacturingOutput {
   created_at: string
   started_at: string | null
   finished_at: string | null
+  current_operation: string | null
   time_delta: number | null
 }
 
@@ -28,10 +29,15 @@ const query = db
     'm.qty',
     'm.finished_at',
     'm.created_at',
-    'm.started_at'
+    'm.started_at',
+    'm.current_operation'
   ])
   .innerJoin('pdo.details as d', 'm.detail_id', 'd.id')
-  .select(['d.name as detail_name', 'd.logical_group_id as group_id'])
+  .select([
+    'd.name as detail_name',
+    'd.logical_group_id as group_id',
+    'd.processing_route'
+  ])
 
 export const listManufacturing = procedure.query(async () => {
   const cutoffDate = new Date(Date.now() - ShowFinishedOrders)
@@ -48,6 +54,9 @@ export const listManufacturing = procedure.query(async () => {
   ])
   const result = [...inProduction, ...finished].map(o => ({
     ...o,
+    current_operation:
+      o.current_operation != null &&
+      o.processing_route?.steps.at(o.current_operation)?.name,
     created_at: formatDate(o.created_at),
     started_at: formatDate(o.started_at),
     finished_at: formatDate(o.finished_at),

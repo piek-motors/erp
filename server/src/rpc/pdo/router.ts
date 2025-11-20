@@ -98,7 +98,22 @@ export const metalFlowRouter = router({
     startMaterialPreparationPhase: startMaterialPreparationPhase,
     startProductionPhase: startProductionPhase,
     list: listManufacturing,
-    finish: finishManufacturing
+    finish: finishManufacturing,
+    set_current_operation: procedure
+      .input(
+        z.object({
+          id: z.number(),
+          operation_index: z.number()
+        })
+      )
+      .mutation(async ({ input }) => {
+        await db
+          .updateTable('pdo.manufacturing')
+          .set({ current_operation: input.operation_index })
+          .where('id', '=', input.id)
+          .execute()
+        return true
+      })
   }),
   deleteFile
 })

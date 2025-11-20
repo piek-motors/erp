@@ -23,11 +23,19 @@ export class ManufacturingOrderState {
   setOrder(order: ManufacturingOrderOutput) {
     this.order = order
     this.qty = order.qty.toString()
+    this.currentOperation = order.current_operation
   }
+
   qty: string = ''
   setQty(qty: string) {
     this.qty = qty
   }
+
+  currentOperation: number | null = null
+  setCurrentOperationIndex(index: number | null) {
+    this.currentOperation = index
+  }
+
   constructor() {
     makeAutoObservable(this)
   }

@@ -82,7 +82,7 @@ export const ManufacturingUpdatePage = observer(() => {
                     <P level="body-sm" whiteSpace={'nowrap'}>
                       Заказ №{api.s.order.id}
                     </P>
-                    <StatusDisplay status={api.s.order.status} />
+                    <OrderStatus status={api.s.order.status} />
                   </Row>
                   <DetailName
                     detail={{
@@ -102,6 +102,7 @@ export const ManufacturingUpdatePage = observer(() => {
                 <QuantityInput detail={detail} />
                 <TechPassportButton />
               </Stack>
+              <ProductionSteps detail={detail} />
               <Cost detail={detail} />
             </Row>
             <Row gap={2} alignItems={'start'} flexWrap={'wrap'}>
@@ -129,10 +130,9 @@ export const ManufacturingUpdatePage = observer(() => {
   )
 })
 
-const StatusDisplay = observer(
+const OrderStatus = observer(
   ({ status }: { status: ManufacturingOrderStatus }) => {
     let color: ChipProps['color'] = 'neutral'
-
     switch (status) {
       case ManufacturingOrderStatus.Production:
         color = 'primary'
@@ -141,7 +141,6 @@ const StatusDisplay = observer(
         color = 'success'
         break
     }
-
     return (
       <Chip color={color} variant="solid" size="sm">
         {uiManufacturingOrderStatus(status)}
@@ -149,6 +148,29 @@ const StatusDisplay = observer(
     )
   }
 )
+
+const ProductionSteps = observer((props: { detail: DetailState }) => {
+  if (props.detail.processingRoute.steps.length === 0) return null
+  return (
+    <Card size="sm" variant="outlined">
+      <Label label="Этапы обработки" />
+      <Stack>
+        {props.detail.processingRoute.steps.map((step, index) => (
+          <Button
+            size="sm"
+            key={step.name}
+            variant={api.s.currentOperation === index ? 'solid' : 'plain'}
+            sx={{ width: 'fit-content' }}
+            color={api.s.currentOperation === index ? 'primary' : 'neutral'}
+            onClick={() => api.setCurrentOperation(index)}
+          >
+            {step.name}
+          </Button>
+        ))}
+      </Stack>
+    </Card>
+  )
+})
 
 const BlankSpecDisplay = observer(
   ({ blankSpec }: { blankSpec?: BlankSpec | null }) => {

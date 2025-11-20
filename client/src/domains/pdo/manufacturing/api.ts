@@ -100,6 +100,15 @@ export class ManufacturingApi {
     })
   }
 
+  async setCurrentOperation(index: number) {
+    if (!this.s.order) throw new Error('Заказ не найден')
+    await rpc.pdo.manufacturing.set_current_operation.mutate({
+      id: this.s.order.id,
+      operation_index: index
+    })
+    this.s.setCurrentOperationIndex(index)
+  }
+
   async finish() {
     await this.status.run(async () => {
       if (!this.s.order) throw new Error('Заказ не найден')

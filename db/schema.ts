@@ -122,10 +122,7 @@ export namespace DB {
   type MaterialId = number
   type Cost = number
   export interface DetailAutomaticWriteoffData {
-    material: [
-      MaterialId,
-      Cost 
-    ] | null
+    material: [MaterialId, Cost] | null
     details: Array<{
       detail_id: number
       qty: number
@@ -151,6 +148,7 @@ export namespace DB {
     status: ManufacturingOrderStatus
     detail_id: number
     qty: number
+    current_operation: number | null
     finished_at: Date | null
     started_at: Date | null
     created_at: GeneratedAlways<Date>
