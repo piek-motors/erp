@@ -1,33 +1,26 @@
 import { UilSearch } from '@iconscout/react-unicons'
-import { Input } from '@mui/joy'
-import { Row, UseIcon } from 'lib'
-import React, { ReactNode } from 'react'
+import { Input, InputProps } from '@mui/joy'
+import { UseIcon } from 'lib'
+import React from 'react'
 
 interface ISearchInputWithFiltersProps {
   value?: string
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
   placeholder?: string
-  children?: ReactNode
+  width?: string | number
 }
 
-export function Search({
-  value,
-  onChange,
-  placeholder,
-  children
-}: ISearchInputWithFiltersProps) {
+export function Search(props: ISearchInputWithFiltersProps & InputProps) {
   return (
-    <Row gap={1}>
-      <Input
-        size="sm"
-        type="text"
-        placeholder={placeholder || 'Найти'}
-        autoFocus={value !== ''}
-        onChange={onChange}
-        value={value}
-        startDecorator={<UseIcon icon={UilSearch} small />}
-      />
-      {children}
-    </Row>
+    <Input
+      size="sm"
+      type="text"
+      placeholder={props.placeholder || 'Найти'}
+      autoFocus={props.value !== ''}
+      onChange={props.onChange}
+      value={props.value}
+      sx={{ width: props.width, ...props.sx }}
+      startDecorator={<UseIcon icon={UilSearch} small {...props} />}
+    />
   )
 }

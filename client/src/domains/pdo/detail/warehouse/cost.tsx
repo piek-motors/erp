@@ -7,6 +7,7 @@ import { QtyInputWithUnit } from 'domains/pdo/shared'
 import {
   Box,
   Label,
+  P,
   PlusIcon,
   Row,
   Sheet,
@@ -28,7 +29,7 @@ interface CostRowProps {
 }
 
 const CostRow = ({ children, onDelete, qtyInput: input }: CostRowProps) => (
-  <Row>
+  <Stack gap={0.5}>
     <Row gap={0.5}>{children}</Row>
     <Row>
       {input}
@@ -36,12 +37,13 @@ const CostRow = ({ children, onDelete, qtyInput: input }: CostRowProps) => (
         <UseIcon icon={UilMinus} />
       </IconButton>
     </Row>
-  </Row>
+  </Stack>
 )
 
 export const MaterialCostInputs = observer(
   ({ detail }: { detail: DetailState }) => {
     const materialCost = detail.autoWriteoff.materialCost
+    const material = cache.materials.get(materialCost?.materialId || 0)
     return (
       <Base
         label="Расход материала"
@@ -55,16 +57,30 @@ export const MaterialCostInputs = observer(
             key={materialCost.materialId}
             onDelete={() => detail.autoWriteoff.setMaterialCost(null)}
             qtyInput={
-              <QtyInputWithUnit
-                size="sm"
-                placeholder="Расход"
-                sx={{ width: '80px' }}
-                unitId={Unit.MilliMeter}
-                value={materialCost.length}
-                setValue={v => {
-                  materialCost.setLength(v)
-                }}
-              />
+              <Stack>
+                {/* TODO: remove note */}
+                <P color="danger" level="body-xs">
+                  Внимание, расход отныне задается в метрах (в единице измерения
+                  остатков материи)
+                </P>
+                <Row>
+                  <QtyInputWithUnit
+                    size="sm"
+                    placeholder="Расход"
+                    sx={{ width: '100px' }}
+                    unitId={material?.unit || NaN}
+                    value={materialCost.length}
+                    setValue={v => {
+                      materialCost.setLength(v)
+                    }}
+                  />
+                  {material?.unit === Unit.M && (
+                    <P color="neutral" level="body-xs">
+                      {+materialCost.length * 1000} мм
+                    </P>
+                  )}
+                </Row>
+              </Stack>
             }
           >
             <Row>
@@ -95,13 +111,13 @@ export const MaterialCostInputs = observer(
 
 export const AutomaticWriteoffAccordion = observer(
   ({ detail }: { detail: DetailState }) => (
-    <AccordionCard title="Расход" defaultExpanded>
+    <AccordionCard title="Расход" defaultExpanded width={'fit-content'}>
       <Stack>
         <Label color="neutral" sx={{ mb: 1 }} level="body-xs">
-          Настройте <b>автоматическое списание</b> материалов или деталей при
-          запуске детали в производство.
+          <b>Автоматическое списание</b> материалов или деталей при запуске в
+          производство.
           <br /> Выберите <b>либо расход материала</b>,{' '}
-          <b>либо расход деталей</b>.
+          <b>либо расход иных деталей</b>.
         </Label>
         <MaterialCostInputs detail={detail} />
         <Divider sx={{ my: 0.5 }} />
@@ -118,8 +134,8 @@ export const DetailCostInputs = observer(
       handleAdd={() => detail.autoWriteoff.insertDetail()}
     >
       {detail.autoWriteoff.detailsCost.map((cost, index) => {
-        const detail = cache.details.get(cost.detailId)
-        if (!detail) {
+        const detailCache = cache.details.get(cost.detailId)
+        if (!detailCache) {
           return (
             <DetailSelectModal
               onRowClick={detail => {
@@ -131,7 +147,9 @@ export const DetailCostInputs = observer(
         return (
           <CostRow
             key={index}
-            onDelete={() => detail.autoWriteoff.deleteDetail(cost.detailId)}
+            onDelete={() => {
+              detail.autoWriteoff.deleteDetail(cost.detailId)
+            }}
             qtyInput={
               <QtyInputWithUnit
                 size="sm"
@@ -151,7 +169,6 @@ export const DetailCostInputs = observer(
               }}
               withLink
               withGroupLink
-              withParamsButton
             />
           </CostRow>
         )

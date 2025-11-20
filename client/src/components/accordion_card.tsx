@@ -4,15 +4,15 @@ import React, { useEffect, useState } from 'react'
 export interface AccordionCardProps {
   title: React.ReactNode
   children: React.ReactNode
-  sx?: React.CSSProperties
   defaultExpanded?: boolean
   expanded?: boolean
+  width?: string | number
 }
 
 export const AccordionCard: React.FC<AccordionCardProps> = ({
   title,
   children,
-  sx,
+  width,
   defaultExpanded,
   expanded: expandedProp
 }) => {
@@ -39,7 +39,9 @@ export const AccordionCard: React.FC<AccordionCardProps> = ({
       onChange={(_, isExpanded) => setExpanded(isExpanded)}
     >
       <AccordionSummary>{title}</AccordionSummary>
-      <AccordionDetails slotProps={{ content: { sx: { overflow: 'auto' } } }}>
+      <AccordionDetails
+        slotProps={{ content: { sx: { overflow: 'auto', width } } }}
+      >
         {children}
       </AccordionDetails>
     </Accordion>

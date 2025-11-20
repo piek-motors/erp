@@ -43,12 +43,7 @@ export const automaticWriteoffSchema = z.object({
       qty: z.number()
     })
   ),
-  material: z
-    .object({
-      material_id: z.number(),
-      length: z.number()
-    })
-    .nullable()
+  material: z.tuple([z.number(), z.number()]).nullable()
 })
 
 export const detailBaseSchema = z.object({

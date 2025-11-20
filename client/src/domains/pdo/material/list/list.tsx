@@ -1,9 +1,8 @@
 /** @jsxImportSource @emotion/react */
-import { SxProps } from '@mui/joy/styles/types'
 import { ScrollableWindow, Search } from 'components/inputs'
 import { Table } from 'components/table.impl'
 import { MetalPageTitle } from 'domains/pdo/shared/basic'
-import { Box, Inp, observer, Row, Stack, useNavigate } from 'lib/index'
+import { Box, observer, Row, Stack, useNavigate } from 'lib/index'
 import { openPage, routeMap } from 'lib/routes'
 import { MaterialShape } from 'models'
 import { Material } from 'srv/rpc/pdo/material/list'
@@ -21,16 +20,12 @@ export const ShapeNameToIconMap = {
 
 interface MaterialsTableProps {
   onRowClick?: (material: Material) => void
-  highlight?: (material: Material) => boolean
-  highlightColor?: string
-  sx?: SxProps
 }
 
 export const MaterialList = observer((props: MaterialsTableProps) => {
   const navigate = useNavigate()
   return (
     <Table
-      sx={props.sx}
       columns={columns}
       data={materialListStore.getFilteredMaterials()}
       onRowClick={row => {
@@ -41,14 +36,6 @@ export const MaterialList = observer((props: MaterialsTableProps) => {
           if (!row.id) throw Error('Material id is null')
           navigate(openPage(routeMap.pdo.material.edit, row.id))
         }
-      }}
-      rowStyleCb={row => {
-        if (props.highlight) {
-          return props.highlight(row.original)
-            ? { backgroundColor: props.highlightColor }
-            : {}
-        }
-        return {}
       }}
     />
   )
@@ -61,14 +48,14 @@ export const MaterialListPage = observer((props: MaterialsTableProps) => (
     scrollableContent={
       <Box sx={{ p: 0.5 }}>
         <Stack p={0.5} gap={0.5}>
+          <MaterialShapeFilter />
           <Row>
-            <Inp
-              size="sm"
-              sx={{ width: '60px' }}
-              placeholder="ID"
+            <Search
+              width={60}
+              placeholder="№"
               value={materialListStore.searchId}
               onChange={v => {
-                materialListStore.setSearchId(v)
+                materialListStore.setSearchId(v.target.value)
               }}
             />
             <Search
@@ -79,7 +66,6 @@ export const MaterialListPage = observer((props: MaterialsTableProps) => (
               value={materialListStore.filterKeyword}
             />
           </Row>
-          <MaterialShapeFilter />
         </Stack>
         <MaterialList {...props} />
       </Box>

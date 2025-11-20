@@ -1,5 +1,6 @@
 import { IDB, TRPCError } from '#root/deps.js'
 import { DB } from 'db'
+import { Decimal } from 'decimal.js'
 import { Selectable } from 'kysely'
 import { ManufacturingOrderStatus, WriteoffReason } from 'models'
 import { Warehouse } from './warehouse.service.js'
@@ -103,19 +104,18 @@ export class Manufacturing {
 
     const materialCost = detail.automatic_writeoff?.material
     let writeoff: MaterialWriteoff = null
-
     if (materialCost) {
+      const [id, cost] = materialCost
       const material = await this.trx
         .selectFrom('pdo.materials')
-        .where('id', '=', materialCost.material_id)
+        .where('id', '=', id)
         .selectAll()
         .executeTakeFirstOrThrow()
+
       writeoff = await this.subtractMaterials(
         {
-          material_id: material.id,
-          data: {
-            materialCostLength: materialCost.length
-          },
+          material_id: id,
+          cost: cost,
           label: material.label,
           stock: material.stock
         },
@@ -189,7 +189,7 @@ export class Manufacturing {
   private async subtractMaterials(
     material: {
       material_id: number
-      data: { materialCostLength: number }
+      cost: number
       stock: number
       label: string
     },
@@ -197,16 +197,16 @@ export class Manufacturing {
     order: Selectable<DB.ManufacturingTable>
   ) {
     const { material_id, label } = material
-    if (!material.data) {
+    if (!material.cost) {
       throw new Error('Material cost data is missing')
     }
-    const totalCost = (material?.data?.materialCostLength * qty) / 1000
+    const totalCost = new Decimal(material.cost)
+      .mul(new Decimal(qty))
+      .toNumber()
 
     if (material.stock < totalCost) {
       throw new ErrNotEnoughMaterial(
-        `Недостаточно материала (id=${material_id}) ${label}, требуется ${totalCost.toFixed(
-          1
-        )} м, имеется ${material.stock.toFixed(1)} м`
+        `Недостаточно материала (id=${material_id}) ${label}, требуется ${totalCost}, имеется ${material.stock}`
       )
     }
     if (totalCost === 0) {

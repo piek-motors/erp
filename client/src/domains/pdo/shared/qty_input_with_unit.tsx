@@ -1,4 +1,4 @@
-import { InputProps, Stack } from '@mui/joy'
+import { InputProps } from '@mui/joy'
 import { Inp, Label } from 'lib/index'
 import { uiUnit } from 'models'
 
@@ -15,25 +15,18 @@ export const QtyInputWithUnit = (props: {
 }) => {
   const { unitId, value: qty, setValue: setQty } = props
   return (
-    <Stack
-      direction="row"
-      alignItems="center"
-      gap={1}
-      sx={{ width: 'min-content' }}
-    >
-      <Inp
-        autoFocus={props.autoFocus}
-        label={props.label}
-        placeholder={props.placeholder}
-        value={qty}
-        onChange={v => {
-          setQty(v)
-        }}
-        size={props.size}
-        type="number"
-        sx={{ maxWidth: 100, ...props.sx }}
-      />
-      <Label>{uiUnit(unitId)}</Label>
-    </Stack>
+    <Inp
+      autoFocus={props.autoFocus}
+      label={props.label}
+      placeholder={props.placeholder}
+      value={qty}
+      onChange={v => {
+        setQty(v)
+      }}
+      size={props.size}
+      type="number"
+      sx={{ maxWidth: 150, ...props.sx }}
+      endDecorator={<Label color="primary">{uiUnit(unitId)}</Label>}
+    />
   )
 }

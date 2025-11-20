@@ -1,4 +1,4 @@
-import { Inp } from 'lib/index'
+import { InputWithUnit } from 'lib/index'
 
 interface Props {
   label?: string
@@ -11,13 +11,13 @@ interface Props {
 
 export function NumberInput(props: Props) {
   return (
-    <Inp
+    <InputWithUnit
       sx={{ width: props.width ? `${props.width}px` : '120px' }}
       type="number"
       {...props}
       value={props.value == null ? '' : props.value}
-      onChange={v => {
-        const num = Number(v)
+      onChange={e => {
+        const num = Number(e.target.value)
         if (Number.isNaN(num)) {
           return
         }

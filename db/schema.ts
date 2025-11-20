@@ -119,11 +119,13 @@ export namespace DB {
     recommended_batch_size: number | null
   }
 
+  type MaterialId = number
+  type Cost = number
   export interface DetailAutomaticWriteoffData {
-    material: {
-      material_id: number
-      length: number // meters
-    } | null
+    material: [
+      MaterialId,
+      Cost 
+    ] | null
     details: Array<{
       detail_id: number
       qty: number

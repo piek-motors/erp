@@ -1,5 +1,6 @@
 import { cache } from 'domains/pdo/cache/root'
 import { makeAutoObservable } from 'mobx'
+import { DetailAutomaticWriteoffData } from 'srv/rpc/pdo/detail/get'
 
 export class MaterialCost {
   materialId!: number
@@ -10,9 +11,15 @@ export class MaterialCost {
   setLength(length: string) {
     this.length = length
   }
-  constructor(init: { material_id?: number; length?: string | number } = {}) {
-    this.materialId = init.material_id || 0
-    this.length = init.length?.toString() ?? ''
+  constructor(init?: DetailAutomaticWriteoffData['material']) {
+    if (init) {
+      if (init[0]) {
+        this.materialId = init[0]
+      }
+      if (init[1]) {
+        this.length = init[1].toString()
+      }
+    }
     makeAutoObservable(this)
   }
   get material() {

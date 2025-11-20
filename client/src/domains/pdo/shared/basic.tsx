@@ -23,17 +23,17 @@ export function MaterialUnitSelect(props: {
 }) {
   return (
     <Stack>
-      <Label label="Ед. измерения" />
+      <Label label="Ед. учета остатков" />
       <ToggleButtonGroup
-        variant="outlined"
-        color="primary"
+        variant="solid"
+        color="neutral"
         value={props.value != null ? Object.keys(Unit)[props.value] : null}
         onChange={(e, v) => {
           props.onChange(parseInt(v as any))
         }}
       >
         {Object.entries(UiUnit).map(([key, value]) => (
-          <Button value={key} key={key} color="neutral">
+          <Button value={key} key={key}>
             {value}
           </Button>
         ))}

@@ -1,4 +1,4 @@
-import { Box, Card, Chip, ChipProps } from '@mui/joy'
+import { Box, Card, Chip, ChipProps, Divider } from '@mui/joy'
 import { AttachmentComponent } from 'components/attachments/attachment'
 import { InModal } from 'components/modal'
 import { PrintOnly, WebOnly } from 'components/utilities/conditional-display'
@@ -25,7 +25,11 @@ import {
 } from 'lib/index'
 import { notifier } from 'lib/store/notifier.store'
 import { dayAndMonth, formatDate, roundAndTrim } from 'lib/utils/formatting'
-import { ManufacturingOrderStatus, uiManufacturingOrderStatus } from 'models'
+import {
+  ManufacturingOrderStatus,
+  uiManufacturingOrderStatus,
+  uiUnit
+} from 'models'
 import { cache } from '../cache/root'
 import { TechParamsDisplay } from '../detail/components'
 import { BlankSpec, DetailState } from '../detail/detail.state'
@@ -69,50 +73,52 @@ export const ManufacturingUpdatePage = observer(() => {
   return (
     <Stack p={1} gap={1}>
       <WebOnly>
-        <Stack gap={1}>
-          <MetalPageTitle
-            t={
-              <Box>
-                <Row>
-                  <P level="body-sm" whiteSpace={'nowrap'}>
-                    Заказ №{api.s.order.id}
-                  </P>
-                  <StatusDisplay status={api.s.order.status} />
-                </Row>
-                <DetailName
-                  detail={{
-                    id: detail.id,
-                    name: detail.name,
-                    group_id: detail.groupId || null
-                  }}
-                  withLink
-                  withGroupLink
-                />
-              </Box>
-            }
-          />
+        <Card size="sm">
+          <Stack gap={1}>
+            <MetalPageTitle
+              t={
+                <Box>
+                  <Row>
+                    <P level="body-sm" whiteSpace={'nowrap'}>
+                      Заказ №{api.s.order.id}
+                    </P>
+                    <StatusDisplay status={api.s.order.status} />
+                  </Row>
+                  <DetailName
+                    detail={{
+                      id: detail.id,
+                      name: detail.name,
+                      group_id: detail.groupId || null
+                    }}
+                    withLink
+                    withGroupLink
+                  />
+                </Box>
+              }
+            />
 
-          <Row gap={1} alignItems={'start'}>
-            <Stack>
-              <QuantityInput detail={detail} />
-              <TechPassportButton />
-            </Stack>
-            <Cost detail={detail} />
-          </Row>
-          <Row gap={2} alignItems={'start'} flexWrap={'wrap'}>
-            <BlankSpecDisplay blankSpec={detail?.blankSpec} />
-            <DetailAttachments detail={detail} />
-            <DetailDescription htmlContent={detail.description} />
-          </Row>
+            <Row gap={1} alignItems={'start'}>
+              <Stack>
+                <QuantityInput detail={detail} />
+                <TechPassportButton />
+              </Stack>
+              <Cost detail={detail} />
+            </Row>
+            <Row gap={2} alignItems={'start'} flexWrap={'wrap'}>
+              <BlankSpecDisplay blankSpec={detail?.blankSpec} />
+              <DetailAttachments detail={detail} />
+              <DetailDescription htmlContent={detail.description} />
+            </Row>
 
-          <Row mt={1}>
-            {api.status.loading && <Loading />}
-            <ErrorHint e={api.status.error} />
-            <ActionButton status={api.s.order.status} />
-            {isDeletionAllowed && <DeleteOrderButton />}
-          </Row>
-          <Dates />
-        </Stack>
+            <Dates />
+            <Row>
+              {api.status.loading && <Loading />}
+              <ErrorHint e={api.status.error} />
+              <ActionButton status={api.s.order.status} />
+              {isDeletionAllowed && <DeleteOrderButton />}
+            </Row>
+          </Stack>
+        </Card>
         <DuplicationCheckModal />
       </WebOnly>
 
@@ -257,7 +263,7 @@ export const Cost = observer(({ detail }: { detail: DetailState }) => {
   return (
     <Row alignItems={'start'}>
       {!!materialCost ? (
-        <Card size="sm" variant="plain">
+        <Card size="sm">
           <Label label="Материал к потреблению" />
           <Stack gap={0.5}>
             <DetailMaterialInfo cost={materialCost} />
@@ -293,7 +299,7 @@ const QuantityInput = observer(({ detail }: { detail: DetailState }) => {
   if (api.s.order.status === ManufacturingOrderStatus.Preparation) {
     const recBatchSize = detail.recommendedBatchSize
     return (
-      <Card size="sm" variant="outlined">
+      <Card size="sm" variant="plain">
         <Label>Кол-во</Label>
         <Stack>
           {recBatchSize && (
@@ -312,6 +318,8 @@ const QuantityInput = observer(({ detail }: { detail: DetailState }) => {
               }}
             />
             <SaveIconButton
+              variant="solid"
+              color="neutral"
               onClick={() =>
                 api.save().then(() => {
                   notifier.notify('info', 'Кол-во установлено')
@@ -429,8 +437,9 @@ export const DuplicationCheckModal = observer(() => {
 
 const DetailMaterialInfo = observer((props: { cost: MaterialCost }) => {
   const { cost } = props
-  const totalConsumedAmount = (parseInt(api.s.qty) * (+cost.length || 0)) / 1000
+  const totalConsumedAmount = parseInt(api.s.qty) * (+cost.length || 0)
   const remainingAmount = (cost.material?.stock || 0) - totalConsumedAmount
+  const unit = uiUnit(cost?.material?.unit)
   return (
     <Box>
       <Row>
@@ -440,17 +449,19 @@ const DetailMaterialInfo = observer((props: { cost: MaterialCost }) => {
           withLink
         />
         <Label level="body-sm" color="primary">
-          Расход {cost?.length || 'не указано'} мм
+          Расход {cost?.length || 'не указано'}{' '}
+          {uiUnit(cost.material?.unit) || ''}
         </Label>
       </Row>
+      <Divider sx={{ my: 0.5 }} />
       {api.s.qty && (
         <>
-          <P level="body-sm" color="primary">
-            Потребное кол-во: {roundAndTrim(totalConsumedAmount) || 0} м
+          <P level="body-sm" color="neutral">
+            Потребное кол-во: {roundAndTrim(totalConsumedAmount, 3) || 0} {unit}
           </P>
 
           <P level="body-sm" color="neutral">
-            Остаток: {roundAndTrim(cost.material?.stock) || 0} м
+            Остаток: {roundAndTrim(cost.material?.stock, 3) || 0} {unit}
           </P>
 
           {api.s.order?.status === ManufacturingOrderStatus.Preparation && (
@@ -464,7 +475,7 @@ const DetailMaterialInfo = observer((props: { cost: MaterialCost }) => {
               }
               level="body-sm"
             >
-              Остаток после запуска {remainingAmount.toFixed(1)} м
+              Остаток после запуска {remainingAmount.toFixed(1)} {unit}
             </P>
           )}
         </>

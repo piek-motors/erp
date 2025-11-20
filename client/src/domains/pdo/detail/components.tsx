@@ -1,12 +1,22 @@
 /** @jsxImportSource @emotion/react */
-import { AccordionGroup, Stack, TypographySystem } from '@mui/joy'
+import { AccordionGroup, Sheet, Stack, TypographySystem } from '@mui/joy'
 import { AccordionCard } from 'components/accordion_card'
 import { ArrayJsonEditor } from 'components/array-json-editor'
 import { BaseAutocomplete, BaseOption } from 'components/base-autocomplete'
 import { NumberInput } from 'components/inputs/number_input'
 import { TextEditor } from 'domains/orders/one/comments/text-editor'
 import { cache } from 'domains/pdo/cache/root'
-import { Box, Inp, Label, MyInputProps, observer, P, Row } from 'lib/index'
+import {
+  Box,
+  Inp,
+  Label,
+  MultilineInput,
+  MyInputProps,
+  observer,
+  P,
+  Row
+} from 'lib/index'
+import { MetalPageTitle } from '../shared'
 import { MaterialAutocomplete } from '../shared/material_autocomplete'
 import { DetailAttachmentList } from './attachment/list'
 import { BlankSpec, DetailState } from './detail.state'
@@ -15,46 +25,65 @@ import { MaterialCost } from './warehouse/cost.store'
 
 export const DetailInputs = observer(
   ({ detail: d }: { detail: DetailState }) => (
-    <Stack gap={0} pr={{ xs: 0, md: 4 }}>
-      <Input
-        fullWidth
-        sx={{ fontWeight: 500 }}
-        label="Название со склада"
-        onChange={v => {
-          d.setName(v)
-        }}
-        value={d.name}
-      />
-      <Input
-        fullWidth
-        label="Название чертежа"
-        onChange={v => {
-          d.setDrawingName(v)
-        }}
-        value={d.drawingName}
-      />
-      <Input
-        label="Номер чертежа"
-        onChange={v => {
-          d.setDrawingNumber(v)
-          if (v.startsWith('ВЗИС')) {
-            alert('Впишите конструкторский номер без приставки "ВЗИС"')
+    <Stack
+      pr={{ xs: 0, md: 4 }}
+      direction={{ xs: 'column', md: 'row' }}
+      gap={1}
+    >
+      <Box sx={{ flexGrow: 1.5 }}>
+        <MetalPageTitle
+          t={
+            <P level="body-sm" whiteSpace={'nowrap'}>
+              Деталь № {d.id}
+            </P>
           }
-        }}
-        value={d.drawingNumber}
-      />
-      <DetailGroupInput detail={d} />
-      <DetailRecommendedBatchSizeInput detail={d} />
-      <DetailDescriptionInput detail={d} />
-      <AccordionGroup sx={{ my: 1 }}>
-        <DetailAttachmentInput detail={d} />
-        <BlankSpecInput detail={d} />
-        <ProcessingRouteAccordion detail={d} />
-        <AutomaticWriteoffAccordion detail={d} />
-      </AccordionGroup>
+        />
+        <MultilineInput
+          sx={{ fontWeight: 500, width: '100%' }}
+          color="primary"
+          label="Название со склада"
+          onChange={e => {
+            d.setName(e.target.value)
+          }}
+          value={d.name}
+        />
+        <MultilineInput
+          sx={{ width: '100%' }}
+          label="Название чертежа"
+          onChange={e => {
+            d.setDrawingName(e.target.value)
+          }}
+          value={d.drawingName}
+        />
+        <Input
+          label="Номер чертежа"
+          onChange={v => {
+            d.setDrawingNumber(v)
+            if (v.startsWith('ВЗИС')) {
+              alert('Впишите конструкторский номер без приставки "ВЗИС"')
+            }
+          }}
+          value={d.drawingNumber}
+        />
+        <DetailGroupInput detail={d} />
+        <DetailRecommendedBatchSizeInput detail={d} />
+        <DetailDescriptionInput detail={d} />
+      </Box>
+      <DetailAccordionGroup d={d} />
     </Stack>
   )
 )
+
+export const DetailAccordionGroup = observer(({ d }: { d: DetailState }) => (
+  <Sheet>
+    <AccordionGroup>
+      <DetailAttachmentInput detail={d} />
+      <BlankSpecInput detail={d} />
+      <ProcessingRouteAccordion detail={d} />
+      <AutomaticWriteoffAccordion detail={d} />
+    </AccordionGroup>
+  </Sheet>
+))
 
 export const MaterialSelect = observer(
   (props: {
@@ -62,13 +91,9 @@ export const MaterialSelect = observer(
     index: number
     onChange: (m: MaterialCost) => void
   }) => {
-    const data = cache.materials.getMaterials().map(
-      e =>
-        new MaterialCost({
-          material_id: e.id,
-          length: props.value.length
-        })
-    )
+    const data = cache.materials
+      .getMaterials()
+      .map(e => new MaterialCost([e.id, +props.value.length]))
     return (
       <MaterialAutocomplete
         size="sm"

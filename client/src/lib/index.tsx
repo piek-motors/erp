@@ -18,7 +18,6 @@ import {
   CircularProgress,
   Container,
   FormControl,
-  FormHelperText,
   IconButton,
   IconButtonProps,
   Input,
@@ -71,12 +70,8 @@ export const Label = (
 
 export type MyInputProps = {
   label?: string
-  helperText?: string
   value?: string | number | null
   onChange?: (value: string) => void
-  customInput?: React.ComponentType<any>
-  unit?: string
-  enableAutoComplete?: boolean
   name?: string
   type?: InputProps['type']
   placeholder?: string
@@ -87,6 +82,7 @@ export type MyInputProps = {
   variant?: InputProps['variant']
   color?: InputProps['color']
   onBlur?: InputProps['onBlur']
+  endDecorator?: InputProps['endDecorator']
 }
 
 export function Inp(props: MyInputProps) {
@@ -95,28 +91,38 @@ export function Inp(props: MyInputProps) {
       sx={{ width: props.fullWidth ? '-webkit-fill-available' : 'auto' }}
     >
       <Label label={props.label} />
-      {props.customInput ? (
-        <props.customInput onChange={props.onChange} name={props.name} />
-      ) : (
-        <Row>
-          <Input
-            {...props}
-            color={props.color}
-            value={props.value?.toString() || ''}
-            autoComplete={props.enableAutoComplete ? 'on' : 'off'}
-            onChange={e => {
-              const value = e.target.value ?? ''
-              props.onChange?.(value)
-            }}
-            size={props.size}
-            sx={props.sx}
-            variant={props.variant}
-            onBlur={props.onBlur}
-          />
-          {props.unit && <P>{props.unit}</P>}
-        </Row>
-      )}
-      {props.helperText && <FormHelperText>{props.helperText}</FormHelperText>}
+      <Row>
+        <Input
+          color={props.color}
+          value={props.value?.toString() || ''}
+          autoComplete={'off'}
+          onChange={e => {
+            const value = e.target.value ?? ''
+            props.onChange?.(value)
+          }}
+          size={props.size}
+          sx={props.sx}
+          variant={props.variant}
+          onBlur={props.onBlur}
+          endDecorator={props.endDecorator}
+        />
+      </Row>
+    </FormControl>
+  )
+}
+
+export function InputWithUnit(
+  props: InputProps & { unit?: string; label?: string }
+) {
+  return (
+    <FormControl
+      sx={{ width: props.fullWidth ? '-webkit-fill-available' : 'auto' }}
+    >
+      <Label label={props.label} />
+      <Row>
+        <Input autoComplete={'off'} {...props} />
+        {props.unit && <P>{props.unit}</P>}
+      </Row>
     </FormControl>
   )
 }
@@ -358,11 +364,6 @@ export function Pre(props: { children: React.ReactNode }) {
   return (
     <pre style={{ whiteSpace: 'pre-wrap', margin: 0 }}>{props.children}</pre>
   )
-}
-
-export const bgcolors = {
-  lightgrey: '#d5cccc53',
-  blue: '#8cb8e753'
 }
 
 export const text = {

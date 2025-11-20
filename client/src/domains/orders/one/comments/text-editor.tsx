@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import { UilBold, UilMessage, UilPaintTool } from '@iconscout/react-unicons'
-import { Box, Button, Sheet, Stack } from '@mui/joy'
+import { Box, Button, Sheet, SheetProps, Stack } from '@mui/joy'
 import Highlight from '@tiptap/extension-highlight'
 import Mention from '@tiptap/extension-mention'
 import Placeholder from '@tiptap/extension-placeholder'
@@ -17,6 +17,7 @@ export const TextEditor = (props: {
   onSubmit?: (content: string) => Promise<void>
   onChange?: (content: string) => void
   editable?: boolean
+  variant?: SheetProps['variant']
 }) => {
   const [key, setKey] = useState(0)
   const editable = props.editable === undefined ? true : props.editable
@@ -74,7 +75,10 @@ export const TextEditor = (props: {
   if (!editor) return null
   return (
     <Stack gap={1} key={key} css={styles} sx={{ position: 'relative' }}>
-      <Sheet sx={{ borderRadius: 'md', p: 1 }}>
+      <Sheet
+        sx={{ borderRadius: 'md', p: 1 }}
+        variant={props.variant || 'outlined'}
+      >
         {editable && (
           <Row>
             <TooltipIconButton

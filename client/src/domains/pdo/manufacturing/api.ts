@@ -2,6 +2,8 @@ import { LoadingController } from 'lib/loading_controller'
 import { rpc } from 'lib/rpc.client'
 import { notifier } from 'lib/store/notifier.store'
 import { makeAutoObservable } from 'mobx'
+import { uiUnit } from 'models'
+import { cache } from '../cache/root'
 import { DetailApi } from '../detail/api'
 import { DetailState } from '../detail/detail.state'
 import {
@@ -56,6 +58,7 @@ export class ManufacturingApi {
     await this.status.run(async () => {
       if (!this.s.order) throw new Error('Заказ не найден')
       if (!this.s.qty) throw new Error('Кол-во не может быть 0')
+
       try {
         const writeoff =
           await rpc.pdo.manufacturing.startProductionPhase.mutate({
@@ -65,9 +68,11 @@ export class ManufacturingApi {
           })
         await this.load(this.s.order.id)
         if (writeoff) {
+          const material = cache.materials.get(writeoff.material_id)
+          const unitStr = uiUnit(material?.unit)
           notifier.notify(
             'info',
-            `Списано ${writeoff.totalCost} м ${writeoff.material_name}, остаток ${writeoff.stock} м`
+            `Списано ${writeoff.totalCost} ${unitStr} ${writeoff.material_name}, остаток ${writeoff.stock} ${unitStr}`
           )
         }
       } catch (e: any) {

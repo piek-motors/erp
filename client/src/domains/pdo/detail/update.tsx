@@ -1,5 +1,5 @@
 import { Sheet, Stack } from '@mui/joy'
-import { MetalPageTitle, SaveAndDelete } from 'domains/pdo/shared/basic'
+import { SaveAndDelete } from 'domains/pdo/shared/basic'
 import {
   Loading,
   observer,
@@ -36,14 +36,7 @@ export const UpdateDetailPage = observer(() => {
 
   if (api.loader.loading || !detail) return <Loading />
   return (
-    <Stack>
-      <MetalPageTitle
-        t={
-          <P level="body-sm" whiteSpace={'nowrap'}>
-            Деталь № {id}
-          </P>
-        }
-      />
+    <Sheet sx={{ p: 1 }}>
       <RowButColumsAtSm gap={1} flexGrow={4}>
         <Stack gap={1} alignItems={'center'}>
           <DetailWarehouse detail={detail} />
@@ -60,7 +53,7 @@ export const UpdateDetailPage = observer(() => {
           <SaveFloatingButton detail={detail} />
         </Stack>
       </RowButColumsAtSm>
-    </Stack>
+    </Sheet>
   )
 })
 
@@ -70,12 +63,11 @@ function SaveFloatingButton({ detail }: { detail: DetailState }) {
     <Sheet
       sx={{
         borderRadius: 'sm',
-        backgroundColor: 'lightblue',
+        backgroundColor: 'lightgray',
         position: 'sticky',
         bottom: 0,
         width: 'min-content',
-        px: 3,
-        py: 0.5,
+        p: 1,
         height: 'min-content'
       }}
     >

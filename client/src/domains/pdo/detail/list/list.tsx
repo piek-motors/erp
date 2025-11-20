@@ -7,7 +7,6 @@ import { Table } from 'components/table.impl'
 import { MetalPageTitle } from 'domains/pdo/shared/basic'
 import {
   Box,
-  Inp,
   Label,
   Loading,
   Row,
@@ -142,22 +141,22 @@ const DetailSearchArguments = observer(() => {
   return (
     <>
       <RowButColumsAtSm>
-        <Inp
+        <Search
           size="sm"
-          sx={{ width: '60px' }}
-          placeholder="ID"
+          width={60}
+          placeholder="№"
           value={state.searchId}
-          onChange={v => state.setId(v)}
+          onChange={v => state.setId(v.target.value)}
         />
         <Search
           placeholder="Название"
           onChange={e => state.setKeyword(e.target.value)}
-          value={state.searchKeyword || ''}
+          value={state.searchKeyword}
         />
         <Search
           placeholder="Номер чертежа"
           onChange={e => state.setDrawingNumber(e.target.value)}
-          value={state.drawingNumber || ''}
+          value={state.drawingNumber}
         />
       </RowButColumsAtSm>
     </>

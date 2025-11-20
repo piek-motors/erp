@@ -4,8 +4,8 @@ import { DetailCost, MaterialCost } from './cost.store'
 
 export class DetailAutomaticWriteoffStore {
   detailsCost: DetailCost[] = []
-  setDetailCost(details?: DetailCost[]) {
-    this.detailsCost = details || []
+  setDetailCost(detailCosts?: DetailCost[]) {
+    this.detailsCost = detailCosts || []
   }
   materialCost: MaterialCost | null = null
   setMaterialCost(material?: MaterialCost | null) {
@@ -16,9 +16,11 @@ export class DetailAutomaticWriteoffStore {
     makeAutoObservable(this)
   }
 
-  init(init: DetailAutomaticWriteoffData) {
-    this.setDetailCost(init.details.map(d => new DetailCost(d)))
-    this.setMaterialCost(init.material ? new MaterialCost(init.material) : null)
+  init(writeoffData: DetailAutomaticWriteoffData) {
+    this.setDetailCost(writeoffData.details.map(d => new DetailCost(d)))
+    this.setMaterialCost(
+      writeoffData.material ? new MaterialCost(writeoffData.material) : null
+    )
   }
 
   get payload(): DetailAutomaticWriteoffData {
@@ -28,10 +30,7 @@ export class DetailAutomaticWriteoffStore {
         qty: +d.qty
       })),
       material: this.materialCost
-        ? {
-            material_id: this.materialCost.materialId,
-            length: +this.materialCost.length
-          }
+        ? [this.materialCost.materialId, +this.materialCost.length]
         : null
     }
   }
@@ -59,15 +58,7 @@ export class DetailAutomaticWriteoffStore {
     }
   }
 
-  updateDetail(index: number, detailId: number, qty: string) {
-    const d = this.detailsCost[index]
-    if (!d) {
-      this.insertDetail()
-      return
-    }
-  }
-
-  async deleteDetail(detailId: number) {
+  deleteDetail(detailId: number) {
     this.setDetailCost(this.detailsCost.filter(d => d.detailId !== detailId))
   }
 }

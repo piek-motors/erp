@@ -17,11 +17,11 @@ export const updateDetail = publicProcedure
         part_code: input.partCode,
         logical_group_id: input.groupId,
         blank_spec: input.blankSpec || null,
-        updated_at: new Date(),
         processing_route: input.processingRoute || null,
         drawing_name: input.drawingName || null,
         automatic_writeoff: input.automaticWriteoff,
-        recommended_batch_size: input.recommendedBatchSize || null
+        recommended_batch_size: input.recommendedBatchSize || null,
+        updated_at: new Date()
       })
       .where('id', '=', input.id)
       .execute()

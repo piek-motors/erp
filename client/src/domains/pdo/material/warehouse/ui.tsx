@@ -15,10 +15,9 @@ import { Stack } from '@mui/joy'
 import { QtyInputWithUnit } from 'domains/pdo/shared'
 import { modalState } from 'domains/pdo/warehouse/modals.store'
 import { ActionButton, Label, P, Row } from 'lib/index'
-import { Unit } from 'models'
 
 interface Props {
-  materialLabel?: string
+  material: MaterialState
   lengthValue: string
   lengthSetValue: (value: string) => void
   reasonComponent: React.ReactNode
@@ -32,13 +31,13 @@ const CreateWarehouseMaterialOperation = observer((props: Props) => (
     <Row sx={{ fontSize: 20 }}>
       <Label>Материал: </Label>
       <P fontWeight={600} color="primary">
-        {props.materialLabel || <P color="neutral">Не выбран</P>}
+        {props.material.label || <P color="neutral">Не выбран</P>}
       </P>
     </Row>
     {props.stock && <P level="body-sm">{props.stock}</P>}
     <QtyInputWithUnit
       autoFocus
-      unitId={Unit.M}
+      unitId={props.material.unit}
       value={props.lengthValue}
       setValue={props.lengthSetValue}
       label={'Длина'}
@@ -60,7 +59,7 @@ export const MaterialWarehouse = observer(({ m }: { m: MaterialState }) => {
       unit={uiUnit(m.unit)}
       supply={
         <CreateWarehouseMaterialOperation
-          materialLabel={m.label}
+          material={m}
           lengthValue={m.warehouse.supply.length}
           lengthSetValue={value => m.warehouse.supply.setLength(value)}
           reasonComponent={
@@ -89,7 +88,7 @@ export const MaterialWarehouse = observer(({ m }: { m: MaterialState }) => {
       }
       writeoff={
         <CreateWarehouseMaterialOperation
-          materialLabel={m.label}
+          material={m}
           lengthValue={m.warehouse.writeoff.length}
           lengthSetValue={value => m.warehouse.writeoff.setLength(value)}
           reasonComponent={
