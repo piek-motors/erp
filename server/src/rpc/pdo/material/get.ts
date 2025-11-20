@@ -18,7 +18,7 @@ export const getMaterial = publicProcedure
     const detailCount = await db
       .selectFrom('pdo.details')
       .where(
-        sql<boolean>`(automatic_writeoff->'material'->>'material_id')::int = ${input.id}`
+        sql<boolean>`(automatic_writeoff->'material'->>0)::int = ${input.id}`
       )
       .select(eb => eb.fn.countAll().as('count'))
       .executeTakeFirstOrThrow()

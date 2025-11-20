@@ -51,7 +51,7 @@ export const MaterialListPage = observer((props: MaterialsTableProps) => (
           <MaterialShapeFilter />
           <Row>
             <Search
-              width={60}
+              width={100}
               placeholder="№"
               value={materialListStore.searchId}
               onChange={v => {

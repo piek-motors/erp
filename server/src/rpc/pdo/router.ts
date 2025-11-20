@@ -65,7 +65,7 @@ export const metalFlowRouter = router({
         db
           .selectFrom('pdo.details')
           .where(
-            sql<boolean>`(automatic_writeoff->'material'->>'material_id')::int = ${input.material_id}`
+            sql<boolean>`(automatic_writeoff->'material'->>0)::int = ${input.material_id}`
           )
           .selectAll()
           .execute()

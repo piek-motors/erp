@@ -143,7 +143,7 @@ const DetailSearchArguments = observer(() => {
       <RowButColumsAtSm>
         <Search
           size="sm"
-          width={60}
+          width={100}
           placeholder="№"
           value={state.searchId}
           onChange={v => state.setId(v.target.value)}

@@ -25,7 +25,7 @@ export function MaterialUnitSelect(props: {
     <Stack>
       <Label label="Ед. учета остатков" />
       <ToggleButtonGroup
-        variant="solid"
+        variant="outlined"
         color="neutral"
         value={props.value != null ? Object.keys(Unit)[props.value] : null}
         onChange={(e, v) => {
