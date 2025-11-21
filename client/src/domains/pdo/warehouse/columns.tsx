@@ -26,9 +26,10 @@ export const columns: Column<Operation>[] = [
     Header: 'Кол-во',
     accessor: data => {
       const unit = data.material_id != null ? uiUnit(data.unit) : ''
+      const sign = data.operation_type == OperationType.Supply ? '+' : '-'
       return (
         <P>
-          {data.qty} {unit}
+          {sign} {data.qty} {unit}
         </P>
       )
     }

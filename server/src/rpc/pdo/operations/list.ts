@@ -4,7 +4,7 @@ import { formatDate } from '#root/lib/time.js'
 import type { DB, Selectable } from 'db'
 import { Unit } from 'models'
 
-const Limit = 300
+const Limit = 100
 
 export interface OperationListItem
   extends Omit<Selectable<DB.OperationsTable>, 'timestamp'> {
