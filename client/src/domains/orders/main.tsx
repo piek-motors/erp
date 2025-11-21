@@ -45,6 +45,7 @@ const PriorityList = observer(() => {
     orders && (
       <Sheet>
         <Search
+          maxWidth={200}
           value={store.searchTerm}
           onChange={e => store.searchInputHandler(e)}
           placeholder={searchPlaceholder}
@@ -188,7 +189,7 @@ const tabs: TabConfig = [
   },
   {
     value: routeMap.orders.recentlyPaid,
-    label: 'Недавно оплаченные',
+    label: 'Новые',
     component: <NewOrderList />
   },
   {
@@ -244,7 +245,7 @@ const exportRoutes = (
     },
     {
       path: orders.recentlyPaid,
-      title: 'Недавно оплаченные',
+      title: 'Новые',
       element: <NewOrderList />
     },
     {

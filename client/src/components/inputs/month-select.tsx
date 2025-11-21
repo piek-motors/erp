@@ -83,7 +83,7 @@ function _MonthSelect({ onSearch, store }: IReportConfiguratorProps) {
       {onSearch && (
         <IconButton
           loading={store.isLoading}
-          variant="solid"
+          variant="soft"
           color="primary"
           onClick={() => {
             onSearch(store.month, store.year)
