@@ -222,7 +222,7 @@ const ProcessingOperationAutocomplete = observer(
 const ProcessingRouteAccordion = observer(
   ({ detail }: { detail: DetailState }) => {
     return (
-      <AccordionCard title="Маршрут обработки" defaultExpanded>
+      <AccordionCard title="Маршрут" defaultExpanded>
         <Stack gap={0.5}>
           {detail.processingRoute.steps.map((op, idx) => (
             <Row>
