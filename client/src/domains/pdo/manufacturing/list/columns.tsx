@@ -54,7 +54,7 @@ const productionColumns = commonColumns.concat([
     )
   },
   {
-    Header: 'Этап',
+    Header: 'Операция',
     accessor: m => <P level="body-xs">{m.current_operation}</P>
   }
 ])

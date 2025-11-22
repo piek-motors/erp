@@ -210,7 +210,7 @@ const ProcessingOperationAutocomplete = observer(
             op.setName('')
           }
         }}
-        placeholder="Такой-то этап"
+        placeholder="Такая-то обработка"
         size="sm"
         freeSolo
         loading={!!cache.details.dictProcessingOperaions.length}
