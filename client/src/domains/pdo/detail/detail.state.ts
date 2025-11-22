@@ -8,7 +8,10 @@ type DetailResponse = RouterOutput['pdo']['details']['get']['detail']
 type UpdateDetailRequest = RouterInput['pdo']['details']['update']
 
 export class Operation {
-  name!: string
+  name: string = ''
+  setName(n: string) {
+    this.name = n
+  }
   dur?: number | null
   constructor() {
     makeAutoObservable(this)
@@ -26,6 +29,13 @@ export class ProcessingRoute {
   }
   constructor() {
     makeAutoObservable(this)
+  }
+  addEmpty() {
+    this.steps = [...this.steps, new Operation()]
+  }
+  remove(idx: number) {
+    if (idx < 0 || idx >= this.steps.length) return
+    this.steps = [...this.steps.slice(0, idx), ...this.steps.slice(idx + 1)]
   }
   reset() {
     this.steps = []

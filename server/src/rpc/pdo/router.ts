@@ -74,7 +74,29 @@ export const metalFlowRouter = router({
     update: updateDetail,
     create: createDetail,
     writeoff: createDetailWriteoff,
-    supply: createDetailSupply
+    supply: createDetailSupply,
+    dict_processing_operations: procedure.query(async () => {
+      const details = await db
+        .selectFrom('pdo.details')
+        .select(['processing_route'])
+        .where('processing_route', 'is not', null)
+        .execute()
+      const operationsMap = new Map<string, number>()
+      for (const detail of details) {
+        const route = detail.processing_route
+        if (route?.steps) {
+          for (const step of route.steps) {
+            const name = step.name.trim()
+            if (name.length === 0) continue
+            operationsMap.set(name, (operationsMap.get(name) ?? 0) + 1)
+          }
+        }
+      }
+      // Sort by frequency
+      return Array.from(operationsMap.entries())
+        .sort((a, b) => b[1] - a[1])
+        .map(([op]) => op)
+    })
   }),
   detail_groups: router({
     get: getDetailInTheGroup,

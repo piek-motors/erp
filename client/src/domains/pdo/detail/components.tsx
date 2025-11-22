@@ -10,16 +10,18 @@ import {
   Box,
   Inp,
   Label,
+  MinusIcon,
   MultilineInput,
   MyInputProps,
   observer,
   P,
+  PlusIcon,
   Row
 } from 'lib/index'
 import { MetalPageTitle } from '../shared'
 import { MaterialAutocomplete } from '../shared/material_autocomplete'
 import { DetailAttachmentList } from './attachment/list'
-import { BlankSpec, DetailState } from './detail.state'
+import { BlankSpec, DetailState, Operation } from './detail.state'
 import { AutomaticWriteoffAccordion } from './warehouse/cost'
 import { MaterialCost } from './warehouse/cost.store'
 
@@ -186,20 +188,54 @@ const BlankSpecInput = observer(({ detail }: { detail: DetailState }) => (
   </AccordionCard>
 ))
 
-const ProcessingRouteAccordion = observer(
-  ({ detail }: { detail: DetailState }) => (
-    <AccordionCard title="Маршрут обработки" defaultExpanded>
-      <ArrayJsonEditor
-        value={detail.processingRoute.steps ?? null}
-        newItem={{
-          name: ''
+const ProcessingOperationAutocomplete = observer(
+  (props: { operation: Operation }) => {
+    const { operation: op } = props
+    return (
+      <BaseAutocomplete
+        width={'100%'}
+        variant="plain"
+        options={cache.details.dictProcessingOperaions.map(e => ({
+          label: e,
+          value: e
+        }))}
+        value={{
+          value: op.name,
+          label: op.name
         }}
-        onChange={steps => detail.processingRoute.init(steps ?? [])}
-        placeholders={['Операция', 'мин']}
-        width={[90, 10]}
+        onChange={newValue => {
+          if (newValue && !Array.isArray(newValue)) {
+            op.setName(newValue.value)
+          } else {
+            op.setName('')
+          }
+        }}
+        placeholder="Такой-то этап"
+        size="sm"
+        freeSolo
+        loading={!!cache.details.dictProcessingOperaions.length}
       />
-    </AccordionCard>
-  )
+    )
+  }
+)
+
+const ProcessingRouteAccordion = observer(
+  ({ detail }: { detail: DetailState }) => {
+    return (
+      <AccordionCard title="Маршрут обработки" defaultExpanded>
+        <Stack gap={0.5}>
+          {detail.processingRoute.steps.map((op, idx) => (
+            <Row>
+              <Label>{idx + 1}</Label>
+              <ProcessingOperationAutocomplete key={idx} operation={op} />
+              <MinusIcon onClick={() => detail.processingRoute.remove(idx)} />
+            </Row>
+          ))}
+          <PlusIcon onClick={() => detail.processingRoute.addEmpty()} />
+        </Stack>
+      </AccordionCard>
+    )
+  }
 )
 
 export const TechParamsDisplay = observer(

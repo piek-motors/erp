@@ -3,6 +3,7 @@ import { css } from '@emotion/react'
 import {
   Icon,
   UilLink,
+  UilMinus,
   UilPen,
   UilPlusCircle,
   UilSave,
@@ -233,9 +234,29 @@ export function AddResourceButton(props: {
   )
 }
 
+export function MinusIcon(props: IconButtonProps) {
+  return (
+    <IconButton
+      variant="soft"
+      color="danger"
+      {...props}
+      size="sm"
+      sx={{ width: 'min-content', ...props.sx }}
+    >
+      <UseIcon icon={UilMinus} />
+    </IconButton>
+  )
+}
+
 export function PlusIcon(props: IconButtonProps) {
   return (
-    <IconButton variant="soft" color="primary" {...props} size="sm">
+    <IconButton
+      variant="soft"
+      color="primary"
+      {...props}
+      size="sm"
+      sx={{ width: 'min-content', ...props.sx }}
+    >
       <UseIcon icon={UilPlusCircle} />
     </IconButton>
   )

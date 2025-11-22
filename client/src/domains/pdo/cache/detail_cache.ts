@@ -49,6 +49,15 @@ export class DetailCache {
   updateDetail(detail: DetailState) {
     this.setDetails(this._details.map(d => (d.id === detail.id ? detail : d)))
   }
+  count() {
+    return this._details.length
+  }
+
+  dictProcessingOperaions: string[] = []
+  setDictProcessingOperations(v: string[]) {
+    this.dictProcessingOperaions = v
+  }
+
   constructor() {
     makeAutoObservable(this)
   }
@@ -56,8 +65,9 @@ export class DetailCache {
     const detailsRaw = await rpc.pdo.details.list.query()
     const details = matrixDecoder<ListDetailsOutput>(detailsRaw)
     this.setDetails(details.map(each => map.detail.fromDto(each)))
-  }
-  count() {
-    return this._details.length
+
+    const operationsDict =
+      await rpc.pdo.details.dict_processing_operations.query()
+    this.setDictProcessingOperations(operationsDict)
   }
 }
