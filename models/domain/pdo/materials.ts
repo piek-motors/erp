@@ -55,7 +55,7 @@ export class RoundBar extends Material {
   density!: number
   deriveLabel(): string {
     if (Number.isNaN(this.diameter)) {
-      throw new Error('diameter is NaN')
+      throw new Error('RoundBar validation failed: diameter is NaN')
     }
     const calibrationSuffix = this.calibrated ? 'К' : ''
     return `${this.shapeUI} ${this.diameter} ${this.alloy} ${calibrationSuffix}`.trim()
@@ -101,7 +101,7 @@ export class Pipe extends Material {
   thickness!: number
   deriveLabel(): string {
     if (isNaN(this.diameter)) {
-      throw new Error('diameter is NaN')
+      throw new Error('Pipe validation failed: diameter is NaN')
     }
     return `${this.shapeUI} ${this.diameter}x${this.thickness} ${this.alloy}`.trim()
   }
@@ -117,7 +117,7 @@ export class SquareBar extends Material {
   length!: number
   deriveLabel(): string {
     if (!this.length) {
-      throw new Error('length is not specified')
+      throw new Error('SquareBar validation failed: length is not specified')
     }
     return `${this.shapeUI} ${this.length} ${this.alloy || ''}`.trim()
   }

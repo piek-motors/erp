@@ -459,7 +459,7 @@ export const DuplicationCheckModal = observer(() => {
 
 const DetailMaterialInfo = observer((props: { cost: MaterialCost }) => {
   const { cost } = props
-  const totalConsumedAmount = parseInt(api.s.qty) * (+cost.length || 0)
+  const totalConsumedAmount = parseInt(api.s.qty) * (cost.length || 0)
   const remainingAmount = (cost.material?.stock || 0) - totalConsumedAmount
   const unit = uiUnit(cost?.material?.unit)
   return (

@@ -2,21 +2,21 @@ import { UilLink, UilMinus } from '@iconscout/react-unicons'
 import { Divider, IconButton, Stack } from '@mui/joy'
 import { AccordionCard } from 'components/accordion_card'
 import { ExtraSmallIconButton } from 'components/buttons'
+import { NumberInput } from 'components/inputs/number_input'
 import { cache } from 'domains/pdo/cache/root'
-import { QtyInputWithUnit } from 'domains/pdo/shared'
 import {
   Box,
   Label,
+  observer,
   P,
   PlusIcon,
+  routeMap,
   Row,
   Sheet,
-  UseIcon,
-  observer,
-  routeMap
+  UseIcon
 } from 'lib/index'
 import { openPage } from 'lib/routes'
-import { Unit } from 'models'
+import { uiUnit, Unit } from 'models'
 import { MaterialSelect } from '../components'
 import { DetailState } from '../detail.state'
 import { DetailSelectModal } from '../list/list'
@@ -44,6 +44,7 @@ export const MaterialCostInputs = observer(
   ({ detail }: { detail: DetailState }) => {
     const materialCost = detail.autoWriteoff.materialCost
     const material = cache.materials.get(materialCost?.materialId || 0)
+
     return (
       <Base
         label="Расход материала"
@@ -64,19 +65,17 @@ export const MaterialCostInputs = observer(
                   остатков материи)
                 </P>
                 <Row>
-                  <QtyInputWithUnit
-                    size="sm"
-                    placeholder="Расход"
-                    sx={{ width: '100px' }}
-                    unitId={material?.unit || NaN}
+                  <NumberInput
+                    width={100}
+                    unit={uiUnit(material?.unit)}
                     value={materialCost.length}
-                    setValue={v => {
+                    onChange={v => {
                       materialCost.setLength(v)
                     }}
                   />
-                  {material?.unit === Unit.M && (
+                  {material?.unit === Unit.M && materialCost.length && (
                     <P color="neutral" level="body-xs">
-                      {+materialCost.length * 1000} мм
+                      {materialCost.length * 1000} мм
                     </P>
                   )}
                 </Row>
@@ -90,7 +89,7 @@ export const MaterialCostInputs = observer(
                 onChange={cost => {
                   detail.autoWriteoff.updateMaterial(
                     cost.materialId,
-                    cost.length
+                    cost.length!
                   )
                 }}
               />
@@ -151,11 +150,9 @@ export const DetailCostInputs = observer(
               detail.autoWriteoff.deleteDetail(cost.detailId)
             }}
             qtyInput={
-              <QtyInputWithUnit
-                size="sm"
-                sx={{ width: '80px' }}
+              <NumberInput
                 value={cost.qty}
-                setValue={v => {
+                onChange={v => {
                   cost.setQty(v)
                 }}
               />

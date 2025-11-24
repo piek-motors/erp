@@ -7,8 +7,8 @@ export class MaterialCost {
   setMaterialId(materialId: number) {
     this.materialId = materialId
   }
-  length!: string
-  setLength(length: string) {
+  length?: number
+  setLength(length?: number) {
     this.length = length
   }
   constructor(init?: DetailAutomaticWriteoffData['material']) {
@@ -17,13 +17,19 @@ export class MaterialCost {
         this.materialId = init[0]
       }
       if (init[1]) {
-        this.length = init[1].toString()
+        this.length = init[1]
       }
     }
     makeAutoObservable(this)
   }
   get material() {
     return cache.materials.get(this.materialId)
+  }
+  getCost(): [number, number] {
+    if (!this.length) {
+      throw Error(`Не указан расход для материала ${this.material?.label}`)
+    }
+    return [this.materialId, this.length]
   }
 }
 
@@ -32,14 +38,14 @@ export class DetailCost {
   setDetailId(id: number) {
     this.detailId = id
   }
-  qty: string
-  setQty(qty: string) {
+  qty?: number
+  setQty(qty?: number) {
     this.qty = qty
   }
-  constructor(init: { detail_id?: number; qty?: string | number } = {}) {
+  constructor(init: { detail_id?: number; qty?: number } = {}) {
     makeAutoObservable(this)
     this.detailId = init.detail_id || 0
-    this.qty = init.qty?.toString() || '1'
+    this.qty = init.qty
   }
   get detail() {
     return cache.details.get(this.detailId)

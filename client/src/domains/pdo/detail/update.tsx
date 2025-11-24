@@ -13,7 +13,6 @@ import {
   useParams,
   useState
 } from 'lib/index'
-import { notifier } from 'lib/store/notifier.store'
 import { formatDate, formatDetailDateTime } from 'lib/utils/formatting'
 import { CreateDetailOrder } from '../warehouse/create_order'
 import { api } from './api'
@@ -79,9 +78,7 @@ function SaveFloatingButton({ detail }: { detail: DetailState }) {
               navigate(openPage(routeMap.pdo.details))
             })
           }
-          handleSave={() =>
-            api.update(detail).then(() => notifier.ok(`Деталь обновлена`))
-          }
+          handleSave={() => api.update(detail)}
         />
       </Row>
     </Sheet>

@@ -3,12 +3,12 @@ import { Pipe, PipeShapeData } from 'models'
 import { IMaterialShapeState } from '../shape_state.interface'
 
 export class PipeState implements IMaterialShapeState {
-  diameter!: number
-  setDiameter(diameter: number) {
+  diameter?: number
+  setDiameter(diameter?: number) {
     this.diameter = diameter
   }
-  thickness!: number
-  setThickness(thickness: number) {
+  thickness?: number
+  setThickness(thickness?: number) {
     this.thickness = thickness
   }
   constructor() {

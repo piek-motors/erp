@@ -1,3 +1,4 @@
+import { NumberInput } from 'components/inputs/number_input'
 import { SupplyReasonSelect } from 'domains/pdo/shared/supply-reason-select'
 import { WriteoffReasonSelect } from 'domains/pdo/shared/writeoff-reason-select'
 import {
@@ -7,7 +8,7 @@ import {
 } from 'domains/pdo/warehouse/card'
 import { OperationsListModal } from 'domains/pdo/warehouse/modals'
 import { modalState } from 'domains/pdo/warehouse/modals.store'
-import { ActionButton, Inp, Label, observer, P } from 'lib/index'
+import { ActionButton, Label, observer, P } from 'lib/index'
 import { notifier } from 'lib/store/notifier.store'
 import { DetailState } from '../detail.state'
 
@@ -26,7 +27,7 @@ const CreateWarehouseDetailOperation = observer(
         <P>
           <Label>Остаток:</Label> {detail.warehouse.stock} шт
         </P>
-        <Inp
+        <NumberInput
           label="Кол-во"
           autoFocus
           type="number"

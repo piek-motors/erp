@@ -3,8 +3,8 @@ import { RoundBar, RoundBarShapeData } from 'models'
 import { IMaterialShapeState } from '../shape_state.interface'
 
 export class RoundBarState implements IMaterialShapeState {
-  diameter!: number
-  setDiameter(diameter: number) {
+  diameter?: number
+  setDiameter(diameter?: number) {
     this.diameter = diameter
   }
   calibrated!: boolean

@@ -81,8 +81,8 @@ export class MaterialState {
     this.detailsMadeFromThisMaterial = []
   }
 
-  safetyStock = 0
-  setSafetyStock(safetyStock: number) {
+  safetyStock?: number
+  setSafetyStock(safetyStock?: number) {
     this.safetyStock = safetyStock
   }
   syncState(material: Material) {

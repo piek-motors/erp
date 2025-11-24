@@ -27,11 +27,9 @@ export class DetailAutomaticWriteoffStore {
     return {
       details: this.detailsCost.map(d => ({
         detail_id: d.detailId,
-        qty: +d.qty
+        qty: d.qty ? d.qty : 0
       })),
-      material: this.materialCost
-        ? [this.materialCost.materialId, +this.materialCost.length]
-        : null
+      material: this.materialCost ? this.materialCost.getCost() : null
     }
   }
 
@@ -48,7 +46,7 @@ export class DetailAutomaticWriteoffStore {
     this.detailsCost.push(new DetailCost())
   }
 
-  updateMaterial(materialId: number, length: string) {
+  updateMaterial(materialId: number, length: number) {
     if (!this.materialCost) {
       this.insertMaterialCost()
     }

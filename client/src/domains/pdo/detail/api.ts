@@ -66,14 +66,16 @@ export class DetailApi {
   }
 
   async update(detail: DetailState) {
-    const payload = detail.createPayload()
     try {
+      const payload = detail.createPayload()
       await rpc.pdo.details.update.mutate(payload)
       await cache.details.load()
       detail.setUpdatedAt(new Date())
+      notifier.ok(`Деталь обновлена`)
       return detail
     } catch (e: any) {
       notifier.notify('err', e.message)
+      throw e
     }
   }
 

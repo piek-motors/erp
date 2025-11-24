@@ -95,7 +95,7 @@ export const MaterialSelect = observer(
   }) => {
     const data = cache.materials
       .getMaterials()
-      .map(e => new MaterialCost([e.id, +props.value.length]))
+      .map(e => new MaterialCost([e.id, props.value.length ?? 0]))
     return (
       <MaterialAutocomplete
         size="sm"

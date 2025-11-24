@@ -1,27 +1,33 @@
-import { InputWithUnit } from 'lib/index'
+import { InputProps } from '@mui/joy'
+import { InputWithUnit, useState } from 'lib/index'
 
 interface Props {
-  label?: string
   value?: number | null
-  onChange: (v: number) => void
   placeholder?: string
   width?: number
   unit?: string
+  label?: string
+  onChange: (v?: number) => void
 }
 
-export function NumberInput(props: Props) {
+export function NumberInput(props: Omit<InputProps, 'onChange'> & Props) {
+  const [error, setError] = useState<boolean>(false)
   return (
     <InputWithUnit
       sx={{ width: props.width ? `${props.width}px` : '120px' }}
-      type="number"
       {...props}
+      type="number"
+      error={error}
       value={props.value == null ? '' : props.value}
       onChange={e => {
-        const num = Number(e.target.value)
-        if (Number.isNaN(num)) {
-          return
+        const num = e.target.value.trim()
+        if (num === '') {
+          props.onChange(undefined)
+          setError(true)
+        } else {
+          setError(false)
+          props.onChange(parseFloat(num))
         }
-        props.onChange(num)
       }}
       unit={props.unit}
     />

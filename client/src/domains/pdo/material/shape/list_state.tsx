@@ -3,8 +3,8 @@ import { List, ListShapeData } from 'models'
 import { IMaterialShapeState } from '../shape_state.interface'
 
 export class ListState implements IMaterialShapeState {
-  thickness!: number
-  setThickness(thickness: number) {
+  thickness?: number
+  setThickness(thickness?: number) {
     this.thickness = thickness
   }
   width!: number
