@@ -1,5 +1,6 @@
 import { LoadingController } from 'lib/loading_controller'
 import { rpc } from 'lib/rpc.client'
+import { notifier } from 'lib/store/notifier.store'
 import { makeAutoObservable } from 'mobx'
 import { Attachment } from 'models'
 import { cache } from '../cache/root'
@@ -66,7 +67,10 @@ export class DetailApi {
 
   async update(detail: DetailState) {
     const payload = detail.createPayload()
-    await rpc.pdo.details.update.mutate(payload)
+    await rpc.pdo.details.update.mutate(payload).catch(e => {
+      notifier.notify('err', e)
+      throw e
+    })
     await cache.details.load()
     detail.setUpdatedAt(new Date())
     return detail
