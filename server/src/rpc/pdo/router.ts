@@ -81,21 +81,20 @@ export const metalFlowRouter = router({
         .select(['processing_route'])
         .where('processing_route', 'is not', null)
         .execute()
-      const operationsMap = new Map<string, number>()
+      let operations = new Set<string>()
       for (const detail of details) {
         const route = detail.processing_route
         if (route?.steps) {
           for (const step of route.steps) {
             const name = step.name.trim()
             if (name.length === 0) continue
-            operationsMap.set(name, (operationsMap.get(name) ?? 0) + 1)
+            operations.add(name)
           }
         }
       }
-      // Sort by frequency
-      return Array.from(operationsMap.entries())
-        .sort((a, b) => b[1] - a[1])
-        .map(([op]) => op)
+      const result = Array.from(operations)
+      result.sort()
+      return result
     })
   }),
   detail_groups: router({
