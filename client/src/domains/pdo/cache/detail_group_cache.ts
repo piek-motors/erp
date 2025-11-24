@@ -10,7 +10,12 @@ export class DetailGroupCache {
     this.groups = groups
   }
   getGroups() {
-    return this.groups
+    return this.groups.slice().sort((a, b) =>
+      a.name.localeCompare(b.name, 'ru', {
+        numeric: true,
+        sensitivity: 'base'
+      })
+    )
   }
   getGroupName(id?: number | null) {
     if (!id) return null

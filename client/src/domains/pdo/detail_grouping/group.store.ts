@@ -53,6 +53,15 @@ export class DetailGroupStore {
     return cache.detailGroups.getGroups()
   }
 
+  get targetGroupDetails() {
+    return this.targetGroup?.details.slice().sort((a, b) =>
+      a.name.localeCompare(b.name, 'ru', {
+        numeric: true,
+        sensitivity: 'base'
+      })
+    )
+  }
+
   toggleDetailSelection(detailId: number) {
     if (this.selectedDetailIds.includes(detailId)) {
       this.selectedDetailIds = this.selectedDetailIds.filter(

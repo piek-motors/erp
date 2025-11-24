@@ -52,7 +52,7 @@ export const TargetGroupDetailList = observer(() => {
           gridTemplateColumns: 'auto 6fr'
         }}
       >
-        {crud.store.targetGroup?.details.map(detail => (
+        {crud.store.targetGroupDetails?.map(detail => (
           <DetailRow
             key={detail.id}
             detail={detail}

@@ -166,7 +166,7 @@ const DetailSearchArguments = observer(() => {
 const DetailsList = observer((props: DetailsTableProps) => {
   return (
     <Stack gap={1} sx={props.sx}>
-      {state.async.loading && <Loading />}
+      {state.loader.loading && <Loading />}
       <SearchResults store={state.searchStore} emptyMessage="Детали не найдены">
         <DetailList
           highlight={props.highlight}

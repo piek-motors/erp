@@ -8,7 +8,7 @@ import { makeAutoObservable, runInAction } from 'mobx'
 import { DetailState } from '../detail.state'
 
 export class DetailList {
-  readonly async = new LoadingController()
+  readonly loader = new LoadingController()
   readonly searchStore: PaginatedSearchStore<DetailState>
 
   constructor() {
