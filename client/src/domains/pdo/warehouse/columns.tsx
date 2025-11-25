@@ -74,7 +74,7 @@ export const columns: Column<Operation>[] = [
             group_id: data.detail_group_id!
           }}
           withLink
-          withParamsButton
+          withGroupLink
         />
       )
     }
@@ -83,9 +83,10 @@ export const columns: Column<Operation>[] = [
     Header: 'Тип операции',
     accessor: data => {
       const isSupply = Number(data.operation_type) === OperationType.Supply
-      return isSupply
+      const op = isSupply
         ? uiSupplyReason(data?.reason as SupplyReason)
         : uiWriteoffReason(data?.reason as WriteoffReason)
+      return <Label xs>{op}</Label>
     }
   },
   {
