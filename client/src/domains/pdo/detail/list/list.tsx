@@ -39,7 +39,7 @@ const columnList: Column<DetailState>[] = [
           name: r.name,
           group_id: r.groupId || null
         }}
-        withGroupLink
+        withGroupName
       />
     )
   },

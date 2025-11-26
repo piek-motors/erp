@@ -15,7 +15,11 @@ import { Operation } from './store'
 export const columns: Column<Operation>[] = [
   {
     Header: 'Дата',
-    accessor: data => <P whiteSpace={'nowrap'}>{data.timestamp}</P>
+    accessor: data => (
+      <Label level="body-xs" whiteSpace={'nowrap'}>
+        {data.timestamp}
+      </Label>
+    )
   },
   {
     Header: `Объект`,
@@ -28,7 +32,7 @@ export const columns: Column<Operation>[] = [
       const unit = data.material_id != null ? uiUnit(data.unit) : ''
       const sign = data.operation_type == OperationType.Supply ? '+' : '-'
       return (
-        <P>
+        <P whiteSpace={'nowrap'}>
           {sign} {data.qty} {unit}
         </P>
       )
@@ -74,7 +78,7 @@ export const columns: Column<Operation>[] = [
             group_id: data.detail_group_id!
           }}
           withLink
-          withGroupLink
+          withGroupName
         />
       )
     }

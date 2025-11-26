@@ -20,8 +20,7 @@ const commonColumns: Column<ManufactoringListOutput>[] = [
           group_id: d.group_id
         }}
         withLink
-        withGroupLink
-        withParamsButton
+        withGroupName
       />
     )
   },

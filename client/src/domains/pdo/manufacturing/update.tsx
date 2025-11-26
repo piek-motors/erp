@@ -91,7 +91,7 @@ export const ManufacturingUpdatePage = observer(() => {
                       group_id: detail.groupId || null
                     }}
                     withLink
-                    withGroupLink
+                    withGroupName
                   />
                 </Box>
               }

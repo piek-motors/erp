@@ -35,8 +35,7 @@ export const OperationName = observer((props: Props) => {
           group_id: null // We don't have group_id in operations, so defaulting to null
         }}
         withLink
-        withGroupLink
-        withParamsButton
+        withGroupName
       />
     )
   }
