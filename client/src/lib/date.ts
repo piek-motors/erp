@@ -21,3 +21,26 @@ export function timedeltaInSeconds(
 export function sec2hours(seconds: number) {
   return (seconds / 3600).toFixed(0)
 }
+
+export function timedeltaDays(t?: string | null) {
+  if (!t) return null
+
+  const t1 = new Date(Number(t))
+  if (isNaN(t1.getTime())) return null
+
+  const now = new Date()
+  const diffMs = now.getTime() - t1.getTime()
+  if (diffMs <= 0) return null
+
+  const hours = Math.floor(diffMs / (1000 * 60 * 60))
+  if (hours <= 24) {
+    return null
+  }
+
+  const rtf = new Intl.RelativeTimeFormat('ru', {
+    numeric: 'always',
+    style: 'short'
+  })
+  const days = Math.floor(hours / 24)
+  return rtf.format(-days, 'day')
+}

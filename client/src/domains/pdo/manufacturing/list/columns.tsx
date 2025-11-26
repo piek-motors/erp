@@ -1,5 +1,6 @@
 import { DetailName } from 'domains/pdo/detail/name'
-import { Label, P } from 'lib/index'
+import { timedeltaDays } from 'lib/date'
+import { Label, P, Stack } from 'lib/index'
 import { ManufacturingOrderStatus as Status } from 'models'
 import { Column } from 'react-table'
 import { ManufactoringListOutput } from './store'
@@ -7,7 +8,7 @@ import { ManufactoringListOutput } from './store'
 const commonColumns: Column<ManufactoringListOutput>[] = [
   {
     Header: '№',
-    accessor: m => <Label xs>{m.id}</Label>
+    accessor: m => <Label>{m.id}</Label>
   },
   {
     Header: 'Деталь',
@@ -55,7 +56,15 @@ const productionColumns = commonColumns.concat([
   },
   {
     Header: 'Операция',
-    accessor: m => <P level="body-xs">{m.current_operation}</P>
+    accessor: m => {
+      const timedelta = timedeltaDays(m.current_operation_start_at)
+      return (
+        <Stack>
+          <P level="body-xs">{m.current_operation}</P>
+          {timedelta && <P level="body-xs">{timedelta}</P>}
+        </Stack>
+      )
+    }
   }
 ])
 

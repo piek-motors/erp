@@ -107,6 +107,7 @@ export class ManufacturingApi {
       operation_index: index
     })
     this.s.setCurrentOperationIndex(index)
+    this.s.order.current_operation_start_at = null
   }
 
   async finish() {

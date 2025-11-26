@@ -4,6 +4,7 @@ import { InModal } from 'components/modal'
 import { PrintOnly, WebOnly } from 'components/utilities/conditional-display'
 import { DetailName } from 'domains/pdo/detail/name'
 import { MaterialName, MetalPageTitle } from 'domains/pdo/shared'
+import { timedeltaDays } from 'lib/date'
 import {
   Button,
   DeleteResourceButton,
@@ -155,18 +156,28 @@ const ProductionSteps = observer((props: { detail: DetailState }) => {
     <Card size="sm" variant="outlined">
       <Label label="Этапы обработки" />
       <Stack>
-        {props.detail.processingRoute.steps.map((step, index) => (
-          <Button
-            size="sm"
-            key={step.name}
-            variant={api.s.currentOperation === index ? 'solid' : 'plain'}
-            sx={{ width: 'fit-content' }}
-            color={api.s.currentOperation === index ? 'primary' : 'neutral'}
-            onClick={() => api.setCurrentOperation(index)}
-          >
-            {step.name}
-          </Button>
-        ))}
+        {props.detail.processingRoute.steps.map((step, index) => {
+          const current = api.s.currentOperation === index
+          const timedelta =
+            current &&
+            api.s.order?.current_operation_start_at &&
+            timedeltaDays(api.s.order.current_operation_start_at)
+          return (
+            <Row>
+              <Button
+                size="sm"
+                key={step.name}
+                variant={current ? 'solid' : 'plain'}
+                sx={{ width: 'fit-content' }}
+                color={current ? 'primary' : 'neutral'}
+                onClick={() => api.setCurrentOperation(index)}
+              >
+                {step.name}
+              </Button>
+              <Label>{timedelta}</Label>
+            </Row>
+          )
+        })}
       </Stack>
     </Card>
   )

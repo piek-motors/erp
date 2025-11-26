@@ -17,6 +17,7 @@ export interface ListManufacturingOutput {
   started_at: string | null
   finished_at: string | null
   current_operation: string | null
+  current_operation_start_at: string | null
   time_delta: number | null
 }
 
@@ -30,7 +31,8 @@ const query = db
     'm.finished_at',
     'm.created_at',
     'm.started_at',
-    'm.current_operation'
+    'm.current_operation',
+    'm.current_operation_start_at'
   ])
   .innerJoin('pdo.details as d', 'm.detail_id', 'd.id')
   .select([

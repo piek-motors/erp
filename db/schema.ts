@@ -149,6 +149,7 @@ export namespace DB {
     detail_id: number
     qty: number
     current_operation: number | null
+    current_operation_start_at: string | null
     finished_at: Date | null
     started_at: Date | null
     created_at: GeneratedAlways<Date>

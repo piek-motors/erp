@@ -130,7 +130,10 @@ export const metalFlowRouter = router({
       .mutation(async ({ input }) => {
         await db
           .updateTable('pdo.manufacturing')
-          .set({ current_operation: input.operation_index })
+          .set({
+            current_operation: input.operation_index,
+            current_operation_start_at: Date.now().toString()
+          })
           .where('id', '=', input.id)
           .execute()
         return true
