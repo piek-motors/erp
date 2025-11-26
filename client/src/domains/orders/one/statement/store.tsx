@@ -4,7 +4,8 @@ import {
   WebOnly
 } from 'components/utilities/conditional-display'
 import { Textarea } from 'lib/index'
-import { formatDate, formatMoney } from 'lib/utils/formatting'
+import { fmtDate } from 'lib/utils/date_fmt'
+import { formatMoney } from 'lib/utils/fmt'
 import { makeAutoObservable } from 'mobx'
 import { OrderStatus } from 'models'
 import moment from 'moment'
@@ -244,15 +245,15 @@ export class StatementStore {
       },
       {
         label: 'Создан',
-        view: formatDate(this.order?.created_at)
+        view: fmtDate(this.order?.created_at)
       },
       {
         label: 'В очередности с',
-        view: formatDate(this.order?.acceptance_date)
+        view: fmtDate(this.order?.acceptance_date)
       },
       {
         label: 'Отгружен',
-        view: formatDate(this.order?.actual_shipping_date)
+        view: fmtDate(this.order?.actual_shipping_date)
       },
       {
         label: 'Комментарий',

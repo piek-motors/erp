@@ -1,6 +1,6 @@
 import { AttachmentsStore } from 'components/attachments/store'
 import { UnpackedOrder } from 'domains/orders/api'
-import { rpc } from 'lib/rpc.client'
+import { rpc } from 'lib/rpc/rpc.client'
 import { makeAutoObservable } from 'mobx'
 import { Attachment, OrderItem, OrderStatus, Payment } from 'models'
 import { CommentsStore } from './comments/store'

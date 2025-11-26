@@ -4,11 +4,9 @@ import { InModal } from 'components/modal'
 import { PrintOnly, WebOnly } from 'components/utilities/conditional-display'
 import { DetailName } from 'domains/pdo/detail/name'
 import { MaterialName, MetalPageTitle } from 'domains/pdo/shared'
-import { timedeltaDays } from 'lib/date'
 import {
   Button,
   DeleteResourceButton,
-  ErrorHint,
   Inp,
   Label,
   Loading,
@@ -25,7 +23,8 @@ import {
   useState
 } from 'lib/index'
 import { notifier } from 'lib/store/notifier.store'
-import { dayAndMonth, formatDate, roundAndTrim } from 'lib/utils/formatting'
+import { fmtDate, timeDeltaDays } from 'lib/utils/date_fmt'
+import { roundAndTrim } from 'lib/utils/fmt'
 import {
   ManufacturingOrderStatus,
   uiManufacturingOrderStatus,
@@ -115,7 +114,6 @@ export const ManufacturingUpdatePage = observer(() => {
             <Dates />
             <Row>
               {api.status.loading && <Loading />}
-              <ErrorHint e={api.status.error} />
               <ActionButton status={api.s.order.status} />
               {isDeletionAllowed && <DeleteOrderButton />}
             </Row>
@@ -161,7 +159,7 @@ const ProductionSteps = observer((props: { detail: DetailState }) => {
           const timedelta =
             current &&
             api.s.order?.current_operation_start_at &&
-            timedeltaDays(api.s.order.current_operation_start_at)
+            timeDeltaDays(api.s.order.current_operation_start_at)
           return (
             <Row>
               <Button
@@ -213,12 +211,12 @@ const DetailAttachments = observer(({ detail }: { detail: DetailState }) => {
 
 const Dates = observer(() => {
   if (!api.s.order) return null
-  const createdAt = formatDate(new Date(api.s.order.created_at))
+  const createdAt = fmtDate(new Date(api.s.order.created_at))
   const startedAt = api.s.order.started_at
-    ? dayAndMonth(new Date(api.s.order.started_at))
+    ? fmtDate(new Date(api.s.order.started_at), true)
     : null
   const finishedAt = api.s.order.finished_at
-    ? dayAndMonth(new Date(api.s.order.finished_at))
+    ? fmtDate(new Date(api.s.order.finished_at), true)
     : null
   return (
     <Row gap={1}>

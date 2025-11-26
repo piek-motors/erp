@@ -1,6 +1,5 @@
 import { BoxProps, Stack } from '@mui/joy'
 import { Box, Label, Loading, P, Sheet } from 'lib'
-import { sec2hours } from 'lib/date'
 import moment from 'moment'
 import { Column } from 'react-table'
 import {
@@ -24,7 +23,9 @@ export const AttendanceReportComponent = (props: {
     },
     {
       Header: '∑',
-      Cell: props => <Box p={0.2}>{sec2hours(props.row.original.total)}</Box>
+      Cell: props => (
+        <Box p={0.2}>{(props.row.original.total / 3600).toFixed(0)}</Box>
+      )
     },
     ...Array.from({ length: props.report.daysInMonth }).map<
       Column<AttendanceEmployee>

@@ -13,7 +13,7 @@ import {
   routeMap,
   Row
 } from 'lib/index'
-import { rpc } from 'lib/rpc.client'
+import { rpc } from 'lib/rpc/rpc.client'
 import { UiUnit, Unit } from 'models'
 import { useEffect, useState } from 'react'
 

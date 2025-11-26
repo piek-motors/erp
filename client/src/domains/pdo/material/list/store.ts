@@ -1,5 +1,5 @@
 import { cache } from 'domains/pdo/cache/root'
-import { LoadingController } from 'lib/loading_controller'
+import { LoadingController } from 'lib/store/loading_controller'
 import { makeAutoObservable } from 'mobx'
 import { MaterialShape } from 'models'
 import { Material } from 'srv/rpc/pdo/material/list'

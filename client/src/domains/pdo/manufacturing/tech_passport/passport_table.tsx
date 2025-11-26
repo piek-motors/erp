@@ -6,7 +6,7 @@ import { TechParamsRowDisplay } from 'domains/pdo/detail/components'
 import { DetailState } from 'domains/pdo/detail/detail.state'
 import { capitalize } from 'domains/pdo/shared'
 import { Label, observer, P } from 'lib/index'
-import { formatDate } from 'lib/utils/formatting'
+import { fmtDate } from 'lib/utils/date_fmt'
 import { ReactNode } from 'react'
 import { ManufacturingOrderState } from '../order.state'
 import { tableStyles } from './shared'
@@ -45,7 +45,7 @@ export const DetailTechPassportTable = observer(({ order, detail }: Props) => {
           <td>
             <L>Дата запуска в производство</L>
             {s.order.started_at && (
-              <P>{formatDate(new Date(s.order.started_at))}</P>
+              <P>{fmtDate(new Date(s.order.started_at))}</P>
             )}
           </td>
         </tr>

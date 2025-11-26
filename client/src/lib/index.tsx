@@ -16,7 +16,6 @@ import {
   ButtonProps,
   Checkbox,
   ChipProps,
-  CircularProgress,
   Container,
   FormControl,
   IconButton,
@@ -282,47 +281,6 @@ export function MultilineInput(
       <Label label={props.label} />
       <Textarea {...props} />
     </FormControl>
-  )
-}
-
-export function SavedHint(props: { data: any }) {
-  return (
-    props.data && (
-      <P color="success" level="body-sm">
-        Сохранено
-      </P>
-    )
-  )
-}
-
-export const ErrorText = (props: { e?: Error | any }) => (
-  <P color="danger" level="body-sm" fontFamily={'monospace'}>
-    {props.e['message'] || props.e}
-  </P>
-)
-
-export function ErrorHint(props: { e?: Error | any }) {
-  if (props.e) {
-    console.error(props.e)
-  }
-  return (
-    props.e && (
-      <Box>
-        <P color="danger">{props.e['message']}</P>
-      </Box>
-    )
-  )
-}
-
-/**@deprecated use LinearProgress instead */
-export function LoadingHint(props: { show: boolean }) {
-  return (
-    props.show && (
-      <Row p={2} gap={1}>
-        <P>Загрузка...</P>
-        <CircularProgress size="sm" color="neutral" />
-      </Row>
-    )
   )
 }
 

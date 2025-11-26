@@ -13,7 +13,7 @@ import {
   useParams,
   useState
 } from 'lib/index'
-import { formatDate, formatDetailDateTime } from 'lib/utils/formatting'
+import { fmtDate, fmtTimestamp } from 'lib/utils/date_fmt'
 import { CreateDetailOrder } from '../warehouse/create_order'
 import { api } from './api'
 import { DetailInputs } from './components'
@@ -95,7 +95,7 @@ function Metadata(props: {
       {props.lastManufacturingDate && (
         <P level="body-xs" color="neutral" sx={{ whiteSpace: 'nowrap' }}>
           <b>Последнее производство:</b>{' '}
-          {formatDetailDateTime(props.lastManufacturingDate)}
+          {fmtTimestamp(props.lastManufacturingDate)}
           {props.lastManufacturingQty && (
             <span> ({props.lastManufacturingQty} шт)</span>
           )}
@@ -103,7 +103,7 @@ function Metadata(props: {
       )}
       {props.updatedAt && (
         <P level="body-xs" color="neutral" sx={{ whiteSpace: 'nowrap' }}>
-          <b>Обновлено:</b> {formatDate(props.updatedAt)}
+          <b>Обновлено:</b> {fmtDate(props.updatedAt)}
         </P>
       )}
     </Stack>

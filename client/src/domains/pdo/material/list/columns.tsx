@@ -1,5 +1,5 @@
 import { Label, P, Row } from 'lib/index'
-import { roundAndTrim } from 'lib/utils/formatting'
+import { roundAndTrim } from 'lib/utils/fmt'
 import { Unit, uiUnit } from 'models'
 import { Column } from 'react-table'
 import { Material } from 'srv/rpc/pdo/material/list'

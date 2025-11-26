@@ -1,6 +1,6 @@
 import { rpc } from 'lib/deps'
-import { LoadingController } from 'lib/loading_controller'
-import { matrixDecoder } from 'lib/matrix_decoder'
+import { matrixDecoder } from 'lib/rpc/matrix_decoder'
+import { LoadingController } from 'lib/store/loading_controller'
 import { makeAutoObservable } from 'mobx'
 import { ListManufacturingOutput } from 'srv/rpc/pdo/manufacturing/list'
 

@@ -3,7 +3,7 @@ import {
   SearchFilters
 } from 'components/search-paginated'
 import { cache } from 'domains/pdo/cache/root'
-import { LoadingController } from 'lib/loading_controller'
+import { LoadingController } from 'lib/store/loading_controller'
 import { makeAutoObservable, runInAction } from 'mobx'
 import { DetailState } from '../detail.state'
 

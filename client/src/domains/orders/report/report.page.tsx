@@ -1,8 +1,7 @@
 import { Box } from '@mui/joy'
 import { MonthSelect } from 'components/inputs/month-select'
-import { TableName } from 'components/table-name'
 import { P } from 'lib/index'
-import { formatMoney } from 'lib/utils/formatting'
+import { formatMoney } from 'lib/utils/fmt'
 import { observer } from 'mobx-react-lite'
 import { useEffect } from 'react'
 import { columns, OrdersTable, withActualShippingDate } from '../columns'
@@ -30,7 +29,7 @@ export const RequestReportPage = observer(() => {
       )}
       {Array.isArray(report.data) && report.data.length > 0 && (
         <>
-          {report.dataLabel && <TableName name={report.dataLabel} />}
+          {report.dataLabel && <P>{report.dataLabel}</P>}
           <P level="body-sm" py={1}>
             Общая выручка: {formatMoney(report.totalIncome)}
           </P>

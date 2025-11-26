@@ -1,5 +1,5 @@
-import { matrixDecoder } from 'lib/matrix_decoder'
-import { rpc } from 'lib/rpc.client'
+import { matrixDecoder } from 'lib/rpc/matrix_decoder'
+import { rpc } from 'lib/rpc/rpc.client'
 import { makeAutoObservable } from 'mobx'
 import { Material } from 'srv/rpc/pdo/material/list'
 

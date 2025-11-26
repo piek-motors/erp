@@ -2,7 +2,7 @@
 import { css } from '@emotion/react'
 import { Box, Button, Card, Divider } from '@mui/joy'
 import { DeleteResourceButton, P, Row, text } from 'lib/index'
-import { rpc } from 'lib/rpc.client'
+import { rpc } from 'lib/rpc/rpc.client'
 import { observer } from 'mobx-react-lite'
 import { User } from 'models'
 import moment from 'moment'

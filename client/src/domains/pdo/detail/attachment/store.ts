@@ -1,4 +1,4 @@
-import { rpc } from 'lib/rpc.client'
+import { rpc } from 'lib/rpc/rpc.client'
 import { FileService } from 'lib/services/file.service'
 import { makeAutoObservable } from 'mobx'
 import { Attachment } from 'models'

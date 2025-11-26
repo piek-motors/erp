@@ -59,11 +59,6 @@ export const MaterialCostInputs = observer(
             onDelete={() => detail.autoWriteoff.setMaterialCost(null)}
             qtyInput={
               <Stack>
-                {/* TODO: remove note */}
-                <P color="danger" level="body-xs">
-                  Внимание, расход отныне задается в метрах (в единице измерения
-                  остатков материи)
-                </P>
                 <Row>
                   <NumberInput
                     width={100}

@@ -1,5 +1,5 @@
 import { Inp } from 'lib/index'
-import { formatMoney } from 'lib/utils/formatting'
+import { formatMoney } from 'lib/utils/fmt'
 import { useCallback, useMemo } from 'react'
 
 interface Props {

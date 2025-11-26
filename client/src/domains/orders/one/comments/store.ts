@@ -1,4 +1,4 @@
-import { rpc } from 'lib/rpc.client'
+import { rpc } from 'lib/rpc/rpc.client'
 import { makeAutoObservable } from 'mobx'
 import { OrderComment } from 'srv/rpc/orders/comments'
 

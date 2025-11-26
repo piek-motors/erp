@@ -1,5 +1,5 @@
 import { ReactRenderer } from '@tiptap/react'
-import { rpc } from 'lib/rpc.client'
+import { rpc } from 'lib/rpc/rpc.client'
 import tippy from 'tippy.js'
 import { MentionSelectUser } from './mention-user-list'
 

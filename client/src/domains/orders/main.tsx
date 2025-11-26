@@ -3,14 +3,13 @@ import { Sheet } from '@mui/joy'
 import { FactoryPage } from 'components/factory_page'
 import { Search } from 'components/inputs'
 import { OrderTypeFilter } from 'components/order-type-filter'
-import { TableName } from 'components/table-name'
 import { TabConfig, Tabs } from 'components/tabs'
 import { useFilter } from 'hooks'
 import { SxProperty } from 'lib/constants'
-import { AddResourceButton } from 'lib/index'
+import { AddResourceButton, P } from 'lib/index'
 import { routeMap } from 'lib/routes'
 import { RouteConfig } from 'lib/types/global'
-import { formatOnlyDate } from 'lib/utils/formatting'
+import { formatOnlyDate } from 'lib/utils/date_fmt'
 import { observer } from 'mobx-react-lite'
 import { OrderStatus } from 'models'
 import moment from 'moment'
@@ -120,10 +119,10 @@ const NewOrderList = observer(() => {
 
   return (
     <>
-      <TableName name={'Сегодня'} />
+      <P>Сегодня</P>
       <OrdersTable data={ordersByToday} />
 
-      <TableName name={'Вчера'} />
+      <P>Вчера</P>
       <OrdersTable data={ordersByYesterday} />
     </>
   )

@@ -12,7 +12,7 @@ import { Badge, IconButton, Stack } from '@mui/joy'
 import { Context } from 'index'
 import { P, Row, UseIcon } from 'lib/index'
 import { routeMap } from 'lib/routes'
-import { rpc } from 'lib/rpc.client'
+import { rpc } from 'lib/rpc/rpc.client'
 import { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
 

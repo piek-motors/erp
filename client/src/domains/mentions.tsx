@@ -13,9 +13,9 @@ import {
   useNavigate,
   useState
 } from 'lib/index'
-import { matrixDecoder } from 'lib/matrix_decoder'
 import { openOrderDetailPage } from 'lib/routes'
-import { rpc } from 'lib/rpc.client'
+import { matrixDecoder } from 'lib/rpc/matrix_decoder'
+import { rpc } from 'lib/rpc/rpc.client'
 import moment from 'moment'
 import { useContext, useEffect } from 'react'
 import { Mention } from 'srv/rpc/orders/mentions'

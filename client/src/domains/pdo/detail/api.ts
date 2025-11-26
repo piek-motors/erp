@@ -1,5 +1,5 @@
-import { LoadingController } from 'lib/loading_controller'
-import { rpc } from 'lib/rpc.client'
+import { rpc } from 'lib/rpc/rpc.client'
+import { LoadingController } from 'lib/store/loading_controller'
 import { notifier } from 'lib/store/notifier.store'
 import { makeAutoObservable } from 'mobx'
 import { Attachment } from 'models'

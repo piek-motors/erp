@@ -1,6 +1,6 @@
 import { DetailName } from 'domains/pdo/detail/name'
-import { timedeltaDays } from 'lib/date'
 import { Label, P, Stack } from 'lib/index'
+import { timeDeltaDays } from 'lib/utils/date_fmt'
 import { ManufacturingOrderStatus as Status } from 'models'
 import { Column } from 'react-table'
 import { ManufactoringListOutput } from './store'
@@ -57,7 +57,7 @@ const productionColumns = commonColumns.concat([
   {
     Header: 'Операция',
     accessor: m => {
-      const timedelta = timedeltaDays(m.current_operation_start_at)
+      const timedelta = timeDeltaDays(m.current_operation_start_at)
       return (
         <Stack>
           <P level="body-xs">{m.current_operation}</P>

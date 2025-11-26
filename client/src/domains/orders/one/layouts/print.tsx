@@ -1,7 +1,7 @@
 import { Box, Grid, Stack } from '@mui/joy'
 import { PrintOnly } from 'components/utilities/conditional-display'
 import { Label, P } from 'lib/index'
-import { formatOnlyDate } from 'lib/utils/formatting'
+import { formatOnlyDate } from 'lib/utils/date_fmt'
 import { observer } from 'mobx-react-lite'
 import { OrderAttachmentList } from '../order-attachment-list'
 import { orderStore } from '../order.store'

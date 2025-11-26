@@ -1,4 +1,4 @@
-import { LoadingController } from 'lib/loading_controller'
+import { LoadingController } from 'lib/store/loading_controller'
 import { makeAutoObservable } from 'mobx'
 import { RouterOutput } from 'srv/lib/trpc'
 

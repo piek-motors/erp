@@ -1,7 +1,7 @@
 import { UilPlusCircle } from '@iconscout/react-unicons'
 import { Button, Stack } from '@mui/joy'
 import { InModal } from 'components/modal'
-import { Inp, LoadingHint, observer, P, UseIcon, useState } from 'lib/index'
+import { Inp, Loading, observer, P, UseIcon, useState } from 'lib/index'
 import { ReactNode, useEffect } from 'react'
 import { crud } from './api'
 
@@ -57,7 +57,7 @@ const BaseGroupModal = observer((props: BaseGroupModalProps) => {
       <Stack gap={1} onKeyDown={handleKeyDown}>
         <P>{props.title}</P>
         <Inp value={name} onChange={setName} placeholder="Название" autoFocus />
-        <LoadingHint show={isSubmitting} />
+        {isSubmitting && <Loading />}
       </Stack>
     </InModal>
   )

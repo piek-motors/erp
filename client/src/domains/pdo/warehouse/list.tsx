@@ -1,4 +1,4 @@
-import { ScrollableWindow } from 'components/inputs/scrollable_window'
+import { ScrollableWindow } from 'components/scrollable_window'
 import { Table } from 'components/table.impl'
 import { MetalPageTitle } from 'domains/pdo/shared/basic'
 import { observer } from 'mobx-react-lite'
