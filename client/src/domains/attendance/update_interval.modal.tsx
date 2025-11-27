@@ -2,7 +2,7 @@ import { UilExchange } from '@iconscout/react-unicons'
 import { Divider, IconButton, Modal, ModalClose, ModalDialog } from '@mui/joy'
 import { rpc } from 'lib/deps'
 import { Inp, P, Row, SaveIconButton, UseIcon } from 'lib/index'
-import { convertDateToUTC } from 'lib/utils/date_fmt'
+import { createDateAsUTC } from 'lib/utils/date_fmt'
 import { makeAutoObservable } from 'mobx'
 import { observer } from 'mobx-react-lite'
 import { Interval } from 'srv/service/attendance_report.generator'
@@ -128,7 +128,7 @@ function upTimeAndMinutesOnDate(d: Date, newTime: string): string {
     throw Error('invalid time')
   }
 
-  const newDate = convertDateToUTC(d)
+  const newDate = createDateAsUTC(new Date(d))
   newDate.setHours(hours, minutes, 0, 0)
   return newDate.toISOString()
 }
