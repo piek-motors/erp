@@ -13,10 +13,11 @@ interface GeneratorOptions {
   timeRetentionMinutes: number
 }
 
-interface Interval {
+export interface Interval {
   ent?: Date | null
   ext?: Date | null
   dur: number
+  ent_event_id: number
 }
 export interface AttendanceEmployee {
   id: number
@@ -87,6 +88,7 @@ export class AttendanceReportGenerator {
 
       for (const interval of userRelatedIntervals) {
         const i: Interval = {
+          ent_event_id: interval.ent_event_id,
           dur: 0
         }
         if (interval.ext && interval.ent) {
@@ -126,12 +128,17 @@ export class AttendanceReportGenerator {
       )
 
       for (const day of Object.values(employee.days)) {
+        if (day.total_dur < 0) {
+          day.total_dur = 0
+        }
         if (day.total_dur > 0) {
           employee.workDays += 1
         }
         if (day.intervals.length === 1 && !day.total_dur) {
           day.broken = true
         }
+
+        employee.name = removeCardNumber(employee.name)
       }
 
       result.push(employee)
@@ -146,4 +153,8 @@ function createDaysInMonthArray(period: Period) {
   const { month, year } = period
   const days_number = new Date(year, month + 1, 0).getDate()
   return Array.from({ length: days_number }, (_, k) => k + 1)
+}
+
+const removeCardNumber = (employeeName: string) => {
+  return employeeName.replace(/\d+/g, '').replace(/\s+/g, ' ').trim()
 }

@@ -41,7 +41,10 @@ export class MonthSelectStore {
     this.year = year
   }
   getMonthLabel() {
-    return `${months[this.month]} ${this.year}`
+    return new Date(this.year, this.month, 1).toLocaleDateString('ru-RU', {
+      month: 'long',
+      year: 'numeric'
+    })
   }
   setIsLoading(isLoading: boolean) {
     this.isLoading = isLoading

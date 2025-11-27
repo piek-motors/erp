@@ -1,46 +1,41 @@
 import { MonthSelect } from 'components/inputs/month-select'
-import { Button, Checkbox, Input, Label, observer, P, Row, Stack } from 'lib'
+import { Button, Checkbox, InputWithUnit, observer, Row, Stack } from 'lib'
 import { store } from './store'
 
 const ReportConfigurator = observer(() => {
   return (
-    <Stack gap={1}>
+    <Stack gap={0.5}>
       <MonthSelect store={store.monthSelect} />
-      <Row alignItems={'center'} gap={1}>
-        <Label sx={{ whiteSpace: 'nowrap' }}>Норма вычета времени</Label>
-        <Row gap={1}>
-          <Input
-            size="sm"
-            sx={{ width: 60 }}
-            type="number"
-            value={store.timeRetention ?? ''}
-            onChange={e => {
-              store.setTimeRetention(e.target.value)
-            }}
-          />
-          <P>мин</P>
-        </Row>
+      <Row alignItems={'last baseline'}>
+        <InputWithUnit
+          size="sm"
+          label="Дневная норма вычета"
+          sx={{ width: 60 }}
+          type="number"
+          value={store.timeRetention ?? ''}
+          onChange={e => {
+            store.setTimeRetention(e.target.value)
+          }}
+          unit="мин"
+        />
+        <Checkbox
+          size="sm"
+          variant="outlined"
+          label="Полный отчет"
+          checked={store.showFullInfo}
+          onClick={() => {
+            store.setShowFullInfo(!store.showFullInfo)
+          }}
+        />
       </Row>
-      <Checkbox
-        variant="outlined"
-        label="Время прихода и ухода"
-        checked={store.showFullInfo}
-        onClick={() => {
-          store.setShowFullInfo(!store.showFullInfo)
-        }}
-      />
-
-      {/* Generate Report Button */}
       <Button
         variant="solid"
         color="primary"
-        onClick={() => {
-          store.load(store.monthSelect.month, store.monthSelect.year)
-        }}
-        disabled={store.async.loading}
+        onClick={() => store.load()}
+        disabled={store.loader.loading}
         sx={{ mt: 1 }}
       >
-        {store.async.loading ? 'Генерация...' : 'Сгенерировать отчет'}
+        {store.loader.loading ? 'Генерация...' : 'Сгенерировать'}
       </Button>
     </Stack>
   )

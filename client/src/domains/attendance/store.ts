@@ -4,9 +4,19 @@ import { LoadingController } from 'lib/store/loading_controller'
 import { makeAutoObservable } from 'mobx'
 import { AttendanceReport } from 'srv/service/attendance_report.generator'
 
+export class Report {
+  constructor(
+    readonly resp: AttendanceReport,
+    readonly month: string,
+    readonly timeRetention: number,
+    readonly isFull: boolean
+  ) {}
+}
+
 export class AttendanceStore {
-  async = new LoadingController()
+  loader = new LoadingController()
   monthSelect = new MonthSelectStore()
+  report?: Report
 
   timeRetention: number = 30
   setTimeRetention(timeRetention: string) {
@@ -18,25 +28,30 @@ export class AttendanceStore {
     this.showFullInfo = showFullInfo
   }
 
-  report: AttendanceReport | null = null
-  setReport(employees: AttendanceReport) {
-    this.report = employees
-  }
-
   constructor() {
     makeAutoObservable(this)
   }
 
-  async load(m: number, y: number) {
-    const res = await this.async.run(async () =>
-      rpc.attendance.getAttendanceList.query({
-        month: m,
-        year: y,
+  updatedIntervalId?: number
+  setUpdatedIntervalId(v: number) {
+    this.updatedIntervalId = v
+  }
+
+  async load() {
+    const res = await this.loader.run(() =>
+      rpc.attendance.get_report.query({
+        month: this.monthSelect.month,
+        year: this.monthSelect.year,
         timeRetentionMinutes: this.timeRetention,
         showFullInfo: this.showFullInfo
       })
     )
-    this.setReport(res as AttendanceReport)
+    this.report = new Report(
+      res as AttendanceReport,
+      this.monthSelect.getMonthLabel(),
+      this.timeRetention,
+      this.showFullInfo
+    )
   }
 }
 

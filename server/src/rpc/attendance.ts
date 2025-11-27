@@ -1,10 +1,9 @@
-import { procedure } from '#root/deps.js'
+import { db, procedure } from '#root/deps.js'
 import { attendanceReportGenerator } from '#root/ioc/index.js'
 import {} from '#root/lib/trpc/trpc.js'
-import { AttendanceReport } from '#root/service/attendance_report.generator.js'
 import { z } from 'zod'
 
-export const getAttendanceList = procedure
+export const getReport = procedure
   .input(
     z.object({
       month: z.number().min(0).max(11),
@@ -13,8 +12,8 @@ export const getAttendanceList = procedure
       showFullInfo: z.boolean()
     })
   )
-  .query(async ({ input }) => {
-    const report = await attendanceReportGenerator.generateReport({
+  .query(async ({ input }) =>
+    attendanceReportGenerator.generateReport({
       period: {
         month: input.month,
         year: input.year
@@ -22,5 +21,24 @@ export const getAttendanceList = procedure
       showFullInfo: input.showFullInfo,
       timeRetentionMinutes: input.timeRetentionMinutes
     })
-    return report as AttendanceReport
+  )
+
+export const updateInterval = procedure
+  .input(
+    z.object({
+      ent_event_id: z.number(),
+      ent: z.string(),
+      ext: z.string()
+    })
+  )
+  .mutation(async ({ input }) => {
+    const interval = await db
+      .updateTable('attendance.intervals')
+      .set({
+        ent: new Date(input.ent),
+        ext: new Date(input.ext)
+      })
+      .where('ent_event_id', '=', input.ent_event_id)
+      .execute()
+    return interval.length
   })

@@ -30,9 +30,12 @@ export function Table({ columns, data }: ITableProps) {
             <tr
               {...headerGroup.getHeaderGroupProps()}
               style={{ padding: '0 4px' }}
+              key={i}
             >
               {headerGroup.headers.map((column, i) => (
-                <th {...column.getHeaderProps()}>{column.render('Header')}</th>
+                <th {...column.getHeaderProps()} key={i}>
+                  {column.render('Header')}
+                </th>
               ))}
             </tr>
           ))}
@@ -41,15 +44,17 @@ export function Table({ columns, data }: ITableProps) {
           {rows.map((row, i) => {
             prepareRow(row)
             return (
-              <tr {...row.getRowProps()}>
+              <tr {...row.getRowProps()} key={i}>
                 {row.cells.map((cell, i) => {
                   return (
                     <td
                       {...cell.getCellProps()}
                       style={{
-                        border: '1px solid #d3cbcb',
-                        padding: '0px 1px'
+                        border: '1px solid #9e9797ff',
+                        padding: '0px 1px',
+                        verticalAlign: 'top'
                       }}
+                      key={i}
                     >
                       {cell.render('Cell')}
                     </td>

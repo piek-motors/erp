@@ -427,8 +427,16 @@ export function DesktopOnly(props: {
 
 export const SaveIconButton = (props: IconButtonProps) => (
   <Tooltip title="Сохранить">
-    <IconButton variant="solid" color="primary" {...props}>
-      <UseIcon icon={UilSave} invert={props.variant === 'solid'} />
+    <IconButton
+      variant="solid"
+      color="primary"
+      {...props}
+      sx={{ width: 'min-content', ...props.sx }}
+    >
+      <UseIcon
+        icon={UilSave}
+        invert={props.variant === 'solid' || !props.variant}
+      />
     </IconButton>
   </Tooltip>
 )

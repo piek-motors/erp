@@ -9,7 +9,7 @@ import {
   getDetailAttachments,
   updateName
 } from './attachment.js'
-import { getAttendanceList } from './attendance.js'
+import { getReport, updateInterval } from './attendance.js'
 import { ordersRouter } from './orders/router.js'
 import { metalFlowRouter as pdoRouter } from './pdo/router.js'
 
@@ -23,12 +23,13 @@ export const trpcRouter = router({
     getAttachmentByKey
   }),
   attendance: router({
-    getAttendanceList: getAttendanceList
+    get_report: getReport,
+    update_interval: updateInterval
   }),
   userList: procedure
     .input(
       z.object({
-        role: z.nativeEnum(UserRole).optional()
+        role: z.enum(UserRole).optional()
       })
     )
     .query(async ({ input }) => {
