@@ -79,7 +79,7 @@ export class AttendanceReportGenerator {
       const employee: AttendanceEmployee = {
         totalIntervalsCount: userRelatedIntervals.length,
         id: user.id,
-        name: `${user.lastname} ${user.firstname}`,
+        name: removeCardNumber(`${user.lastname} ${user.firstname}`),
         card: user.card,
         total: 0,
         workDays: 0,
@@ -137,8 +137,6 @@ export class AttendanceReportGenerator {
         if (day.intervals.length === 1 && !day.total_dur) {
           day.broken = true
         }
-
-        employee.name = removeCardNumber(employee.name)
       }
 
       result.push(employee)

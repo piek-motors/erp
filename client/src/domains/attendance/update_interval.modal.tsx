@@ -112,7 +112,8 @@ export function fmtDateToHoursAndMinutes(d?: Date | null): string {
   if (!d) return ''
   return new Intl.DateTimeFormat('ru-RU', {
     hour: '2-digit',
-    minute: '2-digit'
+    minute: '2-digit',
+    timeZone: 'UTC'
   }).format(new Date(d))
 }
 
