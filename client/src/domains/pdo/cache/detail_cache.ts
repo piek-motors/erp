@@ -30,7 +30,6 @@ export class DetailCache {
       const firstLetter = detail.name.charAt(0).toUpperCase()
       index.add(firstLetter)
     }
-
     const arr = Array.from(index).filter(
       letter => letter && alphabet.includes(letter)
     )
@@ -40,13 +39,13 @@ export class DetailCache {
   getUniversalDetails() {
     return this._details.filter(d => d.groupId == null)
   }
-  removeDetail(id: number) {
+  remove(id: number) {
     this.setDetails(this._details.filter(d => d.id !== id))
   }
   addDetail(detail: DetailState) {
     this.setDetails([...this._details, detail])
   }
-  updateDetail(detail: DetailState) {
+  update(detail: DetailState) {
     this.setDetails(this._details.map(d => (d.id === detail.id ? detail : d)))
   }
   count() {

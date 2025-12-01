@@ -9,10 +9,10 @@ export type SuggestionItem = {
 }
 
 export const suggestion = {
-  items: async ({ query, editor }) =>
+  items: async () =>
     rpc.users.query().then(
-      res =>
-        res.map(
+      users =>
+        users.map(
           e =>
             ({
               id: e.id,

@@ -15,7 +15,7 @@ class MetalflowCache {
 
   async init() {
     await this.details.load()
-    detailListStore.init()
+    detailListStore.index()
     await this.materials.load()
     await this.detailGroups.load()
   }

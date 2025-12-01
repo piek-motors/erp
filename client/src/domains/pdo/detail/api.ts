@@ -41,7 +41,7 @@ export class DetailApi {
 
   async delete(id: number) {
     await rpc.pdo.details.delete.mutate({ id })
-    cache.details.removeDetail(id)
+    cache.details.remove(id)
     detailListStore.searchStore.search()
   }
 
@@ -52,17 +52,15 @@ export class DetailApi {
   }
 
   async insert(detail: DetailState) {
-    const payload = detail.createPayload()
-    const res = await rpc.pdo.details.create.mutate(payload)
+    const res = await rpc.pdo.details.create.mutate(detail.payload())
     await cache.details.load()
     return res.id
   }
 
   async update(detail: DetailState) {
     try {
-      const payload = detail.createPayload()
-      await rpc.pdo.details.update.mutate(payload)
-      await cache.details.load()
+      await rpc.pdo.details.update.mutate(detail.payload())
+      cache.details.update(detail)
       detail.setUpdatedAt(new Date())
       notifier.ok(`Деталь обновлена`)
       return detail

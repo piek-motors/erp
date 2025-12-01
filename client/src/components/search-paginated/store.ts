@@ -1,5 +1,5 @@
 import { debounceMs } from 'lib/constants'
-import { action, makeObservable, observable, reaction, runInAction } from 'mobx'
+import { makeAutoObservable, reaction, runInAction } from 'mobx'
 
 export interface SearchableItem {
   id?: number
@@ -43,23 +43,7 @@ export class PaginatedSearchStore<T extends SearchableItem> {
     this.pageSize = pageSize
     this.customFilterFn = customFilter
 
-    makeObservable(this, {
-      searchFilters: observable,
-      searchResult: observable,
-      displayedResults: observable,
-      isSearching: observable,
-      setIsSearching: action,
-      pageSize: observable,
-      currentPage: observable,
-      hasMore: observable,
-      setSearchFilter: action,
-      setSearchKeyword: action,
-      setSearchId: action,
-      clearFilters: action,
-      loadMore: action,
-      search: action,
-      clear: action
-    })
+    makeAutoObservable(this)
 
     // Debounced search reaction
     reaction(

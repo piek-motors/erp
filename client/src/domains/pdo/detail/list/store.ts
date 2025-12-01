@@ -25,7 +25,7 @@ export class DetailList {
   drawingNumber: string = ''
   indexLetter: string | null = null
 
-  init() {
+  index() {
     this.searchStore.search()
   }
 
@@ -102,13 +102,11 @@ export class DetailList {
   get displayedResults() {
     return this.searchStore.displayedResults
   }
-
   get searchKeyword() {
-    return this.searchStore.searchFilters.keyword || ''
+    return this.searchStore.searchFilters.keyword
   }
-
   get searchId() {
-    return this.searchStore.searchFilters.id || ''
+    return this.searchStore.searchFilters.id
   }
 }
 

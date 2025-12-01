@@ -1,66 +1,69 @@
 import { Box, Button, Modal, ModalClose, ModalDialog } from '@mui/joy'
+import { NumberInput } from 'components/inputs/number_input'
 import { CancelButton, Inp, MultilineInput, P, Row } from 'lib/index'
 import { observer } from 'mobx-react-lite'
 import { useEffect } from 'react'
 import { orderStore } from '../order.store'
 
 export const InputPositionModal = observer(() => {
+  const { positions } = orderStore
+
   useEffect(() => {
-    if (orderStore.positions.editedOrderItem) {
-      orderStore.positions.openDialog(orderStore.positions.editedOrderItem)
+    if (positions.editedOrderItem) {
+      positions.openDialog(positions.editedOrderItem)
     }
-  }, [orderStore.positions.editedOrderItem])
+  }, [positions.editedOrderItem])
 
   return (
     <Modal
-      open={orderStore.positions.isOpen}
+      open={positions.isOpen}
       onClose={() => {
-        orderStore.positions.closeDialog()
+        positions.closeDialog()
       }}
     >
       <ModalDialog minWidth={600}>
         <ModalClose />
         <P level="h4" pb={2}>
-          {orderStore.positions.editedOrderItem ? 'Изменить' : 'Добавить'}{' '}
-          позицию
+          {positions.editedOrderItem ? 'Изменить' : 'Добавить'} позицию
         </P>
 
         <Box display="flex" flexDirection="column">
           <Inp
             fullWidth
+            sx={{ width: '100%' }}
             autoFocus
             label="Наименование"
-            value={orderStore.positions.name}
-            onChange={v => orderStore.positions.setName(v)}
+            value={positions.name}
+            onChange={v => positions.setName(v)}
           />
           <MultilineInput
             label="Примечание"
-            value={orderStore.positions.description}
-            onChange={e => orderStore.positions.setDescription(e.target.value)}
+            value={positions.description}
+            onChange={e => positions.setDescription(e.target.value)}
           />
-          <Inp
-            label="Количество"
+          <NumberInput
+            label="Кол-во"
             type="number"
-            value={orderStore.positions.quantity?.toString() ?? ''}
-            onChange={v => orderStore.positions.setQuantity(v)}
+            value={positions.qty}
+            onChange={v => positions.setQty(v)}
           />
         </Box>
         <Row gap={2}>
-          {!orderStore.positions.editedOrderItem?.id ? (
+          {!positions.editedOrderItem?.id ? (
             <Button
               onClick={() =>
-                orderStore.positions
+                positions
                   .save(orderStore.order!.id)
                   .then(() => orderStore.loadOrder(orderStore.order!.id))
               }
-              disabled={!orderStore.positions.canSave}
+              disabled={!positions.canSave}
             >
               Добавить
             </Button>
           ) : (
             <Button
               onClick={() =>
-                orderStore.positions
+                positions
                   .save(orderStore.order!.id)
                   .then(() => orderStore.loadOrder(orderStore.order!.id))
               }
@@ -68,7 +71,7 @@ export const InputPositionModal = observer(() => {
               Сохранить
             </Button>
           )}
-          <CancelButton onClick={() => orderStore.positions.closeDialog()} />
+          <CancelButton onClick={() => positions.closeDialog()} />
         </Row>
       </ModalDialog>
     </Modal>

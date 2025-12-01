@@ -41,7 +41,6 @@ export const UpdateDetailPage = observer(() => {
           <DetailWarehouse detail={detail} />
           <CreateDetailOrder detailId={detail.id} />
         </Stack>
-
         <Stack gap={2} sx={{ flex: 1 }}>
           <DetailInputs detail={detail} />
           <Metadata

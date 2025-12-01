@@ -330,8 +330,8 @@ export const ActionButton = observer(
         onClick={handleSubmit}
         disabled={props.disabled}
         loading={loading}
-        sx={{ width: 'fit-content', ...props.props?.sx }}
         {...props.props}
+        sx={{ width: 'fit-content', ...props.props?.sx }}
       >
         {props.label ?? 'Сохранить'}
       </Button>

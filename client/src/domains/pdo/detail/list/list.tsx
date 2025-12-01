@@ -15,6 +15,7 @@ import {
   observer,
   openPage,
   routeMap,
+  useEffect,
   useNavigate,
   useState
 } from 'lib/index'
@@ -61,6 +62,9 @@ interface DetailsTableProps {
 
 const DetailList = observer((props: DetailsTableProps) => {
   const navigate = useNavigate()
+  useEffect(() => {
+    state.index()
+  }, [])
   return (
     <Table
       sx={props.sx}
@@ -137,43 +141,37 @@ export const DetailSelectModal = observer((props: DetailSelectModalProps) => {
   )
 })
 
-const DetailSearchArguments = observer(() => {
-  return (
-    <>
-      <RowButColumsAtSm>
-        <Search
-          size="sm"
-          width={100}
-          placeholder="№"
-          value={state.searchId}
-          onChange={v => state.setId(v.target.value)}
-        />
-        <Search
-          placeholder="Название"
-          onChange={e => state.setKeyword(e.target.value)}
-          value={state.searchKeyword}
-        />
-        <Search
-          placeholder="Номер чертежа"
-          onChange={e => state.setDrawingNumber(e.target.value)}
-          value={state.drawingNumber}
-        />
-      </RowButColumsAtSm>
-    </>
-  )
-})
+const DetailSearchArguments = observer(() => (
+  <RowButColumsAtSm>
+    <Search
+      size="sm"
+      width={100}
+      placeholder="№"
+      value={state.searchId}
+      onChange={v => state.setId(v.target.value)}
+    />
+    <Search
+      placeholder="Название"
+      onChange={e => state.setKeyword(e.target.value)}
+      value={state.searchKeyword}
+    />
+    <Search
+      placeholder="Номер чертежа"
+      onChange={e => state.setDrawingNumber(e.target.value)}
+      value={state.drawingNumber}
+    />
+  </RowButColumsAtSm>
+))
 
-const DetailsList = observer((props: DetailsTableProps) => {
-  return (
-    <Stack gap={1} sx={props.sx}>
-      {state.loader.loading && <Loading />}
-      <SearchResults store={state.searchStore} emptyMessage="Детали не найдены">
-        <DetailList
-          highlight={props.highlight}
-          highlightColor={props.highlightColor}
-          onRowClick={props.onRowClick}
-        />
-      </SearchResults>
-    </Stack>
-  )
-})
+const DetailsList = observer((props: DetailsTableProps) => (
+  <Stack gap={1} sx={props.sx}>
+    {state.loader.loading && <Loading />}
+    <SearchResults store={state.searchStore} emptyMessage="Детали не найдены">
+      <DetailList
+        highlight={props.highlight}
+        highlightColor={props.highlightColor}
+        onRowClick={props.onRowClick}
+      />
+    </SearchResults>
+  </Stack>
+))

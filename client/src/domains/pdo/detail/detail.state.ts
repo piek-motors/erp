@@ -22,7 +22,7 @@ export class Operation {
   }
 }
 
-export class ProcessingRoute {
+class ProcessingRoute {
   steps: Operation[] = []
   init(steps: Operation[]) {
     this.steps = steps
@@ -153,7 +153,7 @@ export class DetailState {
     this.autoWriteoff.reset()
   }
 
-  createPayload(): UpdateDetailRequest {
+  payload(): UpdateDetailRequest {
     const technicalParams =
       this.blankSpec?.arr?.map(({ key, value }) => ({
         key: key?.trim(),

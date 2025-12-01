@@ -2,7 +2,7 @@ import { rpc } from 'lib/rpc/rpc.client'
 import { notifier } from 'lib/store/notifier.store'
 import { makeAutoObservable } from 'mobx'
 
-export class OrderItem {
+class Position {
   id!: number
   name!: string
   description?: string | null
@@ -12,23 +12,24 @@ export class OrderItem {
     makeAutoObservable(this)
   }
 }
+
 export class PositionsStore {
-  items: OrderItem[] = []
+  items: Position[] = []
   isOpen = false
-  editedOrderItem: Partial<OrderItem> | null = null
+  editedOrderItem: Partial<Position> | null = null
   name = ''
   description = ''
-  quantity: number | null = null
+  qty?: number
   constructor() {
     makeAutoObservable(this)
   }
-  openDialog(orderItem: Partial<OrderItem> | null = null) {
-    this.editedOrderItem = orderItem
+  openDialog(position: Partial<Position> | null = null) {
+    this.editedOrderItem = position
     this.isOpen = true
-    if (orderItem) {
-      this.name = orderItem.name ?? ''
-      this.description = orderItem.description ?? ''
-      this.quantity = orderItem.quantity ?? null
+    if (position) {
+      this.name = position.name ?? ''
+      this.description = position.description ?? ''
+      this.qty = position.quantity
     } else {
       this.clear()
     }
@@ -41,7 +42,7 @@ export class PositionsStore {
   clear() {
     this.name = ''
     this.description = ''
-    this.quantity = null
+    this.qty = undefined
   }
   setName(value: string) {
     this.name = value
@@ -49,22 +50,23 @@ export class PositionsStore {
   setDescription(value: string) {
     this.description = value
   }
-  setQuantity(value: string) {
-    this.quantity = value ? parseInt(value, 10) : null
+  setQty(qty?: number) {
+    this.qty = qty
   }
   get canSave(): boolean {
-    return Boolean(this.name && this.quantity)
+    return Boolean(this.name && this.qty)
   }
 
-  setItems(items: OrderItem[]) {
+  setItems(items: Position[]) {
     this.items = [...items].sort((a, b) => a.id - b.id)
   }
 
   async save(orderId: number) {
-    if (!this.canSave) throw new Error('No data to save')
-
+    if (!this.canSave) {
+      throw new Error('No data to save')
+    }
     if (this.editedOrderItem?.id) {
-      await this.updateOrderItem(orderId)
+      await this.updateOrderItem()
       notifier.ok('Позиция обновлена')
     } else {
       await this.insertOrderItem(orderId)
@@ -73,24 +75,24 @@ export class PositionsStore {
     this.closeDialog()
   }
 
-  private async updateOrderItem(orderId: number) {
+  private async updateOrderItem() {
     const positionId = this.editedOrderItem?.id
     if (!positionId) {
       throw new Error('No order item to update')
     }
-    if (!this.quantity) {
+    if (!this.qty) {
       throw new Error('Quantity is required')
     }
     await rpc.orders.positions.update.mutate({
       id: positionId,
-      quantity: this.quantity,
+      quantity: this.qty,
       name: this.name,
       description: this.description
     })
     const item = this.items.find(item => item.id === positionId)
     if (item) {
       Object.assign(item, {
-        quantity: this.quantity,
+        quantity: this.qty,
         name: this.name,
         description: this.description
       })
@@ -101,14 +103,14 @@ export class PositionsStore {
     const result = await rpc.orders.positions.insert.mutate({
       order_id: orderId,
       name: this.name,
-      quantity: this.quantity!,
+      quantity: this.qty!,
       description: this.description
     })
     // update local state
-    const item = new OrderItem()
+    const item = new Position()
     item.id = result.id
     item.name = this.name
-    item.quantity = this.quantity!
+    item.quantity = this.qty!
     item.description = this.description
     this.items.push(item)
   }

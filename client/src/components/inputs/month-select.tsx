@@ -61,9 +61,9 @@ function _MonthSelect({ onSearch, store }: IReportConfiguratorProps) {
     <Row gap={0.5}>
       <Select
         placeholder="Месяц"
-        selectElements={months.map((e, i) => ({
-          name: e,
-          value: i
+        selectElements={months.map((month, idx) => ({
+          name: month,
+          value: idx
         }))}
         value={store.month}
         onChange={v => {

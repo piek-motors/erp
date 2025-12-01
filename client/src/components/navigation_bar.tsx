@@ -22,14 +22,14 @@ export function NavigationBar(props: Props) {
   return (
     <Stack
       direction="row"
-      gap={2}
+      gap={1}
       alignItems="center"
       sx={{ minHeight: '36px', ...props.sx }}
     >
       {!props.hideIcon && (
         <Link to={routeMap.index}>
           <IconButton
-            variant="soft"
+            variant="outlined"
             size="sm"
             sx={{
               background: isDev ? 'red' : undefined

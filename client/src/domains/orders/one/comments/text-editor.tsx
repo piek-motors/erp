@@ -19,7 +19,7 @@ export const TextEditor = (props: {
   editable?: boolean
   variant?: SheetProps['variant']
 }) => {
-  const [key, setKey] = useState(0)
+  const [key] = useState(0)
   const editable = props.editable === undefined ? true : props.editable
 
   const handleChange = () => {
@@ -99,36 +99,6 @@ export const TextEditor = (props: {
                 handleChange()
               }}
             />
-            {/* <Box sx={{ display: 'flex', gap: 0.5 }}>
-              <TooltipIconButton
-                editor={editor}
-                color={
-                  editor.isActive('heading', { level: 3 })
-                    ? 'primary'
-                    : 'neutral'
-                }
-                onClick={() => {
-                  editor.chain().focus().toggleHeading({ level: 3 }).run()
-                  handleChange()
-                }}
-              >
-                H1
-              </TooltipIconButton>
-              <TextFormatButton
-                editor={editor}
-                color={
-                  editor.isActive('heading', { level: 4 })
-                    ? 'primary'
-                    : 'neutral'
-                }
-                onClick={() => {
-                  editor.chain().focus().toggleHeading({ level: 4 }).run()
-                  handleChange()
-                }}
-              >
-                H2
-              </TextFormatButton>
-            </Box> */}
           </Row>
         )}
         <EditorContent
