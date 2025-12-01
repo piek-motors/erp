@@ -1,14 +1,15 @@
-export { config } from '#root/env.js'
-export { db } from '#root/ioc/db.js'
-export { s3 } from '#root/ioc/s3.js'
-export {
-  publicProcedure as procedure,
-  publicProcedure,
-  router
-} from '#root/lib/trpc/trpc.js'
-export { TRPCError } from '@trpc/server'
-export { sql, type Kysely } from 'kysely'
-export { z } from 'zod'
-
 import { db } from '#root/ioc/db.js'
 export type IDB = typeof db
+
+export { config } from '#root/config/env.js'
+export { db } from '#root/ioc/db.js'
+export { s3 } from '#root/ioc/s3.js'
+export { matrixEncoder } from '#root/lib/matrix_encoder.js'
+export { procedure, router } from '#root/lib/trpc/trpc.js'
+export { TRPCError } from '@trpc/server'
+export { type DB, type Selectable } from 'db'
+export { sql, type Kysely } from 'kysely'
+export { z } from 'zod'
+export { rbac } from './config/rbac_definition.js'
+export { Scope } from './lib/constants.js'
+export { requireScope } from './lib/rbac/require_scope.middleware.js'

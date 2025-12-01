@@ -1,8 +1,10 @@
-import { log } from '#root/ioc/log.js'
+import { logger } from '#root/ioc/log.js'
 import { initTRPC } from '@trpc/server'
 import type { Context } from './context.ts'
 
-const t = initTRPC.context<Context>().create({
+const skipLoggingForCodes = new Set(['FORBIDDEN'])
+
+export const t = initTRPC.context<Context>().create({
   errorFormatter({ shape, error, input, path, type }) {
     if (error.message === 'jwt expired') {
       return shape
@@ -11,15 +13,17 @@ const t = initTRPC.context<Context>().create({
     const code = shape?.data?.code ?? 'UNKNOWN'
     const logMessage = `${code} ${path ?? ''}: ${error.message}`
 
-    if (code === 'BAD_REQUEST') {
-      log.warn(
+    if (skipLoggingForCodes.has(code)) {
+      return shape
+    } else if (code === 'BAD_REQUEST') {
+      logger.warn(
         {
           input: JSON.stringify(input)
         },
         logMessage
       )
     } else {
-      log.error(path == null ? error : logMessage, logMessage)
+      logger.error(path == null ? error : logMessage, logMessage)
     }
 
     return shape
@@ -27,4 +31,4 @@ const t = initTRPC.context<Context>().create({
 })
 
 export const router = t.router
-export const publicProcedure = t.procedure
+export const procedure = t.procedure

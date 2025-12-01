@@ -1,29 +1,21 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import { JSX } from '@emotion/react/jsx-runtime'
+import { UilPlusCircle } from '@iconscout/react-unicons'
 import { Box, Button, Dropdown, Menu, MenuButton, Stack, Table } from '@mui/joy'
 import { DateInput } from 'components/inputs/date_input'
 import { MoneyInput } from 'components/inputs/money-input'
 import { UnpackedOrder } from 'domains/orders/api'
-import { useAppContext } from 'hooks'
-import { DeleteResourceButton, Label, P, Row } from 'lib/index'
+import { useEscapeClose } from 'hooks/use-escape-close'
+import { DeleteResourceButton, Label, P, Row, UseIcon } from 'lib/index'
 import { formatOnlyDate } from 'lib/utils/date_fmt'
 import { formatMoney, percentage } from 'lib/utils/fmt'
 import { observer } from 'mobx-react-lite'
-import { UserRole } from 'models'
 import { useState } from 'react'
 import { Payment } from 'srv/rpc/orders/payments'
 import { orderStore, orderStore as os } from '../order.store'
 
 export const Paymnets = observer(({ order }: { order: UnpackedOrder }) => {
-  const { store }: any = useAppContext()
-
-  const isHaveFullRight = [
-    UserRole.Admin,
-    UserRole.OrderManager,
-    UserRole.Bookkeeper
-  ].includes(store?.user?.role)
-
   const paymentHistoryContent = order.total_amount ? (
     <PaymentsTable
       data={os.payments.payments.map(p => ({
@@ -35,16 +27,13 @@ export const Paymnets = observer(({ order }: { order: UnpackedOrder }) => {
       onDelete={ID => os.payments.deletePayment(ID)}
       totalAmount={order.total_amount}
       loading={os.payments.loading}
-      footerComponent={
-        <Box>{isHaveFullRight && <NewPaymentInput order={order} />}</Box>
-      }
+      footerComponent={<NewPaymentInput order={order} />}
     />
   ) : (
     <P level="body-xs" color="danger">
       Не задана сумма заказа
     </P>
   )
-
   return (
     <Box my={1}>
       <Label>Платежи</Label>
@@ -135,7 +124,7 @@ const NewPaymentInput = observer((props: NewPaymentInputProps) => {
 
   const open = Boolean(anchorEl)
 
-  async function handleSave() {
+  const handleSave = async () => {
     try {
       await os.payments.insertPayment(props.order)
       handleClose()
@@ -145,9 +134,7 @@ const NewPaymentInput = observer((props: NewPaymentInputProps) => {
     }
   }
 
-  function handleAmountChange(v: number) {
-    os.payments.setAmount(v)
-  }
+  useEscapeClose(open, handleClose)
 
   return (
     <Dropdown
@@ -168,7 +155,7 @@ const NewPaymentInput = observer((props: NewPaymentInputProps) => {
         size="sm"
         disabled={os.payments.loading}
       >
-        Добавить
+        <UseIcon icon={UilPlusCircle} />
       </MenuButton>
       <Menu
         open={open}
@@ -189,7 +176,7 @@ const NewPaymentInput = observer((props: NewPaymentInputProps) => {
           <Row gap={1} alignItems={'end'}>
             <MoneyInput
               label="Сумма платежа"
-              onChange={handleAmountChange}
+              onChange={v => os.payments.setAmount(v)}
               value={os.payments.amount}
               autoFocus
             />

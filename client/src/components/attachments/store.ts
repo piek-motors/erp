@@ -49,12 +49,12 @@ export class AttachmentsStore {
   }
 
   async delete(file: Attachment, relatedTo: 'order' | 'detail') {
-    await rpc.attachments.deleteFile.mutate({ type: relatedTo, key: file.key })
+    await rpc.attachments.delete_file.mutate({ type: relatedTo, key: file.key })
     this.setFiles(this.files.filter(f => f.key !== file.key))
   }
 
   async rename(file: Attachment, newName: string) {
-    await rpc.attachments.updateName.mutate({ key: file.key, name: newName })
+    await rpc.attachments.update_name.mutate({ key: file.key, name: newName })
     this.setFiles(
       this.files.map(f =>
         f.key === file.key ? new Attachment(f.id, newName, f.size, f.key) : f

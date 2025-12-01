@@ -7,7 +7,6 @@ import {
   useState
 } from 'lib/index'
 import { openPage, routeMap } from 'lib/routes'
-import { notifier } from 'lib/store/notifier.store'
 import { api } from './api'
 import { MaterialFormFields } from './form-fields'
 import { MaterialState } from './state'
@@ -30,16 +29,10 @@ export const CreateMaterialPage = observer(() => {
         <MaterialFormFields showTabs m={material} />
         <ActionButton
           onClick={() =>
-            api
-              .insert(material)
-              .then(id => {
-                setInsertedMaterialId(id)
-                setMaterial(new MaterialState())
-              })
-              .catch(e => {
-                notifier.err(`Ошибка добавления: ${e.message}`)
-                throw e
-              })
+            api.insert(material).then(id => {
+              setInsertedMaterialId(id)
+              setMaterial(new MaterialState())
+            })
           }
         />
       </Stack>

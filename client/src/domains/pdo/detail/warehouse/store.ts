@@ -51,13 +51,13 @@ export class DetailWarehouseStore {
     return res.stock
   }
   async insertWriteoff(detailId: number) {
-    const res = await rpc.pdo.details.writeoff.mutate({
+    const stock = await rpc.pdo.details.writeoff.mutate({
       detailId,
       qty: this.qty,
       reason: this.writeoff.reason
     })
     this.clear()
-    this.setStock(res.stock)
-    return res.stock
+    this.setStock(stock)
+    return stock
   }
 }

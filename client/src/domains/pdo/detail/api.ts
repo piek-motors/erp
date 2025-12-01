@@ -39,13 +39,6 @@ export class DetailApi {
     })
   }
 
-  async loadShort(detailId: number) {
-    const res = await rpc.pdo.details.getShort.query({ id: detailId })
-    const detail = new DetailState()
-    detail.init(res)
-    return detail
-  }
-
   async delete(id: number) {
     await rpc.pdo.details.delete.mutate({ id })
     cache.details.removeDetail(id)

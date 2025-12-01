@@ -52,7 +52,7 @@ export class GlobalStore {
             this.setUser(
               new User(
                 res.data.user.id,
-                res.data.user.role,
+                res.data.user.roles,
                 res.data.user.first_name!,
                 res.data.user.last_name,
                 res.data.user.email

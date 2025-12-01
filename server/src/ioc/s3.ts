@@ -1,4 +1,4 @@
-import { config } from '#root/env.js'
+import { config } from '#root/config/env.js'
 import AWS from 'aws-sdk'
 
 export const s3 = new AWS.S3({

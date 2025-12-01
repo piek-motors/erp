@@ -4,7 +4,7 @@ import { rpc } from 'lib/deps'
 import { Inp, P, Row, SaveIconButton, UseIcon } from 'lib/index'
 import { makeAutoObservable } from 'mobx'
 import { observer } from 'mobx-react-lite'
-import { Interval } from 'srv/service/attendance_report.generator'
+import { Interval } from 'srv/rpc/attendance/report_generator'
 import { store } from './store'
 
 export interface UpdateIntervalMetadata {

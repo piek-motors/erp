@@ -10,7 +10,7 @@ import { makeAutoObservable } from 'mobx'
 import { OrderStatus } from 'models'
 import moment from 'moment'
 import { RouterInput, RouterOutput } from 'srv/lib/trpc'
-import { OrderUpdateInput } from 'srv/rpc/orders/router'
+import { OrderUpdateInput } from 'srv/rpc/orders/orders_router'
 import { SuggestionsStore } from '../suggestions.store'
 
 export enum InputTypes {

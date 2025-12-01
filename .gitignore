@@ -16,3 +16,4 @@ client/build/tsconfig.tsbuildinfo
 *.tsbuildinfo
 client/build
 server/public
+.claude

@@ -19,7 +19,7 @@ function Settings() {
   return (
     <FactoryPage title="Аккаунт">
       <P>{store.user?.fullName}</P>
-      <P>Роль: {store.user?.role}</P>
+      <P>Роли: {store.user?.roles}</P>
       <Box>
         <Button
           onClick={handleLogout}

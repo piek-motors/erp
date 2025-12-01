@@ -25,7 +25,7 @@ export class SuggestionsStore {
     this.setManagers(
       res.managers.map(
         user =>
-          new User(user.id, user.role, user.first_name!, user.last_name, null)
+          new User(user.id, user.roles, user.first_name!, user.last_name, null)
       )
     )
   }

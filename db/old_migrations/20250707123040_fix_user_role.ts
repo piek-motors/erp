@@ -1,5 +1,4 @@
 import { sql } from 'kysely'
-import { UserRole } from 'models'
 import { type KDB } from '../schema'
 
 export async function up(db: KDB): Promise<void> {
@@ -14,34 +13,34 @@ export async function up(db: KDB): Promise<void> {
     ADD COLUMN role user_role NOT NULL DEFAULT 'bookkeeper';
   `.execute(db)
 
-  for (const user of allUsers) {
-    let role: UserRole | null = null
+  // for (const user of allUsers) {
+  //   let role: UserRole | null = null
 
-    switch (user.role as any as number) {
-      case 1:
-        role = UserRole.Admin
-        break
-      case 2:
-        role = UserRole.OrderManager
-        break
-      default:
-        role = UserRole.Bookkeeper
-        break
-    }
+  //   switch (user.role as any as number) {
+  //     case 1:
+  //       role = UserRole.Admin
+  //       break
+  //     case 2:
+  //       role = UserRole.OrderManager
+  //       break
+  //     default:
+  //       role = UserRole.Bookkeeper
+  //       break
+  //   }
 
-    if (role === null) {
-      throw new Error(
-        `Unknown role: ${user.role} for user ${user.id} ${user.first_name} ${user.last_name}`
-      )
-    }
-    await db
-      .updateTable('users')
-      .set({
-        role
-      })
-      .where('id', '=', user.id)
-      .execute()
-  }
+  //   if (role === null) {
+  //     throw new Error(
+  //       `Unknown role: ${user.role} for user ${user.id} ${user.first_name} ${user.last_name}`
+  //     )
+  //   }
+  //   await db
+  //     .updateTable('users')
+  //     .set({
+  //       role
+  //     })
+  //     .where('id', '=', user.id)
+  //     .execute()
+  // }
 }
 
 export async function down(db: KDB): Promise<void> {

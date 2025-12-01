@@ -117,9 +117,8 @@ export class OrderStore {
     if (!('id' in payload)) {
       throw new Error('Order id is not set')
     }
-    const res = await this.try(() => rpc.orders.update.mutate(payload))
+    await this.try(() => rpc.orders.update.mutate(payload))
     await this.loadOrder(id)
-    return res
   }
 
   async insertOrder(status: OrderStatus): Promise<number> {
@@ -142,7 +141,7 @@ export class OrderStore {
     if (!id) {
       throw new Error('Order id is not set')
     }
-    return this.try(() => rpc.orders.delete.mutate({ id }))
+    await this.try(() => rpc.orders.delete.mutate({ id }))
   }
 
   async moveToArchive(

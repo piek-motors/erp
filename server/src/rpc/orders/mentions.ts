@@ -13,17 +13,11 @@ export type Mention = {
   order_id: number
 }
 
-const mentionInput = z.object({
-  order_id: z.number(),
-  user_id: z.number(),
-  comment_id: z.number()
-})
-
-export const mentionsRouter = router({
+export const mentions = router({
   list: procedure
     .input(z.object({ user_id: z.number() }))
     .query(async ({ input }) => {
-      const q = db
+      const query = db
         .selectFrom('orders.notifications as n')
         .selectAll()
         .innerJoin('orders.comments as c', 'c.id', 'n.comment_id')
@@ -43,33 +37,39 @@ export const mentionsRouter = router({
         .orderBy('n.id', 'desc')
         .where('n.user_id', '=', input.user_id)
       const [unseen, seen] = await Promise.all([
-        q.where('n.seen', '=', false).execute(),
-        q.where('n.seen', '=', true).limit(50).execute()
+        query.where('n.seen', '=', false).execute(),
+        query.where('n.seen', '=', true).limit(50).execute()
       ])
       return { unseen: matrixEncoder(unseen), seen: matrixEncoder(seen) }
     }),
-  insert: procedure.input(mentionInput).mutation(async ({ input }) => {
-    const mention = await db
-      .insertInto('orders.notifications')
-      .values({
-        ...input,
-        seen: false
+  //
+  insert: procedure
+    .input(
+      z.object({
+        order_id: z.number(),
+        user_id: z.number(),
+        comment_id: z.number()
       })
-      .returning('id')
-      .executeTakeFirstOrThrow()
-    return mention
-  }),
+    )
+    .mutation(async ({ input }) => {
+      await db
+        .insertInto('orders.notifications')
+        .values({
+          ...input,
+          seen: false
+        })
+        .execute()
+    }),
   // mention checked,
   checked: procedure
     .input(z.object({ id: z.number() }))
-    .mutation(async ({ input }) =>
-      db
+    .mutation(async ({ input }) => {
+      await db
         .updateTable('orders.notifications')
         .set({ seen: true })
         .where('id', '=', input.id)
-        .returning('id')
-        .executeTakeFirstOrThrow()
-    ),
+        .execute()
+    }),
   //
   count: procedure
     .input(z.object({ user_id: z.number() }))

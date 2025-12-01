@@ -3,7 +3,7 @@ import { WebOnly } from 'components/utilities/conditional-display'
 import { Box, Label, Loading, observer, Sheet } from 'lib'
 import moment from 'moment'
 import { Column } from 'react-table'
-import { AttendanceEmployee } from 'srv/service/attendance_report.generator'
+import { Employee } from 'srv/rpc/attendance/report_generator'
 import { Report, store } from './store'
 import { Table } from './table'
 import {
@@ -15,7 +15,7 @@ import {
 
 export const AttendanceReportComponent = observer(
   ({ report }: { report: Report }) => {
-    const columns: Column<AttendanceEmployee>[] = [
+    const columns: Column<Employee>[] = [
       {
         Header: 'Фамилия Имя',
         accessor: data => (
@@ -28,21 +28,21 @@ export const AttendanceReportComponent = observer(
           <Box p={0.2}>{(props.row.original.total / 3600).toFixed(0)}</Box>
         )
       },
-      ...Array.from({ length: report.resp.daysInMonth }).map<
-        Column<AttendanceEmployee>
-      >((_, i) => {
-        const day = i + 1
-        return {
-          Header: day.toString(),
-          Cell: props => (
-            <ReportCell
-              employes={props.row.original}
-              day={day}
-              report={report}
-            />
-          )
+      ...Array.from({ length: report.resp.daysInMonth }).map<Column<Employee>>(
+        (_, i) => {
+          const day = i + 1
+          return {
+            Header: day.toString(),
+            Cell: props => (
+              <ReportCell
+                employes={props.row.original}
+                day={day}
+                report={report}
+              />
+            )
+          }
         }
-      })
+      )
     ]
 
     if (store.loader.loading) return <Loading />
@@ -64,7 +64,7 @@ export const AttendanceReportComponent = observer(
 )
 
 const ReportCell = observer(
-  (props: { employes: AttendanceEmployee; day: number; report: Report }) => {
+  (props: { employes: Employee; day: number; report: Report }) => {
     const employee = props.employes.name
     const data = props.employes.days[props.day]
     const meta: UpdateIntervalMetadata = {
@@ -118,7 +118,7 @@ const EditInterval = observer(
     data,
     meta
   }: {
-    data: AttendanceEmployee['days'][number]
+    data: Employee['days'][number]
     meta: UpdateIntervalMetadata
   }) => (
     <WebOnly>

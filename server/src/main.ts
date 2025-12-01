@@ -1,4 +1,4 @@
-import { config } from '#root/env.js'
+import { config } from '#root/config/env.js'
 import errorMiddleware from '#root/lib/middlewares/error.middleware.js'
 import { createContext } from '#root/lib/trpc/context.js'
 import { router } from '#root/routers/http-routes.js'
@@ -7,13 +7,13 @@ import * as trpcExpress from '@trpc/server/adapters/express'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import express from 'express'
-import { log } from './ioc/log.js'
+import { logger } from './ioc/log.js'
 import './lib/trpc/index.js'
 
 const clientBuild = config.BUILD_PATH
 
 process.on('unhandledRejection', (reason, p) => {
-  log.error(
+  logger.error(
     `Unhandled Rejection at: Promise ${p}, ${reason}`,
     reason instanceof Error ? reason.stack || reason.message : reason
   )
@@ -46,7 +46,7 @@ express()
     response.sendFile('index.html', { root: clientBuild })
   })
   .listen(config.PORT, async () => {
-    log.info(
+    logger.info(
       `🛫 Express running in ${config.NODE_ENV} mode on port ${config.PORT}`
     )
   })

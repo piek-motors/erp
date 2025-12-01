@@ -120,11 +120,7 @@ export function MentionList() {
                   size: 'sm'
                 }}
                 label="Прочитать все"
-                onClick={() =>
-                  rpc.markAllNotificationsAsRead.mutate({
-                    userId: store?.user?.id
-                  })
-                }
+                onClick={() => rpc.read_notifications.mutate()}
               />
             </Box>
             {!loading &&

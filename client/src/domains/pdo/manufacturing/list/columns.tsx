@@ -3,9 +3,9 @@ import { Label, P, Stack } from 'lib/index'
 import { timeDeltaDays } from 'lib/utils/date_fmt'
 import { ManufacturingOrderStatus as Status } from 'models'
 import { Column } from 'react-table'
-import { ManufactoringListOutput } from './store'
+import { ListManufacturingOutput } from 'srv/rpc/pdo/manufacturing'
 
-const commonColumns: Column<ManufactoringListOutput>[] = [
+const commonColumns: Column<ListManufacturingOutput>[] = [
   {
     Header: '№',
     accessor: m => <Label>{m.id}</Label>

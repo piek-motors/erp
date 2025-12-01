@@ -1,5 +1,6 @@
 import { createTRPCClient, httpLink } from '@trpc/client'
 import { getInMemoryToken, getNewInMemoryToken } from 'index'
+import { notifier } from 'lib/store/notifier.store'
 import type { AppRouter } from 'srv/lib/trpc/index.js'
 
 const url = process.env.REACT_APP_RPC_URL
@@ -14,6 +15,7 @@ const fetchWithTokenRefresh: typeof fetch = async (input, init?) => {
   if (resp.ok) {
     return resp
   }
+  // error handling
   const clonedResp = resp.clone()
   const body = await resp.json().catch(() => ({}))
   if (
@@ -31,6 +33,8 @@ const fetchWithTokenRefresh: typeof fetch = async (input, init?) => {
     const headers = new Headers(init?.headers)
     headers.set('Authorization', `Bearer ${getInMemoryToken()}`)
     return fetch(input, { ...init, headers })
+  } else {
+    notifier.err(body?.error?.message)
   }
   return clonedResp
 }

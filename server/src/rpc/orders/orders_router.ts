@@ -1,16 +1,24 @@
-import { db, procedure, TRPCError, z } from '#root/deps.js'
+import {
+  db,
+  procedure,
+  requireScope,
+  Scope,
+  sql,
+  TRPCError,
+  z
+} from '#root/deps.js'
 import { attachmentService } from '#root/ioc/index.js'
-import { log } from '#root/ioc/log.js'
+import { logger } from '#root/ioc/log.js'
 import { Matrix, matrixEncoder } from '#root/lib/matrix_encoder.js'
 import { fromMs } from '#root/lib/time.js'
 import { router } from '#root/lib/trpc/trpc.js'
 import { DB } from 'db'
 import { Selectable } from 'kysely'
 import { OrderStatus, UserRole } from 'models'
-import { commentsRouter, OrderComment } from './comments.js'
-import { mentionsRouter } from './mentions.js'
-import { paymentsRouter } from './payments.js'
-import { positionRouter } from './positions.js'
+import { comments, OrderComment } from './comments.js'
+import { mentions } from './mentions.js'
+import { payments } from './payments.js'
+import { positions } from './positions.js'
 
 export type OrderPosition = Selectable<DB.OrderItemsTable>
 
@@ -51,11 +59,14 @@ const updateOrderSchema = insertOrderSchema.extend({
 
 export type OrderUpdateInput = z.infer<typeof updateOrderSchema>
 
-export const ordersRouter = router({
-  positions: positionRouter,
-  payments: paymentsRouter,
-  comments: commentsRouter,
-  mentions: mentionsRouter,
+export const orders = router({
+  positions,
+  //
+  payments,
+  //
+  comments,
+  //
+  mentions,
   //
   get: procedure
     .input(
@@ -64,44 +75,50 @@ export const ordersRouter = router({
       })
     )
     .query(async ({ input }) => {
-      const order = await db
-        .selectFrom('orders.orders')
-        .where('id', '=', input.id)
-        .selectAll()
-        .executeTakeFirst()
+      const [order, positions, payments, comments, attachments] =
+        await Promise.all([
+          db
+            .selectFrom('orders.orders')
+            .where('id', '=', input.id)
+            .selectAll()
+            .executeTakeFirst(),
+          //
+          db
+            .selectFrom('orders.order_items')
+            .selectAll()
+            .where('order_id', '=', input.id)
+            .execute(),
+          //
+          db
+            .selectFrom('orders.order_payments')
+            .select(['id', 'amount', 'date'])
+            .where('order_id', '=', input.id)
+            .execute(),
+          //
+          db
+            .selectFrom('orders.comments as c')
+            .innerJoin('users as u', 'u.id', 'c.user_id')
+            .select([
+              'c.user_id',
+              'c.order_id',
+              'c.id',
+              'c.text',
+              'c.created_at',
+              'u.first_name',
+              'u.last_name',
+              'u.id as user_id'
+            ])
+            .where('order_id', '=', input.id)
+            .execute(),
+          //
+          attachmentService.getOrderAttachments(input.id)
+        ])
       if (!order) {
         throw new TRPCError({
           code: 'NOT_FOUND',
           message: `Order with id ${input.id} not found`
         })
       }
-      const positions = await db
-        .selectFrom('orders.order_items')
-        .selectAll()
-        .where('order_id', '=', input.id)
-        .execute()
-      const payments = await db
-        .selectFrom('orders.order_payments')
-        .select(['id', 'amount', 'date'])
-        .where('order_id', '=', input.id)
-        .execute()
-      const comments = await db
-        .selectFrom('orders.comments as c')
-        .innerJoin('users as u', 'u.id', 'c.user_id')
-        .select([
-          'c.user_id',
-          'c.order_id',
-          'c.id',
-          'c.text',
-          'c.created_at',
-          'u.first_name',
-          'u.last_name',
-          'u.id as user_id'
-        ])
-        .where('order_id', '=', input.id)
-        .execute()
-
-      const attachments = await attachmentService.getOrderAttachments(input.id)
       const enriched = await enrichOrders([order])
       return {
         ...enriched[0],
@@ -112,26 +129,30 @@ export const ordersRouter = router({
       }
     }),
   //
-  insert: procedure.input(insertOrderSchema).mutation(async ({ input }) => {
-    return db
-      .insertInto('orders.orders')
-      .values({
-        ...input,
-        shipping_date: input.shipping_date
-          ? new Date(input.shipping_date)
-          : null,
-        is_reclamation: input.is_reclamation ?? false,
-        awaiting_dispatch: false,
-        created_at: new Date()
-      })
-      .returning('id')
-      .executeTakeFirstOrThrow()
-  }),
+  insert: procedure
+    .use(requireScope(Scope.orders))
+    .input(insertOrderSchema)
+    .mutation(async ({ input }) => {
+      return db
+        .insertInto('orders.orders')
+        .values({
+          ...input,
+          shipping_date: input.shipping_date
+            ? new Date(input.shipping_date)
+            : null,
+          is_reclamation: input.is_reclamation ?? false,
+          awaiting_dispatch: false,
+          created_at: new Date()
+        })
+        .returning('id')
+        .executeTakeFirstOrThrow()
+    }),
   //
   update: procedure
+    .use(requireScope(Scope.orders))
     .input(updateOrderSchema)
     .mutation(async ({ input, ctx }) => {
-      return db
+      await db
         .updateTable('orders.orders')
         .set({
           ...input,
@@ -140,13 +161,11 @@ export const ordersRouter = router({
           actual_shipping_date: fromMs(input.actual_shipping_date)
         })
         .where('id', '=', input.id)
-        .returning('id')
-        .executeTakeFirstOrThrow()
-        .then(r => {
-          log.info(
+        .execute()
+        .then(() => {
+          logger.info(
             `Client order ${input.id} updated by ${ctx.user.first_name} ${ctx.user.last_name}`
           )
-          return r
         })
     }),
   //
@@ -228,20 +247,19 @@ export const ordersRouter = router({
     }),
   //
   delete: procedure
+    .use(requireScope(Scope.orders))
     .input(z.object({ id: z.number() }))
-    .mutation(async ({ input, ctx }) =>
-      db
+    .mutation(async ({ input, ctx }) => {
+      await db
         .deleteFrom('orders.orders')
         .where('id', '=', input.id)
-        .returning('id')
-        .executeTakeFirstOrThrow()
-        .then(r => {
-          log.info(
+        .execute()
+        .then(() => {
+          logger.info(
             `Client order ${input.id} deleted by ${ctx.user.first_name} ${ctx.user.last_name}`
           )
-          return r
         })
-    ),
+    }),
   //
   suggestions: procedure.query(async () => {
     const [citiesRes, contractorsRes, managers] = await Promise.all([
@@ -249,8 +267,9 @@ export const ordersRouter = router({
       db.selectFrom('orders.orders').select('contractor').distinct().execute(),
       db
         .selectFrom('users')
-        .select(['id', 'first_name', 'last_name', 'role'])
-        .where('role', '=', UserRole.OrderManager)
+        .select(['id', 'first_name', 'last_name', 'roles'])
+        .where('is_deleted', '=', false)
+        .where(sql<boolean>`roles @> ${[UserRole.OrderManager]}`)
         .execute()
     ])
     return {

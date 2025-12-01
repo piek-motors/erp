@@ -5,8 +5,8 @@ import {
   Unit
 } from 'models'
 import { RouterOutput } from 'srv/lib/trpc'
-import { SelectableDetail } from 'srv/rpc/pdo/detail/get'
-import { Material as MaterialListDto } from 'srv/rpc/pdo/material/list'
+import { SelectableDetail } from 'srv/rpc/pdo/details'
+import { Material as MaterialListDto } from 'srv/rpc/pdo/materials'
 import { DetailState } from './detail/detail.state'
 
 type GetMaterialsOutput = RouterOutput['pdo']['material']['get']

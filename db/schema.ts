@@ -76,7 +76,7 @@ export namespace DB {
     first_name: string
     last_name: string
     email: string
-    role: UserRole
+    roles: UserRole[]
     password: string
     is_deleted: boolean
   }

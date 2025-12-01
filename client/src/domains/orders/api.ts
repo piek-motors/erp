@@ -3,7 +3,7 @@ import { rpc } from 'lib/rpc/rpc.client'
 import { makeAutoObservable } from 'mobx'
 import { OrderStatus } from 'models'
 import { RouterInput } from 'srv/lib/trpc'
-import { ClientOrder, OrderPosition } from 'srv/rpc/orders/router'
+import { ClientOrder, OrderPosition } from 'srv/rpc/orders/orders_router'
 
 export type UnpackedOrder = Omit<ClientOrder, 'positions'> & {
   positions: OrderPosition[]

@@ -49,7 +49,7 @@ export function AlloyAutocomplete(props: {
   const { setAlloy, alloy } = props
   const [alloys, setAlloys] = useState<string[]>([])
   useEffect(() => {
-    rpc.pdo.material.getDistinctAlloys
+    rpc.pdo.material.dict_distinct_alloys
       .query()
       .then(alloys => setAlloys(alloys.filter(Boolean) as string[]))
   }, [])

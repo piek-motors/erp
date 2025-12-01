@@ -1,5 +1,5 @@
+import { AttendanceReportGenerator } from '#root/rpc/attendance/report_generator.js'
 import { AttachmentService } from '#root/service/attachment.service.js'
-import { AttendanceReportGenerator } from '#root/service/attendance_report.generator.js'
 import { AuthSevice } from '#root/service/auth.service.js'
 import { Jobs } from '#root/service/jobs.js'
 import { TokenService } from '#root/service/token.service.js'

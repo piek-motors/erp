@@ -2,7 +2,7 @@ import { cache } from 'domains/pdo/cache/root'
 import { LoadingController } from 'lib/store/loading_controller'
 import { makeAutoObservable } from 'mobx'
 import { MaterialShape } from 'models'
-import { Material } from 'srv/rpc/pdo/material/list'
+import { Material } from 'srv/rpc/pdo/materials'
 import { MaterialSupplyStore } from '../warehouse/supply'
 
 export class MaterialListStore {

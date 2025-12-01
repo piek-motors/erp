@@ -5,7 +5,6 @@ import { OrderComment } from 'srv/rpc/orders/comments'
 export class CommentsStore {
   showMentionList = false
   comments: OrderComment[] = []
-  loading = false
   constructor() {
     makeAutoObservable(this)
   }
@@ -17,6 +16,9 @@ export class CommentsStore {
   }
   setComments(comments: OrderComment[]) {
     this.comments = comments
+  }
+  delete(commentId: number) {
+    this.comments = this.comments.filter(c => c.id !== commentId)
   }
   async insertComment(comment: string, orderId: number, userId: number) {
     const document = new DOMParser().parseFromString(comment, 'text/html')

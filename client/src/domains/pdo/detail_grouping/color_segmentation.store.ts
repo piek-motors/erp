@@ -38,7 +38,7 @@ export class ColorSegmentation {
     if (!this.detail) {
       throw new Error('Detail ID and group ID are required')
     }
-    await rpc.pdo.detail_groups.set_сolor_annotation.mutate({
+    await rpc.pdo.detail_groups.set_color_annotation.mutate({
       detail_id: this.detail.id,
       group_id: this.groupId!,
       colors: this.detail.colors?.map(c => +c) || []

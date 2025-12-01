@@ -1,6 +1,6 @@
-import { config } from '#root/env.js'
+import { config } from '#root/config/env.js'
 import { attachmentService } from '#root/ioc/index.js'
-import { log } from '#root/ioc/log.js'
+import { logger } from '#root/ioc/log.js'
 import { s3 } from '#root/ioc/s3.js'
 import type { NextFunction, Request, Response } from 'express'
 
@@ -32,7 +32,7 @@ export const uploadBinaryFiles = async (
     )
     res.send(data)
   } catch (error) {
-    log.error(error, 'Error uploading binary files')
+    logger.error(error, 'Error uploading binary files')
     next(error)
   }
 }
@@ -55,7 +55,7 @@ export const getBinaryFile = async (
     res.set('Content-Disposition', `inline;filename*=utf-8''${fileName}`)
     res.send(data.Body)
   } catch (error) {
-    log.error(error, `Error getting binary file with key ${key}`)
+    logger.error(error, `Error getting binary file with key ${key}`)
     next(error)
   }
 }

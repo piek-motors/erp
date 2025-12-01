@@ -1,5 +1,5 @@
 import { db } from '#root/deps.js'
-import { log } from '#root/ioc/log.js'
+import { logger } from '#root/ioc/log.js'
 import { Day } from '#root/lib/constants.js'
 import { ManufacturingOrderStatus } from 'models'
 
@@ -26,7 +26,7 @@ export class Jobs {
       ])
       .returning('id')
       .execute()
-    log.debug(
+    logger.debug(
       `Removed ${result.length} outdated orders created before ${cutoffDate}`
     )
   }

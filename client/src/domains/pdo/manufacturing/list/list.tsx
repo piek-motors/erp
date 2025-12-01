@@ -15,8 +15,9 @@ import {
   useState
 } from 'lib/index'
 import { ManufacturingOrderStatus, uiManufacturingOrderStatus } from 'models'
+import { ListManufacturingOutput } from 'srv/rpc/pdo/manufacturing'
 import { getColumns } from './columns'
-import { ManufactoringListOutput, s } from './store'
+import { s } from './store'
 
 const STATUSES = [
   ManufacturingOrderStatus.Collected,
@@ -27,9 +28,9 @@ const STATUSES = [
 
 function StatusAccordion(props: {
   status: ManufacturingOrderStatus
-  onRowClick: (row: ManufactoringListOutput) => void
+  onRowClick: (row: ListManufacturingOutput) => void
   expanded?: boolean
-  data: ManufactoringListOutput[]
+  data: ListManufacturingOutput[]
 }) {
   return (
     <AccordionCard
@@ -51,7 +52,7 @@ export const ManufacturingList = observer(() => {
     s.load()
   }, [])
 
-  const onRowClick = (row: ManufactoringListOutput) => {
+  const onRowClick = (row: ListManufacturingOutput) => {
     navigate(openPage(routeMap.pdo.manufacturing_order.edit, row.id))
   }
 

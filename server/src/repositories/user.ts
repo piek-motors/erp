@@ -5,7 +5,7 @@ import { Errcode } from '#root/lib/error-code.js'
 export class UserRepository {
   constructor(private readonly db: IDB) {}
 
-  async find(id: number) {
+  async get(id: number) {
     const user = await this.db
       .selectFrom('users')
       .selectAll()
@@ -18,7 +18,7 @@ export class UserRepository {
     return user
   }
 
-  async findByEmail(email: string) {
+  async getByEmail(email: string) {
     const user = await this.db
       .selectFrom('users')
       .selectAll()

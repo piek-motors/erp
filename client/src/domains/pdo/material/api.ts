@@ -90,7 +90,7 @@ export class MaterialApi {
   }
 
   async loadDetailsMadeFromThatMaterial(material_id: number) {
-    const res = await rpc.pdo.details.listByMaterialId.query({
+    const res = await rpc.pdo.details.filter_by_material.query({
       material_id
     })
     return res.map(e => ({

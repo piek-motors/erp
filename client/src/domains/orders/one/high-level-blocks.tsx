@@ -79,7 +79,6 @@ export const OrderCommentsSection = observer(() => {
   if (!store.user) {
     throw new Error('User not found')
   }
-
   return (
     <Box>
       <Divider sx={{ my: 2 }} />

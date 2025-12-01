@@ -20,6 +20,7 @@ export class MaterialSupplyStore {
   disabled() {
     return this.length === '' || this.reason == null
   }
+
   async insertSupply(materialId?: number): Promise<number> {
     if (!materialId) throw Error('Материал не выбран')
     if (this.reason == null) throw Error('Причина не указана')
@@ -27,12 +28,12 @@ export class MaterialSupplyStore {
     const length = this.length
     if (!length) throw Error('Длина не указана')
 
-    const res = await rpc.pdo.material.supply.mutate({
+    const { qty } = await rpc.pdo.material.supply.mutate({
       material_id: materialId,
       lengthMeters: Number(length),
       reason: this.reason
     })
     this.reset()
-    return Number(res.qty)
+    return Number(qty)
   }
 }

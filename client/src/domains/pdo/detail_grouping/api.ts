@@ -3,7 +3,7 @@ import { matrixDecoder } from 'lib/rpc/matrix_decoder'
 import { rpc } from 'lib/rpc/rpc.client'
 import { LoadingController } from 'lib/store/loading_controller'
 import { makeAutoObservable } from 'mobx'
-import { DetailInTheGroup } from 'srv/rpc/pdo/detail_grouping/get'
+import { DetailInTheGroup } from 'srv/rpc/pdo/detail_groups'
 import { Detail, DetailGroupStore } from './group.store'
 
 export class DetailGroupingApi {
@@ -64,16 +64,22 @@ export class DetailGroupingApi {
 
   async addDetailsToGroup(groupId: number, detailIds: number[]) {
     return this.groupsLoading.run(async () => {
-      await rpc.pdo.detail_groups.add_details.mutate({ groupId, detailIds })
+      await rpc.pdo.detail_groups.add_details.mutate({
+        group_id: groupId,
+        detail_ids: detailIds
+      })
       await this.loadGroupWithDetails(groupId)
       this.store.clearSelection()
     })
   }
 
-  async removeDetailsFromGroup(groupId: number, detailIds: number[]) {
+  async removeDetailsFromGroup(group_id: number, detail_ids: number[]) {
     return this.groupsLoading.run(async () => {
-      await rpc.pdo.detail_groups.remove_details.mutate({ groupId, detailIds })
-      await this.loadGroupWithDetails(groupId)
+      await rpc.pdo.detail_groups.remove_details.mutate({
+        group_id,
+        detail_ids
+      })
+      await this.loadGroupWithDetails(group_id)
       this.store.clearSelection()
     })
   }

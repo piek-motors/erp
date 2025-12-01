@@ -1,7 +1,15 @@
 import { Day } from '#root/lib/constants.js'
 import jwt from 'jsonwebtoken'
-import { config } from '../env.js'
+import { UserRole } from 'models'
+import { config } from '../config/env.js'
 import { TokenRepository } from '../repositories/token.js'
+
+export interface TokenPayload {
+  id: number
+  first_name: string
+  last_name: string
+  roles: UserRole[]
+}
 
 export class TokenService {
   constructor(private readonly tokenRepo: TokenRepository) {}
@@ -23,29 +31,31 @@ export class TokenService {
       })
     }
   }
-  verifyAccess(token: string) {
-    return jwt.verify(token, this.secret('access')) as {
-      id: number
-      first_name: string
-      last_name: string
-      role: string
-    }
+
+  verifyAccess(token: string): TokenPayload {
+    return jwt.verify(token, this.secret('access')) as TokenPayload
   }
+
   verifyRefresh(token: string) {
     return jwt.verify(token, this.secret('refresh'))
   }
+
   async find(refreshToken: string) {
     return this.tokenRepo.find(refreshToken)
   }
+
   async update(oldToken: string, newToken: string) {
     return this.tokenRepo.update(oldToken, newToken)
   }
+
   async insert(userId: number, token: string) {
     return this.tokenRepo.insert(userId, token)
   }
+
   async revoke(token: string) {
     return this.tokenRepo.delete(token)
   }
+
   async revokeOutdatedTokens(): Promise<void> {
     try {
       const tokens = await this.tokenRepo.getOutdatedTokens()
@@ -57,6 +67,7 @@ export class TokenService {
       throw Error(`Failed to delete outdated tokens: ${e}`)
     }
   }
+
   private secret(type: 'access' | 'refresh') {
     return type === 'access'
       ? config.JWT_ACCESS_SECRET

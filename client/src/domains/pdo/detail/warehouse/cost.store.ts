@@ -1,6 +1,6 @@
 import { cache } from 'domains/pdo/cache/root'
 import { makeAutoObservable } from 'mobx'
-import { DetailAutomaticWriteoffData } from 'srv/rpc/pdo/detail/get'
+import { DetailAutomaticWriteoffData } from 'srv/rpc/pdo/details'
 
 export class MaterialCost {
   materialId!: number

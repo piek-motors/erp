@@ -68,10 +68,6 @@ export const DetailWarehouse = observer(
                 .then(() => {
                   notifier.ok(WriteoffCompletedText)
                 })
-                .catch(e => {
-                  notifier.err(`Ошибка списания детали: ${e.message}`)
-                  throw e
-                })
                 .finally(() => {
                   modalState.setWriteoff(false)
                 })
@@ -92,10 +88,6 @@ export const DetailWarehouse = observer(
                 .insertSupply(detail.id)
                 .then(() => {
                   notifier.ok(SupplyCompletedText)
-                })
-                .catch(e => {
-                  notifier.err(`Ошибка при регистрации поставки: ${e.message}`)
-                  throw e
                 })
                 .finally(() => {
                   modalState.setSupply(false)

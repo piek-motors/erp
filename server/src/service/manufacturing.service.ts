@@ -136,13 +136,7 @@ export class Manufacturing {
     return writeoff
   }
 
-  async finishOrder(orderId: number): Promise<{
-    id: number
-    detail_id: number
-    qty: number
-    finished_at: Date | null
-    material_writeoffs: any
-  }> {
+  async finishOrder(orderId: number): Promise<void> {
     const manufacturing = await this.trx
       .updateTable('pdo.manufacturing')
       .set({
@@ -152,7 +146,6 @@ export class Manufacturing {
       .where('id', '=', orderId)
       .returningAll()
       .executeTakeFirst()
-
     if (!manufacturing) {
       throw new ErrManufacturingOrderNotFound(
         `Manufacturing with id ${orderId} not found`
@@ -166,20 +159,17 @@ export class Manufacturing {
       }))
       .where('id', '=', manufacturing.detail_id)
       .execute()
-
-    return manufacturing
   }
 
   async deleteOrder(manufacturingId: number): Promise<void> {
     const manufacturing = await this.getOrder(manufacturingId)
-
     if (manufacturing.status === ManufacturingOrderStatus.Collected) {
-      throw Error(
-        `Cannot delete manufacturing order that has already been collected`
-      )
+      throw new TRPCError({
+        code: 'BAD_REQUEST',
+        message: 'Cannot delete completed order'
+      })
     }
 
-    // ON DELETE SET NULL constraint will automatically set operations.manufacturing_order_id to null
     await this.trx
       .deleteFrom('pdo.manufacturing')
       .where('id', '=', manufacturingId)
@@ -195,7 +185,7 @@ export class Manufacturing {
     },
     qty: number,
     order: Selectable<DB.ManufacturingTable>
-  ) {
+  ): Promise<MaterialWriteoff> {
     const { material_id, label } = material
     if (!material.cost) {
       throw new Error('Material cost data is missing')

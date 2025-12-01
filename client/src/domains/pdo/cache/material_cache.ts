@@ -1,7 +1,7 @@
 import { matrixDecoder } from 'lib/rpc/matrix_decoder'
 import { rpc } from 'lib/rpc/rpc.client'
 import { makeAutoObservable } from 'mobx'
-import { Material } from 'srv/rpc/pdo/material/list'
+import { Material } from 'srv/rpc/pdo/materials'
 
 export class MaterialCache {
   private materials: Material[] = []

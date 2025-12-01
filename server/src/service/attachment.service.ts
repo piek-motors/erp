@@ -12,13 +12,13 @@ export interface Attachment {
 export class AttachmentService {
   constructor(private readonly db: IDB) {}
 
-  async insertAttachmentMetadata(
+  insertAttachmentMetadata(
     files: Attachment[]
   ): Promise<Selectable<DB.AttachmentTable>[]> {
     if (files.length === 0) {
       throw Error('No files to insert')
     }
-    const attachments = await this.db
+    return this.db
       .insertInto('attachments')
       .values(
         files.map(file => ({
@@ -30,8 +30,6 @@ export class AttachmentService {
       )
       .returningAll()
       .execute()
-
-    return attachments
   }
 
   async linkAttachmentsToOrder(
@@ -81,19 +79,18 @@ export class AttachmentService {
     return attachments
   }
 
-  async get(key: string): Promise<Selectable<DB.AttachmentTable> | null> {
-    const result = await this.db
+  get(key: string): Promise<Selectable<DB.AttachmentTable> | undefined> {
+    return this.db
       .selectFrom('attachments')
       .selectAll()
       .where('key', '=', key)
       .executeTakeFirst()
-    return result || null
   }
 
-  async getOrderAttachments(
+  getOrderAttachments(
     orderId: number
   ): Promise<Selectable<DB.AttachmentTable>[]> {
-    return await this.db
+    return this.db
       .selectFrom('orders.order_attachments as oa')
       .innerJoin('attachments as a', 'oa.attachment_id', 'a.id')
       .selectAll('a')
@@ -101,10 +98,10 @@ export class AttachmentService {
       .execute()
   }
 
-  async getDetailAttachments(
+  getDetailAttachments(
     detailId: number
   ): Promise<Selectable<DB.AttachmentTable>[]> {
-    return await this.db
+    return this.db
       .selectFrom('pdo.detail_attachments as da')
       .innerJoin('attachments as a', 'da.attachment_id', 'a.id')
       .selectAll('a')

@@ -96,7 +96,6 @@ export const ManufacturingUpdatePage = observer(() => {
                 </Box>
               }
             />
-
             <Row gap={1} alignItems={'start'}>
               <Stack>
                 <QuantityInput detail={detail} />
@@ -288,7 +287,11 @@ const DeleteOrderButton = observer(() => {
   )
 })
 
-export const Cost = observer(({ detail }: { detail: DetailState }) => {
+const Cost = observer(({ detail }: { detail: DetailState }) => {
+  if (api.s.order?.status === ManufacturingOrderStatus.Collected) {
+    return null
+  }
+
   const materialCost = detail.autoWriteoff.materialCost
   const details = detail.autoWriteoff.detailsCost
   return (
@@ -362,7 +365,13 @@ const QuantityInput = observer(({ detail }: { detail: DetailState }) => {
       </Card>
     )
   }
-  if (api.s.order.status === ManufacturingOrderStatus.Production) {
+
+  if (
+    [
+      ManufacturingOrderStatus.Production,
+      ManufacturingOrderStatus.Collected
+    ].includes(api.s.order.status)
+  ) {
     return (
       <Row gap={1}>
         <Label label="Кол-во" />
@@ -370,7 +379,6 @@ const QuantityInput = observer(({ detail }: { detail: DetailState }) => {
       </Row>
     )
   }
-  return null
 })
 
 const ActionButton = observer((props: { status: ManufacturingOrderStatus }) => {
@@ -413,7 +421,7 @@ const ActionButton = observer((props: { status: ManufacturingOrderStatus }) => {
   }
 })
 
-export const DuplicationCheckModal = observer(() => {
+const DuplicationCheckModal = observer(() => {
   const navigate = useNavigate()
   if (!api.s.orderAlreadyInProductionModal) return null
   const detail = cache.details.get(api.s.orderAlreadyInProductionModal.detailId)

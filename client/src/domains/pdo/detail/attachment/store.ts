@@ -41,7 +41,7 @@ export class DetailAttachmentsStore {
     this.setFiles([...this.files, ...newAttachments])
   }
   async delete(file: Attachment) {
-    await rpc.attachments.deleteFile.mutate({ type: 'detail', key: file.key })
+    await rpc.attachments.delete_file.mutate({ type: 'detail', key: file.key })
     this.setFiles(this.files.filter(f => f.key !== file.key))
   }
 }

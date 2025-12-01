@@ -75,10 +75,6 @@ export const MaterialWarehouse = observer(({ m }: { m: MaterialState }) => {
               .then(() => {
                 notifier.ok(SupplyCompletedText)
               })
-              .catch(e => {
-                notifier.err(`Ошибка зачисления поставки: ${e.message}`)
-                throw e
-              })
               .finally(() => {
                 modalState.setSupply(false)
               })
@@ -103,10 +99,6 @@ export const MaterialWarehouse = observer(({ m }: { m: MaterialState }) => {
               .insertWriteoff(m.id!)
               .then(() => {
                 notifier.ok(WriteoffCompletedText)
-              })
-              .catch(e => {
-                notifier.err(`Ошибка списания: ${e.message}`)
-                throw e
               })
               .finally(() => {
                 modalState.setWriteoff(false)

@@ -19,7 +19,7 @@ export class TokenRepository {
     if (!token) {
       throw ApiError.Unauthorized(Errcode.INVALID_REFRESH_TOKEN)
     }
-    const user = await this.userRepo.find(token.user_id)
+    const user = await this.userRepo.get(token.user_id)
     return {
       token,
       user

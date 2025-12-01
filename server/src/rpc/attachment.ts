@@ -1,53 +1,9 @@
 import { config, db, procedure, s3, TRPCError } from '#root/deps.js'
 import { attachmentService } from '#root/ioc/index.js'
-import { publicProcedure } from '#root/lib/trpc/trpc.js'
+import { router } from '#root/lib/trpc/trpc.js'
 import { z } from 'zod'
 
-export const getDetailAttachments = publicProcedure
-  .input(
-    z.object({
-      detailId: z.number()
-    })
-  )
-  .query(async ({ input }) => {
-    return await attachmentService.getDetailAttachments(input.detailId)
-  })
-
-export const getAttachmentByKey = publicProcedure
-  .input(
-    z.object({
-      key: z.string()
-    })
-  )
-  .query(async ({ input }) => {
-    return await attachmentService.get(input.key)
-  })
-
-export const updateName = procedure
-  .input(
-    z.object({
-      key: z.string(),
-      name: z.string()
-    })
-  )
-  .mutation(async ({ input }) => {
-    const attachment = await db
-      .updateTable('attachments')
-      .set({ filename: input.name })
-      .where('key', '=', input.key)
-      .executeTakeFirst()
-
-    if (!attachment) {
-      throw new TRPCError({
-        code: 'BAD_REQUEST',
-        message: 'Attachment not found'
-      })
-    }
-
-    return 'ok'
-  })
-
-export const deleteFile = publicProcedure
+export const delete_file = procedure
   .input(
     z.object({
       key: z.string(),
@@ -55,18 +11,11 @@ export const deleteFile = publicProcedure
     })
   )
   .mutation(async ({ input }) => {
-    const attachmentId = await db
+    const { id } = await db
       .deleteFrom('attachments')
       .where('key', '=', input.key)
       .returning('id')
-      .executeTakeFirst()
-
-    if (!attachmentId) {
-      throw new TRPCError({
-        code: 'BAD_REQUEST',
-        message: 'Attachment not found'
-      })
-    }
+      .executeTakeFirstOrThrow()
 
     await s3
       .deleteObject({ Bucket: config.S3_BUCKET, Key: input.key })
@@ -79,13 +28,13 @@ export const deleteFile = publicProcedure
       case 'order':
         await db
           .deleteFrom('orders.order_attachments')
-          .where('attachment_id', '=', attachmentId.id)
+          .where('attachment_id', '=', id)
           .execute()
         break
       case 'detail':
         await db
           .deleteFrom('pdo.detail_attachments')
-          .where('attachment_id', '=', attachmentId.id)
+          .where('attachment_id', '=', id)
           .execute()
         break
       default:
@@ -97,3 +46,49 @@ export const deleteFile = publicProcedure
 
     return 'ok'
   })
+
+export const attachments = router({
+  update_name: procedure
+    .input(
+      z.object({
+        key: z.string(),
+        name: z.string()
+      })
+    )
+    .mutation(async ({ input }) => {
+      const attachment = await db
+        .updateTable('attachments')
+        .set({ filename: input.name })
+        .where('key', '=', input.key)
+        .executeTakeFirst()
+      if (!attachment) {
+        throw new TRPCError({
+          code: 'BAD_REQUEST',
+          message: 'Attachment not found'
+        })
+      }
+      return 'ok'
+    }),
+  //
+  delete_file,
+  //
+  get_detail_attachments: procedure
+    .input(
+      z.object({
+        detailId: z.number()
+      })
+    )
+    .query(async ({ input }) => {
+      return await attachmentService.getDetailAttachments(input.detailId)
+    }),
+  //
+  get_attachment_by_key: procedure
+    .input(
+      z.object({
+        key: z.string()
+      })
+    )
+    .query(async ({ input }) => {
+      return await attachmentService.get(input.key)
+    })
+})

@@ -2,7 +2,7 @@ import { Label, P, Row } from 'lib/index'
 import { roundAndTrim } from 'lib/utils/fmt'
 import { Unit, uiUnit } from 'models'
 import { Column } from 'react-table'
-import { Material } from 'srv/rpc/pdo/material/list'
+import { Material } from 'srv/rpc/pdo/materials'
 import { ShapeNameToIconMap } from './list'
 
 function balanceWithUnit(stock: number, unit: Unit) {

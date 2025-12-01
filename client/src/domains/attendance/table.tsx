@@ -2,11 +2,11 @@
 import { css } from '@emotion/react'
 import { Sheet } from 'lib'
 import { useTable } from 'react-table'
-import { AttendanceEmployee } from 'srv/service/attendance_report.generator'
+import { Employee } from 'srv/rpc/attendance/report_generator'
 
 interface ITableProps {
   readonly columns: any[]
-  readonly data: AttendanceEmployee[]
+  readonly data: Employee[]
 }
 
 export function Table({ columns, data }: ITableProps) {

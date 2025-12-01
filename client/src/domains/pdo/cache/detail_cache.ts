@@ -1,7 +1,7 @@
 import { matrixDecoder } from 'lib/rpc/matrix_decoder'
 import { rpc } from 'lib/rpc/rpc.client'
 import { makeAutoObservable } from 'mobx'
-import { ListDetailsOutput } from 'srv/rpc/pdo/detail/list'
+import { ListDetailsOutput } from 'srv/rpc/pdo/details'
 import { DetailState } from '../detail/detail.state'
 import { map } from '../mappers'
 

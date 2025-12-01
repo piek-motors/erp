@@ -1,15 +1,14 @@
 export enum UserRole {
   Admin = 'admin',
   OrderManager = 'order_manager',
-  Bookkeeper = 'bookkeeper',
-  MetalflowWorker = 'metalflow_worker',
-  WarehouseBookkeeper = 'warehouse_bookkeeper'
+  PdoManager = 'pdo_manager',
+  StaffManager = 'staff_manager'
 }
 
 export class User {
   constructor(
     readonly id: number,
-    readonly role: UserRole | null,
+    readonly roles: UserRole[] | null,
     readonly firstName: string,
     readonly lastName: string | null,
     readonly email: string | null

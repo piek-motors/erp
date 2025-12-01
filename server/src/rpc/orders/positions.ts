@@ -1,7 +1,8 @@
-import { db, procedure, router, z } from '#root/deps.js'
+import { db, procedure, requireScope, router, Scope, z } from '#root/deps.js'
 
-export const positionRouter = router({
+export const positions = router({
   insert: procedure
+    .use(requireScope(Scope.orders))
     .input(
       z.object({
         order_id: z.number(),
@@ -24,6 +25,7 @@ export const positionRouter = router({
     ),
   //
   update: procedure
+    .use(requireScope(Scope.orders))
     .input(
       z.object({
         id: z.number(),
@@ -46,6 +48,7 @@ export const positionRouter = router({
     ),
   //
   delete: procedure
+    .use(requireScope(Scope.orders))
     .input(
       z.object({
         id: z.number()

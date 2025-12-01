@@ -19,7 +19,8 @@ export interface Interval {
   dur: number
   ent_event_id: number
 }
-export interface AttendanceEmployee {
+
+export interface Employee {
   id: number
   name: string
   card: string
@@ -33,7 +34,7 @@ export interface AttendanceEmployee {
 
 export interface AttendanceReport {
   daysInMonth: number
-  employees: AttendanceEmployee[]
+  employees: Employee[]
 }
 
 export class AttendanceReportGenerator {
@@ -58,7 +59,7 @@ export class AttendanceReportGenerator {
     ])
 
     const days = createDaysInMonthArray(period)
-    const result: AttendanceEmployee[] = []
+    const result: Employee[] = []
     const dailyTimeRetention = options.timeRetentionMinutes * 60
 
     for (const user of users) {
@@ -76,7 +77,7 @@ export class AttendanceReportGenerator {
         return acc
       }, {} as Record<number, { intervals: Interval[]; total_dur: number; broken: boolean }>)
 
-      const employee: AttendanceEmployee = {
+      const employee: Employee = {
         totalIntervalsCount: userRelatedIntervals.length,
         id: user.id,
         name: removeCardNumber(`${user.lastname} ${user.firstname}`),
