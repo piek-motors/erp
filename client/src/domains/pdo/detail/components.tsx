@@ -68,7 +68,10 @@ export const DetailInputs = observer(
           value={d.drawingNumber}
         />
         <DetailGroupInput detail={d} />
-        <DetailRecommendedBatchSizeInput detail={d} />
+        <Row alignItems={'end'}>
+          <StockLocationInput detail={d} />
+          <DetailRecommendedBatchSizeInput detail={d} />
+        </Row>
         <DetailDescriptionInput detail={d} />
       </Box>
       <DetailAccordionGroup d={d} />
@@ -134,6 +137,14 @@ const DetailRecommendedBatchSizeInput = observer(
     />
   )
 )
+
+const StockLocationInput = observer(({ detail }: { detail: DetailState }) => (
+  <Input
+    label="Адрес на складе"
+    value={detail.stockLocation}
+    onChange={v => detail.setStockLocation(v)}
+  />
+))
 
 const Input = (props: MyInputProps) => (
   <Inp variant="outlined" color="neutral" {...props} />

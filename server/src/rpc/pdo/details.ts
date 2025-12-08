@@ -62,6 +62,7 @@ const detailBaseSchema = z.object({
   processingRoute: processingRouteSchema.nullable(),
   drawingName: z.string().nullable(),
   automaticWriteoff: automaticWriteoffSchema.nullable(),
+  stockLocation: z.string().nullable(),
   recommendedBatchSize: z.number().nullable()
 })
 
@@ -151,6 +152,7 @@ export const details = router({
           description: input.description,
           part_code: input.partCode,
           stock: 0,
+          stock_location: input.stockLocation,
           logical_group_id: input.groupId,
           blank_spec: input.blankSpec || null,
           processing_route: input.processingRoute || null,
@@ -194,6 +196,7 @@ export const details = router({
           drawing_name: input.drawingName || null,
           automatic_writeoff: input.automaticWriteoff,
           recommended_batch_size: input.recommendedBatchSize || null,
+          stock_location: input.stockLocation,
           updated_at: new Date()
         })
         .where('id', '=', input.id)

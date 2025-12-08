@@ -68,7 +68,8 @@ class DetailMapper {
       recommended_batch_size: detail.recommended_batch_size ?? null,
       processing_route: detail.processing_route ?? null,
       automatic_writeoff: detail.automatic_writeoff ?? null,
-      unit: detail.unit ?? Unit.Countable
+      unit: detail.unit ?? Unit.Countable,
+      stock_location: detail.stock_location ?? null
     })
     return res
   }

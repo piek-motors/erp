@@ -76,7 +76,10 @@ export class DetailState {
   setDrawingNumber(drawingNumber: string) {
     this.drawingNumber = drawingNumber
   }
-
+  stockLocation?: string | null
+  setStockLocation(v: string) {
+    this.stockLocation = v
+  }
   blankSpec?: BlankSpec | null = null
   setBlankSpec(params?: BlankSpec | null) {
     this.blankSpec = params
@@ -134,6 +137,7 @@ export class DetailState {
       this.autoWriteoff.init(d.automatic_writeoff)
     }
     this.setRecommendedBatchSize(d.recommended_batch_size ?? undefined)
+    this.stockLocation = d.stock_location
   }
 
   reset() {
@@ -180,7 +184,8 @@ export class DetailState {
           }
         : null,
       drawingName: this.drawingName ?? null,
-      automaticWriteoff: this.autoWriteoff.payload
+      automaticWriteoff: this.autoWriteoff.payload,
+      stockLocation: this.stockLocation || null
     }
   }
 }

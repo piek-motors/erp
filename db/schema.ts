@@ -103,6 +103,7 @@ export namespace DB {
     logical_group_id: number | null // hash index
     part_code: string | null
     stock: number
+    stock_location: string | null
     blank_spec: JSONColumnType<any, any, any>
     updated_at: Date
     processing_route: JSONColumnType<
