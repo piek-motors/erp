@@ -19,7 +19,7 @@ export function timeDeltaDays(t?: string | null) {
 
   const rtf = new Intl.RelativeTimeFormat('ru', {
     numeric: 'always',
-    style: 'short'
+    style: 'narrow'
   })
   const days = Math.floor(hours / 24)
   return rtf.format(-days, 'day')
