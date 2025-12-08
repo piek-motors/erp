@@ -186,13 +186,15 @@ export class Manufacturing {
     qty: number,
     order: Selectable<DB.ManufacturingTable>
   ): Promise<MaterialWriteoff> {
-    const { material_id, label } = material
-    if (!material.cost) {
-      throw new Error('Material cost data is missing')
+    const { material_id, label, cost } = material
+    if (!cost) {
+      throw new Error('Не задан расход материала')
     }
-    const totalCost = new Decimal(material.cost)
-      .mul(new Decimal(qty))
-      .toNumber()
+    const qty_decimal = new Decimal(qty)
+    if (!qty_decimal) {
+      throw Error('Не задано кол-во изделий')
+    }
+    const totalCost = new Decimal(cost).mul(qty_decimal).toNumber()
 
     if (material.stock < totalCost) {
       throw new ErrNotEnoughMaterial(
