@@ -1,5 +1,5 @@
 import { UilLink, UilMinus } from '@iconscout/react-unicons'
-import { Divider, IconButton, Stack } from '@mui/joy'
+import { IconButton, Stack } from '@mui/joy'
 import { AccordionCard } from 'components/accordion_card'
 import { ExtraSmallIconButton } from 'components/buttons'
 import { NumberInput } from 'components/inputs/number_input'
@@ -62,6 +62,7 @@ export const MaterialCostInputs = observer(
                 <Row>
                   <NumberInput
                     width={100}
+                    size="sm"
                     unit={uiUnit(material?.unit)}
                     value={materialCost.length}
                     onChange={v => {
@@ -108,14 +109,13 @@ export const AutomaticWriteoffAccordion = observer(
     <AccordionCard title="Расход" defaultExpanded width={'fit-content'}>
       <Stack>
         <Label color="neutral" sx={{ mb: 1 }} level="body-xs">
-          <b>Автоматическое списание</b> материалов или деталей при запуске в
-          производство.
-          <br /> Выберите <b>либо расход материала</b>,{' '}
-          <b>либо расход иных деталей</b>.
+          <b>Автоматическое списание</b> материалов при запуске в производство.
+          {/* <br /> Выберите <b>либо расход материала</b>,{' '} */}
+          {/* <b>либо расход иных деталей</b>. */}
         </Label>
         <MaterialCostInputs detail={detail} />
-        <Divider sx={{ my: 0.5 }} />
-        <DetailCostInputs detail={detail} />
+        {/* <Divider sx={{ my: 0.5 }} /> */}
+        {/* <DetailCostInputs detail={detail} /> */}
       </Stack>
     </AccordionCard>
   )

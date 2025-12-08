@@ -304,7 +304,7 @@ const Cost = observer(({ detail }: { detail: DetailState }) => {
           </Stack>
         </Card>
       ) : null}
-
+      {/* 
       {!!details.length ? (
         <Card size="sm">
           <Label label="Детали к потреблению" />
@@ -323,7 +323,7 @@ const Cost = observer(({ detail }: { detail: DetailState }) => {
             ))}
           </Stack>
         </Card>
-      ) : null}
+      ) : null} */}
     </Row>
   )
 })
