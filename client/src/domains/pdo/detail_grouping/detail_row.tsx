@@ -17,12 +17,12 @@ export function DetailRow({
   return (
     <>
       <ColorSegmentation detail={detail} />
-      <Grid>
+      <Grid sx={{ alignContent: 'center' }}>
         <Row
           sx={{
             alignItems: 'center',
             display: 'flex',
-            p: 0,
+            p: 0.5,
             mb: 0,
             backgroundColor: isSelected ? '#e7b6be' : 'transparent',
             '&:hover .detail-arrow': {

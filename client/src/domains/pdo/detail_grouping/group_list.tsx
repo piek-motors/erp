@@ -32,7 +32,7 @@ export const SharedGroupList = observer(
               <Button
                 size="sm"
                 variant={isSelected ? 'solid' : 'plain'}
-                color={isSelected ? 'primary' : 'neutral'}
+                color={'neutral'}
               >
                 {group.name}
               </Button>
@@ -52,7 +52,8 @@ export const GroupSelectModal = observer(() => {
       openButton={
         <Button
           variant="solid"
-          color="primary"
+          color="neutral"
+          size="sm"
           startDecorator={<UseIcon icon={UilBars} invert />}
         >
           Группы

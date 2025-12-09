@@ -10,18 +10,16 @@ interface Props {
     material_id?: number | null
     detail_id?: number | null
   }
-  showLinkButton?: boolean
 }
 
 export const OperationName = observer((props: Props) => {
-  const { operation, showLinkButton } = props
+  const { operation } = props
 
   if (operation.material_label && operation.material_id) {
     return (
       <MaterialName
         materialLabel={operation.material_label}
         materialId={operation.material_id}
-        withLink={showLinkButton}
       />
     )
   }

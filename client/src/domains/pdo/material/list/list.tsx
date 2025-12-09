@@ -1,8 +1,8 @@
 /** @jsxImportSource @emotion/react */
-import { ScrollableWindow, Search } from 'components/inputs'
+import { Search } from 'components/inputs'
 import { Table } from 'components/table.impl'
-import { MetalPageTitle } from 'domains/pdo/shared/basic'
-import { Box, observer, Row, Stack, useNavigate } from 'lib/index'
+import { HomeButton } from 'domains/pdo/metalflow_root'
+import { observer, Row, Stack, useNavigate } from 'lib/index'
 import { openPage, routeMap } from 'lib/routes'
 import { MaterialShape } from 'models'
 import { Material } from 'srv/rpc/pdo/materials'
@@ -42,33 +42,28 @@ export const MaterialList = observer((props: MaterialsTableProps) => {
 })
 
 export const MaterialListPage = observer((props: MaterialsTableProps) => (
-  <ScrollableWindow
-    refreshTrigger={false}
-    staticContent={<MetalPageTitle t={'Материалы'}></MetalPageTitle>}
-    scrollableContent={
-      <Box sx={{ p: 0.5 }}>
-        <Stack p={0.5} gap={0.5}>
-          <MaterialShapeFilter />
-          <Row>
-            <Search
-              width={100}
-              placeholder="№"
-              value={materialListStore.searchId}
-              onChange={v => {
-                materialListStore.setSearchId(v.target.value)
-              }}
-            />
-            <Search
-              placeholder="Название"
-              onChange={e => {
-                materialListStore.setSearchKeyword(e.target.value)
-              }}
-              value={materialListStore.filterKeyword}
-            />
-          </Row>
-        </Stack>
-        <MaterialList {...props} />
-      </Box>
-    }
-  />
+  <>
+    <Stack p={0.5} gap={0.5}>
+      <HomeButton t={'Материалы'} />
+      <MaterialShapeFilter />
+      <Row>
+        <Search
+          width={100}
+          placeholder="№"
+          value={materialListStore.searchId}
+          onChange={v => {
+            materialListStore.setSearchId(v.target.value)
+          }}
+        />
+        <Search
+          placeholder="Название"
+          onChange={e => {
+            materialListStore.setSearchKeyword(e.target.value)
+          }}
+          value={materialListStore.filterKeyword}
+        />
+      </Row>
+    </Stack>
+    <MaterialList {...props} />
+  </>
 ))

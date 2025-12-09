@@ -1,9 +1,16 @@
-import { Box, Stack } from '@mui/joy'
+import { Box, Sheet, Stack } from '@mui/joy'
 import { WebOnly } from 'components/utilities/conditional-display'
-import { DesktopOnly } from 'lib/index'
+import { DesktopOnly, MobileOnly } from 'lib/index'
 import { useEffect } from 'react'
 import { cache } from './cache/root'
+import { MetalPageTitle } from './shared'
 import { NavigationSideBar } from './shared/nav'
+
+export const HomeButton = (props: { t?: string }) => (
+  <MobileOnly>
+    <MetalPageTitle t={props.t} />
+  </MobileOnly>
+)
 
 export function MetalFlowRootLayout(props: { children?: React.ReactNode }) {
   useEffect(() => {
@@ -28,9 +35,11 @@ export function MetalFlowRootLayout(props: { children?: React.ReactNode }) {
         </WebOnly>
       </DesktopOnly>
       {props.children && (
-        <Stack sx={{ flexGrow: 1, gap: 1, overflowX: 'auto' }}>
-          {props.children}
-        </Stack>
+        <Sheet sx={{ width: '100%', height: 'min-content' }}>
+          <Stack sx={{ flexGrow: 1, gap: 1, overflowX: 'auto' }}>
+            {props.children}
+          </Stack>
+        </Sheet>
       )}
     </Box>
   )

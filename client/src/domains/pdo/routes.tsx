@@ -11,7 +11,7 @@ import { MaterialListPage } from './material/list/list'
 import { MaterialUpdatePage } from './material/update'
 import { MetalFlowRootLayout } from './metalflow_root'
 import { UsageInstruction } from './usage-instuction'
-import { OperationsScrollableWindow } from './warehouse/list'
+import { OperationsTable } from './warehouse/list'
 
 const { pdo: metalflow } = routeMap
 
@@ -61,7 +61,7 @@ const innerRoutes = [
     path: metalflow.detailGroup
   },
   {
-    element: <OperationsScrollableWindow />,
+    element: <OperationsTable />,
     path: metalflow.operations
   },
   {

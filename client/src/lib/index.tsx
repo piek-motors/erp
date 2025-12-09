@@ -119,10 +119,7 @@ export function InputWithUnit(
       sx={{ width: props.fullWidth ? '-webkit-fill-available' : 'auto' }}
     >
       <Label label={props.label} />
-      <Row>
-        <Input autoComplete={'off'} {...props} />
-        {props.unit && <P>{props.unit}</P>}
-      </Row>
+      <Input autoComplete={'off'} {...props} endDecorator={props.unit} />
     </FormControl>
   )
 }
@@ -140,7 +137,13 @@ export function Link(props: { to: string; children: React.ReactNode }) {
     }
   `
   return (
-    <ReactLink to={props.to} css={style}>
+    <ReactLink
+      to={props.to}
+      css={style}
+      onClick={e => {
+        e.stopPropagation()
+      }}
+    >
       {props.children}
     </ReactLink>
   )
@@ -151,7 +154,7 @@ export function RowButColumsAtSm(
     children: React.ReactNode
   } & StackProps
 ) {
-  return <Stack gap={1} direction={{ xs: 'column', md: 'row' }} {...props} />
+  return <Stack gap={0.5} direction={{ xs: 'column', md: 'row' }} {...props} />
 }
 
 export function StackButRowAtSm(

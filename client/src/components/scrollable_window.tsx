@@ -10,10 +10,7 @@ function Wrapper(props: {
 }) {
   if (props.useSheet)
     return (
-      <Sheet
-        sx={{ ...props.sx, width: '100%', minWidth: 'fit-content' }}
-        variant="outlined"
-      >
+      <Sheet sx={{ ...props.sx, width: '100%', minWidth: 'fit-content' }}>
         {props.children}
       </Sheet>
     )

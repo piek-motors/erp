@@ -25,7 +25,10 @@ export const ColorSegmentation = observer((props: { detail: Detail }) => (
       m: 0.1,
       width: '-webkit-fill-available',
       minWidth: 20,
-      justifyContent: 'start'
+      minHeight: 20,
+      justifyContent: 'center',
+      alignItems: 'center',
+      alignContent: 'center'
     }}
     size="sm"
     color="neutral"

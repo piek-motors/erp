@@ -57,12 +57,14 @@ function MenuButton(props: {
   name?: string
   size: ButtonProps['size']
 }) {
+  const location = useLocation()
+  const isActive = location.pathname === props.href
   return (
     <Link to={props.href} key={props.href}>
       <Button
         sx={{ textAlign: 'left', lineHeight: 1, width: 'min-content' }}
-        variant="plain"
-        color="neutral"
+        variant={isActive ? 'solid' : 'plain'}
+        color={'neutral'}
         size={props.size}
       >
         {props.name}

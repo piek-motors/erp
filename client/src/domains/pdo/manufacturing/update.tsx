@@ -77,7 +77,7 @@ export const ManufacturingUpdatePage = observer(() => {
           <Stack gap={1}>
             <MetalPageTitle
               t={
-                <Box>
+                <Box width={'max-content'}>
                   <Row>
                     <P level="body-sm" whiteSpace={'nowrap'}>
                       Заказ №{api.s.order.id}
@@ -96,6 +96,7 @@ export const ManufacturingUpdatePage = observer(() => {
                 </Box>
               }
             />
+            <Divider />
             <Row gap={1} alignItems={'start'}>
               <Stack>
                 <QuantityInput detail={detail} />
@@ -485,7 +486,6 @@ const DetailMaterialInfo = observer((props: { cost: MaterialCost }) => {
         <MaterialName
           materialId={cost.materialId}
           materialLabel={cost.material?.label || ''}
-          withLink
         />
         <Label level="body-sm" color="primary">
           Расход {cost?.length || 'не указано'}{' '}

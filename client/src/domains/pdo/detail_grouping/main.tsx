@@ -11,42 +11,34 @@ import {
   Stack,
   useEffect
 } from 'lib/index'
-import { ReactNode } from 'react'
 import { useParams } from 'react-router'
 import { crud } from './api'
 import { GroupActions, TargetGroupDetailList } from './detail_list'
 import { GroupSelectModal, SharedGroupList } from './group_list'
 import { UpdateGroupNameModal } from './group_name.modal'
 
-interface DetailGroupsLayoutProps {
-  children?: ReactNode
-}
-
 const Detauls = observer(() => {
   if (crud.targetGroupLoading.loading) return <Loading />
   const openedGroup = crud.store.targetGroup
   return (
-    <Box>
-      <ScrollableWindow
-        scrollableContent={
-          openedGroup && (
-            <Stack p={1}>
-              <Row>
-                <UpdateGroupNameModal />
-                <GroupActions />
-              </Row>
-              <Divider sx={{ my: 0.5 }} />
-              <TargetGroupDetailList />
-            </Stack>
-          )
-        }
-        refreshTrigger={null}
-      />
-    </Box>
+    <ScrollableWindow
+      scrollableContent={
+        openedGroup && (
+          <Stack p={1}>
+            <Row>
+              <UpdateGroupNameModal />
+              <GroupActions />
+            </Row>
+            <Divider sx={{ my: 0.5 }} />
+            <TargetGroupDetailList />
+          </Stack>
+        )
+      }
+    />
   )
 })
 
-const DetailGroupsLayout = observer((props: DetailGroupsLayoutProps) => (
+const DetailGroupsLayout = observer(() => (
   <Stack
     direction={{
       xs: 'column',
@@ -72,6 +64,7 @@ const DetailGroupsLayout = observer((props: DetailGroupsLayoutProps) => (
       </DesktopOnly>
     </Box>
     {/* Group details */}
+    <Divider orientation="vertical" />
     <Detauls />
   </Stack>
 ))

@@ -1,7 +1,6 @@
-import { UilLink, UilMinus } from '@iconscout/react-unicons'
+import { UilMinus } from '@iconscout/react-unicons'
 import { IconButton, Stack } from '@mui/joy'
 import { AccordionCard } from 'components/accordion_card'
-import { ExtraSmallIconButton } from 'components/buttons'
 import { NumberInput } from 'components/inputs/number_input'
 import { cache } from 'domains/pdo/cache/root'
 import {
@@ -10,12 +9,10 @@ import {
   observer,
   P,
   PlusIcon,
-  routeMap,
   Row,
   Sheet,
   UseIcon
 } from 'lib/index'
-import { openPage } from 'lib/routes'
 import { uiUnit, Unit } from 'models'
 import { MaterialSelect } from '../components'
 import { DetailState } from '../detail.state'
@@ -31,7 +28,7 @@ interface CostRowProps {
 const CostRow = ({ children, onDelete, qtyInput: input }: CostRowProps) => (
   <Stack gap={0.5}>
     <Row gap={0.5}>{children}</Row>
-    <Row>
+    <Row justifyContent={'space-between'}>
       {input}
       <IconButton variant="soft" color="danger" size="sm" onClick={onDelete}>
         <UseIcon icon={UilMinus} />
@@ -78,25 +75,16 @@ export const MaterialCostInputs = observer(
               </Stack>
             }
           >
-            <Row>
-              <MaterialSelect
-                value={materialCost}
-                index={0}
-                onChange={cost => {
-                  detail.autoWriteoff.updateMaterial(
-                    cost.materialId,
-                    cost.length!
-                  )
-                }}
-              />
-              <ExtraSmallIconButton
-                link={openPage(
-                  routeMap.pdo.material.edit,
-                  materialCost.materialId
-                )}
-                icon={UilLink}
-              />
-            </Row>
+            <MaterialSelect
+              value={materialCost}
+              index={0}
+              onChange={cost => {
+                detail.autoWriteoff.updateMaterial(
+                  cost.materialId,
+                  cost.length!
+                )
+              }}
+            />
           </CostRow>
         )}
       </Base>

@@ -1,8 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { SxProps } from '@mui/joy/styles/types'
-import { WithHiddenLinkButton } from 'components/hidden_button'
 import { cache } from 'domains/pdo/cache/root'
-import { Box, P, Row, observer } from 'lib/index'
+import { Box, Link, P, Row, observer } from 'lib/index'
 import { openPage, routeMap } from 'lib/routes'
 
 interface Detail {
@@ -24,32 +23,17 @@ const capitalizeFirstLetter = (str: string): string => {
 }
 
 export const DetailName = observer((props: Props) => {
-  const { detail, withLink, withGroupName } = props
-
-  // Main content: detail name + optional group link
-  const mainContent = (
-    <>
-      <Box sx={{ width: 'min-content', whiteSpace: 'nowrap', ...props.sx }}>
-        {capitalizeFirstLetter(detail.name)}
-      </Box>
-      {withGroupName && <GroupName groupId={detail.group_id} />}
-    </>
+  const { detail, withGroupName } = props
+  return (
+    <Box width={'fit-content'}>
+      <Link to={openPage(routeMap.pdo.detail.edit, detail.id)}>
+        <Row gap={1} rowGap={0} flexWrap={'wrap'}>
+          <P sx={props.sx}>{capitalizeFirstLetter(detail.name)}</P>
+          {withGroupName && <GroupName groupId={detail.group_id} />}
+        </Row>
+      </Link>
+    </Box>
   )
-
-  // Final content with optional link button
-  if (withLink) {
-    const editLink = detail.id
-      ? openPage(routeMap.pdo.detail.edit, detail.id)
-      : '#'
-
-    return (
-      <WithHiddenLinkButton linkTo={editLink}>
-        <Row>{mainContent}</Row>
-      </WithHiddenLinkButton>
-    )
-  }
-
-  return <Row>{mainContent}</Row>
 })
 
 const GroupName = observer(({ groupId }: { groupId: number | null }) => {

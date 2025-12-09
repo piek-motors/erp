@@ -4,7 +4,7 @@ import { ScrollableWindow, Search } from 'components/inputs'
 import { InModal } from 'components/modal'
 import { SearchResults } from 'components/search-paginated'
 import { Table } from 'components/table.impl'
-import { MetalPageTitle } from 'domains/pdo/shared/basic'
+import { HomeButton } from 'domains/pdo/metalflow_root'
 import {
   Box,
   Label,
@@ -90,19 +90,15 @@ const DetailList = observer((props: DetailsTableProps) => {
 })
 
 export const DetailsListPage = () => (
-  <ScrollableWindow
-    staticContent={<MetalPageTitle t={'Детали'} />}
-    scrollableContent={
-      <Stack p={0.5} gap={0.5}>
-        <DetailSearchArguments />
-        <Row alignItems="start" gap={0.5}>
-          <AlphabetIndex sx={{ position: 'sticky', top: 0, zIndex: 1 }} />
-          <Divider orientation="vertical" />
-          <DetailsList sx={{ width: '100%' }} />
-        </Row>
-      </Stack>
-    }
-  />
+  <Stack p={0.5} gap={0.5}>
+    <HomeButton t={'Детали'} />
+    <DetailSearchArguments />
+    <Row alignItems="start" gap={0.5}>
+      <AlphabetIndex sx={{ position: 'sticky', top: 0, zIndex: 1 }} />
+      <Divider orientation="vertical" />
+      <DetailsList sx={{ width: '100%' }} />
+    </Row>
+  </Stack>
 )
 
 interface DetailSelectModalProps {

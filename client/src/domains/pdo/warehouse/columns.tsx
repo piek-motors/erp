@@ -24,7 +24,7 @@ export const columns: Column<Operation>[] = [
   {
     Header: `Объект`,
     id: 'name',
-    accessor: data => <OperationName operation={data} showLinkButton={true} />
+    accessor: data => <OperationName operation={data} />
   },
   {
     Header: 'Кол-во',
