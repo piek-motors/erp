@@ -2,7 +2,7 @@ import { NumberInput } from 'components/inputs/number_input'
 import { Tabs } from 'components/tabs'
 import { AlloyAutocomplete, MaterialUnitSelect } from 'domains/pdo/shared/basic'
 import { Stack, observer } from 'lib/index'
-import { MaterialShape } from 'models'
+import { MaterialShape, uiUnit } from 'models'
 import { MaterialState } from './state'
 import { tabsConfig } from './tabs-config'
 
@@ -37,11 +37,12 @@ export const MaterialFormFields = observer(
           unit="кг/м"
         /> */}
         <NumberInput
-          label={'Норм. остаток'}
+          label={'Норм. запас'}
           value={m.safetyStock}
           onChange={v => {
             m.setSafetyStock(v)
           }}
+          unit={uiUnit(m.unit)}
         />
         <MaterialUnitSelect value={m.unit} onChange={v => m.setUnit(v)} />
       </Stack>
