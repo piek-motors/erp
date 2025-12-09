@@ -33,6 +33,7 @@ export const SharedGroupList = observer(
                 size="sm"
                 variant={isSelected ? 'solid' : 'plain'}
                 color={'neutral'}
+                sx={{ textAlign: 'left' }}
               >
                 {group.name}
               </Button>
