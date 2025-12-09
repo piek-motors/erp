@@ -8,7 +8,7 @@ import {
   UilSetting,
   UilWrench
 } from '@iconscout/react-unicons'
-import { Badge, IconButton, Stack } from '@mui/joy'
+import { Badge, Box, IconButton, Stack } from '@mui/joy'
 import { Context } from 'index'
 import { P, Row, UseIcon } from 'lib/index'
 import { routeMap } from 'lib/routes'
@@ -75,6 +75,13 @@ export function IndexPage() {
 
         return <Element key={idx} {...each} />
       })}
+      <Box width={300}>
+        <P level="body-xs" color="neutral">
+          Обратную связь по системе можно отправить в телеграме{' '}
+          <P fontWeight={700}>invalid_parameter</P> или на почту{' '}
+          <P fontWeight={700}>loseev5@gmail.com</P>
+        </P>
+      </Box>
     </Stack>
   )
 }
