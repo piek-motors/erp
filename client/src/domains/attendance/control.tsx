@@ -10,7 +10,7 @@ const ReportConfigurator = observer(() => {
         <InputWithUnit
           size="sm"
           label="Дневная норма вычета"
-          sx={{ width: 60 }}
+          sx={{ width: 100 }}
           type="number"
           value={store.timeRetention ?? ''}
           onChange={e => {
