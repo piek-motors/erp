@@ -1,9 +1,10 @@
 import { BoxProps, Button, Stack } from '@mui/joy'
 import { WebOnly } from 'components/utilities/conditional-display'
-import { Box, Label, Loading, observer, Sheet } from 'lib'
+import { Box, Label, Loading, observer, Sheet, useState } from 'lib'
 import moment from 'moment'
 import { Column } from 'react-table'
 import { Employee } from 'srv/rpc/attendance/report_generator'
+import { AbseceReasonMenu, AbsenceSection } from './absence_reason'
 import { Report, store } from './store'
 import { Table } from './table'
 import {
@@ -35,7 +36,7 @@ export const AttendanceReportComponent = observer(
             Header: day.toString(),
             Cell: props => (
               <ReportCell
-                employes={props.row.original}
+                employee={props.row.original}
                 day={day}
                 report={report}
               />
@@ -57,6 +58,7 @@ export const AttendanceReportComponent = observer(
         <UpdateIntervalModal />
         <Label>Отчет за {report.month}</Label>
         <Label>Норма вычета времени: {report.timeRetention} мин</Label>
+        <AbseceReasonMenu />
         <Table columns={columns} data={report.resp.employees} />
       </Sheet>
     )
@@ -64,24 +66,36 @@ export const AttendanceReportComponent = observer(
 )
 
 const ReportCell = observer(
-  (props: { employes: Employee; day: number; report: Report }) => {
-    const employee = props.employes.name
-    const data = props.employes.days[props.day]
+  (props: { employee: Employee; day: number; report: Report }) => {
+    const [data, setData] = useState(props.employee.days[props.day])
     const meta: UpdateIntervalMetadata = {
-      employee,
+      employee: props.employee.name,
       day: props.day,
       month: store.monthSelect.getMonthLabel()
     }
+    const date = new Date(
+      store.monthSelect.year,
+      store.monthSelect.month,
+      props.day + 1
+    )
     return (
       <Stack
         sx={{ fontSize: '0.86rem' }}
         bgcolor={
           data.intervals &&
+          data.intervals[0]?.ent_event_id &&
           data.intervals[0]?.ent_event_id === store.updatedIntervalId
             ? 'greenyellow'
             : undefined
         }
       >
+        <AbsenceSection
+          hasIntervals={data.intervals.length > 0}
+          absence={data.absence}
+          employeeId={props.employee.id}
+          date={date}
+          onReasonSet={r => setData({ ...data, absence: r })}
+        />
         {data.intervals.map(interval => (
           <>
             {interval.ent && (

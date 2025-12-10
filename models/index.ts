@@ -1,4 +1,5 @@
 export * from './domain/attachment'
+export * from './domain/attendance/enums'
 export * from './domain/orders/enums'
 export * from './domain/orders/order'
 export * from './domain/orders/ui.translators'

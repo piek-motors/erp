@@ -1,6 +1,7 @@
 import { db, procedure, requireScope, Scope } from '#root/deps.js'
 import { attendanceReportGenerator } from '#root/ioc/index.js'
 import { router } from '#root/lib/trpc/trpc.js'
+import { AbsenceReason } from 'models'
 import { z } from 'zod'
 
 export const attendance = router({
@@ -43,5 +44,21 @@ export const attendance = router({
         .where('ent_event_id', '=', input.ent_event_id)
         .execute()
       return interval.length
+    }),
+  //
+  set_absence_reason: procedure
+    .use(requireScope(Scope.staff))
+    .input(
+      z.object({
+        user_id: z.number(),
+        date: z.string(),
+        reason: z.enum(AbsenceReason)
+      })
+    )
+    .mutation(async ({ input }) => {
+      await db
+        .insertInto('attendance.employee_absences')
+        .values(input)
+        .execute()
     })
 })

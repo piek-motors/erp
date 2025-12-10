@@ -1,6 +1,7 @@
 import { Hour, Minute } from '#root/lib/constants.js'
 import { timedeltaInSeconds } from '#root/lib/time.js'
 import { KDB } from 'db'
+import { AbsenceReason } from 'models'
 
 interface Period {
   month: number
@@ -20,6 +21,13 @@ export interface Interval {
   ent_event_id: number
 }
 
+type Day = {
+  intervals: Interval[]
+  total_dur: number
+  broken: boolean
+  absence?: AbsenceReason
+}
+
 export interface Employee {
   id: number
   name: string
@@ -28,7 +36,7 @@ export interface Employee {
   workDays: number
   totalIntervalsCount: number
   days: {
-    [day: number]: { intervals: Interval[]; total_dur: number; broken: boolean }
+    [day: number]: Day
   }
 }
 
@@ -48,14 +56,20 @@ export class AttendanceReportGenerator {
     const endDate = new Date(
       Date.UTC(Number(period.year), Number(period.month) + 1, 1, 0, 0, 0)
     )
-    const [intervals, users] = await Promise.all([
+    const [intervals, users, all_absences] = await Promise.all([
       this.db
         .selectFrom('attendance.intervals')
         .selectAll()
         .where('ent', '>=', startDate)
         .where('ent', '<', endDate)
         .execute(),
-      this.db.selectFrom('attendance.users').selectAll().execute()
+      this.db.selectFrom('attendance.users').selectAll().execute(),
+      this.db
+        .selectFrom('attendance.employee_absences')
+        .selectAll()
+        .where('date', '>=', startDate.toISOString().split('T')[0])
+        .where('date', '<=', endDate.toISOString().split('T')[0])
+        .execute()
     ])
 
     const days = createDaysInMonthArray(period)
@@ -67,7 +81,7 @@ export class AttendanceReportGenerator {
         interval => interval.card === user.card
       )
       if (!userRelatedIntervals.length) continue
-
+      const absences = all_absences.filter(e => e.user_id === user.id)
       const daysMap = days.reduce((acc, day) => {
         acc[day] = {
           intervals: [],
@@ -75,7 +89,7 @@ export class AttendanceReportGenerator {
           broken: false
         }
         return acc
-      }, {} as Record<number, { intervals: Interval[]; total_dur: number; broken: boolean }>)
+      }, {} as Record<number, Day>)
 
       const employee: Employee = {
         totalIntervalsCount: userRelatedIntervals.length,
@@ -138,6 +152,11 @@ export class AttendanceReportGenerator {
         if (day.intervals.length === 1 && !day.total_dur) {
           day.broken = true
         }
+      }
+
+      for (const a of absences) {
+        const day = new Date(a.date).getDate()
+        daysMap[day].absence = a.reason
       }
 
       result.push(employee)

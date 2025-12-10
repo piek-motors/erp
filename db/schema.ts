@@ -7,6 +7,7 @@ import {
   type Updateable as KyselyUpdateable
 } from 'kysely'
 import {
+  AbsenceReason,
   Color,
   ManufacturingOrderStatus,
   MaterialShape,
@@ -37,6 +38,7 @@ export namespace DB {
 
     ['attendance.intervals']: AttendanceIntervalTable
     ['attendance.users']: AttendanceUserTable
+    ['attendance.employee_absences']: EmployeeAbsenceTable
 
     ['pdo.materials']: MaterialTable
     ['pdo.details']: DetailTable
@@ -254,6 +256,12 @@ export namespace DB {
     lastname: string
     card: string
     created_at: GeneratedAlways<Date>
+  }
+
+  export interface EmployeeAbsenceTable {
+    user_id: number
+    date: string
+    reason: AbsenceReason
   }
 
   export interface OrderCommentsTable {
