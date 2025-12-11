@@ -1,7 +1,7 @@
-import { Button } from '@mui/joy'
+import { Button, ButtonProps } from '@mui/joy'
 import Menu from '@mui/joy/Menu'
+import { SxProps } from '@mui/joy/styles/types'
 import { WebOnly } from 'components/utilities/conditional-display'
-import { P } from 'lib'
 import { rpc } from 'lib/deps'
 import { makeAutoObservable } from 'mobx'
 import { observer } from 'mobx-react-lite'
@@ -71,14 +71,20 @@ export const AbseceReasonMenu = observer(() => {
 })
 
 export const OpenAbsenceReasonButton = observer(
-  (props: Omit<OpenParams, 'anchorEl'>) => {
+  (
+    props: Omit<OpenParams, 'anchorEl'> & {
+      value?: string
+      sx?: SxProps
+      color?: ButtonProps['color']
+    }
+  ) => {
     if (props.date >= new Date()) return null
     return (
       <Button
         variant="plain"
-        color="neutral"
+        color={props.color}
         size="sm"
-        sx={{ opacity: 0.5, m: '0 auto' }}
+        sx={props.sx}
         onClick={e =>
           state.open({
             ...props,
@@ -86,7 +92,7 @@ export const OpenAbsenceReasonButton = observer(
           })
         }
       >
-        +
+        {props.value ?? '+'}
       </Button>
     )
   }
@@ -110,12 +116,19 @@ export const AbsenceSection = observer((props: AbsenceSectionProps) => {
             userId={props.employeeId}
             date={props.date}
             onReasonSet={props.onReasonSet}
+            sx={{ opacity: 0.3, m: '0 auto' }}
+            color={'neutral'}
           />
         </WebOnly>
       ) : (
-        <P textAlign={'center'} color="danger" level="body-sm" fontWeight={600}>
-          {props.absence}
-        </P>
+        <OpenAbsenceReasonButton
+          sx={{ opacity: 1, m: '0 auto' }}
+          color={'primary'}
+          userId={props.employeeId}
+          date={props.date}
+          onReasonSet={props.onReasonSet}
+          value={props.absence}
+        />
       )}
     </>
   )

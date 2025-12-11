@@ -33,7 +33,7 @@ export const SharedGroupList = observer(
                 size="sm"
                 variant={isSelected ? 'solid' : 'plain'}
                 color={'neutral'}
-                sx={{ textAlign: 'left' }}
+                sx={{ textAlign: 'left', width: 'max-content' }}
               >
                 {group.name}
               </Button>

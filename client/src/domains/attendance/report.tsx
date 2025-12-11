@@ -4,7 +4,7 @@ import { Box, Label, Loading, observer, Sheet, useState } from 'lib'
 import moment from 'moment'
 import { Column } from 'react-table'
 import { Employee } from 'srv/rpc/attendance/report_generator'
-import { AbseceReasonMenu, AbsenceSection } from './absence_reason'
+import { AbseceReasonMenu, AbsenceSection } from './absence'
 import { Report, store } from './store'
 import { Table } from './table'
 import {
@@ -12,7 +12,7 @@ import {
   UpdateIntervalMetadata,
   UpdateIntervalModal,
   updateIntervalModalState
-} from './update_interval.modal'
+} from './update_interval'
 
 export const AttendanceReportComponent = observer(
   ({ report }: { report: Report }) => {

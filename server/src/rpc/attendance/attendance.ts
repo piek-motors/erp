@@ -60,6 +60,7 @@ export const attendance = router({
       await db
         .insertInto('attendance.employee_absences')
         .values(input)
+        .onConflict(b => b.columns(['user_id', 'date']).doUpdateSet(input))
         .execute()
     })
 })
