@@ -248,6 +248,7 @@ export namespace DB {
     database: string | null
     ent_event_id: number
     ext_event_id: number | null
+    updated_manually: boolean | null
   }
 
   export interface AttendanceUserTable {

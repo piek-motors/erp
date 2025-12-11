@@ -78,16 +78,21 @@ const ReportCell = observer(
       store.monthSelect.month,
       props.day + 1
     )
+
+    const isUpdatedRecently =
+      data.intervals &&
+      data.intervals[0]?.ent_event_id &&
+      data.intervals[0]?.ent_event_id === store.updatedIntervalId
+
+    const bgcolor =
+      isUpdatedRecently ||
+      data.intervals.some(each => each.updated_manually === true)
     return (
       <Stack
-        sx={{ fontSize: '0.86rem' }}
-        bgcolor={
-          data.intervals &&
-          data.intervals[0]?.ent_event_id &&
-          data.intervals[0]?.ent_event_id === store.updatedIntervalId
-            ? 'greenyellow'
-            : undefined
-        }
+        sx={{
+          fontSize: '0.86rem',
+          outline: bgcolor ? '2.5px dashed darkred' : undefined
+        }}
       >
         <AbsenceSection
           hasIntervals={data.intervals.length > 0}

@@ -39,7 +39,8 @@ export const attendance = router({
         .updateTable('attendance.intervals')
         .set({
           ent: new Date(input.ent),
-          ext: new Date(input.ext)
+          ext: new Date(input.ext),
+          updated_manually: true
         })
         .where('ent_event_id', '=', input.ent_event_id)
         .execute()

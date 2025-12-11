@@ -19,6 +19,7 @@ export interface Interval {
   ext?: Date | null
   dur: number
   ent_event_id: number
+  updated_manually: boolean | null
 }
 
 type Day = {
@@ -104,7 +105,8 @@ export class AttendanceReportGenerator {
       for (const interval of userRelatedIntervals) {
         const i: Interval = {
           ent_event_id: interval.ent_event_id,
-          dur: 0
+          dur: 0,
+          updated_manually: null
         }
         if (interval.ext && interval.ent) {
           const interval_dur = timedeltaInSeconds(interval.ent, interval.ext)
@@ -114,6 +116,7 @@ export class AttendanceReportGenerator {
         if (showFullInfo) {
           i.ent = interval.ent
           i.ext = interval.ext
+          i.updated_manually = interval.updated_manually
         }
 
         const dayOfMonth = new Date(interval.ent).getDate()
