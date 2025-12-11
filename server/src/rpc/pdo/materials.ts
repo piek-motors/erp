@@ -23,7 +23,10 @@ import {
 } from 'models'
 import { z } from 'zod'
 
-export type Material = DB.Material
+export type Material = DB.Material & {
+  total_income: number
+  total_outcome: number
+}
 
 export const material = router({
   get: procedure
@@ -49,6 +52,11 @@ export const material = router({
   list: procedure.query(() =>
     db
       .selectFrom('pdo.materials as m')
+      .leftJoin(
+        'pdo.materials_quarterly_spending as s',
+        's.material_id',
+        'm.id'
+      )
       .selectAll()
       .orderBy('m.label')
       .execute()

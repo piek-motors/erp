@@ -1,4 +1,4 @@
-import { Label, P, Row } from 'lib/index'
+import { Label, P, Row, Stack } from 'lib/index'
 import { roundAndTrim } from 'lib/utils/fmt'
 import { Unit, uiUnit } from 'models'
 import { Column } from 'react-table'
@@ -52,5 +52,29 @@ export const columns: Column<Material>[] = [
   {
     Header: 'Норм. запас',
     accessor: m => balanceWithUnit(m.safety_stock, m.unit)
+  },
+  {
+    Header: 'Квартал',
+    accessor: m => (
+      <Row>
+        <Stack>
+          {m.total_income && m.total_income != 0 && (
+            <P fontWeight={400} level="body-xs">
+              +{m.total_income}
+            </P>
+          )}
+          {m.total_outcome && m.total_outcome != 0 && (
+            <P fontWeight={400} level="body-xs">
+              -{m.total_outcome}
+            </P>
+          )}
+        </Stack>
+        {(m.total_income || m.total_outcome) && (
+          <P fontWeight={400} level="body-xs">
+            {uiUnit(m.unit)}
+          </P>
+        )}
+      </Row>
+    )
   }
 ]

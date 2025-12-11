@@ -41,6 +41,7 @@ export namespace DB {
     ['attendance.employee_absences']: EmployeeAbsenceTable
 
     ['pdo.materials']: MaterialTable
+    ['pdo.materials_quarterly_spending']: MaterialQuarterlySpendingTable
     ['pdo.details']: DetailTable
     ['pdo.detail_attachments']: DetailAttachmentTable
     ['pdo.operations']: OperationsTable
@@ -96,6 +97,12 @@ export namespace DB {
   }
 
   export type Material = KyselySelectable<MaterialTable>
+
+  export interface MaterialQuarterlySpendingTable {
+    material_id: number
+    total_income: number
+    total_outcome: number
+  }
 
   export interface DetailTable {
     id: Generated<number>
