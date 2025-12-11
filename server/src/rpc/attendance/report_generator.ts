@@ -64,7 +64,7 @@ export class AttendanceReportGenerator {
         .where('ent', '>=', startDate)
         .where('ent', '<', endDate)
         .execute(),
-      this.db.selectFrom('attendance.users').selectAll().execute(),
+      this.db.selectFrom('attendance.employees').selectAll().execute(),
       this.db
         .selectFrom('attendance.employee_absences')
         .selectAll()

@@ -37,7 +37,7 @@ export namespace DB {
     ['orders.notifications']: NotificationTable
 
     ['attendance.intervals']: AttendanceIntervalTable
-    ['attendance.users']: AttendanceUserTable
+    ['attendance.employees']: AttendanceUserTable
     ['attendance.employee_absences']: EmployeeAbsenceTable
 
     ['pdo.materials']: MaterialTable
