@@ -7,14 +7,12 @@ import { routeMap } from 'lib/routes'
 import Attendance from './domains/attendance/main'
 import { IndexPage } from './index.page'
 import { RouteConfig } from './lib/types/global'
-import settings from './settings'
 
 export const protectedRoutes: RouteConfig[] = [
   ...orders,
   ...Attendance,
   ...order_detail,
   ...reclamations,
-  ...settings,
   ...metalflow,
   {
     element: <MentionList />,

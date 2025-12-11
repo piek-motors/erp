@@ -42,7 +42,7 @@ function MentionComponent({ data }: { data: Mention }) {
     <Stack>
       <Sheet
         sx={{ p: 1, borderRadius: 'lg' }}
-        variant={!data.seen ? 'soft' : 'plain'}
+        variant={!data.seen ? 'soft' : 'outlined'}
       >
         <Box sx={{ display: 'grid' }}>
           <Stack direction={'row'} gap={1}>

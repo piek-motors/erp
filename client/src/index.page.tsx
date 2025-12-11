@@ -5,15 +5,14 @@ import {
   UilCalculatorAlt,
   UilConstructor,
   UilListOl,
-  UilSetting,
   UilWrench
 } from '@iconscout/react-unicons'
-import { Badge, Box, IconButton, Stack } from '@mui/joy'
-import { Context } from 'index'
+import { Badge, Button, IconButton, Stack } from '@mui/joy'
+import { useAppContext } from 'hooks'
 import { P, Row, UseIcon } from 'lib/index'
 import { routeMap } from 'lib/routes'
 import { rpc } from 'lib/rpc/rpc.client'
-import { useContext, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
 
 export const links = [
@@ -37,16 +36,13 @@ export const links = [
     href: routeMap.mentions,
     icon: UilBell,
     name: 'Упоминания'
-  },
-  {
-    href: routeMap.settings,
-    icon: UilSetting,
-    name: 'Настройки'
   }
 ]
 
 export function IndexPage() {
-  const { store } = useContext(Context)
+  const { store } = useAppContext()
+  const navigate = useNavigate()
+
   if (!store?.user?.id) {
     throw Error('user not found')
   }
@@ -62,6 +58,11 @@ export function IndexPage() {
       .then(setCount)
   }, [])
 
+  async function handleLogout() {
+    await store.logout()
+    navigate('/login')
+  }
+
   return (
     <Stack py={3} gap={2} p={2}>
       {links.map((each, idx) => {
@@ -75,13 +76,27 @@ export function IndexPage() {
 
         return <Element key={idx} {...each} />
       })}
-      <Box width={300}>
+      <Stack width={300} gap={1}>
+        <P level="body-xs">
+          Аккаунт: {store.user?.email} {store.user?.fullName}
+          <br />
+          Роль: {store.user?.roles}
+        </P>
         <P level="body-xs" color="neutral">
-          Обратную связь по системе можно отправить в телеграме{' '}
+          Предложения по улучшению можно отправить в телеграме{' '}
           <P fontWeight={700}>invalid_parameter</P> или на почту{' '}
           <P fontWeight={700}>loseev5@gmail.com</P>
         </P>
-      </Box>
+        <Button
+          sx={{ width: 'fit-content' }}
+          onClick={handleLogout}
+          size="sm"
+          color="danger"
+          variant="outlined"
+        >
+          Выйти
+        </Button>
+      </Stack>
     </Stack>
   )
 }
