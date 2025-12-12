@@ -42,8 +42,8 @@ export interface Employee {
 }
 
 export interface AttendanceReport {
-  daysInMonth: number
   employees: Employee[]
+  days: number[]
 }
 
 export class AttendanceReportGenerator {
@@ -57,7 +57,7 @@ export class AttendanceReportGenerator {
     const endDate = new Date(
       Date.UTC(Number(period.year), Number(period.month) + 1, 1, 0, 0, 0)
     )
-    const [intervals, users, all_absences] = await Promise.all([
+    const [all_intervals, employees, all_absences] = await Promise.all([
       this.db
         .selectFrom('attendance.intervals')
         .selectAll()
@@ -77,12 +77,14 @@ export class AttendanceReportGenerator {
     const result: Employee[] = []
     const dailyTimeRetention = options.timeRetentionMinutes * 60
 
-    for (const user of users) {
-      const userRelatedIntervals = intervals.filter(
-        interval => interval.card === user.card
+    for (const empl of employees) {
+      const intervals = all_intervals.filter(
+        interval => interval.card === empl.card
       )
-      if (!userRelatedIntervals.length) continue
-      const absences = all_absences.filter(e => e.user_id === user.id)
+      if (!intervals.length) {
+        continue
+      }
+      const absences = all_absences.filter(e => e.user_id === empl.id)
       const daysMap = days.reduce((acc, day) => {
         acc[day] = {
           intervals: [],
@@ -93,16 +95,16 @@ export class AttendanceReportGenerator {
       }, {} as Record<number, Day>)
 
       const employee: Employee = {
-        totalIntervalsCount: userRelatedIntervals.length,
-        id: user.id,
-        name: removeCardNumber(`${user.lastname} ${user.firstname}`),
-        card: user.card,
+        totalIntervalsCount: intervals.length,
+        id: empl.id,
+        name: removeCardNumber(`${empl.lastname} ${empl.firstname}`),
+        card: empl.card,
         total: 0,
         workDays: 0,
         days: daysMap
       }
 
-      for (const interval of userRelatedIntervals) {
+      for (const interval of intervals) {
         const i: Interval = {
           ent_event_id: interval.ent_event_id,
           dur: 0,
@@ -166,7 +168,24 @@ export class AttendanceReportGenerator {
     }
 
     result.sort((a, b) => a.name.localeCompare(b.name))
-    return { employees: result, daysInMonth: days.length }
+    const weekdays = this.getWeekdays(days, result)
+    return {
+      employees: result,
+      days: days.filter(d => !weekdays.includes(d))
+    }
+  }
+
+  private getWeekdays(days: number[], employees: Employee[]): number[] {
+    const weekdays: number[] = []
+    for (const day of days) {
+      const isWeekday = employees.every(
+        empl => empl.days[day].intervals.length === 0
+      )
+      if (isWeekday) {
+        weekdays.push(day)
+      }
+    }
+    return weekdays
   }
 }
 

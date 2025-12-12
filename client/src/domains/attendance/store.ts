@@ -32,11 +32,6 @@ export class AttendanceStore {
     makeAutoObservable(this)
   }
 
-  updatedIntervalId?: number
-  setUpdatedIntervalId(v: number) {
-    this.updatedIntervalId = v
-  }
-
   async load() {
     const res = await this.loader.run(() =>
       rpc.attendance.get_report.query({
@@ -52,6 +47,10 @@ export class AttendanceStore {
       this.timeRetention,
       this.showFullInfo
     )
+  }
+
+  reset() {
+    this.report = undefined
   }
 }
 

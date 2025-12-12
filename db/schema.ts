@@ -37,7 +37,7 @@ export namespace DB {
     ['orders.notifications']: NotificationTable
 
     ['attendance.intervals']: AttendanceIntervalTable
-    ['attendance.employees']: AttendanceUserTable
+    ['attendance.employees']: AttendanceEmployeeTable
     ['attendance.employee_absences']: EmployeeAbsenceTable
 
     ['pdo.materials']: MaterialTable
@@ -258,7 +258,7 @@ export namespace DB {
     updated_manually: boolean | null
   }
 
-  export interface AttendanceUserTable {
+  export interface AttendanceEmployeeTable {
     id: GeneratedAlways<number>
     firstname: string
     lastname: string

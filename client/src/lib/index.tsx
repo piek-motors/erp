@@ -373,7 +373,6 @@ export function UseIcon(props: {
   invert?: boolean
 }) {
   const fillColor = props.invert ? 'white' : IconSettings.fill
-
   return (
     <props.icon
       width={props.small ? IconSettings.width / 1.5 : IconSettings.width}

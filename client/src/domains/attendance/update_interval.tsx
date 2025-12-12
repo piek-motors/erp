@@ -1,15 +1,26 @@
 import { UilExchange } from '@iconscout/react-unicons'
-import { Divider, IconButton, Modal, ModalClose, ModalDialog } from '@mui/joy'
+import {
+  Button,
+  Divider,
+  IconButton,
+  Modal,
+  ModalClose,
+  ModalDialog,
+  Stack
+} from '@mui/joy'
+import { WebOnly } from 'components/utilities/conditional-display'
 import { rpc } from 'lib/deps'
-import { Inp, P, Row, SaveIconButton, UseIcon } from 'lib/index'
+import { Inp, Label, P, Row, SaveIconButton, UseIcon } from 'lib/index'
 import { makeAutoObservable } from 'mobx'
 import { observer } from 'mobx-react-lite'
-import { Interval } from 'srv/rpc/attendance/report_generator'
+import { AbsenceReason } from 'models'
+import { Employee, Interval } from 'srv/rpc/attendance/report_generator'
+import { AbsenceReasons, absenceReasonState } from './absence'
 import { store } from './store'
 
 export interface UpdateIntervalMetadata {
-  employee: string
-  day: number
+  employee: Employee
+  date: Date
   month: string
 }
 
@@ -17,18 +28,22 @@ class State {
   constructor() {
     makeAutoObservable(this)
   }
-
   interval?: Interval
   intervalDate?: Date | null
-
   meta?: UpdateIntervalMetadata
 
-  open(interval: Interval, meta: this['meta']) {
+  open(meta: this['meta'], interval?: Interval) {
+    // reset
+    this.ent = undefined
+    this.ext = undefined
+
     this.interval = interval
     this.meta = meta
-    this.intervalDate = interval.ent ?? interval.ext
-    this.ent = fmtDateToHoursAndMinutes(interval.ent)
-    this.ext = fmtDateToHoursAndMinutes(interval.ext)
+    this.intervalDate = meta?.date
+    if (interval) {
+      this.ent = fmtDateToHoursAndMinutes(interval.ent)
+      this.ext = fmtDateToHoursAndMinutes(interval.ext)
+    }
   }
 
   ent?: string
@@ -46,25 +61,46 @@ class State {
     this.ext = c
   }
 
+  generateRandomEntEventId(): number {
+    const min = 1e9 // one milliard
+    const max = 2147483647
+    return Math.floor(Math.random() * (max - min + 1)) + min
+  }
+
   close() {
     this.interval = undefined
     this.meta = undefined
+    this.intervalDate = undefined
   }
 
   async save() {
-    if (!this.interval || !this.intervalDate) {
+    if (!this.intervalDate) {
       throw Error('Interval is not set')
     }
     if (!this.ent || !this.ext) {
       throw Error('ent or ext is not set')
     }
-    await rpc.attendance.update_interval.mutate({
-      ent_event_id: this.interval.ent_event_id,
-      ent: upTimeAndMinutesOnDate(this.intervalDate, this.ent),
-      ext: upTimeAndMinutesOnDate(this.intervalDate, this.ext)
-    })
+
+    const [ent, ext] = [this.ent, this.ext].map(each =>
+      upTimeAndMinutesOnDate(this.intervalDate!, each)
+    )
+
+    if (this.interval?.ent_event_id) {
+      await rpc.attendance.update_interval.mutate({
+        ent_event_id: this.interval?.ent_event_id,
+        ent,
+        ext
+      })
+    } else {
+      await rpc.attendance.insert_interval.mutate({
+        card: this.meta?.employee.card!,
+        ent_event_id: this.generateRandomEntEventId(),
+        ent,
+        ext
+      })
+    }
+
     store.load()
-    store.setUpdatedIntervalId(this.interval.ent_event_id)
     this.close()
   }
 }
@@ -73,14 +109,23 @@ const state = new State()
 export const updateIntervalModalState = state
 
 export const UpdateIntervalModal = observer(() => (
-  <Modal open={!!state.interval} onClose={() => state.close()}>
+  <Modal open={!!state.intervalDate} onClose={() => state.close()}>
     <ModalDialog>
       <ModalClose />
       <P>
-        {state.meta?.day} {state.meta?.month}
+        {state.meta?.date.getDate()} {state.meta?.month}
       </P>
-      <P>{state.meta?.employee}</P>
+      <P>{state.meta?.employee.name}</P>
       <Divider />
+      {!state.interval && (
+        <>
+          <Stack gap={1}>
+            <Label>Причина отсутсвия</Label>
+            <AbsenceReasons onClick={() => state.close()} />
+          </Stack>
+          <Divider />
+        </>
+      )}
       <Row alignItems={'end'}>
         <Inp
           value={state.ent}
@@ -107,6 +152,52 @@ export const UpdateIntervalModal = observer(() => (
     </ModalDialog>
   </Modal>
 ))
+
+export const UpdateIntervalButton = observer(
+  ({
+    data,
+    meta,
+    onReasonSet
+  }: {
+    data: Employee['days'][number]
+    meta: UpdateIntervalMetadata
+    onReasonSet: (r: AbsenceReason) => void
+  }) => {
+    if (meta.date > new Date()) return null
+    if (
+      (data.broken && data.intervals.length === 1) ||
+      data.intervals.length === 0
+    ) {
+      return (
+        <WebOnly>
+          <Button
+            variant={data.broken ? 'solid' : 'plain'}
+            color={data.broken ? 'danger' : 'neutral'}
+            size="sm"
+            sx={{
+              opacity: 0.7,
+              width: 'min-content',
+              m: '0 auto',
+              fontSize: '1rem',
+              fontWeight: 400,
+              minHeight: 'min-content'
+            }}
+            onClick={() => {
+              updateIntervalModalState.open(meta, data.intervals.at(0))
+              absenceReasonState.open({
+                date: meta.date,
+                employeeId: meta.employee.id,
+                onReasonSet
+              })
+            }}
+          >
+            +
+          </Button>
+        </WebOnly>
+      )
+    }
+  }
+)
 
 export function fmtDateToHoursAndMinutes(d?: Date | null): string {
   if (!d) return ''

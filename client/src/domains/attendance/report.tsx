@@ -1,17 +1,16 @@
-import { BoxProps, Button, Stack } from '@mui/joy'
-import { WebOnly } from 'components/utilities/conditional-display'
-import { Box, Label, Loading, observer, Sheet, useState } from 'lib'
+import { BoxProps, Stack, Tooltip } from '@mui/joy'
+import { Box, Label, Loading, observer, P, Sheet, useState } from 'lib'
+import { createDateAsUTC } from 'lib/utils/date_fmt'
 import moment from 'moment'
 import { Column } from 'react-table'
 import { Employee } from 'srv/rpc/attendance/report_generator'
-import { AbseceReasonMenu, AbsenceSection } from './absence'
 import { Report, store } from './store'
 import { Table } from './table'
 import {
   fmtDateToHoursAndMinutes,
+  UpdateIntervalButton,
   UpdateIntervalMetadata,
-  UpdateIntervalModal,
-  updateIntervalModalState
+  UpdateIntervalModal
 } from './update_interval'
 
 export const AttendanceReportComponent = observer(
@@ -29,21 +28,21 @@ export const AttendanceReportComponent = observer(
           <Box p={0.2}>{(props.row.original.total / 3600).toFixed(0)}</Box>
         )
       },
-      ...Array.from({ length: report.resp.daysInMonth }).map<Column<Employee>>(
-        (_, i) => {
-          const day = i + 1
-          return {
-            Header: day.toString(),
-            Cell: props => (
-              <ReportCell
-                employee={props.row.original}
-                day={day}
-                report={report}
-              />
-            )
-          }
+      ...report.resp.days.map<Column<Employee>>(day => {
+        const date = createDateAsUTC(
+          new Date(store.monthSelect.year, store.monthSelect.month, day)
+        )
+        return {
+          Header: day.toString(),
+          Cell: props => (
+            <ReportCell
+              employee={props.row.original}
+              date={date}
+              report={report}
+            />
+          )
         }
-      )
+      })
     ]
 
     if (store.loader.loading) return <Loading />
@@ -58,7 +57,6 @@ export const AttendanceReportComponent = observer(
         <UpdateIntervalModal />
         <Label>Отчет за {report.month}</Label>
         <Label>Норма вычета времени: {report.timeRetention} мин</Label>
-        <AbseceReasonMenu />
         <Table columns={columns} data={report.resp.employees} />
       </Sheet>
     )
@@ -66,100 +64,72 @@ export const AttendanceReportComponent = observer(
 )
 
 const ReportCell = observer(
-  (props: { employee: Employee; day: number; report: Report }) => {
-    const [data, setData] = useState(props.employee.days[props.day])
+  (props: { employee: Employee; date: Date; report: Report }) => {
+    const [data, setData] = useState(props.employee.days[props.date.getDate()])
     const meta: UpdateIntervalMetadata = {
-      employee: props.employee.name,
-      day: props.day,
+      employee: props.employee,
+      date: props.date,
       month: store.monthSelect.getMonthLabel()
     }
-    const date = new Date(
-      store.monthSelect.year,
-      store.monthSelect.month,
-      props.day + 1
+    const isUpdatedRecently = data.intervals.some(
+      each => each.updated_manually === true
     )
 
-    const isUpdatedRecently =
-      data.intervals &&
-      data.intervals[0]?.ent_event_id &&
-      data.intervals[0]?.ent_event_id === store.updatedIntervalId
+    const weekday = props.date.toLocaleDateString('ru', { weekday: 'short' })
 
-    const bgcolor =
-      isUpdatedRecently ||
-      data.intervals.some(each => each.updated_manually === true)
     return (
-      <Stack
-        sx={{
-          fontSize: '0.86rem',
-          outline: bgcolor ? '2.5px dashed darkred' : undefined
-        }}
+      <Tooltip
+        title={`${props.date.getDate()} ${weekday}`}
+        arrow
+        placement="top"
       >
-        <AbsenceSection
-          hasIntervals={data.intervals.length > 0}
-          absence={data.absence}
-          employeeId={props.employee.id}
-          date={date}
-          onReasonSet={r => setData({ ...data, absence: r })}
-        />
-        {data.intervals.map(interval => (
-          <>
-            {interval.ent && (
-              <Time>
-                {ArrowRight()}
-                {fmtDateToHoursAndMinutes(interval.ent)}
-              </Time>
-            )}
-            {interval.ext && (
-              <Time>
-                {ArrowLeft()}
-                {fmtDateToHoursAndMinutes(interval.ext)}
-              </Time>
-            )}
-          </>
-        ))}
-        {props.report.isFull && <EditInterval data={data} meta={meta} />}
-        <Box>
-          {!!data.total_dur && (
-            <Time sx={{ fontWeight: 600, color: 'primary.500' }}>
-              {moment(data.total_dur * 1000)
-                .utcOffset(0, false)
-                .format('H:mm')}
-            </Time>
+        <Stack
+          sx={{
+            fontSize: '0.86rem',
+            outline: isUpdatedRecently ? '2.5px dashed darkred' : undefined
+          }}
+        >
+          {data.intervals.length === 0 && (
+            <P level="body-sm" color="primary" textAlign={'center'}>
+              {data.absence}
+            </P>
           )}
-        </Box>
-      </Stack>
+          {data.intervals.map(interval => (
+            <>
+              {interval.ent && (
+                <Time>
+                  {ArrowRight()}
+                  {fmtDateToHoursAndMinutes(interval.ent)}
+                </Time>
+              )}
+              {interval.ext && (
+                <Time>
+                  {ArrowLeft()}
+                  {fmtDateToHoursAndMinutes(interval.ext)}
+                </Time>
+              )}
+            </>
+          ))}
+          {props.report.isFull && (
+            <UpdateIntervalButton
+              data={data}
+              meta={meta}
+              onReasonSet={r => setData({ ...data, absence: r })}
+            />
+          )}
+          <Box>
+            {!!data.total_dur && (
+              <Time sx={{ fontWeight: 600, color: 'primary.500' }}>
+                {moment(data.total_dur * 1000)
+                  .utcOffset(0, false)
+                  .format('H:mm')}
+              </Time>
+            )}
+          </Box>
+        </Stack>
+      </Tooltip>
     )
   }
-)
-
-const EditInterval = observer(
-  ({
-    data,
-    meta
-  }: {
-    data: Employee['days'][number]
-    meta: UpdateIntervalMetadata
-  }) => (
-    <WebOnly>
-      {data.broken && data.intervals.length === 1 && (
-        <Button
-          variant="solid"
-          color="primary"
-          size="sm"
-          sx={{
-            width: 'min-content',
-            m: '0 auto',
-            fontSize: '.8rem',
-            fontWeight: 400,
-            minHeight: 'min-content'
-          }}
-          onClick={() => updateIntervalModalState.open(data.intervals[0], meta)}
-        >
-          set
-        </Button>
-      )}
-    </WebOnly>
-  )
 )
 
 const Time = (props: { children: React.ReactNode; sx?: BoxProps }) => (

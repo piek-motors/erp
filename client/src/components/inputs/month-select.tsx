@@ -54,9 +54,10 @@ export class MonthSelectStore {
 interface IReportConfiguratorProps {
   store: MonthSelectStore
   onSearch?: (month: number, year: number) => void
+  onChange?: () => void
 }
 
-function _MonthSelect({ onSearch, store }: IReportConfiguratorProps) {
+function _MonthSelect({ onSearch, store, onChange }: IReportConfiguratorProps) {
   return (
     <Row gap={0.5}>
       <Select
@@ -68,6 +69,7 @@ function _MonthSelect({ onSearch, store }: IReportConfiguratorProps) {
         value={store.month}
         onChange={v => {
           store.setMonth(Number(v))
+          onChange && onChange()
         }}
         width="100px"
       />
@@ -81,6 +83,7 @@ function _MonthSelect({ onSearch, store }: IReportConfiguratorProps) {
         value={store.year}
         onChange={v => {
           store.setYear(Number(v))
+          onChange && onChange()
         }}
       />
       {onSearch && (

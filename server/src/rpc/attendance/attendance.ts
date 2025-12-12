@@ -4,6 +4,12 @@ import { router } from '#root/lib/trpc/trpc.js'
 import { AbsenceReason } from 'models'
 import { z } from 'zod'
 
+const intervalUpdate = z.object({
+  ent_event_id: z.number(),
+  ent: z.string(),
+  ext: z.string()
+})
+
 export const attendance = router({
   get_report: procedure
     .input(
@@ -25,15 +31,26 @@ export const attendance = router({
       })
     ),
   //
+  insert_interval: procedure
+    .use(requireScope(Scope.staff))
+    .input(intervalUpdate.extend({ card: z.string() }))
+    .mutation(async ({ input }) => {
+      return db
+        .insertInto('attendance.intervals')
+        .values({
+          card: input.card,
+          ent_event_id: input.ent_event_id,
+          ent: new Date(input.ent),
+          ext: new Date(input.ext),
+          updated_manually: true
+        })
+        .returningAll()
+        .executeTakeFirstOrThrow()
+    }),
+  //
   update_interval: procedure
     .use(requireScope(Scope.staff))
-    .input(
-      z.object({
-        ent_event_id: z.number(),
-        ent: z.string(),
-        ext: z.string()
-      })
-    )
+    .input(intervalUpdate)
     .mutation(async ({ input }) => {
       const interval = await db
         .updateTable('attendance.intervals')
@@ -43,8 +60,11 @@ export const attendance = router({
           updated_manually: true
         })
         .where('ent_event_id', '=', input.ent_event_id)
-        .execute()
-      return interval.length
+        .executeTakeFirstOrThrow()
+      if (interval.numUpdatedRows === 0n) {
+        throw Error('failed to update interval: not found')
+      }
+      return true
     }),
   //
   set_absence_reason: procedure
