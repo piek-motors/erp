@@ -81,6 +81,7 @@ const ReportCell = observer(
       <Tooltip
         title={`${props.date.getDate()} ${weekday}`}
         arrow
+        size="sm"
         placement="top"
       >
         <Stack
