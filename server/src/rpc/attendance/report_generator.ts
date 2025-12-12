@@ -1,6 +1,6 @@
 import { Hour, Minute } from '#root/lib/constants.js'
 import { timedeltaInSeconds } from '#root/lib/time.js'
-import { KDB } from 'db'
+import { DB, KDB, type Selectable } from 'db'
 import { AbsenceReason } from 'models'
 
 interface Period {
@@ -77,102 +77,135 @@ export class AttendanceReportGenerator {
     const result: Employee[] = []
     const dailyTimeRetention = options.timeRetentionMinutes * 60
 
+    // Pre-group intervals by card and absences by user_id for O(1) lookups
+    const intervalsByCard = all_intervals.reduce((acc, interval) => {
+      if (!acc.has(interval.card)) {
+        acc.set(interval.card, [])
+      }
+      acc.get(interval.card)!.push(interval)
+      return acc
+    }, new Map<string, typeof all_intervals>())
+
+    const absencesByUserId = all_absences.reduce((acc, absence) => {
+      if (!acc.has(absence.user_id)) {
+        acc.set(absence.user_id, [])
+      }
+      acc.get(absence.user_id)!.push(absence)
+      return acc
+    }, new Map<number, typeof all_absences>())
+
     for (const empl of employees) {
-      const intervals = all_intervals.filter(
-        interval => interval.card === empl.card
-      )
+      const intervals = intervalsByCard.get(empl.card) || []
       if (!intervals.length) {
         continue
       }
-      const absences = all_absences.filter(e => e.user_id === empl.id)
-      const daysMap = days.reduce((acc, day) => {
-        acc[day] = {
-          intervals: [],
-          total_dur: 0,
-          broken: false
-        }
-        return acc
-      }, {} as Record<number, Day>)
-
-      const employee: Employee = {
-        totalIntervalsCount: intervals.length,
-        id: empl.id,
-        name: removeCardNumber(`${empl.lastname} ${empl.firstname}`),
-        card: empl.card,
-        total: 0,
-        workDays: 0,
-        days: daysMap
-      }
-
-      for (const interval of intervals) {
-        const i: Interval = {
-          ent_event_id: interval.ent_event_id,
-          dur: 0,
-          updated_manually: null
-        }
-        if (interval.ext && interval.ent) {
-          const interval_dur = timedeltaInSeconds(interval.ent, interval.ext)
-          i.dur = interval_dur
-        }
-
-        if (showFullInfo) {
-          i.ent = interval.ent
-          i.ext = interval.ext
-          i.updated_manually = interval.updated_manually
-        }
-
-        const dayOfMonth = new Date(interval.ent).getDate()
-        daysMap[dayOfMonth].intervals.push(i)
-        if (i.dur) {
-          daysMap[dayOfMonth].total_dur += i.dur - dailyTimeRetention
-        }
-      }
-
-      // fake overtime correction
-      // if employee worked more then 8:00 hours, but less then 8:54 hours, we should round it as 8:00 hours
-      const RoundingStartRange = (8 * Hour) / 1000
-      const RoundingEndRange = (8 * Hour + 54 * Minute) / 1000
-      const corrected = Object.values(employee.days).map(day => {
-        if (
-          day.total_dur > RoundingStartRange &&
-          day.total_dur <= RoundingEndRange
-        ) {
-          day.total_dur = RoundingStartRange
-        }
-        return day
-      })
-
-      employee.total = Object.values(corrected).reduce(
-        (acc, day) => acc + day.total_dur,
-        0
+      result.push(
+        this.processEmployee(
+          empl,
+          intervals,
+          absencesByUserId.get(empl.id) || [],
+          days,
+          showFullInfo,
+          dailyTimeRetention
+        )
       )
-
-      for (const day of Object.values(employee.days)) {
-        if (day.total_dur < 0) {
-          day.total_dur = 0
-        }
-        if (day.total_dur > 0) {
-          employee.workDays += 1
-        }
-        if (day.intervals.length === 1 && !day.total_dur) {
-          day.broken = true
-        }
-      }
-
-      for (const a of absences) {
-        const day = new Date(a.date).getDate()
-        daysMap[day].absence = a.reason
-      }
-
-      result.push(employee)
     }
-
     result.sort((a, b) => a.name.localeCompare(b.name))
     const weekdays = this.getWeekdays(days, result)
     return {
       employees: result,
       days: days.filter(d => !weekdays.includes(d))
     }
+  }
+
+  private processEmployee(
+    empl: Selectable<DB.AttendanceEmployeeTable>,
+    intervals: Selectable<DB.AttendanceIntervalTable>[],
+    absences: Selectable<DB.AttendanceEmployeeAbsenceTable>[],
+    days: number[],
+    showFullInfo: boolean,
+    dailyTimeRetention: number
+  ): Employee {
+    const daysMap = days.reduce((acc, day) => {
+      acc[day] = {
+        intervals: [],
+        total_dur: 0,
+        broken: false
+      }
+      return acc
+    }, {} as Record<number, Day>)
+
+    const employee: Employee = {
+      totalIntervalsCount: intervals.length,
+      id: empl.id,
+      name: removeCardNumber(`${empl.lastname} ${empl.firstname}`),
+      card: empl.card,
+      total: 0,
+      workDays: 0,
+      days: daysMap
+    }
+
+    for (const interval of intervals) {
+      const i: Interval = {
+        ent_event_id: interval.ent_event_id,
+        dur: 0,
+        updated_manually: null
+      }
+      if (interval.ext && interval.ent) {
+        const interval_dur = timedeltaInSeconds(interval.ent, interval.ext)
+        i.dur = interval_dur
+      }
+
+      if (showFullInfo) {
+        i.ent = interval.ent
+        i.ext = interval.ext
+        i.updated_manually = interval.updated_manually
+      }
+
+      const dayOfMonth = new Date(interval.ent).getDate()
+      daysMap[dayOfMonth].intervals.push(i)
+      if (i.dur) {
+        daysMap[dayOfMonth].total_dur += i.dur - dailyTimeRetention
+      }
+    }
+
+    // fake overtime correction
+    // if employee worked more then 8:00 hours, but less then 8:54 hours, we should round it as 8:00 hours
+    const RoundingStartRange = (8 * Hour) / 1000
+    const RoundingEndRange = (8 * Hour + 54 * Minute) / 1000
+    const corrected = Object.values(employee.days).map(day => {
+      if (
+        day.total_dur > RoundingStartRange &&
+        day.total_dur <= RoundingEndRange
+      ) {
+        day.total_dur = RoundingStartRange
+      }
+      return day
+    })
+
+    employee.total = Object.values(corrected).reduce(
+      (acc, day) => acc + day.total_dur,
+      0
+    )
+
+    for (const day of Object.values(employee.days)) {
+      if (day.total_dur < 0) {
+        day.total_dur = 0
+      }
+      if (day.total_dur > 0) {
+        employee.workDays += 1
+      }
+      if (day.intervals.length === 1 && !day.total_dur) {
+        day.broken = true
+      }
+    }
+
+    for (const a of absences) {
+      const day = new Date(a.date).getDate()
+      daysMap[day].absence = a.reason
+    }
+
+    return employee
   }
 
   private getWeekdays(days: number[], employees: Employee[]): number[] {

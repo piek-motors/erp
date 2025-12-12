@@ -38,7 +38,7 @@ export namespace DB {
 
     ['attendance.intervals']: AttendanceIntervalTable
     ['attendance.employees']: AttendanceEmployeeTable
-    ['attendance.employee_absences']: EmployeeAbsenceTable
+    ['attendance.employee_absences']: AttendanceEmployeeAbsenceTable
 
     ['pdo.materials']: MaterialTable
     ['pdo.materials_quarterly_spending']: MaterialQuarterlySpendingTable
@@ -266,7 +266,7 @@ export namespace DB {
     created_at: GeneratedAlways<Date>
   }
 
-  export interface EmployeeAbsenceTable {
+  export interface AttendanceEmployeeAbsenceTable {
     user_id: number
     date: string
     reason: AbsenceReason
