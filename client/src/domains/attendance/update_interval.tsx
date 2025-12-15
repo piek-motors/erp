@@ -120,7 +120,7 @@ export const UpdateIntervalModal = observer(() => (
       {!state.interval && (
         <>
           <Stack gap={1}>
-            <Label>Причина отсутсвия</Label>
+            <Label>Причина отсутствия</Label>
             <AbsenceReasons onClick={() => state.close()} />
           </Stack>
           <Divider />

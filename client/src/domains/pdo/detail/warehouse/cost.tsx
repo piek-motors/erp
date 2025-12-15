@@ -147,7 +147,6 @@ export const DetailCostInputs = observer(
                 name: detail.name,
                 group_id: detail.groupId ?? 0
               }}
-              withLink
               withGroupName
             />
           </CostRow>

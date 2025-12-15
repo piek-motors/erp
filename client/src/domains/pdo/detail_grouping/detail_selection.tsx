@@ -68,7 +68,6 @@ const UniversalDetailSelection = observer(() => {
                       name: detail.name,
                       group_id: detail.groupId ?? null
                     }}
-                    withLink
                   />
                   <IconButton
                     variant="soft"

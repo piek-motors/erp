@@ -19,7 +19,7 @@ const commonColumns: Column<ListManufacturingOutput>[] = [
           name: d.detail_name,
           group_id: d.group_id
         }}
-        withLink
+        disableLink
         withGroupName
       />
     )

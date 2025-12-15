@@ -90,7 +90,6 @@ export const ManufacturingUpdatePage = observer(() => {
                       name: detail.name,
                       group_id: detail.groupId || null
                     }}
-                    withLink
                     withGroupName
                   />
                 </Box>

@@ -44,7 +44,7 @@ export const DetailsMadeOfMaterialModal = observer(
             <Stack sx={{ overflowY: 'scroll' }} pb={5} p={1}>
               {m.detailsMadeFromThisMaterial.map(each => (
                 <Box display={'flex'}>
-                  <DetailName detail={each} withLink withGroupName />
+                  <DetailName detail={each} withGroupName />
                 </Box>
               ))}
             </Stack>

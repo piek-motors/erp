@@ -40,7 +40,6 @@ export function DetailRow({
               name: detail.name,
               group_id: detail.group_id || null
             }}
-            withLink
           />
         </Row>
       </Grid>

@@ -77,7 +77,6 @@ export const columns: Column<Operation>[] = [
             name: data.detail_name!,
             group_id: data.detail_group_id!
           }}
-          withLink
           withGroupName
         />
       )

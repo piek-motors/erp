@@ -12,8 +12,8 @@ interface Detail {
 
 interface Props {
   detail: Detail
-  withLink?: boolean
   withGroupName?: boolean
+  disableLink?: boolean
   sx?: SxProps
 }
 
@@ -24,14 +24,18 @@ const capitalizeFirstLetter = (str: string): string => {
 
 export const DetailName = observer((props: Props) => {
   const { detail, withGroupName } = props
+  const l = (
+    <Row gap={1} rowGap={0} flexWrap={'wrap'}>
+      <P sx={props.sx}>{capitalizeFirstLetter(detail.name)}</P>
+      {withGroupName && <GroupName groupId={detail.group_id} />}
+    </Row>
+  )
+  if (props.disableLink) {
+    return l
+  }
   return (
     <Box width={'fit-content'}>
-      <Link to={openPage(routeMap.pdo.detail.edit, detail.id)}>
-        <Row gap={1} rowGap={0} flexWrap={'wrap'}>
-          <P sx={props.sx}>{capitalizeFirstLetter(detail.name)}</P>
-          {withGroupName && <GroupName groupId={detail.group_id} />}
-        </Row>
-      </Link>
+      <Link to={openPage(routeMap.pdo.detail.edit, detail.id)}>{l}</Link>
     </Box>
   )
 })
