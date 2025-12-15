@@ -166,20 +166,22 @@ export const UpdateIntervalButton = observer(
     if (meta.date > new Date()) return null
     if (
       (data.broken && data.intervals.length === 1) ||
-      data.intervals.length === 0
+      data.intervals.length === 0 ||
+      data.intervals.some(i => i.updated_manually)
     ) {
       return (
         <WebOnly>
           <Button
-            variant={data.broken ? 'solid' : 'plain'}
-            color={data.broken ? 'danger' : 'neutral'}
+            variant={data.broken ? 'solid' : 'solid'}
+            color={data.broken ? 'danger' : 'primary'}
             size="sm"
             sx={{
-              opacity: 0.7,
+              opacity: 0.6,
               width: 'min-content',
               m: '0 auto',
+              height: '20px',
+              widows: '30px',
               fontSize: '1rem',
-              fontWeight: 400,
               minHeight: 'min-content'
             }}
             onClick={() => {

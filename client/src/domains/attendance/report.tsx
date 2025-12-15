@@ -57,6 +57,7 @@ export const AttendanceReportComponent = observer(
         <UpdateIntervalModal />
         <Label>Отчет за {report.month}</Label>
         <Label>Норма вычета времени: {report.timeRetention} мин</Label>
+        <Label>Обозначения: O (отпуск), Б (болеет), П (пропуск)</Label>
         <Table columns={columns} data={report.resp.employees} />
       </Sheet>
     )
@@ -111,13 +112,6 @@ const ReportCell = observer(
               )}
             </>
           ))}
-          {props.report.isFull && (
-            <UpdateIntervalButton
-              data={data}
-              meta={meta}
-              onReasonSet={r => setData({ ...data, absence: r })}
-            />
-          )}
           <Box>
             {!!data.total_dur && (
               <Time sx={{ fontWeight: 600, color: 'primary.500' }}>
@@ -127,6 +121,13 @@ const ReportCell = observer(
               </Time>
             )}
           </Box>
+          {props.report.isFull && (
+            <UpdateIntervalButton
+              data={data}
+              meta={meta}
+              onReasonSet={r => setData({ ...data, absence: r })}
+            />
+          )}
         </Stack>
       </Tooltip>
     )
