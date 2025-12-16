@@ -57,7 +57,10 @@ export const AttendanceReportComponent = observer(
         <UpdateIntervalModal />
         <Label>Отчет за {report.month}</Label>
         <Label>Норма вычета времени: {report.timeRetention} мин</Label>
-        <Label>Обозначения: O (отпуск), Б (болеет), П (пропуск)</Label>
+        <Label>
+          Обозначения: O - отпуск, АО - административный отпуск, Б - болеет, П -
+          пропуск
+        </Label>
         <Table columns={columns} data={report.resp.employees} />
       </Sheet>
     )
