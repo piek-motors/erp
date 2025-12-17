@@ -36,6 +36,7 @@ export namespace DB {
     ['orders.order_items']: OrderItemsTable
     ['orders.notifications']: NotificationTable
 
+    ['attendance.events']: AttendanceEventsTable
     ['attendance.intervals']: AttendanceIntervalTable
     ['attendance.employees']: AttendanceEmployeeTable
     ['attendance.employee_absences']: AttendanceEmployeeAbsenceTable
@@ -246,6 +247,12 @@ export namespace DB {
   export interface DetailAttachmentTable {
     detail_id: number
     attachment_id: number
+  }
+
+  export interface AttendanceEventsTable {
+    id: number
+    card: string
+    timestamp: Date
   }
 
   export interface AttendanceIntervalTable {

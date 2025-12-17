@@ -172,7 +172,7 @@ export const UpdateIntervalButton = observer(
       return (
         <WebOnly>
           <Button
-            variant={data.broken ? 'solid' : 'solid'}
+            variant={data.broken ? 'solid' : 'soft'}
             color={data.broken ? 'danger' : 'primary'}
             size="sm"
             sx={{
