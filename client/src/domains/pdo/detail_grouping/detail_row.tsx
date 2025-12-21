@@ -1,7 +1,5 @@
-import { Grid } from '@mui/joy'
 import { Row } from 'lib/index'
 import { DetailName } from '../detail/name'
-import { ColorSegmentation } from './color_segmentation'
 import { Detail } from './group.store'
 
 interface DetailRowProps {
@@ -16,33 +14,31 @@ export function DetailRow({
 }: DetailRowProps & { isSelected: boolean }) {
   return (
     <>
-      <ColorSegmentation detail={detail} />
-      <Grid sx={{ alignContent: 'center' }}>
-        <Row
-          sx={{
-            alignItems: 'center',
-            display: 'flex',
-            p: 0.5,
-            mb: 0,
-            backgroundColor: isSelected ? '#e7b6be' : 'transparent',
-            '&:hover .detail-arrow': {
-              opacity: 1
-            },
-            cursor: detail.group_id === null ? 'pointer' : 'default'
+      {/* <ColorSegmentation detail={detail} /> */}
+      <Row
+        sx={{
+          alignItems: 'center',
+          display: 'flex',
+          p: 0.5,
+          mb: 0,
+          backgroundColor: isSelected ? '#e7b6be' : 'transparent',
+          '&:hover .detail-arrow': {
+            opacity: 1
+          },
+          cursor: detail.group_id === null ? 'pointer' : 'default'
+        }}
+        alignItems="center"
+        onClick={() => detail.group_id === null && onToggle(detail.id)}
+      >
+        <DetailName
+          sx={{ whiteSpace: 'wrap', width: 'auto', lineHeight: '1.2' }}
+          detail={{
+            id: detail.id,
+            name: detail.name,
+            group_id: detail.group_id || null
           }}
-          alignItems="center"
-          onClick={() => detail.group_id === null && onToggle(detail.id)}
-        >
-          <DetailName
-            sx={{ whiteSpace: 'wrap', width: 'auto', lineHeight: '1.2' }}
-            detail={{
-              id: detail.id,
-              name: detail.name,
-              group_id: detail.group_id || null
-            }}
-          />
-        </Row>
-      </Grid>
+        />
+      </Row>
     </>
   )
 }

@@ -71,6 +71,7 @@ export const CreateGroupModal = observer(() => {
     <BaseGroupModal
       openButton={
         <Button
+          sx={{ mt: 1 }}
           size="sm"
           variant="soft"
           color="primary"

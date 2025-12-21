@@ -1,5 +1,5 @@
 import { UilBars } from '@iconscout/react-unicons'
-import { Button, Stack } from '@mui/joy'
+import { Button, Divider, Stack } from '@mui/joy'
 import { InModal } from 'components/modal'
 import { observer, P, UseIcon, useState } from 'lib/index'
 import { openPage, routeMap } from 'lib/routes'
@@ -40,6 +40,7 @@ export const SharedGroupList = observer(
             </Link>
           )
         })}
+        <Divider />
         <CreateGroupModal />
       </Stack>
     )

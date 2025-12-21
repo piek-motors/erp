@@ -1,7 +1,6 @@
 import { Box, Button } from '@mui/joy'
 import { observer, P, Stack } from 'lib/index'
 import { crud } from './api'
-import { ColorSegmentationMenu } from './color_segmentation'
 import { DetailRow } from './detail_row'
 import { UniversalDetailsModalSelect } from './detail_selection'
 
@@ -42,14 +41,14 @@ export const TargetGroupDetailList = observer(() => {
 
   return (
     <Stack sx={{ flex: 1 }}>
-      <ColorSegmentationMenu />
+      {/* <ColorSegmentationMenu /> */}
       <Box
         sx={{
           flex: 1,
-          overflow: 'auto',
-          columnGap: 1,
-          display: 'grid',
-          gridTemplateColumns: 'auto 6fr'
+          overflow: 'auto'
+          // columnGap: 1
+          // display: 'grid',
+          // gridTemplateColumns: 'auto 6fr'
         }}
       >
         {crud.store.targetGroupDetails?.map(detail => (
