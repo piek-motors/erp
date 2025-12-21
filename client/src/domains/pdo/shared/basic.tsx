@@ -20,11 +20,13 @@ import { useEffect, useState } from 'react'
 export function MaterialUnitSelect(props: {
   value?: Unit
   onChange: (e: Unit) => void
+  disabled?: boolean
 }) {
   return (
     <Stack>
       <Label label="Ед. учета остатков" />
       <ToggleButtonGroup
+        disabled={props.disabled}
         variant="outlined"
         color="primary"
         value={props.value != null ? Object.keys(Unit)[props.value] : null}

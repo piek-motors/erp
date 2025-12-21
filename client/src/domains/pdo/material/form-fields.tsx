@@ -2,40 +2,48 @@ import { NumberInput } from 'components/inputs/number_input'
 import { Tabs } from 'components/tabs'
 import { AlloyAutocomplete, MaterialUnitSelect } from 'domains/pdo/shared/basic'
 import { Stack, observer } from 'lib/index'
-import { MaterialShape, uiUnit } from 'models'
+import { MaterialShape, UiMaterialShape, uiUnit } from 'models'
+import { MaterialSpecificInput } from './shape/main'
 import { MaterialState } from './state'
-import { tabsConfig } from './tabs-config'
 
 export const MaterialFormFields = observer(
-  ({ showTabs, m }: { showTabs?: boolean; m: MaterialState }) => {
-    const tabs = tabsConfig(m)
+  ({
+    showTabs,
+    m,
+    disabled
+  }: {
+    showTabs?: boolean
+    m: MaterialState
+    disabled?: boolean
+  }) => {
     return (
       <Stack>
         {showTabs ? (
           <Tabs
+            variant="outlined"
+            sx={{ width: 'fit-content' }}
             p={0}
-            tabs={tabs}
+            tabs={Object.values(MaterialShape)
+              .filter(e => typeof e !== 'string')
+              .map(value => ({
+                label: UiMaterialShape[value],
+                value,
+                component: <MaterialSpecificInput m={m} disabled={disabled} />
+              }))}
             handleChange={value => {
               m.setShape(value as unknown as MaterialShape)
             }}
           />
         ) : (
-          tabs.find(t => t.value === m.shape)?.component
+          <MaterialSpecificInput m={m} disabled={disabled} />
         )}
+        <MaterialUnitSelect value={m.unit} onChange={v => m.setUnit(v)} />
         <AlloyAutocomplete
           setAlloy={alloy => {
             m.setAlloy(alloy)
           }}
           alloy={m.alloy}
         />
-        {/* <Inp
-          label={'Линейная масса'}
-          value={m.linearMass}
-          onChange={v => {
-            m.setLinearMass(v)
-          }}
-          unit="кг/м"
-        /> */}
         <NumberInput
           label={'Норм. запас'}
           value={m.safetyStock}
@@ -44,7 +52,6 @@ export const MaterialFormFields = observer(
           }}
           unit={uiUnit(m.unit)}
         />
-        <MaterialUnitSelect value={m.unit} onChange={v => m.setUnit(v)} />
       </Stack>
     )
   }

@@ -72,18 +72,8 @@ export type MyInputProps = {
   label?: string
   value?: string | number | null
   onChange?: (value: string) => void
-  name?: string
-  type?: InputProps['type']
-  placeholder?: string
   fullWidth?: boolean
-  autoFocus?: boolean
-  sx?: InputProps['sx']
-  size?: InputProps['size']
-  variant?: InputProps['variant']
-  color?: InputProps['color']
-  onBlur?: InputProps['onBlur']
-  endDecorator?: InputProps['endDecorator']
-}
+} & Omit<InputProps, 'value' | 'onChange'>
 
 export function Inp(props: MyInputProps) {
   return (
@@ -93,18 +83,13 @@ export function Inp(props: MyInputProps) {
       <Label label={props.label} />
       <Row>
         <Input
-          color={props.color}
+          {...props}
           value={props.value?.toString() || ''}
           autoComplete={'off'}
           onChange={e => {
             const value = e.target.value ?? ''
             props.onChange?.(value)
           }}
-          size={props.size}
-          sx={props.sx}
-          variant={props.variant}
-          onBlur={props.onBlur}
-          endDecorator={props.endDecorator}
         />
       </Row>
     </FormControl>

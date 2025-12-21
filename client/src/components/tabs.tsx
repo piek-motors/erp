@@ -1,4 +1,4 @@
-import { Tabs as MuiTabs, Tab, TabList, TabPanel } from '@mui/joy'
+import { Tabs as MuiTabs, Tab, TabList, TabPanel, TabsProps } from '@mui/joy'
 import { ReactNode } from 'react'
 
 export type TabConfig = {
@@ -7,19 +7,17 @@ export type TabConfig = {
   component: ReactNode
 }[]
 
-export interface TabProps {
+export type TabProps = {
   handleChange?: (newVal: any) => void
-  value?: string
   tabs: TabConfig
   p?: number
-}
+} & TabsProps
 
 export function Tabs(props: TabProps) {
   return (
     <MuiTabs
-      variant="outlined"
-      sx={{ borderRadius: 'sm', minWidth: 'fit-content' }}
-      value={props.value}
+      {...props}
+      sx={{ borderRadius: 'sm', minWidth: 'fit-content', ...props.sx }}
       onChange={(e, v) => {
         if (v == null) return
         if (props.handleChange) {

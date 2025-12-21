@@ -63,7 +63,7 @@ export const MaterialUpdatePage = observer(() => {
           <DetailsMadeOfMaterialModal m={m} />
         </Stack>
         <Stack gap={1}>
-          <MaterialFormFields m={m} />
+          <MaterialFormFields m={m} disabled />
           <SaveAndDelete
             sx={{ width: 'fit-content' }}
             itemName={`Материал (${m.id}) - ${m.label}`}
