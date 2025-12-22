@@ -18,8 +18,9 @@ export const WriteoffCompletedText = 'Списание зарегистриро�
 export const WarehouseCard = observer((props: Props) => {
   return (
     <Card
-      variant="outlined"
+      variant="soft"
       size="sm"
+      color="primary"
       sx={{ width: 'fit-content', gap: 0.5, height: 'inherit' }}
     >
       <Row justifyContent={'center'}>

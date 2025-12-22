@@ -23,9 +23,9 @@ export const MaterialSpecificInput = observer(({ m, disabled }: ShapeProps) => {
     case MaterialShape.Arbitrary:
       res = (
         <Inp
-          disabled={disabled}
           label={'Название'}
           value={m.arbitrary.name}
+          sx={{ minWidth: 400 }}
           onChange={v => {
             m.arbitrary.setName(v)
           }}
