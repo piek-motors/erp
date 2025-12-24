@@ -1,6 +1,7 @@
 export enum AbsenceReason {
   Vacation = 'О',
-  AdministrativeVacation = 'AO',
+  AdministrativeVacation = 'A',
   Sick = 'Б',
-  Absense = 'П'
+  Absense = 'П',
+  BussinesTrip = 'К'
 }

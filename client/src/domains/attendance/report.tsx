@@ -4,6 +4,7 @@ import { createDateAsUTC } from 'lib/utils/date_fmt'
 import moment from 'moment'
 import { Column } from 'react-table'
 import { Employee } from 'srv/rpc/attendance/report_generator'
+import { AbsenceLabels } from './absence'
 import { Report, store } from './store'
 import { Table } from './table'
 import {
@@ -57,10 +58,7 @@ export const AttendanceReportComponent = observer(
         <UpdateIntervalModal />
         <Label>Отчет за {report.month}</Label>
         <Label>Норма вычета времени: {report.timeRetention} мин</Label>
-        <Label>
-          Обозначения: O - отпуск, АО - административный отпуск, Б - болеет, П -
-          пропуск
-        </Label>
+        <AbsenceLabels />
         <Table columns={columns} data={report.resp.employees} />
       </Sheet>
     )

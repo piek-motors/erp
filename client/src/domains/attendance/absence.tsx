@@ -1,6 +1,6 @@
 import { Button } from '@mui/joy'
 import { rpc } from 'lib/deps'
-import { Row } from 'lib/index'
+import { Label, Row } from 'lib/index'
 import { makeAutoObservable } from 'mobx'
 import { observer } from 'mobx-react-lite'
 import { AbsenceReason } from 'models'
@@ -61,3 +61,10 @@ export const AbsenceReasons = observer((props: { onClick: () => void }) => (
     ))}
   </Row>
 ))
+
+export const AbsenceLabels = () => (
+  <Label>
+    Обозначения: O - отпуск, А - административный отпуск, Б - болеет, П -
+    пропуск, К - командировка
+  </Label>
+)
