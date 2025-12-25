@@ -4,7 +4,7 @@ import { notifier } from 'lib/store/notifier.store'
 import { makeAutoObservable } from 'mobx'
 import { Attachment } from 'models'
 import { cache } from '../cache/root'
-import { DetailState } from './detail.state'
+import { DetailSt } from './detail.state'
 import { detailListStore } from './list/store'
 
 export class DetailApi {
@@ -15,7 +15,7 @@ export class DetailApi {
 
   async loadFull(detailId: number) {
     return this.loader.run(async () => {
-      const detail = new DetailState()
+      const detail = new DetailSt()
       const res = await rpc.pdo.details.get.query({ id: detailId })
       detail.init(res.detail)
       detail.setLastManufacturingDate(
@@ -51,13 +51,13 @@ export class DetailApi {
     })
   }
 
-  async insert(detail: DetailState) {
+  async insert(detail: DetailSt) {
     const res = await rpc.pdo.details.create.mutate(detail.payload())
     await cache.details.load()
     return res.id
   }
 
-  async update(detail: DetailState) {
+  async update(detail: DetailSt) {
     try {
       await rpc.pdo.details.update.mutate(detail.payload())
       cache.details.update(detail)

@@ -21,65 +21,59 @@ import {
 import { MetalPageTitle } from '../shared'
 import { MaterialAutocomplete } from '../shared/material_autocomplete'
 import { DetailAttachmentList } from './attachment/list'
-import { BlankSpec, DetailState, Operation } from './detail.state'
+import { BlankSpec, DetailSt, DetailStProp, Operation } from './detail.state'
 import { AutomaticWriteoffAccordion } from './warehouse/cost'
 import { MaterialCost } from './warehouse/cost.store'
 
-export const DetailInputs = observer(
-  ({ detail: d }: { detail: DetailState }) => (
-    <Stack
-      pr={{ xs: 0, md: 4 }}
-      direction={{ xs: 'column', md: 'row' }}
-      gap={1}
-    >
-      <Box sx={{ flexGrow: 1.5 }}>
-        <MetalPageTitle
-          t={
-            <P level="body-sm" whiteSpace={'nowrap'}>
-              Деталь № {d.id}
-            </P>
+export const DetailInputs = observer(({ detail: d }: DetailStProp) => (
+  <Stack pr={{ xs: 0, md: 4 }} direction={{ xs: 'column', md: 'row' }} gap={1}>
+    <Box sx={{ flexGrow: 1.5 }}>
+      <MetalPageTitle
+        t={
+          <P level="body-sm" whiteSpace={'nowrap'}>
+            Деталь № {d.id}
+          </P>
+        }
+      />
+      <MultilineInput
+        sx={{ fontWeight: 500, width: '100%' }}
+        color="primary"
+        label="Название со склада"
+        onChange={e => {
+          d.setName(e.target.value)
+        }}
+        value={d.name}
+      />
+      <MultilineInput
+        sx={{ width: '100%' }}
+        label="Название чертежа"
+        onChange={e => {
+          d.setDrawingName(e.target.value)
+        }}
+        value={d.drawingName}
+      />
+      <Input
+        label="Номер чертежа"
+        onChange={v => {
+          d.setDrawingNumber(v)
+          if (v.startsWith('ВЗИС')) {
+            alert('Впишите конструкторский номер без приставки "ВЗИС"')
           }
-        />
-        <MultilineInput
-          sx={{ fontWeight: 500, width: '100%' }}
-          color="primary"
-          label="Название со склада"
-          onChange={e => {
-            d.setName(e.target.value)
-          }}
-          value={d.name}
-        />
-        <MultilineInput
-          sx={{ width: '100%' }}
-          label="Название чертежа"
-          onChange={e => {
-            d.setDrawingName(e.target.value)
-          }}
-          value={d.drawingName}
-        />
-        <Input
-          label="Номер чертежа"
-          onChange={v => {
-            d.setDrawingNumber(v)
-            if (v.startsWith('ВЗИС')) {
-              alert('Впишите конструкторский номер без приставки "ВЗИС"')
-            }
-          }}
-          value={d.drawingNumber}
-        />
-        <DetailGroupInput detail={d} />
-        <Row alignItems={'end'}>
-          <StockLocationInput detail={d} />
-          <DetailRecommendedBatchSizeInput detail={d} />
-        </Row>
-        <DetailDescriptionInput detail={d} />
-      </Box>
-      <DetailAccordionGroup d={d} />
-    </Stack>
-  )
-)
+        }}
+        value={d.drawingNumber}
+      />
+      <DetailGroupInput detail={d} />
+      <Row alignItems={'end'}>
+        <StockLocationInput detail={d} />
+        <DetailRecommendedBatchSizeInput detail={d} />
+      </Row>
+      <DetailDescriptionInput detail={d} />
+    </Box>
+    <DetailAccordionGroup d={d} />
+  </Stack>
+))
 
-export const DetailAccordionGroup = observer(({ d }: { d: DetailState }) => (
+export const DetailAccordionGroup = observer(({ d }: { d: DetailSt }) => (
   <Sheet>
     <AccordionGroup>
       <DetailAttachmentInput detail={d} />
@@ -112,22 +106,20 @@ export const MaterialSelect = observer(
   }
 )
 
-const DetailDescriptionInput = observer(
-  ({ detail }: { detail: DetailState }) => (
-    <Box>
-      <Label>Примечание</Label>
-      <TextEditor
-        defaultValue={detail.description}
-        onChange={content => {
-          detail.setDescription(content)
-        }}
-      />
-    </Box>
-  )
-)
+const DetailDescriptionInput = observer(({ detail }: { detail: DetailSt }) => (
+  <Box>
+    <Label>Примечание</Label>
+    <TextEditor
+      defaultValue={detail.description}
+      onChange={content => {
+        detail.setDescription(content)
+      }}
+    />
+  </Box>
+))
 
 const DetailRecommendedBatchSizeInput = observer(
-  ({ detail }: { detail: DetailState }) => (
+  ({ detail }: { detail: DetailSt }) => (
     <NumberInput
       label="Рекомендуемый размер партии"
       value={detail.recommendedBatchSize}
@@ -138,7 +130,7 @@ const DetailRecommendedBatchSizeInput = observer(
   )
 )
 
-const StockLocationInput = observer(({ detail }: { detail: DetailState }) => (
+const StockLocationInput = observer(({ detail }: { detail: DetailSt }) => (
   <Input
     label="Адрес на складе"
     value={detail.stockLocation}
@@ -150,7 +142,7 @@ const Input = (props: MyInputProps) => (
   <Inp variant="outlined" color="neutral" {...props} />
 )
 
-const DetailGroupInput = observer(({ detail }: { detail: DetailState }) => {
+const DetailGroupInput = observer(({ detail }: { detail: DetailSt }) => {
   const groupOptions: BaseOption[] = cache.detailGroups
     .getGroups()
     .map(group => ({
@@ -176,15 +168,13 @@ const DetailGroupInput = observer(({ detail }: { detail: DetailState }) => {
   )
 })
 
-const DetailAttachmentInput = observer(
-  ({ detail }: { detail: DetailState }) => (
-    <AccordionCard title="Файлы" defaultExpanded>
-      <DetailAttachmentList detail={detail} />
-    </AccordionCard>
-  )
-)
+const DetailAttachmentInput = observer(({ detail }: { detail: DetailSt }) => (
+  <AccordionCard title="Файлы" defaultExpanded>
+    <DetailAttachmentList detail={detail} />
+  </AccordionCard>
+))
 
-const BlankSpecInput = observer(({ detail }: { detail: DetailState }) => (
+const BlankSpecInput = observer(({ detail }: { detail: DetailSt }) => (
   <AccordionCard title="Заготовка" defaultExpanded>
     <Label level="body-xs">Материал заготовки указывать не нужно</Label>
     <ArrayJsonEditor
@@ -231,7 +221,7 @@ const ProcessingOperationAutocomplete = observer(
 )
 
 const ProcessingRouteAccordion = observer(
-  ({ detail }: { detail: DetailState }) => {
+  ({ detail }: { detail: DetailSt }) => {
     return (
       <AccordionCard title="Маршрут" defaultExpanded>
         <Stack gap={0.5}>

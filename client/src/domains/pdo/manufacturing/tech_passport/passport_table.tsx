@@ -3,17 +3,17 @@ import { css } from '@emotion/react'
 import { Box } from '@mui/joy'
 import { cache } from 'domains/pdo/cache/root'
 import { TechParamsRowDisplay } from 'domains/pdo/detail/components'
-import { DetailState } from 'domains/pdo/detail/detail.state'
+import { DetailSt } from 'domains/pdo/detail/detail.state'
 import { capitalize } from 'domains/pdo/shared'
 import { Label, observer, P } from 'lib/index'
 import { fmtDate } from 'lib/utils/date_fmt'
 import { ReactNode } from 'react'
-import { ManufacturingOrderState } from '../order.state'
+import { OrderSt } from '../order.state'
 import { tableStyles } from './shared'
 
 type Props = {
-  order: ManufacturingOrderState
-  detail: DetailState
+  order: OrderSt
+  detail: DetailSt
 }
 
 const emptySpace = <Box width={30} height={30} />
@@ -22,10 +22,9 @@ const L = (props: { children: ReactNode }) => (
   <Label level={'body-xs'}>{props.children}</Label>
 )
 
-export const DetailTechPassportTable = observer(({ order, detail }: Props) => {
-  const s = order
+export const TechPassportTable = observer(({ order, detail }: Props) => {
   const materialCost = detail.autoWriteoff.materialCost
-  if (!s.order) return
+  if (!order.resp) return
   return (
     <table css={css(tableStyles)} style={{ textAlign: 'center' }}>
       <tbody>
@@ -38,14 +37,14 @@ export const DetailTechPassportTable = observer(({ order, detail }: Props) => {
           <td>Технологический паспорт № </td>
           <td width={70}>Заказ № {emptySpace}</td>
           <td width={70}>
-            Кол. дет. в партии <P>{s.order?.qty || ''}</P>
+            Кол. дет. в партии <P>{order.qty || ''}</P>
           </td>
           <td width={50}>ОП</td>
           <td width={50}>Взрыв</td>
           <td>
             <L>Дата запуска в производство</L>
-            {s.order.started_at && (
-              <P>{fmtDate(new Date(s.order.started_at))}</P>
+            {order.resp.started_at && (
+              <P>{fmtDate(new Date(order.resp.started_at))}</P>
             )}
           </td>
         </tr>

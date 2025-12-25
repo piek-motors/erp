@@ -5,14 +5,14 @@ import {
 import { cache } from 'domains/pdo/cache/root'
 import { LoadingController } from 'lib/store/loading_controller'
 import { makeAutoObservable, runInAction } from 'mobx'
-import { DetailState } from '../detail.state'
+import { DetailSt } from '../detail.state'
 
 export class DetailList {
   readonly loader = new LoadingController()
-  readonly searchStore: PaginatedSearchStore<DetailState>
+  readonly searchStore: PaginatedSearchStore<DetailSt>
 
   constructor() {
-    this.searchStore = new PaginatedSearchStore<DetailState>(
+    this.searchStore = new PaginatedSearchStore<DetailSt>(
       () => cache.details.details,
       {
         pageSize: 50,
@@ -56,9 +56,9 @@ export class DetailList {
 
   // Custom filter function for the search store
   private filterDetails(
-    details: DetailState[],
+    details: DetailSt[],
     filters: SearchFilters
-  ): DetailState[] {
+  ): DetailSt[] {
     this.searchStore.setIsSearching(true)
     // Handle built-in filters first (keyword, id)
     if (filters.keyword) {

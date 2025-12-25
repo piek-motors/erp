@@ -1,13 +1,14 @@
 import { Box, Card, Chip, ChipProps, Divider } from '@mui/joy'
 import { AttachmentComponent } from 'components/attachments/attachment'
+import { NumberInput } from 'components/inputs/number_input'
 import { InModal } from 'components/modal'
 import { PrintOnly, WebOnly } from 'components/utilities/conditional-display'
 import { DetailName } from 'domains/pdo/detail/name'
 import { MaterialName, MetalPageTitle } from 'domains/pdo/shared'
+import { rpc } from 'lib/deps'
 import {
   Button,
   DeleteResourceButton,
-  Inp,
   Label,
   Loading,
   observer,
@@ -26,50 +27,51 @@ import { notifier } from 'lib/store/notifier.store'
 import { fmtDate, timeDeltaDays } from 'lib/utils/date_fmt'
 import { roundAndTrim } from 'lib/utils/fmt'
 import {
-  ManufacturingOrderStatus,
+  ManufacturingOrderStatus as OrderStatus,
   uiManufacturingOrderStatus,
   uiUnit
 } from 'models'
 import { cache } from '../cache/root'
 import { TechParamsDisplay } from '../detail/components'
-import { BlankSpec, DetailState } from '../detail/detail.state'
+import { BlankSpec, DetailSt, DetailStProp } from '../detail/detail.state'
 import { MaterialCost } from '../detail/warehouse/cost.store'
 import { api } from './api'
-import {
-  ManufacturingOrderOutput,
-  ManufacturingOrderState
-} from './order.state'
-import { DetailTechPassportTable } from './tech_passport/passport_table'
+import { OrderSt, OrderStProp } from './order.state'
+import { TechPassportTable } from './tech_passport/passport_table'
 import { ProductionRoute } from './tech_passport/production_route_table'
 import { DetailDescription } from './tech_passport/shared'
 
 const deletionAllowed = [
-  ManufacturingOrderStatus.Waiting,
-  ManufacturingOrderStatus.Preparation,
-  ManufacturingOrderStatus.Production
+  OrderStatus.Waiting,
+  OrderStatus.Preparation,
+  OrderStatus.Production
 ]
 
 export const ManufacturingUpdatePage = observer(() => {
   const { id } = useParams<{ id: string }>()
-  const [detail, setDetail] = useState<DetailState | null>(null)
-  const [order, setOrder] = useState<ManufacturingOrderOutput | null>(null)
+
+  const [detail, setDetail] = useState<DetailSt | null>(null)
+  const [order] = useState(() => new OrderSt())
+
   useEffect(() => {
     if (id) {
-      api.load(Number(id)).then(({ detail, order }) => {
-        setDetail(detail)
-        setOrder(order)
+      api.load(Number(id)).then(res => {
+        setDetail(res.detail)
+        order.setOrder(res.order)
       })
     }
   }, [id])
 
-  if (api.status.loading) {
+  if (!detail || api.loader.loading || order.isLoading()) {
     return <Loading />
   }
-  if (!api.s.order) {
+
+  if (!order.resp) {
     return <div>Заказ не найден</div>
   }
-  const isDeletionAllowed = deletionAllowed.includes(api.s.order.status)
-  if (!detail || !order) return <Loading />
+
+  const isDeletionAllowed = deletionAllowed.includes(order.status)
+
   return (
     <Stack p={1} gap={1}>
       <WebOnly>
@@ -80,9 +82,9 @@ export const ManufacturingUpdatePage = observer(() => {
                 <Box width={'max-content'}>
                   <Row>
                     <P level="body-sm" whiteSpace={'nowrap'}>
-                      Заказ №{api.s.order.id}
+                      Заказ №{order.id}
                     </P>
-                    <OrderStatus status={api.s.order.status} />
+                    <OrderStatusChip status={order.resp.status} />
                   </Row>
                   <DetailName
                     detail={{
@@ -97,88 +99,102 @@ export const ManufacturingUpdatePage = observer(() => {
             />
             <Divider />
             <Row gap={1} alignItems={'start'}>
-              <Stack>
-                <QuantityInput detail={detail} />
-                <TechPassportButton />
+              <ProductionSteps order={order} detail={detail} />
+              <Divider orientation="vertical" />
+              <Stack gap={1}>
+                <TechPassportButton order={order} />
+                <QuantityInput
+                  order={order}
+                  recBatchSize={detail.recommendedBatchSize}
+                />
               </Stack>
-              <ProductionSteps detail={detail} />
-              <Cost detail={detail} />
+              <Cost order={order} detail={detail} />
             </Row>
+            <Divider />
             <Row gap={2} alignItems={'start'} flexWrap={'wrap'}>
               <BlankSpecDisplay blankSpec={detail?.blankSpec} />
               <DetailAttachments detail={detail} />
               <DetailDescription htmlContent={detail.description} />
             </Row>
-
-            <Dates />
-            <Row>
-              {api.status.loading && <Loading />}
-              <ActionButton status={api.s.order.status} />
-              {isDeletionAllowed && <DeleteOrderButton />}
+            <Dates order={order} />
+            <Row
+              justifyContent={
+                [OrderStatus.Production, OrderStatus.Collected].includes(
+                  order.status
+                )
+                  ? 'end'
+                  : 'start'
+              }
+            >
+              {api.loader.loading && <Loading />}
+              <ActionButton order={order} />
+              {isDeletionAllowed && <DeleteOrderButton order={order} />}
             </Row>
           </Stack>
         </Card>
-        <DuplicationCheckModal />
+        <DuplicationCheckModal order={order} />
       </WebOnly>
 
       <PrintOnly display="block">
-        <PrintingPageVerion order={api.s} detail={detail} />
+        <PrintingPageVerion order={order} detail={detail} />
       </PrintOnly>
     </Stack>
   )
 })
 
-const OrderStatus = observer(
-  ({ status }: { status: ManufacturingOrderStatus }) => {
-    let color: ChipProps['color'] = 'neutral'
-    switch (status) {
-      case ManufacturingOrderStatus.Production:
-        color = 'primary'
-        break
-      case ManufacturingOrderStatus.Collected:
-        color = 'success'
-        break
-    }
-    return (
-      <Chip color={color} variant="solid" size="sm">
-        {uiManufacturingOrderStatus(status)}
-      </Chip>
-    )
+const OrderStatusChip = ({ status }: { status: OrderStatus }) => {
+  let color: ChipProps['color'] = 'neutral'
+  switch (status) {
+    case OrderStatus.Production:
+      color = 'primary'
+      break
+    case OrderStatus.Collected:
+      color = 'success'
+      break
   }
-)
-
-const ProductionSteps = observer((props: { detail: DetailState }) => {
-  if (props.detail.processingRoute.steps.length === 0) return null
   return (
-    <Card size="sm" variant="outlined">
-      <Label label="Этапы обработки" />
+    <Chip color={color} variant="solid" size="sm">
+      {uiManufacturingOrderStatus(status)}
+    </Chip>
+  )
+}
+
+const ProductionSteps = observer(
+  ({ detail, order }: DetailStProp & OrderStProp) => {
+    if (
+      detail.processingRoute.steps.length === 0 ||
+      order.status == OrderStatus.Collected
+    )
+      return null
+    return (
       <Stack>
-        {props.detail.processingRoute.steps.map((step, index) => {
-          const current = api.s.currentOperation === index
+        <Label label="Этапы обработки" />
+        {detail.processingRoute.steps.map((operation, operation_index) => {
+          const current = order.currentOperation === operation_index
           const timedelta =
             current &&
-            api.s.order?.current_operation_start_at &&
-            timeDeltaDays(api.s.order.current_operation_start_at)
+            order.resp?.current_operation_start_at &&
+            timeDeltaDays(order.resp.current_operation_start_at)
           return (
             <Row>
               <Button
                 size="sm"
-                key={step.name}
+                key={operation.name}
                 variant={current ? 'solid' : 'plain'}
                 sx={{ width: 'fit-content' }}
-                color={current ? 'primary' : 'neutral'}
-                onClick={() => api.setCurrentOperation(index)}
+                color={current ? 'success' : 'neutral'}
+                onClick={() => api.setCurrentOperation(order, operation_index)}
               >
-                {step.name}
+                {operation.name}
               </Button>
               <Label>{timedelta}</Label>
             </Row>
           )
         })}
       </Stack>
-    </Card>
-  )
-})
+    )
+  }
+)
 
 const BlankSpecDisplay = observer(
   ({ blankSpec }: { blankSpec?: BlankSpec | null }) => {
@@ -192,7 +208,7 @@ const BlankSpecDisplay = observer(
   }
 )
 
-const DetailAttachments = observer(({ detail }: { detail: DetailState }) => {
+const DetailAttachments = observer(({ detail }: { detail: DetailSt }) => {
   if (detail.attachments.files.length === 0) return null
   return (
     <Stack>
@@ -208,14 +224,14 @@ const DetailAttachments = observer(({ detail }: { detail: DetailState }) => {
   )
 })
 
-const Dates = observer(() => {
-  if (!api.s.order) return null
-  const createdAt = fmtDate(new Date(api.s.order.created_at))
-  const startedAt = api.s.order.started_at
-    ? fmtDate(new Date(api.s.order.started_at), true)
+const Dates = observer(({ order }: { order: OrderSt }) => {
+  if (!order.resp) return null
+  const createdAt = fmtDate(new Date(order.resp.created_at))
+  const startedAt = order.resp.started_at
+    ? fmtDate(new Date(order.resp.started_at), true)
     : null
-  const finishedAt = api.s.order.finished_at
-    ? fmtDate(new Date(api.s.order.finished_at), true)
+  const finishedAt = order.resp.finished_at
+    ? fmtDate(new Date(order.resp.finished_at), true)
     : null
   return (
     <Row gap={1}>
@@ -241,15 +257,17 @@ const Dates = observer(() => {
   )
 })
 
-const TechPassportButton = () => {
-  if (api.s.order?.status !== ManufacturingOrderStatus.Production) {
+const TechPassportButton = ({ order }: OrderStProp) => {
+  if (
+    ![OrderStatus.Preparation, OrderStatus.Production].includes(order.status)
+  ) {
     return null
   }
   return (
     <Button
       onClick={() => window.print()}
-      color="neutral"
-      variant="outlined"
+      color="primary"
+      variant="soft"
       sx={{ width: 'fit-content' }}
     >
       Тех. паспорт
@@ -257,28 +275,23 @@ const TechPassportButton = () => {
   )
 }
 
-const PrintingPageVerion = (props: {
-  order: ManufacturingOrderState
-  detail: DetailState
-}) => (
+const PrintingPageVerion = (props: DetailStProp & OrderStProp) => (
   <>
-    <DetailTechPassportTable order={props.order} detail={props.detail} />
-    <ProductionRoute detail={props.detail} />
+    <TechPassportTable {...props} />
+    <ProductionRoute {...props} />
   </>
 )
 
-const DeleteOrderButton = observer(() => {
+const DeleteOrderButton = observer(({ order }: OrderStProp) => {
   const navigate = useNavigate()
+  const msg = `Удалить заказ?\nEсли заказ находится в состоянии "Производство" - значит материал уже был списан. 
+            В этом случае необходимо вручную скорректировать остатки через поставку.`
   return (
     <DeleteResourceButton
       onClick={e => {
         e.stopPropagation()
-        if (
-          window.confirm(
-            `Удалить заказ?\nEсли заказ находится в состоянии "Производство" - значит материал уже был списан. В этом случае необходимо вручную скорректировать остатки через поставку.`
-          )
-        ) {
-          api.delete(api.s.order!.id).then(() => {
+        if (window.confirm(msg)) {
+          api.delete(order!.id).then(() => {
             navigate(routeMap.pdo.manufacturing_orders)
           })
         }
@@ -287,11 +300,10 @@ const DeleteOrderButton = observer(() => {
   )
 })
 
-const Cost = observer(({ detail }: { detail: DetailState }) => {
-  if (api.s.order?.status === ManufacturingOrderStatus.Collected) {
+const Cost = observer(({ detail, order }: DetailStProp & OrderStProp) => {
+  if (order?.status === OrderStatus.Collected) {
     return null
   }
-
   const materialCost = detail.autoWriteoff.materialCost
   const details = detail.autoWriteoff.detailsCost
   return (
@@ -300,7 +312,7 @@ const Cost = observer(({ detail }: { detail: DetailState }) => {
         <Card size="sm">
           <Label label="Материал к потреблению" />
           <Stack gap={0.5}>
-            <DetailMaterialInfo cost={materialCost} />
+            <MaterialCostCalculations cost={materialCost} order={order} />
           </Stack>
         </Card>
       ) : null}
@@ -328,92 +340,103 @@ const Cost = observer(({ detail }: { detail: DetailState }) => {
   )
 })
 
-const QuantityInput = observer(({ detail }: { detail: DetailState }) => {
-  if (!api.s.order) return null
-  if (api.s.order.status === ManufacturingOrderStatus.Preparation) {
-    const recBatchSize = detail.recommendedBatchSize
+const QuantityInput = observer(
+  ({ recBatchSize, order }: OrderStProp & { recBatchSize?: number }) => {
+    const [qty, setQty] = useState(order.qty)
+
+    if ([OrderStatus.Collected].includes(order.status)) {
+      return (
+        <Row gap={1}>
+          <Label label="Кол-во" />
+          <P>{order.qty}</P>
+        </Row>
+      )
+    }
+
     return (
-      <Card size="sm" variant="plain">
-        <Label>Кол-во</Label>
+      <Card size="sm" variant="soft" color="success">
         <Stack>
           {recBatchSize && (
-            <P level="body-sm" color="primary">
-              Рекомендуемый размер партии - {recBatchSize} шт
+            <P level="body-xs" color="primary">
+              Реком. размер партии - {recBatchSize} шт
             </P>
           )}
           <Row alignItems={'end'}>
-            <Inp
-              sx={{ maxWidth: 70 }}
-              value={api.s.qty || ''}
-              variant="solid"
-              color="neutral"
+            <NumberInput
+              size="sm"
+              sx={{ maxWidth: 80 }}
+              value={qty}
+              variant="outlined"
               onChange={v => {
-                api.s.setQty(v)
+                setQty(v)
               }}
             />
             <SaveIconButton
-              variant="solid"
-              color="neutral"
-              onClick={() =>
-                api.save().then(() => {
-                  notifier.notify('info', 'Кол-во установлено')
+              size="sm"
+              disabled={qty == null}
+              variant="soft"
+              onClick={async () => {
+                if (qty == null) throw Error('Кол-во не задано')
+                await rpc.pdo.manufacturing.update_qty.mutate({
+                  orderId: order.id,
+                  qty
                 })
-              }
+                order.setQty(qty)
+                notifier.notify('info', 'Кол-во установлено')
+              }}
             />
           </Row>
         </Stack>
       </Card>
     )
   }
+)
 
-  if (
-    [
-      ManufacturingOrderStatus.Production,
-      ManufacturingOrderStatus.Collected
-    ].includes(api.s.order.status)
-  ) {
-    return (
-      <Row gap={1}>
-        <Label label="Кол-во" />
-        <P>{api.s.order.qty}</P>
-      </Row>
-    )
-  }
-})
-
-const ActionButton = observer((props: { status: ManufacturingOrderStatus }) => {
-  switch (props.status) {
-    case ManufacturingOrderStatus.Waiting:
+const ActionButton = observer(({ order }: OrderStProp) => {
+  switch (order.status as OrderStatus) {
+    case OrderStatus.Waiting:
       return (
         <Button
           size="sm"
           color="success"
-          onClick={() => api.startMaterialPreparationPhase()}
-          disabled={api.status.loading}
+          onClick={() => api.startPreparation(order)}
+          disabled={api.loader.loading}
         >
           Начать подготовку материалов
         </Button>
       )
-    case ManufacturingOrderStatus.Preparation:
+    case OrderStatus.Preparation:
       return (
         <Button
           size="sm"
           color="primary"
-          onClick={() => api.startProductionPhase()}
-          disabled={api.status.loading || !api.s.qty}
+          onClick={() => api.startProduction(order)}
+          disabled={api.loader.loading || !order.qty}
         >
           Начать производство
         </Button>
       )
-    case ManufacturingOrderStatus.Production:
+    case OrderStatus.Production:
       return (
         <Button
-          onClick={() => api.finish()}
-          disabled={api.status.loading}
+          onClick={() => api.finish(order)}
+          disabled={api.loader.loading}
           size="sm"
           color="success"
         >
-          Завершить заказ
+          Завершить
+        </Button>
+      )
+    case OrderStatus.Collected:
+      return (
+        <Button
+          onClick={() => api.returnToProduction(order)}
+          disabled={api.loader.loading}
+          size="sm"
+          color="danger"
+          variant="outlined"
+        >
+          Вернуть в производство
         </Button>
       )
     default:
@@ -421,79 +444,71 @@ const ActionButton = observer((props: { status: ManufacturingOrderStatus }) => {
   }
 })
 
-const DuplicationCheckModal = observer(() => {
+const DuplicationCheckModal = observer(({ order }: { order: OrderSt }) => {
   const navigate = useNavigate()
-  if (!api.s.orderAlreadyInProductionModal) return null
-  const detail = cache.details.get(api.s.orderAlreadyInProductionModal.detailId)
+  if (!order.orderAlreadyInProductionModal) return null
+  const detail = cache.details.get(order.orderAlreadyInProductionModal.detailId)
   if (!detail) return null
-  const order = api.s.orderAlreadyInProductionModal
+  const modalState = order.orderAlreadyInProductionModal
   return (
     <InModal
       size="lg"
-      open={Boolean(api.s.orderAlreadyInProductionModal)}
-      setOpen={() => api.s.setOrderAlreadyInProductionModal(null)}
-      onClose={() => api.s.setOrderAlreadyInProductionModal(null)}
+      open={Boolean(order.orderAlreadyInProductionModal)}
+      setOpen={() => order.setOrderAlreadyInProductionModal(null)}
+      onClose={() => order.setOrderAlreadyInProductionModal(null)}
     >
       <P>
         Заказ на производство{' '}
         <b>
-          {detail.name} - {order.qty} шт
+          {detail.name} - {modalState.qty} шт
         </b>{' '}
-        уже в производстве под номером <b>{order.manufacturingId}</b>
+        уже в производстве под номером <b>{modalState.manufacturingId}</b>
       </P>
-      <Stack gap={1} mt={3}>
+      <Row mt={3}>
         <Button
           size="sm"
+          variant="soft"
           onClick={async () => {
             navigate(
               openPage(
                 routeMap.pdo.manufacturing_order.edit,
-                order.manufacturingId
+                modalState.manufacturingId
               )
             )
-            api.s.setOrderAlreadyInProductionModal(null)
-            await api.delete(api.s.order!.id)
+            order.setOrderAlreadyInProductionModal(null)
+            await api.delete(order.id)
           }}
         >
-          Открыть существующий заказ и удалить текущий
+          Открыть существующий и удалить текущий
         </Button>
         <Button
           size="sm"
-          color="danger"
           variant="soft"
           onClick={async () => {
-            api.s.setOrderAlreadyInProductionModal(null)
-            await api.startProductionPhase(true)
+            order.setOrderAlreadyInProductionModal(null)
+            await api.startProduction(order, true)
           }}
-          disabled={api.status.loading}
+          disabled={api.loader.loading}
         >
-          Запустить новый заказ
+          Запустить новый
         </Button>
-      </Stack>
+      </Row>
     </InModal>
   )
 })
 
-const DetailMaterialInfo = observer((props: { cost: MaterialCost }) => {
-  const { cost } = props
-  const totalConsumedAmount = parseInt(api.s.qty) * (cost.length || 0)
-  const remainingAmount = (cost.material?.stock || 0) - totalConsumedAmount
-  const unit = uiUnit(cost?.material?.unit)
-  return (
-    <Box>
-      <Row>
-        <MaterialName
-          materialId={cost.materialId}
-          materialLabel={cost.material?.label || ''}
-        />
-        <Label level="body-sm" color="primary">
-          Расход {cost?.length || 'не указано'}{' '}
-          {uiUnit(cost.material?.unit) || ''}
-        </Label>
-      </Row>
-      <Divider sx={{ my: 0.5 }} />
-      {api.s.qty && (
+const MaterialCostCalculations = observer(
+  (props: { cost: MaterialCost; order: OrderSt }) => {
+    const { cost, order } = props
+
+    const costCalculations = () => {
+      if (!order.qty) return null
+      const totalConsumedAmount = order.qty * (cost.length || 0)
+      const remainingAmount = (cost.material?.stock || 0) - totalConsumedAmount
+      const unit = uiUnit(cost?.material?.unit)
+      return (
         <>
+          <Divider sx={{ my: 0.5 }} />
           <P level="body-sm" color="neutral">
             Потребное кол-во: {roundAndTrim(totalConsumedAmount, 3) || 0} {unit}
           </P>
@@ -502,7 +517,7 @@ const DetailMaterialInfo = observer((props: { cost: MaterialCost }) => {
             Остаток: {roundAndTrim(cost.material?.stock, 3) || 0} {unit}
           </P>
 
-          {api.s.order?.status === ManufacturingOrderStatus.Preparation && (
+          {order?.status === OrderStatus.Preparation && (
             <P
               color={
                 remainingAmount >= 0
@@ -517,7 +532,23 @@ const DetailMaterialInfo = observer((props: { cost: MaterialCost }) => {
             </P>
           )}
         </>
-      )}
-    </Box>
-  )
-})
+      )
+    }
+
+    return (
+      <Box>
+        <Row>
+          <MaterialName
+            materialId={cost.materialId}
+            materialLabel={cost.material?.label || ''}
+          />
+          <Label level="body-sm" color="primary">
+            Расход {cost?.length || 'не указано'}{' '}
+            {uiUnit(cost.material?.unit) || ''}
+          </Label>
+        </Row>
+        {costCalculations()}
+      </Box>
+    )
+  }
+)

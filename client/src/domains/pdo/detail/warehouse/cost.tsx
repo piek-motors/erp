@@ -15,7 +15,7 @@ import {
 } from 'lib/index'
 import { uiUnit, Unit } from 'models'
 import { MaterialSelect } from '../components'
-import { DetailState } from '../detail.state'
+import { DetailSt } from '../detail.state'
 import { DetailSelectModal } from '../list/list'
 import { DetailName } from '../name'
 
@@ -38,7 +38,7 @@ const CostRow = ({ children, onDelete, qtyInput: input }: CostRowProps) => (
 )
 
 export const MaterialCostInputs = observer(
-  ({ detail }: { detail: DetailState }) => {
+  ({ detail }: { detail: DetailSt }) => {
     const materialCost = detail.autoWriteoff.materialCost
     const material = cache.materials.get(materialCost?.materialId || 0)
 
@@ -93,7 +93,7 @@ export const MaterialCostInputs = observer(
 )
 
 export const AutomaticWriteoffAccordion = observer(
-  ({ detail }: { detail: DetailState }) => (
+  ({ detail }: { detail: DetailSt }) => (
     <AccordionCard title="Расход" defaultExpanded width={'fit-content'}>
       <Stack>
         <Label color="neutral" sx={{ mb: 1 }} level="body-xs">
@@ -109,52 +109,50 @@ export const AutomaticWriteoffAccordion = observer(
   )
 )
 
-export const DetailCostInputs = observer(
-  ({ detail }: { detail: DetailState }) => (
-    <Base
-      label="Расход деталей"
-      handleAdd={() => detail.autoWriteoff.insertDetail()}
-    >
-      {detail.autoWriteoff.detailsCost.map((cost, index) => {
-        const detailCache = cache.details.get(cost.detailId)
-        if (!detailCache) {
-          return (
-            <DetailSelectModal
-              onRowClick={detail => {
-                cost.setDetailId(detail.id)
-              }}
-            />
-          )
-        }
+export const DetailCostInputs = observer(({ detail }: { detail: DetailSt }) => (
+  <Base
+    label="Расход деталей"
+    handleAdd={() => detail.autoWriteoff.insertDetail()}
+  >
+    {detail.autoWriteoff.detailsCost.map((cost, index) => {
+      const detailCache = cache.details.get(cost.detailId)
+      if (!detailCache) {
         return (
-          <CostRow
-            key={index}
-            onDelete={() => {
-              detail.autoWriteoff.deleteDetail(cost.detailId)
+          <DetailSelectModal
+            onRowClick={detail => {
+              cost.setDetailId(detail.id)
             }}
-            qtyInput={
-              <NumberInput
-                value={cost.qty}
-                onChange={v => {
-                  cost.setQty(v)
-                }}
-              />
-            }
-          >
-            <DetailName
-              detail={{
-                id: detail.id ?? 0,
-                name: detail.name,
-                group_id: detail.groupId ?? 0
-              }}
-              withGroupName
-            />
-          </CostRow>
+          />
         )
-      })}
-    </Base>
-  )
-)
+      }
+      return (
+        <CostRow
+          key={index}
+          onDelete={() => {
+            detail.autoWriteoff.deleteDetail(cost.detailId)
+          }}
+          qtyInput={
+            <NumberInput
+              value={cost.qty}
+              onChange={v => {
+                cost.setQty(v)
+              }}
+            />
+          }
+        >
+          <DetailName
+            detail={{
+              id: detail.id ?? 0,
+              name: detail.name,
+              group_id: detail.groupId ?? 0
+            }}
+            withGroupName
+          />
+        </CostRow>
+      )
+    })}
+  </Base>
+))
 
 interface BaseProps {
   label: string

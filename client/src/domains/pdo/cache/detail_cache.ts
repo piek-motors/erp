@@ -2,7 +2,7 @@ import { matrixDecoder } from 'lib/rpc/matrix_decoder'
 import { rpc } from 'lib/rpc/rpc.client'
 import { makeAutoObservable } from 'mobx'
 import { ListDetailsOutput } from 'srv/rpc/pdo/details'
-import { DetailState } from '../detail/detail.state'
+import { DetailSt } from '../detail/detail.state'
 import { map } from '../mappers'
 
 const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
@@ -10,11 +10,11 @@ const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
 const alphabet = 'АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ'.split('')
 
 export class DetailCache {
-  private _details: DetailState[] = []
-  setDetails(details: DetailState[]) {
+  private _details: DetailSt[] = []
+  setDetails(details: DetailSt[]) {
     this._details = details
   }
-  get(id: number): DetailState | undefined {
+  get(id: number): DetailSt | undefined {
     return this._details.find(detail => detail.id === id)
   }
   getLabel(id: number): string | null {
@@ -42,10 +42,10 @@ export class DetailCache {
   remove(id: number) {
     this.setDetails(this._details.filter(d => d.id !== id))
   }
-  addDetail(detail: DetailState) {
+  addDetail(detail: DetailSt) {
     this.setDetails([...this._details, detail])
   }
-  update(detail: DetailState) {
+  update(detail: DetailSt) {
     this.setDetails(this._details.map(d => (d.id === detail.id ? detail : d)))
   }
   count() {

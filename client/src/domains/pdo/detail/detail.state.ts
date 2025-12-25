@@ -46,7 +46,9 @@ export type BlankSpec = {
   arr: { key: string; value: any }[]
 }
 
-export class DetailState {
+export type DetailStProp = { detail: DetailSt }
+
+export class DetailSt {
   readonly attachments = new AttachmentsStore()
   readonly warehouse = new DetailWarehouseStore()
   readonly autoWriteoff = new DetailAutomaticWriteoffStore()

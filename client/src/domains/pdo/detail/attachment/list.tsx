@@ -1,10 +1,10 @@
 import { AttachmentList } from 'components/attachments/attachment-list'
 import { observer } from 'lib'
 import { Attachment } from 'models'
-import { DetailState } from '../detail.state'
+import { DetailSt } from '../detail.state'
 
 interface DetailAttachmentListProps {
-  detail: DetailState
+  detail: DetailSt
   onDelete?: (attachment: Attachment) => void
 }
 

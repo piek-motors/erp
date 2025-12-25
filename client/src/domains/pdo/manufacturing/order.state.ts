@@ -1,4 +1,3 @@
-import { LoadingController } from 'lib/store/loading_controller'
 import { makeAutoObservable } from 'mobx'
 import { RouterOutput } from 'srv/lib/trpc'
 
@@ -11,9 +10,17 @@ type OrderAlreadyInProductionModal = {
   qty: number
 } | null
 
-export class ManufacturingOrderState {
-  readonly async = new LoadingController()
-  order: ManufacturingOrderOutput | null = null
+export type OrderStProp = { order: OrderSt }
+
+export class OrderSt {
+  constructor() {
+    makeAutoObservable(this)
+  }
+
+  resp: ManufacturingOrderOutput | null = null
+  isLoading(): boolean {
+    return this.resp == null
+  }
 
   orderAlreadyInProductionModal: OrderAlreadyInProductionModal = null
   setOrderAlreadyInProductionModal(modal: OrderAlreadyInProductionModal) {
@@ -21,13 +28,14 @@ export class ManufacturingOrderState {
   }
 
   setOrder(order: ManufacturingOrderOutput) {
-    this.order = order
-    this.qty = order.qty.toString()
+    this.resp = order
+    this.qty = order.qty
     this.currentOperation = order.current_operation
+    this.orderAlreadyInProductionModal = null
   }
 
-  qty: string = ''
-  setQty(qty: string) {
+  qty?: number
+  setQty(qty: number) {
     this.qty = qty
   }
 
@@ -36,7 +44,17 @@ export class ManufacturingOrderState {
     this.currentOperation = index
   }
 
-  constructor() {
-    makeAutoObservable(this)
+  get id() {
+    if (!this.resp?.id) {
+      throw new Error('Manufacturing order id not set')
+    }
+    return this.resp.id
+  }
+
+  get status() {
+    if (this.resp?.status == null) {
+      throw new Error('Manufacturing order status is not set')
+    }
+    return this.resp.status
   }
 }

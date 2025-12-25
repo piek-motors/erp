@@ -4,9 +4,7 @@ import { matrixEncoder } from '#root/lib/matrix_encoder.js'
 import { formatDate, timedeltaInSeconds } from '#root/lib/time.js'
 import { router } from '#root/lib/trpc/trpc.js'
 import { Manufacturing } from '#root/service/manufacturing.service.js'
-import { DB } from 'db'
-import { Updateable } from 'kysely'
-import { ManufacturingOrderStatus } from 'models'
+import { ManufacturingOrderStatus as OrderStatus } from 'models'
 import z from 'zod'
 
 const ShowFinishedOrders = 14 * Day
@@ -17,7 +15,7 @@ export interface ListManufacturingOutput {
   detail_name: string
   qty: number
   group_id: number | null
-  status: ManufacturingOrderStatus
+  status: OrderStatus
   created_at: string
   started_at: string | null
   finished_at: string | null
@@ -30,21 +28,21 @@ export const manufacturing = router({
   get: procedure
     .input(z.object({ id: z.number() }))
     .query(async ({ input }) => {
-      const manufacturingOrder = await db
+      const order = await db
         .selectFrom('pdo.manufacturing as m')
         .selectAll('m')
         .innerJoin('pdo.details as d', 'm.detail_id', 'd.id')
         .select(['d.name as detail_name', 'd.logical_group_id as group_id'])
         .where('m.id', '=', input.id)
         .executeTakeFirst()
-      if (!manufacturingOrder) {
+      if (!order) {
         throw new TRPCError({
           code: 'NOT_FOUND',
           message: `Manufacturing order with id ${input.id} not found`
         })
       }
       return {
-        ...manufacturingOrder,
+        ...order,
         material_writeoffs: undefined
       }
     }),
@@ -63,23 +61,19 @@ export const manufacturing = router({
       )
     ),
   //
-  update: procedure
+  update_qty: procedure
     .use(requireScope(Scope.pdo))
     .input(
       z.object({
         orderId: z.number(),
-        qty: z.number().nullable()
+        qty: z.number()
       })
     )
     .mutation(async ({ input }) => {
-      const update: Updateable<DB.ManufacturingTable> = {}
-      if (input.qty != null) {
-        update.qty = input.qty
-      }
       return db.transaction().execute(async trx => {
         await trx
           .updateTable('pdo.manufacturing')
-          .set(update)
+          .set({ qty: input.qty })
           .where('id', '=', input.orderId)
           .execute()
         return {
@@ -101,7 +95,7 @@ export const manufacturing = router({
         )
     ),
   //
-  startMaterialPreparationPhase: procedure
+  start_preparation: procedure
     .use(requireScope(Scope.pdo))
     .input(z.object({ orderId: z.number() }))
     .mutation(({ input, ctx }) =>
@@ -114,7 +108,7 @@ export const manufacturing = router({
       )
     ),
   //
-  startProductionPhase: procedure
+  start_production: procedure
     .use(requireScope(Scope.pdo))
     .input(
       z.object({
@@ -134,6 +128,41 @@ export const manufacturing = router({
           )
         )
     ),
+  //
+  return_to_production: procedure
+    .use(requireScope(Scope.pdo))
+    .input(z.object({ id: z.number() }))
+    .mutation(async ({ input }) => {
+      const order = await db
+        .selectFrom('pdo.manufacturing')
+        .select('finished_at')
+        .where('status', '=', OrderStatus.Collected)
+        .where('id', '=', input.id)
+        .executeTakeFirst()
+      if (!order) {
+        throw new TRPCError({
+          code: 'NOT_FOUND',
+          message: `Manufacturing order with id ${input.id} not found`
+        })
+      }
+      if (
+        order.finished_at &&
+        Date.now() - order.finished_at.getTime() > 5 * Day
+      ) {
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'Order finished a long time ago so it cannot be returned'
+        })
+      }
+      await db
+        .updateTable('pdo.manufacturing')
+        .set({
+          finished_at: null,
+          status: OrderStatus.Production
+        })
+        .where('id', '=', input.id)
+        .executeTakeFirstOrThrow()
+    }),
   //
   list: procedure.query(async () => {
     const cutoffDate = new Date(Date.now() - ShowFinishedOrders)
@@ -158,7 +187,7 @@ export const manufacturing = router({
           'd.processing_route'
         ])
         .where('m.finished_at', 'is', null)
-        .where('m.status', '!=', ManufacturingOrderStatus.Collected)
+        .where('m.status', '!=', OrderStatus.Collected)
         .orderBy('m.created_at', 'desc')
         .execute(),
       db

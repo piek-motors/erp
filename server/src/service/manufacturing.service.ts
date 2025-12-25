@@ -16,7 +16,7 @@ type MaterialWriteoff = {
 export class Manufacturing {
   private readonly warehouse: Warehouse
 
-  constructor(private readonly trx: IDB, private readonly userId: number) {
+  constructor(private readonly trx: IDB, userId: number) {
     this.warehouse = new Warehouse(trx, userId)
   }
 
@@ -59,7 +59,7 @@ export class Manufacturing {
   ): Promise<Selectable<DB.ManufacturingTable>> {
     const order = await this.getOrder(orderId)
     if (order.status !== ManufacturingOrderStatus.Waiting) {
-      throw new ErrManufacturingOrderInvalidStatusTransition(
+      throw new ErrForbiddenStatusTransition(
         `Manufacturing with id ${orderId} not waiting`
       )
     }
@@ -86,20 +86,8 @@ export class Manufacturing {
       .select('automatic_writeoff')
       .executeTakeFirstOrThrow()
 
-    // deduplication check:  if order already started production
     if (!force) {
-      const existingOrder = await this.trx
-        .selectFrom('pdo.manufacturing')
-        .where('detail_id', '=', order.detail_id)
-        .where('status', '=', ManufacturingOrderStatus.Production)
-        .select('id')
-        .executeTakeFirst()
-      if (existingOrder) {
-        throw new TRPCError({
-          code: 'CONFLICT',
-          message: `Order already in production order_id=${existingOrder.id}, detail_id=${order.detail_id}, qty=${qty}`
-        })
-      }
+      await this.deduplicateProductionList(order.detail_id)
     }
 
     const materialCost = detail.automatic_writeoff?.material
@@ -134,6 +122,23 @@ export class Manufacturing {
       .where('id', '=', orderId)
       .execute()
     return writeoff
+  }
+
+  /** deduplication check:  if order already started production */
+  private async deduplicateProductionList(detail_id: number) {
+    const order = await this.trx
+      .selectFrom('pdo.manufacturing')
+      .where('detail_id', '=', detail_id)
+      .where('status', '=', ManufacturingOrderStatus.Production)
+      .select(['id', 'qty'])
+      .executeTakeFirst()
+
+    if (order) {
+      throw new TRPCError({
+        code: 'CONFLICT',
+        message: `Order already in production order_id=${order.id}, detail_id=${detail_id}, qty=${order.qty}`
+      })
+    }
   }
 
   async finishOrder(orderId: number): Promise<void> {
@@ -270,7 +275,7 @@ class ErrManufacturingOrderNotFound extends TRPCError {
   }
 }
 
-class ErrManufacturingOrderInvalidStatusTransition extends TRPCError {
+class ErrForbiddenStatusTransition extends TRPCError {
   constructor(message: string) {
     super({
       code: 'BAD_REQUEST',

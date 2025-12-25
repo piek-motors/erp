@@ -20,12 +20,12 @@ import {
   useState
 } from 'lib/index'
 import { Column } from 'react-table'
-import { DetailState } from '../detail.state'
+import { DetailSt } from '../detail.state'
 import { DetailName } from '../name'
 import { AlphabetIndex } from './alphabet_index'
 import { detailListStore as state } from './store'
 
-const columnList: Column<DetailState>[] = [
+const columnList: Column<DetailSt>[] = [
   {
     Header: '№',
     accessor: d => <Label xs>{d.id}</Label>
@@ -55,8 +55,8 @@ const columnList: Column<DetailState>[] = [
 ]
 
 interface DetailsTableProps {
-  onRowClick?: (row: DetailState) => void
-  highlight?: (row: DetailState) => boolean
+  onRowClick?: (row: DetailSt) => void
+  highlight?: (row: DetailSt) => boolean
   highlightColor?: string
   sx?: SxProps
 }
@@ -103,8 +103,8 @@ export const DetailsListPage = () => (
 )
 
 interface DetailSelectModalProps {
-  value?: DetailState
-  onRowClick: (row: DetailState) => void
+  value?: DetailSt
+  onRowClick: (row: DetailSt) => void
 }
 
 export const DetailSelectModal = observer((props: DetailSelectModalProps) => {

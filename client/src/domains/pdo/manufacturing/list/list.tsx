@@ -5,6 +5,7 @@ import { Table } from 'components/table.impl'
 import { MetalPageTitle } from 'domains/pdo/shared/basic'
 import { observer } from 'lib/deps'
 import {
+  Label,
   Loading,
   openPage,
   routeMap,
@@ -14,27 +15,37 @@ import {
   useNavigate,
   useState
 } from 'lib/index'
-import { ManufacturingOrderStatus, uiManufacturingOrderStatus } from 'models'
+import {
+  ManufacturingOrderStatus as OrderStatus,
+  uiManufacturingOrderStatus
+} from 'models'
 import { ListManufacturingOutput } from 'srv/rpc/pdo/manufacturing'
 import { getColumns } from './columns'
 import { s } from './store'
 
 const STATUSES = [
-  ManufacturingOrderStatus.Collected,
-  ManufacturingOrderStatus.Production,
-  ManufacturingOrderStatus.Preparation,
-  ManufacturingOrderStatus.Waiting
+  OrderStatus.Collected,
+  OrderStatus.Production,
+  OrderStatus.Preparation,
+  OrderStatus.Waiting
 ]
 
 function StatusAccordion(props: {
-  status: ManufacturingOrderStatus
+  status: OrderStatus
   onRowClick: (row: ListManufacturingOutput) => void
   expanded?: boolean
   data: ListManufacturingOutput[]
 }) {
   return (
     <AccordionCard
-      title={uiManufacturingOrderStatus(props.status)}
+      title={
+        <Row>
+          {uiManufacturingOrderStatus(props.status)}{' '}
+          {props.status === OrderStatus.Production && (
+            <Label level="body-xs">[{props.data.length}]</Label>
+          )}
+        </Row>
+      }
       expanded={props.expanded}
     >
       <Table
@@ -67,8 +78,7 @@ export const ManufacturingList = observer(() => {
       })
     : s.orders
 
-  const hasInStatus = (s: ManufacturingOrderStatus) =>
-    filtered.some(o => o.status === s)
+  const hasInStatus = (s: OrderStatus) => filtered.some(o => o.status === s)
 
   if (s.async.loading) return <Loading />
   return (

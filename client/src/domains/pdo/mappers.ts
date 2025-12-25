@@ -7,7 +7,7 @@ import {
 import { RouterOutput } from 'srv/lib/trpc'
 import { SelectableDetail } from 'srv/rpc/pdo/details'
 import { Material as MaterialListDto } from 'srv/rpc/pdo/materials'
-import { DetailState } from './detail/detail.state'
+import { DetailSt } from './detail/detail.state'
 
 type GetMaterialsOutput = RouterOutput['pdo']['material']['get']
 
@@ -52,8 +52,8 @@ class MaterialMapper {
 }
 
 class DetailMapper {
-  fromDto(detail: Partial<SelectableDetail>): DetailState {
-    const res = new DetailState()
+  fromDto(detail: Partial<SelectableDetail>): DetailSt {
+    const res = new DetailSt()
 
     res.init({
       id: detail.id ?? 0,

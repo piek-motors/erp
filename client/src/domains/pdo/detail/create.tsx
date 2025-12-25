@@ -9,10 +9,10 @@ import {
 import { openPage, routeMap } from 'lib/routes'
 import { api } from './api'
 import { DetailInputs } from './components'
-import { DetailState } from './detail.state'
+import { DetailSt } from './detail.state'
 
 export const CreateDetailPage = observer(() => {
-  const [detail, setDetail] = useState(() => new DetailState())
+  const [detail, setDetail] = useState(() => new DetailSt())
   const [insertedDetailId, setInsertedDetailId] = useState<number | null>(null)
   return (
     <Stack gap={2} p={1}>
@@ -28,7 +28,7 @@ export const CreateDetailPage = observer(() => {
         onClick={() =>
           api.insert(detail).then(id => {
             setInsertedDetailId(id)
-            setDetail(new DetailState())
+            setDetail(new DetailSt())
           })
         }
       />

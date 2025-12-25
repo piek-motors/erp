@@ -17,7 +17,7 @@ import { fmtDate, fmtTimestamp } from 'lib/utils/date_fmt'
 import { CreateDetailOrder } from '../warehouse/create_order'
 import { api } from './api'
 import { DetailInputs } from './components'
-import { DetailState } from './detail.state'
+import { DetailSt, DetailStProp } from './detail.state'
 import { DetailWarehouse } from './warehouse/ui'
 
 export const UpdateDetailPage = observer(() => {
@@ -25,7 +25,7 @@ export const UpdateDetailPage = observer(() => {
   if (!id) {
     throw new Error('Invalid page params; id is required')
   }
-  const [detail, setDetail] = useState<DetailState | null>(null)
+  const [detail, setDetail] = useState<DetailSt | null>(null)
 
   useEffect(() => {
     api.loadFull(Number(id)).then(d => {
@@ -55,7 +55,7 @@ export const UpdateDetailPage = observer(() => {
   )
 })
 
-function SaveFloatingButton({ detail }: { detail: DetailState }) {
+function SaveFloatingButton({ detail }: DetailStProp) {
   const navigate = useNavigate()
   return (
     <Sheet
