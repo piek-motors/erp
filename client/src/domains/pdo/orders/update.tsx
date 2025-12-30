@@ -292,7 +292,7 @@ const DeleteOrderButton = observer(({ order }: OrderStProp) => {
         e.stopPropagation()
         if (window.confirm(msg)) {
           api.delete(order!.id).then(() => {
-            navigate(routeMap.pdo.manufacturing_orders)
+            navigate(routeMap.pdo.index)
           })
         }
       }}
@@ -470,10 +470,7 @@ const DuplicationCheckModal = observer(({ order }: { order: OrderSt }) => {
           variant="soft"
           onClick={async () => {
             navigate(
-              openPage(
-                routeMap.pdo.manufacturing_order.edit,
-                modalState.manufacturingId
-              )
+              openPage(routeMap.pdo.order.edit, modalState.manufacturingId)
             )
             order.setOrderAlreadyInProductionModal(null)
             await api.delete(order.id)

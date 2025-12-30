@@ -10,7 +10,7 @@ export type Action = {
 export const actions: Action[] = [
   {
     name: 'Производство',
-    href: routeMap.pdo.manufacturing_orders
+    href: routeMap.pdo.index
   },
   {
     name: 'Группы',

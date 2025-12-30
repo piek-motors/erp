@@ -4,6 +4,7 @@ import { Table } from 'components/table.impl'
 import { TabConfig } from 'components/tabs'
 import { observer } from 'lib/deps'
 import {
+  Label,
   Loading,
   openPage,
   routeMap,
@@ -18,38 +19,53 @@ import { ListManufacturingOutput } from 'srv/rpc/pdo/orders'
 import { getColumns } from './columns'
 import { s } from './store'
 
-function getTabConfig(
+const getTabConfig = (
   data: ListManufacturingOutput[],
   onRowClick: (row: ListManufacturingOutput) => void
-): TabConfig {
-  return [
-    {
-      value: OrderStatus.Waiting,
-      label: 'Ожидание'
-    },
-    {
-      value: OrderStatus.Preparation,
-      label: 'Подготовка'
-    },
-    {
-      value: OrderStatus.Production,
-      label: 'Производство'
-    },
-    {
-      value: OrderStatus.Collected,
-      label: 'Завершенные'
-    }
-  ].map(each => ({
-    ...each,
+): TabConfig => [
+  {
+    value: OrderStatus.Preparation,
+    label: 'Подготовка',
+    component: (
+      <Stack>
+        <Label>Подготовка</Label>
+        <Table
+          onRowClick={onRowClick}
+          data={data.filter(e => e.status == OrderStatus.Preparation)}
+          columns={getColumns(OrderStatus.Preparation)}
+        />
+        <Label>Ожидание</Label>
+        <Table
+          onRowClick={onRowClick}
+          data={data.filter(e => e.status == OrderStatus.Waiting)}
+          columns={getColumns(OrderStatus.Waiting)}
+        />
+      </Stack>
+    )
+  },
+  {
+    value: OrderStatus.Production,
+    label: 'Производство',
     component: (
       <Table
         onRowClick={onRowClick}
-        data={data.filter(e => e.status === each.value)}
-        columns={getColumns(each.value)}
+        data={data.filter(e => e.status == OrderStatus.Production)}
+        columns={getColumns(OrderStatus.Production)}
       />
     )
-  }))
-}
+  },
+  {
+    value: OrderStatus.Collected,
+    label: 'Завершенные',
+    component: (
+      <Table
+        onRowClick={onRowClick}
+        data={data.filter(e => e.status == OrderStatus.Collected)}
+        columns={getColumns(OrderStatus.Collected)}
+      />
+    )
+  }
+]
 
 export const ManufacturingList = observer(() => {
   const navigate = useNavigate()
@@ -59,7 +75,7 @@ export const ManufacturingList = observer(() => {
   }, [])
 
   const onRowClick = (row: ListManufacturingOutput) => {
-    navigate(openPage(routeMap.pdo.manufacturing_order.edit, row.id))
+    navigate(openPage(routeMap.pdo.order.edit, row.id))
   }
   const [query, setQuery] = useState('')
   const q = query.trim().toLowerCase()
@@ -96,6 +112,8 @@ export const ManufacturingList = observer(() => {
             >
               {tabs.map(({ value, label }) => (
                 <Tab
+                  indicatorInset
+                  indicatorPlacement="top"
                   sx={{
                     fontSize: {
                       xs: '12px',
@@ -107,6 +125,7 @@ export const ManufacturingList = observer(() => {
                     }
                   }}
                   key={value}
+                  value={value}
                   color={'primary'}
                   variant={tab == value ? 'outlined' : 'plain'}
                 >

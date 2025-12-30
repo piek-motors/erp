@@ -10,7 +10,6 @@ import { MaterialUpdatePage } from './material/update'
 import { MetalFlowRootLayout } from './metalflow_root'
 import { ManufacturingList } from './orders/list/list'
 import { ManufacturingUpdatePage } from './orders/update'
-import { UsageInstruction } from './usage-instuction'
 import { OperationsTable } from './warehouse/list'
 
 const { pdo: metalflow } = routeMap
@@ -24,7 +23,7 @@ function wrapEachRoute(route: RouteConfig) {
 
 const innerRoutes = [
   {
-    element: <UsageInstruction />,
+    element: <ManufacturingList />,
     path: metalflow.index
   },
   {
@@ -65,12 +64,8 @@ const innerRoutes = [
     path: metalflow.operations
   },
   {
-    element: <ManufacturingList />,
-    path: metalflow.manufacturing_orders
-  },
-  {
     element: <ManufacturingUpdatePage />,
-    path: metalflow.manufacturing_order.edit
+    path: metalflow.order.edit
   }
 ] as RouteConfig[]
 

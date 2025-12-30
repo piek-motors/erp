@@ -15,7 +15,7 @@ export const CreateDetailOrder = observer(
       api
         .createManufacturingOrder(detailId)
         .then(r => {
-          navigate(openPage(routeMap.pdo.manufacturing_order.edit, r.id))
+          navigate(openPage(routeMap.pdo.order.edit, r.id))
         })
         .catch(e => {
           if (
@@ -24,9 +24,7 @@ export const CreateDetailOrder = observer(
           ) {
             const existingOrderId = parseInt(e.message.split('order_id=')[1])
             if (existingOrderId) {
-              navigate(
-                openPage(routeMap.pdo.manufacturing_order.edit, existingOrderId)
-              )
+              navigate(openPage(routeMap.pdo.order.edit, existingOrderId))
             }
           }
         })

@@ -43,10 +43,7 @@ export const columns: Column<Operation>[] = [
     accessor: data =>
       data.manufacturing_order_id && (
         <Link
-          to={openPage(
-            routeMap.pdo.manufacturing_order.edit,
-            data.manufacturing_order_id
-          )}
+          to={openPage(routeMap.pdo.order.edit, data.manufacturing_order_id)}
         >
           <Button
             variant="outlined"
