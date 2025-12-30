@@ -34,7 +34,7 @@ export const TechPassportTable = observer(({ order, detail }: Props) => {
             <P fontSize={14}>{detail.drawingNumber}</P>
             <P fontSize={14}>{detail.drawingName}</P>
           </td>
-          <td>Технологический паспорт № </td>
+          <td>Технологический паспорт № {order.id}</td>
           <td width={70}>Заказ № {emptySpace}</td>
           <td width={70}>
             Кол. дет. в партии <P>{order.qty || ''}</P>
