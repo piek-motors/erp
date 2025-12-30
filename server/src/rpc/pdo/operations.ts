@@ -91,11 +91,7 @@ export const operations = router({
         .select('d.name as detail_name')
         .select('d.logical_group_id as detail_group_id')
         .select('m.label as material_label')
-        .leftJoin(
-          'pdo.manufacturing as manuf',
-          'manufacturing_order_id',
-          'manuf.id'
-        )
+        .leftJoin('pdo.orders as manuf', 'manufacturing_order_id', 'manuf.id')
         .select('o.manufacturing_order_id as manufacturing_order_id')
         .select('manuf.qty as manufacturing_order_qty')
         .select('m.unit as unit')

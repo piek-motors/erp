@@ -46,7 +46,7 @@ export namespace DB {
     ['pdo.details']: DetailTable
     ['pdo.detail_attachments']: DetailAttachmentTable
     ['pdo.operations']: OperationsTable
-    ['pdo.manufacturing']: ManufacturingTable
+    ['pdo.orders']: ProductionOrderTable
     ['pdo.detail_group']: DetailGroupTable
     ['pdo.detail_group_details']: DetailGroupDetailsTable
     ['pdo.detail_group_color_annotations']: DetailGroupColorAnnotationsTable
@@ -154,11 +154,12 @@ export namespace DB {
       writeoff_id: number
     }>
   }
-  export interface ManufacturingTable {
+  export interface ProductionOrderTable {
     id: GeneratedAlways<number>
     status: ManufacturingOrderStatus
     detail_id: number
     qty: number
+    output_qty: number | null
     current_operation: number | null
     current_operation_start_at: string | null
     finished_at: Date | null

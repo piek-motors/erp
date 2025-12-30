@@ -29,7 +29,7 @@ export const manufacturing = router({
     .input(z.object({ id: z.number() }))
     .query(async ({ input }) => {
       const order = await db
-        .selectFrom('pdo.manufacturing as m')
+        .selectFrom('pdo.orders as m')
         .selectAll('m')
         .innerJoin('pdo.details as d', 'm.detail_id', 'd.id')
         .select(['d.name as detail_name', 'd.logical_group_id as group_id'])
@@ -72,7 +72,7 @@ export const manufacturing = router({
     .mutation(async ({ input }) => {
       return db.transaction().execute(async trx => {
         await trx
-          .updateTable('pdo.manufacturing')
+          .updateTable('pdo.orders')
           .set({ qty: input.qty })
           .where('id', '=', input.orderId)
           .execute()
@@ -134,7 +134,7 @@ export const manufacturing = router({
     .input(z.object({ id: z.number() }))
     .mutation(async ({ input }) => {
       const order = await db
-        .selectFrom('pdo.manufacturing')
+        .selectFrom('pdo.orders')
         .select('finished_at')
         .where('status', '=', OrderStatus.Collected)
         .where('id', '=', input.id)
@@ -155,7 +155,7 @@ export const manufacturing = router({
         })
       }
       await db
-        .updateTable('pdo.manufacturing')
+        .updateTable('pdo.orders')
         .set({
           finished_at: null,
           status: OrderStatus.Production
@@ -168,7 +168,7 @@ export const manufacturing = router({
     const cutoffDate = new Date(Date.now() - ShowFinishedOrders)
     const [inProduction, finished] = await Promise.all([
       db
-        .selectFrom('pdo.manufacturing as m')
+        .selectFrom('pdo.orders as m')
         .select([
           'm.id',
           'm.status',
@@ -191,7 +191,7 @@ export const manufacturing = router({
         .orderBy('m.created_at', 'desc')
         .execute(),
       db
-        .selectFrom('pdo.manufacturing as m')
+        .selectFrom('pdo.orders as m')
         .select([
           'm.id',
           'm.status',
@@ -250,7 +250,7 @@ export const manufacturing = router({
     )
     .mutation(async ({ input }) => {
       await db
-        .updateTable('pdo.manufacturing')
+        .updateTable('pdo.orders')
         .set({
           current_operation: input.operation_index,
           current_operation_start_at: Date.now().toString()

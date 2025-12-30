@@ -25,7 +25,7 @@ export class Jobs {
       Date.now() - OutdatedManufacturingOrderDeletionAfter
     )
     const result = await db
-      .deleteFrom('pdo.manufacturing')
+      .deleteFrom('pdo.orders')
       .where('created_at', '<', cutoffDate)
       .where('status', 'in', [
         ManufacturingOrderStatus.Waiting,

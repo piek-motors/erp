@@ -106,7 +106,7 @@ export const details = router({
           .selectAll()
           .execute(),
         db
-          .selectFrom('pdo.manufacturing')
+          .selectFrom('pdo.orders')
           .select(['finished_at', 'qty'])
           .where('detail_id', '=', input.id)
           .where('finished_at', 'is not', null)

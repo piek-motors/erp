@@ -22,10 +22,10 @@ export class Manufacturing {
 
   async createOrder(
     detail_id: number
-  ): Promise<Selectable<DB.ManufacturingTable>> {
+  ): Promise<Selectable<DB.ProductionOrderTable>> {
     // deduplication check:  if order created some already
     const existingOrder = await this.trx
-      .selectFrom('pdo.manufacturing')
+      .selectFrom('pdo.orders')
       .where('detail_id', '=', detail_id)
       .where('status', 'in', [
         ManufacturingOrderStatus.Waiting,
@@ -40,7 +40,7 @@ export class Manufacturing {
     }
 
     return await this.trx
-      .insertInto('pdo.manufacturing')
+      .insertInto('pdo.orders')
       .values({
         detail_id,
         qty: 0,
@@ -56,7 +56,7 @@ export class Manufacturing {
 
   async startMaterialPreparationPhase(
     orderId: number
-  ): Promise<Selectable<DB.ManufacturingTable>> {
+  ): Promise<Selectable<DB.ProductionOrderTable>> {
     const order = await this.getOrder(orderId)
     if (order.status !== ManufacturingOrderStatus.Waiting) {
       throw new ErrForbiddenStatusTransition(
@@ -65,7 +65,7 @@ export class Manufacturing {
     }
 
     await this.trx
-      .updateTable('pdo.manufacturing')
+      .updateTable('pdo.orders')
       .set({ status: ManufacturingOrderStatus.Preparation })
       .where('id', '=', orderId)
       .execute()
@@ -113,7 +113,7 @@ export class Manufacturing {
     }
 
     await this.trx
-      .updateTable('pdo.manufacturing')
+      .updateTable('pdo.orders')
       .set({
         qty,
         started_at: new Date(),
@@ -127,7 +127,7 @@ export class Manufacturing {
   /** deduplication check:  if order already started production */
   private async deduplicateProductionList(detail_id: number) {
     const order = await this.trx
-      .selectFrom('pdo.manufacturing')
+      .selectFrom('pdo.orders')
       .where('detail_id', '=', detail_id)
       .where('status', '=', ManufacturingOrderStatus.Production)
       .select(['id', 'qty'])
@@ -143,7 +143,7 @@ export class Manufacturing {
 
   async finishOrder(orderId: number): Promise<void> {
     const manufacturing = await this.trx
-      .updateTable('pdo.manufacturing')
+      .updateTable('pdo.orders')
       .set({
         finished_at: new Date(),
         status: ManufacturingOrderStatus.Collected
@@ -176,7 +176,7 @@ export class Manufacturing {
     }
 
     await this.trx
-      .deleteFrom('pdo.manufacturing')
+      .deleteFrom('pdo.orders')
       .where('id', '=', manufacturingId)
       .execute()
   }
@@ -189,7 +189,7 @@ export class Manufacturing {
       label: string
     },
     qty: number,
-    order: Selectable<DB.ManufacturingTable>
+    order: Selectable<DB.ProductionOrderTable>
   ): Promise<MaterialWriteoff> {
     const { material_id, label, cost } = material
     if (!cost) {
@@ -231,9 +231,9 @@ export class Manufacturing {
 
   private async getOrder(
     orderId: number
-  ): Promise<Selectable<DB.ManufacturingTable>> {
+  ): Promise<Selectable<DB.ProductionOrderTable>> {
     const order = await this.trx
-      .selectFrom('pdo.manufacturing')
+      .selectFrom('pdo.orders')
       .where('id', '=', orderId)
       .selectAll()
       .executeTakeFirst()
