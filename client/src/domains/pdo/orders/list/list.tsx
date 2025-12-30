@@ -15,13 +15,13 @@ import {
   useState
 } from 'lib/index'
 import { ManufacturingOrderStatus as OrderStatus } from 'models'
-import { ListManufacturingOutput } from 'srv/rpc/pdo/orders'
+import { ListOrdersOutput } from 'srv/rpc/pdo/orders'
 import { getColumns } from './columns'
 import { s } from './store'
 
 const getTabConfig = (
-  data: ListManufacturingOutput[],
-  onRowClick: (row: ListManufacturingOutput) => void
+  data: ListOrdersOutput[],
+  onRowClick: (row: ListOrdersOutput) => void
 ): TabConfig => [
   {
     value: OrderStatus.Preparation,
@@ -47,22 +47,31 @@ const getTabConfig = (
     value: OrderStatus.Production,
     label: 'Производство',
     component: (
-      <Table
-        onRowClick={onRowClick}
-        data={data.filter(e => e.status == OrderStatus.Production)}
-        columns={getColumns(OrderStatus.Production)}
-      />
+      <>
+        <Label level="body-xs" color="neutral">
+          {data.filter(e => e.status == OrderStatus.Production).length} заказов
+          в производстве
+        </Label>
+        <Table
+          onRowClick={onRowClick}
+          data={data.filter(e => e.status == OrderStatus.Production)}
+          columns={getColumns(OrderStatus.Production)}
+        />
+      </>
     )
   },
   {
     value: OrderStatus.Collected,
     label: 'Завершенные',
     component: (
-      <Table
-        onRowClick={onRowClick}
-        data={data.filter(e => e.status == OrderStatus.Collected)}
-        columns={getColumns(OrderStatus.Collected)}
-      />
+      <>
+        <Label level="body-xs">За последние 14 дней</Label>
+        <Table
+          onRowClick={onRowClick}
+          data={data.filter(e => e.status == OrderStatus.Collected)}
+          columns={getColumns(OrderStatus.Collected)}
+        />
+      </>
     )
   }
 ]
@@ -74,7 +83,7 @@ export const ManufacturingList = observer(() => {
     s.load()
   }, [])
 
-  const onRowClick = (row: ListManufacturingOutput) => {
+  const onRowClick = (row: ListOrdersOutput) => {
     navigate(openPage(routeMap.pdo.order.edit, row.id))
   }
   const [query, setQuery] = useState('')
@@ -121,7 +130,7 @@ export const ManufacturingList = observer(() => {
                     },
                     padding: {
                       xs: 0.3,
-                      sm: 1
+                      sm: '0px 12px'
                     }
                   }}
                   key={value}

@@ -37,7 +37,7 @@ export const routeMap = {
 
     operations: '/metalflow/operations',
     order: {
-      edit: '/metalflow/manufacturing/:id'
+      edit: '/metalflow/orders/:id'
     }
   }
 } as const

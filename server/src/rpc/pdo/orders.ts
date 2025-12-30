@@ -7,9 +7,11 @@ import { Manufacturing } from '#root/service/manufacturing.service.js'
 import { ManufacturingOrderStatus as OrderStatus } from 'models'
 import z from 'zod'
 
-const ShowFinishedOrders = 14 * Day
+export const FinishedOrderRetentionDays = 14
 
-export interface ListManufacturingOutput {
+export const FinishedOrderRetentionPeriod = FinishedOrderRetentionDays * Day
+
+export interface ListOrdersOutput {
   id: number
   detail_id: number
   detail_name: string
@@ -24,7 +26,7 @@ export interface ListManufacturingOutput {
   time_delta: number | null
 }
 
-export const manufacturing = router({
+export const orders = router({
   get: procedure
     .input(z.object({ id: z.number() }))
     .query(async ({ input }) => {
@@ -165,7 +167,7 @@ export const manufacturing = router({
     }),
   //
   list: procedure.query(async () => {
-    const cutoffDate = new Date(Date.now() - ShowFinishedOrders)
+    const cutoffDate = new Date(Date.now() - FinishedOrderRetentionPeriod)
     const [inProduction, finished] = await Promise.all([
       db
         .selectFrom('pdo.orders as m')
@@ -188,7 +190,7 @@ export const manufacturing = router({
         ])
         .where('m.finished_at', 'is', null)
         .where('m.status', '!=', OrderStatus.Collected)
-        .orderBy('m.created_at', 'desc')
+        .orderBy('m.started_at', 'desc')
         .execute(),
       db
         .selectFrom('pdo.orders as m')
