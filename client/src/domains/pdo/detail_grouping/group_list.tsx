@@ -17,7 +17,7 @@ export const SharedGroupList = observer(
       )
     }
     return (
-      <Stack p={1} gap={0}>
+      <Stack p={0.5} gap={0}>
         {crud.store.groups.map(group => {
           const isSelected = crud.store.targetGroup?.group.id === group.id
           return (

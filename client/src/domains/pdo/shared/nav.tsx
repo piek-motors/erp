@@ -5,29 +5,25 @@ import { UseIcon } from 'lib/index'
 import { Link, useLocation } from 'react-router'
 import { Action, actions } from '../nav.links'
 
-export function NavigationSideBar() {
-  return (
-    <Stack gap={1} p={1}>
-      <NavigationBar t="ПДО" />
-      {actions.map(each => (
-        <RenderAction action={each} key={each.href} size="sm" />
-      ))}
-    </Stack>
-  )
-}
+export const NavigationSideBar = () => (
+  <Stack gap={0.5} p={1}>
+    <NavigationBar t="ПДО" />
+    {actions.map(each => (
+      <RenderAction action={each} key={each.href} size="sm" />
+    ))}
+  </Stack>
+)
 
-export function MobileNavigationLinks() {
-  return (
-    <Card size="sm" sx={{ p: 1 }}>
-      <NavigationBar t="ПДО" />
-      {actions.map(each => (
-        <RenderAction action={each} key={each.href} size="lg" />
-      ))}
-    </Card>
-  )
-}
+export const MobileNavigationLinks = () => (
+  <Card size="sm">
+    <NavigationBar t="ПДО" />
+    {actions.map(each => (
+      <RenderAction action={each} key={each.href} size="sm" />
+    ))}
+  </Card>
+)
 
-function RenderAction(props: { action: Action; size: ButtonProps['size'] }) {
+const RenderAction = (props: { action: Action; size: ButtonProps['size'] }) => {
   const { action, size } = props
   return (
     <Stack
@@ -42,7 +38,7 @@ function RenderAction(props: { action: Action; size: ButtonProps['size'] }) {
           <Stack>
             {action.endBlock?.map(e => (
               <Box key={e.href}>
-                <LinkableIcon href={e.href} />
+                <LinkableIcon href={e.href} small />
               </Box>
             ))}
           </Stack>
@@ -63,9 +59,9 @@ function MenuButton(props: {
     <Link to={props.href} key={props.href}>
       <Button
         sx={{ textAlign: 'left', lineHeight: 1, width: 'min-content' }}
-        variant={isActive ? 'solid' : 'plain'}
+        variant={isActive ? 'soft' : 'plain'}
         color={'neutral'}
-        size={props.size}
+        size={'sm'}
       >
         {props.name}
       </Button>
@@ -73,15 +69,13 @@ function MenuButton(props: {
   )
 }
 
-function LinkableIcon(props: { href: string; small?: boolean }) {
-  return (
-    <Link to={props.href} key={props.href}>
-      <IconButton
-        size="sm"
-        variant={props.href === useLocation().pathname ? 'soft' : 'plain'}
-      >
-        <UseIcon icon={UilPlusCircle} />
-      </IconButton>
-    </Link>
-  )
-}
+const LinkableIcon = (props: { href: string; small?: boolean }) => (
+  <Link to={props.href} key={props.href}>
+    <IconButton
+      size="sm"
+      variant={props.href === useLocation().pathname ? 'soft' : 'plain'}
+    >
+      <UseIcon icon={UilPlusCircle} small />
+    </IconButton>
+  </Link>
+)

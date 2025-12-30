@@ -20,10 +20,16 @@ export function Search(props: ISearchInputWithFiltersProps & InputProps) {
         type="text"
         placeholder={props.placeholder || 'Найти'}
         autoFocus={props.value !== ''}
-        onChange={props.onChange}
         value={props.value}
-        sx={{ width: props.width, maxWidth: props.maxWidth, ...props.sx }}
+        sx={{
+          width: props.width,
+          maxWidth: props.maxWidth,
+          ...props.sx,
+          boxShadow: 'none'
+        }}
         startDecorator={<UseIcon icon={UilSearch} small {...props} />}
+        {...props}
+        onChange={props.onChange}
       />
       {props.children}
     </Row>

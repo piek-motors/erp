@@ -3,7 +3,7 @@ import { Label, P } from 'lib/index'
 import { timeDeltaDays } from 'lib/utils/date_fmt'
 import { ManufacturingOrderStatus as Status } from 'models'
 import { Column } from 'react-table'
-import { ListManufacturingOutput } from 'srv/rpc/pdo/manufacturing'
+import { ListManufacturingOutput } from 'srv/rpc/pdo/orders'
 
 const commonColumns: Column<ListManufacturingOutput>[] = [
   {

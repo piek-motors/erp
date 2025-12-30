@@ -14,7 +14,7 @@ import {
   useState
 } from 'lib/index'
 import { ManufacturingOrderStatus as OrderStatus } from 'models'
-import { ListManufacturingOutput } from 'srv/rpc/pdo/manufacturing'
+import { ListManufacturingOutput } from 'srv/rpc/pdo/orders'
 import { getColumns } from './columns'
 import { s } from './store'
 
@@ -80,6 +80,7 @@ export const ManufacturingList = observer(() => {
   return (
     <Tabs
       variant="outlined"
+      color="primary"
       value={tab}
       onChange={(_, v) => setTab(v as OrderStatus)}
       size="sm"
@@ -90,7 +91,7 @@ export const ManufacturingList = observer(() => {
           <Stack gap={0.5}>
             <TabList
               variant="soft"
-              color="warning"
+              color="primary"
               sx={{ width: 'fit-content' }}
             >
               {tabs.map(({ value, label }) => (
@@ -106,7 +107,7 @@ export const ManufacturingList = observer(() => {
                     }
                   }}
                   key={value}
-                  color={tab == value ? 'primary' : 'neutral'}
+                  color={'primary'}
                   variant={tab == value ? 'outlined' : 'plain'}
                 >
                   {label}
@@ -114,7 +115,13 @@ export const ManufacturingList = observer(() => {
               ))}
             </TabList>
             <Row gap={0} px={1}>
-              <Search value={query} onChange={e => setQuery(e.target.value)} />
+              <Search
+                size="sm"
+                variant="soft"
+                color="primary"
+                value={query}
+                onChange={e => setQuery(e.target.value)}
+              />
             </Row>
           </Stack>
         }

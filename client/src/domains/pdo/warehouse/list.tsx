@@ -1,3 +1,4 @@
+import { ScrollableWindow } from 'components/scrollable_window'
 import { Table } from 'components/table.impl'
 import { MetalPageTitle } from 'domains/pdo/shared/basic'
 import { observer } from 'mobx-react-lite'
@@ -20,22 +21,24 @@ export const OperationsTable = observer((props: Props) => {
     s.load(materialId, detailId)
   }, [materialId, detailId])
   return (
-    <>
-      <HomeButton t="Журнал операций" />
-      <Table
-        sx={{ cursor: 'initial' }}
-        columns={columns}
-        data={s.operations}
-        rowStyleCb={op => {
-          const type = Number(op.original.operation_type)
-          if (type === OperationType.Supply) {
-            return {
-              backgroundColor: '#c6e7c3b9'
+    <ScrollableWindow
+      staticContent={<HomeButton t="Журнал операций" />}
+      scrollableContent={
+        <Table
+          sx={{ cursor: 'initial' }}
+          columns={columns}
+          data={s.operations}
+          rowStyleCb={op => {
+            const type = Number(op.original.operation_type)
+            if (type === OperationType.Supply) {
+              return {
+                backgroundColor: '#c6e7c3b9'
+              }
             }
-          }
-          return {}
-        }}
-      />
-    </>
+            return {}
+          }}
+        />
+      }
+    />
   )
 })

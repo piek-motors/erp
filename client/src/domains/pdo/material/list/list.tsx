@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { Search } from 'components/inputs'
+import { ScrollableWindow, Search } from 'components/inputs'
 import { Table } from 'components/table.impl'
 import { HomeButton } from 'domains/pdo/metalflow_root'
 import { observer, Row, Stack, useNavigate } from 'lib/index'
@@ -42,28 +42,38 @@ export const MaterialList = observer((props: MaterialsTableProps) => {
 })
 
 export const MaterialListPage = observer((props: MaterialsTableProps) => (
-  <>
-    <Stack p={0.5} gap={0.5}>
-      <HomeButton t={'Материалы'} />
-      <MaterialShapeFilter />
-      <Row>
-        <Search
-          width={100}
-          placeholder="№"
-          value={materialListStore.searchId}
-          onChange={v => {
-            materialListStore.setSearchId(v.target.value)
-          }}
-        />
-        <Search
-          placeholder="Название"
-          onChange={e => {
-            materialListStore.setSearchKeyword(e.target.value)
-          }}
-          value={materialListStore.filterKeyword}
-        />
-      </Row>
-    </Stack>
-    <MaterialList {...props} />
-  </>
+  <ScrollableWindow
+    staticContent={
+      <Stack p={0.5} gap={0.5}>
+        <HomeButton t={'Материалы'} />
+        <MaterialShapeFilter />
+        <Row>
+          <Search
+            width={100}
+            variant="soft"
+            color="primary"
+            placeholder="№"
+            value={materialListStore.searchId}
+            onChange={v => {
+              materialListStore.setSearchId(v.target.value)
+            }}
+          />
+          <Search
+            variant="soft"
+            color="primary"
+            placeholder="Название"
+            onChange={e => {
+              materialListStore.setSearchKeyword(e.target.value)
+            }}
+            value={materialListStore.filterKeyword}
+          />
+        </Row>
+      </Stack>
+    }
+    scrollableContent={
+      <>
+        <MaterialList {...props} />
+      </>
+    }
+  />
 ))

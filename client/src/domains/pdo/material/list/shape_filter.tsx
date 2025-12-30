@@ -8,7 +8,8 @@ export const MaterialShapeFilter = observer(() => {
   return (
     <ToggleButtonGroup
       size="sm"
-      variant="outlined"
+      variant="soft"
+      color="primary"
       value={value}
       sx={{ overflow: 'hidden' }}
       onChange={(_, value) => {
@@ -20,11 +21,7 @@ export const MaterialShapeFilter = observer(() => {
       }}
     >
       {shapes.map(([index, name]) => (
-        <Button
-          key={index}
-          value={index}
-          color={value === index ? 'primary' : 'neutral'}
-        >
+        <Button key={index} value={index}>
           {name}
         </Button>
       ))}

@@ -9,6 +9,14 @@ export type Action = {
 
 export const actions: Action[] = [
   {
+    name: 'Производство',
+    href: routeMap.pdo.manufacturing_orders
+  },
+  {
+    name: 'Группы',
+    href: routeMap.pdo.detailGroups
+  },
+  {
     name: 'Материалы',
     href: routeMap.pdo.materials,
     endBlock: [
@@ -25,14 +33,6 @@ export const actions: Action[] = [
         href: routeMap.pdo.detail.new
       }
     ]
-  },
-  {
-    name: 'Группы',
-    href: routeMap.pdo.detailGroups
-  },
-  {
-    name: 'Производство',
-    href: routeMap.pdo.manufacturing_orders
   },
   {
     name: 'Журнал',

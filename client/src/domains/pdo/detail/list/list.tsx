@@ -142,18 +142,26 @@ const DetailSearchArguments = observer(() => (
   <RowButColumsAtSm>
     <Search
       size="sm"
+      variant="soft"
+      color="primary"
       width={100}
       placeholder="№"
       value={state.searchId}
       onChange={v => state.setId(v.target.value)}
     />
     <Search
+      size="sm"
       placeholder="Название"
+      variant="soft"
+      color="primary"
       onChange={e => state.setKeyword(e.target.value)}
       value={state.searchKeyword}
     />
     <Search
+      size="sm"
       placeholder="Номер чертежа"
+      variant="soft"
+      color="primary"
       onChange={e => state.setDrawingNumber(e.target.value)}
       value={state.drawingNumber}
     />
@@ -161,14 +169,21 @@ const DetailSearchArguments = observer(() => (
 ))
 
 const DetailsList = observer((props: DetailsTableProps) => (
-  <Stack gap={1} sx={props.sx}>
-    {state.loader.loading && <Loading />}
-    <SearchResults store={state.searchStore} emptyMessage="Детали не найдены">
-      <DetailList
-        highlight={props.highlight}
-        highlightColor={props.highlightColor}
-        onRowClick={props.onRowClick}
-      />
-    </SearchResults>
-  </Stack>
+  <ScrollableWindow
+    scrollableContent={
+      <Stack gap={1} sx={props.sx}>
+        {state.loader.loading && <Loading />}
+        <SearchResults
+          store={state.searchStore}
+          emptyMessage="Детали не найдены"
+        >
+          <DetailList
+            highlight={props.highlight}
+            highlightColor={props.highlightColor}
+            onRowClick={props.onRowClick}
+          />
+        </SearchResults>
+      </Stack>
+    }
+  />
 ))
