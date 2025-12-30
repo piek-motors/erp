@@ -78,7 +78,12 @@ export const ManufacturingList = observer(() => {
 
   const tabs = getTabConfig(filtered, onRowClick)
   return (
-    <Tabs value={tab} onChange={(_, v) => setTab(v as OrderStatus)} size="sm">
+    <Tabs
+      variant="outlined"
+      value={tab}
+      onChange={(_, v) => setTab(v as OrderStatus)}
+      size="sm"
+    >
       <ScrollableWindow
         refreshTrigger={false}
         staticContent={
@@ -102,7 +107,7 @@ export const ManufacturingList = observer(() => {
                   }}
                   key={value}
                   color={tab == value ? 'primary' : 'neutral'}
-                  variant={tab == value ? 'soft' : 'plain'}
+                  variant={tab == value ? 'outlined' : 'plain'}
                 >
                   {label}
                 </Tab>
