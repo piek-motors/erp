@@ -1,26 +1,30 @@
 import { UilPlusCircle } from '@iconscout/react-unicons'
-import { Box, Button, ButtonProps, Card, IconButton, Stack } from '@mui/joy'
+import {
+  Box,
+  Button,
+  ButtonProps,
+  IconButton,
+  Stack,
+  StackProps
+} from '@mui/joy'
 import { NavigationBar } from 'components/navigation_bar'
 import { UseIcon } from 'lib/index'
 import { Link, useLocation } from 'react-router'
 import { Action, actions } from '../nav.links'
 
-export const NavigationSideBar = () => (
-  <Stack gap={0.5} p={1}>
+const Navigations = () => (
+  <>
     <NavigationBar t="ПДО" />
     {actions.map(each => (
       <RenderAction action={each} key={each.href} size="sm" />
     ))}
-  </Stack>
+  </>
 )
 
-export const MobileNavigationLinks = () => (
-  <Card size="sm">
-    <NavigationBar t="ПДО" />
-    {actions.map(each => (
-      <RenderAction action={each} key={each.href} size="sm" />
-    ))}
-  </Card>
+export const NavigationSideBar = (props: StackProps) => (
+  <Stack gap={0.5} {...props}>
+    <Navigations />
+  </Stack>
 )
 
 const RenderAction = (props: { action: Action; size: ButtonProps['size'] }) => {

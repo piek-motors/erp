@@ -4,7 +4,7 @@ import { ScrollableWindow, Search } from 'components/inputs'
 import { InModal } from 'components/modal'
 import { SearchResults } from 'components/search-paginated'
 import { Table } from 'components/table.impl'
-import { MobileNavModal } from 'domains/pdo/metalflow_root'
+import { MobileNavModal } from 'domains/pdo/root_layout'
 import {
   Box,
   Label,

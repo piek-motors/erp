@@ -98,10 +98,7 @@ export const ManufacturingList = observer(() => {
       })
     : s.orders
 
-  const hasInStatus = (s: OrderStatus) => filtered.some(o => o.status === s)
-
   if (s.async.loading) return <Loading />
-
   const tabs = getTabConfig(filtered, onRowClick)
   return (
     <Tabs

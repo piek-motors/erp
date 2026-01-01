@@ -7,17 +7,15 @@ interface Props {
   setReason: (reason: SupplyReason) => void
 }
 
-export const SupplyReasonSelect = observer((props: Props) => {
-  return (
-    <ReasonSelect
-      label={'Тип поставки'}
-      enum={SupplyReason}
-      enumTranslationEnum={UiSupplyReason}
-      value={{
-        label: uiSupplyReason(props.reason),
-        value: props.reason?.toString() || '0'
-      }}
-      onChange={newValue => props.setReason(Number(newValue?.value || 0))}
-    />
-  )
-})
+export const SupplyReasonSelect = observer((props: Props) => (
+  <ReasonSelect
+    label={'Тип поставки'}
+    enum={SupplyReason}
+    enumTranslationEnum={UiSupplyReason}
+    value={{
+      label: uiSupplyReason(props.reason),
+      value: props.reason?.toString() || '0'
+    }}
+    onChange={newValue => props.setReason(Number(newValue?.value || 0))}
+  />
+))

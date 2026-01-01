@@ -7,9 +7,9 @@ import { DetailGroupById, DetailGroupListPage } from './detail_grouping/main'
 import { CreateMaterialPage } from './material/create'
 import { MaterialListPage } from './material/list/list'
 import { MaterialUpdatePage } from './material/update'
-import { MetalFlowRootLayout } from './metalflow_root'
 import { ManufacturingList } from './orders/list/list'
 import { ManufacturingUpdatePage } from './orders/update'
+import { MetalFlowRootLayout } from './root_layout'
 import { OperationsTable } from './warehouse/list'
 
 const { pdo: metalflow } = routeMap

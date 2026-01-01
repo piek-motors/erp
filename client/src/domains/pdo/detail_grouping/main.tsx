@@ -12,7 +12,7 @@ import {
   useEffect
 } from 'lib/index'
 import { useParams } from 'react-router'
-import { MobileNavModal } from '../metalflow_root'
+import { MobileNavModal } from '../root_layout'
 import { crud } from './api'
 import { GroupActions, TargetGroupDetailList } from './detail_list'
 import { GroupSelectModal, SharedGroupList } from './group_list'

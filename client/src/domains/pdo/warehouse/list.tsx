@@ -4,7 +4,7 @@ import { MetalPageTitle } from 'domains/pdo/shared/basic'
 import { observer } from 'mobx-react-lite'
 import { OperationType } from 'models'
 import { useEffect } from 'react'
-import { MobileNavModal } from '../metalflow_root'
+import { MobileNavModal } from '../root_layout'
 import { columns } from './columns'
 import { s } from './store'
 

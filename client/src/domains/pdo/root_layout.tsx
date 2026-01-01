@@ -60,11 +60,14 @@ export function MetalFlowRootLayout(props: { children?: React.ReactNode }) {
     >
       <DesktopOnly>
         <WebOnly>
-          <NavigationSideBar />
+          <NavigationSideBar
+            p={1}
+            sx={{ background: 'lightgrey', height: 'inherit' }}
+          />
         </WebOnly>
       </DesktopOnly>
       {props.children && (
-        <Sheet sx={{ width: '100%', height: 'min-content' }}>
+        <Sheet sx={{ width: '100%', height: 'inherit' }}>
           <Stack sx={{ flexGrow: 1, gap: 1, overflowX: 'auto' }}>
             {props.children}
           </Stack>

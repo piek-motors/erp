@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { ScrollableWindow, Search } from 'components/inputs'
 import { Table } from 'components/table.impl'
-import { MobileNavModal } from 'domains/pdo/metalflow_root'
+import { MobileNavModal } from 'domains/pdo/root_layout'
 import { observer, Row, Stack, useNavigate } from 'lib/index'
 import { openPage, routeMap } from 'lib/routes'
 import { Material } from 'srv/rpc/pdo/materials'
