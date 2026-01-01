@@ -1,27 +1,12 @@
 import { SxProps } from '@mui/joy/styles/types'
 import { ScrollPreserv } from 'components/utilities/scroll_preserve'
 import { ScrollPreservNavigation } from 'components/utilities/scroll_preserve_navigation'
-import { Box, Sheet, Stack } from 'lib'
-
-function Wrapper(props: {
-  children: React.ReactNode
-  sx: SxProps
-  useSheet: boolean
-}) {
-  if (props.useSheet)
-    return (
-      <Sheet sx={{ ...props.sx, width: '100%', minWidth: 'fit-content' }}>
-        {props.children}
-      </Sheet>
-    )
-  return <Box sx={{ ...props.sx }}>{props.children}</Box>
-}
+import { Box, Stack } from 'lib'
 
 export const ScrollableWindow = (props: {
-  staticContent?: React.ReactNode
-  scrollableContent: React.ReactNode
+  scrollable: React.ReactNode
+  static?: React.ReactNode
   refreshTrigger?: any
-  useSheet?: boolean
   preserveScrollAcrossNavigation?: boolean
   height?: string | number
   maxHeight?: string | number
@@ -58,16 +43,11 @@ export const ScrollableWindow = (props: {
   } as SxProps
   return (
     <Stack sx={{ ...outerSx, overflowX: 'scroll', width: '100%' }}>
-      {props.staticContent && (
-        <Box sx={{ p: { xs: 0.75, sm: 0 } }}>{props.staticContent}</Box>
+      {props.static && (
+        <Box sx={{ p: { xs: 0.75, sm: 0 } }}>{props.static}</Box>
       )}
       <ScrollComponent refreshTrigger={props.refreshTrigger} sx={scrollSx}>
-        <Wrapper
-          sx={{ width: '100%', ...props.contentSx, borderRadius: 'sm' }}
-          useSheet={props.useSheet ?? true}
-        >
-          <Box sx={{ width: '100%' }}>{props.scrollableContent}</Box>
-        </Wrapper>
+        <Box sx={{ width: '100%' }}>{props.scrollable}</Box>
       </ScrollComponent>
     </Stack>
   )

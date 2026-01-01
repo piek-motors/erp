@@ -2,6 +2,7 @@ import { Tab, TabList, TabPanel, Tabs } from '@mui/joy'
 import { ScrollableWindow, Search } from 'components/inputs'
 import { Table } from 'components/table.impl'
 import { TabConfig } from 'components/tabs'
+import { MobileNavModal } from 'domains/pdo/metalflow_root'
 import { observer } from 'lib/deps'
 import {
   Label,
@@ -112,27 +113,14 @@ export const ManufacturingList = observer(() => {
     >
       <ScrollableWindow
         refreshTrigger={false}
-        staticContent={
+        static={
           <Stack gap={0.5}>
-            <TabList
-              variant="soft"
-              color="primary"
-              sx={{ width: 'fit-content' }}
-            >
+            <MobileNavModal t={'Производство'} />
+            <TabList variant="soft" color="primary">
               {tabs.map(({ value, label }) => (
                 <Tab
                   indicatorInset
                   indicatorPlacement="top"
-                  sx={{
-                    fontSize: {
-                      xs: '12px',
-                      sm: 'inherit'
-                    },
-                    padding: {
-                      xs: 0.3,
-                      sm: '0px 12px'
-                    }
-                  }}
                   key={value}
                   value={value}
                   color={'primary'}
@@ -153,7 +141,7 @@ export const ManufacturingList = observer(() => {
             </Row>
           </Stack>
         }
-        scrollableContent={
+        scrollable={
           <Stack gap={0} pt={0}>
             {tabs.map(({ value, component }) => (
               <TabPanel key={value} value={value}>

@@ -31,13 +31,12 @@ export const GroupActions = observer(() => {
 })
 
 export const TargetGroupDetailList = observer(() => {
-  if (crud.store.targetGroup?.details.length === 0) {
+  if (crud.store.targetGroup?.details.length === 0)
     return (
       <P level="body-sm" color="neutral">
         В группе нет деталей
       </P>
     )
-  }
 
   return (
     <Stack sx={{ flex: 1 }}>

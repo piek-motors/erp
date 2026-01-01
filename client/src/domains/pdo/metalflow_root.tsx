@@ -1,16 +1,45 @@
-import { Box, Sheet, Stack } from '@mui/joy'
+import { UilBars } from '@iconscout/react-unicons'
+import {
+  Box,
+  IconButton,
+  Modal,
+  ModalClose,
+  ModalDialog,
+  Sheet,
+  Stack
+} from '@mui/joy'
 import { WebOnly } from 'components/utilities/conditional-display'
-import { DesktopOnly, MobileOnly } from 'lib/index'
-import { useEffect } from 'react'
+import { DesktopOnly, MobileOnly, P, Row, UseIcon } from 'lib/index'
+import { useEffect, useState } from 'react'
 import { cache } from './cache/root'
-import { MetalPageTitle } from './shared'
 import { NavigationSideBar } from './shared/nav'
 
-export const HomeButton = (props: { t?: string }) => (
-  <MobileOnly>
-    <MetalPageTitle t={props.t} />
-  </MobileOnly>
-)
+export const MobileNavModal = (props: { t?: string }) => {
+  const [open, setOpen] = useState(false)
+  return (
+    <MobileOnly>
+      <Row>
+        <IconButton
+          variant="soft"
+          color="primary"
+          onClick={() => setOpen(true)}
+          size="sm"
+        >
+          <UseIcon icon={UilBars} />
+        </IconButton>
+        <P color="primary" level="body-sm" fontWeight={600}>
+          {props.t}
+        </P>
+      </Row>
+      <Modal open={open} onClose={() => setOpen(false)}>
+        <ModalDialog layout="fullscreen">
+          <ModalClose />
+          <NavigationSideBar />
+        </ModalDialog>
+      </Modal>
+    </MobileOnly>
+  )
+}
 
 export function MetalFlowRootLayout(props: { children?: React.ReactNode }) {
   useEffect(() => {

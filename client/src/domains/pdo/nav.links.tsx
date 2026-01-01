@@ -17,20 +17,20 @@ export const actions: Action[] = [
     href: routeMap.pdo.detailGroups
   },
   {
-    name: 'Материалы',
-    href: routeMap.pdo.materials,
-    endBlock: [
-      {
-        href: routeMap.pdo.material.new
-      }
-    ]
-  },
-  {
     name: 'Детали',
     href: routeMap.pdo.details,
     endBlock: [
       {
         href: routeMap.pdo.detail.new
+      }
+    ]
+  },
+  {
+    name: 'Материалы',
+    href: routeMap.pdo.materials,
+    endBlock: [
+      {
+        href: routeMap.pdo.material.new
       }
     ]
   },

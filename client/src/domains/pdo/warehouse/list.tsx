@@ -4,7 +4,7 @@ import { MetalPageTitle } from 'domains/pdo/shared/basic'
 import { observer } from 'mobx-react-lite'
 import { OperationType } from 'models'
 import { useEffect } from 'react'
-import { HomeButton } from '../metalflow_root'
+import { MobileNavModal } from '../metalflow_root'
 import { columns } from './columns'
 import { s } from './store'
 
@@ -22,8 +22,8 @@ export const OperationsTable = observer((props: Props) => {
   }, [materialId, detailId])
   return (
     <ScrollableWindow
-      staticContent={<HomeButton t="Журнал операций" />}
-      scrollableContent={
+      static={<MobileNavModal t="Журнал операций" />}
+      scrollable={
         <Table
           sx={{ cursor: 'initial' }}
           columns={columns}

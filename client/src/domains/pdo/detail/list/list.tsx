@@ -4,13 +4,12 @@ import { ScrollableWindow, Search } from 'components/inputs'
 import { InModal } from 'components/modal'
 import { SearchResults } from 'components/search-paginated'
 import { Table } from 'components/table.impl'
-import { HomeButton } from 'domains/pdo/metalflow_root'
+import { MobileNavModal } from 'domains/pdo/metalflow_root'
 import {
   Box,
   Label,
   Loading,
   Row,
-  RowButColumsAtSm,
   Stack,
   observer,
   openPage,
@@ -91,15 +90,23 @@ const DetailList = observer((props: DetailsTableProps) => {
 })
 
 export const DetailsListPage = () => (
-  <Stack p={0.5} gap={0.5}>
-    <HomeButton t={'Детали'} />
-    <DetailSearchArguments />
-    <Row alignItems="start" gap={0.5}>
-      <AlphabetIndex sx={{ position: 'sticky', top: 0, zIndex: 1 }} />
-      <Divider orientation="vertical" />
-      <DetailsList sx={{ width: '100%' }} />
-    </Row>
-  </Stack>
+  <ScrollableWindow
+    static={
+      <Stack>
+        <MobileNavModal t={'Детали'} />
+        <SearchArguments />
+      </Stack>
+    }
+    scrollable={
+      <Stack gap={0.5}>
+        <Row alignItems="start" gap={0.5}>
+          <AlphabetIndex sx={{ position: 'sticky', top: 0, zIndex: 1 }} />
+          <Divider orientation="vertical" />
+          <DetailsList sx={{ width: '100%' }} />
+        </Row>
+      </Stack>
+    }
+  />
 )
 
 interface DetailSelectModalProps {
@@ -122,9 +129,9 @@ export const DetailSelectModal = observer((props: DetailSelectModalProps) => {
     >
       <ScrollableWindow
         refreshTrigger={false}
-        scrollableContent={
+        scrollable={
           <Box p={1} mb={3}>
-            <DetailSearchArguments />
+            <SearchArguments />
             <DetailsList
               onRowClick={v => {
                 props.onRowClick(v)
@@ -138,13 +145,13 @@ export const DetailSelectModal = observer((props: DetailSelectModalProps) => {
   )
 })
 
-const DetailSearchArguments = observer(() => (
-  <RowButColumsAtSm>
+const SearchArguments = observer(() => (
+  <Stack flexWrap={'wrap'} direction="row" gap={0.5}>
     <Search
       size="sm"
       variant="soft"
       color="primary"
-      width={100}
+      width={80}
       placeholder="№"
       value={state.searchId}
       onChange={v => state.setId(v.target.value)}
@@ -153,37 +160,32 @@ const DetailSearchArguments = observer(() => (
       size="sm"
       placeholder="Название"
       variant="soft"
+      width={150}
       color="primary"
       onChange={e => state.setKeyword(e.target.value)}
       value={state.searchKeyword}
     />
     <Search
       size="sm"
+      width={150}
       placeholder="Номер чертежа"
       variant="soft"
       color="primary"
       onChange={e => state.setDrawingNumber(e.target.value)}
       value={state.drawingNumber}
     />
-  </RowButColumsAtSm>
+  </Stack>
 ))
 
 const DetailsList = observer((props: DetailsTableProps) => (
-  <ScrollableWindow
-    scrollableContent={
-      <Stack gap={1} sx={props.sx}>
-        {state.loader.loading && <Loading />}
-        <SearchResults
-          store={state.searchStore}
-          emptyMessage="Детали не найдены"
-        >
-          <DetailList
-            highlight={props.highlight}
-            highlightColor={props.highlightColor}
-            onRowClick={props.onRowClick}
-          />
-        </SearchResults>
-      </Stack>
-    }
-  />
+  <Stack gap={1} sx={props.sx}>
+    {state.loader.loading && <Loading />}
+    <SearchResults store={state.searchStore} emptyMessage="Детали не найдены">
+      <DetailList
+        highlight={props.highlight}
+        highlightColor={props.highlightColor}
+        onRowClick={props.onRowClick}
+      />
+    </SearchResults>
+  </Stack>
 ))

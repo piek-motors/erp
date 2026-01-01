@@ -1,22 +1,13 @@
 /** @jsxImportSource @emotion/react */
 import { ScrollableWindow, Search } from 'components/inputs'
 import { Table } from 'components/table.impl'
-import { HomeButton } from 'domains/pdo/metalflow_root'
+import { MobileNavModal } from 'domains/pdo/metalflow_root'
 import { observer, Row, Stack, useNavigate } from 'lib/index'
 import { openPage, routeMap } from 'lib/routes'
-import { MaterialShape } from 'models'
 import { Material } from 'srv/rpc/pdo/materials'
 import { columns } from './columns'
 import { MaterialShapeFilter } from './shape_filter'
 import { materialListStore } from './store'
-
-export const ShapeNameToIconMap = {
-  [MaterialShape.SquareBar]: '/icons/square.svg',
-  [MaterialShape.RoundBar]: '/icons/circle.svg',
-  [MaterialShape.Pipe]: '/icons/pipe.svg',
-  [MaterialShape.List]: '/icons/list.svg',
-  [MaterialShape.HexagonBar]: '/icons/hexagon.svg'
-}
 
 interface MaterialsTableProps {
   onRowClick?: (material: Material) => void
@@ -43,9 +34,9 @@ export const MaterialList = observer((props: MaterialsTableProps) => {
 
 export const MaterialListPage = observer((props: MaterialsTableProps) => (
   <ScrollableWindow
-    staticContent={
+    static={
       <Stack p={0.5} gap={0.5}>
-        <HomeButton t={'Материалы'} />
+        <MobileNavModal t={'Материалы'} />
         <MaterialShapeFilter />
         <Row>
           <Search
@@ -70,7 +61,7 @@ export const MaterialListPage = observer((props: MaterialsTableProps) => (
         </Row>
       </Stack>
     }
-    scrollableContent={
+    scrollable={
       <>
         <MaterialList {...props} />
       </>

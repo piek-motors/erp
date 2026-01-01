@@ -26,7 +26,12 @@ export const MobileNavigationLinks = () => (
 const RenderAction = (props: { action: Action; size: ButtonProps['size'] }) => {
   const { action, size } = props
   return (
-    <Stack direction="row" alignItems={'center'} sx={{ cursor: 'pointer' }}>
+    <Stack
+      direction="row"
+      alignItems={'center'}
+      sx={{ cursor: 'pointer' }}
+      justifyContent={'space-between'}
+    >
       <MenuButton href={action.href} name={action.name} size={size} />
       <Box>
         {action.endBlock?.length && (

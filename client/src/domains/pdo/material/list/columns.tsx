@@ -3,7 +3,6 @@ import { roundAndTrim } from 'lib/utils/fmt'
 import { Unit, uiUnit } from 'models'
 import { Column } from 'react-table'
 import { Material } from 'srv/rpc/pdo/materials'
-import { ShapeNameToIconMap } from './list'
 
 function balanceWithUnit(stock: number, unit: Unit) {
   if (!stock) return ''
@@ -25,24 +24,7 @@ export const columns: Column<Material>[] = [
   {
     Header: 'Наименование',
     id: 'name',
-    accessor: m => {
-      const label = <P whiteSpace={'nowrap'}>{m.label}</P>
-      if (ShapeNameToIconMap[m.shape]) {
-        const iconUrl = ShapeNameToIconMap[m.shape]
-        return (
-          <Row>
-            <img
-              src={iconUrl}
-              width={16}
-              height={16}
-              style={{ opacity: 0.65 }}
-            />
-            {label}
-          </Row>
-        )
-      }
-      return label
-    },
+    accessor: m => <P whiteSpace={'nowrap'}>{m.label}</P>,
     width: '95%'
   },
   {

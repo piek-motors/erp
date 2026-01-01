@@ -1,28 +1,35 @@
 import { Divider } from '@mui/joy'
 import { ScrollableWindow } from 'components/inputs'
-import { MetalPageTitle } from 'domains/pdo/shared/basic'
 import {
   Box,
   DesktopOnly,
   Loading,
   MobileOnly,
   observer,
+  P,
   Row,
   Stack,
   useEffect
 } from 'lib/index'
 import { useParams } from 'react-router'
+import { MobileNavModal } from '../metalflow_root'
 import { crud } from './api'
 import { GroupActions, TargetGroupDetailList } from './detail_list'
 import { GroupSelectModal, SharedGroupList } from './group_list'
 import { UpdateGroupNameModal } from './group_name.modal'
 
-const Detauls = observer(() => {
+const DetailsPanel = observer(() => {
   if (crud.targetGroupLoading.loading) return <Loading />
   const openedGroup = crud.store.targetGroup
+  if (!openedGroup)
+    return (
+      <P level="body-sm" p={2}>
+        Выберите группу
+      </P>
+    )
   return (
     <ScrollableWindow
-      scrollableContent={
+      scrollable={
         openedGroup && (
           <Stack p={1}>
             <Row>
@@ -55,17 +62,18 @@ const DetailGroupsLayout = observer(() => (
     {/* Group list */}
     <Box>
       <MobileOnly>
-        <MetalPageTitle t="Группы">
+        <Row>
+          <MobileNavModal />
           <GroupSelectModal />
-        </MetalPageTitle>
+        </Row>
       </MobileOnly>
       <DesktopOnly>
-        <ScrollableWindow scrollableContent={<SharedGroupList />} />
+        <ScrollableWindow scrollable={<SharedGroupList />} />
       </DesktopOnly>
     </Box>
     {/* Group details */}
     <Divider orientation="vertical" />
-    <Detauls />
+    <DetailsPanel />
   </Stack>
 ))
 
