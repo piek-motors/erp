@@ -1,7 +1,14 @@
-import { Autocomplete, Stack } from '@mui/joy'
+import { Button, Stack, ToggleButtonGroup } from '@mui/joy'
 import { Label } from 'lib/index'
 import { observer } from 'mobx-react-lite'
-import { UiWriteoffReason, uiWriteoffReason, WriteoffReason } from 'models'
+import {
+  SupplyReason,
+  UiSupplyReason,
+  uiSupplyReason,
+  UiWriteoffReason,
+  uiWriteoffReason,
+  WriteoffReason
+} from 'models'
 
 interface WriteoffReasonSelectProps {
   reason: WriteoffReason
@@ -18,12 +25,10 @@ export const WriteoffReasonSelect = observer(
         label: uiWriteoffReason(props.reason),
         value: props.reason?.toString() || '0'
       }}
-      onChange={newValue => props.setReason(Number(newValue?.value || 0))}
+      onChange={newValue => props.setReason(Number(newValue || 0))}
     />
   )
 )
-
-import { SupplyReason, UiSupplyReason, uiSupplyReason } from 'models'
 
 interface Props {
   reason: SupplyReason
@@ -39,7 +44,7 @@ export const SupplyReasonSelect = observer((props: Props) => (
       label: uiSupplyReason(props.reason),
       value: props.reason?.toString() || '0'
     }}
-    onChange={newValue => props.setReason(Number(newValue?.value || 0))}
+    onChange={newValue => props.setReason(Number(newValue || 0))}
   />
 ))
 
@@ -53,23 +58,29 @@ interface ReasonSelectProps {
   enum: object
   enumTranslationEnum: object
   value: ReasonOption
-  onChange: (value: ReasonOption | null) => void
+  onChange: (value: string | null) => void
 }
 
 const ReasonSelect = observer((props: ReasonSelectProps) => (
   <Stack py={0.5}>
     <Label label={props.label} />
-    <Autocomplete
-      options={Object.entries(props.enum)
+    <ToggleButtonGroup
+      size="sm"
+      color="primary"
+      variant="soft"
+      value={props.value.value}
+      onChange={(_, v) => props.onChange(v)}
+      sx={{ flexWrap: 'wrap', rowGap: 0.5 }}
+    >
+      {Object.entries(props.enum)
         .filter(([k, v]) => !Number.isNaN(Number(k)))
         .map(([k, v]) => ({
           label: props.enumTranslationEnum[k],
           value: k
-        }))}
-      value={props.value}
-      isOptionEqualToValue={(option, value) => option.value === value.value}
-      getOptionLabel={option => option.label}
-      onChange={(_, newValue) => props.onChange(newValue)}
-    />
+        }))
+        .map(option => (
+          <Button value={option.value}>{option.label}</Button>
+        ))}
+    </ToggleButtonGroup>
   </Stack>
 ))

@@ -9,7 +9,7 @@ import {
 
 export const UiWriteoffReason = {
   [WriteoffReason.UsedInProduction]: 'Производство',
-  [WriteoffReason.Defective]: 'Брак продукта',
+  [WriteoffReason.Defective]: 'Брак',
   [WriteoffReason.InventoryAdjustment]: 'Инвентаризация',
   [WriteoffReason.Sell]: 'Продажа'
 }
@@ -20,7 +20,7 @@ export function uiWriteoffReason(reason?: WriteoffReason | null) {
 
 export const UiSupplyReason = {
   [SupplyReason.FromSupplier]: 'Поставка',
-  [SupplyReason.InternalProduction]: 'Собственное производство',
+  [SupplyReason.InternalProduction]: 'Собств. производство',
   [SupplyReason.InventoryAdjustment]: 'Инвентаризация'
 }
 export function uiSupplyReason(reason?: SupplyReason | null) {

@@ -10,7 +10,7 @@ import {
 } from 'domains/pdo/warehouse/card'
 import { OperationsListModal } from 'domains/pdo/warehouse/modals'
 import { modalState } from 'domains/pdo/warehouse/modals.store'
-import { ActionButton, Label, observer, P } from 'lib/index'
+import { ActionButton, Box, Label, observer, P } from 'lib/index'
 import { notifier } from 'lib/store/notifier.store'
 import { DetailSt, DetailStProp } from '../detail.state'
 
@@ -38,10 +38,12 @@ const CreateWarehouseDetailOperation = observer(
           onChange={val => detail.warehouse.setQty(Number(val))}
         />
         {props.reasonComponent}
-        <ActionButton
-          onClick={() => props.onSubmit()}
-          disabled={!detail.warehouse.qty}
-        />
+        <Box pt={2}>
+          <ActionButton
+            onClick={() => props.onSubmit()}
+            disabled={!detail.warehouse.qty}
+          />
+        </Box>
       </>
     )
   }

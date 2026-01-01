@@ -1,3 +1,5 @@
+import { Box, Stack } from '@mui/joy'
+import { QtyInputWithUnit } from 'domains/pdo/shared'
 import {
   SupplyReasonSelect,
   WriteoffReasonSelect
@@ -8,15 +10,11 @@ import {
   WriteoffCompletedText
 } from 'domains/pdo/warehouse/card'
 import { OperationsListModal } from 'domains/pdo/warehouse/modals'
-import { observer, useParams } from 'lib/index'
+import { modalState } from 'domains/pdo/warehouse/modals.store'
+import { ActionButton, Label, observer, P, Row, useParams } from 'lib/index'
 import { notifier } from 'lib/store/notifier.store'
 import { uiUnit } from 'models'
 import { MaterialState } from '../state'
-
-import { Stack } from '@mui/joy'
-import { QtyInputWithUnit } from 'domains/pdo/shared'
-import { modalState } from 'domains/pdo/warehouse/modals.store'
-import { ActionButton, Label, P, Row } from 'lib/index'
 
 interface Props {
   material: MaterialState
@@ -29,7 +27,7 @@ interface Props {
 }
 
 const CreateWarehouseMaterialOperation = observer((props: Props) => (
-  <Stack spacing={1} p={1}>
+  <Stack spacing={1}>
     <Row sx={{ fontSize: 20 }}>
       <Label>Материал: </Label>
       <P fontWeight={600} color="primary">
@@ -45,7 +43,9 @@ const CreateWarehouseMaterialOperation = observer((props: Props) => (
       label={'Длина'}
     />
     {props.reasonComponent}
-    <ActionButton disabled={props.submitDisabled} onClick={props.onSubmit} />
+    <Box pt={2}>
+      <ActionButton disabled={props.submitDisabled} onClick={props.onSubmit} />
+    </Box>
   </Stack>
 ))
 
