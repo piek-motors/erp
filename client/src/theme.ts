@@ -18,6 +18,13 @@ const theme = extendTheme({
         }
       }
     }
+  },
+  components: {
+    JoyButton: {
+      defaultProps: {
+        size: 'sm'
+      }
+    }
   }
 })
 

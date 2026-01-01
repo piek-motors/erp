@@ -23,7 +23,7 @@ export const OperationsTable = observer((props: Props) => {
   return (
     <ScrollableWindow
       static={<MobileNavModal t="Журнал операций" />}
-      scrollable={
+      scroll={
         <Table
           sx={{ cursor: 'initial' }}
           columns={columns}

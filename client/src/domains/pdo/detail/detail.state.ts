@@ -1,6 +1,8 @@
 import { AttachmentsStore } from 'components/attachments/store'
 import { makeAutoObservable } from 'mobx'
+import { Unit } from 'models'
 import { RouterInput, RouterOutput } from 'srv/lib/trpc'
+import { SelectableDetail } from 'srv/rpc/pdo/details'
 import { DetailAutomaticWriteoffStore } from './warehouse/auto_writeoff.store'
 import { DetailWarehouseStore } from './warehouse/store'
 
@@ -53,6 +55,25 @@ export class DetailSt {
   readonly warehouse = new DetailWarehouseStore()
   readonly autoWriteoff = new DetailAutomaticWriteoffStore()
   readonly processingRoute = new ProcessingRoute()
+
+  static fromDto(detail: Partial<SelectableDetail>): DetailSt {
+    return new DetailSt().init({
+      id: detail.id ?? 0,
+      name: detail.name ?? '',
+      part_code: detail.part_code ?? null,
+      logical_group_id: detail.logical_group_id ?? null,
+      stock: detail.stock || 0,
+      description: detail.description || '',
+      drawing_name: detail.drawing_name ?? '',
+      updated_at: detail.updated_at?.toString() ?? '',
+      blank_spec: detail.blank_spec,
+      recommended_batch_size: detail.recommended_batch_size ?? null,
+      processing_route: detail.processing_route ?? null,
+      automatic_writeoff: detail.automatic_writeoff ?? null,
+      unit: detail.unit ?? Unit.Countable,
+      stock_location: detail.stock_location ?? null
+    })
+  }
 
   id: number = 0
   setId(id: number) {
@@ -140,6 +161,7 @@ export class DetailSt {
     }
     this.setRecommendedBatchSize(d.recommended_batch_size ?? undefined)
     this.stockLocation = d.stock_location
+    return this
   }
 
   reset() {

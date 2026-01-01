@@ -5,7 +5,6 @@ import React from 'react'
 
 interface ISearchInputWithFiltersProps {
   value?: string
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
   placeholder?: string
   width?: string | number
   maxWidth?: string | number
@@ -19,7 +18,6 @@ export function Search(props: ISearchInputWithFiltersProps & InputProps) {
         size="sm"
         type="text"
         placeholder={props.placeholder || 'Найти'}
-        autoFocus={props.value !== ''}
         value={props.value}
         sx={{
           width: props.width,
@@ -29,7 +27,6 @@ export function Search(props: ISearchInputWithFiltersProps & InputProps) {
         }}
         startDecorator={<UseIcon icon={UilSearch} small {...props} />}
         {...props}
-        onChange={props.onChange}
       />
       {props.children}
     </Row>

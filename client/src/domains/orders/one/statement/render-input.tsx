@@ -2,7 +2,7 @@ import { BaseAutocomplete } from 'components/base-autocomplete'
 import { DateInput } from 'components/inputs/date_input'
 import { MoneyInput } from 'components/inputs/money-input'
 import { Select } from 'components/select'
-import { Inp, MultilineInput, observer } from 'lib/index'
+import { InputLabled, MultilineInput, observer } from 'lib/index'
 import { orderStore } from '../order.store'
 import { suggestionsStore } from '../suggestions.store'
 import { ColumnDefinition, InputTypes } from './store'
@@ -47,7 +47,7 @@ export const RenderInput = observer(
         )
       case InputTypes.Text:
         return (
-          <Inp
+          <InputLabled
             key={key}
             type="text"
             label={label}
@@ -58,7 +58,7 @@ export const RenderInput = observer(
         )
       case InputTypes.Number:
         return (
-          <Inp
+          <InputLabled
             key={key}
             type="number"
             label={label}
@@ -132,7 +132,7 @@ export const RenderInput = observer(
       default:
         console.warn('Unknown input type', column.inputType)
         return (
-          <Inp
+          <InputLabled
             key={key}
             label={label}
             value={value ?? ''}

@@ -7,27 +7,32 @@ import {
   Stack,
   StackProps
 } from '@mui/joy'
-import { NavigationBar } from 'components/navigation_bar'
+import { NavTopBar } from 'components/nav_topbar'
 import { UseIcon } from 'lib/index'
 import { Link, useLocation } from 'react-router'
-import { Action, actions } from '../nav.links'
 
-const Navigations = () => (
-  <>
-    <NavigationBar t="ПДО" />
-    {actions.map(each => (
+export type Link = {
+  name?: string
+  href: string
+  childres?: Link[]
+  endBlock?: Link[]
+}
+
+export const NavigationSideBar = (
+  props: StackProps & {
+    title: string
+    links: Link[]
+  }
+) => (
+  <Stack gap={0.5} {...props}>
+    <NavTopBar t={props.title} />
+    {props.links.map(each => (
       <RenderAction action={each} key={each.href} size="sm" />
     ))}
-  </>
-)
-
-export const NavigationSideBar = (props: StackProps) => (
-  <Stack gap={0.5} {...props}>
-    <Navigations />
   </Stack>
 )
 
-const RenderAction = (props: { action: Action; size: ButtonProps['size'] }) => {
+const RenderAction = (props: { action: Link; size: ButtonProps['size'] }) => {
   const { action, size } = props
   return (
     <Stack
@@ -41,9 +46,7 @@ const RenderAction = (props: { action: Action; size: ButtonProps['size'] }) => {
         {action.endBlock?.length && (
           <Stack>
             {action.endBlock?.map(e => (
-              <Box key={e.href}>
-                <LinkableIcon href={e.href} small />
-              </Box>
+              <LinkableIcon href={e.href} small />
             ))}
           </Stack>
         )}
@@ -74,12 +77,14 @@ function MenuButton(props: {
 }
 
 const LinkableIcon = (props: { href: string; small?: boolean }) => (
-  <Link to={props.href} key={props.href}>
-    <IconButton
-      size="sm"
-      variant={props.href === useLocation().pathname ? 'soft' : 'plain'}
-    >
-      <UseIcon icon={UilPlusCircle} small />
-    </IconButton>
-  </Link>
+  <Box key={props.href}>
+    <Link to={props.href} key={props.href}>
+      <IconButton
+        size="sm"
+        variant={props.href === useLocation().pathname ? 'soft' : 'plain'}
+      >
+        <UseIcon icon={UilPlusCircle} small />
+      </IconButton>
+    </Link>
+  </Box>
 )

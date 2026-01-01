@@ -3,7 +3,14 @@ import { css } from '@emotion/react'
 import { UilEllipsisV, UilPen } from '@iconscout/react-unicons'
 import { Dropdown, IconButton, Menu, MenuButton, Stack } from '@mui/joy'
 import { WebOnly } from 'components/utilities/conditional-display'
-import { DeleteResourceButton, Inp, P, Row, UseIcon, useState } from 'lib/index'
+import {
+  DeleteResourceButton,
+  InputLabled,
+  P,
+  Row,
+  UseIcon,
+  useState
+} from 'lib/index'
 import { Attachment } from 'models'
 
 export const AttachmentComponent = (props: {
@@ -104,7 +111,7 @@ function FileNameInput(props: {
 
   return (
     <Row onKeyDown={handleKeyDown}>
-      <Inp
+      <InputLabled
         fullWidth
         value={name}
         onChange={e => setName(e)}

@@ -1,13 +1,10 @@
 import {
   getMaterialConstructor,
   Material,
-  MaterialShapeAbstractionLayer,
-  Unit
+  MaterialShapeAbstractionLayer
 } from 'models'
 import { RouterOutput } from 'srv/lib/trpc'
-import { SelectableDetail } from 'srv/rpc/pdo/details'
 import { Material as MaterialListDto } from 'srv/rpc/pdo/materials'
-import { DetailSt } from './detail/detail.state'
 
 type GetMaterialsOutput = RouterOutput['pdo']['material']['get']
 
@@ -51,31 +48,6 @@ class MaterialMapper {
   }
 }
 
-class DetailMapper {
-  fromDto(detail: Partial<SelectableDetail>): DetailSt {
-    const res = new DetailSt()
-
-    res.init({
-      id: detail.id ?? 0,
-      name: detail.name ?? '',
-      part_code: detail.part_code ?? null,
-      logical_group_id: detail.logical_group_id ?? null,
-      stock: detail.stock || 0,
-      description: detail.description || '',
-      drawing_name: detail.drawing_name ?? '',
-      updated_at: detail.updated_at?.toString() ?? '',
-      blank_spec: detail.blank_spec,
-      recommended_batch_size: detail.recommended_batch_size ?? null,
-      processing_route: detail.processing_route ?? null,
-      automatic_writeoff: detail.automatic_writeoff ?? null,
-      unit: detail.unit ?? Unit.Countable,
-      stock_location: detail.stock_location ?? null
-    })
-    return res
-  }
-}
-
 export const map = {
-  material: new MaterialMapper(),
-  detail: new DetailMapper()
+  material: new MaterialMapper()
 }

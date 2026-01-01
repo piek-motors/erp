@@ -13,23 +13,23 @@ interface Props {
 }
 
 export const OperationName = observer((props: Props) => {
-  const { operation } = props
+  const { operation: op } = props
 
-  if (operation.material_label && operation.material_id) {
+  if (op.material_label && op.material_id) {
     return (
       <MaterialName
-        materialLabel={operation.material_label}
-        materialId={operation.material_id}
+        materialLabel={op.material_label}
+        materialId={op.material_id}
       />
     )
   }
 
-  if (operation.detail_name && operation.detail_id) {
+  if (op.detail_name && op.detail_id) {
     return (
       <DetailName
         detail={{
-          id: operation.detail_id,
-          name: operation.detail_name,
+          id: op.detail_id,
+          name: op.detail_name,
           group_id: null // We don't have group_id in operations, so defaulting to null
         }}
         withGroupName

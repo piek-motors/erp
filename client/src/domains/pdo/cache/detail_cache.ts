@@ -3,13 +3,15 @@ import { rpc } from 'lib/rpc/rpc.client'
 import { makeAutoObservable } from 'mobx'
 import { ListDetailsOutput } from 'srv/rpc/pdo/details'
 import { DetailSt } from '../detail/detail.state'
-import { map } from '../mappers'
 
 const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
 
 const alphabet = 'АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ'.split('')
 
 export class DetailCache {
+  constructor() {
+    makeAutoObservable(this)
+  }
   private _details: DetailSt[] = []
   setDetails(details: DetailSt[]) {
     this._details = details
@@ -51,19 +53,17 @@ export class DetailCache {
   count() {
     return this._details.length
   }
-
   dictProcessingOperaions: string[] = []
   setDictProcessingOperations(v: string[]) {
     this.dictProcessingOperaions = v
   }
 
-  constructor() {
-    makeAutoObservable(this)
-  }
   async load() {
     const detailsRaw = await rpc.pdo.details.list.query()
-    const details = matrixDecoder<ListDetailsOutput>(detailsRaw)
-    this.setDetails(details.map(each => map.detail.fromDto(each)))
+    const details = matrixDecoder<ListDetailsOutput>(detailsRaw).map(
+      DetailSt.fromDto
+    )
+    this.setDetails(details)
 
     const operationsDict =
       await rpc.pdo.details.dict_processing_operations.query()

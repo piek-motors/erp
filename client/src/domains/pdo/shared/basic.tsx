@@ -2,10 +2,7 @@ import { Button, Stack, ToggleButtonGroup } from '@mui/joy'
 import { SxProps } from '@mui/joy/styles/types'
 import { BaseAutocomplete, BaseOption } from 'components/base-autocomplete'
 import { DeleteConfirmDialog } from 'components/delete_confirm_dialog'
-import {
-  NavigationBar,
-  Props as PageTitleProps
-} from 'components/navigation_bar'
+import { NavTopBar, Props as PageTitleProps } from 'components/nav_topbar'
 import {
   ActionButton,
   DeleteResourceButton,
@@ -108,12 +105,7 @@ export const SaveAndDelete = (props: {
 
 export function MetalPageTitle(props: PageTitleProps) {
   return (
-    <NavigationBar
-      {...props}
-      homeUrl={routeMap.pdo.index}
-      hideIcon
-      spaceBetween
-    />
+    <NavTopBar {...props} homeUrl={routeMap.pdo.index} hideIcon spaceBetween />
   )
 }
 

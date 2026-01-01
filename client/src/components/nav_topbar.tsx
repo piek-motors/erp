@@ -4,7 +4,8 @@ import { SxProperty } from 'lib/constants'
 import { routeMap } from 'lib/routes'
 import React, { ReactNode } from 'react'
 import { Link } from 'react-router'
-import { MobileOnly, P, Row, UseIcon } from '../lib'
+import { P, Row, UseIcon } from '../lib'
+import { MobileOnly } from './utilities/conditional-display'
 
 export interface Props {
   t?: string | ReactNode
@@ -16,9 +17,8 @@ export interface Props {
   homeUrl?: string
 }
 
-export function NavigationBar(props: Props) {
+export function NavTopBar(props: Props) {
   const isDev = process.env.REACT_APP_NODE_ENV === 'development'
-
   return (
     <Stack
       direction="row"

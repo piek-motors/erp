@@ -4,7 +4,7 @@ import { makeAutoObservable } from 'mobx'
 import { User } from 'models'
 import { AuthService } from '../services/auth.service'
 
-export class GlobalStore {
+export class AuthStore {
   user: User | null = null
   setUser(user: User | null) {
     this.user = user
@@ -13,9 +13,9 @@ export class GlobalStore {
   setLoading(bool: boolean) {
     this.isLoading = bool
   }
-  inMemoryToken: string | null = null
-  setInMemoryToken(token: string | null) {
-    this.inMemoryToken = token
+  token: string | null = null
+  setToken(token: string | null) {
+    this.token = token
   }
   constructor() {
     makeAutoObservable(this)
@@ -24,20 +24,20 @@ export class GlobalStore {
   async logout() {
     try {
       await AuthService.logout()
-      this.setInMemoryToken(null)
+      this.setToken(null)
       this.setUser(null)
     } catch (e: any) {
       console.log(e.response?.data?.message)
     }
   }
 
-  async getNewToken() {
+  async refresh() {
     return await axios
       .get(`${API_URL}/refresh`, { withCredentials: true })
       .then(r => {
         if (r.status !== 200)
           new Error('Invalid response while trying to get new access token')
-        this.setInMemoryToken(r.data.accessToken)
+        this.setToken(r.data.accessToken)
         return r.data.accessToken
       })
   }
@@ -58,14 +58,16 @@ export class GlobalStore {
                 res.data.user.email
               )
             )
-            this.setInMemoryToken(res.data.accessToken)
+            this.setToken(res.data.accessToken)
           }
         })
     } catch (e) {
       console.error(e)
     } finally {
       this.setLoading(false)
-      return this.inMemoryToken
+      return this.token
     }
   }
 }
+
+export const authStore = new AuthStore()

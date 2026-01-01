@@ -2,7 +2,20 @@ import { cache } from 'domains/pdo/cache/root'
 import { makeAutoObservable } from 'mobx'
 import { Color } from 'models'
 import { ColorSegmentation } from './color_segmentation.store'
-import { GroupNameState } from './group_name.state'
+
+class GroupNameState {
+  constructor() {
+    makeAutoObservable(this)
+  }
+  name: string = ''
+  setName(name: string) {
+    this.name = name
+  }
+  modalOpen: boolean = false
+  setModalOpen(open: boolean) {
+    this.modalOpen = open
+  }
+}
 
 export interface Group {
   id: number

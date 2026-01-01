@@ -1,28 +1,12 @@
 import '@fontsource/inter'
 import { CssBaseline, ThemeProvider } from '@mui/joy'
 import { observer } from 'mobx-react-lite'
-import { createContext } from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router'
 import { NetworkStatusMessage } from './components/network-status-hint'
 import { NotifierOverlay } from './components/notifier'
 import { AppRouter } from './lib/routers/Router'
-import { GlobalStore } from './lib/store/global.store'
 import theme from './theme'
-
-const store = new GlobalStore()
-
-export const Context = createContext({
-  store
-})
-
-export function getInMemoryToken() {
-  return store.inMemoryToken
-}
-
-export async function getNewInMemoryToken() {
-  return await store.getNewToken()
-}
 
 const App = observer(() => {
   return (
@@ -40,11 +24,9 @@ const root = createRoot(container) // createRoot(container!) if you use TypeScri
 
 root.render(
   <BrowserRouter>
-    <Context.Provider value={{ store }}>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <App />
-      </ThemeProvider>
-    </Context.Provider>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <App />
+    </ThemeProvider>
   </BrowserRouter>
 )

@@ -1,7 +1,7 @@
 import { NumberInput } from 'components/inputs/number_input'
 import {
   Button,
-  Inp,
+  InputLabled,
   InputStack,
   Label,
   observer,
@@ -22,7 +22,7 @@ export const MaterialSpecificInput = observer(({ m, disabled }: ShapeProps) => {
   switch (m.shape) {
     case MaterialShape.Arbitrary:
       res = (
-        <Inp
+        <InputLabled
           label={'Название'}
           value={m.arbitrary.name}
           sx={{ minWidth: 400 }}

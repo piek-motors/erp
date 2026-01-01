@@ -24,6 +24,24 @@ import { DetailName } from '../name'
 import { AlphabetIndex } from './alphabet_index'
 import { detailListStore as state } from './store'
 
+export const DetailsListPage = () => (
+  <ScrollableWindow
+    static={
+      <Stack>
+        <MobileNavModal t={'Детали'} />
+        <SearchArguments />
+      </Stack>
+    }
+    scroll={
+      <Row alignItems="start" gap={0.5}>
+        <AlphabetIndex sx={{ position: 'sticky', top: 0, zIndex: 1 }} />
+        <Divider orientation="vertical" />
+        <DetailsList sx={{ width: '100%' }} />
+      </Row>
+    }
+  />
+)
+
 const columnList: Column<DetailSt>[] = [
   {
     Header: '№',
@@ -89,26 +107,6 @@ const DetailList = observer((props: DetailsTableProps) => {
   )
 })
 
-export const DetailsListPage = () => (
-  <ScrollableWindow
-    static={
-      <Stack>
-        <MobileNavModal t={'Детали'} />
-        <SearchArguments />
-      </Stack>
-    }
-    scrollable={
-      <Stack gap={0.5}>
-        <Row alignItems="start" gap={0.5}>
-          <AlphabetIndex sx={{ position: 'sticky', top: 0, zIndex: 1 }} />
-          <Divider orientation="vertical" />
-          <DetailsList sx={{ width: '100%' }} />
-        </Row>
-      </Stack>
-    }
-  />
-)
-
 interface DetailSelectModalProps {
   value?: DetailSt
   onRowClick: (row: DetailSt) => void
@@ -129,7 +127,7 @@ export const DetailSelectModal = observer((props: DetailSelectModalProps) => {
     >
       <ScrollableWindow
         refreshTrigger={false}
-        scrollable={
+        scroll={
           <Box p={1} mb={3}>
             <SearchArguments />
             <DetailsList

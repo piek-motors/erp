@@ -4,7 +4,7 @@ import { ScrollPreservNavigation } from 'components/utilities/scroll_preserve_na
 import { Box, Stack } from 'lib'
 
 export const ScrollableWindow = (props: {
-  scrollable: React.ReactNode
+  scroll: React.ReactNode
   static?: React.ReactNode
   refreshTrigger?: any
   preserveScrollAcrossNavigation?: boolean
@@ -47,7 +47,7 @@ export const ScrollableWindow = (props: {
         <Box sx={{ p: { xs: 0.75, sm: 0 } }}>{props.static}</Box>
       )}
       <ScrollComponent refreshTrigger={props.refreshTrigger} sx={scrollSx}>
-        <Box sx={{ width: '100%' }}>{props.scrollable}</Box>
+        <Box sx={{ width: '100%' }}>{props.scroll}</Box>
       </ScrollComponent>
     </Stack>
   )

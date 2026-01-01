@@ -1,16 +1,10 @@
 import { Divider } from '@mui/joy'
 import { ScrollableWindow } from 'components/inputs'
 import {
-  Box,
   DesktopOnly,
-  Loading,
-  MobileOnly,
-  observer,
-  P,
-  Row,
-  Stack,
-  useEffect
-} from 'lib/index'
+  MobileOnly
+} from 'components/utilities/conditional-display'
+import { Box, Loading, observer, P, Row, Stack, useEffect } from 'lib/index'
 import { useParams } from 'react-router'
 import { MobileNavModal } from '../root_layout'
 import { crud } from './api'
@@ -29,7 +23,7 @@ const DetailsPanel = observer(() => {
     )
   return (
     <ScrollableWindow
-      scrollable={
+      scroll={
         openedGroup && (
           <Stack p={1}>
             <Row>
@@ -68,7 +62,7 @@ const DetailGroupsLayout = observer(() => (
         </Row>
       </MobileOnly>
       <DesktopOnly>
-        <ScrollableWindow scrollable={<SharedGroupList />} />
+        <ScrollableWindow scroll={<SharedGroupList />} />
       </DesktopOnly>
     </Box>
     {/* Group details */}
@@ -96,7 +90,7 @@ export const DetailGroupById = observer(() => {
 
 export const DetailGroupListPage = observer(() => {
   useEffect(() => {
-    crud.loadGroups()
+    crud.listGroups()
     return () => {
       crud.store.clear()
     }

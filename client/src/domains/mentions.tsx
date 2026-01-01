@@ -1,11 +1,11 @@
 /** @jsxImportSource @emotion/react */
 import styled from '@emotion/styled'
 import { FactoryPage } from 'components/factory_page'
-import { Context } from 'index'
 import {
   ActionButton,
   Box,
   Button,
+  observer,
   P,
   Row,
   Sheet,
@@ -16,8 +16,9 @@ import {
 import { openOrderDetailPage } from 'lib/routes'
 import { matrixDecoder } from 'lib/rpc/matrix_decoder'
 import { rpc } from 'lib/rpc/rpc.client'
+import { authStore } from 'lib/store/auth.store'
 import moment from 'moment'
-import { useContext, useEffect } from 'react'
+import { useEffect } from 'react'
 import { Mention } from 'srv/rpc/orders/mentions'
 
 function MentionComponent({ data }: { data: Mention }) {
@@ -78,8 +79,7 @@ function MentionComponent({ data }: { data: Mention }) {
   )
 }
 
-export function MentionList() {
-  const { store }: any = useContext(Context)
+export const MentionList = observer(() => {
   const [notifications, setNotifications] = useState<{
     unseen: Mention[]
     seen: Mention[]
@@ -87,11 +87,11 @@ export function MentionList() {
 
   const [loading, setLoading] = useState(false)
   useEffect(() => {
-    if (!store?.user?.id) return
+    if (!authStore.user?.id) return
     setLoading(true)
     rpc.orders.mentions.list
       .query({
-        user_id: store.user.id
+        user_id: authStore.user.id
       })
       .then(res => {
         const unseen = matrixDecoder<Mention>(res.unseen)
@@ -140,7 +140,7 @@ export function MentionList() {
       </Stack>
     </FactoryPage>
   )
-}
+})
 
 function SectionTitle({ title }: { title: string }) {
   return (

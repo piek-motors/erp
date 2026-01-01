@@ -1,13 +1,7 @@
 import { routeMap } from 'lib/routes'
+import { Link } from '../../components/nav_sidebar'
 
-export type Action = {
-  name?: string
-  href: string
-  childres?: Action[]
-  endBlock?: Action[]
-}
-
-export const actions: Action[] = [
+export const nav_links: Link[] = [
   {
     name: 'Производство',
     href: routeMap.pdo.index

@@ -1,4 +1,4 @@
-import { Inp } from 'lib/index'
+import { InputLabled } from 'lib/index'
 import { formatMoney } from 'lib/utils/fmt'
 import { useCallback, useMemo } from 'react'
 
@@ -38,7 +38,7 @@ export function MoneyInput({
   }, [value])
 
   return (
-    <Inp
+    <InputLabled
       placeholder={placeholder}
       value={formattedValue}
       onChange={handleChange}

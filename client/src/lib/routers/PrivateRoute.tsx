@@ -1,18 +1,18 @@
-import { ReactElement, useContext, useEffect, useState } from 'react'
+import { authStore } from 'lib/store/auth.store'
+import { observer } from 'mobx-react-lite'
+import { ReactElement, useEffect, useState } from 'react'
 import { Navigate } from 'react-router'
-import { Context } from '../..'
 
 type IRequireAuthProps = {
   children: ReactElement
 }
 
-const RequireAuth = (props: IRequireAuthProps) => {
-  const { store } = useContext(Context)
+const RequireAuth = observer((props: IRequireAuthProps) => {
   const [isLoaded, setisLoaded] = useState(false)
-  const [token, setToken] = useState(store.inMemoryToken)
+  const [token, setToken] = useState(authStore.token)
 
   async function getToken() {
-    store.checkAuth().then(res => {
+    authStore.checkAuth().then(res => {
       setToken(res)
       setisLoaded(true)
     })
@@ -26,6 +26,6 @@ const RequireAuth = (props: IRequireAuthProps) => {
   if (!isLoaded) return <>Authentication</>
 
   return token ? props.children : <Navigate to="/login" />
-}
+})
 
 export default RequireAuth

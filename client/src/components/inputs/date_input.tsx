@@ -1,5 +1,5 @@
 import { Stack } from '@mui/joy'
-import { Inp, P } from 'lib/index'
+import { InputLabled, P } from 'lib/index'
 import { useCallback, useMemo } from 'react'
 
 interface Props {
@@ -39,7 +39,7 @@ export function DateInput({ value = '', onChange, label }: Props) {
 
   return (
     <Stack spacing={0.5}>
-      <Inp
+      <InputLabled
         value={displayValue}
         onChange={handleChange}
         placeholder="дд.мм.гг"

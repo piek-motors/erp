@@ -40,7 +40,7 @@ export const DetailsMadeOfMaterialModal = observer(
         <ScrollableWindow
           refreshTrigger={false}
           static={<P level="h4">Детали из этого материала</P>}
-          scrollable={
+          scroll={
             <Stack sx={{ overflowY: 'scroll' }} pb={5} p={1}>
               {m.detailsMadeFromThisMaterial.map(each => (
                 <Box display={'flex'}>

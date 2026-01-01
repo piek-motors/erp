@@ -8,11 +8,18 @@ import {
   Sheet,
   Stack
 } from '@mui/joy'
-import { WebOnly } from 'components/utilities/conditional-display'
-import { DesktopOnly, MobileOnly, P, Row, UseIcon } from 'lib/index'
+import {
+  DesktopOnly,
+  MobileOnly,
+  WebOnly
+} from 'components/utilities/conditional-display'
+import { P, Row, UseIcon } from 'lib/index'
 import { useEffect, useState } from 'react'
+import { NavigationSideBar } from '../../components/nav_sidebar'
 import { cache } from './cache/root'
-import { NavigationSideBar } from './shared/nav'
+import { nav_links } from './nav.links'
+
+const title = 'ПДО'
 
 export const MobileNavModal = (props: { t?: string }) => {
   const [open, setOpen] = useState(false)
@@ -34,7 +41,7 @@ export const MobileNavModal = (props: { t?: string }) => {
       <Modal open={open} onClose={() => setOpen(false)}>
         <ModalDialog layout="fullscreen">
           <ModalClose />
-          <NavigationSideBar />
+          <NavigationSideBar title={title} links={nav_links} />
         </ModalDialog>
       </Modal>
     </MobileOnly>
@@ -61,8 +68,14 @@ export function MetalFlowRootLayout(props: { children?: React.ReactNode }) {
       <DesktopOnly>
         <WebOnly>
           <NavigationSideBar
+            links={nav_links}
+            title={title}
             p={1}
-            sx={{ background: 'lightgrey', height: 'inherit' }}
+            pr={0}
+            sx={{
+              background: 'lightgrey',
+              height: 'inherit'
+            }}
           />
         </WebOnly>
       </DesktopOnly>

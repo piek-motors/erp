@@ -1,5 +1,7 @@
-import { SupplyReasonSelect } from 'domains/pdo/shared/supply-reason-select'
-import { WriteoffReasonSelect } from 'domains/pdo/shared/writeoff-reason-select'
+import {
+  SupplyReasonSelect,
+  WriteoffReasonSelect
+} from 'domains/pdo/shared/reason-select'
 import {
   SupplyCompletedText,
   WarehouseCard,

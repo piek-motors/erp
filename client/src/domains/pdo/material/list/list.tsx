@@ -6,7 +6,6 @@ import { observer, Row, Stack, useNavigate } from 'lib/index'
 import { openPage, routeMap } from 'lib/routes'
 import { Material } from 'srv/rpc/pdo/materials'
 import { columns } from './columns'
-import { MaterialShapeFilter } from './shape_filter'
 import { materialListStore } from './store'
 
 interface MaterialsTableProps {
@@ -37,7 +36,7 @@ export const MaterialListPage = observer((props: MaterialsTableProps) => (
     static={
       <Stack p={0.5} gap={0.5}>
         <MobileNavModal t={'Материалы'} />
-        <MaterialShapeFilter />
+        <ShapeFilter />
         <Row>
           <Search
             width={100}
@@ -61,10 +60,36 @@ export const MaterialListPage = observer((props: MaterialsTableProps) => (
         </Row>
       </Stack>
     }
-    scrollable={
-      <>
-        <MaterialList {...props} />
-      </>
-    }
+    scroll={<MaterialList {...props} />}
   />
 ))
+
+import { Button, ToggleButtonGroup } from 'lib/index'
+import { UiMaterialShape } from 'models'
+
+const ShapeFilter = observer(() => {
+  const shapes = Object.entries(UiMaterialShape)
+  const value = materialListStore.filterShape?.toString()
+  return (
+    <ToggleButtonGroup
+      size="sm"
+      variant="soft"
+      color="primary"
+      value={value}
+      sx={{ overflow: 'hidden' }}
+      onChange={(_, value) => {
+        if (value == null) {
+          materialListStore.setFilterShape()
+        } else {
+          materialListStore.setFilterShape(Number(value))
+        }
+      }}
+    >
+      {shapes.map(([index, name]) => (
+        <Button key={index} value={index}>
+          {name}
+        </Button>
+      ))}
+    </ToggleButtonGroup>
+  )
+})

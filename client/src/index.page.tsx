@@ -8,10 +8,10 @@ import {
   UilWrench
 } from '@iconscout/react-unicons'
 import { Badge, Button, IconButton, Stack } from '@mui/joy'
-import { useAppContext } from 'hooks'
-import { P, Row, UseIcon } from 'lib/index'
+import { observer, P, Row, UseIcon } from 'lib/index'
 import { routeMap } from 'lib/routes'
 import { rpc } from 'lib/rpc/rpc.client'
+import { authStore } from 'lib/store/auth.store'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
 
@@ -39,27 +39,22 @@ export const links = [
   }
 ]
 
-export function IndexPage() {
-  const { store } = useAppContext()
+export const IndexPage = observer(() => {
   const navigate = useNavigate()
-
-  if (!store?.user?.id) {
-    throw Error('user not found')
-  }
-
   const [count, setCount] = useState(0)
-  useEffect(() => {
-    if (!store?.user?.id) return
 
-    rpc.orders.mentions.count
-      .query({
-        user_id: store.user.id
-      })
-      .then(setCount)
+  useEffect(() => {
+    if (authStore.user?.id) {
+      rpc.orders.mentions.count
+        .query({
+          user_id: authStore.user.id
+        })
+        .then(setCount)
+    }
   }, [])
 
   async function handleLogout() {
-    await store.logout()
+    await authStore.logout()
     navigate('/login')
   }
 
@@ -78,9 +73,9 @@ export function IndexPage() {
       })}
       <Stack width={300} gap={1}>
         <P level="body-xs">
-          Аккаунт: {store.user?.email} {store.user?.fullName}
+          Аккаунт: {authStore.user?.email} {authStore.user?.fullName}
           <br />
-          Роль: {store.user?.roles}
+          Роль: {authStore.user?.roles}
         </P>
         <P level="body-xs" color="neutral">
           Предложения по улучшению можно отправить в телеграме{' '}
@@ -99,7 +94,7 @@ export function IndexPage() {
       </Stack>
     </Stack>
   )
-}
+})
 
 function Element(props: {
   href: string
@@ -108,7 +103,6 @@ function Element(props: {
   count?: number
 }) {
   const navigate = useNavigate()
-
   return (
     <Stack sx={{ alignSelf: 'flex-start' }}>
       <IconButton
@@ -125,17 +119,18 @@ function Element(props: {
   )
 }
 
-function BadgeWrapper(props: { children: React.ReactNode; content: number }) {
-  return (
-    <Badge
-      color="danger"
-      anchorOrigin={{
-        vertical: 'top',
-        horizontal: 'left'
-      }}
-      badgeContent={props.content}
-    >
-      {props.children}
-    </Badge>
-  )
-}
+const BadgeWrapper = (props: {
+  children: React.ReactNode
+  content: number
+}) => (
+  <Badge
+    color="danger"
+    anchorOrigin={{
+      vertical: 'top',
+      horizontal: 'left'
+    }}
+    badgeContent={props.content}
+  >
+    {props.children}
+  </Badge>
+)

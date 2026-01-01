@@ -11,7 +11,6 @@ import {
 } from '@iconscout/react-unicons'
 import {
   Box,
-  BoxProps,
   Button,
   ButtonProps,
   Checkbox,
@@ -34,7 +33,6 @@ import {
   Typography,
   TypographyProps
 } from '@mui/joy'
-import { useIsDesktop, useIsMobile } from 'hooks/use-media-query'
 import { observer } from 'mobx-react-lite'
 import React from 'react'
 import { Link as ReactLink, useNavigate } from 'react-router'
@@ -68,33 +66,31 @@ export const Label = (
   )
 }
 
-export type MyInputProps = {
+export type InputLabledProps = {
   label?: string
   value?: string | number | null
   onChange?: (value: string) => void
   fullWidth?: boolean
 } & Omit<InputProps, 'value' | 'onChange'>
 
-export function Inp(props: MyInputProps) {
-  return (
-    <FormControl
-      sx={{ width: props.fullWidth ? '-webkit-fill-available' : 'auto' }}
-    >
-      <Label label={props.label} />
-      <Row>
-        <Input
-          {...props}
-          value={props.value?.toString() || ''}
-          autoComplete={'off'}
-          onChange={e => {
-            const value = e.target.value ?? ''
-            props.onChange?.(value)
-          }}
-        />
-      </Row>
-    </FormControl>
-  )
-}
+export const InputLabled = (props: InputLabledProps) => (
+  <FormControl
+    sx={{ width: props.fullWidth ? '-webkit-fill-available' : 'auto' }}
+  >
+    <Label label={props.label} />
+    <Row>
+      <Input
+        {...props}
+        value={props.value?.toString() || ''}
+        autoComplete={'off'}
+        onChange={e => {
+          const value = e.target.value ?? ''
+          props.onChange?.(value)
+        }}
+      />
+    </Row>
+  </FormControl>
+)
 
 export function InputWithUnit(
   props: InputProps & { unit?: string; label?: string }
@@ -182,25 +178,17 @@ export function DeleteResourceButton(props: {
   )
 }
 
-export function UpdateResourceButton(props: { onClick: () => void }) {
-  return (
-    <IconButton
-      variant="soft"
-      color="primary"
-      onClick={props.onClick}
-      size="sm"
-    >
-      <UseIcon icon={UilPen} />
-    </IconButton>
-  )
-}
+export const UpdateResourceButton = (props: { onClick: () => void }) => (
+  <IconButton variant="soft" color="primary" onClick={props.onClick} size="sm">
+    <UseIcon icon={UilPen} />
+  </IconButton>
+)
 
-export function AddResourceButton(props: {
+export const AddResourceButton = (props: {
   onClick?: () => void
   navigateTo?: string
-}) {
+}) => {
   const navigate = useNavigate()
-
   return (
     <Button
       variant="solid"
@@ -221,33 +209,29 @@ export function AddResourceButton(props: {
   )
 }
 
-export function MinusIcon(props: IconButtonProps) {
-  return (
-    <IconButton
-      variant="soft"
-      color="danger"
-      {...props}
-      size="sm"
-      sx={{ width: 'min-content', ...props.sx }}
-    >
-      <UseIcon icon={UilMinus} />
-    </IconButton>
-  )
-}
+export const MinusIcon = (props: IconButtonProps) => (
+  <IconButton
+    variant="soft"
+    color="danger"
+    {...props}
+    size="sm"
+    sx={{ width: 'min-content', ...props.sx }}
+  >
+    <UseIcon icon={UilMinus} />
+  </IconButton>
+)
 
-export function PlusIcon(props: IconButtonProps) {
-  return (
-    <IconButton
-      variant="soft"
-      color="primary"
-      {...props}
-      size="sm"
-      sx={{ width: 'min-content', ...props.sx }}
-    >
-      <UseIcon icon={UilPlusCircle} />
-    </IconButton>
-  )
-}
+export const PlusIcon = (props: IconButtonProps) => (
+  <IconButton
+    variant="soft"
+    color="primary"
+    {...props}
+    size="sm"
+    sx={{ width: 'min-content', ...props.sx }}
+  >
+    <UseIcon icon={UilPlusCircle} />
+  </IconButton>
+)
 
 export function InputStack(props: { children: React.ReactNode; p?: number }) {
   return (
@@ -346,11 +330,11 @@ export const text = {
   orderCompleted: 'Заказ был выполнен'
 }
 
-export const IconSettings = {
+const IconSettings = {
   opacity: 0.6,
   width: 22,
   fill: 'black'
-}
+} as const
 
 export function UseIcon(props: {
   icon: Icon
@@ -377,38 +361,6 @@ export function Chip(props: {
     <MuiChip color="success" variant="outlined" size="sm" {...props.chipProps}>
       {props.text}
     </MuiChip>
-  )
-}
-
-// create function to show content only on mobile and hide on desktop
-export function MobileOnly(props: {
-  children: React.ReactNode
-  sx?: BoxProps['sx']
-}) {
-  const isMobile = useIsMobile()
-  if (!isMobile) {
-    return null
-  }
-  return (
-    <Box sx={{ display: { xs: 'block', sm: 'none' }, ...props.sx }}>
-      {props.children}
-    </Box>
-  )
-}
-
-// create function to show content only on desktop and hide on mobile
-export function DesktopOnly(props: {
-  children: React.ReactNode
-  sx?: BoxProps['sx']
-}) {
-  const isDesktop = useIsDesktop()
-  if (!isDesktop) {
-    return null
-  }
-  return (
-    <Box sx={{ display: { xs: 'none', sm: 'block' }, ...props.sx }}>
-      {props.children}
-    </Box>
   )
 }
 

@@ -8,11 +8,11 @@ import { TextEditor } from 'domains/orders/one/comments/text-editor'
 import { cache } from 'domains/pdo/cache/root'
 import {
   Box,
-  Inp,
+  InputLabled,
+  InputLabledProps,
   Label,
   MinusIcon,
   MultilineInput,
-  MyInputProps,
   observer,
   P,
   PlusIcon,
@@ -95,7 +95,6 @@ export const MaterialSelect = observer(
       .map(e => new MaterialCost([e.id, props.value.length ?? 0]))
     return (
       <MaterialAutocomplete
-        size="sm"
         data={data}
         value={props.value}
         onChange={m => {
@@ -138,8 +137,8 @@ const StockLocationInput = observer(({ detail }: { detail: DetailSt }) => (
   />
 ))
 
-const Input = (props: MyInputProps) => (
-  <Inp variant="outlined" color="neutral" {...props} />
+const Input = (props: InputLabledProps) => (
+  <InputLabled variant="outlined" color="neutral" {...props} />
 )
 
 const DetailGroupInput = observer(({ detail }: { detail: DetailSt }) => {

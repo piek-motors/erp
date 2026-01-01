@@ -1,6 +1,6 @@
 import { Stack } from '@mui/joy'
 import { ReactNode } from 'react'
-import { NavigationBar } from './navigation_bar'
+import { NavTopBar } from './nav_topbar'
 
 export const FactoryPage = (props: {
   title: string
@@ -9,7 +9,7 @@ export const FactoryPage = (props: {
 }) => {
   return (
     <Stack gap={1} p={1} sx={{ overflow: 'auto' }}>
-      <NavigationBar t={props.title}>{props.header}</NavigationBar>
+      <NavTopBar t={props.title}>{props.header}</NavTopBar>
       <Stack gap={1}>{props.children}</Stack>
     </Stack>
   )

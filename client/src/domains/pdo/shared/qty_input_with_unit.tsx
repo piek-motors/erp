@@ -1,12 +1,11 @@
 import { InputProps } from '@mui/joy'
-import { Inp, Label } from 'lib/index'
+import { InputLabled, Label } from 'lib/index'
 import { uiUnit } from 'models'
 
 export const QtyInputWithUnit = (props: {
   unitId?: number
   autoFocus?: boolean
   value?: string
-  defaultValue?: string
   setValue: (num: string) => void
   label?: string
   placeholder?: string
@@ -15,7 +14,7 @@ export const QtyInputWithUnit = (props: {
 }) => {
   const { unitId, value: qty, setValue: setQty } = props
   return (
-    <Inp
+    <InputLabled
       autoFocus={props.autoFocus}
       label={props.label}
       placeholder={props.placeholder}

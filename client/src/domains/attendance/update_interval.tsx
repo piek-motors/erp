@@ -10,7 +10,7 @@ import {
 } from '@mui/joy'
 import { WebOnly } from 'components/utilities/conditional-display'
 import { rpc } from 'lib/deps'
-import { Inp, Label, P, Row, SaveIconButton, UseIcon } from 'lib/index'
+import { InputLabled, Label, P, Row, SaveIconButton, UseIcon } from 'lib/index'
 import { makeAutoObservable } from 'mobx'
 import { observer } from 'mobx-react-lite'
 import { AbsenceReason } from 'models'
@@ -127,7 +127,7 @@ export const UpdateIntervalModal = observer(() => (
         </>
       )}
       <Row alignItems={'end'}>
-        <Inp
+        <InputLabled
           value={state.ent}
           onChange={v => state.setEnt(v)}
           label="Приход"
@@ -141,7 +141,7 @@ export const UpdateIntervalModal = observer(() => (
         >
           <UseIcon icon={UilExchange} />
         </IconButton>
-        <Inp
+        <InputLabled
           value={state.ext}
           onChange={v => state.setExt(v)}
           label="Уход"

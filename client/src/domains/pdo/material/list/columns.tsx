@@ -22,7 +22,7 @@ export const columns: Column<Material>[] = [
     accessor: m => <Label xs>{m.id}</Label>
   },
   {
-    Header: 'Наименование',
+    Header: 'Наим.',
     id: 'name',
     accessor: m => <P whiteSpace={'nowrap'}>{m.label}</P>,
     width: '95%'

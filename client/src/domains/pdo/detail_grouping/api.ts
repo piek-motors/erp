@@ -15,7 +15,7 @@ export class DetailGroupingApi {
     makeAutoObservable(this)
   }
 
-  async loadGroups() {
+  async listGroups() {
     return this.groupsLoading.run(async () => {
       await cache.detailGroups.load()
     })

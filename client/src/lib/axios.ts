@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { getInMemoryToken } from 'index'
+import { authStore } from './store/auth.store'
 
 export const API_URL =
   process.env.REACT_APP_API_URL || 'http://localhost:9000/api'
@@ -13,6 +13,6 @@ export const $api = axios.create({
 
 $api.interceptors.request.use(config => {
   config.headers = config.headers ?? {}
-  config.headers.Authorization = `Bearer ${getInMemoryToken()}`
+  config.headers.Authorization = `Bearer ${authStore.token}`
   return config
 })

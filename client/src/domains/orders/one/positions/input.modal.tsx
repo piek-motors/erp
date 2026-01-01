@@ -1,6 +1,6 @@
 import { Box, Button, Modal, ModalClose, ModalDialog } from '@mui/joy'
 import { NumberInput } from 'components/inputs/number_input'
-import { CancelButton, Inp, MultilineInput, P, Row } from 'lib/index'
+import { CancelButton, InputLabled, MultilineInput, P, Row } from 'lib/index'
 import { observer } from 'mobx-react-lite'
 import { useEffect } from 'react'
 import { orderStore } from '../order.store'
@@ -28,7 +28,7 @@ export const InputPositionModal = observer(() => {
         </P>
 
         <Box display="flex" flexDirection="column">
-          <Inp
+          <InputLabled
             fullWidth
             sx={{ width: '100%' }}
             autoFocus

@@ -1,5 +1,5 @@
 import { Box } from '@mui/joy'
-import { NavigationBar } from 'components/navigation_bar'
+import { NavTopBar } from 'components/nav_topbar'
 import { CenteredContainer } from 'components/utilities/centered-container'
 import { Row } from 'lib/index'
 import { openOrderDetailPage } from 'lib/routes'
@@ -39,7 +39,7 @@ export const CreateOrder = observer(() => {
     <CenteredContainer>
       <Box>
         <Row>
-          <NavigationBar t={'Новый заказ'} />
+          <NavTopBar t={'Новый заказ'} />
         </Row>
         <OrderStatementInput mutation={() => handleCreateOrder()} />
       </Box>

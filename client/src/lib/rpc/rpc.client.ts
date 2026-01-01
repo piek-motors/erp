@@ -1,5 +1,5 @@
 import { createTRPCClient, httpLink } from '@trpc/client'
-import { getInMemoryToken, getNewInMemoryToken } from 'index'
+import { authStore } from 'lib/store/auth.store'
 import { notifier } from 'lib/store/notifier.store'
 import type { AppRouter } from 'srv/lib/trpc/index.js'
 
@@ -23,7 +23,7 @@ const fetchWithTokenRefresh: typeof fetch = async (input, init?) => {
     body?.error?.data?.code === 'UNAUTHORIZED'
   ) {
     if (refreshTokenPromise == null) {
-      refreshTokenPromise = getNewInMemoryToken().finally(() => {
+      refreshTokenPromise = authStore.refresh().finally(() => {
         refreshTokenPromise = null
       })
     }
@@ -31,7 +31,7 @@ const fetchWithTokenRefresh: typeof fetch = async (input, init?) => {
     await refreshTokenPromise
 
     const headers = new Headers(init?.headers)
-    headers.set('Authorization', `Bearer ${getInMemoryToken()}`)
+    headers.set('Authorization', `Bearer ${authStore.token}`)
     return fetch(input, { ...init, headers })
   } else {
     notifier.err(body?.error?.message)
@@ -47,7 +47,7 @@ export const rpc: ReturnType<typeof createTRPCClient<AppRouter>> =
         fetch: fetchWithTokenRefresh,
         headers: () => {
           return {
-            Authorization: `Bearer ${getInMemoryToken()}`
+            Authorization: `Bearer ${authStore.token}`
           }
         }
       })
