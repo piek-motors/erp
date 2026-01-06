@@ -113,9 +113,10 @@ function FileNameInput(props: {
     <Row onKeyDown={handleKeyDown}>
       <InputLabled
         fullWidth
+        autoFocus
         value={name}
         onChange={e => setName(e)}
-        variant="plain"
+        variant="soft"
         sx={{ maxWidth: '100%', minWidth: '100%' }}
       />
     </Row>
