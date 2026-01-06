@@ -21,7 +21,6 @@ export const NotifierOverlay = observer(() => (
             size="sm"
             color={each.level === 'err' ? 'danger' : 'success'}
           >
-            {' '}
             <Container maxWidth="sm">{each.msg}</Container>
           </Alert>
         ))}

@@ -1,6 +1,6 @@
 import {
   Button,
-  Divider,
+  Container,
   Input,
   Modal,
   ModalClose,
@@ -9,6 +9,7 @@ import {
 } from '@mui/joy'
 import { Label, Loading, PlusIcon, Row } from 'lib/index'
 import { LoadingController } from 'lib/store/loading_controller'
+import { notifier } from 'lib/store/notifier.store'
 import { makeAutoObservable } from 'mobx'
 import { observer } from 'mobx-react-lite'
 import { DictEntry } from 'srv/lib/create_dict_router'
@@ -25,6 +26,11 @@ class State {
     makeAutoObservable(this)
   }
   readonly loader = new LoadingController()
+
+  search?: string
+  setSearch(s?: string) {
+    this.search = s
+  }
 
   options: DictEntry[] = []
   setOptions(ops: DictEntry[]) {
@@ -45,6 +51,15 @@ class State {
     this.newValue = s
   }
 
+  get filtredOptions() {
+    if (this.search) {
+      return this.options.filter(e =>
+        e.v.toLocaleLowerCase().includes(this.search!.toLocaleLowerCase())
+      )
+    }
+    return this.options
+  }
+
   async open<V extends DictEntry>(dict: Dict<V>) {
     this.dict = dict
     this.setModalOpen(true)
@@ -53,6 +68,7 @@ class State {
   }
 
   async close() {
+    this.search = undefined
     this.setModalOpen(false)
     this.setDict(undefined)
   }
@@ -73,12 +89,14 @@ class State {
     if (opts) {
       this.setOptions(opts)
     }
-    this.newValue = undefined
+    notifier.ok(`В справочник добавлено значение ${this.newValue}`)
+
+    this.setNewValue(undefined)
+    this.setSearch(undefined)
   }
 
   async onClick(v) {
     if (!this.dict) throw Error('dict is undefined')
-
     this.dict?.onClick(v)
     this.close()
   }
@@ -86,17 +104,29 @@ class State {
 
 export const DictManagerModal = observer(() => (
   <Modal open={state.modalOpen} onClose={() => state.setModalOpen(false)}>
-    <ModalDialog>
-      <>
+    <ModalDialog layout="fullscreen">
+      <Container maxWidth="xs" sx={{ overflow: 'auto' }}>
         <ModalClose />
         <Label>Справочник</Label>
         {state.loader.loading && <Loading />}
-        <Stack sx={{ overflow: 'auto' }}>
-          {state.options.map(option => (
+        <Input
+          size="sm"
+          placeholder="Поиск"
+          variant="outlined"
+          autoFocus
+          value={state.search}
+          onChange={e => state.setSearch(e.target.value)}
+        />
+        <Stack>
+          {state.filtredOptions.map(option => (
             <Button
               sx={{
+                textAlign: 'left',
                 width: '100%',
-                justifyContent: 'start'
+                fontWeight: 'normal',
+                justifyContent: 'start',
+                py: 0.3,
+                minHeight: 20
               }}
               variant="plain"
               color="neutral"
@@ -106,18 +136,22 @@ export const DictManagerModal = observer(() => (
               {option.v}
             </Button>
           ))}
-          <Divider sx={{ my: 1 }} />
-          <Row>
+          <Row py={1}>
             <Input
+              size="sm"
               variant="outlined"
               placeholder="Новое значение"
               value={state.newValue}
               onChange={e => state.setNewValue(e.target.value)}
             />
-            <PlusIcon onClick={() => state.add()} variant="solid" />
+            <PlusIcon
+              onClick={() => state.add()}
+              variant="outlined"
+              size="sm"
+            />
           </Row>
         </Stack>
-      </>
+      </Container>
     </ModalDialog>
   </Modal>
 ))
