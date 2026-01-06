@@ -342,13 +342,42 @@ const Cost = observer(({ detail, order }: DetailStProp & OrderStProp) => {
 
 const QuantityInput = observer(
   ({ recBatchSize, order }: OrderStProp & { recBatchSize?: number }) => {
-    const [qty, setQty] = useState(order.qty)
+    const isProduction = order.status === OrderStatus.Production
+    const isCollected = order.status === OrderStatus.Collected
 
-    if ([OrderStatus.Collected].includes(order.status)) {
+    const mode = isProduction
+      ? {
+          label: 'Выпуск',
+          initialQty: order.outputQty,
+          save: (qty: number) => order.setOutputQty(qty),
+          notification: 'Выпуск установлен'
+        }
+      : {
+          label: 'Кол-во',
+          initialQty: order.qty,
+          save: (qty: number) => order.setQty(qty),
+          notification: 'Кол-во установлено'
+        }
+
+    const [qty, setQty] = useState<number | undefined>(mode.initialQty)
+
+    const isUnchanged = qty === mode.initialQty
+
+    const handleSave = async () => {
+      if (qty == null) return
+      await rpc.pdo.orders.update_qty.mutate({
+        id: order.id,
+        qty
+      })
+      mode.save(qty)
+      notifier.notify('info', mode.notification)
+    }
+
+    if (isCollected) {
       return (
         <Row gap={1}>
           <Label label="Кол-во" />
-          <P>{order.qty}</P>
+          <P>{order.outputQty ?? order.qty}</P>
         </Row>
       )
     }
@@ -358,32 +387,31 @@ const QuantityInput = observer(
         <Stack>
           {recBatchSize && (
             <P level="body-xs" color="primary">
-              Реком. размер партии - {recBatchSize} шт
+              Реком. размер партии — {recBatchSize} шт
             </P>
           )}
-          <Row alignItems={'end'}>
+
+          {isProduction && (
+            <P level="body-xs" color="neutral">
+              Заказано — {order.qty} шт
+            </P>
+          )}
+
+          <Row alignItems="end">
             <NumberInput
+              label={mode.label}
               size="sm"
               sx={{ maxWidth: 80 }}
               value={qty}
               variant="outlined"
-              onChange={v => {
-                setQty(v)
-              }}
+              onChange={setQty}
             />
+
             <SaveIconButton
               size="sm"
-              disabled={qty == null}
               variant="soft"
-              onClick={async () => {
-                if (qty == null) throw Error('Кол-во не задано')
-                await rpc.pdo.orders.update_qty.mutate({
-                  orderId: order.id,
-                  qty
-                })
-                order.setQty(qty)
-                notifier.notify('info', 'Кол-во установлено')
-              }}
+              disabled={qty == null || isUnchanged}
+              onClick={handleSave}
             />
           </Row>
         </Stack>

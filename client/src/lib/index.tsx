@@ -99,7 +99,7 @@ export function InputWithUnit(
     <FormControl
       sx={{ width: props.fullWidth ? '-webkit-fill-available' : 'auto' }}
     >
-      <Label label={props.label} />
+      <Label xs label={props.label} />
       <Input autoComplete={'off'} {...props} endDecorator={props.unit} />
     </FormControl>
   )

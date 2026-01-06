@@ -29,6 +29,7 @@ export class OrderSt {
   setOrder(order: ManufacturingOrderOutput) {
     this.resp = order
     this.qty = order.qty
+    this.outputQty = order.output_qty ?? undefined
     this.currentOperation = order.current_operation
     this.orderAlreadyInProductionModal = null
   }
@@ -36,6 +37,10 @@ export class OrderSt {
   qty?: number
   setQty(qty: number) {
     this.qty = qty
+  }
+  outputQty?: number
+  setOutputQty(qty: number) {
+    this.outputQty = qty
   }
 
   currentOperation: number | null = null

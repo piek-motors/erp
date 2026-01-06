@@ -69,6 +69,10 @@ async function updateOperationNames(db: KDB) {
 
   await Promise.all(promises)
   console.log(`Updated ${promises.length} details`)
+  await db
+    .deleteFrom('pdo.dict_operation_kinds')
+    .where('id', '=', old_op_id)
+    .execute()
 }
 
 main()

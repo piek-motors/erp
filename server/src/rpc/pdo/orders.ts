@@ -1,4 +1,4 @@
-import { db, procedure, requireScope, TRPCError } from '#root/deps.js'
+import { DB, db, procedure, requireScope, TRPCError } from '#root/deps.js'
 import { Day, Scope } from '#root/lib/constants.js'
 import { matrixEncoder } from '#root/lib/matrix_encoder.js'
 import { formatDate, timedeltaInSeconds } from '#root/lib/time.js'
@@ -67,16 +67,33 @@ export const orders = router({
     .use(requireScope(Scope.pdo))
     .input(
       z.object({
-        orderId: z.number(),
+        id: z.number(),
         qty: z.number()
       })
     )
-    .mutation(async ({ input }) => {
+    .mutation(async ({ input: { qty, id } }) => {
       return db.transaction().execute(async trx => {
+        const { status } = await db
+          .selectFrom('pdo.orders')
+          .select('status')
+          .where('id', '=', id)
+          .executeTakeFirstOrThrow()
+
+        const update: Partial<
+          Pick<DB.ProductionOrderTable, 'qty' | 'output_qty'>
+        > = {}
+
+        if (OrderStatus.Production === status) {
+          update.output_qty = qty
+        } else {
+          update.qty = qty
+          update.output_qty = qty
+        }
+
         await trx
           .updateTable('pdo.orders')
-          .set({ qty: input.qty })
-          .where('id', '=', input.orderId)
+          .set(update)
+          .where('id', '=', id)
           .execute()
         return {
           success: true
