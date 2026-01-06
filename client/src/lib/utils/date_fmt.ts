@@ -14,7 +14,7 @@ export function timeDeltaDays(t?: string | null) {
 
   const hours = Math.floor(diffMs / (1000 * 60 * 60))
   if (hours <= 24) {
-    return null
+    return `< дн.`
   }
 
   const rtf = new Intl.RelativeTimeFormat('ru', {

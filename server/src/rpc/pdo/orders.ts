@@ -227,14 +227,16 @@ export const orders = router({
 
     const result = [...inProduction, ...finished].map(o => {
       const current_op_id =
-        o.current_operation && o.processing_route?.steps.at(o.current_operation)
+        o.current_operation != null
+          ? o.processing_route?.steps.at(o.current_operation)
+          : null
       return {
         ...o,
-        current_operation: current_op_id && operationsMap[current_op_id],
+        current_operation:
+          current_op_id != null && operationsMap[current_op_id],
         created_at: formatDate(o.created_at),
         started_at: formatDate(o.started_at),
         finished_at: formatDate(o.finished_at),
-
         time_delta:
           o.finished_at && o.started_at
             ? timedeltaInSeconds(o.finished_at, o.started_at)
