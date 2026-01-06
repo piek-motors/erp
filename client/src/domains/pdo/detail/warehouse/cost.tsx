@@ -14,8 +14,8 @@ import {
   UseIcon
 } from 'lib/index'
 import { uiUnit, Unit } from 'models'
-import { MaterialSelect } from '../components'
 import { DetailSt } from '../detail.state'
+import { MaterialSelect } from '../inputs'
 import { DetailSelectModal } from '../list/list'
 import { DetailName } from '../name'
 

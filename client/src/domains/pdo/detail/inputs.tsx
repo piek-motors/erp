@@ -1,11 +1,20 @@
 /** @jsxImportSource @emotion/react */
-import { AccordionGroup, Sheet, Stack, TypographySystem } from '@mui/joy'
+import {
+  AccordionGroup,
+  Button,
+  Sheet,
+  Stack,
+  TypographySystem
+} from '@mui/joy'
 import { AccordionCard } from 'components/accordion_card'
 import { ArrayJsonEditor } from 'components/array-json-editor'
 import { BaseAutocomplete, BaseOption } from 'components/base-autocomplete'
+import { dictManager } from 'components/dict_manager'
+import { HoverReveal } from 'components/hidden_button'
 import { NumberInput } from 'components/inputs/number_input'
 import { TextEditor } from 'domains/orders/one/comments/text-editor'
 import { cache } from 'domains/pdo/cache/root'
+import { rpc } from 'lib/deps'
 import {
   Box,
   InputLabled,
@@ -21,7 +30,7 @@ import {
 import { MetalPageTitle } from '../shared'
 import { MaterialAutocomplete } from '../shared/material_autocomplete'
 import { DetailAttachmentList } from './attachment/list'
-import { BlankSpec, DetailSt, DetailStProp, Operation } from './detail.state'
+import { BlankSpec, DetailSt, DetailStProp } from './detail.state'
 import { AutomaticWriteoffAccordion } from './warehouse/cost'
 import { MaterialCost } from './warehouse/cost.store'
 
@@ -30,9 +39,11 @@ export const DetailInputs = observer(({ detail: d }: DetailStProp) => (
     <Box sx={{ flexGrow: 1.5 }}>
       <MetalPageTitle
         t={
-          <P level="body-sm" whiteSpace={'nowrap'}>
-            Деталь № {d.id}
-          </P>
+          Boolean(d.id) && (
+            <P level="body-sm" whiteSpace={'nowrap'}>
+              Деталь № {d.id}
+            </P>
+          )
         }
       />
       <MultilineInput
@@ -188,48 +199,43 @@ const BlankSpecInput = observer(({ detail }: { detail: DetailSt }) => (
   </AccordionCard>
 ))
 
-const ProcessingOperationAutocomplete = observer(
-  (props: { operation: Operation }) => {
-    const { operation: op } = props
-    return (
-      <BaseAutocomplete
-        width={'100%'}
-        variant="plain"
-        options={cache.details.dictProcessingOperaions.map(e => ({
-          label: e,
-          value: e
-        }))}
-        value={{
-          value: op.name,
-          label: op.name
-        }}
-        onChange={newValue => {
-          if (newValue && !Array.isArray(newValue)) {
-            op.setName(newValue.value)
-          } else {
-            op.setName('')
-          }
-        }}
-        placeholder="Такая-то обработка"
-        size="sm"
-        freeSolo
-        loading={!!cache.details.dictProcessingOperaions.length}
-      />
-    )
-  }
-)
-
 const ProcessingRouteAccordion = observer(
   ({ detail }: { detail: DetailSt }) => {
+    const dict = rpc.pdo.dict.operation_kinds
     return (
       <AccordionCard title="Маршрут" defaultExpanded>
-        <Stack gap={0.5}>
+        <Stack>
           {detail.processingRoute.steps.map((op, idx) => (
-            <Row>
+            <HoverReveal
+              key={op.id}
+              alignSelf={'start'}
+              hiddenComp={
+                <MinusIcon onClick={() => detail.processingRoute.remove(idx)} />
+              }
+            >
               <Label>{idx + 1}</Label>
-              <ProcessingOperationAutocomplete key={idx} operation={op} />
-              <MinusIcon onClick={() => detail.processingRoute.remove(idx)} />
-            </Row>
+              <Button
+                variant="plain"
+                color="neutral"
+                sx={{ fontWeight: 'normal' }}
+                onClick={() =>
+                  dictManager.open({
+                    ls: () =>
+                      dict.ls.query().then(res => {
+                        cache.details.setDictProcessingOperations(res)
+                        return res
+                      }),
+                    add: operation => dict.add.mutate({ v: operation }),
+                    rm: id => dict.rm.mutate({ id }),
+                    onClick: operation => {
+                      op.setId(operation.id)
+                    }
+                  })
+                }
+              >
+                {op.name || 'Выбрать'}
+              </Button>
+            </HoverReveal>
           ))}
           <PlusIcon onClick={() => detail.processingRoute.addEmpty()} />
         </Stack>

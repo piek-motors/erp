@@ -7,7 +7,7 @@ import { observer } from 'mobx-react-lite'
 import { tableStyles } from './shared'
 
 type Props = {
-  data: Operation[]
+  operations: Operation[]
 }
 
 const qtyInpW = 50
@@ -20,7 +20,7 @@ export const ProductionRoute = observer(({ detail }: DetailStProp) => {
   return (
     <Stack>
       <Label label="Маршрут" level="body-xs" />
-      <DetailProductionRouteTable data={steps} />
+      <DetailProductionRouteTable operations={steps} />
     </Stack>
   )
 })
@@ -47,7 +47,7 @@ const DetailProductionRouteTable = observer((props: Props) => (
       </tr>
     </thead>
     <tbody>
-      {props.data.map((step, i) => (
+      {props.operations.map((operation, i) => (
         <tr
           key={i}
           css={css({
@@ -57,7 +57,7 @@ const DetailProductionRouteTable = observer((props: Props) => (
           })}
         >
           <td width={'1%'}>{i + 1}</td>
-          <td width={'1%'}>{step.name}</td>
+          <td width={'1%'}>{operation.name}</td>
           <td width={150} />
           <td width={qtyInpW} />
           <td width={dateW} />

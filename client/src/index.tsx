@@ -1,5 +1,6 @@
 import '@fontsource/inter'
 import { CssBaseline, ThemeProvider } from '@mui/joy'
+import { DictManagerModal } from 'components/dict_manager'
 import { observer } from 'mobx-react-lite'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router'
@@ -12,6 +13,7 @@ const App = observer(() => {
   return (
     <>
       <NotifierOverlay />
+      <DictManagerModal />
       <NetworkStatusMessage />
       <AppRouter />
     </>

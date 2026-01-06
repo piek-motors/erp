@@ -18,19 +18,19 @@ export class ManufacturingListStore {
 
   async load() {
     this.async.run(async () => {
-      const encodedOrders = await rpc.pdo.manufacturing.list.query()
+      const encodedOrders = await rpc.pdo.orders.list.query()
       const orders = matrixDecoder<ListOrdersOutput>(encodedOrders)
       this.setOrders(orders)
     })
   }
 
   async finishManufacturing(id: number) {
-    await rpc.pdo.manufacturing.finish.mutate({ id })
+    await rpc.pdo.orders.finish.mutate({ id })
     this.load()
   }
 
   async deleteOrder(id: number) {
-    await rpc.pdo.manufacturing.delete.mutate({ id })
+    await rpc.pdo.orders.delete.mutate({ id })
     this.load()
   }
 }

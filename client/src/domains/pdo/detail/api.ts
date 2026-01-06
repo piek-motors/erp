@@ -13,7 +13,7 @@ export class DetailApi {
     makeAutoObservable(this)
   }
 
-  async loadFull(detailId: number) {
+  async get(detailId: number) {
     return this.loader.run(async () => {
       const detail = new DetailSt()
       const res = await rpc.pdo.details.get.query({ id: detailId })
@@ -46,7 +46,7 @@ export class DetailApi {
   }
 
   async createManufacturingOrder(id: number) {
-    return rpc.pdo.manufacturing.create.mutate({
+    return rpc.pdo.orders.create.mutate({
       detailId: id
     })
   }

@@ -26,12 +26,7 @@ const ErrDetailPartCodeUnique = new TRPCError({
 })
 
 const processingRouteSchema = z.object({
-  steps: z.array(
-    z.object({
-      name: z.string(),
-      dur: z.number().nullish()
-    })
-  )
+  steps: z.array(z.number())
 })
 
 const blankSpecSchema = z.object({
@@ -250,28 +245,6 @@ export const details = router({
             .then(({ stock }) => ({ stock }))
         )
     ),
-  //
-  dict_processing_operations: procedure.query(async () => {
-    const details = await db
-      .selectFrom('pdo.details')
-      .select(['processing_route'])
-      .where('processing_route', 'is not', null)
-      .execute()
-    const operations = new Set<string>()
-    for (const detail of details) {
-      const route = detail.processing_route
-      if (route?.steps) {
-        for (const step of route.steps) {
-          const name = step.name.trim()
-          if (name.length === 0) continue
-          operations.add(name)
-        }
-      }
-    }
-    const result = Array.from(operations)
-    result.sort()
-    return result
-  }),
   //
   filter_by_material: procedure
     .input(z.object({ material_id: z.number() }))

@@ -41,6 +41,7 @@ export namespace DB {
     ['attendance.employees']: AttendanceEmployeeTable
     ['attendance.employee_absences']: AttendanceEmployeeAbsenceTable
 
+    ['pdo.dict_operation_kinds']: Dict<string>
     ['pdo.materials']: MaterialTable
     ['pdo.materials_quarterly_spending']: MaterialQuarterlySpendingTable
     ['pdo.details']: DetailTable
@@ -50,6 +51,11 @@ export namespace DB {
     ['pdo.detail_group']: DetailGroupTable
     ['pdo.detail_group_details']: DetailGroupDetailsTable
     ['pdo.detail_group_color_annotations']: DetailGroupColorAnnotationsTable
+  }
+
+  export interface Dict<V> {
+    id: GeneratedAlways<number>
+    v: V
   }
 
   export interface RefreshTokenTable {
@@ -141,10 +147,7 @@ export namespace DB {
   }
 
   export interface ProcessingRoute {
-    steps: {
-      name: string
-      dur?: number | null
-    }[]
+    steps: number[] // pdo.dict_operation_kinds
   }
 
   interface MetarialWiteoffData {

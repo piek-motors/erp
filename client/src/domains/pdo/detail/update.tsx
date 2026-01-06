@@ -16,8 +16,8 @@ import {
 import { fmtDate, fmtTimestamp } from 'lib/utils/date_fmt'
 import { CreateDetailOrder } from '../warehouse/create_order'
 import { api } from './api'
-import { DetailInputs } from './components'
 import { DetailSt, DetailStProp } from './detail.state'
+import { DetailInputs } from './inputs'
 import { DetailWarehouse } from './warehouse/ui'
 
 export const UpdateDetailPage = observer(() => {
@@ -28,7 +28,7 @@ export const UpdateDetailPage = observer(() => {
   const [detail, setDetail] = useState<DetailSt | null>(null)
 
   useEffect(() => {
-    api.loadFull(Number(id)).then(d => {
+    api.get(Number(id)).then(d => {
       setDetail(d)
     })
   }, [id])

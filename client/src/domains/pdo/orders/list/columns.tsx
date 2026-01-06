@@ -8,7 +8,7 @@ import { ListOrdersOutput } from 'srv/rpc/pdo/orders'
 const commonColumns: Column<ListOrdersOutput>[] = [
   {
     Header: '№',
-    accessor: m => <Label>{m.id}</Label>
+    accessor: m => <Label level="body-xs">{m.id}</Label>
   },
   {
     Header: 'Деталь',

@@ -19,8 +19,8 @@ export class ManufacturingApi {
     id: number
   ): Promise<{ detail: DetailSt; order: ManufacturingOrderOutput }> {
     return this.loader.run(async () => {
-      const order = await rpc.pdo.manufacturing.get.query({ id })
-      const detail = await this.detailApi.loadFull(order.detail_id)
+      const order = await rpc.pdo.orders.get.query({ id })
+      const detail = await this.detailApi.get(order.detail_id)
       return { detail, order }
     })
   }
@@ -32,7 +32,7 @@ export class ManufacturingApi {
 
   async startPreparation(order: OrderSt) {
     await this.loader.run(async () => {
-      await rpc.pdo.manufacturing.start_preparation.mutate({
+      await rpc.pdo.orders.start_preparation.mutate({
         orderId: order.id
       })
       await this.reload(order)
@@ -42,7 +42,7 @@ export class ManufacturingApi {
   async startProduction(order: OrderSt, force?: boolean) {
     await this.loader.run(async () => {
       try {
-        const writeoff = await rpc.pdo.manufacturing.start_production.mutate({
+        const writeoff = await rpc.pdo.orders.start_production.mutate({
           orderId: order.id,
           qty: order.qty!,
           force
@@ -83,7 +83,7 @@ export class ManufacturingApi {
 
   async setCurrentOperation(order: OrderSt, index: number) {
     if (!order.resp) throw new Error('Заказ не найден')
-    await rpc.pdo.manufacturing.set_current_operation.mutate({
+    await rpc.pdo.orders.set_current_operation.mutate({
       id: order.id,
       operation_index: index
     })
@@ -93,14 +93,14 @@ export class ManufacturingApi {
 
   async finish(order: OrderSt) {
     await this.loader.run(async () => {
-      await rpc.pdo.manufacturing.finish.mutate({ id: order.id })
+      await rpc.pdo.orders.finish.mutate({ id: order.id })
       await this.reload(order)
     })
   }
 
   async returnToProduction(order: OrderSt) {
     await this.loader.run(async () => {
-      await rpc.pdo.manufacturing.return_to_production.mutate({
+      await rpc.pdo.orders.return_to_production.mutate({
         id: order.id
       })
       await this.reload(order)
@@ -108,7 +108,7 @@ export class ManufacturingApi {
   }
 
   delete(id: ManufacturingOrderOutput['id']) {
-    return rpc.pdo.manufacturing.delete.mutate({ id })
+    return rpc.pdo.orders.delete.mutate({ id })
   }
 }
 

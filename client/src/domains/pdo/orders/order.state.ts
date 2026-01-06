@@ -1,8 +1,7 @@
 import { makeAutoObservable } from 'mobx'
 import { RouterOutput } from 'srv/lib/trpc'
 
-export type ManufacturingOrderOutput =
-  RouterOutput['pdo']['manufacturing']['get']
+export type ManufacturingOrderOutput = RouterOutput['pdo']['orders']['get']
 
 type OrderAlreadyInProductionModal = {
   manufacturingId: number

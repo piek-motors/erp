@@ -3,6 +3,7 @@ import { makeAutoObservable } from 'mobx'
 import { Unit } from 'models'
 import { RouterInput, RouterOutput } from 'srv/lib/trpc'
 import { SelectableDetail } from 'srv/rpc/pdo/details'
+import { cache } from '../cache/root'
 import { DetailAutomaticWriteoffStore } from './warehouse/auto_writeoff.store'
 import { DetailWarehouseStore } from './warehouse/store'
 
@@ -10,17 +11,20 @@ type DetailResponse = RouterOutput['pdo']['details']['get']['detail']
 type UpdateDetailRequest = RouterInput['pdo']['details']['update']
 
 export class Operation {
-  name: string = ''
-  setName(n: string) {
-    this.name = n
+  id: number | null
+  setId(id: number | null) {
+    this.id = id
   }
-  dur?: number | null
-  constructor() {
+  constructor(id: number | null) {
     makeAutoObservable(this)
+    this.id = id
   }
-  reset() {
-    this.name = ''
-    this.dur = 0
+  get name(): string {
+    if (!this.id) return ''
+    const name = cache.details.dictProcessingOperaions.find(
+      each => each.id === this.id
+    )?.v
+    return name ?? 'Cannot load name for operation'
   }
 }
 
@@ -33,7 +37,7 @@ class ProcessingRoute {
     makeAutoObservable(this)
   }
   addEmpty() {
-    this.steps = [...this.steps, new Operation()]
+    this.steps = [...this.steps, new Operation(null)]
   }
   remove(idx: number) {
     if (idx < 0 || idx >= this.steps.length) return
@@ -147,12 +151,9 @@ export class DetailSt {
     this.setUpdatedAt(d.updated_at ? new Date(d.updated_at) : undefined)
     this.processingRoute.init(
       d.processing_route && d.processing_route.steps
-        ? d.processing_route.steps.map(s => {
-            const step = new Operation()
-            step.name = s.name
-            step.dur = s.dur
-            return step
-          })
+        ? d.processing_route.steps.map(
+            operation_id => new Operation(operation_id)
+          )
         : []
     )
     this.setDrawingName(d.drawing_name ?? '')
@@ -200,11 +201,7 @@ export class DetailSt {
       recommendedBatchSize: Number(this.recommendedBatchSize) ?? null,
       processingRoute: this.processingRoute
         ? {
-            steps:
-              this.processingRoute.steps?.map(s => ({
-                name: s.name?.trim(),
-                dur: s.dur ? +s.dur : null
-              })) ?? null
+            steps: this.processingRoute.steps.map(s => s.id!) ?? null
           }
         : null,
       drawingName: this.drawingName ?? null,

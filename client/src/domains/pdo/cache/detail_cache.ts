@@ -8,6 +8,11 @@ const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
 
 const alphabet = 'АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ'.split('')
 
+type Operation = {
+  id: number
+  v: string
+}
+
 export class DetailCache {
   constructor() {
     makeAutoObservable(this)
@@ -53,8 +58,9 @@ export class DetailCache {
   count() {
     return this._details.length
   }
-  dictProcessingOperaions: string[] = []
-  setDictProcessingOperations(v: string[]) {
+
+  dictProcessingOperaions: Operation[] = []
+  setDictProcessingOperations(v: Operation[]) {
     this.dictProcessingOperaions = v
   }
 
@@ -65,8 +71,7 @@ export class DetailCache {
     )
     this.setDetails(details)
 
-    const operationsDict =
-      await rpc.pdo.details.dict_processing_operations.query()
+    const operationsDict = await rpc.pdo.dict.operation_kinds.ls.query()
     this.setDictProcessingOperations(operationsDict)
   }
 }

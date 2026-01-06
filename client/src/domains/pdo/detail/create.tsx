@@ -8,8 +8,8 @@ import {
 } from 'lib/index'
 import { openPage, routeMap } from 'lib/routes'
 import { api } from './api'
-import { DetailInputs } from './components'
 import { DetailSt } from './detail.state'
+import { DetailInputs } from './inputs'
 
 export const CreateDetailPage = observer(() => {
   const [detail, setDetail] = useState(() => new DetailSt())

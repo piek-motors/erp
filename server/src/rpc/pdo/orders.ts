@@ -217,9 +217,6 @@ export const orders = router({
     ])
     const result = [...inProduction, ...finished].map(o => ({
       ...o,
-      current_operation:
-        o.current_operation != null &&
-        o.processing_route?.steps.at(o.current_operation)?.name,
       created_at: formatDate(o.created_at),
       started_at: formatDate(o.started_at),
       finished_at: formatDate(o.finished_at),

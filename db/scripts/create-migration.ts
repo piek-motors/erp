@@ -10,7 +10,7 @@ const timestamp = new Date()
 const migrationName = process.argv[2]
 
 if (!migrationName) {
-  console.error('Please provide a migration name')
+  console.error('Expects argument [name] at first position')
   process.exit(1)
 }
 

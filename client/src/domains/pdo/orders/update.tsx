@@ -32,8 +32,8 @@ import {
   uiUnit
 } from 'models'
 import { cache } from '../cache/root'
-import { TechParamsDisplay } from '../detail/components'
 import { BlankSpec, DetailSt, DetailStProp } from '../detail/detail.state'
+import { TechParamsDisplay } from '../detail/inputs'
 import { MaterialCost } from '../detail/warehouse/cost.store'
 import { api } from './api'
 import { OrderSt, OrderStProp } from './order.state'
@@ -377,7 +377,7 @@ const QuantityInput = observer(
               variant="soft"
               onClick={async () => {
                 if (qty == null) throw Error('Кол-во не задано')
-                await rpc.pdo.manufacturing.update_qty.mutate({
+                await rpc.pdo.orders.update_qty.mutate({
                   orderId: order.id,
                   qty
                 })
