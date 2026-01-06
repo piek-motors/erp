@@ -2,6 +2,7 @@ import { Tab, TabList, TabPanel, Tabs } from '@mui/joy'
 import { ScrollableWindow, Search } from 'components/inputs'
 import { Table } from 'components/table.impl'
 import { TabConfig } from 'components/tabs'
+import { cache } from 'domains/pdo/cache/root'
 import { MobileNavModal } from 'domains/pdo/root_layout'
 import { observer } from 'lib/deps'
 import {
@@ -89,12 +90,15 @@ export const ManufacturingList = observer(() => {
   }
   const [query, setQuery] = useState('')
   const q = query.trim().toLowerCase()
+
   const filtered = q
-    ? s.orders.filter(o => {
-        const idMatch = String(o.id).includes(q)
-        const nameMatch = o.detail_name?.toLowerCase().includes(q)
-        const groupMatch = String(o.group_id || '').includes(q)
-        return idMatch || nameMatch || groupMatch
+    ? s.orders.filter(order => {
+        const id_match = String(order.id).includes(q)
+        const name_match = order.detail_name?.toLowerCase().includes(q)
+        const group_match = String(
+          cache.detailGroups.getGroupName(order.group_id)?.toLowerCase() || ''
+        ).includes(q)
+        return id_match || name_match || group_match
       })
     : s.orders
 
