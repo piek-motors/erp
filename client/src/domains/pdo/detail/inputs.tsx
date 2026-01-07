@@ -1,11 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import {
-  AccordionGroup,
-  Button,
-  Sheet,
-  Stack,
-  TypographySystem
-} from '@mui/joy'
+import { AccordionGroup, Button, Grid, Stack, TypographySystem } from '@mui/joy'
 import { AccordionCard } from 'components/accordion_card'
 import { ArrayJsonEditor } from 'components/array-json-editor'
 import { BaseAutocomplete, BaseOption } from 'components/base-autocomplete'
@@ -35,8 +29,8 @@ import { AutomaticWriteoffAccordion } from './warehouse/cost'
 import { MaterialCost } from './warehouse/cost.store'
 
 export const DetailInputs = observer(({ detail: d }: DetailStProp) => (
-  <Stack pr={{ xs: 0, md: 4 }} direction={{ xs: 'column', md: 'row' }} gap={1}>
-    <Box sx={{ flexGrow: 1.5 }}>
+  <Grid container direction={{ xs: 'column', md: 'row' }} spacing={1}>
+    <Grid xs={7}>
       <MetalPageTitle
         t={
           Boolean(d.id) && (
@@ -79,20 +73,20 @@ export const DetailInputs = observer(({ detail: d }: DetailStProp) => (
         <DetailRecommendedBatchSizeInput detail={d} />
       </Row>
       <DetailDescriptionInput detail={d} />
-    </Box>
-    <DetailAccordionGroup d={d} />
-  </Stack>
+    </Grid>
+    <Grid xs={5}>
+      <DetailAccordionGroup d={d} />
+    </Grid>
+  </Grid>
 ))
 
 export const DetailAccordionGroup = observer(({ d }: { d: DetailSt }) => (
-  <Sheet>
-    <AccordionGroup>
-      <DetailAttachmentInput detail={d} />
-      <BlankSpecInput detail={d} />
-      <ProcessingRouteAccordion detail={d} />
-      <AutomaticWriteoffAccordion detail={d} />
-    </AccordionGroup>
-  </Sheet>
+  <AccordionGroup>
+    <DetailAttachmentInput detail={d} />
+    <BlankSpecInput detail={d} />
+    <ProcessingRouteAccordion detail={d} />
+    <AutomaticWriteoffAccordion detail={d} />
+  </AccordionGroup>
 ))
 
 export const MaterialSelect = observer(
@@ -217,7 +211,7 @@ const ProcessingRouteAccordion = observer(
               <Button
                 variant="plain"
                 color="neutral"
-                sx={{ fontWeight: 'normal' }}
+                sx={{ fontWeight: 'normal', textAlign: 'left' }}
                 onClick={() =>
                   dictManager.open({
                     ls: () =>
