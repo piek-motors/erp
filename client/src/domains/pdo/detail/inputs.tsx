@@ -30,7 +30,7 @@ import { MaterialCost } from './warehouse/cost.store'
 
 export const DetailInputs = observer(({ detail: d }: DetailStProp) => (
   <Grid container direction={{ xs: 'column', md: 'row' }} spacing={1}>
-    <Grid xs={7}>
+    <Grid xs={12} md={7}>
       <MetalPageTitle
         t={
           Boolean(d.id) && (
@@ -74,7 +74,7 @@ export const DetailInputs = observer(({ detail: d }: DetailStProp) => (
       </Row>
       <DetailDescriptionInput detail={d} />
     </Grid>
-    <Grid xs={5}>
+    <Grid xs={12} md={5}>
       <DetailAccordionGroup d={d} />
     </Grid>
   </Grid>
