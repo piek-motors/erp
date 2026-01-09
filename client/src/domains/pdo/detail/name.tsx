@@ -46,7 +46,7 @@ const GroupName = observer(({ groupId }: { groupId: number | null }) => {
   return (
     <P
       color="primary"
-      sx={{ cursor: 'pointer', fontSize: '0.9em', fontWeight: 'normal' }}
+      sx={{ cursor: 'pointer', fontSize: '0.9em', fontWeight: '500' }}
     >
       {groupName?.toLowerCase() || ''}
     </P>

@@ -62,10 +62,27 @@ export class DetailList {
     this.searchStore.setIsSearching(true)
     // Handle built-in filters first (keyword, id)
     if (filters.keyword) {
-      const keyword = filters.keyword.toLowerCase()
-      return details.filter(detail =>
-        detail.name.toLowerCase().includes(keyword)
-      )
+      const tokens = filters.keyword.toLowerCase().split(/\s+/).filter(Boolean)
+      return details
+        .map(detail => {
+          const name = detail.name.toLowerCase()
+          const group = (
+            cache.detailGroups.getGroupName(detail.groupId) ?? ''
+          ).toLowerCase()
+
+          let score = 0
+
+          for (const token of tokens) {
+            if (name.includes(token)) score += 3
+            else if (group.includes(token)) score += 1
+            else return null
+          }
+
+          return { detail, score }
+        })
+        .filter(Boolean)
+        .sort((a, b) => b!.score - a!.score)
+        .map(item => item!.detail)
     }
 
     if (filters.id) {

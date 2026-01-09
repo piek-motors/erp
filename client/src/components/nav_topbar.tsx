@@ -30,7 +30,7 @@ export function NavTopBar(props: Props) {
         <Link to={routeMap.index}>
           <IconButton
             variant="outlined"
-            size="sm"
+            size="md"
             sx={{
               background: isDev ? 'red' : undefined
             }}
@@ -44,7 +44,7 @@ export function NavTopBar(props: Props) {
       {props.homeUrl && (
         <MobileOnly>
           <Link to={props.homeUrl}>
-            <IconButton variant="soft" size="sm">
+            <IconButton variant="soft" size="md">
               <UseIcon icon={UilHome} />
             </IconButton>
           </Link>
