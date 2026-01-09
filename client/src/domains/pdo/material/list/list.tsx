@@ -76,7 +76,7 @@ const ShapeFilter = observer(() => {
       variant="soft"
       color="primary"
       value={value}
-      sx={{ overflow: 'hidden' }}
+      sx={{ overflow: 'scroll' }}
       onChange={(_, value) => {
         if (value == null) {
           materialListStore.setFilterShape()
