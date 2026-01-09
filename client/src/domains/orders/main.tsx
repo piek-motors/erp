@@ -6,14 +6,14 @@ import { OrderTypeFilter } from 'components/order-type-filter'
 import { TabConfig, Tabs } from 'components/tabs'
 import { useFilter } from 'hooks'
 import { SxProperty } from 'lib/constants'
-import { AddResourceButton, P } from 'lib/index'
+import { AddResourceButton, Label } from 'lib/index'
 import { routeMap } from 'lib/routes'
 import { RouteConfig } from 'lib/types/global'
 import { formatOnlyDate } from 'lib/utils/date_fmt'
 import { observer } from 'mobx-react-lite'
 import { OrderStatus } from 'models'
 import moment from 'moment'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router'
 import { ordersApi, UnpackedOrder } from './api'
 import { columns, OrdersTable, withActualShippingDate } from './columns'
@@ -91,39 +91,43 @@ const RegistrationList = observer(() => {
   )
 })
 
-const NewOrderList = observer(() => {
+const NewOrderList = observer(({ daysCount = 5 }: { daysCount?: number }) => {
   const [orders, setOrders] = useState<UnpackedOrder[]>([])
+
   useEffect(() => {
     ordersApi.loadOrders(OrderStatus.InProduction).then(setOrders)
   }, [])
 
-  const { todayDate, yesterdayDate } = useMemo(() => {
-    const today = moment()
-    const yesterday = moment().subtract(1, 'day')
+  const lastNDates = Array.from({ length: daysCount }, (_, i) => {
+    const date = moment().subtract(i, 'day')
     return {
-      todayDate: formatOnlyDate(today.toISOString()),
-      yesterdayDate: formatOnlyDate(yesterday.toISOString())
+      key: formatOnlyDate(date.toISOString()) as string,
+      label: i === 0 ? 'Сегодня' : i === 1 ? 'Вчера' : date.format('D MMM')
     }
-  }, [])
+  })
 
-  const { ordersByToday, ordersByYesterday } = useMemo(() => {
-    return {
-      ordersByToday: orders.filter(
-        each => formatOnlyDate(each.acceptance_date) === todayDate
-      ),
-      ordersByYesterday: orders.filter(
-        each => formatOnlyDate(each.acceptance_date) === yesterdayDate
-      )
-    }
-  }, [orders, todayDate, yesterdayDate])
-
+  const ordersByDate = orders.reduce<Record<string, UnpackedOrder[]>>(
+    (acc, order) => {
+      const dateKey = formatOnlyDate(order.acceptance_date)
+      if (!dateKey) {
+        return acc
+      }
+      if (!acc[dateKey]) {
+        acc[dateKey] = []
+      }
+      acc[dateKey].push(order)
+      return acc
+    },
+    {}
+  )
   return (
     <>
-      <P>Сегодня</P>
-      <OrdersTable data={ordersByToday} />
-
-      <P>Вчера</P>
-      <OrdersTable data={ordersByYesterday} />
+      {lastNDates.map(({ key, label }) => (
+        <div key={key}>
+          <Label>{label}</Label>
+          <OrdersTable data={ordersByDate[key] ?? []} />
+        </div>
+      ))}
     </>
   )
 })
