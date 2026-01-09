@@ -312,9 +312,7 @@ export const ActionButton = observer(
 )
 
 export function Pre(props: { children: React.ReactNode }) {
-  return (
-    <pre style={{ whiteSpace: 'pre-wrap', margin: 0 }}>{props.children}</pre>
-  )
+  return <pre style={{ whiteSpace: 'nowrap', margin: 0 }}>{props.children}</pre>
 }
 
 export const text = {
