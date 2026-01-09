@@ -29,11 +29,13 @@ export const DetailsListPage = () => (
     static={
       <Stack>
         <MobileNavModal t={'Детали'} />
-        <SearchArguments />
+        <Box p={0.5}>
+          <SearchArguments />
+        </Box>
       </Stack>
     }
     scroll={
-      <Row alignItems="start" gap={0.5}>
+      <Row alignItems="start" gap={0.5} mb={2}>
         <AlphabetIndex sx={{ position: 'sticky', top: 0, zIndex: 1 }} />
         <Divider orientation="vertical" />
         <DetailsList sx={{ width: '100%' }} />

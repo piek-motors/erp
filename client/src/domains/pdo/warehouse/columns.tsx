@@ -32,35 +32,11 @@ export const columns: Column<Operation>[] = [
       const unit = data.material_id != null ? uiUnit(data.unit) : ''
       const sign = data.operation_type == OperationType.Supply ? '+' : '-'
       return (
-        <P whiteSpace={'nowrap'}>
+        <P whiteSpace={'nowrap'} level="body-xs">
           {sign} {data.qty} {unit}
         </P>
       )
     }
-  },
-  {
-    Header: 'Заказ',
-    accessor: data =>
-      data.manufacturing_order_id && (
-        <Link
-          to={openPage(routeMap.pdo.order.edit, data.manufacturing_order_id)}
-        >
-          <Button
-            variant="outlined"
-            size="sm"
-            color="neutral"
-            sx={{
-              fontWeight: 'normal',
-              fontSize: '0.7rem',
-              whiteSpace: 'nowrap',
-              p: 0.5
-            }}
-          >
-            №{data.manufacturing_order_id} {' ⇥ '}
-            {data.manufacturing_order_qty} шт.
-          </Button>
-        </Link>
-      )
   },
   {
     Header: 'Деталь',
@@ -80,6 +56,30 @@ export const columns: Column<Operation>[] = [
     }
   },
   {
+    Header: 'Заказ',
+    accessor: data =>
+      data.manufacturing_order_id && (
+        <Link
+          to={openPage(routeMap.pdo.order.edit, data.manufacturing_order_id)}
+        >
+          <Button
+            variant="soft"
+            size="sm"
+            color="neutral"
+            sx={{
+              fontWeight: 'normal',
+              fontSize: '0.7rem',
+              whiteSpace: 'nowrap',
+              p: 0.5
+            }}
+          >
+            №{data.manufacturing_order_id} {' ⇥ '}
+            {data.manufacturing_order_qty} шт.
+          </Button>
+        </Link>
+      )
+  },
+  {
     Header: 'Тип операции',
     accessor: data => {
       const isSupply = Number(data.operation_type) === OperationType.Supply
@@ -88,9 +88,5 @@ export const columns: Column<Operation>[] = [
         : uiWriteoffReason(data?.reason as WriteoffReason)
       return <Label xs>{op}</Label>
     }
-  },
-  {
-    Header: '№',
-    accessor: o => <Label xs>{o.id}</Label>
   }
 ]

@@ -125,7 +125,7 @@ const DetailDescriptionInput = observer(({ detail }: { detail: DetailSt }) => (
 const DetailRecommendedBatchSizeInput = observer(
   ({ detail }: { detail: DetailSt }) => (
     <NumberInput
-      label="Рекомендуемый размер партии"
+      label="Рекоменд. размер партии"
       value={detail.recommendedBatchSize}
       onChange={v => {
         detail.setRecommendedBatchSize(v)

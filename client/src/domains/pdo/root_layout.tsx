@@ -30,7 +30,7 @@ export const MobileNavModal = (props: { t?: string }) => {
           variant="soft"
           color="primary"
           onClick={() => setOpen(true)}
-          size="sm"
+          size="md"
         >
           <UseIcon icon={UilBars} />
         </IconButton>

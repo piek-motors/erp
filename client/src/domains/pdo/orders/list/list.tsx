@@ -30,13 +30,13 @@ const getTabConfig = (
     label: 'Подготовка',
     component: (
       <Stack>
-        <Label>Подготовка</Label>
+        <Label px={1}>Подготовка</Label>
         <Table
           onRowClick={onRowClick}
           data={data.filter(e => e.status == OrderStatus.Preparation)}
           columns={getColumns(OrderStatus.Preparation)}
         />
-        <Label>Ожидание</Label>
+        <Label px={1}>Ожидание</Label>
         <Table
           onRowClick={onRowClick}
           data={data.filter(e => e.status == OrderStatus.Waiting)}
@@ -50,9 +50,8 @@ const getTabConfig = (
     label: 'Производство',
     component: (
       <>
-        <Label level="body-xs" color="neutral">
+        <Label xs px={1}>
           {data.filter(e => e.status == OrderStatus.Production).length} заказов
-          в производстве
         </Label>
         <Table
           onRowClick={onRowClick}
@@ -67,7 +66,9 @@ const getTabConfig = (
     label: 'Завершенные',
     component: (
       <>
-        <Label level="body-xs">За последние 14 дней</Label>
+        <Label xs px={1}>
+          За последние 14 дней
+        </Label>
         <Table
           onRowClick={onRowClick}
           data={data.filter(e => e.status == OrderStatus.Collected)}
@@ -106,8 +107,7 @@ export const ManufacturingList = observer(() => {
   const tabs = getTabConfig(filtered, onRowClick)
   return (
     <Tabs
-      variant="outlined"
-      color="primary"
+      variant="plain"
       value={tab}
       onChange={(_, v) => setTab(v as OrderStatus)}
       size="sm"
@@ -142,9 +142,9 @@ export const ManufacturingList = observer(() => {
           </Stack>
         }
         scroll={
-          <Stack gap={0} pt={0}>
+          <Stack gap={0} pt={0} sx={{ mb: 2 }}>
             {tabs.map(({ value, component }) => (
-              <TabPanel key={value} value={value}>
+              <TabPanel key={value} value={value} sx={{ p: 0 }}>
                 {component}
               </TabPanel>
             ))}

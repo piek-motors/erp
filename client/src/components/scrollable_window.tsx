@@ -36,8 +36,7 @@ export const ScrollableWindow = (props: {
     minHeight: 0,
     minWidth: 0,
     width: '100%',
-    scrollbarGutter: 'stable both-edges',
-    overscrollBehavior: 'contain',
+    overscrollBehavior: 'auto',
     WebkitOverflowScrolling: 'touch',
     ...props.scrollSx
   } as SxProps

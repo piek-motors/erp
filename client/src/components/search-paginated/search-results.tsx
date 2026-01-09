@@ -46,9 +46,8 @@ export const SearchResults = observer(
               onClick={() => store.loadMore()}
               disabled={store.isSearching}
             >
-              {loadMoreText} (
-              {store.searchResult.length - store.displayedResults.length}{' '}
-              осталось)
+              {loadMoreText}{' '}
+              {store.searchResult.length - store.displayedResults.length}
             </Button>
           </Box>
         )}

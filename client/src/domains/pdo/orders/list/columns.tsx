@@ -62,7 +62,13 @@ const productionColumns = commonColumns.concat([
     accessor: m => {
       const timedelta = timeDeltaDays(m.current_operation_start_at)
       return (
-        <>{timedelta && <P level="body-xs">{timedelta.replace('-', '')}</P>}</>
+        <>
+          {timedelta && (
+            <P level="body-xs" noWrap>
+              {timedelta.replace('-', '')}
+            </P>
+          )}
+        </>
       )
     }
   }

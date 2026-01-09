@@ -59,7 +59,7 @@ export const Label = (
   const level = props.xs ? 'body-xs' : 'body-sm'
   return (
     Boolean(props.label || props.children) && (
-      <Typography level={level} sx={{ p: 0, m: 0 }} {...props}>
+      <Typography level={level} {...props}>
         {props.label || props.children}
       </Typography>
     )
@@ -99,7 +99,7 @@ export function InputWithUnit(
     <FormControl
       sx={{ width: props.fullWidth ? '-webkit-fill-available' : 'auto' }}
     >
-      <Label xs label={props.label} />
+      <Label label={props.label} />
       <Input autoComplete={'off'} {...props} endDecorator={props.unit} />
     </FormControl>
   )
