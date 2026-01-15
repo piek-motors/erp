@@ -14,6 +14,8 @@ import {
 } from 'lib/index'
 import { openPage, routeMap } from 'lib/routes'
 import { notifier } from 'lib/store/notifier.store'
+import { fmtDate } from 'lib/utils/date_fmt'
+import { uiUnit } from 'models'
 import { SaveAndDelete } from '../shared/basic'
 import { api } from './api'
 import { DetailsMadeOfMaterialModal } from './details_made_of_that_material'
@@ -92,12 +94,34 @@ export const MaterialStatBarChart = observer(({ m }: { m: MaterialState }) => {
   return (
     <Box>
       <BarChart
-        xAxis={[
+        borderRadius={2}
+        series={[
           {
-            data: m.writeoffStat?.map(([month]) => month)
+            data: m.writeoffStat?.map(([_, val]) => val),
+            label: 'Совокупный расход'
           }
         ]}
-        series={[{ data: m.writeoffStat?.map(([_, val]) => val) }]}
+        xAxis={[
+          {
+            data: m.writeoffStat?.map(([d]) => {
+              const [year, month] = d.split('-')
+              return new Date(+year, +month)
+            }),
+            ordinalTimeTicks: ['years', 'quarterly', 'months'],
+            valueFormatter: v => fmtDate(v) ?? ''
+          }
+        ]}
+        yAxis={[
+          {
+            label: uiUnit(m.unit)
+          }
+        ]}
+        slotProps={{
+          tooltip: {
+            sx: { background: 'var(--joy-palette-neutral-50, #FBFCFE)' }
+          }
+        }}
+        margin={0}
         height={200}
         width={400}
       />
