@@ -24,7 +24,7 @@ export class Operation {
     const name = cache.details.dictProcessingOperaions.find(
       each => each.id === this.id
     )?.v
-    return name ?? 'Cannot load name for operation'
+    return name ?? 'No value in the dict'
   }
 }
 

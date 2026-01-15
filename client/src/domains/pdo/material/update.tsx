@@ -1,3 +1,4 @@
+import { BarChart } from '@mui/x-charts'
 import { capitalize, MetalPageTitle } from 'domains/pdo/shared/basic'
 import {
   Box,
@@ -80,7 +81,26 @@ export const MaterialUpdatePage = observer(() => {
             }
           />
         </Stack>
+        <MaterialStatBarChart m={m} />
       </RowButColumsAtSm>
     </Stack>
+  )
+})
+
+export const MaterialStatBarChart = observer(({ m }: { m: MaterialState }) => {
+  if (!m.writeoffStat) return null
+  return (
+    <Box>
+      <BarChart
+        xAxis={[
+          {
+            data: m.writeoffStat?.map(([month]) => month)
+          }
+        ]}
+        series={[{ data: m.writeoffStat?.map(([_, val]) => val) }]}
+        height={200}
+        width={400}
+      />
+    </Box>
   )
 })

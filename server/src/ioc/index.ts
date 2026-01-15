@@ -2,6 +2,7 @@ import { AttendanceReportGenerator } from '#root/rpc/attendance/report_generator
 import { AttachmentService } from '#root/service/attachment.service.js'
 import { AuthSevice } from '#root/service/auth.service.js'
 import { Jobs } from '#root/service/jobs.js'
+import { PeriodAggregator } from '#root/service/period_aggregator.js'
 import { TokenService } from '#root/service/token.service.js'
 import { UserController } from '../controllers/auth.controller.js'
 import { TokenRepository } from '../repositories/token.js'
@@ -11,10 +12,16 @@ import { db } from './db.js'
 const userRepo = new UserRepository(db)
 const tokenRepo = new TokenRepository(userRepo, db)
 
+export class MaterialStatDataContainer {
+  writeoffs?: PeriodAggregator
+}
+
+export const materialsStatContainer = new MaterialStatDataContainer()
+
 export const tokenService = new TokenService(tokenRepo)
 tokenService.initCron()
 
-export const jobs = new Jobs()
+export const jobs = new Jobs(materialsStatContainer)
 jobs.initCron()
 
 const authService = new AuthSevice(tokenService, userRepo)

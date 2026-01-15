@@ -181,7 +181,7 @@ const ProductionSteps = observer(
                 size="sm"
                 key={operation.name}
                 variant={current ? 'solid' : 'plain'}
-                sx={{ width: 'fit-content' }}
+                sx={{ width: 'fit-content', textAlign: 'left' }}
                 color={current ? 'success' : 'neutral'}
                 onClick={() => api.setCurrentOperation(order, operation_index)}
               >

@@ -6,6 +6,7 @@ import {
   Scope,
   TRPCError
 } from '#root/deps.js'
+import { materialsStatContainer } from '#root/ioc/index.js'
 import { logger } from '#root/ioc/log.js'
 import { isDuplicateKeyError } from '#root/lib/kysely.js'
 import { router } from '#root/lib/trpc/trpc.js'
@@ -23,10 +24,7 @@ import {
 } from 'models'
 import { z } from 'zod'
 
-export type Material = DB.Material & {
-  total_income: number
-  total_outcome: number
-}
+export type Material = DB.Material & {}
 
 export const material = router({
   get: procedure
@@ -46,21 +44,17 @@ export const material = router({
           .select(eb => eb.fn.countAll().as('count'))
           .executeTakeFirstOrThrow()
       ])
-      return { material, detailCount: Number(detailCount.count) }
+      const writeoff_stat = materialsStatContainer.writeoffs?.get(input.id)?.raw
+      return { material, detailCount: Number(detailCount.count), writeoff_stat }
     }),
   //
   list: procedure.query(() =>
     db
       .selectFrom('pdo.materials as m')
-      .leftJoin(
-        'pdo.materials_quarterly_spending as s',
-        's.material_id',
-        'm.id'
-      )
       .selectAll()
       .orderBy('m.label')
       .execute()
-      .then(r => matrixEncoder(r))
+      .then(materials => matrixEncoder(materials))
   ),
   //
   create: procedure

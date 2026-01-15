@@ -85,6 +85,8 @@ export class MaterialState {
   setSafetyStock(safetyStock?: number) {
     this.safetyStock = safetyStock
   }
+
+  writeoffStat?: [string, number][]
   syncState(material: Material) {
     this.id = material.id
     this.label = material.label

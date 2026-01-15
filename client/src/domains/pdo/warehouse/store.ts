@@ -14,6 +14,7 @@ class OperationsStore {
     this.operations = operations
   }
   async load(materialId?: number, detailId?: number) {
+    this.setOperations([])
     const operationsRaw = await rpc.pdo.operations.list.query({
       materialId,
       detailId

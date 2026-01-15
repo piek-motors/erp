@@ -1,16 +1,21 @@
-import { DB, db } from '#root/deps.js'
+import { db } from '#root/deps.js'
+import { MaterialStatDataContainer } from '#root/ioc/index.js'
 import { logger } from '#root/ioc/log.js'
 import { Day } from '#root/lib/constants.js'
+import { ManufacturingOrderStatus, OperationType, WriteoffReason } from 'models'
 import {
-  ManufacturingOrderStatus,
-  OperationType,
-  SupplyReason,
-  WriteoffReason
-} from 'models'
+  MonthFrequencer,
+  PeriodAggregator,
+  PeriodAggregatorArgs
+} from './period_aggregator.js'
 
 const OutdatedManufacturingOrderDeletionAfter = 7 * Day
 
 export class Jobs {
+  constructor(
+    private readonly material_stat_data_container: MaterialStatDataContainer
+  ) {}
+
   initCron() {
     this.removeOutdatedManufacturingOrders()
     this.calcMaterialQuarterlySpendings()
@@ -38,77 +43,54 @@ export class Jobs {
     )
   }
 
-  private async calcMaterialQuarterlySpendings() {
-    const end = new Date()
-    const start = new Date()
-    start.setMonth(end.getMonth() - 3)
+  private async calcMaterialQuarterlySpendings(nMonths: number = 12) {
+    const start = Date.now()
+
+    const period_end = new Date()
+    const period_start = new Date()
+    period_start.setMonth(period_end.getMonth() - 12)
 
     const operations = await db
-      .selectFrom('pdo.operations')
+      .selectFrom('pdo.operations as op')
       .selectAll()
       .where('material_id', 'is not', null)
-      .where('pdo.operations.timestamp', '>', start)
+      .where('op.timestamp', '>', period_start)
+      .where('op.timestamp', '<', period_end)
       .execute()
 
-    type MapVal = { income: number; outcome: number }
-    const map: Map<number, MapVal> = new Map()
-    // initialize map
-    for (const op of operations) {
-      if (!op.material_id) {
-        throw new Error('operation is not related to material')
-      }
-      const material = map.get(op.material_id)
-      if (!material) {
-        map.set(op.material_id, { income: 0, outcome: 0 })
-      }
+    logger.info(
+      {
+        period_start,
+        period_end
+      },
+      `Materials quarter spendings quantification for ${operations.length} operations`
+    )
+
+    const bucket_args: PeriodAggregatorArgs = {
+      frequencer: new MonthFrequencer(),
+      period_start,
+      period_end
     }
-    // calc totals
+    const writeoff_agg = new PeriodAggregator(bucket_args)
+
     for (const op of operations) {
-      if (!op.material_id) {
+      if (!op.material_id)
         throw new Error('operation is not related to material')
-      }
-      if (!op.qty) {
-        throw Error('qty is not specified')
-      }
-      const totals = map.get(op.material_id)
-      if (!totals) {
-        throw Error('map is not initialized properly')
-      }
 
-      if (
-        op.operation_type == OperationType.Supply &&
-        op.reason == SupplyReason.FromSupplier
-      ) {
-        totals.income += Number(op.qty)
-      }
-
-      if (
+      const is_writeoff =
         op.operation_type == OperationType.Writeoff &&
         op.reason == WriteoffReason.UsedInProduction
-      ) {
-        totals.outcome += Number(op.qty)
+
+      if (is_writeoff) {
+        writeoff_agg.add(op.material_id, op.timestamp, Number(op.qty))
       }
     }
 
-    const entities: DB.MaterialQuarterlySpendingTable[] = []
-    map.forEach((value, material_id) => {
-      entities.push({
-        material_id,
-        total_income: Math.round(value.income),
-        total_outcome: Math.round(value.outcome)
-      })
-    })
+    this.material_stat_data_container.writeoffs = writeoff_agg
 
-    await db
-      .insertInto('pdo.materials_quarterly_spending')
-      .values(entities)
-      .onConflict(oc =>
-        oc.column('material_id').doUpdateSet(eb => ({
-          material_id: eb.ref('excluded.material_id'),
-          total_income: eb.ref('excluded.total_income'),
-          total_outcome: eb.ref('excluded.total_outcome')
-        }))
-      )
-      .execute()
+    const elapsedTimeSec = (Date.now() - start) / 1000
+    logger.info(
+      `Materials quarter spendings quantified in ${elapsedTimeSec} sec`
+    )
   }
 }

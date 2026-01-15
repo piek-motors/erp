@@ -43,7 +43,6 @@ export namespace DB {
 
     ['pdo.dict_operation_kinds']: Dict<string>
     ['pdo.materials']: MaterialTable
-    ['pdo.materials_quarterly_spending']: MaterialQuarterlySpendingTable
     ['pdo.details']: DetailTable
     ['pdo.detail_attachments']: DetailAttachmentTable
     ['pdo.operations']: OperationsTable
@@ -104,12 +103,6 @@ export namespace DB {
   }
 
   export type Material = KyselySelectable<MaterialTable>
-
-  export interface MaterialQuarterlySpendingTable {
-    material_id: number
-    total_income: number
-    total_outcome: number
-  }
 
   export interface DetailTable {
     id: Generated<number>
@@ -185,10 +178,10 @@ export namespace DB {
     reason: SupplyReason | WriteoffReason
     user_id: number
     material_id: number | null
-    qty: number | null
     detail_id: number | null
+    qty: string // numeric in db
     data: JSONColumnType<any, any, any> | null
-    timestamp?: Generated<Date>
+    timestamp: Generated<Date>
     manufacturing_order_id: number | null
   }
 
