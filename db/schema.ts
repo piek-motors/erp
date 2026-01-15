@@ -179,7 +179,8 @@ export namespace DB {
     user_id: number
     material_id: number | null
     detail_id: number | null
-    qty: string // numeric in db
+    // string on read
+    qty: number // numeric in db
     data: JSONColumnType<any, any, any> | null
     timestamp: Generated<Date>
     manufacturing_order_id: number | null
