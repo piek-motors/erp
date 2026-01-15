@@ -45,7 +45,11 @@ export const material = router({
           .executeTakeFirstOrThrow()
       ])
       const writeoff_stat = materialsStatContainer.writeoffs?.get(input.id)?.raw
-      return { material, detailCount: Number(detailCount.count), writeoff_stat }
+      return {
+        material,
+        detailCount: Number(detailCount.count),
+        writeoff_stat
+      }
     }),
   //
   list: procedure.query(() =>

@@ -14,7 +14,6 @@ import {
 } from 'lib/index'
 import { openPage, routeMap } from 'lib/routes'
 import { notifier } from 'lib/store/notifier.store'
-import { fmtDate } from 'lib/utils/date_fmt'
 import { uiUnit } from 'models'
 import { SaveAndDelete } from '../shared/basic'
 import { api } from './api'
@@ -98,30 +97,38 @@ export const MaterialStatBarChart = observer(({ m }: { m: MaterialState }) => {
         series={[
           {
             data: m.writeoffStat?.map(([_, val]) => val),
-            label: 'Совокупный расход'
+            label: 'Агрегированный расход',
+            valueFormatter: v => {
+              if (typeof v == 'number') {
+                return `${Math.round(v)} ${uiUnit(m.unit)}`
+              }
+              return ''
+            }
           }
         ]}
+        grid={{ horizontal: true }}
         xAxis={[
           {
             data: m.writeoffStat?.map(([d]) => {
               const [year, month] = d.split('-')
-              return new Date(+year, +month)
+              return new Date(+year, +month - 1)
             }),
             ordinalTimeTicks: ['years', 'quarterly', 'months'],
-            valueFormatter: v => fmtDate(v) ?? ''
-          }
-        ]}
-        yAxis={[
-          {
-            label: uiUnit(m.unit)
+            valueFormatter: v =>
+              Intl.DateTimeFormat('ru-RU', {
+                month: 'short',
+                year: '2-digit'
+              }).format(v) ?? ''
           }
         ]}
         slotProps={{
           tooltip: {
-            sx: { background: 'var(--joy-palette-neutral-50, #FBFCFE)' }
+            sx: {
+              background: 'var(--joy-palette-neutral-50, #FBFCFE)',
+              fontSize: '.8rem'
+            }
           }
         }}
-        margin={0}
         height={200}
         width={400}
       />

@@ -26,7 +26,7 @@ export const OperationModal = observer(
       <InModal
         size="sm"
         openButton={
-          <Btn variant="soft" color={btn.color} fullWidth>
+          <Btn variant="soft" color={btn.color} fullWidth size="md">
             {btn.label}
           </Btn>
         }
@@ -53,7 +53,7 @@ export const OperationsListModal = observer(
           setOpen(open)
         }}
         openButton={
-          <Button fullWidth variant="soft" color="neutral">
+          <Button fullWidth variant="outlined" color="neutral" size="md">
             Журнал
           </Button>
         }
