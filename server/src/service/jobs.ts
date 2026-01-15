@@ -2,6 +2,7 @@ import { db } from '#root/deps.js'
 import { MaterialStatDataContainer } from '#root/ioc/index.js'
 import { logger } from '#root/ioc/log.js'
 import { Day } from '#root/lib/constants.js'
+import { addUTCMonths, startOfUTCDay, startOfUTCMonth } from '#root/lib/time.js'
 import { ManufacturingOrderStatus, OperationType, WriteoffReason } from 'models'
 import {
   MonthFrequencer,
@@ -46,9 +47,8 @@ export class Jobs {
   private async calcMaterialQuarterlySpendings(nMonths: number = 12) {
     const start = Date.now()
 
-    const period_end = new Date()
-    const period_start = new Date()
-    period_start.setMonth(period_end.getMonth() - 12)
+    const period_end = startOfUTCDay(new Date())
+    const period_start = startOfUTCMonth(addUTCMonths(period_end, -nMonths))
 
     const operations = await db
       .selectFrom('pdo.operations as op')

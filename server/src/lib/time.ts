@@ -43,3 +43,27 @@ export const convertDateToUTC = (date: Date) =>
     date.getUTCMinutes(),
     date.getUTCSeconds()
   )
+
+export function startOfUTCDay(d: Date): Date {
+  return new Date(
+    Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate(), 0, 0, 0, 0)
+  )
+}
+
+export function startOfUTCMonth(d: Date): Date {
+  return new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), 1, 0, 0, 0, 0))
+}
+
+export function addUTCMonths(d: Date, delta: number): Date {
+  return new Date(
+    Date.UTC(
+      d.getUTCFullYear(),
+      d.getUTCMonth() + delta,
+      d.getUTCDate(),
+      d.getUTCHours(),
+      d.getUTCMinutes(),
+      d.getUTCSeconds(),
+      d.getUTCMilliseconds()
+    )
+  )
+}
