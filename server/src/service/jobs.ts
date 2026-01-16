@@ -5,9 +5,11 @@ import { Day } from '#root/lib/constants.js'
 import { addUTCMonths, startOfUTCDay, startOfUTCMonth } from '#root/lib/time.js'
 import { ManufacturingOrderStatus, OperationType, WriteoffReason } from 'models'
 import {
-  MonthFrequencer,
+  MonthStrategy,
   PeriodAggregator,
-  PeriodAggregatorArgs
+  QuarterStrategy,
+  TimeSeriesRollup,
+  TimeWindow
 } from '../lib/statistic/period_aggregator.js'
 
 const OutdatedManufacturingOrderDeletionAfter = 7 * Day
@@ -66,27 +68,42 @@ export class Jobs {
       `Materials quarter spendings quantification for ${operations.length} operations`
     )
 
-    const bucket_args: PeriodAggregatorArgs = {
-      frequencer: new MonthFrequencer(),
-      period_start,
-      period_end
-    }
-    const writeoff_agg = new PeriodAggregator(bucket_args)
+    const strategy = new MonthStrategy()
+    const window = new TimeWindow(period_start, period_end, strategy)
+    const writeoff_agg = new PeriodAggregator(window, strategy)
 
-    for (const op of operations) {
-      if (!op.material_id)
-        throw new Error('operation is not related to material')
+    {
+      for (const op of operations) {
+        if (!op.material_id)
+          throw new Error('operation is not related to material')
 
-      const is_writeoff =
-        op.operation_type == OperationType.Writeoff &&
-        op.reason == WriteoffReason.UsedInProduction
+        const is_writeoff =
+          op.operation_type == OperationType.Writeoff &&
+          op.reason == WriteoffReason.UsedInProduction
 
-      if (is_writeoff) {
-        writeoff_agg.add(op.material_id, op.timestamp, Number(op.qty))
+        if (is_writeoff) {
+          writeoff_agg.add(op.material_id, op.timestamp, Number(op.qty))
+        }
       }
+      this.material_stat_data_container.writeoffs.monthly = writeoff_agg
     }
 
-    this.material_stat_data_container.writeoffs = writeoff_agg
+    {
+      const rollap = new TimeSeriesRollup()
+      const strategy = new QuarterStrategy()
+      const window = new TimeWindow(period_start, period_end, strategy)
+      const writeoff_agg_quarterly = new PeriodAggregator(window, strategy)
+
+      for (const [id, bucket_series] of writeoff_agg.iterator) {
+        writeoff_agg_quarterly.set(
+          id,
+          rollap.moth_to_quarter_aggregation(bucket_series)
+        )
+      }
+
+      this.material_stat_data_container.writeoffs.quarterly =
+        writeoff_agg_quarterly
+    }
 
     const elapsedTimeSec = (Date.now() - start) / 1000
     logger.info(

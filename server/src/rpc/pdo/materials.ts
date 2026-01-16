@@ -6,7 +6,7 @@ import {
   Scope,
   TRPCError
 } from '#root/deps.js'
-import { materialsStatContainer } from '#root/ioc/index.js'
+import { materials_stat_container } from '#root/ioc/index.js'
 import { logger } from '#root/ioc/log.js'
 import { isDuplicateKeyError } from '#root/lib/kysely.js'
 import { router } from '#root/lib/trpc/trpc.js'
@@ -44,11 +44,15 @@ export const material = router({
           .select(eb => eb.fn.countAll().as('count'))
           .executeTakeFirstOrThrow()
       ])
-      const writeoff_stat = materialsStatContainer.writeoffs?.get(input.id)?.raw
       return {
         material,
         detailCount: Number(detailCount.count),
-        writeoff_stat
+        writeoff_stat: {
+          monthly: materials_stat_container.writeoffs.monthly?.get(input.id)
+            ?.entries,
+          quarterly: materials_stat_container.writeoffs.quarterly?.get(input.id)
+            ?.entries
+        }
       }
     }),
   //

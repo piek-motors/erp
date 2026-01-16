@@ -23,7 +23,10 @@ export class MaterialApi {
       m.setSafetyStock(res.material.safety_stock)
       m.setUnit(res.material.unit)
       m.setDetailCount(Number(res.detailCount))
-      m.writeoffStat = res.writeoff_stat
+      m.writeoffStat = {
+        monthly: res.writeoff_stat.monthly,
+        quarterly: res.writeoff_stat.quarterly
+      }
       return m
     })
   }

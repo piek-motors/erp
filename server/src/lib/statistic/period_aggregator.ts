@@ -1,16 +1,24 @@
-import { addMonths, createDateAsUTC, toDate } from '#root/lib/time.js'
+import {
+  addMonths,
+  createDateAsUTC,
+  isoMonthToQuarter,
+  toDate
+} from '#root/lib/time.js'
 
-interface Frequencer {
-  bucket_key(ts: Date | number): string
+interface BucketStrategy {
+  key(ts: Date | number): string
+}
+
+interface StepStrategy {
   next(ts: Date): Date
 }
 
-export class QuarterFrequencer implements Frequencer {
+export class QuarterStrategy implements BucketStrategy, StepStrategy {
   next(ts: Date): Date {
     return addMonths(ts, 3)
   }
 
-  bucket_key(ts: Date | number): string {
+  key(ts: Date | number): string {
     const d = toDate(ts)
     const year = d.getUTCFullYear()
     const quarter = Math.floor(d.getUTCMonth() / 3) + 1
@@ -18,12 +26,12 @@ export class QuarterFrequencer implements Frequencer {
   }
 }
 
-export class MonthFrequencer implements Frequencer {
+export class MonthStrategy implements BucketStrategy, StepStrategy {
   next(ts: Date): Date {
     return addMonths(ts, 1)
   }
 
-  bucket_key(ts: Date | number): string {
+  key(ts: Date | number): string {
     const d = toDate(ts)
     const year = d.getUTCFullYear()
     const month = d.getUTCMonth() + 1
@@ -31,23 +39,23 @@ export class MonthFrequencer implements Frequencer {
   }
 }
 
-class Buckets {
-  private readonly map = new Map<string, number>()
+class BucketSeries {
+  readonly map = new Map<string, number>()
 
-  constructor(readonly frequencer: Frequencer, init_keys: string[]) {
+  constructor(init_keys: string[]) {
     init_keys.forEach(each => this.map.set(each, 0))
   }
 
-  add(ts: Date | number, value: number) {
-    const key = this.frequencer.bucket_key(ts)
+  increment(key: string, value: number): Error | undefined {
     const prev = this.map.get(key)
     if (prev == null) {
-      throw Error(`No bucket with key ${key}`)
+      return Error(`No bucket with key ${key}`)
     }
     this.map.set(key, prev + value)
+    return
   }
 
-  count_buckets(): number {
+  size(): number {
     return this.map.size
   }
 
@@ -73,50 +81,89 @@ class Buckets {
     return sum
   }
 
-  get raw() {
+  get entries() {
     return Array.from(this.map.entries())
+  }
+
+  get(key: string) {
+    return this.map.get(key)
+  }
+
+  get butcket_keys() {
+    return Array.from(this.map.keys())
   }
 }
 
-export interface PeriodAggregatorArgs {
-  frequencer: Frequencer
-  period_start: Date
-  period_end: Date
-}
+export class TimeWindow {
+  constructor(
+    readonly start: Date,
+    readonly end: Date,
+    readonly strategy: TimeStrategy
+  ) {}
 
-export class PeriodAggregator {
-  private items: Map<number, Buckets> = new Map()
-  constructor(private readonly buckets_args: PeriodAggregatorArgs) {}
+  get bucket_keys(): string[] {
+    const keys: string[] = []
+    let cursor = createDateAsUTC(this.start)
+    const end = createDateAsUTC(this.end)
 
-  add(id: number, timestamp: Date | number, value: number) {
-    if (!this.items.has(id)) {
-      this.items.set(id, this.new_bucket())
+    while (cursor <= end) {
+      keys.push(this.strategy.key(cursor))
+      cursor = this.strategy.next(cursor)
     }
 
-    const item = this.items.get(id) as Buckets
-    item.add(timestamp, value)
+    return keys
+  }
+}
+
+type TimeStrategy = BucketStrategy & StepStrategy
+
+export class PeriodAggregator {
+  private items: Map<number, BucketSeries> = new Map()
+
+  constructor(
+    private readonly window: TimeWindow,
+    private readonly strategy: TimeStrategy
+  ) {}
+
+  set(id: number, s: BucketSeries) {
+    this.items.set(id, s)
+  }
+
+  add(id: number, ts: Date | number, value: number) {
+    if (!this.items.has(id)) {
+      this.items.set(id, new BucketSeries(this.window.bucket_keys))
+    }
+
+    const item = this.items.get(id) as BucketSeries
+    const key = this.strategy.key(ts)
+    item.increment(key, value)
   }
 
   get(id: number) {
     return this.items.get(id)
   }
 
-  bucket_keys() {
-    const start = createDateAsUTC(this.buckets_args.period_start)
-    const end = createDateAsUTC(this.buckets_args.period_end)
-    const { frequencer } = this.buckets_args
-    const buckets_keys: string[] = []
+  get iterator() {
+    return this.items
+  }
+}
 
-    let cursor = start
-    while (cursor <= end) {
-      buckets_keys.push(frequencer.bucket_key(cursor))
-      cursor = frequencer.next(cursor)
+export class TimeSeriesRollup {
+  moth_to_quarter_aggregation(monthly: BucketSeries) {
+    const quarterly = new BucketSeries([])
+
+    for (const [key, value] of monthly.entries) {
+      const [year, month] = key.split('-')
+      const quarter = isoMonthToQuarter(Number(month))
+      const qkey = `${year}-Q${quarter}`
+
+      if (!quarterly.map.has(qkey)) {
+        quarterly.map.set(qkey, 0)
+      }
+
+      quarterly.increment(qkey, value)
     }
 
-    return buckets_keys
-  }
-
-  private new_bucket() {
-    return new Buckets(this.buckets_args.frequencer, this.bucket_keys())
+    return quarterly
   }
 }

@@ -77,3 +77,22 @@ export function addMonths(date: Date, months: number): Date {
   d.setUTCMonth(d.getUTCMonth() + months)
   return d
 }
+
+// move date forward to the start of its quarter (UTC)
+export function startOfTheQuarter(date: Date): Date {
+  const d = createDateAsUTC(date)
+
+  const month = d.getUTCMonth() // 0–11
+  const quarterStartMonth = Math.floor(month / 3) * 3
+
+  // go to start of the quarter month
+  return startOfUTCMonth(
+    new Date(Date.UTC(d.getUTCFullYear(), quarterStartMonth, 1))
+  )
+}
+
+/**
+ * @param month Human / ISO - 1-12
+ */
+export const isoMonthToQuarter = (month: number) =>
+  Math.floor((month - 1) / 3) + 1

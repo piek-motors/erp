@@ -2,6 +2,7 @@ import { BarChart } from '@mui/x-charts'
 import { capitalize, MetalPageTitle } from 'domains/pdo/shared/basic'
 import {
   Box,
+  Label,
   Loading,
   observer,
   P,
@@ -92,12 +93,14 @@ export const MaterialStatBarChart = observer(({ m }: { m: MaterialState }) => {
   if (!m.writeoffStat) return null
   return (
     <Box>
+      <Label textAlign={'center'}>Агрегированный расход</Label>
       <BarChart
-        borderRadius={2}
+        colors={['#308e74']}
         series={[
           {
-            data: m.writeoffStat?.map(([_, val]) => val),
-            label: 'Агрегированный расход',
+            data: m.writeoffStat.quarterly?.map(([_, val]) => Math.round(val)),
+            barLabel: 'value',
+            barLabelPlacement: 'outside',
             valueFormatter: v => {
               if (typeof v == 'number') {
                 return `${Math.round(v)} ${uiUnit(m.unit)}`
@@ -109,7 +112,43 @@ export const MaterialStatBarChart = observer(({ m }: { m: MaterialState }) => {
         grid={{ horizontal: true }}
         xAxis={[
           {
-            data: m.writeoffStat?.map(([d]) => {
+            tickPlacement: 'middle',
+            data: m.writeoffStat.quarterly?.map(([key]) =>
+              key.slice(2).replace('-', '')
+            )
+          }
+        ]}
+        slotProps={{
+          barLabel: {
+            fontSize: '.8rem'
+          },
+          tooltip: {
+            sx: {
+              background: 'var(--joy-palette-neutral-50, #FBFCFE)',
+              fontSize: '.8rem'
+            }
+          }
+        }}
+        height={200}
+        width={400}
+      />
+
+      <BarChart
+        series={[
+          {
+            data: m.writeoffStat?.monthly?.map(([_, val]) => val),
+            valueFormatter: v => {
+              if (typeof v == 'number') {
+                return `${Math.round(v)} ${uiUnit(m.unit)}`
+              }
+              return ''
+            }
+          }
+        ]}
+        grid={{ horizontal: true }}
+        xAxis={[
+          {
+            data: m.writeoffStat?.monthly?.map(([d]) => {
               const [year, month] = d.split('-')
               return new Date(+year, +month - 1)
             }),

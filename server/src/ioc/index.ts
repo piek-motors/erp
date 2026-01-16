@@ -13,15 +13,18 @@ const userRepo = new UserRepository(db)
 const tokenRepo = new TokenRepository(userRepo, db)
 
 export class MaterialStatDataContainer {
-  writeoffs?: PeriodAggregator
+  writeoffs: {
+    monthly?: PeriodAggregator
+    quarterly?: PeriodAggregator
+  } = {}
 }
 
-export const materialsStatContainer = new MaterialStatDataContainer()
+export const materials_stat_container = new MaterialStatDataContainer()
 
 export const tokenService = new TokenService(tokenRepo)
 tokenService.initCron()
 
-export const jobs = new Jobs(materialsStatContainer)
+export const jobs = new Jobs(materials_stat_container)
 jobs.initCron()
 
 const authService = new AuthSevice(tokenService, userRepo)
