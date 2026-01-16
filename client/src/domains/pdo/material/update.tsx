@@ -90,7 +90,7 @@ export const MaterialUpdatePage = observer(() => {
 })
 
 export const MaterialStatBarChart = observer(({ m }: { m: MaterialState }) => {
-  if (!m.writeoffStat) return null
+  if (!m.writeoffStat?.monthly || !m.writeoffStat?.quarterly) return null
   return (
     <Box>
       <Label textAlign={'center'}>Агрегированный расход</Label>
