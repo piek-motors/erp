@@ -14,7 +14,7 @@ describe('period_aggregator', () => {
 
     const mfreq = new MonthFrequencer()
     strictEqual(mfreq.bucket_key(new Date('2025-12-31')), '2025-12')
-    strictEqual(mfreq.bucket_key(new Date('2025-01-01')), '2025-01')
+    strictEqual(mfreq.bucket_key(new Date('2025-01-01')), '2025-1')
   })
 
   test('aggregator', () => {

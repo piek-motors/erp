@@ -5,8 +5,8 @@ import { Scope } from '../constants.js'
 import { t } from '../trpc/trpc.js'
 import { hasPermission } from './has_permission.js'
 
-export const requireScope = (permission: Scope | string) => {
-  return t.middleware(({ ctx, next }) => {
+export const requireScope = (permission: Scope | string) =>
+  t.middleware(({ ctx, next }) => {
     const { roles, first_name, last_name, id } = ctx.user
     const rolePermissions = roles.flatMap(role => rbac[role] || [])
     if (
@@ -24,4 +24,3 @@ export const requireScope = (permission: Scope | string) => {
 
     return next()
   })
-}

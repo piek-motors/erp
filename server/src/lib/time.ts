@@ -67,3 +67,13 @@ export function addUTCMonths(d: Date, delta: number): Date {
     )
   )
 }
+
+export function toDate(ts: Date | number): Date {
+  return ts instanceof Date ? ts : new Date(ts)
+}
+
+export function addMonths(date: Date, months: number): Date {
+  const d = new Date(date)
+  d.setUTCMonth(d.getUTCMonth() + months)
+  return d
+}

@@ -8,7 +8,7 @@ import {
   MonthFrequencer,
   PeriodAggregator,
   PeriodAggregatorArgs
-} from './period_aggregator.js'
+} from '../lib/statistic/period_aggregator.js'
 
 const OutdatedManufacturingOrderDeletionAfter = 7 * Day
 

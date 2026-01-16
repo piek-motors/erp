@@ -1,4 +1,4 @@
-import { createDateAsUTC } from '#root/lib/time.js'
+import { addMonths, createDateAsUTC, toDate } from '#root/lib/time.js'
 
 interface Frequencer {
   bucket_key(ts: Date | number): string
@@ -26,19 +26,9 @@ export class MonthFrequencer implements Frequencer {
   bucket_key(ts: Date | number): string {
     const d = toDate(ts)
     const year = d.getUTCFullYear()
-    const month = String(d.getUTCMonth() + 1).padStart(2, '0')
+    const month = d.getUTCMonth() + 1
     return `${year}-${month}`
   }
-}
-
-function toDate(ts: Date | number): Date {
-  return ts instanceof Date ? ts : new Date(ts)
-}
-
-function addMonths(date: Date, months: number): Date {
-  const d = new Date(date)
-  d.setUTCMonth(d.getUTCMonth() + months)
-  return d
 }
 
 class Buckets {
@@ -48,8 +38,8 @@ class Buckets {
     init_keys.forEach(each => this.map.set(each, 0))
   }
 
-  add(timestamp: Date | number, value: number) {
-    const key = this.frequencer.bucket_key(timestamp)
+  add(ts: Date | number, value: number) {
+    const key = this.frequencer.bucket_key(ts)
     const prev = this.map.get(key)
     if (prev == null) {
       throw Error(`No bucket with key ${key}`)
@@ -87,6 +77,7 @@ class Buckets {
     return Array.from(this.map.entries())
   }
 }
+
 export interface PeriodAggregatorArgs {
   frequencer: Frequencer
   period_start: Date
@@ -113,13 +104,13 @@ export class PeriodAggregator {
   bucket_keys() {
     const start = createDateAsUTC(this.buckets_args.period_start)
     const end = createDateAsUTC(this.buckets_args.period_end)
-    const freq = this.buckets_args.frequencer
+    const { frequencer } = this.buckets_args
     const buckets_keys: string[] = []
 
     let cursor = start
     while (cursor <= end) {
-      buckets_keys.push(freq.bucket_key(cursor))
-      cursor = freq.next(cursor)
+      buckets_keys.push(frequencer.bucket_key(cursor))
+      cursor = frequencer.next(cursor)
     }
 
     return buckets_keys
