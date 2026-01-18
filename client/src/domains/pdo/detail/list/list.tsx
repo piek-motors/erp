@@ -35,7 +35,7 @@ export const DetailsListPage = () => (
       </Stack>
     }
     scroll={
-      <Row alignItems="start" gap={0.5} mb={2}>
+      <Row alignItems="start" gap={0} mb={2}>
         <AlphabetIndex sx={{ position: 'sticky', top: 0, zIndex: 1 }} />
         <Divider orientation="vertical" />
         <DetailsList sx={{ width: '100%' }} />

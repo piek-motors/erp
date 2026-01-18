@@ -14,7 +14,8 @@ export interface Props {
   children?: React.ReactNode
   hideIcon?: boolean
   spaceBetween?: boolean
-  homeUrl?: string
+  goToHomeUrl?: string
+  mobileMenuButton?: ReactNode
 }
 
 export function NavTopBar(props: Props) {
@@ -41,14 +42,18 @@ export function NavTopBar(props: Props) {
       )}
 
       {/* Mobile-only metalflow navigation button */}
-      {props.homeUrl && (
+      {props.goToHomeUrl && (
         <MobileOnly>
-          <Link to={props.homeUrl}>
+          <Link to={props.goToHomeUrl}>
             <IconButton variant="soft" size="md">
               <UseIcon icon={UilHome} />
             </IconButton>
           </Link>
         </MobileOnly>
+      )}
+
+      {props.mobileMenuButton && (
+        <MobileOnly>{props.mobileMenuButton}</MobileOnly>
       )}
 
       <Row gap={1} sx={{ ...props.sx }}>

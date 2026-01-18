@@ -1,4 +1,11 @@
-import { Tabs as MuiTabs, Tab, TabList, TabPanel, TabsProps } from '@mui/joy'
+import {
+  Tabs as MuiTabs,
+  Tab,
+  TabList,
+  TabListProps,
+  TabPanel,
+  TabsProps
+} from '@mui/joy'
 import { ReactNode } from 'react'
 
 export type TabConfig = {
@@ -11,6 +18,9 @@ export type TabProps = {
   handleChange?: (newVal: any) => void
   tabs: TabConfig
   p?: number
+  slots?: {
+    tabList: TabListProps
+  }
 } & TabsProps
 
 export function Tabs(props: TabProps) {
@@ -25,7 +35,7 @@ export function Tabs(props: TabProps) {
         }
       }}
     >
-      <TabList>
+      <TabList {...props.slots?.tabList}>
         {props.tabs.map(({ value, label }, idx) => (
           <Tab
             key={value}

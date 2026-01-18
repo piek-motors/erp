@@ -30,7 +30,7 @@ export const DetailsMadeOfMaterialModal = observer(
       <InModal
         layout="fullscreen"
         openButton={
-          <Button variant="soft" color="neutral">
+          <Button variant="outlined" color="neutral">
             Детали {count}
           </Button>
         }

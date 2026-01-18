@@ -12,7 +12,7 @@ export const AlphabetIndex = observer(({ sx }: { sx?: SxProps }) => {
           key={letter}
           size="sm"
           sx={{
-            p: 0.5,
+            p: 1,
             py: 0,
             minHeight: '26px',
             fontSize: '13px'

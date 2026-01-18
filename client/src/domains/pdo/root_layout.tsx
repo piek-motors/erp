@@ -41,7 +41,11 @@ export const MobileNavModal = (props: { t?: string }) => {
       <Modal open={open} onClose={() => setOpen(false)}>
         <ModalDialog layout="fullscreen">
           <ModalClose />
-          <NavigationSideBar title={title} links={nav_links} />
+          <NavigationSideBar
+            title={title}
+            links={nav_links}
+            onClick={() => setOpen(false)}
+          />
         </ModalDialog>
       </Modal>
     </MobileOnly>

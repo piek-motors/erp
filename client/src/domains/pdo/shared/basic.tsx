@@ -3,16 +3,11 @@ import { SxProps } from '@mui/joy/styles/types'
 import { BaseAutocomplete, BaseOption } from 'components/base-autocomplete'
 import { DeleteConfirmDialog } from 'components/delete_confirm_dialog'
 import { NavTopBar, Props as PageTitleProps } from 'components/nav_topbar'
-import {
-  ActionButton,
-  DeleteResourceButton,
-  Label,
-  routeMap,
-  Row
-} from 'lib/index'
+import { ActionButton, DeleteResourceButton, Label, Row } from 'lib/index'
 import { rpc } from 'lib/rpc/rpc.client'
 import { UiUnit, Unit } from 'models'
 import { useEffect, useState } from 'react'
+import { MobileNavModal } from '../root_layout'
 
 export function MaterialUnitSelect(props: {
   value?: Unit
@@ -103,11 +98,15 @@ export const SaveAndDelete = (props: {
   )
 }
 
-export function MetalPageTitle(props: PageTitleProps) {
-  return (
-    <NavTopBar {...props} homeUrl={routeMap.pdo.index} hideIcon spaceBetween />
-  )
-}
+export const MetalPageTitle = (props: PageTitleProps) => (
+  <NavTopBar
+    {...props}
+    // goToHomeUrl={routeMap.pdo.index}
+    mobileMenuButton={<MobileNavModal />}
+    hideIcon
+    spaceBetween
+  />
+)
 
 export function capitalize(text: string) {
   if (!text) return ''

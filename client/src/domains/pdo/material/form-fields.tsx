@@ -20,7 +20,7 @@ export const MaterialFormFields = observer(
       <Stack>
         {showTabs ? (
           <Tabs
-            variant="outlined"
+            variant="plain"
             sx={{ width: 'fit-content' }}
             p={0}
             tabs={Object.values(MaterialShape)
