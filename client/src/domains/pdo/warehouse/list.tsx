@@ -5,7 +5,6 @@ import { Label } from 'lib/index'
 import { observer } from 'mobx-react-lite'
 import { OperationType } from 'models'
 import { useEffect } from 'react'
-import { MobileNavModal } from '../root_layout'
 import { columns } from './columns'
 import { s } from './store'
 
@@ -23,7 +22,6 @@ export const OperationsTable = observer((props: Props) => {
   }, [materialId, detailId])
   return (
     <ScrollableWindow
-      static={<MobileNavModal t="Журнал операций" />}
       scroll={
         <>
           {!s.operations.length && <Label>Нет информации</Label>}
