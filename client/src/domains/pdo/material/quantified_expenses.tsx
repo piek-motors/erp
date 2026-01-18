@@ -7,12 +7,32 @@ import { MaterialState } from './state'
 export const MaterialQuntifiedExpenses = observer(
   ({ m }: { m: MaterialState }) => {
     if (!m.writeoffStat?.monthly || !m.writeoffStat?.quarterly) return null
-    const margin = {
-      top: 15,
-      right: 15,
-      bottom: 0,
-      left: -30
+
+    const height = 300
+    const slotProps = {
+      barLabel: {
+        fontSize: '.8rem'
+      },
+      tooltip: {
+        sx: {
+          background: 'var(--joy-palette-neutral-50, #FBFCFE)',
+          fontSize: '.8rem'
+        }
+      }
     }
+
+    const qtyFormatter = (v: number | null) => {
+      const unit = uiUnit(m.unit)
+
+      if (typeof v !== 'number') {
+        return ''
+      }
+
+      if (v > 3) {
+        return `${Math.round(v)} ${unit}`
+      } else return `${v.toFixed(1)} ${unit}`
+    }
+
     return (
       <Stack gap={1}>
         <Label textAlign={'center'}>Агрегированный расход</Label>
@@ -25,7 +45,6 @@ export const MaterialQuntifiedExpenses = observer(
               value: 0,
               component: (
                 <BarChart
-                  margin={margin}
                   colors={['#308e74']}
                   series={[
                     {
@@ -34,12 +53,7 @@ export const MaterialQuntifiedExpenses = observer(
                       ),
                       barLabel: 'value',
                       barLabelPlacement: 'outside',
-                      valueFormatter: v => {
-                        if (typeof v == 'number') {
-                          return `${Math.round(v)} ${uiUnit(m.unit)}`
-                        }
-                        return ''
-                      }
+                      valueFormatter: qtyFormatter
                     }
                   ]}
                   grid={{ horizontal: true }}
@@ -51,18 +65,8 @@ export const MaterialQuntifiedExpenses = observer(
                       )
                     }
                   ]}
-                  slotProps={{
-                    barLabel: {
-                      fontSize: '.8rem'
-                    },
-                    tooltip: {
-                      sx: {
-                        background: 'var(--joy-palette-neutral-50, #FBFCFE)',
-                        fontSize: '.8rem'
-                      }
-                    }
-                  }}
-                  height={200}
+                  slotProps={slotProps}
+                  height={height}
                 />
               )
             },
@@ -71,16 +75,10 @@ export const MaterialQuntifiedExpenses = observer(
               value: 1,
               component: (
                 <BarChart
-                  margin={margin}
                   series={[
                     {
                       data: m.writeoffStat?.monthly?.map(([_, val]) => val),
-                      valueFormatter: v => {
-                        if (typeof v == 'number') {
-                          return `${Math.round(v)} ${uiUnit(m.unit)}`
-                        }
-                        return ''
-                      }
+                      valueFormatter: qtyFormatter
                     }
                   ]}
                   grid={{ horizontal: true }}
@@ -98,15 +96,8 @@ export const MaterialQuntifiedExpenses = observer(
                         }).format(v) ?? ''
                     }
                   ]}
-                  slotProps={{
-                    tooltip: {
-                      sx: {
-                        background: 'var(--joy-palette-neutral-50, #FBFCFE)',
-                        fontSize: '.8rem'
-                      }
-                    }
-                  }}
-                  height={200}
+                  slotProps={slotProps}
+                  height={height}
                 />
               )
             }

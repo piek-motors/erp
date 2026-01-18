@@ -7,7 +7,7 @@ import {
 } from 'lib/index'
 import { api } from '../detail/api'
 
-export const CreateDetailOrder = observer(
+export const CreateManufacturingOrder = observer(
   ({ detailId }: { detailId: number }) => {
     const navigate = useNavigate()
 
@@ -35,11 +35,7 @@ export const CreateDetailOrder = observer(
         onClick={handleSubmit}
         props={{
           variant: 'solid',
-          color: 'success',
-          sx: {
-            fontSize: '0.8rem',
-            px: 1
-          }
+          color: 'success'
         }}
       />
     )

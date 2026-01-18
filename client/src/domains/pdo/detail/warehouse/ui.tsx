@@ -49,55 +49,53 @@ const CreateWarehouseDetailOperation = observer(
   }
 )
 
-export const DetailWarehouse = observer(({ detail }: DetailStProp) => {
-  return (
-    <WarehouseCard
-      stock={detail.warehouse.stock}
-      unit="шт"
-      writeoff={
-        <CreateWarehouseDetailOperation
-          detail={detail}
-          reasonComponent={
-            <WriteoffReasonSelect
-              reason={detail.warehouse.writeoff.reason}
-              setReason={reason => detail.warehouse.writeoff.setReason(reason)}
-            />
-          }
-          onSubmit={() =>
-            detail.warehouse
-              .insertWriteoff(detail.id)
-              .then(() => {
-                notifier.ok(WriteoffCompletedText)
-              })
-              .finally(() => {
-                modalState.setWriteoff(false)
-              })
-          }
-        />
-      }
-      supply={
-        <CreateWarehouseDetailOperation
-          detail={detail}
-          reasonComponent={
-            <SupplyReasonSelect
-              reason={detail.warehouse.supply.reason}
-              setReason={reason => detail.warehouse.supply.setReason(reason)}
-            />
-          }
-          onSubmit={() =>
-            detail.warehouse
-              .insertSupply(detail.id)
-              .then(() => {
-                notifier.ok(SupplyCompletedText)
-              })
-              .finally(() => {
-                modalState.setSupply(false)
-              })
-          }
-        />
-      }
-    >
-      <OperationsListModal detailId={detail.id} />
-    </WarehouseCard>
-  )
-})
+export const DetailWarehouse = observer(({ detail }: DetailStProp) => (
+  <WarehouseCard
+    stock={detail.warehouse.stock}
+    unit="шт"
+    writeoff={
+      <CreateWarehouseDetailOperation
+        detail={detail}
+        reasonComponent={
+          <WriteoffReasonSelect
+            reason={detail.warehouse.writeoff.reason}
+            setReason={reason => detail.warehouse.writeoff.setReason(reason)}
+          />
+        }
+        onSubmit={() =>
+          detail.warehouse
+            .insertWriteoff(detail.id)
+            .then(() => {
+              notifier.ok(WriteoffCompletedText)
+            })
+            .finally(() => {
+              modalState.setWriteoff(false)
+            })
+        }
+      />
+    }
+    supply={
+      <CreateWarehouseDetailOperation
+        detail={detail}
+        reasonComponent={
+          <SupplyReasonSelect
+            reason={detail.warehouse.supply.reason}
+            setReason={reason => detail.warehouse.supply.setReason(reason)}
+          />
+        }
+        onSubmit={() =>
+          detail.warehouse
+            .insertSupply(detail.id)
+            .then(() => {
+              notifier.ok(SupplyCompletedText)
+            })
+            .finally(() => {
+              modalState.setSupply(false)
+            })
+        }
+      />
+    }
+  >
+    <OperationsListModal detailId={detail.id} />
+  </WarehouseCard>
+))

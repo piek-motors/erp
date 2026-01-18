@@ -1,23 +1,19 @@
-import { Box, Button, ButtonProps } from '@mui/joy'
+import { Button } from '@mui/joy'
 import { InModal } from 'components/modal'
-import { Btn } from 'lib/index'
 import { observer } from 'mobx-react-lite'
-import { useCallback, useState } from 'react'
+import { ReactNode, useCallback, useState } from 'react'
 import { useEscapeClose } from '../../../hooks/use-escape-close'
 import { OperationsTable, OperationsTitle } from './list'
 
 type OperationModalProps = {
   children: React.ReactNode
-  btn: {
-    label: string
-    color: ButtonProps['color']
-  }
   open: boolean
   setOpen: (open: boolean) => void
+  openButton: ReactNode
 }
 
 export const OperationModal = observer(
-  ({ children, btn, open, setOpen }: OperationModalProps) => {
+  ({ children, open, setOpen, openButton }: OperationModalProps) => {
     const handleClose = useCallback(() => {
       setOpen(false)
     }, [])
@@ -25,11 +21,7 @@ export const OperationModal = observer(
     return (
       <InModal
         size="sm"
-        openButton={
-          <Btn variant="soft" color={btn.color} fullWidth size="md">
-            {btn.label}
-          </Btn>
-        }
+        openButton={openButton}
         open={open}
         setOpen={o => setOpen(o)}
       >
@@ -49,6 +41,7 @@ export const OperationsListModal = observer(
     return (
       <InModal
         open={open}
+        layout="fullscreen"
         setOpen={open => {
           setOpen(open)
         }}
@@ -58,13 +51,13 @@ export const OperationsListModal = observer(
           </Button>
         }
       >
-        <Box>
+        <>
           <OperationsTitle />
           <OperationsTable
             materialId={props.materialId}
             detailId={props.detailId}
           />
-        </Box>
+        </>
       </InModal>
     )
   }

@@ -46,7 +46,7 @@ export function InModal(props: {
             overflowY: 'auto'
           }}
         >
-          <ModalClose variant="soft" color="warning" />
+          <ModalClose variant="solid" color="neutral" />
           <Stack>{props.children}</Stack>
         </ModalDialog>
       </MuiModal>

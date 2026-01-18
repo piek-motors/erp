@@ -6,7 +6,6 @@ import {
   observer,
   P,
   Row,
-  RowButColumsAtSm,
   Stack,
   useEffect,
   useNavigate,
@@ -60,36 +59,36 @@ export const MaterialUpdatePage = observer(() => {
           </Box>
         }
       />
-      <RowButColumsAtSm>
-        <Row alignItems={'start'}>
-          <Stack gap={1}>
-            <MaterialWarehouse m={m} />
-            <DetailsMadeOfMaterialModal m={m} />
-          </Stack>
-          <MaterialQuntifiedExpenses m={m} />
+      <Stack gap={1}>
+        <Row flexWrap={'wrap'}>
+          <MaterialWarehouse m={m} />
+          <DetailsMadeOfMaterialModal m={m} />
         </Row>
 
-        <Card size="md">
-          <Stack gap={3}>
-            <MaterialFormFields m={m} disabled />
-            <SaveAndDelete
-              sx={{ width: 'fit-content' }}
-              itemName={`Материал (${m.id}) - ${m.label}`}
-              handleDelete={() =>
-                api.delete(m.id!).then(() => {
-                  navigate(openPage(routeMap.pdo.materials))
-                })
-              }
-              handleSave={() =>
-                api.update(m).then(m => {
-                  setMaterial(m)
-                  notifier.notify('info', `Материал обновлен`)
-                })
-              }
-            />
-          </Stack>
-        </Card>
-      </RowButColumsAtSm>
+        <Row flexWrap={'wrap'} alignItems={'start'}>
+          <MaterialQuntifiedExpenses m={m} />
+          <Card size="md">
+            <Stack gap={3}>
+              <MaterialFormFields m={m} disabled />
+              <SaveAndDelete
+                sx={{ width: 'fit-content' }}
+                itemName={`Материал (${m.id}) - ${m.label}`}
+                handleDelete={() =>
+                  api.delete(m.id!).then(() => {
+                    navigate(openPage(routeMap.pdo.materials))
+                  })
+                }
+                handleSave={() =>
+                  api.update(m).then(m => {
+                    setMaterial(m)
+                    notifier.notify('info', `Материал обновлен`)
+                  })
+                }
+              />
+            </Stack>
+          </Card>
+        </Row>
+      </Stack>
     </Stack>
   )
 })

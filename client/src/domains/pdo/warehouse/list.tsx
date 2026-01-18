@@ -1,6 +1,7 @@
 import { ScrollableWindow } from 'components/scrollable_window'
 import { Table } from 'components/table.impl'
 import { MetalPageTitle } from 'domains/pdo/shared/basic'
+import { Label } from 'lib/index'
 import { observer } from 'mobx-react-lite'
 import { OperationType } from 'models'
 import { useEffect } from 'react'
@@ -24,20 +25,23 @@ export const OperationsTable = observer((props: Props) => {
     <ScrollableWindow
       static={<MobileNavModal t="Журнал операций" />}
       scroll={
-        <Table
-          sx={{ cursor: 'initial' }}
-          columns={columns}
-          data={s.operations}
-          rowStyleCb={op => {
-            const type = Number(op.original.operation_type)
-            if (type === OperationType.Supply) {
-              return {
-                backgroundColor: '#c6e7c3b9'
+        <>
+          {!s.operations.length && <Label>Нет информации</Label>}
+          <Table
+            sx={{ cursor: 'initial' }}
+            columns={columns}
+            data={s.operations}
+            rowStyleCb={op => {
+              const type = Number(op.original.operation_type)
+              if (type === OperationType.Supply) {
+                return {
+                  backgroundColor: '#c6e7c3b9'
+                }
               }
-            }
-            return {}
-          }}
-        />
+              return {}
+            }}
+          />
+        </>
       }
     />
   )

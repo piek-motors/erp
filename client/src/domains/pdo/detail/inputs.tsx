@@ -21,7 +21,6 @@ import {
   PlusIcon,
   Row
 } from 'lib/index'
-import { MetalPageTitle } from '../shared'
 import { MaterialAutocomplete } from '../shared/material_autocomplete'
 import { DetailAttachmentList } from './attachment/list'
 import { BlankSpec, DetailSt, DetailStProp } from './detail.state'
@@ -31,15 +30,6 @@ import { MaterialCost } from './warehouse/cost.store'
 export const DetailInputs = observer(({ detail: d }: DetailStProp) => (
   <Grid container direction={{ xs: 'column', md: 'row' }} spacing={1}>
     <Grid xs={12} md={7}>
-      <MetalPageTitle
-        t={
-          Boolean(d.id) && (
-            <P level="body-sm" whiteSpace={'nowrap'}>
-              Деталь № {d.id}
-            </P>
-          )
-        }
-      />
       <MultilineInput
         sx={{ fontWeight: 500, width: '100%' }}
         color="primary"

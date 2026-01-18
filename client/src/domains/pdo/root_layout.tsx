@@ -84,7 +84,7 @@ export function MetalFlowRootLayout(props: { children?: React.ReactNode }) {
         </WebOnly>
       </DesktopOnly>
       {props.children && (
-        <Sheet sx={{ width: '100%', height: 'inherit' }}>
+        <Sheet sx={{ width: '100%', height: 'min-content' }}>
           <Stack sx={{ flexGrow: 1, gap: 1, overflowX: 'auto' }}>
             {props.children}
           </Stack>

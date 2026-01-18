@@ -2,7 +2,11 @@ import { db } from '#root/deps.js'
 import { MaterialStatDataContainer } from '#root/ioc/index.js'
 import { logger } from '#root/ioc/log.js'
 import { Day } from '#root/lib/constants.js'
-import { addUTCMonths, startOfUTCDay, startOfUTCMonth } from '#root/lib/time.js'
+import {
+  addUTCMonths,
+  convertDateToUTC,
+  startOfUTCMonth
+} from '#root/lib/time.js'
 import { ManufacturingOrderStatus, OperationType, WriteoffReason } from 'models'
 import {
   MonthStrategy,
@@ -49,7 +53,7 @@ export class Jobs {
   private async calcMaterialQuarterlySpendings(nMonths: number = 12) {
     const start = Date.now()
 
-    const period_end = startOfUTCDay(new Date())
+    const period_end = convertDateToUTC(new Date())
     const period_start = startOfUTCMonth(addUTCMonths(period_end, -nMonths))
 
     const operations = await db
