@@ -52,7 +52,8 @@ export class ManufacturingApi {
           const material = cache.materials.get(writeoff.material_id)
           const unitStr = uiUnit(material?.unit)
           notifier.ok(
-            `Списано ${writeoff.totalCost} ${unitStr} ${writeoff.material_name}`
+            `Списано ${writeoff.totalCost} ${unitStr} ${writeoff.material_name}`,
+            10
           )
         }
       } catch (e: any) {

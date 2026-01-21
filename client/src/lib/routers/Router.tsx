@@ -18,6 +18,8 @@ export function AppRouter() {
           element={<RequireAuth>{route.element}</RequireAuth>}
         />
       ))}
+
+      <Route path="*" element={<Navigate to={routeMap.index} replace />} />
     </Routes>
   )
 }
