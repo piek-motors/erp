@@ -1,4 +1,4 @@
-import { Box, Tab, TabList, TabPanel, Tabs } from '@mui/joy'
+import { Tab, TabList, TabPanel, Tabs } from '@mui/joy'
 import { ScrollableWindow, Search } from 'components/inputs'
 import { Table } from 'components/table.impl'
 import { TabConfig } from 'components/tabs'
@@ -80,17 +80,21 @@ const ArchiveSearch = observer(
 
     return (
       <>
-        <Box px={1}>
-          {archive_search.show_last_archived_orders && (
-            <Label>За последние 30 дней</Label>
-          )}
-        </Box>
+        {archive_search.show_last_archived_orders && (
+          <Label xs px={1}>
+            За последние 30 дней
+          </Label>
+        )}
         <Table
           onRowClick={props.onRowClick}
           data={archive_search.orders_to_render}
           columns={getColumns(OrderStatus.Collected)}
         />
-        {archive_search.loader.loading && <Loading />}
+        {archive_search.loader.loading && (
+          <Label xs px={1}>
+            Загрузка...
+          </Label>
+        )}
       </>
     )
   }

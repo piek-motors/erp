@@ -182,7 +182,7 @@ export const orders = router({
       return matrixEncoder(
         orders.map(o => ({
           ...o,
-          ...dates_formatter(o)
+          ...dates_formatter(o, true)
         }))
       )
     })
@@ -192,10 +192,11 @@ const dates_formatter = (
   order: Pick<
     Selectable<DB.ProductionOrderTable>,
     'created_at' | 'started_at' | 'finished_at'
-  >
+  >,
+  withYear?: boolean
 ) => ({
   created_at: formatDate(order.created_at),
-  started_at: formatDate(order.started_at),
+  started_at: formatDate(order.started_at, withYear),
   finished_at: formatDate(order.finished_at),
   time_delta:
     order.finished_at && order.started_at

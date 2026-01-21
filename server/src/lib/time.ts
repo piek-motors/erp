@@ -12,11 +12,12 @@ export function fromMs(date?: number | null): Date | null {
   return new Date(date)
 }
 
-export const formatDate = (date?: Date | null) => {
+export const formatDate = (date?: Date | null, withYear?: boolean) => {
   if (!date) return null
   return Intl.DateTimeFormat('ru-RU', {
     month: 'short',
-    day: 'numeric'
+    day: 'numeric',
+    year: withYear ? '2-digit' : undefined
   })
     .format(date)
     .replace(/\.$/, '')
