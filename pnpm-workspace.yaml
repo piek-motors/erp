@@ -3,3 +3,4 @@ packages:
   - db
   - models
   - server
+  - rs

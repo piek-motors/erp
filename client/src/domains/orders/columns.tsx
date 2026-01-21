@@ -1,6 +1,6 @@
 import { Stack } from '@mui/joy'
 import { Table } from 'components/table.impl'
-import { P, Pre } from 'lib/index'
+import { Label, P, Pre } from 'lib/index'
 import { openOrderDetailPage } from 'lib/routes'
 import { observer } from 'mobx-react-lite'
 import moment from 'moment'
@@ -13,7 +13,7 @@ import { getBackgroundColor } from './utils'
 export const columns: Column<UnpackedOrder>[] = [
   {
     Header: 'ID',
-    accessor: order => order.id
+    accessor: order => <Label xs>{order.id}</Label>
   },
   {
     Header: 'Позиции',
