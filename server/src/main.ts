@@ -7,6 +7,7 @@ import * as trpcExpress from '@trpc/server/adapters/express'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import express from 'express'
+import { plus100 } from 'rs'
 import { logger } from './ioc/log.js'
 import './lib/trpc/index.js'
 
@@ -50,3 +51,5 @@ express()
       `🛫 Express running in ${config.NODE_ENV} mode on port ${config.PORT}`
     )
   })
+
+console.log('calling rust from node', plus100(100))
