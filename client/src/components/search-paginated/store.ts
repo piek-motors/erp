@@ -1,5 +1,6 @@
 import { debounceMs } from 'lib/constants'
 import { makeAutoObservable, reaction, runInAction } from 'mobx'
+import { sort_rus } from 'models'
 
 export interface SearchableItem {
   id?: number
@@ -119,7 +120,7 @@ export class PaginatedSearchStore<T extends SearchableItem> {
 
   private searchImmediate(items: T[]) {
     const filtered = this.filterItems(items)
-    const sorted = this.sortItems(filtered)
+    const sorted = sort_rus(filtered, v => v.name)
 
     runInAction(() => {
       this.searchResult = sorted
@@ -145,7 +146,7 @@ export class PaginatedSearchStore<T extends SearchableItem> {
       if (currentIndex < items.length) {
         requestAnimationFrame(processChunk)
       } else {
-        const sorted = this.sortItems(filteredResults)
+        const sorted = sort_rus(filteredResults, v => v.name)
         runInAction(() => {
           this.searchResult = sorted
           this.setIsSearching(false)
@@ -182,12 +183,6 @@ export class PaginatedSearchStore<T extends SearchableItem> {
 
       return true
     })
-  }
-
-  private sortItems(items: T[]): T[] {
-    return items
-      .slice()
-      .sort((a, b) => a.name.localeCompare(b.name, 'ru', { numeric: true }))
   }
 
   clear() {

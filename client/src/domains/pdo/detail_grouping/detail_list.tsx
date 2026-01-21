@@ -6,7 +6,7 @@ import { DetailRow } from './detail_row'
 import { UniversalDetailsModalSelect } from './detail_selection'
 
 export const GroupActions = observer(() => {
-  const openedGroup = api.store.openedGroup
+  const { openedGroup } = api.store
   return (
     <Stack direction="row" alignItems="center" gap={1}>
       {openedGroup && <UniversalDetailsModalSelect />}
@@ -32,8 +32,9 @@ export const GroupActions = observer(() => {
 })
 
 export const TargetGroupDetailList = observer(() => {
+  const { detailList } = api.store
   useEffect(() => {
-    api.store.setQuery()
+    detailList.setQuery()
   }, [])
 
   if (api.store.openedGroup?.details.length === 0)
@@ -49,8 +50,8 @@ export const TargetGroupDetailList = observer(() => {
         size="sm"
         variant="soft"
         color="primary"
-        value={api.store.query}
-        onChange={e => api.store.setQuery(e.target.value)}
+        value={detailList.query}
+        onChange={e => detailList.setQuery(e.target.value)}
       />
       {/* <ColorSegmentationMenu /> */}
       <Box

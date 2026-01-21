@@ -126,14 +126,17 @@ export class AttendanceReportGenerator {
     showFullInfo: boolean,
     dailyTimeRetention: number
   ): Employee {
-    const daysMap = days.reduce((acc, day) => {
-      acc[day] = {
-        intervals: [],
-        total_dur: 0,
-        broken: false
-      }
-      return acc
-    }, {} as Record<number, Day>)
+    const daysMap = days.reduce(
+      (acc, day) => {
+        acc[day] = {
+          intervals: [],
+          total_dur: 0,
+          broken: false
+        }
+        return acc
+      },
+      {} as Record<number, Day>
+    )
 
     const employee: Employee = {
       totalIntervalsCount: intervals.length,
