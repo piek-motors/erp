@@ -51,9 +51,8 @@ export class ManufacturingApi {
         if (writeoff) {
           const material = cache.materials.get(writeoff.material_id)
           const unitStr = uiUnit(material?.unit)
-          notifier.notify(
-            'info',
-            `Списано ${writeoff.totalCost} ${unitStr} ${writeoff.material_name}, остаток ${writeoff.stock} ${unitStr}`
+          notifier.ok(
+            `Списано ${writeoff.totalCost} ${unitStr} ${writeoff.material_name}`
           )
         }
       } catch (e: any) {

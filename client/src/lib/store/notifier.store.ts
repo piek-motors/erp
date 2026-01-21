@@ -1,3 +1,4 @@
+import { AlertProps } from '@mui/joy'
 import { makeAutoObservable, runInAction } from 'mobx'
 
 const ErrMsgTime = 10_000
@@ -6,7 +7,7 @@ const OkMsgTime = 3_000
 type Notification = {
   id: string
   msg: string
-  level: 'err' | 'info'
+  color: AlertProps['color']
 }
 
 class NotifierStore {
@@ -16,11 +17,11 @@ class NotifierStore {
     makeAutoObservable(this)
   }
 
-  notify(level: Notification['level'], msg: string, timeout?: number) {
+  private notify(level: Notification['color'], msg: string, timeout?: number) {
     const id = crypto.randomUUID()
 
     runInAction(() => {
-      this.notifications.unshift({ msg, level, id })
+      this.notifications.unshift({ msg, color: level, id })
     })
 
     // Remove notification after timeout
@@ -36,11 +37,15 @@ class NotifierStore {
   }
 
   ok(msg: string) {
-    this.notify('info', msg, OkMsgTime)
+    this.notify('success', msg, OkMsgTime)
+  }
+
+  warn(msg: string) {
+    this.notify('warning', msg, OkMsgTime)
   }
 
   err(msg: string) {
-    this.notify('err', msg, ErrMsgTime)
+    this.notify('danger', msg, ErrMsgTime)
   }
 }
 export const notifier = new NotifierStore()

@@ -316,13 +316,12 @@ const Cost = observer(({ detail, order }: DetailStProp & OrderStProp) => {
           </Stack>
         </Card>
       ) : null}
-      {/* 
       {!!details.length ? (
         <Card size="sm">
           <Label label="Детали к потреблению" />
           <Stack gap={0.5}>
             {details.map((cost, index) => (
-              <Row>
+              <Row justifyContent={'space-between'}>
                 <DetailName
                   detail={{
                     id: cost.detailId,
@@ -330,12 +329,14 @@ const Cost = observer(({ detail, order }: DetailStProp & OrderStProp) => {
                     group_id: cost.detail?.groupId || null
                   }}
                 />
-                <P>{cost.qty} шт</P>
+                <P>
+                  {cost.qty} <Label xs>шт</Label>
+                </P>
               </Row>
             ))}
           </Stack>
         </Card>
-      ) : null} */}
+      ) : null}
     </Row>
   )
 })
@@ -370,7 +371,7 @@ const QuantityInput = observer(
         qty
       })
       mode.save(qty)
-      notifier.notify('info', mode.notification)
+      notifier.ok(mode.notification)
     }
 
     if (isCollected) {

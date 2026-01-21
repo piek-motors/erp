@@ -81,7 +81,7 @@ export const MaterialUpdatePage = observer(() => {
                 handleSave={() =>
                   api.update(m).then(m => {
                     setMaterial(m)
-                    notifier.notify('info', `Материал обновлен`)
+                    notifier.ok(`Материал обновлен`)
                   })
                 }
               />

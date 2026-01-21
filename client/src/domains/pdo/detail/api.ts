@@ -65,7 +65,7 @@ export class DetailApi {
       notifier.ok(`Деталь обновлена`)
       return detail
     } catch (e: any) {
-      notifier.notify('err', e.message)
+      notifier.err(e.message)
       throw e
     }
   }

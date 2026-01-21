@@ -38,14 +38,14 @@ export class DetailCost {
   setDetailId(id: number) {
     this.detailId = id
   }
-  qty?: number
+  qty?: number = 1
   setQty(qty?: number) {
     this.qty = qty
   }
   constructor(init: { detail_id?: number; qty?: number } = {}) {
     makeAutoObservable(this)
     this.detailId = init.detail_id || 0
-    this.qty = init.qty
+    this.qty = init.qty || 1
   }
   get detail() {
     return cache.details.get(this.detailId)

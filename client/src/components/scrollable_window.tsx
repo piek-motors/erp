@@ -25,7 +25,7 @@ export const ScrollableWindow = (props: {
   const overflowY = props.overflowY ?? 'auto'
   const outerSx = {
     height: props.height,
-    maxHeight: props.height ? undefined : props.maxHeight ?? '100vh',
+    maxHeight: props.height ? undefined : (props.maxHeight ?? '100vh'),
     minHeight: props.minHeight ?? 0,
     ...props.containerSx
   } as SxProps
@@ -41,7 +41,7 @@ export const ScrollableWindow = (props: {
     ...props.scrollSx
   } as SxProps
   return (
-    <Stack sx={{ ...outerSx, overflowX: 'scroll', width: '100%' }}>
+    <Stack sx={{ ...outerSx, overflowX: 'auto', width: '100%' }}>
       {props.static && (
         <Box sx={{ p: { xs: 0.75, sm: 0 } }}>{props.static}</Box>
       )}

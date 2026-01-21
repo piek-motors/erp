@@ -25,10 +25,12 @@ export class DetailAutomaticWriteoffStore {
 
   get payload(): DetailAutomaticWriteoffData {
     return {
-      details: this.detailsCost.map(d => ({
-        detail_id: d.detailId,
-        qty: d.qty ? d.qty : 0
-      })),
+      details: this.detailsCost
+        .map(d => ({
+          detail_id: d.detailId,
+          qty: d.qty ?? 1
+        }))
+        .filter(e => e.detail_id && e.qty),
       material: this.materialCost ? this.materialCost.getCost() : null
     }
   }

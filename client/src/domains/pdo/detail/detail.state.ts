@@ -183,12 +183,6 @@ export class DetailSt {
   }
 
   payload(): UpdateDetailRequest {
-    const technicalParams =
-      this.blankSpec?.arr?.map(({ key, value }) => ({
-        key: key?.trim(),
-        value: value?.trim()
-      })) || []
-
     return {
       id: this.id ?? 0,
       description: this.description ?? '',
@@ -196,7 +190,13 @@ export class DetailSt {
       partCode: this.drawingNumber ?? null,
       groupId: this.groupId ?? null,
       blankSpec: {
-        arr: technicalParams ?? []
+        arr:
+          this.blankSpec?.arr
+            ?.map(({ key, value }) => ({
+              key: key?.trim(),
+              value: value?.trim()
+            }))
+            .filter(({ key, value }) => key) ?? []
       },
       recommendedBatchSize: Number(this.recommendedBatchSize) ?? null,
       processingRoute: this.processingRoute

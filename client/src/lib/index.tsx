@@ -221,7 +221,7 @@ export const MinusIcon = (props: IconButtonProps) => (
   </IconButton>
 )
 
-export const PlusIcon = (props: IconButtonProps) => (
+export const PlusIcon = (props: IconButtonProps & { invert?: boolean }) => (
   <IconButton
     variant="soft"
     color="primary"
@@ -229,7 +229,7 @@ export const PlusIcon = (props: IconButtonProps) => (
     size="sm"
     sx={{ width: 'min-content', ...props.sx }}
   >
-    <UseIcon icon={UilPlusCircle} />
+    <UseIcon icon={UilPlusCircle} invert={props.invert} />
   </IconButton>
 )
 

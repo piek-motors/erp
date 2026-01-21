@@ -1,5 +1,12 @@
 /** @jsxImportSource @emotion/react */
-import { AccordionGroup, Button, Grid, Stack, TypographySystem } from '@mui/joy'
+import {
+  AccordionGroup,
+  Button,
+  Divider,
+  Grid,
+  Stack,
+  TypographySystem
+} from '@mui/joy'
 import { AccordionCard } from 'components/accordion_card'
 import { ArrayJsonEditor } from 'components/array-json-editor'
 import { BaseAutocomplete, BaseOption } from 'components/base-autocomplete'
@@ -24,7 +31,7 @@ import {
 import { MaterialAutocomplete } from '../shared/material_autocomplete'
 import { DetailAttachmentList } from './attachment/list'
 import { BlankSpec, DetailSt, DetailStProp } from './detail.state'
-import { AutomaticWriteoffAccordion } from './warehouse/cost'
+import { DetailCostInputs, MaterialCostInputs } from './warehouse/cost'
 import { MaterialCost } from './warehouse/cost.store'
 
 export const DetailInputs = observer(({ detail: d }: DetailStProp) => (
@@ -75,7 +82,6 @@ export const DetailAccordionGroup = observer(({ d }: { d: DetailSt }) => (
     <DetailAttachmentInput detail={d} />
     <BlankSpecInput detail={d} />
     <ProcessingRouteAccordion detail={d} />
-    <AutomaticWriteoffAccordion detail={d} />
   </AccordionGroup>
 ))
 
@@ -170,7 +176,12 @@ const DetailAttachmentInput = observer(({ detail }: { detail: DetailSt }) => (
 
 const BlankSpecInput = observer(({ detail }: { detail: DetailSt }) => (
   <AccordionCard title="Заготовка" defaultExpanded>
-    <Label level="body-xs">Материал заготовки указывать не нужно</Label>
+    <MaterialCostInputs detail={detail} />
+    <Divider sx={{ my: 0.5 }} />
+    <DetailCostInputs detail={detail} />
+    <Divider sx={{ my: 0.5 }} />
+
+    <Label color="primary">Параметры</Label>
     <ArrayJsonEditor
       value={detail.blankSpec?.arr ?? null}
       onChange={parameters =>

@@ -24,6 +24,8 @@ const L = (props: { children: ReactNode }) => (
 
 export const TechPassportTable = observer(({ order, detail }: Props) => {
   const materialCost = detail.autoWriteoff.materialCost
+  const detailsCost = detail.autoWriteoff.detailsCost
+
   if (!order.resp) return
   return (
     <table css={css(tableStyles)} style={{ textAlign: 'center' }}>
@@ -55,11 +57,18 @@ export const TechPassportTable = observer(({ order, detail }: Props) => {
         <tr>
           <td style={{ maxWidth: '30%', width: '25%' }}>
             <L>Заготовка</L>
-            <P fontSize={14} pb={0.5} fontWeight={500}>
-              {materialCost?.materialId
-                ? cache.materials.getLabel(materialCost.materialId)
-                : ''}
-            </P>
+            <Box pb={0.5}>
+              <P fontSize={14} fontWeight={500}>
+                {materialCost?.materialId
+                  ? cache.materials.getLabel(materialCost.materialId)
+                  : ''}
+              </P>
+              {detailsCost.map(d => (
+                <P fontSize={14} fontWeight={500}>
+                  {d.detail?.name} - {d.qty} шт.
+                </P>
+              ))}
+            </Box>
             <TechParamsRowDisplay fontSize={14} params={detail.blankSpec} />
           </td>
           <td colSpan={3}>

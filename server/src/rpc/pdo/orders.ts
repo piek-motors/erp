@@ -151,6 +151,7 @@ export const orders = router({
         )
         .select('pdo.detail_group.name as group_name')
         .where('o.status', '=', OrderStatus.Collected)
+        .where('o.finished_at', 'is not', null)
         .orderBy('o.finished_at', 'desc')
 
       if (isNumericId) {

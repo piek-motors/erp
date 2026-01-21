@@ -15,12 +15,7 @@ export const NotifierOverlay = observer(() => (
     >
       <Stack gap={1}>
         {notifier.all().map(each => (
-          <Alert
-            key={each.id}
-            variant="solid"
-            size="sm"
-            color={each.level === 'err' ? 'danger' : 'success'}
-          >
+          <Alert key={each.id} variant="solid" size="sm" color={each.color}>
             <Container maxWidth="sm">{each.msg}</Container>
           </Alert>
         ))}

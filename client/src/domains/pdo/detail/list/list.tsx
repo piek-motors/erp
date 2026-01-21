@@ -1,4 +1,4 @@
-import { Button, Divider } from '@mui/joy'
+import { Divider } from '@mui/joy'
 import { SxProps } from '@mui/joy/styles/types'
 import { ScrollableWindow, Search } from 'components/inputs'
 import { InModal } from 'components/modal'
@@ -18,6 +18,7 @@ import {
   useNavigate,
   useState
 } from 'lib/index'
+import { ReactNode } from 'react'
 import { Column } from 'react-table'
 import { DetailSt } from '../detail.state'
 import { DetailName } from '../name'
@@ -112,6 +113,7 @@ const DetailList = observer((props: DetailsTableProps) => {
 interface DetailSelectModalProps {
   value?: DetailSt
   onRowClick: (row: DetailSt) => void
+  openButton: ReactNode
 }
 
 export const DetailSelectModal = observer((props: DetailSelectModalProps) => {
@@ -121,11 +123,7 @@ export const DetailSelectModal = observer((props: DetailSelectModalProps) => {
       layout="fullscreen"
       open={opnen}
       setOpen={() => setOpen(!opnen)}
-      openButton={
-        <Button variant="soft" size="sm">
-          Выбрать
-        </Button>
-      }
+      openButton={props.openButton}
     >
       <ScrollableWindow
         refreshTrigger={false}

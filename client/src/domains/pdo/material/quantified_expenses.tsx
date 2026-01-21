@@ -35,7 +35,9 @@ export const MaterialQuntifiedExpenses = observer(
 
     return (
       <Stack gap={1}>
-        <Label textAlign={'center'}>Агрегированный расход</Label>
+        <Label textAlign={'center'} xs>
+          Агрегированный расход
+        </Label>
         <Tabs
           size="sm"
           slots={{ tabList: { sx: { justifyContent: 'center' } } }}
