@@ -26,35 +26,45 @@ import { z } from 'zod'
 
 export type Material = DB.Material & {}
 
+const DEFAULT_SHORTAGE_PREDICTION_HORIZON_DAYS = 60
+
+const payload = z.object({
+  unit: z.enum(Unit),
+  shape: z.enum(MaterialShape),
+  label: z.string().nonempty(),
+  shape_data: z.any(),
+  alloy: z.string().nullable(),
+  shortage_prediction_horizon_days: z
+    .number()
+    .default(DEFAULT_SHORTAGE_PREDICTION_HORIZON_DAYS)
+})
+const id_payload = z.object({ id: z.number() })
+const update_payload = payload.extend({ id: z.number() })
+
 export const material = router({
-  get: procedure
-    .input(z.object({ id: z.number() }))
-    .query(async ({ input }) => {
-      const [material, detailCount] = await Promise.all([
-        db
-          .selectFrom('pdo.materials')
-          .selectAll()
-          .where('id', '=', input.id)
-          .executeTakeFirstOrThrow(),
-        db
-          .selectFrom('pdo.details')
-          .where(
-            sql<boolean>`(automatic_writeoff->'material'->>0)::int = ${input.id}`
-          )
-          .select(eb => eb.fn.countAll().as('count'))
-          .executeTakeFirstOrThrow()
-      ])
-      return {
-        material,
-        detailCount: Number(detailCount.count),
-        writeoff_stat: {
-          monthly: materials_stat_container.writeoffs.monthly?.get(input.id)
-            ?.entries,
-          quarterly: materials_stat_container.writeoffs.quarterly?.get(input.id)
-            ?.entries
-        }
+  get: procedure.input(id_payload).query(async ({ input: { id } }) => {
+    const [material, detailCount] = await Promise.all([
+      db
+        .selectFrom('pdo.materials')
+        .selectAll()
+        .where('id', '=', id)
+        .executeTakeFirstOrThrow(),
+      db
+        .selectFrom('pdo.details')
+        .where(sql<boolean>`(automatic_writeoff->'material'->>0)::int = ${id}`)
+        .select(eb => eb.fn.countAll().as('count'))
+        .executeTakeFirstOrThrow()
+    ])
+    return {
+      material,
+      detailCount: Number(detailCount.count),
+      writeoff_stat: {
+        monthly: materials_stat_container.writeoffs.monthly?.get(id)?.entries,
+        quarterly:
+          materials_stat_container.writeoffs.quarterly?.get(id)?.entries
       }
-    }),
+    }
+  }),
   //
   list: procedure.query(() =>
     db
@@ -67,16 +77,7 @@ export const material = router({
   //
   create: procedure
     .use(requireScope(Scope.pdo))
-    .input(
-      z.object({
-        unit: z.enum(Unit).nullable(),
-        shape: z.enum(MaterialShape),
-        label: z.string().nonempty(),
-        shape_data: z.any(),
-        // linear_mass: z.number(),
-        alloy: z.string().nullable()
-      })
-    )
+    .input(payload)
     .mutation(async ({ input }) => {
       const constructor = MaterialConstructorMap[input.shape]
       const materialModel = new constructor(input.shape_data, '', input.alloy)
@@ -84,17 +85,13 @@ export const material = router({
         materialModel,
         input.shape_data
       )
-      const label = materialModel.deriveLabel()
       const material = await db
         .insertInto('pdo.materials')
         .values({
           ...input,
-          unit: input.unit ?? Unit.M,
-          label,
+          label: materialModel.deriveLabel(),
           stock: 0,
-          linear_mass: 0,
-          alloy: input.alloy,
-          safety_stock: 0
+          linear_mass: 0
         })
         .returningAll()
         .executeTakeFirstOrThrow()
@@ -107,15 +104,14 @@ export const material = router({
           }
           throw e
         })
-      info(`New material created: ${label}`)
+      info(`New material created: ${materialModel.deriveLabel()}`)
       return material
     }),
   //
   delete: procedure
     .use(requireScope(Scope.pdo))
-    .input(z.object({ id: z.number() }))
-    .mutation(async ({ input }) => {
-      const { id } = input
+    .input(id_payload)
+    .mutation(async ({ input: { id } }) => {
       await db.transaction().execute(async trx => {
         await trx
           .deleteFrom('pdo.operations')
@@ -134,30 +130,11 @@ export const material = router({
     }),
   update: procedure
     .use(requireScope(Scope.pdo))
-    .input(
-      z.object({
-        id: z.number(),
-        label: z.string(),
-        shape: z.enum(MaterialShape),
-        shape_data: z.any(),
-        unit: z.enum(Unit).nullable(),
-        // linear_mass: z.number(),
-        alloy: z.string().nullable(),
-        safety_stock: z.number().nullable()
-      })
-    )
+    .input(update_payload)
     .mutation(async ({ input }) => {
       await db
         .updateTable('pdo.materials')
-        .set({
-          label: input.label,
-          shape: input.shape,
-          shape_data: input.shape_data,
-          unit: input.unit ?? Unit.M,
-          // linear_mass: input.linear_mass,
-          alloy: input.alloy,
-          safety_stock: input.safety_stock ?? 0
-        })
+        .set(input)
         .where('id', '=', input.id)
         .executeTakeFirstOrThrow()
       return 'ok'
@@ -169,7 +146,7 @@ export const material = router({
       z.object({
         material_id: z.number(),
         lengthMeters: z.number().gt(0),
-        reason: z.nativeEnum(SupplyReason)
+        reason: z.enum(SupplyReason)
       })
     )
     .mutation(({ input, ctx }) =>

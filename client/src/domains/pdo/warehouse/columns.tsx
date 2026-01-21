@@ -9,8 +9,8 @@ import {
 } from 'models'
 import { Column } from 'react-table'
 import { DetailName } from '../detail/name'
+import { Operation } from './list'
 import { OperationName } from './operation_name'
-import { Operation } from './store'
 
 export const columns: Column<Operation>[] = [
   {

@@ -97,9 +97,13 @@ export namespace DB {
     shape: MaterialShape
     shape_data: JSONColumnType<any, any, any>
     stock: number
-    safety_stock: number
     linear_mass: number // kg/m
     alloy: string | null
+    /**
+     * Number of days before a *predicted* stock deficit at which a warning should be triggered,
+     * calculated from historical consumption rate and extrapolated into the future.
+     */
+    shortage_prediction_horizon_days: number
   }
 
   export type Material = KyselySelectable<MaterialTable>

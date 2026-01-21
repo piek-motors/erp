@@ -26,10 +26,7 @@ const commonColumns: Column<ListOrdersOutput>[] = [
   },
   {
     Header: 'Кол-во',
-    accessor: m => {
-      if (!m.qty) return ''
-      return <P>{m.qty}</P>
-    }
+    accessor: ({ qty }) => (qty ? <P>{qty}</P> : '')
   }
 ]
 
@@ -75,6 +72,10 @@ const productionColumns = commonColumns.concat([
 ])
 
 const finishColumns = commonColumns.concat([
+  {
+    Header: 'Выход',
+    accessor: ({ output_qty }) => (output_qty ? <P>{output_qty}</P> : '')
+  },
   {
     Header: 'Запуск',
     accessor: m => (

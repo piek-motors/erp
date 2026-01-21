@@ -81,9 +81,9 @@ export class MaterialState {
     this.detailsMadeFromThisMaterial = []
   }
 
-  safetyStock?: number
-  setSafetyStock(safetyStock?: number) {
-    this.safetyStock = safetyStock
+  shortagePredictionHorizonDays?: number
+  setShortageOredictionHorizonDays(v?: number) {
+    this.shortagePredictionHorizonDays = v
   }
 
   writeoffStat?: {

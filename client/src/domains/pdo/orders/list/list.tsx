@@ -4,7 +4,7 @@ import { Table } from 'components/table.impl'
 import { TabConfig } from 'components/tabs'
 import { cache } from 'domains/pdo/cache/root'
 import { MobileNavModal } from 'domains/pdo/root_layout'
-import { observer } from 'lib/deps'
+import { makeAutoObservable, observer } from 'lib/deps'
 import {
   Label,
   Loading,
@@ -67,7 +67,7 @@ const getTabConfig = (
     component: (
       <>
         <Label xs px={1}>
-          За последние 14 дней
+          За последние 30 дней
         </Label>
         <Table
           onRowClick={onRowClick}
@@ -79,9 +79,21 @@ const getTabConfig = (
   }
 ]
 
+class ManufacturingListState {
+  constructor() {
+    makeAutoObservable(this)
+  }
+  tab: number = OrderStatus.Production
+  setTab(v: OrderStatus) {
+    this.tab = v
+  }
+}
+
+const list_state = new ManufacturingListState()
+
 export const ManufacturingList = observer(() => {
   const navigate = useNavigate()
-  const [tab, setTab] = useState(OrderStatus.Production)
+
   useEffect(() => {
     s.load()
   }, [])
@@ -108,8 +120,8 @@ export const ManufacturingList = observer(() => {
   return (
     <Tabs
       variant="plain"
-      value={tab}
-      onChange={(_, v) => setTab(v as OrderStatus)}
+      value={list_state.tab}
+      onChange={(_, v) => list_state.setTab(v as OrderStatus)}
       size="sm"
     >
       <ScrollableWindow
@@ -124,7 +136,7 @@ export const ManufacturingList = observer(() => {
                   key={value}
                   value={value}
                   color={'primary'}
-                  variant={tab == value ? 'outlined' : 'plain'}
+                  variant={list_state.tab == value ? 'outlined' : 'plain'}
                 >
                   {label}
                 </Tab>

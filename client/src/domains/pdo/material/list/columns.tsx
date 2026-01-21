@@ -30,9 +30,5 @@ export const columns: Column<Material>[] = [
   {
     Header: 'Остаток',
     accessor: m => balanceWithUnit(m.stock, m.unit)
-  },
-  {
-    Header: 'Норм. запас',
-    accessor: m => balanceWithUnit(m.safety_stock, m.unit)
   }
 ]

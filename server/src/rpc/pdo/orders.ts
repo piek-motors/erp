@@ -7,7 +7,7 @@ import { Manufacturing } from '#root/service/manufacturing.service.js'
 import { ManufacturingOrderStatus as OrderStatus } from 'models'
 import z from 'zod'
 
-export const FinishedOrderRetentionDays = 14
+export const FinishedOrderRetentionDays = 30
 
 export const FinishedOrderRetentionPeriod = FinishedOrderRetentionDays * Day
 
@@ -16,6 +16,7 @@ export interface ListOrdersOutput {
   detail_id: number
   detail_name: string
   qty: number
+  output_qty?: number
   group_id: number | null
   status: OrderStatus
   created_at: string
@@ -185,49 +186,35 @@ export const orders = router({
   //
   list: procedure.query(async () => {
     const cutoffDate = new Date(Date.now() - FinishedOrderRetentionPeriod)
+
+    const base_query = db
+      .selectFrom('pdo.orders as m')
+      .select([
+        'm.id',
+        'm.status',
+        'm.detail_id',
+        'm.qty',
+        'm.output_qty',
+        'm.finished_at',
+        'm.created_at',
+        'm.started_at',
+        'm.current_operation',
+        'm.current_operation_start_at'
+      ])
+      .innerJoin('pdo.details as d', 'm.detail_id', 'd.id')
+      .select([
+        'd.name as detail_name',
+        'd.logical_group_id as group_id',
+        'd.processing_route'
+      ])
+
     const [inProduction, finished, dict_operations] = await Promise.all([
-      db
-        .selectFrom('pdo.orders as m')
-        .select([
-          'm.id',
-          'm.status',
-          'm.detail_id',
-          'm.qty',
-          'm.finished_at',
-          'm.created_at',
-          'm.started_at',
-          'm.current_operation',
-          'm.current_operation_start_at'
-        ])
-        .innerJoin('pdo.details as d', 'm.detail_id', 'd.id')
-        .select([
-          'd.name as detail_name',
-          'd.logical_group_id as group_id',
-          'd.processing_route'
-        ])
+      base_query
         .where('m.finished_at', 'is', null)
         .where('m.status', '!=', OrderStatus.Collected)
         .orderBy('m.started_at', 'desc')
         .execute(),
-      db
-        .selectFrom('pdo.orders as m')
-        .select([
-          'm.id',
-          'm.status',
-          'm.detail_id',
-          'm.qty',
-          'm.finished_at',
-          'm.created_at',
-          'm.started_at',
-          'm.current_operation',
-          'm.current_operation_start_at'
-        ])
-        .innerJoin('pdo.details as d', 'm.detail_id', 'd.id')
-        .select([
-          'd.name as detail_name',
-          'd.logical_group_id as group_id',
-          'd.processing_route'
-        ])
+      base_query
         .where('m.finished_at', '>=', cutoffDate)
         .orderBy('m.finished_at', 'desc')
         .execute(),
