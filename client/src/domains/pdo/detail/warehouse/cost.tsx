@@ -107,7 +107,8 @@ export const DetailCostInputs = observer(({ detail }: { detail: DetailSt }) => (
 
     {detail.autoWriteoff.detailsCost.map((cost, index) => {
       const detailCache = cache.details.get(cost.detailId)
-      if (!detailCache)
+      if (cache.details.loader.loading) return <Label xs>Загрузка..7</Label>
+      else if (!detailCache)
         return (
           <DetailSelectModal
             openButton={
@@ -137,7 +138,6 @@ export const DetailCostInputs = observer(({ detail }: { detail: DetailSt }) => (
                 name: detailCache.name,
                 group_id: detailCache.groupId ?? 0
               }}
-              disableLink
               withGroupName
             />
             <NumberInput

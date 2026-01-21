@@ -1,5 +1,6 @@
 import { matrixDecoder } from 'lib/rpc/matrix_decoder'
 import { rpc } from 'lib/rpc/rpc.client'
+import { LoadingController } from 'lib/store/loading_controller'
 import { makeAutoObservable } from 'mobx'
 import { ListDetailsOutput } from 'srv/rpc/pdo/details'
 import { DetailSt } from '../detail/detail.state'
@@ -14,6 +15,7 @@ type Operation = {
 }
 
 export class DetailCache {
+  readonly loader = new LoadingController()
   constructor() {
     makeAutoObservable(this)
   }
@@ -65,13 +67,15 @@ export class DetailCache {
   }
 
   async load() {
-    const detailsRaw = await rpc.pdo.details.list.query()
-    const details = matrixDecoder<ListDetailsOutput>(detailsRaw).map(
-      DetailSt.fromDto
-    )
-    this.setDetails(details)
+    this.loader.run(async () => {
+      const detailsRaw = await rpc.pdo.details.list.query()
+      const details = matrixDecoder<ListDetailsOutput>(detailsRaw).map(
+        DetailSt.fromDto
+      )
+      this.setDetails(details)
 
-    const operationsDict = await rpc.pdo.dict.operation_kinds.ls.query()
-    this.setDictProcessingOperations(operationsDict)
+      const operationsDict = await rpc.pdo.dict.operation_kinds.ls.query()
+      this.setDictProcessingOperations(operationsDict)
+    })
   }
 }
