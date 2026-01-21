@@ -25,7 +25,7 @@ export class DetailGroupingApi {
     return this.targetGroupLoading.run(async () => {
       const resp = await rpc.pdo.detail_groups.get.query({ groupId })
       const details = matrixDecoder<DetailInTheGroup>(resp.details)
-      this.store.setTargetGroup({
+      this.store.openGroup({
         group: resp.group,
         details: details.map(d => {
           const detail = new Detail()
@@ -55,7 +55,7 @@ export class DetailGroupingApi {
         name
       })
       await cache.detailGroups.load()
-      if (this.store.targetGroup?.group.id === id) {
+      if (this.store.openedGroup?.group.id === id) {
         await this.loadGroupWithDetails(id)
       }
       return updatedGroup
@@ -85,4 +85,4 @@ export class DetailGroupingApi {
   }
 }
 
-export const crud = new DetailGroupingApi()
+export const api = new DetailGroupingApi()

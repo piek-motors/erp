@@ -28,7 +28,7 @@ export class DetailWarehouseStore {
   constructor() {
     makeAutoObservable(this)
   }
-  qty = 0
+  qty?: number
   setQty(qty: number) {
     this.qty = qty
   }
@@ -41,6 +41,8 @@ export class DetailWarehouseStore {
   }
 
   async insertSupply(detailId: number) {
+    if (!this.qty) throw Error('Кол-во не задано')
+
     const res = await rpc.pdo.details.supply.mutate({
       detailId,
       qty: this.qty,
@@ -51,6 +53,8 @@ export class DetailWarehouseStore {
     return res.stock
   }
   async insertWriteoff(detailId: number) {
+    if (!this.qty) throw Error('Кол-во не задано')
+
     const stock = await rpc.pdo.details.writeoff.mutate({
       detailId,
       qty: this.qty,

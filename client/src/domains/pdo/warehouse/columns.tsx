@@ -41,7 +41,7 @@ export const columns: Column<Operation>[] = [
   {
     Header: 'Деталь',
     accessor: data => {
-      if (!data.detail_id) return null
+      if (!data.detail_id || !data.material_id) return null
       return (
         <DetailName
           sx={{ whiteSpace: 'wrap', width: 'auto' }}

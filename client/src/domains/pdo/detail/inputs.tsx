@@ -28,54 +28,61 @@ import {
   PlusIcon,
   Row
 } from 'lib/index'
+import { ReactNode } from 'react'
 import { MaterialAutocomplete } from '../shared/material_autocomplete'
 import { DetailAttachmentList } from './attachment/list'
 import { BlankSpec, DetailSt, DetailStProp } from './detail.state'
 import { DetailCostInputs, MaterialCostInputs } from './warehouse/cost'
 import { MaterialCost } from './warehouse/cost.store'
 
-export const DetailInputs = observer(({ detail: d }: DetailStProp) => (
-  <Grid container direction={{ xs: 'column', md: 'row' }} spacing={1}>
-    <Grid xs={12} md={7}>
-      <MultilineInput
-        sx={{ fontWeight: 500, width: '100%' }}
-        color="primary"
-        label="Название со склада"
-        onChange={e => {
-          d.setName(e.target.value)
-        }}
-        value={d.name}
-      />
-      <MultilineInput
-        sx={{ width: '100%' }}
-        label="Название чертежа"
-        onChange={e => {
-          d.setDrawingName(e.target.value)
-        }}
-        value={d.drawingName}
-      />
-      <Input
-        label="Номер чертежа"
-        onChange={v => {
-          d.setDrawingNumber(v)
-          if (v.startsWith('ВЗИС')) {
-            alert('Впишите конструкторский номер без приставки "ВЗИС"')
-          }
-        }}
-        value={d.drawingNumber}
-      />
-      <DetailGroupInput detail={d} />
-      <Row alignItems={'end'}>
-        <StockLocationInput detail={d} />
-        <DetailRecommendedBatchSizeInput detail={d} />
-      </Row>
-      <DetailDescriptionInput detail={d} />
+export const DetailInputs = observer(
+  ({
+    detail: d,
+    leftChildren
+  }: DetailStProp & { leftChildren?: ReactNode }) => (
+    <Grid container direction={{ xs: 'column', md: 'row' }} spacing={1}>
+      <Grid xs={12} md={7}>
+        <MultilineInput
+          sx={{ fontWeight: 500, width: '100%' }}
+          color="primary"
+          label="Название со склада"
+          onChange={e => {
+            d.setName(e.target.value)
+          }}
+          value={d.name}
+        />
+        <MultilineInput
+          sx={{ width: '100%' }}
+          label="Название чертежа"
+          onChange={e => {
+            d.setDrawingName(e.target.value)
+          }}
+          value={d.drawingName}
+        />
+        <Input
+          label="Номер чертежа"
+          onChange={v => {
+            d.setDrawingNumber(v)
+            if (v.startsWith('ВЗИС')) {
+              alert('Впишите конструкторский номер без приставки "ВЗИС"')
+            }
+          }}
+          value={d.drawingNumber}
+        />
+        <DetailGroupInput detail={d} />
+        <Row alignItems={'end'}>
+          <StockLocationInput detail={d} />
+          <DetailRecommendedBatchSizeInput detail={d} />
+        </Row>
+        <DetailDescriptionInput detail={d} />
+        {leftChildren}
+      </Grid>
+      <Grid xs={12} md={5}>
+        <DetailAccordionGroup d={d} />
+      </Grid>
     </Grid>
-    <Grid xs={12} md={5}>
-      <DetailAccordionGroup d={d} />
-    </Grid>
-  </Grid>
-))
+  )
+)
 
 export const DetailAccordionGroup = observer(({ d }: { d: DetailSt }) => (
   <AccordionGroup>

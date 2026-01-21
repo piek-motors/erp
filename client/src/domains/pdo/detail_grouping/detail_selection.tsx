@@ -5,7 +5,7 @@ import { InModal } from 'components/modal'
 import { observer, P, Row, UseIcon, useState } from 'lib/index'
 import { cache } from '../cache/root'
 import { DetailName } from '../detail/name'
-import { crud } from './api'
+import { api } from './api'
 
 const UniversalDetailSelection = observer(() => {
   const universalDetails = cache.details.getUniversalDetails()
@@ -16,7 +16,7 @@ const UniversalDetailSelection = observer(() => {
 
   // Convert details to BaseOption format, excluding already selected ones
   const availableOptions: BaseOption[] = universalDetails
-    .filter(detail => !crud.store.selectedDetailIds.includes(detail.id))
+    .filter(detail => !api.store.selectedDetailIds.includes(detail.id))
     .map(detail => {
       const baseLabel = `${detail.id} - ${detail.name}`
       return {
@@ -28,19 +28,16 @@ const UniversalDetailSelection = observer(() => {
     })
 
   // Get selected detail options for display
-  const selectedOptions = crud.store.selectedDetailIds.filter(id =>
-    crud.store.selectedDetailIds.includes(id)
+  const selectedOptions = api.store.selectedDetailIds.filter(id =>
+    api.store.selectedDetailIds.includes(id)
   )
 
   const handleSelectionChange = (selectedOption: BaseOption | null) => {
     if (!selectedOption) return
 
     const detailId = selectedOption.value
-    if (!crud.store.selectedDetailIds.includes(detailId)) {
-      crud.store.setSelectedDetailIds([
-        ...crud.store.selectedDetailIds,
-        detailId
-      ])
+    if (!api.store.selectedDetailIds.includes(detailId)) {
+      api.store.setSelectedDetailIds([...api.store.selectedDetailIds, detailId])
     }
   }
 
@@ -74,8 +71,8 @@ const UniversalDetailSelection = observer(() => {
                     color="danger"
                     size="sm"
                     onClick={() => {
-                      crud.store.setSelectedDetailIds(
-                        crud.store.selectedDetailIds.filter(
+                      api.store.setSelectedDetailIds(
+                        api.store.selectedDetailIds.filter(
                           selectedId => selectedId !== id
                         )
                       )
@@ -112,13 +109,13 @@ export const UniversalDetailsModalSelect = observer(() => {
 
   const handleAddDetails = async () => {
     if (
-      crud.store.targetGroup == null ||
-      crud.store.selectedDetailIds.length === 0
+      api.store.openedGroup == null ||
+      api.store.selectedDetailIds.length === 0
     )
       return
-    await crud.addDetailsToGroup(
-      crud.store.targetGroup.group.id,
-      crud.store.selectedDetailIds
+    await api.addDetailsToGroup(
+      api.store.openedGroup.group.id,
+      api.store.selectedDetailIds
     )
     setOpen(false)
   }
@@ -138,7 +135,7 @@ export const UniversalDetailsModalSelect = observer(() => {
         setOpen(v)
       }}
       onClose={() => {
-        crud.store.setSelectedDetailIds([])
+        api.store.setSelectedDetailIds([])
       }}
     >
       <Stack sx={{ flex: 1 }} gap={1}>
@@ -153,9 +150,9 @@ export const UniversalDetailsModalSelect = observer(() => {
             size="sm"
             variant="soft"
             onClick={handleAddDetails}
-            disabled={crud.store.selectedDetailIds.length === 0}
+            disabled={api.store.selectedDetailIds.length === 0}
           >
-            Расширить [{crud.store.selectedDetailIds.length}]
+            Расширить [{api.store.selectedDetailIds.length}]
           </Button>
         </Box>
       </Stack>

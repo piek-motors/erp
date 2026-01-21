@@ -1,29 +1,30 @@
 import { Box, Button } from '@mui/joy'
-import { observer, P, Stack } from 'lib/index'
-import { crud } from './api'
+import { Search } from 'components/inputs'
+import { observer, P, Stack, useEffect } from 'lib/index'
+import { api } from './api'
 import { DetailRow } from './detail_row'
 import { UniversalDetailsModalSelect } from './detail_selection'
 
 export const GroupActions = observer(() => {
-  const openedGroup = crud.store.targetGroup
+  const openedGroup = api.store.openedGroup
   return (
     <Stack direction="row" alignItems="center" gap={1}>
       {openedGroup && <UniversalDetailsModalSelect />}
-      {openedGroup && crud.store.selectedDetailIds.length > 0 && (
+      {openedGroup && api.store.selectedDetailIds.length > 0 && (
         <Button
           size="sm"
           variant="soft"
           color="danger"
           onClick={async () => {
-            if (crud.store.targetGroup == null) return
-            await crud.removeDetailsFromGroup(
-              crud.store.targetGroup.group.id,
-              crud.store.selectedDetailIds
+            if (api.store.openedGroup == null) return
+            await api.removeDetailsFromGroup(
+              api.store.openedGroup.group.id,
+              api.store.selectedDetailIds
             )
           }}
-          disabled={crud.store.selectedDetailIds.length === 0}
+          disabled={api.store.selectedDetailIds.length === 0}
         >
-          Исключить [{crud.store.selectedDetailIds.length}]
+          Исключить [{api.store.selectedDetailIds.length}]
         </Button>
       )}
     </Stack>
@@ -31,7 +32,11 @@ export const GroupActions = observer(() => {
 })
 
 export const TargetGroupDetailList = observer(() => {
-  if (crud.store.targetGroup?.details.length === 0)
+  useEffect(() => {
+    api.store.setQuery()
+  }, [])
+
+  if (api.store.openedGroup?.details.length === 0)
     return (
       <P level="body-sm" color="neutral">
         В группе нет деталей
@@ -40,6 +45,13 @@ export const TargetGroupDetailList = observer(() => {
 
   return (
     <Stack sx={{ flex: 1 }}>
+      <Search
+        size="sm"
+        variant="soft"
+        color="primary"
+        value={api.store.query}
+        onChange={e => api.store.setQuery(e.target.value)}
+      />
       {/* <ColorSegmentationMenu /> */}
       <Box
         sx={{
@@ -50,14 +62,14 @@ export const TargetGroupDetailList = observer(() => {
           // gridTemplateColumns: 'auto 6fr'
         }}
       >
-        {crud.store.targetGroupDetails?.map(detail => (
+        {api.store.targetGroupDetails?.map(detail => (
           <DetailRow
             key={detail.id}
             detail={detail}
             onToggle={() => {
-              crud.store.toggleDetailSelection(detail.id)
+              api.store.toggleDetailSelection(detail.id)
             }}
-            isSelected={crud.store.selectedDetailIds.includes(detail.id)}
+            isSelected={api.store.selectedDetailIds.includes(detail.id)}
           />
         ))}
       </Box>

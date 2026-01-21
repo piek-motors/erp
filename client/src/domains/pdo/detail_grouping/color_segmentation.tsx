@@ -3,7 +3,7 @@ import { Box, Button, Menu } from '@mui/joy'
 import { Row, UseIcon } from 'lib/index'
 import { observer } from 'mobx-react-lite'
 import { Color } from 'models'
-import { crud } from './api'
+import { api } from './api'
 import { Detail } from './group.store'
 
 const map = {
@@ -33,10 +33,10 @@ export const ColorSegmentation = observer((props: { detail: Detail }) => (
     size="sm"
     color="neutral"
     onClick={e => {
-      crud.store.colorSegmentation.init(
+      api.store.colorSegmentation.init(
         e.currentTarget,
         props.detail,
-        crud.store.targetGroup?.group.id!
+        api.store.openedGroup?.group.id!
       )
     }}
   >
@@ -73,13 +73,13 @@ export const ColorSegmentationMenu = observer(() => (
   <Box sx={{ width: 100 }}>
     <Menu
       onMouseLeave={() => {
-        crud.store.colorSegmentation
+        api.store.colorSegmentation
           .save()
-          .then(() => crud.store.colorSegmentation.clear())
+          .then(() => api.store.colorSegmentation.clear())
       }}
       variant="outlined"
-      open={crud.store.colorSegmentation.detail !== null}
-      anchorEl={crud.store.colorSegmentation.anchorEl}
+      open={api.store.colorSegmentation.detail !== null}
+      anchorEl={api.store.colorSegmentation.anchorEl}
       sx={{ p: 1, m: 0 }}
       placement="bottom-start"
       onClose={() => {
@@ -88,15 +88,14 @@ export const ColorSegmentationMenu = observer(() => (
     >
       <Row gap={0.2}>
         {Object.entries(map).map(([color, value]) => {
-          const selected =
-            crud.store.colorSegmentation.detail?.colors?.includes(
-              +color as unknown as Color
-            )
+          const selected = api.store.colorSegmentation.detail?.colors?.includes(
+            +color as unknown as Color
+          )
           return (
             <Box
               onClick={e => {
                 e.stopPropagation()
-                crud.store.colorSegmentation.addOrDeleteColor(
+                api.store.colorSegmentation.addOrDeleteColor(
                   +color as unknown as Color
                 )
               }}

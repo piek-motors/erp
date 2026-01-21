@@ -1,4 +1,4 @@
-import { Sheet, Stack } from '@mui/joy'
+import { Box, Stack } from '@mui/joy'
 import { MetalPageTitle, SaveAndDelete } from 'domains/pdo/shared/basic'
 import {
   Loading,
@@ -48,43 +48,35 @@ export const UpdateDetailPage = observer(() => {
         <DetailWarehouse detail={detail} />
         <CreateManufacturingOrder detailId={detail.id} />
       </Row>
-      <DetailInputs detail={detail} />
-      <Metadata
-        updatedAt={detail.updatedAt}
-        lastManufacturingDate={detail.lastManufacturingDate}
-        lastManufacturingQty={detail.lastManufacturingQty}
+      <DetailInputs
+        detail={detail}
+        leftChildren={
+          <Box pt={1}>
+            <Metadata
+              updatedAt={detail.updatedAt}
+              lastManufacturingDate={detail.lastManufacturingDate}
+              lastManufacturingQty={detail.lastManufacturingQty}
+            />
+            <SaveFloatingButton detail={detail} />
+          </Box>
+        }
       />
-      <SaveFloatingButton detail={detail} />
     </Stack>
   )
 })
 
-function SaveFloatingButton({ detail }: DetailStProp) {
+const SaveFloatingButton = ({ detail }: DetailStProp) => {
   const navigate = useNavigate()
   return (
-    <Sheet
-      sx={{
-        borderRadius: 'sm',
-        backgroundColor: 'lightgray',
-        position: 'sticky',
-        bottom: 0,
-        width: 'min-content',
-        p: 1,
-        height: 'min-content'
-      }}
-    >
-      <Row>
-        <SaveAndDelete
-          itemName={`Деталь (${detail.id}) - ${detail.name}`}
-          handleDelete={() =>
-            api.delete(detail.id).then(() => {
-              navigate(openPage(routeMap.pdo.details))
-            })
-          }
-          handleSave={() => api.update(detail)}
-        />
-      </Row>
-    </Sheet>
+    <SaveAndDelete
+      itemName={`Деталь (${detail.id}) - ${detail.name}`}
+      handleDelete={() =>
+        api.delete(detail.id).then(() => {
+          navigate(openPage(routeMap.pdo.details))
+        })
+      }
+      handleSave={() => api.update(detail)}
+    />
   )
 }
 

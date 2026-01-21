@@ -4,12 +4,12 @@ import { InModal } from 'components/modal'
 import { observer, P, UseIcon, useState } from 'lib/index'
 import { openPage, routeMap } from 'lib/routes'
 import { Link } from 'react-router'
-import { crud } from './api'
+import { api } from './api'
 import { CreateGroupModal } from './group_name.modal'
 
 export const SharedGroupList = observer(
   (props: { onLinkClick?: (open: boolean) => void }) => {
-    if (crud.store.groups.length === 0) {
+    if (api.store.groups.length === 0) {
       return (
         <P level="body-sm" color="neutral">
           Нет созданных групп
@@ -18,8 +18,8 @@ export const SharedGroupList = observer(
     }
     return (
       <Stack p={0.5} gap={0}>
-        {crud.store.groups.map(group => {
-          const isSelected = crud.store.targetGroup?.group.id === group.id
+        {api.store.groups.map(group => {
+          const isSelected = api.store.openedGroup?.group.id === group.id
           return (
             <Link
               onClick={e => {

@@ -7,14 +7,14 @@ import {
 import { Box, Loading, observer, P, Row, Stack, useEffect } from 'lib/index'
 import { useParams } from 'react-router'
 import { MobileNavModal } from '../root_layout'
-import { crud } from './api'
+import { api } from './api'
 import { GroupActions, TargetGroupDetailList } from './detail_list'
 import { GroupSelectModal, SharedGroupList } from './group_list'
 import { UpdateGroupNameModal } from './group_name.modal'
 
 const DetailsPanel = observer(() => {
-  if (crud.targetGroupLoading.loading) return <Loading />
-  const openedGroup = crud.store.targetGroup
+  if (api.targetGroupLoading.loading) return <Loading />
+  const openedGroup = api.store.openedGroup
   if (!openedGroup)
     return (
       <P level="body-sm" p={2}>
@@ -77,11 +77,11 @@ export const DetailGroupById = observer(() => {
     if (id) {
       const groupId = parseInt(id, 10)
       if (!isNaN(groupId)) {
-        crud.loadGroupWithDetails(groupId)
+        api.loadGroupWithDetails(groupId)
       }
     }
     return () => {
-      crud.store.clear()
+      api.store.clear()
     }
   }, [id])
 
@@ -90,9 +90,9 @@ export const DetailGroupById = observer(() => {
 
 export const DetailGroupListPage = observer(() => {
   useEffect(() => {
-    crud.listGroups()
+    api.listGroups()
     return () => {
-      crud.store.clear()
+      api.store.clear()
     }
   }, [])
   return <DetailGroupsLayout />

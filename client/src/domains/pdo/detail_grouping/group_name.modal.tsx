@@ -3,7 +3,7 @@ import { Button, Stack } from '@mui/joy'
 import { InModal } from 'components/modal'
 import { InputLabled, Loading, observer, P, UseIcon, useState } from 'lib/index'
 import { ReactNode, useEffect } from 'react'
-import { crud } from './api'
+import { api } from './api'
 
 interface BaseGroupModalProps {
   openButton: ReactNode
@@ -70,7 +70,7 @@ const BaseGroupModal = observer((props: BaseGroupModalProps) => {
 
 export const CreateGroupModal = observer(() => {
   const handleSubmit = async (name: string) => {
-    await crud.createGroup(name)
+    await api.createGroup(name)
   }
   return (
     <BaseGroupModal
@@ -94,10 +94,10 @@ export const CreateGroupModal = observer(() => {
 
 export const UpdateGroupNameModal = observer(() => {
   const handleSubmit = async (name: string) => {
-    if (!crud.store.targetGroup) {
+    if (!api.store.openedGroup) {
       throw new Error('No group selected for update')
     }
-    await crud.updateGroup(crud.store.targetGroup.group.id, name)
+    await api.updateGroup(api.store.openedGroup.group.id, name)
   }
 
   return (
@@ -113,12 +113,12 @@ export const UpdateGroupNameModal = observer(() => {
             }
           }}
         >
-          {crud.store.targetGroup?.group.name}
+          {api.store.openedGroup?.group.name}
         </P>
       }
       title="Изменить название группы"
       onSubmit={handleSubmit}
-      initialName={crud.store.targetGroup?.group.name || ''}
+      initialName={api.store.openedGroup?.group.name || ''}
     />
   )
 })

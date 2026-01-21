@@ -45,44 +45,47 @@ export class DetailGroupStore {
   readonly groupNameState = new GroupNameState()
   readonly colorSegmentation = new ColorSegmentation()
 
-  targetGroup: GroupWithDetails | null = null
-  setTargetGroup(group: GroupWithDetails | null) {
-    this.targetGroup = group
-    this.targetGroup?.details.sort((a, b) => a.name.localeCompare(b.name))
-    this.groupNameState.setName(group?.group.name || '')
-    this.colorSegmentation.clear()
-  }
-
+  openedGroup: GroupWithDetails | null = null
   selectedDetailIds: number[] = []
-  setSelectedDetailIds(ids: number[]) {
-    this.selectedDetailIds = ids
-  }
+  query?: string
 
   constructor() {
     makeAutoObservable(this)
   }
+
+  /* ------------------ Computed ------------------ */
 
   get groups() {
     return cache.detailGroups.getGroups()
   }
 
   get targetGroupDetails() {
-    return this.targetGroup?.details.slice().sort((a, b) =>
-      a.name.localeCompare(b.name, 'ru', {
-        numeric: true,
-        sensitivity: 'base'
-      })
-    )
+    const details = this.openedGroup?.details ?? []
+
+    return this.sortDetails(this.filterDetailsByQuery(details))
+  }
+
+  /* ------------------ Public actions ------------------ */
+
+  openGroup(group: GroupWithDetails | null) {
+    this.openedGroup = group
+    this.openedGroup?.details.sort((a, b) => a.name.localeCompare(b.name))
+    this.groupNameState.setName(group?.group.name || '')
+    this.colorSegmentation.clear()
+  }
+
+  setSelectedDetailIds(ids: number[]) {
+    this.selectedDetailIds = ids
+  }
+
+  setQuery(q?: string) {
+    this.query = q
   }
 
   toggleDetailSelection(detailId: number) {
-    if (this.selectedDetailIds.includes(detailId)) {
-      this.selectedDetailIds = this.selectedDetailIds.filter(
-        id => id !== detailId
-      )
-    } else {
-      this.selectedDetailIds = [...this.selectedDetailIds, detailId]
-    }
+    this.selectedDetailIds = this.selectedDetailIds.includes(detailId)
+      ? this.selectedDetailIds.filter(id => id !== detailId)
+      : [...this.selectedDetailIds, detailId]
   }
 
   clearSelection() {
@@ -90,7 +93,39 @@ export class DetailGroupStore {
   }
 
   clear() {
-    this.targetGroup = null
+    this.openedGroup = null
     this.selectedDetailIds = []
+  }
+
+  /* ------------------ Search helpers ------------------ */
+
+  private getQueryTokens(): string[] {
+    return this.query?.toLowerCase().split(/\s+/).filter(Boolean) ?? []
+  }
+
+  private filterDetailsByQuery(details: Detail[]): Detail[] {
+    const tokens = this.getQueryTokens()
+
+    if (tokens.length === 0) {
+      return details
+    }
+
+    return details.filter(detail => this.matchesAllTokens(detail.name, tokens))
+  }
+
+  private matchesAllTokens(text: string, tokens: string[]): boolean {
+    const value = text.toLowerCase()
+    return tokens.every(token => value.includes(token))
+  }
+
+  /* ------------------ Sorting ------------------ */
+
+  private sortDetails(details: Detail[]): Detail[] {
+    return details.slice().sort((a, b) =>
+      a.name.localeCompare(b.name, 'ru', {
+        numeric: true,
+        sensitivity: 'base'
+      })
+    )
   }
 }
