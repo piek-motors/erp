@@ -6,6 +6,7 @@ import { details } from './details.js'
 import { material } from './materials.js'
 import { operations } from './operations.js'
 import { orders } from './orders.js'
+import { orders_mut } from './orders_mut.js'
 
 export const dict = router({
   operation_kinds: create_dict_router('pdo.dict_operation_kinds')
@@ -18,5 +19,6 @@ export const pdo = router({
   detail_groups,
   operations,
   orders,
+  orders_mut,
   delete_file
 })

@@ -32,7 +32,7 @@ export class ManufacturingApi {
 
   async startPreparation(order: OrderSt) {
     await this.loader.run(async () => {
-      await rpc.pdo.orders.start_preparation.mutate({
+      await rpc.pdo.orders_mut.start_preparation.mutate({
         orderId: order.id
       })
       await this.reload(order)
@@ -42,7 +42,7 @@ export class ManufacturingApi {
   async startProduction(order: OrderSt, force?: boolean) {
     await this.loader.run(async () => {
       try {
-        const writeoff = await rpc.pdo.orders.start_production.mutate({
+        const writeoff = await rpc.pdo.orders_mut.start_production.mutate({
           orderId: order.id,
           qty: order.qty!,
           force
@@ -83,7 +83,7 @@ export class ManufacturingApi {
 
   async setCurrentOperation(order: OrderSt, index: number) {
     if (!order.resp) throw new Error('Заказ не найден')
-    await rpc.pdo.orders.set_current_operation.mutate({
+    await rpc.pdo.orders_mut.set_current_operation.mutate({
       id: order.id,
       operation_index: index
     })
@@ -93,14 +93,14 @@ export class ManufacturingApi {
 
   async finish(order: OrderSt) {
     await this.loader.run(async () => {
-      await rpc.pdo.orders.finish.mutate({ id: order.id })
+      await rpc.pdo.orders_mut.finish.mutate({ id: order.id })
       await this.reload(order)
     })
   }
 
   async returnToProduction(order: OrderSt) {
     await this.loader.run(async () => {
-      await rpc.pdo.orders.return_to_production.mutate({
+      await rpc.pdo.orders_mut.return_to_production.mutate({
         id: order.id
       })
       await this.reload(order)
@@ -108,7 +108,7 @@ export class ManufacturingApi {
   }
 
   delete(id: ManufacturingOrderOutput['id']) {
-    return rpc.pdo.orders.delete.mutate({ id })
+    return rpc.pdo.orders_mut.delete.mutate({ id })
   }
 }
 

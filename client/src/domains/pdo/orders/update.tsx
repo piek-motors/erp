@@ -365,7 +365,7 @@ const QuantityInput = observer(
 
     const handleSave = async () => {
       if (qty == null) return
-      await rpc.pdo.orders.update_qty.mutate({
+      await rpc.pdo.orders_mut.update_qty.mutate({
         id: order.id,
         qty
       })
@@ -450,9 +450,9 @@ const ActionButton = observer(({ order }: OrderStProp) => {
           onClick={() => api.finish(order)}
           disabled={api.loader.loading}
           size="sm"
-          color="success"
+          color="primary"
         >
-          Завершить
+          В архив
         </Button>
       )
     case OrderStatus.Collected:
@@ -548,8 +548,8 @@ const MaterialCostCalculations = observer(
                 remainingAmount >= 0
                   ? 'success'
                   : remainingAmount < 0
-                  ? 'danger'
-                  : 'primary'
+                    ? 'danger'
+                    : 'primary'
               }
               level="body-sm"
             >

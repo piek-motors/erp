@@ -1,10 +1,9 @@
-import { Tab, TabList, TabPanel, Tabs } from '@mui/joy'
+import { Box, Tab, TabList, TabPanel, Tabs } from '@mui/joy'
 import { ScrollableWindow, Search } from 'components/inputs'
 import { Table } from 'components/table.impl'
 import { TabConfig } from 'components/tabs'
-import { cache } from 'domains/pdo/cache/root'
 import { MobileNavModal } from 'domains/pdo/root_layout'
-import { makeAutoObservable, observer } from 'lib/deps'
+import { observer } from 'lib/deps'
 import {
   Label,
   Loading,
@@ -13,13 +12,15 @@ import {
   Row,
   Stack,
   useEffect,
-  useNavigate,
-  useState
+  useNavigate
 } from 'lib/index'
-import { ManufacturingOrderStatus as OrderStatus } from 'models'
+import {
+  ManufacturingOrderStatus,
+  ManufacturingOrderStatus as OrderStatus
+} from 'models'
 import { ListOrdersOutput } from 'srv/rpc/pdo/orders'
 import { getColumns } from './columns'
-import { s } from './store'
+import { archive_search, s } from './store'
 
 const getTabConfig = (
   data: ListOrdersOutput[],
@@ -63,33 +64,37 @@ const getTabConfig = (
   },
   {
     value: OrderStatus.Collected,
-    label: 'Завершенные',
-    component: (
-      <>
-        <Label xs px={1}>
-          За последние 30 дней
-        </Label>
-        <Table
-          onRowClick={onRowClick}
-          data={data.filter(e => e.status == OrderStatus.Collected)}
-          columns={getColumns(OrderStatus.Collected)}
-        />
-      </>
-    )
+    label: 'Архив',
+    component: <ArchiveSearch data={data} onRowClick={onRowClick} />
   }
 ]
 
-class ManufacturingListState {
-  constructor() {
-    makeAutoObservable(this)
-  }
-  tab: number = OrderStatus.Production
-  setTab(v: OrderStatus) {
-    this.tab = v
-  }
-}
+const ArchiveSearch = observer(
+  (props: {
+    data: ListOrdersOutput[]
+    onRowClick: (row: ListOrdersOutput) => void
+  }) => {
+    useEffect(() => {
+      archive_search.init()
+    }, [])
 
-const list_state = new ManufacturingListState()
+    return (
+      <>
+        <Box px={1}>
+          {archive_search.show_last_archived_orders && (
+            <Label>За последние 30 дней</Label>
+          )}
+        </Box>
+        <Table
+          onRowClick={props.onRowClick}
+          data={archive_search.orders_to_render}
+          columns={getColumns(OrderStatus.Collected)}
+        />
+        {archive_search.loader.loading && <Loading />}
+      </>
+    )
+  }
+)
 
 export const ManufacturingList = observer(() => {
   const navigate = useNavigate()
@@ -101,27 +106,34 @@ export const ManufacturingList = observer(() => {
   const onRowClick = (row: ListOrdersOutput) => {
     navigate(openPage(routeMap.pdo.order.edit, row.id))
   }
-  const [query, setQuery] = useState('')
-  const q = query.trim().toLowerCase()
-
-  const filtered = q
-    ? s.orders.filter(order => {
-        const id_match = String(order.id).includes(q)
-        const name_match = order.detail_name?.toLowerCase().includes(q)
-        const group_match = String(
-          cache.detailGroups.getGroupName(order.group_id)?.toLowerCase() || ''
-        ).includes(q)
-        return id_match || name_match || group_match
-      })
-    : s.orders
 
   if (s.async.loading) return <Loading />
-  const tabs = getTabConfig(filtered, onRowClick)
+  const tabs = getTabConfig(s.filtered, onRowClick)
+
+  const search =
+    s.tab === ManufacturingOrderStatus.Collected ? (
+      <Search
+        size="sm"
+        variant="soft"
+        color="primary"
+        value={archive_search.query}
+        onChange={e => archive_search.setQuery(e.target.value)}
+      />
+    ) : (
+      <Search
+        size="sm"
+        variant="soft"
+        color="primary"
+        value={s.query}
+        onChange={e => s.setQuery(e.target.value)}
+      />
+    )
+
   return (
     <Tabs
       variant="plain"
-      value={list_state.tab}
-      onChange={(_, v) => list_state.setTab(v as OrderStatus)}
+      value={s.tab}
+      onChange={(_, v) => s.setTab(v as OrderStatus)}
       size="sm"
     >
       <ScrollableWindow
@@ -136,20 +148,14 @@ export const ManufacturingList = observer(() => {
                   key={value}
                   value={value}
                   color={'primary'}
-                  variant={list_state.tab == value ? 'outlined' : 'plain'}
+                  variant={s.tab == value ? 'outlined' : 'plain'}
                 >
                   {label}
                 </Tab>
               ))}
             </TabList>
             <Row gap={0} px={1}>
-              <Search
-                size="sm"
-                variant="soft"
-                color="primary"
-                value={query}
-                onChange={e => setQuery(e.target.value)}
-              />
+              {search}
             </Row>
           </Stack>
         }

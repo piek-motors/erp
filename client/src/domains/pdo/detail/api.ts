@@ -46,7 +46,7 @@ export class DetailApi {
   }
 
   async createManufacturingOrder(id: number) {
-    return rpc.pdo.orders.create.mutate({
+    return rpc.pdo.orders_mut.create.mutate({
       detailId: id
     })
   }
