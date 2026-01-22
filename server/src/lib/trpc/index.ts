@@ -1,5 +1,6 @@
-import { trpcRouter } from '#root/rpc/trpc-router.js'
 import type { inferRouterInputs, inferRouterOutputs } from '@trpc/server'
+import type { trpcRouter } from '#root/rpc/trpc-router.js'
+
 export * from '#root/lib/trpc/trpc.js'
 
 export type AppRouter = typeof trpcRouter

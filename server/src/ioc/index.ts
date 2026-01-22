@@ -1,4 +1,4 @@
-import { PeriodAggregator } from '#root/lib/statistic/period_aggregator.js'
+import type { PeriodAggregator } from '#root/lib/statistic/period_aggregator.js'
 import { AttendanceReportGenerator } from '#root/rpc/attendance/report_generator.js'
 import { AttachmentService } from '#root/service/attachment.service.js'
 import { AuthSevice } from '#root/service/auth.service.js'
@@ -13,10 +13,10 @@ const userRepo = new UserRepository(db)
 const tokenRepo = new TokenRepository(userRepo, db)
 
 export class MaterialStatDataContainer {
-  writeoffs: {
-    monthly?: PeriodAggregator
-    quarterly?: PeriodAggregator
-  } = {}
+	writeoffs: {
+		monthly?: PeriodAggregator
+		quarterly?: PeriodAggregator
+	} = {}
 }
 
 export const materials_stat_container = new MaterialStatDataContainer()

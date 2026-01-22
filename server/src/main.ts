@@ -14,42 +14,42 @@ import './lib/trpc/index.js'
 const clientBuild = config.BUILD_PATH
 
 process.on('unhandledRejection', (reason, p) => {
-  logger.error(
-    `Unhandled Rejection at: Promise ${p}, ${reason}`,
-    reason instanceof Error ? reason.stack || reason.message : reason
-  )
+	logger.error(
+		`Unhandled Rejection at: Promise ${p}, ${reason}`,
+		reason instanceof Error ? reason.stack || reason.message : reason,
+	)
 })
 
 express()
-  .use(express.static(clientBuild))
-  .use(express.urlencoded({ extended: false }))
-  .use(express.json())
-  .use(cookieParser())
-  .use(
-    cors({
-      credentials: true,
-      origin: [config.CORS_CLIENT_URL]
-    })
-  )
-  .use('/api', router)
-  .use(
-    '/trpc',
-    trpcExpress.createExpressMiddleware({
-      router: trpcRouter,
-      createContext
-    })
-  )
-  .use((err, req, res, next) => {
-    errorMiddleware(err, req, res, next)
-  })
-  .get('*', function (request, response) {
-    // All remaining requests return the React app, so it can handle routing.
-    response.sendFile('index.html', { root: clientBuild })
-  })
-  .listen(config.PORT, async () => {
-    logger.info(
-      `🛫 Express running in ${config.NODE_ENV} mode on port ${config.PORT}`
-    )
-  })
+	.use(express.static(clientBuild))
+	.use(express.urlencoded({ extended: false }))
+	.use(express.json())
+	.use(cookieParser())
+	.use(
+		cors({
+			credentials: true,
+			origin: [config.CORS_CLIENT_URL],
+		}),
+	)
+	.use('/api', router)
+	.use(
+		'/trpc',
+		trpcExpress.createExpressMiddleware({
+			router: trpcRouter,
+			createContext,
+		}) as any,
+	)
+	.use((err, req, res, next) => {
+		errorMiddleware(err, req, res, next)
+	})
+	.get('*', (_, response) => {
+		// All remaining requests return the React app, so it can handle routing.
+		response.sendFile('index.html', { root: clientBuild })
+	})
+	.listen(config.PORT, async () => {
+		logger.info(
+			`🛫 Express running in ${config.NODE_ENV} mode on port ${config.PORT}`,
+		)
+	})
 
 console.log('calling rust from node', plus100(100))
