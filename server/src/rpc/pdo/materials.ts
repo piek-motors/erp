@@ -1,4 +1,3 @@
-import { info } from 'console'
 import type { DB } from 'db'
 import { sql } from 'kysely'
 import {
@@ -79,8 +78,12 @@ export const material = router({
 		.use(requireScope(Scope.pdo))
 		.input(payload)
 		.mutation(async ({ input }) => {
-			const constructor = MaterialConstructorMap[input.shape]
-			const materialModel = new constructor(input.shape_data, '', input.alloy)
+			const materialConstructor = MaterialConstructorMap[input.shape]
+			const materialModel = new materialConstructor(
+				input.shape_data,
+				'',
+				input.alloy,
+			)
 			MaterialShapeAbstractionLayer.importShapeData(
 				materialModel,
 				input.shape_data,
@@ -104,7 +107,7 @@ export const material = router({
 					}
 					throw e
 				})
-			info(`New material created: ${materialModel.deriveLabel()}`)
+			console.info(`New material created: ${materialModel.deriveLabel()}`)
 			return material
 		}),
 	//

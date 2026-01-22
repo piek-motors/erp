@@ -3,7 +3,7 @@ import { tokenService } from '#root/ioc/index.js'
 import { ApiError } from '#root/lib/api.error.js'
 import { Errcode } from '#root/lib/error-code.js'
 
-export default function (req: Request, res: Response, next: NextFunction) {
+export default function (req: Request, _res: Response, next: NextFunction) {
 	try {
 		const authorizationHeader = req.headers.authorization
 		if (!authorizationHeader) {
@@ -18,7 +18,7 @@ export default function (req: Request, res: Response, next: NextFunction) {
 			return next(ApiError.Unauthorized(Errcode.INVALID_ACCESS_TOKEN))
 		}
 		next()
-	} catch (e) {
+	} catch (_) {
 		next(ApiError.Unauthorized(Errcode.UNKNOWN_ERROR_TRY_AGAIN))
 	}
 }

@@ -5,9 +5,9 @@ import { Errcode } from '#root/lib/error-code.js'
 
 export default function (
 	err: ApiError,
-	req: Request,
+	_req: Request,
 	res: Response,
-	next: NextFunction,
+	_next: NextFunction,
 ) {
 	if (err instanceof ApiError) {
 		return res.status(err.status).json({

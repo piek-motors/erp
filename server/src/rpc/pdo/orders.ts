@@ -124,10 +124,6 @@ export const orders = router({
 		.input(z.object({ term: z.string().nonempty() }))
 		.query(async ({ input }) => {
 			const normalizedTerm = input.term.trim().toLowerCase()
-
-			// Tokenize search term by splitting on spaces
-			const tokens = normalizedTerm.split(/\s+/).filter(t => t.length > 0)
-
 			// Check if term is a number (integer ID search)
 			const isNumericId = /^\d+$/.test(normalizedTerm)
 

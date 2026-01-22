@@ -10,7 +10,7 @@ const multerMiddleware = multer({
 		bucket: config.S3_BUCKET,
 		storageClass: 'COLD',
 		contentType: AUTO_CONTENT_TYPE,
-		key: (req, file, cb) => {
+		key: (_req, _file, cb) => {
 			//generate unique file names to be saved on the server
 			cb(null, randomUUID())
 		},

@@ -82,7 +82,7 @@ export class AttendanceReportGenerator {
 			if (!acc.has(interval.card)) {
 				acc.set(interval.card, [])
 			}
-			acc.get(interval.card)!.push(interval)
+			acc.get(interval.card)?.push(interval)
 			return acc
 		}, new Map<string, typeof all_intervals>())
 
@@ -90,7 +90,7 @@ export class AttendanceReportGenerator {
 			if (!acc.has(absence.user_id)) {
 				acc.set(absence.user_id, [])
 			}
-			acc.get(absence.user_id)!.push(absence)
+			acc.get(absence.user_id)?.push(absence)
 			return acc
 		}, new Map<number, typeof all_absences>())
 

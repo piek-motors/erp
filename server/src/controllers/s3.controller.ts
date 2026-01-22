@@ -1,8 +1,8 @@
+import type { NextFunction, Request, Response } from 'express'
 import { config } from '#root/config/env.js'
 import { attachmentService } from '#root/ioc/index.js'
 import { logger } from '#root/ioc/log.js'
 import { s3 } from '#root/ioc/s3.js'
-import type { NextFunction, Request, Response } from 'express'
 
 export const uploadBinaryFiles = async (
 	req: Request & { files: any[]; headers: { order_id: string } },

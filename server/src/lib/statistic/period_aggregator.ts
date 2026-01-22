@@ -43,7 +43,9 @@ class BucketSeries {
 	readonly map = new Map<string, number>()
 
 	constructor(init_keys: string[]) {
-		init_keys.forEach(each => this.map.set(each, 0))
+		init_keys.forEach(each => {
+			this.map.set(each, 0)
+		})
 	}
 
 	increment(key: string, value: number): Error | undefined {

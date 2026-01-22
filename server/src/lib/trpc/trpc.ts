@@ -5,7 +5,7 @@ import type { Context } from './context.ts'
 const skipLoggingForCodes = new Set(['FORBIDDEN'])
 
 export const t = initTRPC.context<Context>().create({
-	errorFormatter({ shape, error, input, path, type }) {
+	errorFormatter({ shape, error, input, path }) {
 		if (error.message === 'jwt expired') {
 			return shape
 		}

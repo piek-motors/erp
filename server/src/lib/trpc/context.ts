@@ -4,7 +4,6 @@ import { tokenService } from '#root/ioc/index.js'
 
 export async function createContext({
 	req,
-	res,
 }: trpcNext.CreateNextContextOptions) {
 	async function getUserFromHeader() {
 		if (req.headers.authorization) {

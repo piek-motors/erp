@@ -50,7 +50,7 @@ function buildStockUpdates(operation: Operation): StockUpdate[] {
 		updates.push({
 			table: 'pdo.materials',
 			id: operation.material_id,
-			quantity: operation.qty!,
+			quantity: operation.qty,
 			isSupply,
 		})
 	}
@@ -60,7 +60,7 @@ function buildStockUpdates(operation: Operation): StockUpdate[] {
 		updates.push({
 			table: 'pdo.details',
 			id: operation.detail_id,
-			quantity: operation.qty!,
+			quantity: operation.qty,
 			isSupply,
 		})
 	}
@@ -76,14 +76,14 @@ export const operations = router({
 				detailId: z.number().optional(),
 			}),
 		)
-		.query(async ({ ctx, input }) => {
+		.query(async ({ input }) => {
 			const operations = await db
 				.selectFrom('pdo.operations as o')
-				.$if(input.materialId != null, qb =>
-					qb.where('o.material_id', '=', input.materialId!),
+				.$if(!!input.materialId, qb =>
+					qb.where('o.material_id', '=', input.materialId as number),
 				)
-				.$if(input.detailId != null, qb =>
-					qb.where('o.detail_id', '=', input.detailId!),
+				.$if(!!input.detailId, qb =>
+					qb.where('o.detail_id', '=', input.detailId as number),
 				)
 				.leftJoin('pdo.materials as m', 'o.material_id', 'm.id')
 				.leftJoin('pdo.details as d', 'o.detail_id', 'd.id')
