@@ -1,5 +1,5 @@
-import type { DB, Selectable } from 'db'
-import { db, procedure, router, z } from '#root/deps.js'
+import { db, procedure, router, z } from '#root/sdk.js';
+import type { DB, Selectable } from 'db';
 
 export type DictEntry = Selectable<DB.Dict<string>>
 

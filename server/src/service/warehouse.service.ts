@@ -1,11 +1,11 @@
+import { type IDB, TRPCError } from '#root/sdk.js'
 import { OperationType, type SupplyReason, type WriteoffReason } from 'models'
-import { type IDB, TRPCError } from '#root/deps.js'
 
 export class Warehouse {
 	constructor(
 		private readonly trx: IDB,
 		private readonly userId: number,
-	) {}
+	) { }
 
 	supplyMaterial(id: number, qty: number, reason: SupplyReason) {
 		return Promise.all([

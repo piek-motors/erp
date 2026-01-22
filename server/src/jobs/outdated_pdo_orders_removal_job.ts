@@ -1,6 +1,6 @@
-import { db } from '#root/deps.js'
 import { logger } from '#root/ioc/log.js'
 import { Day } from '#root/lib/constants.js'
+import { db } from '#root/sdk.js'
 import { ManufacturingOrderStatus } from 'models'
 import { Job } from './jobs_runner.js'
 

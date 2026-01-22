@@ -1,14 +1,14 @@
-import { config, type IDB } from '#root/deps.js'
 import { ApiError } from '#root/lib/api.error.js'
 import { Day } from '#root/lib/constants.js'
 import { Errcode } from '#root/lib/error-code.js'
+import { config, type IDB } from '#root/sdk.js'
 import type { UserRepository } from './user.js'
 
 export class TokenRepository {
 	constructor(
 		private readonly userRepo: UserRepository,
 		private readonly db: IDB,
-	) {}
+	) { }
 
 	async find(refreshToken: string) {
 		const token = await this.db

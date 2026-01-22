@@ -1,6 +1,6 @@
-import { procedure } from '#root/deps.js'
 import { db } from '#root/ioc/db.js'
 import { router } from '#root/lib/trpc/trpc.js'
+import { procedure } from '#root/sdk.js'
 import { attachments } from './attachment.js'
 import { attendance } from './attendance/attendance.js'
 import { orders } from './orders/orders_router.js'

@@ -7,7 +7,7 @@ import {
 	Scope,
 	type Selectable,
 	z,
-} from '#root/deps.js'
+} from '#root/sdk.js'
 
 export type Payment = Selectable<DB.OrderPaymentsTable>
 

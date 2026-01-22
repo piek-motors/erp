@@ -1,8 +1,8 @@
-import { Color } from 'models'
-import { z } from 'zod'
-import { db, procedure, requireScope, Scope, TRPCError } from '#root/deps.js'
 import { matrixEncoder } from '#root/lib/matrix_encoder.js'
 import { router } from '#root/lib/trpc/trpc.js'
+import { db, procedure, requireScope, Scope, TRPCError } from '#root/sdk.js'
+import { Color } from 'models'
+import { z } from 'zod'
 
 export interface DetailInTheGroup {
 	id: number

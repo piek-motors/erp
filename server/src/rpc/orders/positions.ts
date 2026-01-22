@@ -1,4 +1,4 @@
-import { db, procedure, requireScope, router, Scope, z } from '#root/deps.js'
+import { db, procedure, requireScope, router, Scope, z } from '#root/sdk.js'
 
 export const positions = router({
 	insert: procedure

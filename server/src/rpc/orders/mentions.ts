@@ -1,5 +1,5 @@
-import { db, procedure, router, z } from '#root/deps.js'
 import { matrixEncoder } from '#root/lib/matrix_encoder.js'
+import { db, procedure, router, z } from '#root/sdk.js'
 
 export type Mention = {
 	id: number

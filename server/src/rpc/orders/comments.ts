@@ -5,7 +5,7 @@ import {
 	router,
 	type Selectable,
 	z,
-} from '#root/deps.js'
+} from '#root/sdk.js'
 
 export type OrderComment = Selectable<DB.OrderCommentsTable> & {
 	first_name: string

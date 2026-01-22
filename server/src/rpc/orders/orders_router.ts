@@ -1,6 +1,8 @@
-import type { DB } from 'db'
-import type { Selectable } from 'kysely'
-import { OrderStatus, UserRole } from 'models'
+import { attachmentService } from '#root/ioc/index.js'
+import { logger } from '#root/ioc/log.js'
+import { type Matrix, matrixEncoder } from '#root/lib/matrix_encoder.js'
+import { fromMs } from '#root/lib/time.js'
+import { router } from '#root/lib/trpc/trpc.js'
 import {
 	db,
 	procedure,
@@ -9,12 +11,10 @@ import {
 	sql,
 	TRPCError,
 	z,
-} from '#root/deps.js'
-import { attachmentService } from '#root/ioc/index.js'
-import { logger } from '#root/ioc/log.js'
-import { type Matrix, matrixEncoder } from '#root/lib/matrix_encoder.js'
-import { fromMs } from '#root/lib/time.js'
-import { router } from '#root/lib/trpc/trpc.js'
+} from '#root/sdk.js'
+import type { DB } from 'db'
+import type { Selectable } from 'kysely'
+import { OrderStatus, UserRole } from 'models'
 import { comments, type OrderComment } from './comments.js'
 import { mentions } from './mentions.js'
 import { payments } from './payments.js'

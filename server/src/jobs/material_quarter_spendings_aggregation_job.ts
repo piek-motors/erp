@@ -1,4 +1,3 @@
-import { db } from '#root/deps.js'
 import type { MaterialStatDataContainer } from '#root/ioc/index.js'
 import { logger } from '#root/ioc/log.js'
 import { Day } from '#root/lib/constants.js'
@@ -7,6 +6,7 @@ import {
 	convertDateToUTC,
 	startOfUTCMonth,
 } from '#root/lib/time.js'
+import { db } from '#root/sdk.js'
 import { OperationType, WriteoffReason } from 'models'
 import {
 	MonthStrategy,
