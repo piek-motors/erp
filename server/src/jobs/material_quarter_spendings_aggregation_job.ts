@@ -1,4 +1,3 @@
-import { ManufacturingOrderStatus, OperationType, WriteoffReason } from 'models'
 import { db } from '#root/deps.js'
 import type { MaterialStatDataContainer } from '#root/ioc/index.js'
 import { logger } from '#root/ioc/log.js'
@@ -8,6 +7,7 @@ import {
 	convertDateToUTC,
 	startOfUTCMonth,
 } from '#root/lib/time.js'
+import { OperationType, WriteoffReason } from 'models'
 import {
 	MonthStrategy,
 	PeriodAggregator,
@@ -15,42 +15,19 @@ import {
 	TimeSeriesRollup,
 	TimeWindow,
 } from '../lib/statistic/period_aggregator.js'
+import { Job } from './jobs_runner.js'
 
-const OutdatedManufacturingOrderDeletionAfter = 7 * Day
 
-export class Jobs {
+export class MaterialQuarterSpendingsAggregationJob implements Job {
 	constructor(
 		private readonly material_stat_data_container: MaterialStatDataContainer,
-	) {}
+	) { }
 
-	initCron() {
-		this.removeOutdatedManufacturingOrders()
-		this.calcMaterialQuarterlySpendings()
-		setInterval(() => {
-			this.removeOutdatedManufacturingOrders()
-			this.calcMaterialQuarterlySpendings()
-		}, Day)
+	interval(): number {
+		return Day
 	}
 
-	private async removeOutdatedManufacturingOrders() {
-		const cutoffDate = new Date(
-			Date.now() - OutdatedManufacturingOrderDeletionAfter,
-		)
-		const result = await db
-			.deleteFrom('pdo.orders')
-			.where('created_at', '<', cutoffDate)
-			.where('status', 'in', [
-				ManufacturingOrderStatus.Waiting,
-				ManufacturingOrderStatus.Preparation,
-			])
-			.returning('id')
-			.execute()
-		logger.debug(
-			`Removed ${result.length} outdated orders created before ${cutoffDate}`,
-		)
-	}
-
-	private async calcMaterialQuarterlySpendings(nMonths: number = 12) {
+	async run(nMonths: number = 12) {
 		const start = Date.now()
 
 		const period_end = convertDateToUTC(new Date())
