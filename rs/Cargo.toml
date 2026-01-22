@@ -11,6 +11,8 @@ crate-type = ["cdylib"]
 [dependencies]
 napi = "3.0.0"
 napi-derive = "3.0.0"
+karma = { version = "1.0.0", features = ["serde"] } # Hidden Markov Model
+chrono = "0.4.43"
 
 [build-dependencies]
 napi-build = "2"
