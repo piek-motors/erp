@@ -2,7 +2,7 @@ import { rpc } from 'lib/rpc/rpc.client'
 import { makeAutoObservable } from 'mobx'
 import { SupplyReason } from 'models'
 
-export class MaterialSupplyStore {
+export class MaterialSupplySt {
 	length: string = ''
 	setLength(length: string) {
 		this.length = length

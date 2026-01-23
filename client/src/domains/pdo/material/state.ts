@@ -8,7 +8,7 @@ import { PipeState } from './shape/pipe_state'
 import { RoundBarState } from './shape/rounde_bar.state'
 import { SquareState } from './shape/square_state'
 import type { IMaterialShapeState } from './shape_state.interface'
-import { MaterialWarehouseStore } from './warehouse/store'
+import { MaterialWarehouseStore } from './warehouse/state'
 
 export class MaterialState {
 	readonly loadingWall = new LoadingController()

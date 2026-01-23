@@ -1,11 +1,11 @@
 import { app_cache } from 'domains/pdo/cache'
 import { makeAutoObservable } from 'mobx'
-import { MaterialSupplyStore } from './supply'
-import { MaterialWriteoffState } from './writeoff'
+import { MaterialSupplySt } from './supply_st'
+import { MaterialWriteoffSt } from './writeoff_st'
 
 export class MaterialWarehouseStore {
-	readonly supply = new MaterialSupplyStore()
-	readonly writeoff = new MaterialWriteoffState()
+	readonly supply = new MaterialSupplySt()
+	readonly writeoff = new MaterialWriteoffSt()
 
 	stock: number = 0
 	setStock(val: number) {

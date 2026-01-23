@@ -15,6 +15,9 @@ interface Props {
 export const SupplyCompletedText = 'Поставка зарегистрирована'
 export const WriteoffCompletedText = 'Списание зарегистрировано'
 
+const supply_text = 'Поставка'
+const writeoff_text = 'Списание'
+
 export const WarehouseCard = observer((props: Props) => (
 	<Card
 		variant="soft"
@@ -50,7 +53,7 @@ export const WarehouseCard = observer((props: Props) => (
 		<OperationModal
 			openButton={
 				<Btn variant="soft" color={'success'} fullWidth size="md">
-					Поставка
+					{supply_text}
 				</Btn>
 			}
 			open={modalState.supply}
@@ -59,7 +62,7 @@ export const WarehouseCard = observer((props: Props) => (
 			}}
 		>
 			<P color="success" fontWeight={600}>
-				Поставка
+				{supply_text}
 			</P>
 			<Stack gap={1} my={1}>
 				{props.supply}
@@ -69,14 +72,14 @@ export const WarehouseCard = observer((props: Props) => (
 		<OperationModal
 			openButton={
 				<Btn variant="soft" color={'warning'} fullWidth size="md">
-					Списание
+					{writeoff_text}
 				</Btn>
 			}
 			open={modalState.writeoff}
 			setOpen={o => modalState.setWriteoff(o)}
 		>
 			<P color="warning" fontWeight={600}>
-				Списание
+				{writeoff_text}
 			</P>
 			<Stack gap={1} my={1}>
 				{props.writeoff}

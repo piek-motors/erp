@@ -3,11 +3,11 @@ import { LoadingController } from 'lib/store/loading_controller'
 import { makeAutoObservable } from 'mobx'
 import type { MaterialShape } from 'models'
 import type { Material } from 'srv/rpc/pdo/materials'
-import { MaterialSupplyStore } from '../warehouse/supply'
+import { MaterialSupplySt } from '../warehouse/supply_st'
 
 export class MaterialListStore {
 	readonly async = new LoadingController()
-	supply = new MaterialSupplyStore()
+	supply = new MaterialSupplySt()
 	searchResult: number[] = []
 	searchId: string = ''
 	filterKeyword: string = ''

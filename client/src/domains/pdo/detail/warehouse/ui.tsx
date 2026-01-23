@@ -57,7 +57,7 @@ const CreateWarehouseDetailOperation = observer(
 	},
 )
 
-export const DetailWarehouse = observer(({ detail }: DetailStProp) => (
+export const DetailWarehouseModal = observer(({ detail }: DetailStProp) => (
 	<WarehouseCard
 		stock={value_with_unit(
 			formatter.format(detail.warehouse.stock),

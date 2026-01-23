@@ -20,7 +20,7 @@ import { DetailsMadeOfMaterialModal } from './details_made_of_that_material'
 import { MaterialForm } from './form'
 import { MaterialQuntifiedExpenses } from './quantified_expenses'
 import type { MaterialState } from './state'
-import { MaterialWarehouse } from './warehouse/ui'
+import { MaterialWarehouseCard } from './warehouse'
 
 export const MaterialUpdatePage = observer(() => {
 	const { id } = useParams<{ id: string }>()
@@ -61,7 +61,7 @@ export const MaterialUpdatePage = observer(() => {
 			/>
 			<Stack gap={1}>
 				<Row flexWrap={'wrap'}>
-					<MaterialWarehouse m={m} />
+					<MaterialWarehouseCard m={m} />
 					<DetailsMadeOfMaterialModal m={m} />
 				</Row>
 

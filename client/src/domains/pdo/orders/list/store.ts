@@ -29,14 +29,15 @@ export class ManufacturingListStore {
 
 		const filtered = filter
 			? s.orders.filter(order => {
-				const id_match = String(order.id).includes(filter)
-				const name_match = order.detail_name?.toLowerCase().includes(filter)
-				const group_match = String(
-					app_cache.detailGroups.getGroupName(order.group_id)?.toLowerCase() ||
-					'',
-				).includes(filter)
-				return id_match || name_match || group_match
-			})
+					const id_match = String(order.id).includes(filter)
+					const name_match = order.detail_name?.toLowerCase().includes(filter)
+					const group_match = String(
+						app_cache.detailGroups
+							.getGroupName(order.group_id)
+							?.toLowerCase() || '',
+					).includes(filter)
+					return id_match || name_match || group_match
+				})
 			: s.orders
 
 		return filtered

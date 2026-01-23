@@ -1,9 +1,6 @@
 import { Box, Divider, Stack } from '@mui/joy'
-import {
-	AdaptiveNumberFormatter,
-	QtyInputWithUnit,
-	value_with_unit,
-} from 'domains/pdo/shared'
+import { QtyInputWithUnit } from 'components/inputs'
+import { AdaptiveNumberFormatter, value_with_unit } from 'domains/pdo/shared'
 import {
 	SupplyReasonSelect,
 	WriteoffReasonSelect,
@@ -61,7 +58,7 @@ const CreateWarehouseMaterialOperation = observer(
 	),
 )
 
-export const MaterialWarehouse = observer(({ m }: { m: MaterialState }) => {
+export const MaterialWarehouseCard = observer(({ m }: { m: MaterialState }) => {
 	const { id } = useParams<{ id: string }>()
 	if (!id) throw new Error('No id')
 	const materialId = Number(id)

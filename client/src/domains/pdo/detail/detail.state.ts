@@ -152,8 +152,8 @@ export class DetailSt {
 		this.processingRoute.init(
 			d.processing_route && d.processing_route.steps
 				? d.processing_route.steps.map(
-					operation_id => new Operation(operation_id),
-				)
+						operation_id => new Operation(operation_id),
+					)
 				: [],
 		)
 		this.setDrawingName(d.drawing_name ?? '')
@@ -201,8 +201,8 @@ export class DetailSt {
 			recommendedBatchSize: Number(this.recommendedBatchSize) ?? null,
 			processingRoute: this.processingRoute
 				? {
-					steps: this.processingRoute.steps.map(s => s.id!) ?? null,
-				}
+						steps: this.processingRoute.steps.map(s => s.id!) ?? null,
+					}
 				: null,
 			drawingName: this.drawingName ?? null,
 			automaticWriteoff: this.autoWriteoff.payload,

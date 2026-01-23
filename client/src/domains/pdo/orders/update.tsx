@@ -476,7 +476,9 @@ const ActionButton = observer(({ order }: OrderStProp) => {
 const DuplicationCheckModal = observer(({ order }: { order: OrderSt }) => {
 	const navigate = useNavigate()
 	if (!order.orderAlreadyInProductionModal) return null
-	const detail = app_cache.details.get(order.orderAlreadyInProductionModal.detailId)
+	const detail = app_cache.details.get(
+		order.orderAlreadyInProductionModal.detailId,
+	)
 	if (!detail) return null
 	const modalState = order.orderAlreadyInProductionModal
 	return (

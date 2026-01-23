@@ -6,7 +6,6 @@ import type { ListDetailsOutput } from 'srv/rpc/pdo/details'
 import { DetailSt } from '../detail/detail.state'
 import { capitalize } from '../shared'
 
-
 const alphabet = 'АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ'.split('')
 
 type Operation = {

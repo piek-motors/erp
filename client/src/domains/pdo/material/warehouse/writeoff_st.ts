@@ -1,7 +1,7 @@
 import { makeAutoObservable, rpc } from 'lib/deps'
 import { type WriteoffDirectUnit, WriteoffReason } from 'models'
 
-export class MaterialWriteoffState {
+export class MaterialWriteoffSt {
 	length = ''
 	setLength(length: string) {
 		this.length = length

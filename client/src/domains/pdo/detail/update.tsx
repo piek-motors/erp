@@ -5,8 +5,8 @@ import {
 	observer,
 	openPage,
 	P,
-	Row,
 	routeMap,
+	Row,
 	useEffect,
 	useNavigate,
 	useParams,
@@ -17,7 +17,7 @@ import { CreateManufacturingOrder } from '../orders/create_order'
 import { api } from './api'
 import type { DetailSt, DetailStProp } from './detail.state'
 import { DetailInputs } from './inputs'
-import { DetailWarehouse } from './warehouse/ui'
+import { DetailWarehouseModal } from './warehouse/ui'
 
 export const UpdateDetailPage = observer(() => {
 	const { id } = useParams<{ id: string }>()
@@ -45,7 +45,7 @@ export const UpdateDetailPage = observer(() => {
 				}
 			/>
 			<Row flexWrap={'wrap'} gap={1}>
-				<DetailWarehouse detail={detail} />
+				<DetailWarehouseModal detail={detail} />
 				<CreateManufacturingOrder detailId={detail.id} />
 			</Row>
 			<DetailInputs
