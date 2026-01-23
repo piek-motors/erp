@@ -4,7 +4,7 @@ import {
 } from 'components/search-paginated'
 import { cache } from 'domains/pdo/cache/root'
 import { LoadingController } from 'lib/store/loading_controller'
-import { makeAutoObservable, runInAction } from 'mobx'
+import { makeAutoObservable, reaction, runInAction } from 'mobx'
 import type { DetailSt } from '../detail.state'
 
 export class DetailList {
@@ -16,46 +16,55 @@ export class DetailList {
 			() => cache.details.details,
 			{
 				pageSize: 50,
-				customFilter: this.filterDetails.bind(this),
+				customFilter: this.filter_details.bind(this),
 			},
 		)
 		makeAutoObservable(this)
+
+
+		// Auto-reindex when cache.details.details changes
+		reaction(
+			() => cache.details.details,
+			(details) => {
+				details && this.index()
+			},
+		)
 	}
 
-	drawingNumber: string = ''
-	indexLetter: string | null = null
+	drawing_num: string = ''
+	index_letter: string | null = null
 
 	index() {
 		this.searchStore.search()
 	}
 
-	setKeyword(keyword: string) {
-		this.clearSearchArguments()
+	set_keyword(keyword: string) {
+		this.clear_search_args()
 		this.searchStore.setSearchKeyword(keyword)
 	}
 
-	setId(id: string) {
-		this.clearSearchArguments()
+	set_id(id: string) {
+		this.clear_search_args()
 		this.searchStore.setSearchId(id)
 	}
 
-	setDrawingNumber(partCode: string) {
-		this.clearSearchArguments()
-		this.drawingNumber = partCode
+	set_drawing_num(partCode: string) {
+		this.clear_search_args()
+		this.drawing_num = partCode
 	}
 
-	setIndexLetter(letter: string) {
-		if (this.indexLetter === letter) {
-			this.indexLetter = null
+	set_index_letter(letter: string) {
+		if (this.index_letter === letter) {
+			this.index_letter = null
 			this.searchStore.search()
 			return
 		}
-		this.clearSearchArguments()
-		this.indexLetter = letter
+		this.clear_search_args()
+		this.index_letter = letter
 	}
 
 	// Custom filter function for the search store
-	private filterDetails(
+	private filter_details(
 		details: DetailSt[],
 		filters: SearchFilters,
 	): DetailSt[] {
@@ -90,8 +99,8 @@ export class DetailList {
 		}
 
 		// Handle custom filters (partCode, indexLetter)
-		if (this.drawingNumber) {
-			const partCode = this.drawingNumber.toLowerCase()
+		if (this.drawing_num) {
+			const partCode = this.drawing_num.toLowerCase()
 			return details.filter(
 				detail =>
 					detail.drawingNumber &&
@@ -99,30 +108,30 @@ export class DetailList {
 			)
 		}
 
-		if (this.indexLetter) {
+		if (this.index_letter) {
 			return details.filter(
-				detail => detail.name.charAt(0).toUpperCase() === this.indexLetter,
+				detail => detail.name.charAt(0).toUpperCase() === this.index_letter,
 			)
 		}
 
 		return details
 	}
 
-	private clearSearchArguments() {
+	private clear_search_args() {
 		runInAction(() => {
-			this.drawingNumber = ''
+			this.drawing_num = ''
 			this.searchStore.clear()
-			this.indexLetter = null
+			this.index_letter = null
 		})
 	}
 
-	get displayedResults() {
+	get displayed_results() {
 		return this.searchStore.displayedResults
 	}
-	get searchKeyword() {
+	get search_keyword() {
 		return this.searchStore.searchFilters.keyword
 	}
-	get searchId() {
+	get search_id() {
 		return this.searchStore.searchFilters.id
 	}
 }

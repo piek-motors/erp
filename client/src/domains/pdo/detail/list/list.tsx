@@ -11,8 +11,8 @@ import {
 	Loading,
 	observer,
 	openPage,
-	Row,
 	routeMap,
+	Row,
 	Stack,
 	useEffect,
 	useNavigate,
@@ -90,7 +90,7 @@ const DetailList = observer((props: DetailsTableProps) => {
 		<Table
 			sx={props.sx}
 			columns={columnList}
-			data={state.displayedResults}
+			data={state.displayed_results}
 			rowStyleCb={row => {
 				if (props.highlight) {
 					return props.highlight(row.original)
@@ -151,8 +151,8 @@ const SearchArguments = observer(() => (
 			color="primary"
 			width={80}
 			placeholder="№"
-			value={state.searchId}
-			onChange={v => state.setId(v.target.value)}
+			value={state.search_id}
+			onChange={v => state.set_id(v.target.value)}
 		/>
 		<Search
 			size="sm"
@@ -160,8 +160,8 @@ const SearchArguments = observer(() => (
 			variant="soft"
 			width={150}
 			color="primary"
-			onChange={e => state.setKeyword(e.target.value)}
-			value={state.searchKeyword}
+			onChange={e => state.set_keyword(e.target.value)}
+			value={state.search_keyword}
 		/>
 		<Search
 			size="sm"
@@ -169,8 +169,8 @@ const SearchArguments = observer(() => (
 			placeholder="Номер чертежа"
 			variant="soft"
 			color="primary"
-			onChange={e => state.setDrawingNumber(e.target.value)}
-			value={state.drawingNumber}
+			onChange={e => state.set_drawing_num(e.target.value)}
+			value={state.drawing_num}
 		/>
 	</Stack>
 ))

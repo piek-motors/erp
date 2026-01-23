@@ -4,7 +4,7 @@ import { Button, observer, Stack } from 'lib'
 import { detailListStore } from './store'
 
 export const AlphabetIndex = observer(({ sx }: { sx?: SxProps }) => {
-	const isActive = (letter: string) => detailListStore.indexLetter === letter
+	const isActive = (letter: string) => detailListStore.index_letter === letter
 	return (
 		<Stack sx={{ flexWrap: 'wrap', width: 'fit-content', ...sx }}>
 			{cache.details.getFirstLetterIndex().map((letter, index) => (
@@ -19,7 +19,7 @@ export const AlphabetIndex = observer(({ sx }: { sx?: SxProps }) => {
 					}}
 					color={isActive(letter) ? 'primary' : 'neutral'}
 					variant={isActive(letter) ? 'solid' : 'plain'}
-					onClick={() => detailListStore.setIndexLetter(letter)}
+					onClick={() => detailListStore.set_index_letter(letter)}
 				>
 					{letter}
 				</Button>

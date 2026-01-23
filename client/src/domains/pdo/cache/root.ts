@@ -1,4 +1,3 @@
-import { detailListStore } from 'domains/pdo/detail/list/store'
 import { makeAutoObservable } from 'mobx'
 import { DetailCache } from './detail_cache'
 import { DetailGroupCache } from './detail_group_cache'
@@ -15,7 +14,6 @@ class MetalflowCache {
 
 	async init() {
 		await this.details.load()
-		detailListStore.index()
 		await this.materials.invalidate()
 		await this.detailGroups.load()
 	}
