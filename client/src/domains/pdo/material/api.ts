@@ -1,7 +1,6 @@
 import { rpc } from 'lib/deps'
 import { LoadingController } from 'lib/store/loading_controller'
-import { makeAutoObservable } from 'mobx'
-import { getMaterialConstructor, MaterialShapeAbstractionLayer } from 'models'
+import { makeAutoObservable, runInAction } from 'mobx'
 import { RouterInput } from 'srv/lib/trpc'
 import { cache } from '../cache/root'
 import { map } from '../mappers'
@@ -14,27 +13,34 @@ export class MaterialApi {
   }
 
   async load(id: number) {
-    const m = new MaterialState()
     return this.loader.run(async () => {
       const res = await rpc.pdo.material.get.query({ id })
-      m.syncState(map.material.fromDto(res))
-      m.setLabel(res.material.label)
-      m.setLinearMass(res.material.linear_mass.toString())
-      m.setAlloy(res.material.alloy || '')
-      m.setUnit(res.material.unit)
-      m.setDetailCount(Number(res.detailCount))
-      m.writeoffStat = {
-        monthly: res.writeoff_stat.monthly,
-        quarterly: res.writeoff_stat.quarterly
-      }
-      m.shortagePredictionHorizonDays =
-        res.material.shortage_prediction_horizon_days
+      const { material, writeoff_stat, detailCount } = res
+      const m = new MaterialState()
+
+      runInAction(() => {
+        m.syncState(map.material.fromDto(res))
+        m.id = material.id
+        m.label = material.label
+        m.alloy = material.alloy || ''
+        m.unit = material.unit
+        m.detailCount = Number(detailCount)
+
+        m.writeoff_stat = {
+          monthly: writeoff_stat.monthly,
+          quarterly: writeoff_stat.quarterly
+        }
+        m.shortage_prediction_horizon_days =
+          material.shortage_prediction_horizon_days
+        m.warehouse.stock = material.stock
+      })
       return m
     })
   }
 
   async insert(m: MaterialState) {
-    const res = await rpc.pdo.material.create.mutate(this.create_payload(m))
+    const payload = this.create_payload(m)
+    const res = await rpc.pdo.material.create.mutate(payload)
     m = new MaterialState()
     await cache.materials.load()
     return res.id
@@ -59,22 +65,13 @@ export class MaterialApi {
   private create_payload(
     m: MaterialState
   ): RouterInput['pdo']['material']['create'] {
-    const MaterialConstructor = getMaterialConstructor(m.shape)
-    const material = new MaterialConstructor(0)
-    MaterialShapeAbstractionLayer.importShapeData(
-      material,
-      m.getShapeState(m.shape).export()
-    )
-    const label = material.deriveLabel()
-    if (!label) throw new Error('Material label is not set')
     if (m.unit == null) throw new Error('Не выбрана единица учета остатков')
     return {
-      label,
       shape: m.shape,
-      shape_data: m.getShapeState(m.shape).export(),
+      shape_data: m.get_shape_state(m.shape).export(),
       unit: m.unit,
       alloy: m.alloy || null,
-      shortage_prediction_horizon_days: m.shortagePredictionHorizonDays
+      shortage_prediction_horizon_days: m.shortage_prediction_horizon_days
     }
   }
 
@@ -88,7 +85,7 @@ export class MaterialApi {
     }
   }
 
-  async loadDetailsMadeFromThatMaterial(material_id: number) {
+  async get_details_made_from_material(material_id: number) {
     const res = await rpc.pdo.details.filter_by_material.query({
       material_id
     })

@@ -33,35 +33,25 @@ export class MaterialState {
     [MaterialShape.Arbitrary]: this.arbitrary
   } as const
 
-  getShapeState(shape: MaterialShape): IMaterialShapeState {
+  get_shape_state(shape: MaterialShape): IMaterialShapeState {
     return this.shapeState[shape]
   }
 
   id?: number
-  setId(id: number) {
-    this.id = id
-  }
   label?: string
-  setLabel(label: string) {
-    this.label = label
-  }
   unit?: Unit
-  setUnit(unit: Unit) {
+  set_unit(unit: Unit) {
     this.unit = unit
   }
   shape: MaterialShape = MaterialShape.RoundBar
-  setShape(shape: MaterialShape) {
+  set_shape(shape: MaterialShape) {
     this.shape = shape
   }
-  linearMass = ''
-  setLinearMass(linearMass: string) {
-    this.linearMass = linearMass
-  }
+
   alloy?: string
-  setAlloy(alloy: string) {
+  set_alloy(alloy: string) {
     this.alloy = alloy
   }
-  material?: Material
 
   detailCount: number = 0
   setDetailCount(detailCount: number) {
@@ -81,22 +71,18 @@ export class MaterialState {
     this.detailsMadeFromThisMaterial = []
   }
 
-  shortagePredictionHorizonDays?: number
-  setShortageOredictionHorizonDays(v?: number) {
-    this.shortagePredictionHorizonDays = v
+  shortage_prediction_horizon_days?: number
+  set_shortage_orediction_horizon_days(v?: number) {
+    this.shortage_prediction_horizon_days = v
   }
 
-  writeoffStat?: {
+  writeoff_stat?: {
     monthly?: [string, number][]
     quarterly?: [string, number][]
   }
 
   syncState(material: Material) {
-    this.id = material.id
-    this.label = material.label
     this.shape = material.shape
-    this.material = material
-    this.getShapeState(this.shape).sync(material)
-    this.warehouse.setStock(material.stock)
+    this.get_shape_state(this.shape).sync(material)
   }
 }

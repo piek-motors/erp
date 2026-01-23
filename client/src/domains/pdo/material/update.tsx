@@ -33,7 +33,7 @@ export const MaterialUpdatePage = observer(() => {
   useEffect(() => {
     api.load(materialId).then(async m => {
       setMaterial(m)
-      const details = await api.loadDetailsMadeFromThatMaterial(m.id!)
+      const details = await api.get_details_made_from_material(m.id!)
       m.setDetailsMadeFromThisMaterial(details)
     })
   }, [id])

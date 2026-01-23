@@ -6,7 +6,7 @@ import { MaterialState } from './state'
 
 export const MaterialQuntifiedExpenses = observer(
   ({ m }: { m: MaterialState }) => {
-    if (!m.writeoffStat?.monthly || !m.writeoffStat?.quarterly) return null
+    if (!m.writeoff_stat?.monthly || !m.writeoff_stat?.quarterly) return null
 
     const height = 300
     const slotProps = {
@@ -50,7 +50,7 @@ export const MaterialQuntifiedExpenses = observer(
                   colors={['#308e74']}
                   series={[
                     {
-                      data: m.writeoffStat.quarterly?.map(([_, val]) =>
+                      data: m.writeoff_stat.quarterly?.map(([_, val]) =>
                         Math.round(val)
                       ),
                       barLabel: 'value',
@@ -62,7 +62,7 @@ export const MaterialQuntifiedExpenses = observer(
                   xAxis={[
                     {
                       tickPlacement: 'middle',
-                      data: m.writeoffStat.quarterly?.map(([key]) =>
+                      data: m.writeoff_stat.quarterly?.map(([key]) =>
                         key.slice(2).replace('-', '')
                       )
                     }
@@ -79,14 +79,14 @@ export const MaterialQuntifiedExpenses = observer(
                 <BarChart
                   series={[
                     {
-                      data: m.writeoffStat?.monthly?.map(([_, val]) => val),
+                      data: m.writeoff_stat?.monthly?.map(([_, val]) => val),
                       valueFormatter: qtyFormatter
                     }
                   ]}
                   grid={{ horizontal: true }}
                   xAxis={[
                     {
-                      data: m.writeoffStat?.monthly?.map(([d]) => {
+                      data: m.writeoff_stat?.monthly?.map(([d]) => {
                         const [year, month] = d.split('-')
                         return new Date(+year, +month - 1)
                       }),

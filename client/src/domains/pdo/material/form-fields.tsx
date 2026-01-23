@@ -30,16 +30,16 @@ export const MaterialFormFields = observer(
               component: <MaterialSpecificInput m={m} disabled={disabled} />
             }))}
           handleChange={value => {
-            m.setShape(value as unknown as MaterialShape)
+            m.set_shape(value as unknown as MaterialShape)
           }}
         />
       ) : (
         <MaterialSpecificInput m={m} disabled={disabled} />
       )}
-      <MaterialUnitSelect value={m.unit} onChange={v => m.setUnit(v)} />
+      <MaterialUnitSelect value={m.unit} onChange={v => m.set_unit(v)} />
       <AlloyAutocomplete
         setAlloy={alloy => {
-          m.setAlloy(alloy)
+          m.set_alloy(alloy)
         }}
         alloy={m.alloy}
       />
@@ -51,9 +51,9 @@ export const MaterialFormFields = observer(
           </Label>
         </Stack>
         <NumberInput
-          value={m.shortagePredictionHorizonDays}
+          value={m.shortage_prediction_horizon_days}
           onChange={v => {
-            m.setShortageOredictionHorizonDays(v)
+            m.set_shortage_orediction_horizon_days(v)
           }}
         />
       </Box>

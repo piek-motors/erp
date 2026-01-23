@@ -30,7 +30,6 @@ const DEFAULT_SHORTAGE_PREDICTION_HORIZON_DAYS = 60
 const payload = z.object({
 	unit: z.enum(Unit),
 	shape: z.enum(MaterialShape),
-	label: z.string().nonempty(),
 	shape_data: z.any(),
 	alloy: z.string().nullable(),
 	shortage_prediction_horizon_days: z
@@ -78,21 +77,11 @@ export const material = router({
 		.use(requireScope(Scope.pdo))
 		.input(payload)
 		.mutation(async ({ input }) => {
-			const materialConstructor = MaterialConstructorMap[input.shape]
-			const materialModel = new materialConstructor(
-				input.shape_data,
-				'',
-				input.alloy,
-			)
-			MaterialShapeAbstractionLayer.importShapeData(
-				materialModel,
-				input.shape_data,
-			)
 			const material = await db
 				.insertInto('pdo.materials')
 				.values({
 					...input,
-					label: materialModel.deriveLabel(),
+					label: derive_label(input),
 					stock: 0,
 					linear_mass: 0,
 				})
@@ -107,7 +96,6 @@ export const material = router({
 					}
 					throw e
 				})
-			console.info(`New material created: ${materialModel.deriveLabel()}`)
 			return material
 		}),
 	//
@@ -137,7 +125,9 @@ export const material = router({
 		.mutation(async ({ input }) => {
 			await db
 				.updateTable('pdo.materials')
-				.set(input)
+				.set({
+					...input, label: derive_label(input)
+				})
 				.where('id', '=', input.id)
 				.executeTakeFirstOrThrow()
 			return 'ok'
@@ -193,3 +183,20 @@ export const material = router({
 			.then(res => res.map(e => e.alloy)),
 	),
 })
+
+
+type UpdatePayload = z.infer<typeof payload>
+
+function derive_label(input: UpdatePayload) {
+	const materialConstructor = MaterialConstructorMap[input.shape]
+	const model = new materialConstructor(
+		input.shape_data,
+		'',
+		input.alloy,
+	)
+	MaterialShapeAbstractionLayer.importShapeData(
+		model,
+		input.shape_data,
+	)
+	return model.deriveLabel()
+}
