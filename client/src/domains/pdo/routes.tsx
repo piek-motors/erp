@@ -10,7 +10,7 @@ import { MaterialUpdatePage } from './material/update'
 import { ManufacturingList } from './orders/list/list'
 import { ManufacturingUpdatePage } from './orders/update'
 import { MetalFlowRootLayout } from './root_layout'
-import { OperationsTable } from './warehouse/list'
+import { OperationsPage } from './warehouse/list'
 
 const { pdo: metalflow } = routeMap
 
@@ -60,7 +60,7 @@ const innerRoutes = [
 		path: metalflow.detailGroup,
 	},
 	{
-		element: <OperationsTable />,
+		element: <OperationsPage />,
 		path: metalflow.operations,
 	},
 	{

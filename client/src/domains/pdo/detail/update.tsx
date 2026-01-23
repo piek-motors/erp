@@ -34,7 +34,7 @@ export const UpdateDetailPage = observer(() => {
 
 	if (api.loader.loading || !detail) return <Loading />
 	return (
-		<Stack gap={0.5} sx={{ flex: 1, p: 1 }}>
+		<Stack gap={0.5} sx={{ flex: 1, p: 1, pb: 1 }}>
 			<MetalPageTitle
 				t={
 					Boolean(detail.id) && (
@@ -48,19 +48,16 @@ export const UpdateDetailPage = observer(() => {
 				<DetailWarehouseModal detail={detail} />
 				<CreateManufacturingOrder detailId={detail.id} />
 			</Row>
-			<DetailInputs
-				detail={detail}
-				leftChildren={
-					<Box pt={1}>
-						<Metadata
-							updatedAt={detail.updatedAt}
-							lastManufacturingDate={detail.lastManufacturingDate}
-							lastManufacturingQty={detail.lastManufacturingQty}
-						/>
-						<SaveFloatingButton detail={detail} />
-					</Box>
-				}
-			/>
+			<DetailInputs detail={detail} />
+
+			<Box pt={1}>
+				<Metadata
+					updatedAt={detail.updatedAt}
+					lastManufacturingDate={detail.lastManufacturingDate}
+					lastManufacturingQty={detail.lastManufacturingQty}
+				/>
+				<SaveFloatingButton detail={detail} />
+			</Box>
 		</Stack>
 	)
 })
@@ -69,6 +66,7 @@ const SaveFloatingButton = ({ detail }: DetailStProp) => {
 	const navigate = useNavigate()
 	return (
 		<SaveAndDelete
+			sx={{ py: 1 }}
 			itemName={`Деталь (${detail.id}) - ${detail.name}`}
 			handleDelete={() =>
 				api.delete(detail.id).then(() => {

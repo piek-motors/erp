@@ -83,10 +83,12 @@ export const ArrayJsonEditor = observer((props: ArrayJsonEditorProps) => {
 												ref={dragProvided.innerRef}
 												{...dragProvided.draggableProps}
 												{...dragProvided.dragHandleProps}
+												flexWrap={'nowrap'}
 											>
 												<Label>{index + 1}</Label>
 												<Row
 													sx={{ flexGrow: 1, flexShrink: 0, height: '100%' }}
+													flexWrap={'nowrap'}
 												>
 													{keys.map((key, keyIdx) => (
 														<Box
@@ -124,7 +126,7 @@ export const ArrayJsonEditor = observer((props: ArrayJsonEditorProps) => {
 												</IconButton>
 											</Row>
 											{index !== items.length - 1 && (
-												<Divider sx={{ opacity: 0.3 }} />
+												<Divider sx={{ opacity: 0.5 }} />
 											)}
 										</>
 									)}

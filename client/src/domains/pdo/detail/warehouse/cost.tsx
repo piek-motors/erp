@@ -22,7 +22,7 @@ const CostRow = ({ children, onDelete }: CostRowProps) => {
 		</IconButton>
 	)
 	return (
-		<Row justifyContent={'space-between'}>
+		<Row justifyContent={'space-between'} flexWrap={'nowrap'}>
 			{children}
 			{delete_btn}
 		</Row>

@@ -1,7 +1,7 @@
 import { ScrollableWindow } from 'components/scrollable_window'
 import { Table } from 'components/table.impl'
 import { MetalPageTitle } from 'domains/pdo/shared/basic'
-import { Label } from 'lib/index'
+import { Box, Label } from 'lib/index'
 import { matrixDecoder } from 'lib/rpc/matrix_decoder'
 import { rpc } from 'lib/rpc/rpc.client'
 import { LoadingController } from 'lib/store/loading_controller'
@@ -10,6 +10,7 @@ import { observer } from 'mobx-react-lite'
 import { OperationType } from 'models'
 import { useEffect, useState } from 'react'
 import type { OperationListItem } from 'srv/rpc/pdo/operations'
+import { MobileNavModal } from '../root_layout'
 import { columns } from './columns'
 
 export type Operation = OperationListItem
@@ -79,3 +80,10 @@ export const OperationsTable = observer((props: Props) => {
 		/>
 	)
 })
+
+export const OperationsPage = () => (
+	<Box p={1}>
+		<MobileNavModal t={'Журнал'} />
+		<OperationsTable />
+	</Box>
+)

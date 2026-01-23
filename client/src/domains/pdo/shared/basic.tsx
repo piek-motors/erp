@@ -119,4 +119,3 @@ export const value_with_unit = (value: string | number | null, unit?: Unit) =>
 			{unit != null && <P level="body-xs">{uiUnit(unit)}</P>}
 		</Row>
 	)
-
