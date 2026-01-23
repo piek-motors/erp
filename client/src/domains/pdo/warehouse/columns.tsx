@@ -1,4 +1,4 @@
-import { Button, Label, Link, openPage, Row, routeMap } from 'lib/index'
+import { Button, Label, Link, openPage, routeMap, Row } from 'lib/index'
 import {
 	OperationType,
 	type SupplyReason,
@@ -8,7 +8,8 @@ import {
 } from 'models'
 import type { Column } from 'react-table'
 import { DetailName } from '../detail/name'
-import { AdaptiveNumberFormatter, value_with_unit } from '../shared'
+import { AdaptiveNumberFormatter } from '../shared/adaptive_number_formatter'
+import { value_with_unit } from '../shared/basic'
 import type { Operation } from './list'
 import { OperationName } from './operation_name'
 
