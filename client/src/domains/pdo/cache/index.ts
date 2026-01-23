@@ -19,4 +19,4 @@ class MetalflowCache {
 	}
 }
 
-export const cache = new MetalflowCache()
+export const app_cache = new MetalflowCache()

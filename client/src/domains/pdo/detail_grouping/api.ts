@@ -1,4 +1,4 @@
-import { cache } from 'domains/pdo/cache/root'
+import { app_cache } from 'domains/pdo/cache'
 import { matrixDecoder } from 'lib/rpc/matrix_decoder'
 import { rpc } from 'lib/rpc/rpc.client'
 import { LoadingController } from 'lib/store/loading_controller'
@@ -17,7 +17,7 @@ export class DetailGroupingApi {
 
 	async listGroups() {
 		return this.groupsLoading.run(async () => {
-			await cache.detailGroups.load()
+			await app_cache.detailGroups.load()
 		})
 	}
 
@@ -43,7 +43,7 @@ export class DetailGroupingApi {
 	async createGroup(name: string) {
 		return this.groupsLoading.run(async () => {
 			const newGroup = await rpc.pdo.detail_groups.create.mutate({ name })
-			await cache.detailGroups.load()
+			await app_cache.detailGroups.load()
 			return newGroup
 		})
 	}
@@ -54,7 +54,7 @@ export class DetailGroupingApi {
 				id,
 				name,
 			})
-			await cache.detailGroups.load()
+			await app_cache.detailGroups.load()
 			if (this.store.openedGroup?.group.id === id) {
 				await this.loadGroupWithDetails(id)
 			}

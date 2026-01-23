@@ -1,4 +1,4 @@
-import { cache } from 'domains/pdo/cache/root'
+import { app_cache } from 'domains/pdo/cache'
 import { makeAutoObservable } from 'mobx'
 import type { DetailAutomaticWriteoffData } from 'srv/rpc/pdo/details'
 
@@ -23,7 +23,7 @@ export class MaterialCost {
 		makeAutoObservable(this)
 	}
 	get material() {
-		return cache.materials.get(this.materialId)
+		return app_cache.materials.get(this.materialId)
 	}
 	getCost(): [number, number] {
 		if (!this.length) {
@@ -48,6 +48,6 @@ export class DetailCost {
 		this.qty = init.qty || 1
 	}
 	get detail() {
-		return cache.details.get(this.detailId)
+		return app_cache.details.get(this.detailId)
 	}
 }

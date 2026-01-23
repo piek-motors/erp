@@ -3,7 +3,7 @@ import { LoadingController } from 'lib/store/loading_controller'
 import { notifier } from 'lib/store/notifier.store'
 import { makeAutoObservable } from 'mobx'
 import { uiUnit } from 'models'
-import { cache } from '../cache/root'
+import { app_cache } from '../cache'
 import { DetailApi } from '../detail/api'
 import type { DetailSt } from '../detail/detail.state'
 import type { ManufacturingOrderOutput, OrderSt } from './order.state'
@@ -49,7 +49,7 @@ export class ManufacturingApi {
 				})
 				await this.reload(order)
 				if (writeoff) {
-					const material = cache.materials.get(writeoff.material_id)
+					const material = app_cache.materials.get(writeoff.material_id)
 					const unitStr = uiUnit(material?.unit)
 					notifier.ok(
 						`Списано ${writeoff.totalCost} ${unitStr} ${writeoff.material_name}`,

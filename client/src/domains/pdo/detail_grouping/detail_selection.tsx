@@ -3,12 +3,12 @@ import { Box, Button, IconButton, Stack } from '@mui/joy'
 import { BaseAutocomplete, type BaseOption } from 'components/base-autocomplete'
 import { InModal } from 'components/modal'
 import { observer, P, Row, UseIcon, useState } from 'lib/index'
-import { cache } from '../cache/root'
+import { app_cache } from '../cache'
 import { DetailName } from '../detail/name'
 import { api } from './api'
 
 const UniversalDetailSelection = observer(() => {
-	const universalDetails = cache.details.getUniversalDetails()
+	const universalDetails = app_cache.details.getUniversalDetails()
 
 	if (!universalDetails.length) {
 		return null
@@ -50,7 +50,7 @@ const UniversalDetailSelection = observer(() => {
 							Детали к добавлению:
 						</P>
 						{selectedOptions.map(id => {
-							const detail = cache.details.get(id)
+							const detail = app_cache.details.get(id)
 							if (!detail) return null
 							return (
 								<Stack
@@ -141,7 +141,7 @@ export const UniversalDetailsModalSelect = observer(() => {
 			<Stack sx={{ flex: 1 }} gap={1}>
 				<P>
 					Доступные универсальные детали [
-					{cache.details.getUniversalDetails().length}]
+					{app_cache.details.getUniversalDetails().length}]
 				</P>
 				<UniversalDetailSelection />
 				<Box>

@@ -3,7 +3,7 @@ import { LoadingController } from 'lib/store/loading_controller'
 import { notifier } from 'lib/store/notifier.store'
 import { makeAutoObservable } from 'mobx'
 import { Attachment } from 'models'
-import { cache } from '../cache/root'
+import { app_cache } from '../cache'
 import { DetailSt } from './detail.state'
 import { detailListStore } from './list/store'
 
@@ -41,7 +41,7 @@ export class DetailApi {
 
 	async delete(id: number) {
 		await rpc.pdo.details.delete.mutate({ id })
-		cache.details.remove(id)
+		app_cache.details.remove(id)
 		detailListStore.searchStore.search()
 	}
 
@@ -53,14 +53,14 @@ export class DetailApi {
 
 	async insert(detail: DetailSt) {
 		const res = await rpc.pdo.details.create.mutate(detail.payload())
-		await cache.details.load()
+		await app_cache.details.load()
 		return res.id
 	}
 
 	async update(detail: DetailSt) {
 		try {
 			await rpc.pdo.details.update.mutate(detail.payload())
-			cache.details.update(detail)
+			app_cache.details.update(detail)
 			detail.setUpdatedAt(new Date())
 			notifier.ok(`Деталь обновлена`)
 			return detail

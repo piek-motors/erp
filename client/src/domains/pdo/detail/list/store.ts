@@ -2,7 +2,7 @@ import {
 	PaginatedSearchStore,
 	type SearchFilters,
 } from 'components/search-paginated'
-import { cache } from 'domains/pdo/cache/root'
+import { app_cache } from 'domains/pdo/cache'
 import { LoadingController } from 'lib/store/loading_controller'
 import { makeAutoObservable, reaction, runInAction } from 'mobx'
 import type { DetailSt } from '../detail.state'
@@ -13,7 +13,7 @@ export class DetailList {
 
 	constructor() {
 		this.searchStore = new PaginatedSearchStore<DetailSt>(
-			() => cache.details.details,
+			() => app_cache.details.details,
 			{
 				pageSize: 50,
 				customFilter: this.filter_details.bind(this),
@@ -23,7 +23,7 @@ export class DetailList {
 
 		// Auto-reindex when cache.details.details changes
 		reaction(
-			() => cache.details.details,
+			() => app_cache.details.details,
 			details => {
 				details && this.index()
 			},
@@ -75,7 +75,7 @@ export class DetailList {
 				.map(detail => {
 					const name = detail.name.toLowerCase()
 					const group = (
-						cache.detailGroups.getGroupName(detail.groupId) ?? ''
+						app_cache.detailGroups.getGroupName(detail.groupId) ?? ''
 					).toLowerCase()
 
 					let score = 0

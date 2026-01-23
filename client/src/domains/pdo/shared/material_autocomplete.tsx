@@ -1,5 +1,5 @@
 import { BaseAutocomplete, type BaseOption } from 'components/base-autocomplete'
-import { cache } from '../cache/root'
+import { app_cache } from '../cache'
 import type { MaterialCost } from '../detail/warehouse/cost.store'
 
 export function MaterialAutocomplete(props: {
@@ -10,7 +10,7 @@ export function MaterialAutocomplete(props: {
 	const { data, value, onChange } = props
 	const options: BaseOption[] =
 		data?.map(material => ({
-			label: cache.materials.get(material.materialId)?.label || '',
+			label: app_cache.materials.get(material.materialId)?.label || '',
 			value: material,
 		})) || []
 	return (
@@ -21,7 +21,7 @@ export function MaterialAutocomplete(props: {
 			value={
 				value
 					? {
-							label: cache.materials.getLabel(value.materialId) || '',
+							label: app_cache.materials.getLabel(value.materialId) || '',
 							value,
 						}
 					: null

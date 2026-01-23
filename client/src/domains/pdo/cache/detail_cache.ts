@@ -4,8 +4,8 @@ import { LoadingController } from 'lib/store/loading_controller'
 import { makeAutoObservable } from 'mobx'
 import type { ListDetailsOutput } from 'srv/rpc/pdo/details'
 import { DetailSt } from '../detail/detail.state'
+import { capitalize } from '../shared'
 
-const capitalize = (s: string) => s.charAt(0).toUpperCase() + s.slice(1)
 
 const alphabet = 'АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ'.split('')
 

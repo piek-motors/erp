@@ -16,7 +16,7 @@ import {
 import { P, Row, UseIcon } from 'lib/index'
 import { useEffect, useState } from 'react'
 import { NavigationSideBar } from '../../components/nav_sidebar'
-import { cache } from './cache/root'
+import { app_cache } from './cache'
 import { nav_links } from './nav.links'
 
 const title = 'ПДО'
@@ -54,7 +54,7 @@ export const MobileNavModal = (props: { t?: string }) => {
 
 export function MetalFlowRootLayout(props: { children?: React.ReactNode }) {
 	useEffect(() => {
-		cache.init()
+		app_cache.init()
 	}, [])
 	return (
 		<Box

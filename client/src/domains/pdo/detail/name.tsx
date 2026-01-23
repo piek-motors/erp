@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import type { SxProps } from '@mui/joy/styles/types'
-import { cache } from 'domains/pdo/cache/root'
+import { app_cache } from 'domains/pdo/cache'
 import { Box, Link, observer, P, Row } from 'lib/index'
 import { openPage, routeMap } from 'lib/routes'
 
@@ -42,7 +42,7 @@ export const DetailName = observer((props: Props) => {
 
 const GroupName = observer(({ groupId }: { groupId: number | null }) => {
 	if (!groupId) return null
-	const groupName = cache.detailGroups.getGroupName(groupId)
+	const groupName = app_cache.detailGroups.getGroupName(groupId)
 	return (
 		<P
 			color="primary"

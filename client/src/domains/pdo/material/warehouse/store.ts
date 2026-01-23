@@ -1,4 +1,4 @@
-import { cache } from 'domains/pdo/cache/root'
+import { app_cache } from 'domains/pdo/cache'
 import { makeAutoObservable } from 'mobx'
 import { MaterialSupplyStore } from './supply'
 import { MaterialWriteoffState } from './writeoff'
@@ -33,7 +33,7 @@ export class MaterialWarehouseStore {
 	private reset() {
 		this.supply.reset()
 		this.writeoff.reset()
-		cache.materials.invalidate()
+		app_cache.materials.invalidate()
 		this.stock = 0
 	}
 }

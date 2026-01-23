@@ -1,4 +1,4 @@
-import { cache } from 'domains/pdo/cache/root'
+import { app_cache } from 'domains/pdo/cache'
 import { makeAutoObservable } from 'mobx'
 import type { Color } from 'models'
 import { ColorSegmentation } from './color_segmentation.store'
@@ -98,7 +98,7 @@ export class DetailGroupStore {
 	}
 
 	get groups() {
-		return cache.detailGroups.getGroups()
+		return app_cache.detailGroups.getGroups()
 	}
 
 	get targetGroupDetails() {

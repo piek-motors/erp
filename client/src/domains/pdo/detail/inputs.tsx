@@ -14,7 +14,7 @@ import { dictManager } from 'components/dict_manager'
 import { HoverReveal } from 'components/hidden_button'
 import { NumberInput } from 'components/inputs/number_input'
 import { TextEditor } from 'domains/orders/one/comments/text-editor'
-import { cache } from 'domains/pdo/cache/root'
+import { app_cache } from 'domains/pdo/cache'
 import { rpc } from 'lib/deps'
 import {
 	Box,
@@ -98,7 +98,7 @@ export const MaterialSelect = observer(
 		index: number
 		onChange: (m: MaterialCost) => void
 	}) => {
-		const data = cache.materials
+		const data = app_cache.materials
 			.getMaterials()
 			.map(e => new MaterialCost([e.id, props.value.length ?? 0]))
 		return (
@@ -150,7 +150,7 @@ const Input = (props: InputLabledProps) => (
 )
 
 const DetailGroupInput = observer(({ detail }: { detail: DetailSt }) => {
-	const groupOptions: BaseOption[] = cache.detailGroups
+	const groupOptions: BaseOption[] = app_cache.detailGroups
 		.getGroups()
 		.map(group => ({
 			label: group.name,
@@ -224,7 +224,7 @@ const ProcessingRouteAccordion = observer(
 									dictManager.open({
 										ls: () =>
 											dict.ls.query().then(res => {
-												cache.details.setDictProcessingOperations(res)
+												app_cache.details.setDictProcessingOperations(res)
 												return res
 											}),
 										add: operation => dict.add.mutate({ v: operation }),

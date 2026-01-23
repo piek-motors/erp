@@ -2,9 +2,9 @@ import { UilMinus } from '@iconscout/react-unicons'
 import { Button, Divider, IconButton, Stack } from '@mui/joy'
 import { AccordionCard } from 'components/accordion_card'
 import { NumberInput } from 'components/inputs/number_input'
-import { cache } from 'domains/pdo/cache/root'
+import { app_cache } from 'domains/pdo/cache'
 import { Box, Label, observer, P, PlusIcon, Row, UseIcon } from 'lib/index'
-import { Unit, uiUnit } from 'models'
+import { uiUnit, Unit } from 'models'
 import type { DetailSt } from '../detail.state'
 import { MaterialSelect } from '../inputs'
 import { DetailSelectModal } from '../list/list'
@@ -32,7 +32,7 @@ const CostRow = ({ children, onDelete }: CostRowProps) => {
 export const MaterialCostInputs = observer(
 	({ detail }: { detail: DetailSt }) => {
 		const materialCost = detail.autoWriteoff.materialCost
-		const material = cache.materials.get(materialCost?.materialId || 0)
+		const material = app_cache.materials.get(materialCost?.materialId || 0)
 
 		return (
 			<Base
@@ -106,8 +106,8 @@ export const DetailCostInputs = observer(({ detail }: { detail: DetailSt }) => (
 		</Label>
 
 		{detail.autoWriteoff.detailsCost.map((cost, index) => {
-			const detailCache = cache.details.get(cost.detailId)
-			if (cache.details.loader.loading) return <Label xs>Загрузка..7</Label>
+			const detailCache = app_cache.details.get(cost.detailId)
+			if (app_cache.details.loader.loading) return <Label xs>Загрузка..7</Label>
 			else if (!detailCache)
 				return (
 					<DetailSelectModal

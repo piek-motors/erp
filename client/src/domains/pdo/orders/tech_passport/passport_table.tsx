@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import { Box } from '@mui/joy'
-import { cache } from 'domains/pdo/cache/root'
+import { app_cache } from 'domains/pdo/cache'
 import type { DetailSt } from 'domains/pdo/detail/detail.state'
 import { TechParamsRowDisplay } from 'domains/pdo/detail/inputs'
 import { capitalize } from 'domains/pdo/shared'
@@ -60,7 +60,7 @@ export const TechPassportTable = observer(({ order, detail }: Props) => {
 						<Box pb={0.5}>
 							<P fontSize={14} fontWeight={500}>
 								{materialCost?.materialId
-									? cache.materials.getLabel(materialCost.materialId)
+									? app_cache.materials.getLabel(materialCost.materialId)
 									: ''}
 							</P>
 							{detailsCost.map(d => (

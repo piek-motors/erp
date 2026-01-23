@@ -14,8 +14,8 @@ import {
 	observer,
 	openPage,
 	P,
-	Row,
 	routeMap,
+	Row,
 	SaveIconButton,
 	Stack,
 	useEffect,
@@ -31,7 +31,7 @@ import {
 	uiManufacturingOrderStatus,
 	uiUnit,
 } from 'models'
-import { cache } from '../cache/root'
+import { app_cache } from '../cache'
 import type { BlankSpec, DetailSt, DetailStProp } from '../detail/detail.state'
 import { TechParamsDisplay } from '../detail/inputs'
 import type { MaterialCost } from '../detail/warehouse/cost.store'
@@ -476,7 +476,7 @@ const ActionButton = observer(({ order }: OrderStProp) => {
 const DuplicationCheckModal = observer(({ order }: { order: OrderSt }) => {
 	const navigate = useNavigate()
 	if (!order.orderAlreadyInProductionModal) return null
-	const detail = cache.details.get(order.orderAlreadyInProductionModal.detailId)
+	const detail = app_cache.details.get(order.orderAlreadyInProductionModal.detailId)
 	if (!detail) return null
 	const modalState = order.orderAlreadyInProductionModal
 	return (

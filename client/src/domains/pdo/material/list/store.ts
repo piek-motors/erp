@@ -1,4 +1,4 @@
-import { cache } from 'domains/pdo/cache/root'
+import { app_cache } from 'domains/pdo/cache'
 import { LoadingController } from 'lib/store/loading_controller'
 import { makeAutoObservable } from 'mobx'
 import type { MaterialShape } from 'models'
@@ -16,7 +16,7 @@ export class MaterialListStore {
 		makeAutoObservable(this)
 	}
 	getFilteredMaterials(): Material[] {
-		let filtered = cache.materials.getMaterials()
+		let filtered = app_cache.materials.getMaterials()
 		filtered = filtered.slice().sort((a, b) =>
 			a.label.localeCompare(b.label, 'ru', {
 				numeric: true,

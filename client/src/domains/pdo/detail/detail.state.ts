@@ -3,7 +3,7 @@ import { makeAutoObservable } from 'mobx'
 import { Unit } from 'models'
 import type { RouterInput, RouterOutput } from 'srv/lib/trpc'
 import type { SelectableDetail } from 'srv/rpc/pdo/details'
-import { cache } from '../cache/root'
+import { app_cache } from '../cache'
 import { DetailAutomaticWriteoffStore } from './warehouse/auto_writeoff.store'
 import { DetailWarehouseStore } from './warehouse/store'
 
@@ -21,7 +21,7 @@ export class Operation {
 	}
 	get name(): string {
 		if (!this.id) return ''
-		const name = cache.details.dictProcessingOperaions.find(
+		const name = app_cache.details.dictProcessingOperaions.find(
 			each => each.id === this.id,
 		)?.v
 		return name ?? 'No value in the dict'
@@ -152,8 +152,8 @@ export class DetailSt {
 		this.processingRoute.init(
 			d.processing_route && d.processing_route.steps
 				? d.processing_route.steps.map(
-						operation_id => new Operation(operation_id),
-					)
+					operation_id => new Operation(operation_id),
+				)
 				: [],
 		)
 		this.setDrawingName(d.drawing_name ?? '')
@@ -201,8 +201,8 @@ export class DetailSt {
 			recommendedBatchSize: Number(this.recommendedBatchSize) ?? null,
 			processingRoute: this.processingRoute
 				? {
-						steps: this.processingRoute.steps.map(s => s.id!) ?? null,
-					}
+					steps: this.processingRoute.steps.map(s => s.id!) ?? null,
+				}
 				: null,
 			drawingName: this.drawingName ?? null,
 			automaticWriteoff: this.autoWriteoff.payload,

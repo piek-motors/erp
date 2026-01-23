@@ -50,7 +50,7 @@ export {
 	Sheet,
 	Stack,
 	Textarea,
-	ToggleButtonGroup,
+	ToggleButtonGroup
 }
 export const Btn = Button
 export const P = (props: TypographyProps) => <Typography {...props} />
@@ -106,14 +106,14 @@ export function InputWithUnit(
 	)
 }
 
-export function Row(props: { children: React.ReactNode } & StackProps) {
+export function Row(props: { children: React.ReactNode } & StackProps ) {
 	return (
 		<Stack
 			direction="row"
 			gap={1}
 			alignItems="center"
-			{...props}
 			flexWrap={'wrap'}
+			{...props}
 		/>
 	)
 }

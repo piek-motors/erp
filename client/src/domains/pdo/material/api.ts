@@ -2,7 +2,7 @@ import { rpc } from 'lib/deps'
 import { LoadingController } from 'lib/store/loading_controller'
 import { makeAutoObservable, runInAction } from 'mobx'
 import type { RouterInput } from 'srv/lib/trpc'
-import { cache } from '../cache/root'
+import { app_cache } from '../cache'
 import { map } from '../mappers'
 import { MaterialState } from './state'
 
@@ -42,7 +42,7 @@ export class MaterialApi {
 		const payload = this.create_payload(m)
 		const res = await rpc.pdo.material.create.mutate(payload)
 		m = new MaterialState()
-		await cache.materials.invalidate()
+		await app_cache.materials.invalidate()
 		return res.id
 	}
 
@@ -57,7 +57,7 @@ export class MaterialApi {
 			.then(async res => {
 				if (!m.id) throw new Error('Material id is not set')
 				const updated = await this.load(m.id)
-				cache.materials.invalidate()
+				app_cache.materials.invalidate()
 				return updated
 			})
 	}
@@ -77,11 +77,11 @@ export class MaterialApi {
 
 	async delete(id: number) {
 		await rpc.pdo.material.delete.mutate({ id })
-		const materialToRemove = cache.materials
+		const materialToRemove = app_cache.materials
 			.getMaterials()
 			.find(m => m.id === id)
 		if (materialToRemove) {
-			cache.materials.removeMaterial(materialToRemove)
+			app_cache.materials.removeMaterial(materialToRemove)
 		}
 	}
 
