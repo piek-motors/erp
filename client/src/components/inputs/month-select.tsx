@@ -69,7 +69,7 @@ function _MonthSelect({ onSearch, store, onChange }: IReportConfiguratorProps) {
 				value={store.month}
 				onChange={v => {
 					store.setMonth(Number(v))
-					onChange && onChange()
+					onChange?.()
 				}}
 				width="100px"
 			/>
@@ -83,7 +83,7 @@ function _MonthSelect({ onSearch, store, onChange }: IReportConfiguratorProps) {
 				value={store.year}
 				onChange={v => {
 					store.setYear(Number(v))
-					onChange && onChange()
+					onChange?.()
 				}}
 			/>
 			{onSearch && (

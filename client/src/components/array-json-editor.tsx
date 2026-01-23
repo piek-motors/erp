@@ -90,7 +90,7 @@ export const ArrayJsonEditor = observer((props: ArrayJsonEditorProps) => {
 												>
 													{keys.map((key, keyIdx) => (
 														<Box
-															key={keyIdx}
+															key={key}
 															sx={{
 																width: props.width?.[keyIdx]
 																	? `${props.width?.[keyIdx]}%`

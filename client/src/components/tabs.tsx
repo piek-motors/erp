@@ -36,7 +36,7 @@ export function Tabs(props: TabProps) {
 			}}
 		>
 			<TabList {...props.slots?.tabList}>
-				{props.tabs.map(({ value, label }, idx) => (
+				{props.tabs.map(({ value, label }) => (
 					<Tab
 						key={value}
 						color={props.value === value ? 'primary' : 'neutral'}
@@ -46,7 +46,7 @@ export function Tabs(props: TabProps) {
 					</Tab>
 				))}
 			</TabList>
-			{props.tabs.map(({ value, component }, idx) => (
+			{props.tabs.map(({ value, component }) => (
 				<TabPanel key={value} value={value} sx={{ p: props.p }}>
 					{component}
 				</TabPanel>

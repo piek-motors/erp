@@ -46,7 +46,7 @@ const RenderAction = (props: { action: Link; size: ButtonProps['size'] }) => {
 				{action.endBlock?.length && (
 					<Stack>
 						{action.endBlock?.map(e => (
-							<LinkableIcon href={e.href} small />
+							<LinkableIcon href={e.href} small key={e.href} />
 						))}
 					</Stack>
 				)}
