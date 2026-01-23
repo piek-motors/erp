@@ -117,11 +117,13 @@ export const value_with_unit = (
 	unit?: Unit,
 	opts?: { fraction_digits?: number, null_on_zero?: boolean }
 ) => {
-	if (opts?.null_on_zero && stock === 0) return null
+	const rounded_stock = stock.toFixed(opts?.fraction_digits ?? 2)
+
+	if (opts?.null_on_zero && rounded_stock === "0") return null
 	return (
 		<Row gap={0.5} flexWrap={'nowrap'}>
-			<P>{stock.toFixed(opts?.fraction_digits ?? 2)}</P>
-			{unit != null && <P level="body-xs">{uiUnit(unit)}</P>}
+			<P>{rounded_stock}</P>
+			{unit != null && <P level="body-xs" >{uiUnit(unit)}</P>}
 		</Row>
 	);
 }
