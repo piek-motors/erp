@@ -1,13 +1,9 @@
 {
-  "directory": ".",
-  "exclude": [
-    "\\.(spec|e2e-spec)\\.ts$",
-    "dist",
-    "node_modules"
-  ],
-  "location": "all",
-  "structure": "flat",
-  "singleQuotes": true,
-  "noHeader": true,
-  "delete": true
+	"directory": ".",
+	"exclude": ["\\.(spec|e2e-spec)\\.ts$", "dist", "node_modules"],
+	"location": "all",
+	"structure": "flat",
+	"singleQuotes": true,
+	"noHeader": true,
+	"delete": true
 }

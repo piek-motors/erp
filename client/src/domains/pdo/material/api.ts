@@ -1,100 +1,100 @@
 import { rpc } from 'lib/deps'
 import { LoadingController } from 'lib/store/loading_controller'
 import { makeAutoObservable, runInAction } from 'mobx'
-import { RouterInput } from 'srv/lib/trpc'
+import type { RouterInput } from 'srv/lib/trpc'
 import { cache } from '../cache/root'
 import { map } from '../mappers'
 import { MaterialState } from './state'
 
 export class MaterialApi {
-  readonly loader = new LoadingController()
-  constructor() {
-    makeAutoObservable(this)
-  }
+	readonly loader = new LoadingController()
+	constructor() {
+		makeAutoObservable(this)
+	}
 
-  async load(id: number) {
-    return this.loader.run(async () => {
-      const res = await rpc.pdo.material.get.query({ id })
-      const { material, writeoff_stat, detailCount } = res
-      const m = new MaterialState()
+	async load(id: number) {
+		return this.loader.run(async () => {
+			const res = await rpc.pdo.material.get.query({ id })
+			const { material, writeoff_stat, detailCount } = res
+			const m = new MaterialState()
 
-      runInAction(() => {
-        m.syncState(map.material.fromDto(res))
-        m.id = material.id
-        m.label = material.label
-        m.alloy = material.alloy || ''
-        m.unit = material.unit
-        m.detailCount = Number(detailCount)
+			runInAction(() => {
+				m.syncState(map.material.from_dto(material))
+				m.id = material.id
+				m.label = material.label
+				m.alloy = material.alloy || ''
+				m.unit = material.unit
+				m.detailCount = Number(detailCount)
 
-        m.writeoff_stat = {
-          monthly: writeoff_stat.monthly,
-          quarterly: writeoff_stat.quarterly
-        }
-        m.shortage_prediction_horizon_days =
-          material.shortage_prediction_horizon_days
-        m.warehouse.stock = material.stock
-      })
-      return m
-    })
-  }
+				m.writeoff_stat = {
+					monthly: writeoff_stat.monthly,
+					quarterly: writeoff_stat.quarterly,
+				}
+				m.shortage_prediction_horizon_days =
+					material.shortage_prediction_horizon_days
+				m.warehouse.stock = material.stock
+			})
+			return m
+		})
+	}
 
-  async insert(m: MaterialState) {
-    const payload = this.create_payload(m)
-    const res = await rpc.pdo.material.create.mutate(payload)
-    m = new MaterialState()
-    await cache.materials.load()
-    return res.id
-  }
+	async insert(m: MaterialState) {
+		const payload = this.create_payload(m)
+		const res = await rpc.pdo.material.create.mutate(payload)
+		m = new MaterialState()
+		await cache.materials.invalidate()
+		return res.id
+	}
 
-  async update(m: MaterialState) {
-    if (!m.id) throw new Error('Material id is not set')
-    const payload = this.create_payload(m)
-    return rpc.pdo.material.update
-      .mutate({
-        ...payload,
-        id: m.id
-      })
-      .then(async res => {
-        if (!m.id) throw new Error('Material id is not set')
-        const updated = await this.load(m.id)
-        cache.materials.load()
-        return updated
-      })
-  }
+	async update(m: MaterialState) {
+		if (!m.id) throw new Error('Material id is not set')
+		const payload = this.create_payload(m)
+		return rpc.pdo.material.update
+			.mutate({
+				...payload,
+				id: m.id,
+			})
+			.then(async res => {
+				if (!m.id) throw new Error('Material id is not set')
+				const updated = await this.load(m.id)
+				cache.materials.invalidate()
+				return updated
+			})
+	}
 
-  private create_payload(
-    m: MaterialState
-  ): RouterInput['pdo']['material']['create'] {
-    if (m.unit == null) throw new Error('Не выбрана единица учета остатков')
-    return {
-      shape: m.shape,
-      shape_data: m.get_shape_state(m.shape).export(),
-      unit: m.unit,
-      alloy: m.alloy || null,
-      shortage_prediction_horizon_days: m.shortage_prediction_horizon_days
-    }
-  }
+	private create_payload(
+		m: MaterialState,
+	): RouterInput['pdo']['material']['create'] {
+		if (m.unit == null) throw new Error('Не выбрана единица учета остатков')
+		return {
+			shape: m.shape,
+			shape_data: m.get_shape_state(m.shape).export(),
+			unit: m.unit,
+			alloy: m.alloy || null,
+			shortage_prediction_horizon_days: m.shortage_prediction_horizon_days,
+		}
+	}
 
-  async delete(id: number) {
-    await rpc.pdo.material.delete.mutate({ id })
-    const materialToRemove = cache.materials
-      .getMaterials()
-      .find(m => m.id === id)
-    if (materialToRemove) {
-      cache.materials.removeMaterial(materialToRemove)
-    }
-  }
+	async delete(id: number) {
+		await rpc.pdo.material.delete.mutate({ id })
+		const materialToRemove = cache.materials
+			.getMaterials()
+			.find(m => m.id === id)
+		if (materialToRemove) {
+			cache.materials.removeMaterial(materialToRemove)
+		}
+	}
 
-  async get_details_made_from_material(material_id: number) {
-    const res = await rpc.pdo.details.filter_by_material.query({
-      material_id
-    })
-    return res.map(e => ({
-      id: e.id,
-      name: e.name,
-      group_id: e.logical_group_id
-    }))
-  }
+	async get_details_made_from_material(material_id: number) {
+		const res = await rpc.pdo.details.filter_by_material.query({
+			material_id,
+		})
+		return res.map(e => ({
+			id: e.id,
+			name: e.name,
+			group_id: e.logical_group_id,
+		}))
+	}
 }
 
 export const api = new MaterialApi()

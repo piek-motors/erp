@@ -1,7 +1,7 @@
+import type { DB, Selectable } from 'db'
 import { ApiError } from '#root/lib/api.error.js'
 import { Errcode } from '#root/lib/error-code.js'
 import type { IDB } from '#root/sdk.js'
-import type { DB, Selectable } from 'db'
 
 export interface Attachment {
 	key: string
@@ -10,7 +10,7 @@ export interface Attachment {
 }
 
 export class AttachmentService {
-	constructor(private readonly db: IDB) { }
+	constructor(private readonly db: IDB) {}
 
 	insertAttachmentMetadata(
 		files: Attachment[],

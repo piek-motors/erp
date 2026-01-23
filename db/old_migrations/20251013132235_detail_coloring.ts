@@ -1,8 +1,8 @@
 import { sql } from 'kysely'
-import { type KDB } from '../schema'
+import type { KDB } from '../schema'
 
 export async function up(db: KDB): Promise<void> {
-  await sql`
+	await sql`
     CREATE TABLE pdo.detail_group_color_annotations (
       group_id integer NOT NULL REFERENCES pdo.detail_group(id) ON DELETE CASCADE,
       detail_id integer NOT NULL REFERENCES pdo.details(id) ON DELETE CASCADE,
@@ -13,7 +13,7 @@ export async function up(db: KDB): Promise<void> {
 }
 
 export async function down(db: KDB): Promise<void> {
-  await sql`
+	await sql`
     DROP TABLE pdo.detail_group_color_annotations
  `.execute(db)
 }

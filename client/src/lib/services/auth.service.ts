@@ -1,11 +1,11 @@
 import { $api } from 'lib/axios'
 
 export class AuthService {
-  static async login(email: string, password: string) {
-    return $api.post('/login', { email, password })
-  }
+	static async login(email: string, password: string) {
+		return $api.post('/login', { email, password })
+	}
 
-  static async logout() {
-    return $api.post('/logout')
-  }
+	static async logout() {
+		return $api.post('/logout')
+	}
 }

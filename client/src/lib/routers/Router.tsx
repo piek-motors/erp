@@ -5,21 +5,21 @@ import { LoginForm } from '../../login'
 import RequireAuth from './PrivateRoute'
 
 export function AppRouter() {
-  return (
-    <Routes>
-      {/* Public route for login */}
-      <Route path="/login" element={<LoginForm />} />
-      <Route path="/help" element={<Navigate to={routeMap.index} />} />
-      {/* Protected routes requiring authentication */}
-      {protectedRoutes.map(route => (
-        <Route
-          key={route.path}
-          path={route.path}
-          element={<RequireAuth>{route.element}</RequireAuth>}
-        />
-      ))}
+	return (
+		<Routes>
+			{/* Public route for login */}
+			<Route path="/login" element={<LoginForm />} />
+			<Route path="/help" element={<Navigate to={routeMap.index} />} />
+			{/* Protected routes requiring authentication */}
+			{protectedRoutes.map(route => (
+				<Route
+					key={route.path}
+					path={route.path}
+					element={<RequireAuth>{route.element}</RequireAuth>}
+				/>
+			))}
 
-      <Route path="*" element={<Navigate to={routeMap.index} replace />} />
-    </Routes>
-  )
+			<Route path="*" element={<Navigate to={routeMap.index} replace />} />
+		</Routes>
+	)
 }

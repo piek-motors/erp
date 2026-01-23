@@ -1,3 +1,14 @@
+import type { DB } from 'db'
+import { sql } from 'kysely'
+import {
+	MaterialConstructorMap,
+	MaterialShape,
+	MaterialShapeAbstractionLayer,
+	SupplyReason,
+	Unit,
+	WriteoffReason,
+} from 'models'
+import { z } from 'zod'
 import { materials_stat_container } from '#root/ioc/index.js'
 import { logger } from '#root/ioc/log.js'
 import { isDuplicateKeyError } from '#root/lib/kysely.js'
@@ -11,17 +22,6 @@ import {
 	TRPCError,
 } from '#root/sdk.js'
 import { Warehouse } from '#root/service/warehouse.service.js'
-import type { DB } from 'db'
-import { sql } from 'kysely'
-import {
-	MaterialConstructorMap,
-	MaterialShape,
-	MaterialShapeAbstractionLayer,
-	SupplyReason,
-	Unit,
-	WriteoffReason,
-} from 'models'
-import { z } from 'zod'
 
 export type Material = DB.Material & {}
 
@@ -126,7 +126,8 @@ export const material = router({
 			await db
 				.updateTable('pdo.materials')
 				.set({
-					...input, label: derive_label(input)
+					...input,
+					label: derive_label(input),
 				})
 				.where('id', '=', input.id)
 				.executeTakeFirstOrThrow()
@@ -184,19 +185,11 @@ export const material = router({
 	),
 })
 
-
 type UpdatePayload = z.infer<typeof payload>
 
 function derive_label(input: UpdatePayload) {
 	const materialConstructor = MaterialConstructorMap[input.shape]
-	const model = new materialConstructor(
-		input.shape_data,
-		'',
-		input.alloy,
-	)
-	MaterialShapeAbstractionLayer.importShapeData(
-		model,
-		input.shape_data,
-	)
+	const model = new materialConstructor(input.shape_data, '', input.alloy)
+	MaterialShapeAbstractionLayer.importShapeData(model, input.shape_data)
 	return model.deriveLabel()
 }

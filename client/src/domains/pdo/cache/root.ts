@@ -5,20 +5,20 @@ import { DetailGroupCache } from './detail_group_cache'
 import { MaterialCache } from './material_cache'
 
 class MetalflowCache {
-  details = new DetailCache()
-  materials = new MaterialCache()
-  detailGroups = new DetailGroupCache()
+	details = new DetailCache()
+	materials = new MaterialCache()
+	detailGroups = new DetailGroupCache()
 
-  constructor() {
-    makeAutoObservable(this)
-  }
+	constructor() {
+		makeAutoObservable(this)
+	}
 
-  async init() {
-    await this.details.load()
-    detailListStore.index()
-    await this.materials.load()
-    await this.detailGroups.load()
-  }
+	async init() {
+		await this.details.load()
+		detailListStore.index()
+		await this.materials.invalidate()
+		await this.detailGroups.load()
+	}
 }
 
 export const cache = new MetalflowCache()

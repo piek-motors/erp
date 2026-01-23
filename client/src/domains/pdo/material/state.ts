@@ -1,88 +1,92 @@
 import { makeAutoObservable } from 'lib/deps'
 import { LoadingController } from 'lib/store/loading_controller'
-import { Material, MaterialShape, Unit } from 'models'
+import { type Material, MaterialShape, type Unit } from 'models'
 import { ArbitraryState } from './shape/arbitrary.state'
 import { HexagonBarState } from './shape/hexagon_bar.state'
 import { ListState } from './shape/list_state'
 import { PipeState } from './shape/pipe_state'
 import { RoundBarState } from './shape/rounde_bar.state'
 import { SquareState } from './shape/square_state'
-import { IMaterialShapeState } from './shape_state.interface'
+import type { IMaterialShapeState } from './shape_state.interface'
 import { MaterialWarehouseStore } from './warehouse/store'
 
 export class MaterialState {
-  readonly loadingWall = new LoadingController()
-  readonly warehouse = new MaterialWarehouseStore()
-  constructor() {
-    makeAutoObservable(this)
-  }
+	readonly loadingWall = new LoadingController()
+	readonly warehouse = new MaterialWarehouseStore()
+	constructor() {
+		makeAutoObservable(this)
+	}
 
-  list = new ListState()
-  round = new RoundBarState()
-  square = new SquareState()
-  pipe = new PipeState()
-  hexagon = new HexagonBarState()
-  arbitrary = new ArbitraryState()
+	list = new ListState()
+	round = new RoundBarState()
+	square = new SquareState()
+	pipe = new PipeState()
+	hexagon = new HexagonBarState()
+	arbitrary = new ArbitraryState()
 
-  shapeState = {
-    [MaterialShape.RoundBar]: this.round,
-    [MaterialShape.SquareBar]: this.square,
-    [MaterialShape.Pipe]: this.pipe,
-    [MaterialShape.List]: this.list,
-    [MaterialShape.HexagonBar]: this.hexagon,
-    [MaterialShape.Arbitrary]: this.arbitrary
-  } as const
+	shapeState = {
+		[MaterialShape.RoundBar]: this.round,
+		[MaterialShape.SquareBar]: this.square,
+		[MaterialShape.Pipe]: this.pipe,
+		[MaterialShape.List]: this.list,
+		[MaterialShape.HexagonBar]: this.hexagon,
+		[MaterialShape.Arbitrary]: this.arbitrary,
+	} as const
 
-  get_shape_state(shape: MaterialShape): IMaterialShapeState {
-    return this.shapeState[shape]
-  }
+	get_shape_state(shape: MaterialShape): IMaterialShapeState {
+		return this.shapeState[shape]
+	}
 
-  id?: number
-  label?: string
-  unit?: Unit
-  set_unit(unit: Unit) {
-    this.unit = unit
-  }
-  shape: MaterialShape = MaterialShape.RoundBar
-  set_shape(shape: MaterialShape) {
-    this.shape = shape
-  }
+	id?: number
+	label?: string
+	unit?: Unit
+	set_unit(unit: Unit) {
+		this.unit = unit
+	}
+	shape: MaterialShape = MaterialShape.RoundBar
+	set_shape(shape: MaterialShape) {
+		this.shape = shape
+	}
 
-  alloy?: string
-  set_alloy(alloy: string) {
-    this.alloy = alloy
-  }
+	alloy?: string
+	set_alloy(alloy: string) {
+		this.alloy = alloy
+	}
 
-  detailCount: number = 0
-  setDetailCount(detailCount: number) {
-    this.detailCount = detailCount
-  }
-  detailsMadeFromThisMaterial: {
-    id: number
-    name: string
-    group_id: number | null
-  }[] = []
-  setDetailsMadeFromThisMaterial(
-    details: { id: number; name: string; group_id: number | null }[]
-  ) {
-    this.detailsMadeFromThisMaterial = details
-  }
-  resetDetails() {
-    this.detailsMadeFromThisMaterial = []
-  }
+	get stock() {
+		return this.warehouse.stock
+	}
 
-  shortage_prediction_horizon_days?: number
-  set_shortage_orediction_horizon_days(v?: number) {
-    this.shortage_prediction_horizon_days = v
-  }
+	detailCount: number = 0
+	setDetailCount(detailCount: number) {
+		this.detailCount = detailCount
+	}
+	detailsMadeFromThisMaterial: {
+		id: number
+		name: string
+		group_id: number | null
+	}[] = []
+	setDetailsMadeFromThisMaterial(
+		details: { id: number; name: string; group_id: number | null }[],
+	) {
+		this.detailsMadeFromThisMaterial = details
+	}
+	resetDetails() {
+		this.detailsMadeFromThisMaterial = []
+	}
 
-  writeoff_stat?: {
-    monthly?: [string, number][]
-    quarterly?: [string, number][]
-  }
+	shortage_prediction_horizon_days?: number
+	set_shortage_orediction_horizon_days(v?: number) {
+		this.shortage_prediction_horizon_days = v
+	}
 
-  syncState(material: Material) {
-    this.shape = material.shape
-    this.get_shape_state(this.shape).sync(material)
-  }
+	writeoff_stat?: {
+		monthly?: [string, number][]
+		quarterly?: [string, number][]
+	}
+
+	syncState(material: Material) {
+		this.shape = material.shape
+		this.get_shape_state(this.shape).sync(material)
+	}
 }

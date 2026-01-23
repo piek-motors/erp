@@ -1,3 +1,4 @@
+import { OperationType, WriteoffReason } from 'models'
 import type { MaterialStatDataContainer } from '#root/ioc/index.js'
 import { logger } from '#root/ioc/log.js'
 import { Day } from '#root/lib/constants.js'
@@ -7,7 +8,6 @@ import {
 	startOfUTCMonth,
 } from '#root/lib/time.js'
 import { db } from '#root/sdk.js'
-import { OperationType, WriteoffReason } from 'models'
 import {
 	MonthStrategy,
 	PeriodAggregator,
@@ -15,13 +15,12 @@ import {
 	TimeSeriesRollup,
 	TimeWindow,
 } from '../lib/statistic/period_aggregator.js'
-import { Job } from './jobs_runner.js'
-
+import type { Job } from './jobs_runner.js'
 
 export class MaterialQuarterSpendingsAggregationJob implements Job {
 	constructor(
 		private readonly material_stat_data_container: MaterialStatDataContainer,
-	) { }
+	) {}
 
 	interval(): number {
 		return Day

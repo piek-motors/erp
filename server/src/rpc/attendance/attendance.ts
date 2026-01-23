@@ -1,8 +1,8 @@
+import { AbsenceReason } from 'models'
+import { z } from 'zod'
 import { attendanceReportGenerator } from '#root/ioc/index.js'
 import { router } from '#root/lib/trpc/trpc.js'
 import { db, procedure, requireScope, Scope } from '#root/sdk.js'
-import { AbsenceReason } from 'models'
-import { z } from 'zod'
 
 const intervalUpdate = z.object({
 	ent_event_id: z.number(),

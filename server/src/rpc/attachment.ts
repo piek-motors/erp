@@ -1,7 +1,7 @@
+import { z } from 'zod'
 import { attachmentService } from '#root/ioc/index.js'
 import { router } from '#root/lib/trpc/trpc.js'
 import { config, db, procedure, s3, TRPCError } from '#root/sdk.js'
-import { z } from 'zod'
 
 export const delete_file = procedure
 	.input(

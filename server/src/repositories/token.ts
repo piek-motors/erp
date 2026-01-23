@@ -8,7 +8,7 @@ export class TokenRepository {
 	constructor(
 		private readonly userRepo: UserRepository,
 		private readonly db: IDB,
-	) { }
+	) {}
 
 	async find(refreshToken: string) {
 		const token = await this.db

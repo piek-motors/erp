@@ -1,53 +1,53 @@
-import { AlertProps } from '@mui/joy'
+import type { AlertProps } from '@mui/joy'
 import { Second } from 'lib/constants'
 import { makeAutoObservable, runInAction } from 'mobx'
 
 type Notification = {
-  id: string
-  msg: string
-  color: AlertProps['color']
+	id: string
+	msg: string
+	color: AlertProps['color']
 }
 
 class NotifierStore {
-  notifications: Notification[] = []
+	notifications: Notification[] = []
 
-  constructor() {
-    makeAutoObservable(this)
-  }
+	constructor() {
+		makeAutoObservable(this)
+	}
 
-  private notify(
-    level: Notification['color'],
-    msg: string,
-    timeout_sec: number
-  ) {
-    const id = crypto.randomUUID()
+	private notify(
+		level: Notification['color'],
+		msg: string,
+		timeout_sec: number,
+	) {
+		const id = crypto.randomUUID()
 
-    runInAction(() => {
-      this.notifications.unshift({ msg, color: level, id })
-    })
+		runInAction(() => {
+			this.notifications.unshift({ msg, color: level, id })
+		})
 
-    // Remove notification after timeout
-    setTimeout(() => {
-      runInAction(() => {
-        this.notifications = this.notifications.filter(each => each.id !== id)
-      })
-    }, timeout_sec * Second)
-  }
+		// Remove notification after timeout
+		setTimeout(() => {
+			runInAction(() => {
+				this.notifications = this.notifications.filter(each => each.id !== id)
+			})
+		}, timeout_sec * Second)
+	}
 
-  all() {
-    return this.notifications
-  }
+	all() {
+		return this.notifications
+	}
 
-  ok(msg: string, timeout_sec?: number) {
-    this.notify('success', msg, timeout_sec || 3)
-  }
+	ok(msg: string, timeout_sec?: number) {
+		this.notify('success', msg, timeout_sec || 3)
+	}
 
-  warn(msg: string, timeout_sec?: number) {
-    this.notify('warning', msg, timeout_sec || 5)
-  }
+	warn(msg: string, timeout_sec?: number) {
+		this.notify('warning', msg, timeout_sec || 5)
+	}
 
-  err(msg: string, timeout_sec?: number) {
-    this.notify('danger', msg, timeout_sec || 10)
-  }
+	err(msg: string, timeout_sec?: number) {
+		this.notify('danger', msg, timeout_sec || 10)
+	}
 }
 export const notifier = new NotifierStore()

@@ -1,31 +1,31 @@
 import { authStore } from 'lib/store/auth.store'
 import { observer } from 'mobx-react-lite'
-import { ReactElement, useEffect, useState } from 'react'
+import { type ReactElement, useEffect, useState } from 'react'
 import { Navigate } from 'react-router'
 
 type IRequireAuthProps = {
-  children: ReactElement
+	children: ReactElement
 }
 
 const RequireAuth = observer((props: IRequireAuthProps) => {
-  const [isLoaded, setisLoaded] = useState(false)
-  const [token, setToken] = useState(authStore.token)
+	const [isLoaded, setisLoaded] = useState(false)
+	const [token, setToken] = useState(authStore.token)
 
-  async function getToken() {
-    authStore.checkAuth().then(res => {
-      setToken(res)
-      setisLoaded(true)
-    })
-  }
+	async function getToken() {
+		authStore.checkAuth().then(res => {
+			setToken(res)
+			setisLoaded(true)
+		})
+	}
 
-  useEffect(() => {
-    if (token) setisLoaded(true)
-    else getToken()
-  }, [])
+	useEffect(() => {
+		if (token) setisLoaded(true)
+		else getToken()
+	}, [])
 
-  if (!isLoaded) return <>Authentication</>
+	if (!isLoaded) return <>Authentication</>
 
-  return token ? props.children : <Navigate to="/login" />
+	return token ? props.children : <Navigate to="/login" />
 })
 
 export default RequireAuth

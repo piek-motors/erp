@@ -1,35 +1,35 @@
 import { routeMap } from 'lib/routes'
-import { Link } from '../../components/nav_sidebar'
+import type { Link } from '../../components/nav_sidebar'
 
 export const nav_links: Link[] = [
-  {
-    name: 'Производство',
-    href: routeMap.pdo.index
-  },
-  {
-    name: 'Группы',
-    href: routeMap.pdo.detailGroups
-  },
-  {
-    name: 'Детали',
-    href: routeMap.pdo.details,
-    endBlock: [
-      {
-        href: routeMap.pdo.detail.new
-      }
-    ]
-  },
-  {
-    name: 'Материалы',
-    href: routeMap.pdo.materials,
-    endBlock: [
-      {
-        href: routeMap.pdo.material.new
-      }
-    ]
-  },
-  {
-    name: 'Журнал',
-    href: routeMap.pdo.operations
-  }
+	{
+		name: 'Производство',
+		href: routeMap.pdo.index,
+	},
+	{
+		name: 'Группы',
+		href: routeMap.pdo.detailGroups,
+	},
+	{
+		name: 'Детали',
+		href: routeMap.pdo.details,
+		endBlock: [
+			{
+				href: routeMap.pdo.detail.new,
+			},
+		],
+	},
+	{
+		name: 'Материалы',
+		href: routeMap.pdo.materials,
+		endBlock: [
+			{
+				href: routeMap.pdo.material.new,
+			},
+		],
+	},
+	{
+		name: 'Журнал',
+		href: routeMap.pdo.operations,
+	},
 ]

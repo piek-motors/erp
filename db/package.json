@@ -1,41 +1,41 @@
 {
-  "name": "db",
-  "version": "1.0.0",
-  "main": "./dist/index.js",
-  "scripts": {
-    "build": "tsc -p tsconfig.json",
-    "clean": "rm -rf dist",
-    "dev": "ts-node src/index.ts",
-    "migrate": "npm run build && node ./dist/scripts/migrate.js",
-    "revert": "npm run build && node ./dist/scripts/migrate.js --revert",
-    "prebuild": "npm run clean",
-    "start": "node ./dist/index.js",
-    "typecheck": "tsc --noEmit",
-    "create": "ts-node scripts/create-migration.ts"
-  },
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "default": "./dist/index.js"
-    }
-  },
-  "peerDependencies": {
-    "models": "workspace:*"
-  },
-  "types": "./dist/index.d.ts",
-  "dependencies": {
-    "commander": "^13.1.0",
-    "dotenv": "^10.0.0",
-    "kysely": "^0.27.6",
-    "pg": "^8.14.1"
-  },
-  "devDependencies": {
-    "typescript": "^5.8.2",
-    "ts-node": "^10.9.2",
-    "@types/node": "^18.19.83",
-    "@types/pg": "^8.11.11"
-  },
-  "author": "",
-  "license": "ISC",
-  "description": ""
+	"name": "db",
+	"version": "1.0.0",
+	"main": "./dist/index.js",
+	"scripts": {
+		"build": "tsc -p tsconfig.json",
+		"clean": "rm -rf dist",
+		"dev": "ts-node src/index.ts",
+		"migrate": "npm run build && node ./dist/scripts/migrate.js",
+		"revert": "npm run build && node ./dist/scripts/migrate.js --revert",
+		"prebuild": "npm run clean",
+		"start": "node ./dist/index.js",
+		"typecheck": "tsc --noEmit",
+		"create": "ts-node scripts/create-migration.ts"
+	},
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"default": "./dist/index.js"
+		}
+	},
+	"peerDependencies": {
+		"models": "workspace:*"
+	},
+	"types": "./dist/index.d.ts",
+	"dependencies": {
+		"commander": "^13.1.0",
+		"dotenv": "^10.0.0",
+		"kysely": "^0.27.6",
+		"pg": "^8.14.1"
+	},
+	"devDependencies": {
+		"typescript": "^5.8.2",
+		"ts-node": "^10.9.2",
+		"@types/node": "^18.19.83",
+		"@types/pg": "^8.11.11"
+	},
+	"author": "",
+	"license": "ISC",
+	"description": ""
 }

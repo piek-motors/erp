@@ -1,8 +1,8 @@
+import { ManufacturingOrderStatus } from 'models'
 import { logger } from '#root/ioc/log.js'
 import { Day } from '#root/lib/constants.js'
 import { db } from '#root/sdk.js'
-import { ManufacturingOrderStatus } from 'models'
-import { Job } from './jobs_runner.js'
+import type { Job } from './jobs_runner.js'
 
 const OutdatedManufacturingOrderDeletionAfter = 7 * Day
 
@@ -28,5 +28,4 @@ export class OutdatedPdoOrdersRemovalJob implements Job {
 			`Removed ${result.length} outdated orders created before ${cutoffDate}`,
 		)
 	}
-
 }

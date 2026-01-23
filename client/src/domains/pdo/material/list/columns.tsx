@@ -1,34 +1,20 @@
-import { Label, P, Row } from 'lib/index'
-import { roundAndTrim } from 'lib/utils/fmt'
-import { Unit, uiUnit } from 'models'
-import { Column } from 'react-table'
-import { Material } from 'srv/rpc/pdo/materials'
-
-function balanceWithUnit(stock: number, unit: Unit) {
-  if (!stock) return ''
-  const roundedStock = roundAndTrim(stock, 0)
-  if (!roundedStock || roundedStock === '0') return ''
-  return (
-    <Row gap={0.5}>
-      <P>{roundedStock}</P>
-      <P level="body-xs">{uiUnit(unit)}</P>
-    </Row>
-  )
-}
+import { value_with_unit } from 'domains/pdo/shared'
+import { Label, P } from 'lib/index'
+import type { Column } from 'react-table'
+import type { Material } from 'srv/rpc/pdo/materials'
 
 export const columns: Column<Material>[] = [
-  {
-    Header: '№',
-    accessor: m => <Label xs>{m.id}</Label>
-  },
-  {
-    Header: 'Наим.',
-    id: 'name',
-    accessor: m => <P whiteSpace={'nowrap'}>{m.label}</P>,
-    width: '95%'
-  },
-  {
-    Header: 'Остаток',
-    accessor: m => balanceWithUnit(m.stock, m.unit)
-  }
+	{
+		Header: '№',
+		accessor: m => <Label xs>{m.id}</Label>,
+	},
+	{
+		Header: 'Наим.',
+		id: 'name',
+		accessor: m => <P>{m.label}</P>,
+	},
+	{
+		Header: 'Остаток',
+		accessor: m => value_with_unit(m.stock, m.unit, { fraction_digits: 0, null_on_zero: true }),
+	},
 ]

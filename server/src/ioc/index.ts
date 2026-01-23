@@ -31,8 +31,7 @@ export const attachmentService = new AttachmentService(db)
 export const attendanceReportGenerator = new AttendanceReportGenerator(db)
 export const userController = new UserController(authService)
 
-
 new JobsRunner([
 	new MaterialQuarterSpendingsAggregationJob(materials_stat_container),
-	new OutdatedPdoOrdersRemovalJob()
+	new OutdatedPdoOrdersRemovalJob(),
 ]).setup()

@@ -3,7 +3,7 @@ import { Errcode } from '#root/lib/error-code.js'
 import type { IDB } from '#root/sdk.js'
 
 export class UserRepository {
-	constructor(private readonly db: IDB) { }
+	constructor(private readonly db: IDB) {}
 
 	async get(id: number) {
 		const user = await this.db

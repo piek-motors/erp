@@ -1,11 +1,11 @@
 import { sql } from 'kysely'
-import { type KDB } from '../schema'
+import type { KDB } from '../schema'
 
 export async function up(db: KDB): Promise<void> {
-  await sql`DROP TABLE IF EXISTS pdo.detail_materials`.execute(db)
+	await sql`DROP TABLE IF EXISTS pdo.detail_materials`.execute(db)
 
-  // Transform materials array to single material object
-  await sql`
+	// Transform materials array to single material object
+	await sql`
     UPDATE pdo.details
     SET automatic_writeoff = 
       CASE 
@@ -18,8 +18,8 @@ export async function up(db: KDB): Promise<void> {
       AND automatic_writeoff ? 'materials'
   `.execute(db)
 
-  // Create index for efficient material_id lookups
-  await sql`
+	// Create index for efficient material_id lookups
+	await sql`
     CREATE INDEX idx_details_automatic_writeoff_material_id 
     ON pdo.details 
     USING btree (((automatic_writeoff->'material'->>'material_id')::int))
@@ -28,13 +28,13 @@ export async function up(db: KDB): Promise<void> {
 }
 
 export async function down(db: KDB): Promise<void> {
-  // Drop the index
-  await sql`
+	// Drop the index
+	await sql`
     DROP INDEX pdo.idx_details_automatic_writeoff_material_id
   `.execute(db)
 
-  // Transform single material object back to materials array
-  await sql`
+	// Transform single material object back to materials array
+	await sql`
     UPDATE pdo.details
     SET automatic_writeoff = 
       CASE 
