@@ -1,7 +1,9 @@
-import { value_with_unit } from 'domains/pdo/shared'
+import { AdaptiveNumberFormatter, value_with_unit } from 'domains/pdo/shared'
 import { Label, P } from 'lib/index'
 import type { Column } from 'react-table'
 import type { Material } from 'srv/rpc/pdo/materials'
+
+const formatter = new AdaptiveNumberFormatter(0, 0, true)
 
 export const columns: Column<Material>[] = [
 	{
@@ -15,6 +17,6 @@ export const columns: Column<Material>[] = [
 	},
 	{
 		Header: 'Остаток',
-		accessor: m => value_with_unit(m.stock, m.unit, { fraction_digits: 0, null_on_zero: true }),
+		accessor: m => value_with_unit(formatter.format(m.stock), m.unit),
 	},
 ]

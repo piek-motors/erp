@@ -21,11 +21,10 @@ export class DetailList {
 		)
 		makeAutoObservable(this)
 
-
 		// Auto-reindex when cache.details.details changes
 		reaction(
 			() => cache.details.details,
-			(details) => {
+			details => {
 				details && this.index()
 			},
 		)

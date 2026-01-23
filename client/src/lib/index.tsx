@@ -107,7 +107,15 @@ export function InputWithUnit(
 }
 
 export function Row(props: { children: React.ReactNode } & StackProps) {
-	return <Stack direction="row" gap={1} alignItems="center" {...props} />
+	return (
+		<Stack
+			direction="row"
+			gap={1}
+			alignItems="center"
+			{...props}
+			flexWrap={'wrap'}
+		/>
+	)
 }
 
 export function Link(props: { to: string; children: React.ReactNode }) {

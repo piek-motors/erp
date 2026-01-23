@@ -1,5 +1,9 @@
 import { Box, Divider, Stack } from '@mui/joy'
-import { QtyInputWithUnit, value_with_unit } from 'domains/pdo/shared'
+import {
+	AdaptiveNumberFormatter,
+	QtyInputWithUnit,
+	value_with_unit,
+} from 'domains/pdo/shared'
 import {
 	SupplyReasonSelect,
 	WriteoffReasonSelect,
@@ -26,28 +30,36 @@ interface Props {
 	stock?: string
 }
 
-const CreateWarehouseMaterialOperation = observer(({material, ...props}: Props) => (
-	<Stack spacing={1}>
-		<Row flexWrap={'wrap'}>
-			<P fontWeight={600} color="primary">
-				{material.label || <P color="neutral">Не выбран</P>}
-			</P>
-			<Divider orientation='vertical'/>
-			<Label>Остаток</Label>{value_with_unit(material.stock, material.unit, { fraction_digits: 2 })}
-		</Row>
-		<QtyInputWithUnit
-			autoFocus
-			unitId={material.unit}
-			value={props.lengthValue}
-			setValue={props.lengthSetValue}
-			label={'Длина'}
-		/>
-		{props.reasonComponent}
-		<Box pt={2}>
-			<ActionButton disabled={props.submitDisabled} onClick={props.onSubmit} />
-		</Box>
-	</Stack>
-))
+const formatter = new AdaptiveNumberFormatter(2)
+
+const CreateWarehouseMaterialOperation = observer(
+	({ material, ...props }: Props) => (
+		<Stack spacing={1}>
+			<Row flexWrap={'wrap'}>
+				<P fontWeight={600} color="primary">
+					{material.label || <P color="neutral">Не выбран</P>}
+				</P>
+				<Divider orientation="vertical" />
+				<Label>Остаток</Label>
+				{value_with_unit(formatter.format(material.stock), material.unit)}
+			</Row>
+			<QtyInputWithUnit
+				autoFocus
+				unitId={material.unit}
+				value={props.lengthValue}
+				setValue={props.lengthSetValue}
+				label={'Длина'}
+			/>
+			{props.reasonComponent}
+			<Box pt={2}>
+				<ActionButton
+					disabled={props.submitDisabled}
+					onClick={props.onSubmit}
+				/>
+			</Box>
+		</Stack>
+	),
+)
 
 export const MaterialWarehouse = observer(({ m }: { m: MaterialState }) => {
 	const { id } = useParams<{ id: string }>()
@@ -57,7 +69,7 @@ export const MaterialWarehouse = observer(({ m }: { m: MaterialState }) => {
 	const stockMsg = `Остаток: ${stock} ${uiUnit(m.unit)}`
 	return (
 		<WarehouseCard
-			stock={value_with_unit(m.stock, m.unit, { fraction_digits: 2 })}
+			stock={value_with_unit(formatter.format(m.stock), m.unit)}
 			supply={
 				<CreateWarehouseMaterialOperation
 					material={m}

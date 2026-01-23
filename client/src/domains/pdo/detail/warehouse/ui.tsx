@@ -1,6 +1,6 @@
 import { Divider } from '@mui/joy'
 import { NumberInput } from 'components/inputs/number_input'
-import { value_with_unit } from 'domains/pdo/shared'
+import { AdaptiveNumberFormatter, value_with_unit } from 'domains/pdo/shared'
 import {
 	SupplyReasonSelect,
 	WriteoffReasonSelect,
@@ -17,6 +17,8 @@ import { notifier } from 'lib/store/notifier.store'
 import { Unit } from 'models'
 import type { DetailSt, DetailStProp } from '../detail.state'
 
+const formatter = new AdaptiveNumberFormatter(0)
+
 const CreateWarehouseDetailOperation = observer(
 	(props: {
 		detail: DetailSt
@@ -26,11 +28,14 @@ const CreateWarehouseDetailOperation = observer(
 		const { detail } = props
 		return (
 			<>
-			
-				<Row flexWrap={'wrap'}>
+				<Row>
 					<P>{detail.name}</P>
-					<Divider orientation='vertical'/>
-					<Label>Остаток</Label> {value_with_unit(detail.warehouse.stock, Unit.Countable, { fraction_digits: 0})}
+					<Divider orientation="vertical" />
+					<Label>Остаток</Label>{' '}
+					{value_with_unit(
+						formatter.format(detail.warehouse.stock),
+						Unit.Countable,
+					)}
 				</Row>
 				<NumberInput
 					label="Кол-во"
@@ -54,7 +59,10 @@ const CreateWarehouseDetailOperation = observer(
 
 export const DetailWarehouse = observer(({ detail }: DetailStProp) => (
 	<WarehouseCard
-		stock={value_with_unit(detail.warehouse.stock, Unit.Countable, { fraction_digits: 0})}
+		stock={value_with_unit(
+			formatter.format(detail.warehouse.stock),
+			Unit.Countable,
+		)}
 		writeoff={
 			<CreateWarehouseDetailOperation
 				detail={detail}

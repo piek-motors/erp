@@ -1,16 +1,18 @@
-import { Button, Label, Link, openPage, P, routeMap } from 'lib/index'
+import { Button, Label, Link, openPage, Row, routeMap } from 'lib/index'
 import {
 	OperationType,
 	type SupplyReason,
 	uiSupplyReason,
-	uiUnit,
 	uiWriteoffReason,
 	type WriteoffReason,
 } from 'models'
 import type { Column } from 'react-table'
 import { DetailName } from '../detail/name'
+import { AdaptiveNumberFormatter, value_with_unit } from '../shared'
 import type { Operation } from './list'
 import { OperationName } from './operation_name'
+
+const formatter = new AdaptiveNumberFormatter(2)
 
 export const columns: Column<Operation>[] = [
 	{
@@ -29,12 +31,12 @@ export const columns: Column<Operation>[] = [
 	{
 		Header: 'Кол-во',
 		accessor: data => {
-			const unit = data.material_id != null ? uiUnit(data.unit) : ''
 			const sign = data.operation_type == OperationType.Supply ? '+' : '-'
 			return (
-				<P whiteSpace={'nowrap'} level="body-xs">
-					{sign} {data.qty} {unit}
-				</P>
+				<Row whiteSpace={'nowrap'} gap={0.3}>
+					<Label>{sign}</Label>{' '}
+					{value_with_unit(formatter.format(data.qty), data.unit)}
+				</Row>
 			)
 		},
 	},

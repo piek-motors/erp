@@ -58,12 +58,14 @@ export const WarehouseCard = observer((props: Props) => (
 				modalState.setSupply(o)
 			}}
 		>
-			<P color='success' fontWeight={600}>Поставка</P>
+			<P color="success" fontWeight={600}>
+				Поставка
+			</P>
 			<Stack gap={1} my={1}>
 				{props.supply}
 			</Stack>
 		</OperationModal>
-		
+
 		<OperationModal
 			openButton={
 				<Btn variant="soft" color={'warning'} fullWidth size="md">
@@ -73,7 +75,9 @@ export const WarehouseCard = observer((props: Props) => (
 			open={modalState.writeoff}
 			setOpen={o => modalState.setWriteoff(o)}
 		>
-			<P color='warning' fontWeight={600}>Списание</P>
+			<P color="warning" fontWeight={600}>
+				Списание
+			</P>
 			<Stack gap={1} my={1}>
 				{props.writeoff}
 			</Stack>

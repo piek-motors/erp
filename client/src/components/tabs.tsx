@@ -39,8 +39,8 @@ export function Tabs(props: TabProps) {
 				{props.tabs.map(({ value, label }, idx) => (
 					<Tab
 						key={value}
-						color={props.value == value ? 'primary' : 'neutral'}
-						variant={props.value == value ? 'soft' : 'plain'}
+						color={props.value === value ? 'primary' : 'neutral'}
+						variant={props.value === value ? 'soft' : 'plain'}
 					>
 						{label}
 					</Tab>
