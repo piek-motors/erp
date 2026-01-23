@@ -11,8 +11,8 @@ import {
 	Loading,
 	observer,
 	openPage,
-	Row,
 	routeMap,
+	Row,
 	Stack,
 	useEffect,
 	useNavigate,
@@ -36,7 +36,7 @@ export const DetailsListPage = () => (
 			</Stack>
 		}
 		scroll={
-			<Row alignItems="start" gap={0} mb={2}>
+			<Row alignItems="start" gap={0} mb={2} flexWrap={'nowrap'}>
 				<AlphabetIndex sx={{ position: 'sticky', top: 0, zIndex: 1 }} />
 				<Divider orientation="vertical" />
 				<DetailsList sx={{ width: '100%' }} />
