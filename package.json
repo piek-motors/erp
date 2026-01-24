@@ -5,6 +5,7 @@
 	"devDependencies": {
 		"@biomejs/biome": "2.3.11",
 		"commander": "^13.1.0",
+		"husky": "^9.1.7",
 		"typescript": "^5.9.3"
 	},
 	"scripts": {
@@ -12,7 +13,8 @@
 		"biome:lint": "pnpm exec biome lint --write",
 		"biome": "pnpm exec biome check --write",
 		"build": "pnpm run -r --filter=!./client/** build",
-		"deploy": "sh ./infra/deploy.sh"
+		"deploy": "sh ./infra/deploy.sh",
+		"prepare": "husky"
 	},
 	"repository": {
 		"type": "git",

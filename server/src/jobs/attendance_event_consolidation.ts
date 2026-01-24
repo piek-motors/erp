@@ -1,9 +1,9 @@
+import { writeFileSync } from 'node:fs'
+import { runHiddenMarkovModel } from 'rust'
 import { logger } from '#root/ioc/log.js'
 import { Day } from '#root/lib/constants.js'
 import { db } from '#root/sdk.js'
-import { writeFileSync } from 'node:fs'
-import { runHiddenMarkovModel } from 'rust'
-import { Job } from './jobs_runner.js'
+import type { Job } from './jobs_runner.js'
 
 export class AttendanceEventConsolidation implements Job {
 	async run(): Promise<void> {
