@@ -1,3 +1,4 @@
+import { AttendanceEventConsolidation } from '#root/jobs/attendance_event_consolidation.js'
 import { JobsRunner } from '#root/jobs/jobs_runner.js'
 import { MaterialQuarterSpendingsAggregationJob } from '#root/jobs/material_quarter_spendings_aggregation_job.js'
 import { OutdatedPdoOrdersRemovalJob } from '#root/jobs/outdated_pdo_orders_removal_job.js'
@@ -34,4 +35,5 @@ export const userController = new UserController(authService)
 new JobsRunner([
 	new MaterialQuarterSpendingsAggregationJob(materials_stat_container),
 	new OutdatedPdoOrdersRemovalJob(),
+	new AttendanceEventConsolidation(),
 ]).setup()

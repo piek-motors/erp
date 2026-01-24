@@ -2,9 +2,12 @@ use std::{collections::HashMap, str::FromStr};
 
 use chrono::Utc;
 use napi_derive::napi;
+use serde::Deserialize;
+use strum::IntoEnumIterator;
+use strum_macros::EnumIter;
 
 #[napi(object)]
-#[derive(Debug)]
+#[derive(Debug, Deserialize)]
 pub struct Event {
   pub id: u32,
   pub card: String,
@@ -58,7 +61,7 @@ pub fn move_to_deltas(events: &Vec<i64>) -> Vec<u32> {
   deltas
 }
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, EnumIter)]
 pub enum Observation {
   /// [0; 5m)
   VeryShort,
@@ -72,6 +75,18 @@ pub enum Observation {
   Long,
   /// [24h; _)
   VeryLong,
+}
+
+impl Observation {
+  pub fn as_index(&self) -> usize {
+    Observation::iter().position(|o| o == *self).unwrap()
+  }
+}
+
+impl Into<usize> for Observation {
+  fn into(self) -> usize {
+    Observation::iter().position(|o| o == self).unwrap()
+  }
 }
 
 const MINUTE: u32 = 60;
