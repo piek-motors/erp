@@ -2,53 +2,35 @@ use ndarray::{Array1, Array2};
 
 use crate::{normalization::normalize_arr2, observation_builder::deltas_to_observations, State};
 
-/// Training data builder for HMM sequences
-///
-/// Helps construct multiple training sequences from delta times,
-/// converting them into state-observation pairs for HMM training.
 pub struct HMMTrainingData {
-  /// Multiple sequences of states (hidden)
-  pub state_sequences: Vec<Vec<usize>>,
-  /// Multiple sequences of observations (visible)
-  pub observation_sequences: Vec<Vec<usize>>,
-  /// Number of unique states
+  pub state_seq: Vec<Vec<usize>>,
+  pub observation_seq: Vec<Vec<usize>>,
   pub n_states: usize,
-  /// Number of unique observations
   pub n_observations: usize,
 }
 
 impl HMMTrainingData {
   pub fn new(n_states: usize, n_observations: usize) -> Self {
     Self {
-      state_sequences: Vec::new(),
-      observation_sequences: Vec::new(),
+      state_seq: Vec::new(),
+      observation_seq: Vec::new(),
       n_states,
       n_observations,
     }
   }
 
   /// Add a single training sequence
-  ///
-  /// # Arguments
-  /// * `states` - Sequence of hidden states
-  /// * `observations` - Corresponding sequence of observations
-  ///
-  /// # Panics
-  /// Panics if sequences have different lengths
   pub fn add_sequence(&mut self, states: Vec<usize>, observations: Vec<usize>) {
     assert_eq!(
       states.len(),
       observations.len(),
       "States and observations must have same length"
     );
-    self.state_sequences.push(states);
-    self.observation_sequences.push(observations);
+    self.state_seq.push(states);
+    self.observation_seq.push(observations);
   }
 
   /// Add a sequence from delta times
-  ///
-  /// Converts delta times to observations and infers states based on
-  /// whether the delta indicates "inside" (short) or "outside" (long) activity
   pub fn add_delta_sequence(&mut self, deltas: Vec<u32>, states: Vec<State>) {
     let observations: Vec<usize> = deltas_to_observations(deltas.clone())
       .iter()
@@ -62,12 +44,12 @@ impl HMMTrainingData {
 
   /// Get total number of sequences
   pub fn num_sequences(&self) -> usize {
-    self.state_sequences.len()
+    self.state_seq.len()
   }
 
   /// Get total number of observations across all sequences
   pub fn total_observations(&self) -> usize {
-    self.observation_sequences.iter().map(|seq| seq.len()).sum()
+    self.observation_seq.iter().map(|seq| seq.len()).sum()
   }
 
   /// Print debug information about the training data
@@ -79,9 +61,9 @@ impl HMMTrainingData {
     println!("Number of observation types: {}", self.n_observations);
 
     for (i, (states, obs)) in self
-      .state_sequences
+      .state_seq
       .iter()
-      .zip(self.observation_sequences.iter())
+      .zip(self.observation_seq.iter())
       .enumerate()
     {
       println!("\n--- Sequence {} (length: {}) ---", i + 1, states.len());
@@ -120,9 +102,9 @@ pub fn train_mle(training_data: &HMMTrainingData) -> (Array2<f64>, Array2<f64>, 
 
   // Count occurrences
   for (seq_idx, (states, observations)) in training_data
-    .state_sequences
+    .state_seq
     .iter()
-    .zip(training_data.observation_sequences.iter())
+    .zip(training_data.observation_seq.iter())
     .enumerate()
   {
     println!(
@@ -192,33 +174,20 @@ mod tests {
 
   #[test]
   fn test_training_data_builder() {
-    println!("\n=== Test: Training Data Builder ===");
-
     let mut training_data = HMMTrainingData::new(2, 6);
 
-    // Add sequence 1: Employee stays inside (short deltas)
     let deltas1 = vec![2, 3, 5, 1, 4];
     let states = vec![State::Inside];
     training_data.add_delta_sequence(deltas1, states);
 
-    // // Add sequence 2: Employee goes outside (long deltas)
-    // let deltas2 = vec![25, 30, 20];
-    // training_data.add_delta_sequence(deltas2, 10);
-
-    // // Add sequence 3: Mixed behavior
-    // let deltas3 = vec![2, 3, 20, 25, 1, 5, 40];
-    // training_data.add_delta_sequence(deltas3, 10);
-
     training_data.debug_print();
 
-    assert_eq!(training_data.num_sequences(), 3);
+    assert_eq!(training_data.num_sequences(), 1);
     assert!(training_data.total_observations() > 0);
   }
 
   #[test]
   fn test_train_mle() {
-    println!("\n=== Test: MLE Training ===");
-
     let mut training_data = HMMTrainingData::new(2, 6);
 
     // Add multiple sequences

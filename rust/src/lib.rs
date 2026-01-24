@@ -7,6 +7,7 @@ mod training;
 use hmmm::HMM;
 use napi_derive::napi;
 use ndarray::{Array1, Array2};
+use serde::{Deserialize, Serialize};
 use strum::IntoEnumIterator;
 use strum_macros::EnumIter;
 
@@ -16,17 +17,27 @@ use crate::{
 };
 
 /// These represent the “true” but unobserved status of an employee.
-#[derive(EnumIter, PartialEq)]
+#[derive(Debug, EnumIter, PartialEq, Serialize, Deserialize)]
 pub enum State {
-  /// Employee is currently at work
-  Inside = 0,
   /// Employee is not at work
-  Outside = 1,
+  Outside = 0,
+  /// Employee is currently at work
+  Inside = 1,
 }
 
 impl Into<usize> for State {
   fn into(self) -> usize {
     State::iter().position(|o| o == self).unwrap()
+  }
+}
+
+impl From<u8> for State {
+  fn from(value: u8) -> Self {
+    match value {
+      0 => State::Outside,
+      1 => State::Inside,
+      _ => panic!("invalid state ${}", value),
+    }
   }
 }
 
@@ -66,62 +77,19 @@ pub fn run_hidden_markov_model(all_events: Vec<Event>) -> u32 {
   1
 }
 
-/// Train an HMM using Maximum Likelihood Estimation from fully labeled sequences.
-///
-/// `states_seqs` is a slice of hidden state sequences (known labels)
-/// `obs_seqs` is a slice of corresponding observation sequences.
-/// `n` = number of hidden states
-/// `k` = number of possible observations
-///
-/// Panics if lengths mismatch or sequences contain out-of-bounds values.
-pub fn train_mle(states_seqs: &[Vec<usize>], obs_seqs: &[Vec<usize>], n: usize, k: usize) -> HMM {
-  assert_eq!(states_seqs.len(), obs_seqs.len());
-
-  let mut a_counts = Array2::<f64>::zeros((n, n));
-  let mut b_counts = Array2::<f64>::zeros((n, k));
-  let mut pi_counts = Array1::<f64>::zeros(n);
-
-  for (states, obs) in states_seqs.iter().zip(obs_seqs.iter()) {
-    assert_eq!(states.len(), obs.len());
-
-    if let Some(&first_state) = states.first() {
-      assert!(first_state < n, "state out of bounds");
-      pi_counts[first_state] += 1.0;
-    }
-
-    for (i, &state) in states.iter().enumerate() {
-      assert!(state < n, "state out of bounds");
-      let observation = obs[i];
-      assert!(observation < k, "observation out of bounds");
-      b_counts[(state, observation)] += 1.0;
-
-      // Count transitions (except for last element)
-      if i + 1 < states.len() {
-        let next_state = states[i + 1];
-        a_counts[(state, next_state)] += 1.0;
-      }
-    }
-  }
-
-  let a = normalize_arr2(&a_counts);
-  let b = normalize_arr2(&b_counts);
-
-  let pi_sum: f64 = pi_counts.sum();
-  let pi = if pi_sum > 0.0 {
-    &pi_counts / pi_sum
-  } else {
-    Array1::from_elem(n, 1.0 / n as f64)
-  };
-
-  let h = HMM::new(a, b, pi);
-  h
+#[derive(Debug, Serialize, Deserialize)]
+pub struct TrainingEvent {
+  pub id: u32,
+  pub card: String,
+  pub t: String,
+  pub state: u8,
 }
 
 #[cfg(test)]
 mod tests {
   use std::fs;
 
-  use crate::observation_builder::delta_to_observation;
+  use crate::{observation_builder::Observation, training::train_mle};
 
   use super::*;
 
@@ -130,25 +98,48 @@ mod tests {
     let events_json =
       fs::read("./events_seed.json").unwrap_or_else(|e| panic!("cannot read seed file {e}"));
 
-    let events =
-      serde_json::from_slice::<Vec<Event>>(&events_json).expect("fail to parse events seeds");
+    let all_events = serde_json::from_slice::<Vec<TrainingEvent>>(&events_json)
+      .expect("fail to parse events seeds");
 
-    run_hidden_markov_model(events);
-  }
+    let binding = observation_builder::group(
+      all_events
+        .iter()
+        .clone()
+        .map(|e| Event {
+          id: e.id,
+          card: e.card.clone(),
+          timestamp: e.t.clone(),
+        })
+        .collect(),
+    );
+    let events_grouped = binding.get("10996559").unwrap();
 
-  #[test]
-  fn test_train_mle() {
-    let observations: Vec<usize> = deltas_to_observations(vec![2, 3, 20, 25, 1, 5, 40])
-      .iter()
-      .map(|f| f.as_index())
-      .collect();
-
-    let states: Vec<usize> = vec![State::Inside, State::Outside]
+    let timestamps: Vec<_> = events_grouped.iter().map(|e| e.ts).collect();
+    let deltas = move_to_deltas(&timestamps);
+    // let observations = deltas_to_observations(deltas);
+    let mut states: Vec<State> = all_events
       .into_iter()
-      .map(|state| state.into())
+      .map(|e| State::from(e.state))
       .collect();
 
-    // let hmm = train_employee_hmm(&deltas);
-    // train_mle(&states, &observations, 2, 6);
+    states.remove(0);
+    // let n_observations: Vec<usize> = deltas_to_observations(vec![2, 3, 20, 25, 1, 5, 40])
+    //   .iter()
+    //   .map(|f| f.as_index())
+    //   .collect();
+
+    // // let n_states: Vec<usize> = vec![State::Inside, State::Outside]
+    // //   .into_iter()
+    // //   .map(|state| state.into())
+    // //   .collect();
+
+    // println!("events {:?}", events);
+
+    let mut train_params =
+      training::HMMTrainingData::new(State::iter().count(), Observation::iter().count());
+
+    train_params.add_delta_sequence(deltas, states);
+
+    train_mle(&train_params);
   }
 }
