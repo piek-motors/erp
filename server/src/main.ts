@@ -1,13 +1,12 @@
-import * as trpcExpress from '@trpc/server/adapters/express'
-import cookieParser from 'cookie-parser'
-import cors from 'cors'
-import express from 'express'
-import { plus100 } from 'rust'
 import { config } from '#root/config/env.js'
 import errorMiddleware from '#root/lib/middlewares/error.middleware.js'
 import { createContext } from '#root/lib/trpc/context.js'
 import { router } from '#root/routers/http-routes.js'
 import { trpcRouter } from '#root/rpc/trpc-router.js'
+import * as trpcExpress from '@trpc/server/adapters/express'
+import cookieParser from 'cookie-parser'
+import cors from 'cors'
+import express from 'express'
 import { logger } from './ioc/log.js'
 import './lib/trpc/index.js'
 
@@ -51,5 +50,3 @@ express()
 			`🛫 Express running in ${config.NODE_ENV} mode on port ${config.PORT}`,
 		)
 	})
-
-console.log('calling rust from node', plus100(100))

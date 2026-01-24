@@ -1,1 +1,2 @@
 pnpm biome:format
+pnpm build
