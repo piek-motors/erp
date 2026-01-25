@@ -52,6 +52,6 @@ describe('hmm create dataset', () => {
 			last_date = date
 		}
 
-		writeFileSync('../rust/events_seed.csv', lines.join('\n'))
+		writeFileSync('../rust/events_seed.tsv', lines.join('\n'))
 	})
 })

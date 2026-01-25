@@ -250,7 +250,7 @@ mod tests {
   #[test]
   // TODO: old experimts
   fn test_run_hidden_markov_model() {
-    let all_events = load_dataset(&PathBuf::from("./dataset/events_seed.csv"));
+    let all_events = load_dataset(&PathBuf::from("./dataset/events_seed.tsv"));
 
     let mut timestamps: Vec<_> = all_events
       .iter()
