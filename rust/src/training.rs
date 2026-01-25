@@ -1,6 +1,20 @@
-use ndarray::{Array1, Array2};
+use std::path::Path;
 
-use crate::{normalization::normalize_arr2, observation_builder::deltas_to_observations, State};
+use ndarray::{Array1, Array2};
+use serde::{Deserialize, Serialize};
+use strum::IntoEnumIterator;
+
+use crate::{
+  dataset,
+  normalization::normalize_arr2,
+  observation::{deltas_to_observations, move_to_deltas, parse_datetime_or_panic, Observation},
+  state::State,
+};
+
+const WEIGHTS_PATH_STR: &str = "./weights.dat";
+fn weights_path() -> &'static Path {
+  Path::new(WEIGHTS_PATH_STR)
+}
 
 pub struct HMMTrainingData {
   pub state_seq: Vec<Vec<usize>>,
@@ -74,6 +88,51 @@ impl HMMTrainingData {
   }
 }
 
+#[derive(Serialize, Deserialize)]
+pub struct HmmWeights {
+  pub transition: Array2<f64>,
+  pub emission: Array2<f64>,
+  pub initial_probs: Array1<f64>,
+}
+
+pub fn train_hmm() -> Result<(), Box<dyn std::error::Error>> {
+  let data_sets = dataset::ls_dir()?;
+  let mut training_data = HMMTrainingData::new(State::iter().count(), Observation::iter().count());
+
+  for dataset_path in data_sets {
+    let mut events = dataset::load_dataset(&dataset_path);
+    events.sort_by_key(|e| e.t.clone());
+
+    let timestamps: Vec<_> = events
+      .iter()
+      .map(|e| parse_datetime_or_panic(&e.t))
+      .collect();
+    let deltas = move_to_deltas(&timestamps);
+
+    let states: Vec<State> = events
+      .into_iter()
+      .map(|e| State::from(e.state))
+      .skip(1)
+      .collect();
+
+    assert_eq!(
+      states.iter().all(|s| *s == State::Outside),
+      true,
+      "dataset {} dosnt marked and cannot be used for taining",
+      dataset_path.to_string_lossy()
+    );
+
+    training_data.add_delta_sequence(deltas, states);
+  }
+
+  let weights = train_mle(&training_data);
+
+  let serialized_weights = serde_json::to_string(&weights)?;
+  std::fs::write(weights_path(), serialized_weights)?;
+
+  Ok(())
+}
+
 /// Train an HMM using Maximum Likelihood Estimation
 ///
 /// # Arguments
@@ -87,7 +146,7 @@ impl HMMTrainingData {
 /// - A[i,j] = P(state j | state i) = count(i→j) / count(i→*)
 /// - B[i,o] = P(obs o | state i) = count(state=i, obs=o) / count(state=i)
 /// - π[i] = P(initial state = i) = count(sequences starting with i) / total sequences
-pub fn train_mle(training_data: &HMMTrainingData) -> (Array2<f64>, Array2<f64>, Array1<f64>) {
+pub fn train_mle(training_data: &HMMTrainingData) -> HmmWeights {
   println!("\n=== Starting MLE Training ===");
 
   let n_states = training_data.n_states;
@@ -165,12 +224,76 @@ pub fn train_mle(training_data: &HMMTrainingData) -> (Array2<f64>, Array2<f64>, 
 
   println!("\n=== MLE Training Complete ===\n");
 
-  (transition_matrix, emission_matrix, initial_probs)
+  HmmWeights {
+    transition: transition_matrix,
+    emission: emission_matrix,
+    initial_probs,
+  }
 }
 
 #[cfg(test)]
 mod tests {
   use super::*;
+
+  use hmmm::HMM;
+  use ndarray::Array1;
+  use std::path::PathBuf;
+
+  use crate::{
+    dataset::{apply_prediction_to_events, load_dataset},
+    observation::{move_to_deltas, parse_datetime_or_panic, Observation},
+    state::State,
+    training::train_mle,
+  };
+
+  #[test]
+  // TODO: old experimts
+  fn test_run_hidden_markov_model() {
+    let mut all_events = load_dataset(&PathBuf::from("./dataset/events_seed_1.csv"));
+    all_events.sort_by_key(|e| e.t.clone());
+
+    let timestamps: Vec<_> = all_events
+      .iter()
+      .map(|e| parse_datetime_or_panic(&e.t))
+      .collect();
+
+    let deltas = move_to_deltas(&timestamps);
+    let mut states: Vec<State> = all_events
+      .into_iter()
+      .map(|e| State::from(e.state))
+      .collect();
+    states.remove(0);
+
+    let mut training_data =
+      HMMTrainingData::new(State::iter().count(), Observation::iter().count());
+
+    training_data.add_delta_sequence(deltas, states);
+
+    let weights = train_mle(&training_data);
+
+    {
+      let model = HMM::new(weights.transition, weights.emission, weights.initial_probs);
+      let test_dataset = load_dataset(&PathBuf::from("./dataset/events_seed_2.csv"));
+      let timestamps: Vec<_> = test_dataset
+        .iter()
+        .map(|e| parse_datetime_or_panic(&e.t))
+        .collect();
+
+      let deltas = move_to_deltas(&timestamps);
+      let opbs: Vec<usize> = deltas_to_observations(deltas)
+        .iter()
+        .map(|o| o.as_index())
+        .collect();
+
+      let d = Array1::from(opbs);
+      let prediction = model.most_likely_sequence(&d);
+      println!("prediction {}", prediction);
+
+      let predicted_states: Vec<usize> = prediction.to_vec();
+
+      let predicted_events = apply_prediction_to_events(&test_dataset, &predicted_states);
+    }
+  }
 
   #[test]
   fn test_training_data_builder() {
@@ -203,25 +326,28 @@ mod tests {
 
     training_data.debug_print();
 
-    // Train the HMM
-    let (a, b, pi) = train_mle(&training_data);
+    let HmmWeights {
+      emission,
+      initial_probs,
+      transition,
+    } = train_mle(&training_data);
 
     println!("\n--- Final HMM Parameters ---");
     println!("A (transition matrix):");
-    for i in 0..a.nrows() {
-      println!("  State {} → {:?}", i, a.row(i));
+    for i in 0..transition.nrows() {
+      println!("  State {} → {:?}", i, transition.row(i));
     }
 
     println!("\nB (emission matrix):");
-    for i in 0..b.nrows() {
-      println!("  State {} → {:?}", i, b.row(i));
+    for i in 0..emission.nrows() {
+      println!("  State {} → {:?}", i, emission.row(i));
     }
 
-    println!("\nπ (initial probabilities): {:?}", pi);
+    println!("\nπ (initial probabilities): {:?}", initial_probs);
 
     // Verify probabilities sum to 1
-    for i in 0..a.nrows() {
-      let row_sum = a.row(i).sum();
+    for i in 0..transition.nrows() {
+      let row_sum = transition.row(i).sum();
       assert!(
         (row_sum - 1.0).abs() < 1e-6,
         "Transition matrix row {} should sum to 1.0, got {}",
@@ -230,8 +356,8 @@ mod tests {
       );
     }
 
-    for i in 0..b.nrows() {
-      let row_sum = b.row(i).sum();
+    for i in 0..emission.nrows() {
+      let row_sum = emission.row(i).sum();
       assert!(
         (row_sum - 1.0).abs() < 1e-6,
         "Emission matrix row {} should sum to 1.0, got {}",
@@ -240,7 +366,7 @@ mod tests {
       );
     }
 
-    let pi_sum = pi.sum();
+    let pi_sum = initial_probs.sum();
     assert!(
       (pi_sum - 1.0).abs() < 1e-6,
       "Initial probabilities should sum to 1.0, got {}",
@@ -267,7 +393,11 @@ mod tests {
 
     training_data.debug_print();
 
-    let (a, b, pi) = train_mle(&training_data);
+    let HmmWeights {
+      emission: emission_matrix,
+      initial_probs,
+      transition: transition_matrix,
+    } = train_mle(&training_data);
 
     println!("\n--- Expected Behavior ---");
     println!("Initial: Both sequences start at state 0");
@@ -282,9 +412,9 @@ mod tests {
     println!("  State 1 emits: obs 2 three times");
 
     println!("\n--- Actual Results ---");
-    println!("π: {:?}", pi);
-    println!("A:\n{:?}", a);
-    println!("B:\n{:?}", b);
+    println!("π: {:?}", initial_probs);
+    println!("A:\n{:?}", transition_matrix);
+    println!("B:\n{:?}", emission_matrix);
 
     println!("\n✓ Simple MLE test complete!");
   }

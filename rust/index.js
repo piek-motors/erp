@@ -577,3 +577,4 @@ if (!nativeBinding) {
 
 module.exports = nativeBinding
 module.exports.runHiddenMarkovModel = nativeBinding.runHiddenMarkovModel
+module.exports.trainHiddenMarkovModel = nativeBinding.trainHiddenMarkovModel

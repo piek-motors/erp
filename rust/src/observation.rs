@@ -6,6 +6,15 @@ use serde::Deserialize;
 use strum::IntoEnumIterator;
 use strum_macros::EnumIter;
 
+/// The events we actually observe in the system.
+///
+/// Important:
+/// - Events are instantaneous points in time (badge swipes).
+/// - They do not describe duration or state by themselves.
+///
+/// From events we derive *time intervals* (deltas),
+/// and only those intervals can meaningfully be associated with
+/// a hidden state such as "Inside" or "Outside"
 #[napi(object)]
 #[derive(Debug, Deserialize)]
 pub struct Event {
@@ -14,38 +23,79 @@ pub struct Event {
   pub timestamp: String,
 }
 
+/// Internal representation after grouping and parsing timestamps.
 pub struct UserEvent {
   pub id: u32,
-  pub ts: i64,
+  pub timestamp: i64,
 }
 
-type GroupedEvents = HashMap<String, Vec<UserEvent>>;
+/// Parse ISO-8601 timestamp into UNIX seconds.
+///
+/// Panics if parsing fails — timestamps are assumed to be validated upstream.
+pub fn parse_datetime_or_panic(ts: &str) -> i64 {
+  chrono::DateTime::<Utc>::from_str(ts)
+    .unwrap_or_else(|_| panic!("can't parse event timestamp {}", ts))
+    .timestamp()
+}
 
-pub fn group(events: Vec<Event>) -> GroupedEvents {
-  let mut result: GroupedEvents = HashMap::new();
+/// Events grouped by card (user).
+/// Each vector is sorted by timestamp before further processing.
+type GroupedUserEvents = HashMap<String, Vec<UserEvent>>;
+
+/// Group events by card and sort them by time.
+///
+/// After this step:
+/// - Each user's events are in strict chronological order.
+/// - This ordering is REQUIRED for correct delta computation.
+///
+/// No modeling decisions happen here — this is pure preprocessing.
+pub fn group_events(events: &Vec<Event>) -> GroupedUserEvents {
+  let mut result: GroupedUserEvents = HashMap::new();
 
   for ev in events {
     let user_event = UserEvent {
       id: ev.id,
-      ts: chrono::DateTime::<Utc>::from_str(&ev.timestamp)
-        .unwrap_or_else(|_| panic!("can't parse event timestamp {:?}", ev))
-        .timestamp(),
+      timestamp: parse_datetime_or_panic(&ev.timestamp),
     };
 
     result
-      .entry(ev.card)
+      .entry(ev.card.clone())
       .or_insert_with(Vec::new)
       .push(user_event);
   }
 
-  // Sort each user's events by datetime
   for events in result.values_mut() {
-    events.sort_by_key(|e| e.ts);
+    events.sort_by_key(|e| e.timestamp);
   }
 
   result
 }
 
+/// Convert a sequence of event timestamps into time deltas in seconds.
+///
+/// ### Alignment
+///
+/// Given N events:
+///
+///   `E0, E1, E2, ..., E(N-1)`
+///
+/// we compute `N-1` deltas:
+///
+///   `Δ1 = E1 - E0, Δ2 = E2 - E1, ...`
+///
+/// Each delta represents the *time interval between two consecutive events*.
+///
+/// **There is no delta before the first event.**
+///
+/// Later in the HMM:
+/// - Each delta corresponds to exactly ONE hidden state.
+/// - That state describes the employee status DURING the interval:
+///
+///   `state[i]` describes the interval `(E[i-1] → E[i])`
+///
+/// This is why:
+/// - Number of deltas = number of states
+/// - The first event has no associated state
 pub fn move_to_deltas(events: &Vec<i64>) -> Vec<u32> {
   let mut deltas: Vec<u32> = Vec::new();
 
@@ -61,6 +111,10 @@ pub fn move_to_deltas(events: &Vec<i64>) -> Vec<u32> {
   deltas
 }
 
+/// Discrete observation buckets derived from time deltas.
+///
+/// Observations do NOT represent events.
+/// They represent *duration patterns* between events.
 #[derive(Debug, PartialEq, EnumIter)]
 pub enum Observation {
   /// [0; 5m)
@@ -91,6 +145,7 @@ impl Into<usize> for Observation {
 
 const MINUTE: u32 = 60;
 
+/// Delta discretization to encounter observaiton bucket.
 pub fn delta_to_observation(delta_sec: u32) -> Observation {
   match delta_sec {
     d if d < 5 * MINUTE => Observation::VeryShort,
@@ -102,6 +157,16 @@ pub fn delta_to_observation(delta_sec: u32) -> Observation {
   }
 }
 
+/// Convert deltas into observations.
+///
+/// Alignment reminder:
+/// - observations[i] corresponds to delta[i]
+/// - delta[i] corresponds to interval (E[i] → E[i+1])
+/// - later: hidden_state[i] describes the SAME interval
+///
+/// This keeps the entire pipeline aligned:
+///
+/// events → deltas → observations → hidden states
 pub fn deltas_to_observations(delta_sec: Vec<u32>) -> Vec<Observation> {
   delta_sec
     .into_iter()
@@ -149,15 +214,14 @@ mod tests {
     ];
 
     let cases = vec![("1", vec![10, 14, 6]), ("2", vec![11])];
-
-    let groups = group(events);
+    let groups = group_events(&events);
     assert_eq!(groups.values().len(), 2);
 
     for (card, expected_hours) in cases {
       let usr_events = groups
         .get(card)
         .unwrap_or_else(|| panic!("missing card {card}"));
-      let timestamps: Vec<_> = usr_events.iter().map(|e| e.ts).collect();
+      let timestamps: Vec<_> = usr_events.iter().map(|e| e.timestamp).collect();
       let got = move_to_deltas(&timestamps);
       let expected: Vec<_> = expected_hours
         .clone()
