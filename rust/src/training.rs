@@ -7,7 +7,7 @@ use strum::IntoEnumIterator;
 use crate::{
   dataset,
   normalization::normalize_arr2,
-  observation::{deltas_to_observations, move_to_deltas, parse_datetime_or_panic, Observation},
+  observation::{deltas_to_observations, move_to_deltas, parse_iso_datetime_or_panic, Observation},
   state::State,
 };
 
@@ -105,7 +105,7 @@ pub fn train_hmm() -> Result<(), Box<dyn std::error::Error>> {
 
     let timestamps: Vec<_> = events
       .iter()
-      .map(|e| parse_datetime_or_panic(&e.t))
+      .map(|e| parse_iso_datetime_or_panic(&e.t))
       .collect();
     let deltas = move_to_deltas(&timestamps);
 
@@ -241,7 +241,7 @@ mod tests {
 
   use crate::{
     dataset::{apply_prediction_to_events, load_dataset},
-    observation::{move_to_deltas, parse_datetime_or_panic, Observation},
+    observation::{move_to_deltas, parse_iso_datetime_or_panic, Observation},
     state::State,
     training::train_mle,
   };
@@ -254,7 +254,7 @@ mod tests {
 
     let timestamps: Vec<_> = all_events
       .iter()
-      .map(|e| parse_datetime_or_panic(&e.t))
+      .map(|e| parse_iso_datetime_or_panic(&e.t))
       .collect();
 
     let deltas = move_to_deltas(&timestamps);
@@ -276,7 +276,7 @@ mod tests {
       let test_dataset = load_dataset(&PathBuf::from("./dataset/events_seed_2.csv"));
       let timestamps: Vec<_> = test_dataset
         .iter()
-        .map(|e| parse_datetime_or_panic(&e.t))
+        .map(|e| parse_iso_datetime_or_panic(&e.t))
         .collect();
 
       let deltas = move_to_deltas(&timestamps);

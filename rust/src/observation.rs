@@ -1,6 +1,6 @@
 use std::{collections::HashMap, str::FromStr};
 
-use chrono::Utc;
+use chrono::{FixedOffset, Utc};
 use napi_derive::napi;
 use serde::Deserialize;
 use strum::IntoEnumIterator;
@@ -32,9 +32,9 @@ pub struct UserEvent {
 /// Parse ISO-8601 timestamp into UNIX seconds.
 ///
 /// Panics if parsing fails — timestamps are assumed to be validated upstream.
-pub fn parse_datetime_or_panic(ts: &str) -> i64 {
-  chrono::DateTime::<Utc>::from_str(ts)
-    .unwrap_or_else(|_| panic!("can't parse event timestamp {}", ts))
+pub fn parse_iso_datetime_or_panic(ts: &str) -> i64 {
+  chrono::DateTime::<FixedOffset>::parse_from_rfc2822(ts)
+    .unwrap_or_else(|_| panic!("can't parse timestamp {}", ts))
     .timestamp()
 }
 
@@ -55,7 +55,7 @@ pub fn group_events(events: &Vec<Event>) -> GroupedUserEvents {
   for ev in events {
     let user_event = UserEvent {
       id: ev.id,
-      timestamp: parse_datetime_or_panic(&ev.timestamp),
+      timestamp: parse_iso_datetime_or_panic(&ev.timestamp),
     };
 
     result
@@ -177,6 +177,11 @@ pub fn deltas_to_observations(delta_sec: Vec<u32>) -> Vec<Observation> {
 #[cfg(test)]
 mod tests {
   use super::*;
+
+  #[test]
+  fn it_parse_datetime_or_panic() {
+    parse_iso_datetime_or_panic("Fri, 05 Dec 2025 14:18:52 GMT");
+  }
 
   #[test]
   fn test_group_and_move_to_deltas() {

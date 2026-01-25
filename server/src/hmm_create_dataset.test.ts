@@ -42,7 +42,7 @@ describe('hmm create dataset', () => {
 				lines.push('')
 			}
 
-			lines.push([ev.timestamp.toISOString(), 0, ev.id, ev.card].join(', '))
+			lines.push([ev.timestamp.toUTCString(), 0, ev.id, ev.card].join(', '))
 			last_date = date
 		}
 
