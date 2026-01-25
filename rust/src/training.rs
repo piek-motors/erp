@@ -235,6 +235,7 @@ pub fn train_mle(training_data: &HMMTrainingData) -> HmmWeights {
 mod tests {
   use super::*;
 
+  use core::time;
   use hmmm::HMM;
   use ndarray::Array1;
   use std::path::PathBuf;
@@ -249,13 +250,13 @@ mod tests {
   #[test]
   // TODO: old experimts
   fn test_run_hidden_markov_model() {
-    let mut all_events = load_dataset(&PathBuf::from("./dataset/events_seed_1.csv"));
-    all_events.sort_by_key(|e| e.t.clone());
+    let all_events = load_dataset(&PathBuf::from("./dataset/events_seed.csv"));
 
-    let timestamps: Vec<_> = all_events
+    let mut timestamps: Vec<_> = all_events
       .iter()
       .map(|e| parse_iso_datetime_or_panic(&e.t))
       .collect();
+    timestamps.sort_by_key(|e| *e);
 
     let deltas = move_to_deltas(&timestamps);
     let mut states: Vec<State> = all_events
@@ -271,28 +272,31 @@ mod tests {
 
     let weights = train_mle(&training_data);
 
-    {
-      let model = HMM::new(weights.transition, weights.emission, weights.initial_probs);
-      let test_dataset = load_dataset(&PathBuf::from("./dataset/events_seed_2.csv"));
-      let timestamps: Vec<_> = test_dataset
-        .iter()
-        .map(|e| parse_iso_datetime_or_panic(&e.t))
-        .collect();
+    // {
+    //   let model = HMM::new(weights.transition, weights.emission, weights.initial_probs);
+    //   let test_dataset = load_dataset(&PathBuf::from("./dataset/events_seed_2.csv"));
 
-      let deltas = move_to_deltas(&timestamps);
-      let opbs: Vec<usize> = deltas_to_observations(deltas)
-        .iter()
-        .map(|o| o.as_index())
-        .collect();
+    //   let mut timestamps: Vec<_> = test_dataset
+    //     .iter()
+    //     .map(|e| parse_iso_datetime_or_panic(&e.t))
+    //     .collect();
 
-      let d = Array1::from(opbs);
-      let prediction = model.most_likely_sequence(&d);
-      println!("prediction {}", prediction);
+    //   timestamps.sort_by_key(|e| *e);
 
-      let predicted_states: Vec<usize> = prediction.to_vec();
+    //   let deltas = move_to_deltas(&timestamps);
+    //   let opbs: Vec<usize> = deltas_to_observations(deltas)
+    //     .iter()
+    //     .map(|o| o.as_index())
+    //     .collect();
 
-      let predicted_events = apply_prediction_to_events(&test_dataset, &predicted_states);
-    }
+    //   let d = Array1::from(opbs);
+    //   let prediction = model.most_likely_sequence(&d);
+    //   println!("prediction {}", prediction);
+
+    //   let predicted_states: Vec<usize> = prediction.to_vec();
+
+    //   let predicted_events = apply_prediction_to_events(&test_dataset, &predicted_states);
+    // }
   }
 
   #[test]

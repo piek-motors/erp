@@ -1,2 +1,3 @@
 pnpm biome:format
 pnpm build
+git add .

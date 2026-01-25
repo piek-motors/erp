@@ -8,6 +8,8 @@ use serde::{Deserialize, Serialize};
 
 use crate::{csv, state::State};
 
+const CSV_FIEL_DELIMITER: &str = "\t";
+
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct TrainingEvent {
   pub id: u32,
@@ -18,6 +20,7 @@ pub struct TrainingEvent {
 
 fn matrix_to_training_events(matrix: &Array2<String>) -> Vec<TrainingEvent> {
   let mut result = Vec::new();
+  println!("matrix {:?}", matrix);
   for row_idx in 1..matrix.nrows() {
     let t = matrix[[row_idx, 0]].clone();
     let state: u8 = matrix[[row_idx, 1]]
@@ -46,7 +49,8 @@ pub fn ls_dir() -> Result<Vec<PathBuf>, std::io::Error> {
 
 pub fn load_dataset(path: &PathBuf) -> Vec<TrainingEvent> {
   let lines = fs::read(&path).unwrap_or_else(|e| panic!("cannot read seed file {e}"));
-  let matrix = csv::parse(lines.clone()).unwrap_or_else(|e| panic!("cant load dataset: {e}"));
+  let matrix = csv::parse(lines.clone(), CSV_FIEL_DELIMITER)
+    .unwrap_or_else(|e| panic!("cant load dataset: {e}"));
   matrix_to_training_events(&matrix)
 }
 

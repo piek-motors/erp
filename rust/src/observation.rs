@@ -181,6 +181,7 @@ mod tests {
   #[test]
   fn it_parse_datetime_or_panic() {
     parse_iso_datetime_or_panic("Fri, 05 Dec 2025 14:18:52 GMT");
+    parse_iso_datetime_or_panic("Fri, 05 Dec 2025 14:18:52 GMT");
   }
 
   #[test]
