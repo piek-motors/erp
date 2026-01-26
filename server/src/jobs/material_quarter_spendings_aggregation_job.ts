@@ -1,4 +1,3 @@
-import { OperationType, WriteoffReason } from 'models'
 import type { MaterialStatDataContainer } from '#root/ioc/index.js'
 import { logger } from '#root/ioc/log.js'
 import { Day } from '#root/lib/constants.js'
@@ -8,6 +7,7 @@ import {
 	startOfUTCMonth,
 } from '#root/lib/time.js'
 import { db } from '#root/sdk.js'
+import { OperationType, WriteoffReason } from 'models'
 import {
 	MonthStrategy,
 	PeriodAggregator,
@@ -57,8 +57,8 @@ export class MaterialQuarterSpendingsAggregationJob implements Job {
 				throw new Error('operation is not related to material')
 
 			const is_writeoff =
-				op.operation_type === OperationType.Writeoff &&
-				op.reason === WriteoffReason.UsedInProduction
+				op.operation_type == OperationType.Writeoff &&
+				op.reason == WriteoffReason.UsedInProduction
 
 			if (is_writeoff) {
 				writeoff_agg.add(op.material_id, op.timestamp, Number(op.qty))
