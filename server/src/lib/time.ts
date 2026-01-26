@@ -55,6 +55,12 @@ export function startOfUTCMonth(d: Date): Date {
 	return new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), 1, 0, 0, 0, 0))
 }
 
+export function endOfUTCMonth(d: Date): Date {
+	return new Date(
+		Date.UTC(d.getUTCFullYear(), d.getUTCMonth() + 1, 0, 23, 59, 59, 999),
+	)
+}
+
 export function addUTCMonths(d: Date, delta: number): Date {
 	return new Date(
 		Date.UTC(

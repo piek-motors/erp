@@ -235,13 +235,10 @@ pub fn train_mle(training_data: &HMMTrainingData) -> HmmWeights {
 mod tests {
   use super::*;
 
-  use core::time;
-  use hmmm::HMM;
-  use ndarray::Array1;
   use std::path::PathBuf;
 
   use crate::{
-    dataset::{apply_prediction_to_events, load_dataset},
+    dataset::load_dataset,
     observation::{move_to_deltas, parse_iso_datetime_or_panic, Observation},
     state::State,
     training::train_mle,
@@ -250,7 +247,7 @@ mod tests {
   #[test]
   // TODO: old experimts
   fn test_run_hidden_markov_model() {
-    let all_events = load_dataset(&PathBuf::from("./dataset/events_seed.tsv"));
+    let all_events = load_dataset(&PathBuf::from("./dataset/11051237_11-2025.tsv"));
 
     let mut timestamps: Vec<_> = all_events
       .iter()

@@ -18,7 +18,7 @@ pub struct TrainingEvent {
   pub state: u8,
 }
 
-fn matrix_to_training_events(matrix: &Array2<String>) -> Vec<TrainingEvent> {
+fn matrix_to_training_events(matrix: &Array2<String>, card: &str) -> Vec<TrainingEvent> {
   let mut result = Vec::new();
   println!("matrix {:?}", matrix);
   for row_idx in 1..matrix.nrows() {
@@ -29,8 +29,13 @@ fn matrix_to_training_events(matrix: &Array2<String>) -> Vec<TrainingEvent> {
     let id: u32 = matrix[[row_idx, 2]]
       .parse()
       .unwrap_or_else(|e| panic!("Failed to parse id at row {}: {}", row_idx, e));
-    let card = matrix[[row_idx, 3]].clone();
-    result.push(TrainingEvent { id, card, t, state });
+
+    result.push(TrainingEvent {
+      id,
+      card: card.to_owned(),
+      t,
+      state,
+    });
   }
   result
 }
@@ -49,9 +54,17 @@ pub fn ls_dir() -> Result<Vec<PathBuf>, std::io::Error> {
 
 pub fn load_dataset(path: &PathBuf) -> Vec<TrainingEvent> {
   let lines = fs::read(&path).unwrap_or_else(|e| panic!("cannot read seed file {e}"));
-  let matrix = csv::parse(lines.clone(), CSV_FIEL_DELIMITER)
-    .unwrap_or_else(|e| panic!("cant load dataset: {e}"));
-  matrix_to_training_events(&matrix)
+  let matrix =
+    csv::parse(&lines, CSV_FIEL_DELIMITER).unwrap_or_else(|e| panic!("cant load dataset: {e}"));
+
+  // Extract the card name from the file name
+  let card = path
+    .file_name()
+    .and_then(|c| c.to_str())
+    .map(|s| s.split('_').next().unwrap_or("").to_string())
+    .unwrap_or_else(|| panic!("dataset filename is None"));
+
+  matrix_to_training_events(&matrix, &card)
 }
 
 pub fn apply_prediction_to_events(
