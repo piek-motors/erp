@@ -13,12 +13,17 @@ pub enum CsvParseError {
   ShapeError(#[from] ndarray::ShapeError),
 }
 
-pub fn parse(bytes: &Vec<u8>, delimiter: &str) -> Result<Array2<String>, CsvParseError> {
+pub fn parse(
+  bytes: &Vec<u8>,
+  delimiter: &str,
+  skip_first_lines: usize,
+) -> Result<Array2<String>, CsvParseError> {
   let text = str::from_utf8(&bytes).map_err(|_| CsvParseError::MalformedUtf8)?;
 
   // Split into rows, ignore empty trailing lines
   let rows: Vec<Vec<String>> = text
     .lines()
+    .skip(skip_first_lines)
     .filter(|line| !line.trim().is_empty())
     .map(|line| {
       line

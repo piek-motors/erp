@@ -55,13 +55,13 @@ pub fn ls_dir() -> Result<Vec<PathBuf>, std::io::Error> {
 pub fn load_dataset(path: &PathBuf) -> Vec<TrainingEvent> {
   let lines = fs::read(&path).unwrap_or_else(|e| panic!("cannot read seed file {e}"));
   let matrix =
-    csv::parse(&lines, CSV_FIEL_DELIMITER).unwrap_or_else(|e| panic!("cant load dataset: {e}"));
+    csv::parse(&lines, CSV_FIEL_DELIMITER, 2).unwrap_or_else(|e| panic!("cant load dataset: {e}"));
 
   // Extract the card name from the file name
   let card = path
     .file_name()
     .and_then(|c| c.to_str())
-    .map(|s| s.split('_').next().unwrap_or("").to_string())
+    .map(|s| s.split('_').nth(1).unwrap_or("").to_string())
     .unwrap_or_else(|| panic!("dataset filename is None"));
 
   matrix_to_training_events(&matrix, &card)
