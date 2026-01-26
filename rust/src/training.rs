@@ -1,112 +1,41 @@
 use std::path::Path;
 
+use hmmm::HMM;
 use ndarray::{Array1, Array2};
 use serde::{Deserialize, Serialize};
 use strum::IntoEnumIterator;
 
 use crate::{
-  dataset,
+  dataset::{self, split_dataset},
   normalization::normalize_arr2,
-  observation::{deltas_to_observations, move_to_deltas, parse_iso_datetime_or_panic, Observation},
+  observation::{self, deltas_to_observations, move_to_deltas, Observation},
   state::State,
+  training_data::TrainingData,
 };
 
-const WEIGHTS_PATH_STR: &str = "./weights.dat";
+const WEIGHTS_PATH_STR: &str = "./weights.json";
 fn weights_path() -> &'static Path {
   Path::new(WEIGHTS_PATH_STR)
 }
 
-pub struct HMMTrainingData {
-  pub state_seq: Vec<Vec<usize>>,
-  pub observation_seq: Vec<Vec<usize>>,
-  pub n_states: usize,
-  pub n_observations: usize,
-}
-
-impl HMMTrainingData {
-  pub fn new(n_states: usize, n_observations: usize) -> Self {
-    Self {
-      state_seq: Vec::new(),
-      observation_seq: Vec::new(),
-      n_states,
-      n_observations,
-    }
-  }
-
-  /// Add a single training sequence
-  pub fn add_sequence(&mut self, states: Vec<usize>, observations: Vec<usize>) {
-    assert_eq!(
-      states.len(),
-      observations.len(),
-      "States and observations must have same length"
-    );
-    self.state_seq.push(states);
-    self.observation_seq.push(observations);
-  }
-
-  /// Add a sequence from delta times
-  pub fn add_delta_sequence(&mut self, deltas: Vec<u32>, states: Vec<State>) {
-    let observations: Vec<usize> = deltas_to_observations(deltas.clone())
-      .iter()
-      .map(|obs| obs.as_index())
-      .collect();
-
-    let states: Vec<usize> = states.into_iter().map(|delta| delta.into()).collect();
-
-    self.add_sequence(states, observations);
-  }
-
-  /// Get total number of sequences
-  pub fn num_sequences(&self) -> usize {
-    self.state_seq.len()
-  }
-
-  /// Get total number of observations across all sequences
-  pub fn total_observations(&self) -> usize {
-    self.observation_seq.iter().map(|seq| seq.len()).sum()
-  }
-
-  /// Print debug information about the training data
-  pub fn debug_print(&self) {
-    println!("\n=== HMM Training Data Summary ===");
-    println!("Number of sequences: {}", self.num_sequences());
-    println!("Total observations: {}", self.total_observations());
-    println!("Number of states: {}", self.n_states);
-    println!("Number of observation types: {}", self.n_observations);
-
-    for (i, (states, obs)) in self
-      .state_seq
-      .iter()
-      .zip(self.observation_seq.iter())
-      .enumerate()
-    {
-      println!("\n--- Sequence {} (length: {}) ---", i + 1, states.len());
-      println!("States:       {:?}", states);
-      println!("Observations: {:?}", obs);
-    }
-    println!("\n=================================\n");
-  }
-}
-
 #[derive(Serialize, Deserialize)]
-pub struct HmmWeights {
+pub struct Weights {
   pub transition: Array2<f64>,
   pub emission: Array2<f64>,
   pub initial_probs: Array1<f64>,
 }
 
-pub fn train_hmm() -> Result<(), Box<dyn std::error::Error>> {
-  let data_sets = dataset::ls_dir()?;
-  let mut training_data = HMMTrainingData::new(State::iter().count(), Observation::iter().count());
+pub fn train_hmm(test_ratio: f32) -> Result<(), Box<dyn std::error::Error>> {
+  let dataset = dataset::ls_dir()?;
+  let dataset = split_dataset(dataset, test_ratio as f64);
 
-  for dataset_path in data_sets {
+  let mut training_data = TrainingData::new(State::iter().count(), Observation::iter().count());
+
+  for dataset_path in &dataset.train {
     let mut events = dataset::load_dataset(&dataset_path);
     events.sort_by_key(|e| e.t.clone());
 
-    let timestamps: Vec<_> = events
-      .iter()
-      .map(|e| parse_iso_datetime_or_panic(&e.t))
-      .collect();
+    let timestamps: Vec<_> = events.iter().map(|e| e.t).collect();
     let deltas = move_to_deltas(&timestamps);
 
     let states: Vec<State> = events
@@ -117,8 +46,8 @@ pub fn train_hmm() -> Result<(), Box<dyn std::error::Error>> {
 
     assert_eq!(
       states.iter().all(|s| *s == State::Outside),
-      true,
-      "dataset {} dosnt marked and cannot be used for taining",
+      false,
+      "dataset {} doesnt labeled: check if its labeled",
       dataset_path.to_string_lossy()
     );
 
@@ -126,8 +55,41 @@ pub fn train_hmm() -> Result<(), Box<dyn std::error::Error>> {
   }
 
   let weights = train_mle(&training_data);
-
   let serialized_weights = serde_json::to_string(&weights)?;
+  let hmm = HMM::new(weights.transition, weights.emission, weights.initial_probs);
+
+  let mut errors = 0;
+  let mut predictions = 0;
+
+  for dataset_path in &dataset.test {
+    let mut events = dataset::load_dataset(&dataset_path);
+    events.sort_by_key(|e| e.t.clone());
+
+    let timestamps: Vec<_> = events.iter().map(|e| e.t).collect();
+    let deltas = move_to_deltas(&timestamps);
+    let o = deltas_to_observations(deltas);
+    let observation: Array1<usize> =
+      Array1::from(o.iter().map(|e| e.as_index()).collect::<Vec<_>>());
+
+    let states = hmm.most_likely_sequence(&observation);
+
+    assert_eq!(events.len() - 1, states.len());
+
+    events.iter().skip(1).enumerate().for_each(|(idx, t)| {
+      let model_predicted_state = states
+        .get(idx)
+        .expect("no value produced by mode for event");
+
+      predictions += 1;
+      if t.state as usize != *model_predicted_state {
+        errors += 1;
+      }
+    });
+  }
+
+  let loss = errors as f64 / predictions as f64;
+  println!("Loss {:.3}%", loss * 100.0);
+  println!("Predictions {}, errors {}", predictions, errors,);
   std::fs::write(weights_path(), serialized_weights)?;
 
   Ok(())
@@ -146,9 +108,7 @@ pub fn train_hmm() -> Result<(), Box<dyn std::error::Error>> {
 /// - A[i,j] = P(state j | state i) = count(i→j) / count(i→*)
 /// - B[i,o] = P(obs o | state i) = count(state=i, obs=o) / count(state=i)
 /// - π[i] = P(initial state = i) = count(sequences starting with i) / total sequences
-pub fn train_mle(training_data: &HMMTrainingData) -> HmmWeights {
-  println!("\n=== Starting MLE Training ===");
-
+fn train_mle(training_data: &TrainingData) -> Weights {
   let n_states = training_data.n_states;
   let n_obs = training_data.n_observations;
 
@@ -156,8 +116,6 @@ pub fn train_mle(training_data: &HMMTrainingData) -> HmmWeights {
   let mut transition_counts = Array2::<f64>::zeros((n_states, n_states));
   let mut emission_counts = Array2::<f64>::zeros((n_states, n_obs));
   let mut initial_counts = Array1::<f64>::zeros(n_states);
-
-  println!("Counting transitions and emissions...");
 
   // Count occurrences
   for (seq_idx, (states, observations)) in training_data
@@ -167,7 +125,7 @@ pub fn train_mle(training_data: &HMMTrainingData) -> HmmWeights {
     .enumerate()
   {
     println!(
-      "\nProcessing sequence {}/{}",
+      "Processing sequence {}/{}",
       seq_idx + 1,
       training_data.num_sequences()
     );
@@ -180,7 +138,6 @@ pub fn train_mle(training_data: &HMMTrainingData) -> HmmWeights {
     // Count initial state
     let initial_state = states[0];
     initial_counts[initial_state] += 1.0;
-    println!("  Initial state: {}", initial_state);
 
     // Count transitions and emissions
     for t in 0..states.len() {
@@ -196,23 +153,11 @@ pub fn train_mle(training_data: &HMMTrainingData) -> HmmWeights {
         transition_counts[[state, next_state]] += 1.0;
       }
     }
-
-    println!("  Processed {} time steps", states.len());
   }
 
-  println!("\n--- Count Matrices ---");
-  println!("Transition counts:\n{:?}", transition_counts);
-  println!("\nEmission counts:\n{:?}", emission_counts);
-  println!("\nInitial state counts:\n{:?}", initial_counts);
-
-  // Normalize to get probabilities
-  println!("\n--- Normalizing to probabilities ---");
-
   let transition_matrix = normalize_arr2(&transition_counts);
-  println!("Transition matrix (A):\n{:?}", transition_matrix);
 
   let emission_matrix = normalize_arr2(&emission_counts);
-  println!("\nEmission matrix (B):\n{:?}", emission_matrix);
 
   let initial_sum = initial_counts.sum();
   let initial_probs = if initial_sum > 0.0 {
@@ -220,11 +165,7 @@ pub fn train_mle(training_data: &HMMTrainingData) -> HmmWeights {
   } else {
     Array1::from_elem(n_states, 1.0 / n_states as f64)
   };
-  println!("\nInitial probabilities (π):\n{:?}", initial_probs);
-
-  println!("\n=== MLE Training Complete ===\n");
-
-  HmmWeights {
+  Weights {
     transition: transition_matrix,
     emission: emission_matrix,
     initial_probs,
@@ -234,71 +175,16 @@ pub fn train_mle(training_data: &HMMTrainingData) -> HmmWeights {
 #[cfg(test)]
 mod tests {
   use super::*;
-
-  use std::path::PathBuf;
-
-  use crate::{
-    dataset::load_dataset,
-    observation::{move_to_deltas, parse_iso_datetime_or_panic, Observation},
-    state::State,
-    training::train_mle,
-  };
+  use crate::{state::State, training::train_mle};
 
   #[test]
-  // TODO: old experimts
-  fn test_run_hidden_markov_model() {
-    let all_events = load_dataset(&PathBuf::from("./dataset/11-2025_9224770.tsv"));
-
-    let mut timestamps: Vec<_> = all_events
-      .iter()
-      .map(|e| parse_iso_datetime_or_panic(&e.t))
-      .collect();
-    timestamps.sort_by_key(|e| *e);
-
-    let deltas = move_to_deltas(&timestamps);
-    let mut states: Vec<State> = all_events
-      .into_iter()
-      .map(|e| State::from(e.state))
-      .collect();
-    states.remove(0);
-
-    let mut training_data =
-      HMMTrainingData::new(State::iter().count(), Observation::iter().count());
-
-    training_data.add_delta_sequence(deltas, states);
-
-    let weights = train_mle(&training_data);
-
-    // {
-    //   let model = HMM::new(weights.transition, weights.emission, weights.initial_probs);
-    //   let test_dataset = load_dataset(&PathBuf::from("./dataset/events_seed_2.csv"));
-
-    //   let mut timestamps: Vec<_> = test_dataset
-    //     .iter()
-    //     .map(|e| parse_iso_datetime_or_panic(&e.t))
-    //     .collect();
-
-    //   timestamps.sort_by_key(|e| *e);
-
-    //   let deltas = move_to_deltas(&timestamps);
-    //   let opbs: Vec<usize> = deltas_to_observations(deltas)
-    //     .iter()
-    //     .map(|o| o.as_index())
-    //     .collect();
-
-    //   let d = Array1::from(opbs);
-    //   let prediction = model.most_likely_sequence(&d);
-    //   println!("prediction {}", prediction);
-
-    //   let predicted_states: Vec<usize> = prediction.to_vec();
-
-    //   let predicted_events = apply_prediction_to_events(&test_dataset, &predicted_states);
-    // }
+  fn test_train_hmm() {
+    train_hmm(0.1).unwrap();
   }
 
   #[test]
   fn test_training_data_builder() {
-    let mut training_data = HMMTrainingData::new(2, 6);
+    let mut training_data = TrainingData::new(2, 6);
 
     let deltas1 = vec![2, 3, 5, 1, 4];
     let states = vec![State::Inside];
@@ -312,7 +198,7 @@ mod tests {
 
   #[test]
   fn test_train_mle() {
-    let mut training_data = HMMTrainingData::new(2, 6);
+    let mut training_data = TrainingData::new(2, 6);
 
     // Add multiple sequences
     let sequences = vec![
@@ -327,7 +213,7 @@ mod tests {
 
     training_data.debug_print();
 
-    let HmmWeights {
+    let Weights {
       emission,
       initial_probs,
       transition,
@@ -381,7 +267,7 @@ mod tests {
   fn test_train_mle_simple() {
     println!("\n=== Test: Simple MLE Training ===");
 
-    let mut training_data = HMMTrainingData::new(2, 3);
+    let mut training_data = TrainingData::new(2, 3);
 
     // Manually add simple sequences
     // Sequence 1: State 0 → State 0 → State 1
@@ -394,7 +280,7 @@ mod tests {
 
     training_data.debug_print();
 
-    let HmmWeights {
+    let Weights {
       emission: emission_matrix,
       initial_probs,
       transition: transition_matrix,

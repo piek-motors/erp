@@ -8,6 +8,8 @@ mod normalization;
 mod observation;
 mod state;
 mod training;
+mod training_data;
+
 use napi_derive::napi;
 
 use crate::{
@@ -22,5 +24,5 @@ pub fn run_hidden_markov_model(events: Vec<Event>) -> Result<Vec<WorkInterval>, 
 
 #[napi]
 pub fn train_hidden_markov_model() -> Result<(), napi::Error> {
-  train_hmm().map_err(|e| napi::Error::new(napi::Status::GenericFailure, e))
+  train_hmm(0.3).map_err(|e| napi::Error::new(napi::Status::GenericFailure, e))
 }

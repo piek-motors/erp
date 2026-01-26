@@ -9,7 +9,7 @@ pub struct WorkInterval {
   pub exit: Option<i64>,
 }
 
-pub fn states_to_intervals(
+pub fn _states_to_intervals(
   timestamps: &[i64], // E0..EN
   states: &[State],   // S0..S(N-1)
 ) -> Vec<WorkInterval> {

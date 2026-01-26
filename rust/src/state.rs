@@ -17,8 +17,8 @@ impl Into<usize> for State {
   }
 }
 
-impl From<u8> for State {
-  fn from(value: u8) -> Self {
+impl From<usize> for State {
+  fn from(value: usize) -> Self {
     match value {
       0 => State::Outside,
       1 => State::Inside,

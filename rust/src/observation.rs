@@ -1,6 +1,6 @@
-use std::{collections::HashMap, str::FromStr};
+use std::collections::HashMap;
 
-use chrono::{FixedOffset, Utc};
+use chrono::FixedOffset;
 use napi_derive::napi;
 use serde::Deserialize;
 use strum::IntoEnumIterator;
@@ -25,14 +25,14 @@ pub struct Event {
 
 /// Internal representation after grouping and parsing timestamps.
 pub struct UserEvent {
-  pub id: u32,
+  // pub id: u32,
   pub timestamp: i64,
 }
 
 /// Parse ISO-8601 timestamp into UNIX seconds.
 ///
 /// Panics if parsing fails — timestamps are assumed to be validated upstream.
-pub fn parse_iso_datetime_or_panic(ts: &str) -> i64 {
+pub fn must_parse_timestamp(ts: &str) -> i64 {
   chrono::DateTime::<FixedOffset>::parse_from_rfc2822(ts)
     .unwrap_or_else(|_| panic!("can't parse timestamp {}", ts))
     .timestamp()
@@ -54,8 +54,8 @@ pub fn group_events(events: &Vec<Event>) -> GroupedUserEvents {
 
   for ev in events {
     let user_event = UserEvent {
-      id: ev.id,
-      timestamp: parse_iso_datetime_or_panic(&ev.timestamp),
+      // id: ev.id,
+      timestamp: must_parse_timestamp(&ev.timestamp),
     };
 
     result
@@ -96,11 +96,11 @@ pub fn group_events(events: &Vec<Event>) -> GroupedUserEvents {
 /// This is why:
 /// - Number of deltas = number of states
 /// - The first event has no associated state
-pub fn move_to_deltas(events: &Vec<i64>) -> Vec<u32> {
+pub fn move_to_deltas(timestamps: &Vec<i64>) -> Vec<u32> {
   let mut deltas: Vec<u32> = Vec::new();
 
-  for i in 1..events.len() {
-    let delta = events[i] - events[i - 1];
+  for i in 1..timestamps.len() {
+    let delta = timestamps[i] - timestamps[i - 1];
     let delta_u32 = delta
       .try_into()
       .unwrap_or_else(|_| panic!("Negative or too large delta at index {}: {}", i, delta));
@@ -180,8 +180,8 @@ mod tests {
 
   #[test]
   fn it_parse_datetime_or_panic() {
-    parse_iso_datetime_or_panic("Fri, 05 Dec 2025 14:18:52 GMT");
-    parse_iso_datetime_or_panic("Fri, 05 Dec 2025 14:18:52 GMT");
+    must_parse_timestamp("Fri, 05 Dec 2025 14:18:52 GMT");
+    must_parse_timestamp("Fri, 05 Dec 2025 14:18:52 GMT");
   }
 
   #[test]
