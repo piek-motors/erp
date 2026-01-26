@@ -11,27 +11,12 @@ function validate<T>(config: T): T {
 	return config
 }
 
-type EnvironmentConfig = {
-	NODE_ENV: string
-	PORT: number
-	BUILD_PATH: string
-	CORS_CLIENT_URL: string
-	JWT_ACCESS_SECRET: string
-	JWT_REFRESH_SECRET: string
-	JWT_ACCESS_SECRET_EXPIRES: string
-	JWT_REFRESH_SECRET_EXPIRES: string
-	S3_ACCESS_KEY_ID: string
-	S3_SECRET_ACCESS_KEY: string
-	S3_BUCKET: string
-	S3_ENDPOINT: string
-	PG_CONN_STR: string
-}
-
 const { env } = process
-export const config = validate({
+
+const rawConfig = {
 	NODE_ENV: env.NODE_ENV,
 
-	PORT: env.Port ? Number(env.PORT) : 9000,
+	PORT: env.PORT ? Number(env.PORT) : 9000,
 	BUILD_PATH: env.BUILD_PATH,
 	CORS_CLIENT_URL: env.CORS_CLIENT_URL,
 
@@ -46,4 +31,10 @@ export const config = validate({
 	S3_ENDPOINT: env.S3_ENDPOINT ?? 's3.yandexcloud.net',
 
 	PG_CONN_STR: env.PG_CONN_STR,
-}) as EnvironmentConfig
+}
+
+type Validated<T> = {
+	[K in keyof T]-?: NonNullable<T[K]>
+}
+
+export const config = validate(rawConfig) as Validated<typeof rawConfig>

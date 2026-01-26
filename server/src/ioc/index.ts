@@ -1,7 +1,7 @@
-import { AttendanceEventConsolidation } from '#root/jobs/attendance_event_consolidation.js'
+import { AttendanceEventPairingJob } from '#root/jobs/attendance_event_pairing.js'
 import { JobsRunner } from '#root/jobs/jobs_runner.js'
-import { MaterialQuarterSpendingsAggregationJob } from '#root/jobs/material_quarter_spendings_aggregation_job.js'
-import { OutdatedPdoOrdersRemovalJob } from '#root/jobs/outdated_pdo_orders_removal_job.js'
+import { MaterialSpendAggJob } from '#root/jobs/material_spend_agg.js'
+import { OutdatedPdoOrdersRemovalJob } from '#root/jobs/outdated_pdo_orders_removal.js'
 import type { PeriodAggregator } from '#root/lib/statistic/period_aggregator.js'
 import { AttendanceReportGenerator } from '#root/rpc/attendance/report_generator.js'
 import { AttachmentService } from '#root/service/attachment.service.js'
@@ -33,7 +33,7 @@ export const attendanceReportGenerator = new AttendanceReportGenerator(db)
 export const userController = new UserController(authService)
 
 new JobsRunner([
-	new MaterialQuarterSpendingsAggregationJob(materials_stat_container),
+	new MaterialSpendAggJob(materials_stat_container),
 	new OutdatedPdoOrdersRemovalJob(),
-	new AttendanceEventConsolidation(),
+	new AttendanceEventPairingJob(),
 ]).setup()

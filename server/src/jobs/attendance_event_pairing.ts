@@ -4,7 +4,7 @@ import { db } from '#root/sdk.js'
 import { runHiddenMarkovModel } from 'rust'
 import type { Job } from './jobs_runner.js'
 
-export class AttendanceEventConsolidation implements Job {
+export class AttendanceEventPairingJob implements Job {
 	async run(): Promise<void> {
 		// TODO: remove where
 		const events = await db

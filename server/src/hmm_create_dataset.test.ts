@@ -23,8 +23,10 @@ describe('hmm create dataset', () => {
 			.where('firstname', 'ilike', `%${SELECT.name}%`)
 			.where('lastname', 'ilike', `%${SELECT.lastname}%`)
 			.executeTakeFirstOrThrow()
+
 		console.log('employee', empl)
 		const { card } = empl
+
 		const events = await db
 			.selectFrom('attendance.events')
 			.selectAll()
@@ -45,9 +47,11 @@ describe('hmm create dataset', () => {
 			'',
 		]
 		let last_date: string = ''
+
 		for (const ev of events) {
 			const date = ev.timestamp.toISOString().split('T')[0]
 			if (!date) throw Error(`corrupted date for event ${ev.id}`)
+
 			if (last_date && last_date !== date) {
 				lines.push(DELIMETER.repeat(header.length))
 			}
@@ -59,6 +63,7 @@ describe('hmm create dataset', () => {
 		const month = SELECT.start.getUTCMonth() + 1
 		const year = SELECT.start.getUTCFullYear()
 		const path = `../rust/dataset/${month}-${year}_${card}.tsv`
+
 		writeFileSync(path, lines.join('\n'))
 		console.log(`dataset saved at ${path}`)
 	})

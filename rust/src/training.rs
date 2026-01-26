@@ -8,7 +8,7 @@ use strum::IntoEnumIterator;
 use crate::{
   dataset::{self, split_dataset},
   normalization::normalize_arr2,
-  observation::{self, deltas_to_observations, move_to_deltas, Observation},
+  observation::{deltas_to_observations, move_to_deltas, Observation},
   state::State,
   training_data::TrainingData,
 };

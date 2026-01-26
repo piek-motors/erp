@@ -17,7 +17,7 @@ import {
 } from '../lib/statistic/period_aggregator.js'
 import type { Job } from './jobs_runner.js'
 
-export class MaterialQuarterSpendingsAggregationJob implements Job {
+export class MaterialSpendAggJob implements Job {
 	constructor(
 		private readonly material_stat_data_container: MaterialStatDataContainer,
 	) {}

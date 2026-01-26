@@ -46,11 +46,13 @@ impl TrainingData {
   }
 
   /// Get total number of observations across all sequences
+  #[cfg(test)]
   pub fn total_observations(&self) -> usize {
     self.observation_seq.iter().map(|seq| seq.len()).sum()
   }
 
   /// Print debug information about the training data
+  #[cfg(test)]
   pub fn debug_print(&self) {
     println!("\n=== HMM Training Data Summary ===");
     println!("Number of sequences: {}", self.num_sequences());
