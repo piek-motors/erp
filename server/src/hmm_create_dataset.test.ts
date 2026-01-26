@@ -7,9 +7,9 @@ import { endOfUTCMonth, startOfUTCMonth } from './lib/time.js'
 const DELIMETER = '\t'
 
 const SELECT = {
-	name: 'Николай',
-	lastname: 'Козлов',
-	start: startOfUTCMonth(new Date(2025, 11 - 1)),
+	name: 'Владимир',
+	lastname: 'Матвеев',
+	start: startOfUTCMonth(new Date(2025, 10 - 1)),
 }
 
 describe('hmm create dataset', () => {
@@ -23,6 +23,7 @@ describe('hmm create dataset', () => {
 			.where('firstname', 'ilike', `%${SELECT.name}%`)
 			.where('lastname', 'ilike', `%${SELECT.lastname}%`)
 			.executeTakeFirstOrThrow()
+		console.log('employee', empl)
 		const { card } = empl
 		const events = await db
 			.selectFrom('attendance.events')
