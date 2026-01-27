@@ -8,8 +8,8 @@ import { CreateMaterialPage } from './material/create'
 import { MaterialListPage } from './material/list/list'
 import { MaterialUpdatePage } from './material/update'
 import { ManufacturingList } from './orders/list/list'
-import { ManufacturingUpdatePage } from './orders/update'
-import { MetalFlowRootLayout } from './root_layout'
+import { OrderUpdatePage } from './orders/update'
+import { MetalFlowRootLayout, MobilePadding } from './root_layout'
 import { OperationsPage } from './warehouse/list'
 
 const { pdo: metalflow } = routeMap
@@ -35,7 +35,11 @@ const innerRoutes = [
 		path: metalflow.material.new,
 	},
 	{
-		element: <MaterialUpdatePage />,
+		element: (
+			<MobilePadding desktop_too>
+				<MaterialUpdatePage />
+			</MobilePadding>
+		),
 		path: metalflow.material.edit,
 	},
 
@@ -48,7 +52,11 @@ const innerRoutes = [
 		path: metalflow.detail.new,
 	},
 	{
-		element: <UpdateDetailPage />,
+		element: (
+			<MobilePadding desktop_too>
+				<UpdateDetailPage />
+			</MobilePadding>
+		),
 		path: metalflow.detail.edit,
 	},
 	{
@@ -64,7 +72,11 @@ const innerRoutes = [
 		path: metalflow.operations,
 	},
 	{
-		element: <ManufacturingUpdatePage />,
+		element: (
+			<MobilePadding desktop_too>
+				<OrderUpdatePage />
+			</MobilePadding>
+		),
 		path: metalflow.order.edit,
 	},
 ] as RouteConfig[]

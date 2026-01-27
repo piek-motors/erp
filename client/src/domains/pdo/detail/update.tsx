@@ -5,8 +5,8 @@ import {
 	observer,
 	openPage,
 	P,
-	Row,
 	routeMap,
+	Row,
 	useEffect,
 	useNavigate,
 	useParams,
@@ -34,11 +34,11 @@ export const UpdateDetailPage = observer(() => {
 
 	if (api.loader.loading || !detail) return <Loading />
 	return (
-		<Stack gap={0.5} sx={{ flex: 1, p: 1, pb: 1 }}>
+		<Stack sx={{ flex: 1 }}>
 			<MetalPageTitle
 				t={
 					Boolean(detail.id) && (
-						<P level="body-sm" whiteSpace={'nowrap'}>
+						<P level="body-md" whiteSpace={'nowrap'}>
 							Деталь № {detail.id}
 						</P>
 					)

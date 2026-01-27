@@ -58,9 +58,7 @@ export const ScrollableWindow = (props: {
 
 	return (
 		<Stack sx={{ ...outerSx, overflowX: 'auto', width: '100%' }}>
-			{props.static && (
-				<Box sx={{ p: { xs: 0.75, sm: 0 } }}>{props.static}</Box>
-			)}
+			{props.static}
 			<ScrollComponent refreshTrigger={props.refreshTrigger} sx={scrollSx}>
 				<Box
 					sx={{

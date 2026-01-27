@@ -48,8 +48,7 @@ export const TargetGroupDetailList = observer(() => {
 		<Stack sx={{ flex: 1 }}>
 			<Search
 				size="sm"
-				variant="soft"
-				color="primary"
+				variant="outlined"
 				value={detailList.query}
 				onChange={e => detailList.setQuery(e.target.value)}
 			/>

@@ -27,8 +27,15 @@ export const tableStyles = css({
 	},
 })
 
+function hasTextContent(html: string): boolean {
+	const el = document.createElement('div')
+	el.innerHTML = html
+	return el.textContent?.trim().length > 0
+}
+
 export const DetailDescription = observer((props: { htmlContent?: string }) => {
 	if (!props.htmlContent) return null
+	if (!hasTextContent(props.htmlContent)) return null
 	return (
 		<Stack width={'max-content'} maxWidth={600}>
 			<Label label="Примечание" level="body-sm" />

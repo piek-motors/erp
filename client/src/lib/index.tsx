@@ -16,6 +16,7 @@ import {
 	Checkbox,
 	type ChipProps,
 	Container,
+	Divider,
 	FormControl,
 	IconButton,
 	type IconButtonProps,
@@ -115,6 +116,30 @@ export function Row(props: { children: React.ReactNode } & StackProps) {
 			flexWrap={'wrap'}
 			{...props}
 		/>
+	)
+}
+
+export function RowWithDividers({
+	children,
+	...props
+}: { children: React.ReactNode } & StackProps) {
+	const items = React.Children.toArray(children).filter(Boolean)
+
+	return (
+		<Stack
+			direction="row"
+			gap={1}
+			alignItems="start"
+			flexWrap="wrap"
+			{...props}
+		>
+			{items.map((child, i) => (
+				<React.Fragment key={i}>
+					{i > 0 && <Divider orientation="vertical" />}
+					{child}
+				</React.Fragment>
+			))}
+		</Stack>
 	)
 }
 
@@ -266,7 +291,7 @@ export function MultilineInput(
 export function Loading() {
 	return (
 		<Box sx={{ minWidth: '-webkit-fill-available' }}>
-			<LinearProgress size="sm" color="danger" />
+			<LinearProgress size="sm" color="primary" />
 		</Box>
 	)
 }

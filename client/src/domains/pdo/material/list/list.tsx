@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { ScrollableWindow, Search } from 'components/inputs'
 import { Table } from 'components/table.impl'
-import { MobileNavModal } from 'domains/pdo/root_layout'
+import { MobileNavModal, MobilePadding } from 'domains/pdo/root_layout'
 import { observer, Row, Stack, useNavigate } from 'lib/index'
 import { openPage, routeMap } from 'lib/routes'
 import type { Material } from 'srv/rpc/pdo/materials'
@@ -34,31 +34,33 @@ export const MaterialList = observer((props: MaterialsTableProps) => {
 export const MaterialListPage = observer((props: MaterialsTableProps) => (
 	<ScrollableWindow
 		static={
-			<Stack p={0.5} gap={0.5}>
-				<MobileNavModal t={'Материалы'} />
-				<ShapeFilter />
-				<Row>
-					<Search
-						width={100}
-						variant="soft"
-						color="primary"
-						placeholder="№"
-						value={materialListStore.searchId}
-						onChange={v => {
-							materialListStore.setSearchId(v.target.value)
-						}}
-					/>
-					<Search
-						variant="soft"
-						color="primary"
-						placeholder="Название"
-						onChange={e => {
-							materialListStore.setSearchKeyword(e.target.value)
-						}}
-						value={materialListStore.filterKeyword}
-					/>
-				</Row>
-			</Stack>
+			<MobilePadding>
+				<Stack gap={0.5}>
+					<MobileNavModal t={'Материалы'} />
+					<ShapeFilter />
+					<Row>
+						<Search
+							width={100}
+							variant="soft"
+							color="primary"
+							placeholder="№"
+							value={materialListStore.searchId}
+							onChange={v => {
+								materialListStore.setSearchId(v.target.value)
+							}}
+						/>
+						<Search
+							variant="soft"
+							color="primary"
+							placeholder="Название"
+							onChange={e => {
+								materialListStore.setSearchKeyword(e.target.value)
+							}}
+							value={materialListStore.filterKeyword}
+						/>
+					</Row>
+				</Stack>
+			</MobilePadding>
 		}
 		scroll={<MaterialList {...props} />}
 	/>

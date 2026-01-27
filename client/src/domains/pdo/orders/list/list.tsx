@@ -2,14 +2,14 @@ import { Tab, TabList, TabPanel, Tabs } from '@mui/joy'
 import { ScrollableWindow, Search } from 'components/inputs'
 import { Table } from 'components/table.impl'
 import type { TabConfig } from 'components/tabs'
-import { MobileNavModal } from 'domains/pdo/root_layout'
+import { MobileNavModal, MobilePadding } from 'domains/pdo/root_layout'
 import { observer } from 'lib/deps'
 import {
 	Label,
 	Loading,
 	openPage,
-	Row,
 	routeMap,
+	Row,
 	Stack,
 	useEffect,
 	useNavigate,
@@ -118,16 +118,16 @@ export const ManufacturingList = observer(() => {
 		s.tab === ManufacturingOrderStatus.Collected ? (
 			<Search
 				size="sm"
-				variant="soft"
-				color="primary"
+				sx={{ borderRadius: 0 }}
+				variant="outlined"
 				value={archive_search.query}
 				onChange={e => archive_search.setQuery(e.target.value)}
 			/>
 		) : (
 			<Search
 				size="sm"
-				variant="soft"
-				color="primary"
+				sx={{ borderRadius: 0 }}
+				variant="outlined"
 				value={s.query}
 				onChange={e => s.setQuery(e.target.value)}
 			/>
@@ -142,8 +142,10 @@ export const ManufacturingList = observer(() => {
 		>
 			<ScrollableWindow
 				static={
-					<Stack gap={0.5}>
-						<MobileNavModal t={'Производство'} />
+					<Stack>
+						<MobilePadding>
+							<MobileNavModal t={'Производство'} />
+						</MobilePadding>
 						<TabList variant="soft" color="primary">
 							{tabs.map(({ value, label }) => (
 								<Tab
@@ -158,13 +160,11 @@ export const ManufacturingList = observer(() => {
 								</Tab>
 							))}
 						</TabList>
-						<Row gap={0} px={1}>
-							{search}
-						</Row>
+						<Row gap={0}>{search}</Row>
 					</Stack>
 				}
 				scroll={
-					<Stack gap={0} pt={0} sx={{ mb: 2 }}>
+					<Stack sx={{ mb: 2 }}>
 						{tabs.map(({ value, component }) => (
 							<TabPanel key={value} value={value} sx={{ p: 0 }}>
 								{component}

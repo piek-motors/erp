@@ -2,6 +2,7 @@ import { authStore } from 'lib/store/auth.store'
 import { observer } from 'mobx-react-lite'
 import { type ReactElement, useEffect, useState } from 'react'
 import { Navigate } from 'react-router'
+import { Loading } from '..'
 
 type IRequireAuthProps = {
 	children: ReactElement
@@ -23,7 +24,7 @@ const RequireAuth = observer((props: IRequireAuthProps) => {
 		else getToken()
 	}, [])
 
-	if (!isLoaded) return <>Authentication</>
+	if (!isLoaded) return <Loading />
 
 	return token ? props.children : <Navigate to="/login" />
 })

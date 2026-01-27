@@ -14,7 +14,7 @@ import {
 	WebOnly,
 } from 'components/utilities/conditional-display'
 import { P, Row, UseIcon } from 'lib/index'
-import { useEffect, useState } from 'react'
+import { ReactNode, useEffect, useState } from 'react'
 import { NavigationSideBar } from '../../components/nav_sidebar'
 import { app_cache } from './cache'
 import { nav_links } from './nav.links'
@@ -34,14 +34,15 @@ export const MobileNavModal = (props: { t?: string }) => {
 				>
 					<UseIcon icon={UilBars} />
 				</IconButton>
-				<P color="primary" level="body-sm" fontWeight={600}>
+				<P level="body-sm" fontWeight={500}>
 					{props.t}
 				</P>
 			</Row>
 			<Modal open={open} onClose={() => setOpen(false)}>
-				<ModalDialog layout="fullscreen">
+				<ModalDialog layout="fullscreen" size="sm">
 					<ModalClose />
 					<NavigationSideBar
+						gap={1}
 						title={title}
 						links={nav_links}
 						onClick={() => setOpen(false)}
@@ -51,6 +52,22 @@ export const MobileNavModal = (props: { t?: string }) => {
 		</MobileOnly>
 	)
 }
+
+export const MobilePadding = (props: {
+	children: ReactNode
+	desktop_too?: boolean
+}) => (
+	<Box
+		sx={{
+			p: {
+				xs: 1,
+				md: props.desktop_too ? 1 : 0,
+			},
+		}}
+	>
+		{props.children}
+	</Box>
+)
 
 export function MetalFlowRootLayout(props: { children?: React.ReactNode }) {
 	useEffect(() => {
@@ -85,7 +102,7 @@ export function MetalFlowRootLayout(props: { children?: React.ReactNode }) {
 			</DesktopOnly>
 			{props.children && (
 				<Sheet sx={{ width: '100%', height: 'min-content' }}>
-					<Stack sx={{ flexGrow: 1, gap: 1, overflowX: 'auto' }}>
+					<Stack sx={{ flexGrow: 1, overflowX: 'auto' }}>
 						{props.children}
 					</Stack>
 				</Sheet>

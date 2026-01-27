@@ -13,8 +13,9 @@ import {
 	observer,
 	openPage,
 	P,
-	Row,
 	routeMap,
+	Row,
+	RowWithDividers,
 	SaveIconButton,
 	Stack,
 	useEffect,
@@ -48,7 +49,7 @@ const deletionAllowed = [
 	OrderStatus.Production,
 ]
 
-export const ManufacturingUpdatePage = observer(() => {
+export const OrderUpdatePage = observer(() => {
 	const { id } = useParams<{ id: string }>()
 
 	const [detail, setDetail] = useState<DetailSt | null>(null)
@@ -74,65 +75,60 @@ export const ManufacturingUpdatePage = observer(() => {
 	const isDeletionAllowed = deletionAllowed.includes(order.status)
 
 	return (
-		<Stack p={1} gap={1}>
+		<Stack gap={1}>
 			<WebOnly>
-				<Card size="sm">
-					<Stack gap={1}>
-						<MetalPageTitle
-							t={
-								<Box width={'max-content'}>
-									<Row>
-										<P level="body-sm" whiteSpace={'nowrap'}>
-											Заказ №{order.id}
-										</P>
-										<OrderStatusChip status={order.resp.status} />
-									</Row>
-									<DetailName
-										detail={{
-											id: detail.id,
-											name: detail.name,
-											group_id: detail.groupId || null,
-										}}
-										withGroupName
-									/>
-								</Box>
-							}
-						/>
-						<Divider />
-						<Row gap={1} alignItems={'start'}>
-							<ProductionSteps order={order} detail={detail} />
-							<Divider orientation="vertical" />
-							<Stack gap={1}>
-								<TechPassportButton order={order} />
-								<QuantityInput
-									order={order}
-									recBatchSize={detail.recommendedBatchSize}
+				<Stack gap={1} justifyContent={'space-between'} width={'100%'}>
+					<MetalPageTitle
+						t={
+							<Box width={'max-content'}>
+								<Row>
+									<P level="body-sm" whiteSpace={'nowrap'}>
+										Заказ №{order.id}
+									</P>
+									<OrderStatusChip status={order.resp.status} />
+								</Row>
+								<DetailName
+									detail={{
+										id: detail.id,
+										name: detail.name,
+										group_id: detail.groupId || null,
+									}}
+									withGroupName
 								/>
-							</Stack>
-							<Cost order={order} detail={detail} />
-						</Row>
-						<Divider />
-						<Row gap={2} alignItems={'start'} flexWrap={'wrap'}>
-							<BlankSpecDisplay blankSpec={detail?.blankSpec} />
-							<DetailAttachments detail={detail} />
-							<DetailDescription htmlContent={detail.description} />
-						</Row>
-						<Dates order={order} />
-						<Row
-							justifyContent={
-								[OrderStatus.Production, OrderStatus.Collected].includes(
-									order.status,
-								)
-									? 'end'
-									: 'start'
-							}
-						>
-							{api.loader.loading && <Loading />}
-							<ActionButton order={order} />
-							{isDeletionAllowed && <DeleteOrderButton order={order} />}
-						</Row>
-					</Stack>
-				</Card>
+							</Box>
+						}
+					/>
+					<Divider />
+					<RowWithDividers gap={2} alignItems={'start'}>
+						<ProductionSteps order={order} detail={detail} />
+						<Stack gap={1}>
+							<TechPassportButton order={order} />
+							<QuantityInput
+								order={order}
+								recBatchSize={detail.recommendedBatchSize}
+							/>
+						</Stack>
+						<Cost order={order} detail={detail} />
+						<BlankSpecDisplay blankSpec={detail?.blankSpec} />
+						<DetailAttachments detail={detail} />
+						<DetailDescription htmlContent={detail.description} />
+					</RowWithDividers>
+					<Divider />
+					<Dates order={order} />
+					<Row
+						justifyContent={
+							[OrderStatus.Production, OrderStatus.Collected].includes(
+								order.status,
+							)
+								? 'end'
+								: 'start'
+						}
+					>
+						{api.loader.loading && <Loading />}
+						<ActionButton order={order} />
+						{isDeletionAllowed && <DeleteOrderButton order={order} />}
+					</Row>
+				</Stack>
 				<DuplicationCheckModal order={order} />
 			</WebOnly>
 
@@ -203,7 +199,7 @@ const BlankSpecDisplay = observer(
 		return (
 			<Stack display={'flex'} alignSelf={'start'}>
 				<Label label="Заготовка" />
-				<TechParamsDisplay params={blankSpec} level="body-xs" />
+				<TechParamsDisplay params={blankSpec} level="body-md" />
 			</Stack>
 		)
 	},
@@ -227,33 +223,28 @@ const DetailAttachments = observer(({ detail }: { detail: DetailSt }) => {
 
 const Dates = observer(({ order }: { order: OrderSt }) => {
 	if (!order.resp) return null
-	const createdAt = fmtDate(new Date(order.resp.created_at))
 	const startedAt = order.resp.started_at
-		? fmtDate(new Date(order.resp.started_at), true)
+		? fmtDate(new Date(order.resp.started_at))
 		: null
 	const finishedAt = order.resp.finished_at
 		? fmtDate(new Date(order.resp.finished_at), true)
 		: null
+
+	const expr = [
+		{ t: 'Старт', v: startedAt },
+		{ t: 'Завершен', v: finishedAt },
+	]
 	return (
 		<Row gap={1}>
-			<>
-				<Label xs label="Создан" />
-				<P level="body-xs">{createdAt}</P>
-			</>
-
-			{startedAt && (
-				<>
-					<Label xs label="Старт" />
-					<P level="body-xs">{startedAt}</P>
-				</>
-			)}
-
-			{finishedAt && (
-				<>
-					<Label xs label="Завершен" />
-					<P level="body-xs">{finishedAt}</P>
-				</>
-			)}
+			{expr.map(each => {
+				if (!each.v) return null
+				return (
+					<>
+						<Label xs label={each.t} />
+						<Label xs>{each.v}</Label>
+					</>
+				)
+			})}
 		</Row>
 	)
 })
@@ -286,7 +277,7 @@ const PrintingPageVerion = (props: DetailStProp & OrderStProp) => (
 const DeleteOrderButton = observer(({ order }: OrderStProp) => {
 	const navigate = useNavigate()
 	const msg = `Удалить заказ?\nEсли заказ находится в состоянии "Производство" - значит материал уже был списан. 
-            В этом случае необходимо вручную скорректировать остатки через поставку.`
+												В этом случае необходимо вручную скорректировать остатки через поставку.`
 	return (
 		<DeleteResourceButton
 			onClick={e => {
@@ -310,15 +301,15 @@ const Cost = observer(({ detail, order }: DetailStProp & OrderStProp) => {
 	return (
 		<Row alignItems={'start'}>
 			{materialCost ? (
-				<Card size="sm">
+				<Stack>
 					<Label label="Материал к потреблению" />
 					<Stack gap={0.5}>
 						<MaterialCostCalculations cost={materialCost} order={order} />
 					</Stack>
-				</Card>
+				</Stack>
 			) : null}
 			{details.length ? (
-				<Card size="sm">
+				<Stack>
 					<Label label="Детали к потреблению" />
 					<Stack gap={0.5}>
 						{details.map((cost, index) => (
@@ -336,7 +327,7 @@ const Cost = observer(({ detail, order }: DetailStProp & OrderStProp) => {
 							</Row>
 						))}
 					</Stack>
-				</Card>
+				</Stack>
 			) : null}
 		</Row>
 	)

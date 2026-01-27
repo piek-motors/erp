@@ -6,7 +6,7 @@ import {
 } from 'components/utilities/conditional-display'
 import { Box, Loading, observer, P, Row, Stack, useEffect } from 'lib/index'
 import { useParams } from 'react-router'
-import { MobileNavModal } from '../root_layout'
+import { MobileNavModal, MobilePadding } from '../root_layout'
 import { api } from './api'
 import { GroupActions, TargetGroupDetailList } from './detail_list'
 import { GroupSelectModal, SharedGroupList } from './group_list'
@@ -25,12 +25,11 @@ const DetailsPanel = observer(() => {
 		<ScrollableWindow
 			scroll={
 				openedGroup && (
-					<Stack p={1}>
+					<Stack p={1} gap={1}>
 						<Row>
 							<UpdateGroupNameModal />
 							<GroupActions />
 						</Row>
-						<Divider sx={{ my: 0.5 }} />
 						<TargetGroupDetailList />
 					</Stack>
 				)
@@ -47,19 +46,17 @@ const DetailGroupsLayout = observer(() => (
 		}}
 		sx={{
 			gap: 0.5,
-			p: {
-				xs: 1,
-				sm: 0,
-			},
 		}}
 	>
 		{/* Group list */}
 		<Box>
 			<MobileOnly>
-				<Row>
-					<MobileNavModal />
-					<GroupSelectModal />
-				</Row>
+				<MobilePadding>
+					<Row>
+						<MobileNavModal />
+						<GroupSelectModal />
+					</Row>
+				</MobilePadding>
 			</MobileOnly>
 			<DesktopOnly>
 				<ScrollableWindow scroll={<SharedGroupList />} />

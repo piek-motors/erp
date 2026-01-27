@@ -4,15 +4,15 @@ import { ScrollableWindow, Search } from 'components/inputs'
 import { InModal } from 'components/modal'
 import { SearchResults } from 'components/search-paginated'
 import { Table } from 'components/table.impl'
-import { MobileNavModal } from 'domains/pdo/root_layout'
+import { MobileNavModal, MobilePadding } from 'domains/pdo/root_layout'
 import {
 	Box,
 	Label,
 	Loading,
 	observer,
 	openPage,
-	Row,
 	routeMap,
+	Row,
 	Stack,
 	useEffect,
 	useNavigate,
@@ -28,12 +28,14 @@ import { detailListStore as state } from './store'
 export const DetailsListPage = () => (
 	<ScrollableWindow
 		static={
-			<Stack>
-				<MobileNavModal t={'Детали'} />
-				<Box p={0.5}>
-					<SearchArguments />
-				</Box>
-			</Stack>
+			<MobilePadding>
+				<Stack gap={0.5}>
+					<MobileNavModal t={'Детали'} />
+					<Box>
+						<SearchArguments />
+					</Box>
+				</Stack>
+			</MobilePadding>
 		}
 		scroll={
 			<Row alignItems="start" gap={0} mb={2} flexWrap={'nowrap'}>
