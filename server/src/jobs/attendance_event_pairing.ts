@@ -14,9 +14,15 @@ export class AttendanceEventPairingJob implements Job {
 			.execute()
 		logger.info(`Selected ${events.length} employess events for consolidation`)
 
-		runHiddenMarkovModel(
-			events.map(e => ({ ...e, timestamp: e.timestamp.toUTCString() })),
-		)
+		try {
+			const empl_intervals = runHiddenMarkovModel(
+				events.map(e => ({ ...e, timestamp: e.timestamp.toUTCString() })),
+			)
+
+			// logger.info(empl_intervals, 'result')
+		} catch (error) {
+			logger.error(error, 'Hidden markov model failed')
+		}
 	}
 
 	interval(): number {

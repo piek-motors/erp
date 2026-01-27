@@ -87,37 +87,5 @@ pub fn load_dataset(path: &PathBuf) -> Vec<TrainingEvent> {
   let lines = fs::read(&path).unwrap_or_else(|e| panic!("cannot read seed file {e}"));
   let matrix =
     csv::parse(&lines, CSV_FIEL_DELIMITER, 2).unwrap_or_else(|e| panic!("cant load dataset: {e}"));
-
-  // Extract the card name from the file name
-  // let card = path
-  //   .file_name()
-  //   .and_then(|c| c.to_str())
-  //   .map(|s| s.split('_').nth(1).unwrap_or("").to_string())
-  //   .unwrap_or_else(|| panic!("dataset filename is None"));
-
   matrix_to_training_events(&matrix)
-}
-
-pub fn _align_predictions_with_events(
-  events: &[TrainingEvent],
-  predicted_states: &[usize],
-) -> Vec<TrainingEvent> {
-  assert!(
-    events.len() == predicted_states.len() + 1,
-    "events.len() must be predicted_states.len() + 1"
-  );
-  let mut result = Vec::with_capacity(events.len());
-  // First event has no delta → no prediction
-  let mut first = events[0].clone();
-  first.state = State::Outside;
-  result.push(first);
-
-  // Remaining events get predicted states
-  for (event, &state_idx) in events[1..].iter().zip(predicted_states.iter()) {
-    let mut ev = event.clone();
-    ev.state = State::from(state_idx);
-    result.push(ev);
-  }
-
-  result
 }

@@ -13,12 +13,15 @@ mod training_data;
 use napi_derive::napi;
 
 use crate::{
-  inference::infer_work_intervals, intervaling::WorkInterval, observation::Event,
+  inference::{infer_work_intervals, EmployeeWorkIntervals},
+  observation::Event,
   training::train_hmm,
 };
 
 #[napi]
-pub fn run_hidden_markov_model(events: Vec<Event>) -> Result<Vec<WorkInterval>, napi::Error> {
+pub fn run_hidden_markov_model(
+  events: Vec<Event>,
+) -> Result<Vec<EmployeeWorkIntervals>, napi::Error> {
   infer_work_intervals(&events).map_err(|e| napi::Error::new(napi::Status::GenericFailure, e))
 }
 

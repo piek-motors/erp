@@ -25,8 +25,9 @@ pub struct Event {
 }
 
 /// Internal representation after grouping and parsing timestamps.
-pub struct UserEvent {
-  // pub id: u32,
+#[derive(Debug, Clone)]
+pub struct EmployeeEvent {
+  pub id: u32,
   pub t: i64,
 }
 
@@ -34,7 +35,7 @@ pub trait TimeSeries {
   fn timestamp(&self) -> i64;
 }
 
-impl TimeSeries for UserEvent {
+impl TimeSeries for EmployeeEvent {
   fn timestamp(&self) -> i64 {
     self.t
   }
@@ -51,7 +52,7 @@ pub fn must_parse_timestamp(ts: &str) -> i64 {
 
 /// Events grouped by card (user).
 /// Each vector is sorted by timestamp before further processing.
-type GroupedUserEvents = HashMap<String, Vec<UserEvent>>;
+type GroupedUserEvents = HashMap<String, Vec<EmployeeEvent>>;
 
 /// Group events by card and sort them by time.
 ///
@@ -64,8 +65,8 @@ pub fn group_events(events: &Vec<Event>) -> GroupedUserEvents {
   let mut result: GroupedUserEvents = HashMap::new();
 
   for ev in events {
-    let user_event = UserEvent {
-      // id: ev.id,
+    let user_event = EmployeeEvent {
+      id: ev.id,
       t: must_parse_timestamp(&ev.timestamp),
     };
 
@@ -102,7 +103,7 @@ pub fn group_events(events: &Vec<Event>) -> GroupedUserEvents {
 /// - Each delta corresponds to exactly ONE hidden state.
 /// - That state describes the employee status DURING the interval:
 ///
-///   `state[i]` describes the interval `(E[i-1] → E[i])`
+///   `state[i]` describes the interval `(E[i] → E[i+1])`
 ///
 /// This is why:
 /// - Number of deltas = number of states

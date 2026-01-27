@@ -1,4 +1,4 @@
-use std::{error::Error, path::Path};
+use std::{error::Error, path::PathBuf};
 
 use hmmm::HMM;
 use ndarray::{Array1, Array2};
@@ -6,16 +6,15 @@ use serde::{Deserialize, Serialize};
 use strum::IntoEnumIterator;
 
 use crate::{
-  dataset::{self, split_dataset},
+  dataset::{self, split_dataset, Dataset},
   normalization::normalize_arr2,
   observation::{events_to_observations, move_to_deltas, Observation},
   state::State,
   training_data::TrainingData,
 };
 
-const WEIGHTS_PATH_STR: &str = "./weights.json";
-fn weights_path() -> &'static Path {
-  Path::new(WEIGHTS_PATH_STR)
+fn weights_path() -> PathBuf {
+  PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("weights.json")
 }
 
 #[derive(Serialize, Deserialize, Clone)]
@@ -37,18 +36,17 @@ impl Weights {
     Ok(serde_json::from_slice(&serialized)?)
   }
 
-  pub fn create_model(self) -> HMM {
+  pub fn into_model(self) -> HMM {
     HMM::new(self.transition, self.emission, self.initial_probs)
   }
 }
 
 pub fn train_hmm(test_ratio: f32) -> Result<(), Box<dyn Error>> {
-  let dataset = dataset::ls_dir()?;
-  let dataset = split_dataset(dataset, test_ratio as f64);
+  let Dataset { test, train } = split_dataset(dataset::ls_dir()?, test_ratio as f64);
 
   let mut training_data = TrainingData::new(State::iter().count(), Observation::iter().count());
 
-  for dataset_path in &dataset.train {
+  for dataset_path in &train {
     let mut events = dataset::load_dataset(&dataset_path);
     events.sort_by_key(|e| e.t.clone());
 
@@ -74,12 +72,12 @@ pub fn train_hmm(test_ratio: f32) -> Result<(), Box<dyn Error>> {
   let weights = train_mle(&training_data);
   weights.persist()?;
 
-  let model = weights.create_model();
+  let model = weights.into_model();
 
   let mut errors = 0;
   let mut predictions = 0;
 
-  for dataset_path in &dataset.test {
+  for dataset_path in &test {
     println!("\nTest on dataset {:?}", dataset_path);
     let mut events = dataset::load_dataset(&dataset_path);
     events.sort_by_key(|e| e.t.clone());
