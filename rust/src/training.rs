@@ -1,4 +1,4 @@
-use std::path::Path;
+use std::{error::Error, path::Path};
 
 use hmmm::HMM;
 use ndarray::{Array1, Array2};
@@ -8,7 +8,7 @@ use strum::IntoEnumIterator;
 use crate::{
   dataset::{self, split_dataset},
   normalization::normalize_arr2,
-  observation::{deltas_to_observations, move_to_deltas, Observation},
+  observation::{events_to_observations, move_to_deltas, Observation},
   state::State,
   training_data::TrainingData,
 };
@@ -18,14 +18,31 @@ fn weights_path() -> &'static Path {
   Path::new(WEIGHTS_PATH_STR)
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Clone)]
 pub struct Weights {
   pub transition: Array2<f64>,
   pub emission: Array2<f64>,
   pub initial_probs: Array1<f64>,
 }
 
-pub fn train_hmm(test_ratio: f32) -> Result<(), Box<dyn std::error::Error>> {
+impl Weights {
+  pub fn persist(&self) -> Result<(), Box<dyn Error>> {
+    let serialized_weights = serde_json::to_string(self)?;
+    std::fs::write(weights_path(), serialized_weights)?;
+    Ok(())
+  }
+
+  pub fn load() -> Result<Self, Box<dyn Error>> {
+    let serialized = std::fs::read(weights_path())?;
+    Ok(serde_json::from_slice(&serialized)?)
+  }
+
+  pub fn create_model(self) -> HMM {
+    HMM::new(self.transition, self.emission, self.initial_probs)
+  }
+}
+
+pub fn train_hmm(test_ratio: f32) -> Result<(), Box<dyn Error>> {
   let dataset = dataset::ls_dir()?;
   let dataset = split_dataset(dataset, test_ratio as f64);
 
@@ -55,8 +72,9 @@ pub fn train_hmm(test_ratio: f32) -> Result<(), Box<dyn std::error::Error>> {
   }
 
   let weights = train_mle(&training_data);
-  let serialized_weights = serde_json::to_string(&weights)?;
-  let hmm = HMM::new(weights.transition, weights.emission, weights.initial_probs);
+  weights.persist()?;
+
+  let model = weights.create_model();
 
   let mut errors = 0;
   let mut predictions = 0;
@@ -66,13 +84,8 @@ pub fn train_hmm(test_ratio: f32) -> Result<(), Box<dyn std::error::Error>> {
     let mut events = dataset::load_dataset(&dataset_path);
     events.sort_by_key(|e| e.t.clone());
 
-    let timestamps: Vec<_> = events.iter().map(|e| e.t).collect();
-    let deltas = move_to_deltas(&timestamps);
-    let o = deltas_to_observations(deltas);
-    let observation: Array1<usize> =
-      Array1::from(o.iter().map(|e| e.as_index()).collect::<Vec<_>>());
-
-    let states = hmm.most_likely_sequence(&observation);
+    let observations = events_to_observations(&events);
+    let states = model.most_likely_sequence(&observations);
 
     assert_eq!(events.len() - 1, states.len());
 
@@ -95,8 +108,6 @@ pub fn train_hmm(test_ratio: f32) -> Result<(), Box<dyn std::error::Error>> {
   let loss = errors as f64 / predictions as f64;
   println!("Loss {:.3}%", loss * 100.0);
   println!("Predictions {}, errors {}", predictions, errors,);
-  std::fs::write(weights_path(), serialized_weights)?;
-
   Ok(())
 }
 
@@ -160,9 +171,8 @@ fn train_mle(training_data: &TrainingData) -> Weights {
     }
   }
 
-  let transition_matrix = normalize_arr2(&transition_counts);
-
-  let emission_matrix = normalize_arr2(&emission_counts);
+  let transition = normalize_arr2(&transition_counts);
+  let emission = normalize_arr2(&emission_counts);
 
   let initial_sum = initial_counts.sum();
   let initial_probs = if initial_sum > 0.0 {
@@ -170,9 +180,10 @@ fn train_mle(training_data: &TrainingData) -> Weights {
   } else {
     Array1::from_elem(n_states, 1.0 / n_states as f64)
   };
+
   Weights {
-    transition: transition_matrix,
-    emission: emission_matrix,
+    transition,
+    emission,
     initial_probs,
   }
 }

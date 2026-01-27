@@ -6,7 +6,11 @@ use std::{
 use ndarray::Array2;
 use rand::seq::SliceRandom as _;
 
-use crate::{csv, observation::must_parse_timestamp, state::State};
+use crate::{
+  csv,
+  observation::{must_parse_timestamp, TimeSeries},
+  state::State,
+};
 
 const CSV_FIEL_DELIMITER: &str = "\t";
 
@@ -16,6 +20,12 @@ pub struct TrainingEvent {
   // pub card: String,
   pub t: i64,
   pub state: State,
+}
+
+impl TimeSeries for TrainingEvent {
+  fn timestamp(&self) -> i64 {
+    self.t
+  }
 }
 
 fn matrix_to_training_events(matrix: &Array2<String>) -> Vec<TrainingEvent> {

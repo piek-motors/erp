@@ -2,6 +2,7 @@ use std::collections::HashMap;
 
 use chrono::FixedOffset;
 use napi_derive::napi;
+use ndarray::Array1;
 use serde::Deserialize;
 use strum::IntoEnumIterator;
 use strum_macros::EnumIter;
@@ -26,7 +27,17 @@ pub struct Event {
 /// Internal representation after grouping and parsing timestamps.
 pub struct UserEvent {
   // pub id: u32,
-  pub timestamp: i64,
+  pub t: i64,
+}
+
+pub trait TimeSeries {
+  fn timestamp(&self) -> i64;
+}
+
+impl TimeSeries for UserEvent {
+  fn timestamp(&self) -> i64 {
+    self.t
+  }
 }
 
 /// Parse ISO-8601 timestamp into UNIX seconds.
@@ -55,7 +66,7 @@ pub fn group_events(events: &Vec<Event>) -> GroupedUserEvents {
   for ev in events {
     let user_event = UserEvent {
       // id: ev.id,
-      timestamp: must_parse_timestamp(&ev.timestamp),
+      t: must_parse_timestamp(&ev.timestamp),
     };
 
     result
@@ -65,7 +76,7 @@ pub fn group_events(events: &Vec<Event>) -> GroupedUserEvents {
   }
 
   for events in result.values_mut() {
-    events.sort_by_key(|e| e.timestamp);
+    events.sort_by_key(|e| e.t);
   }
 
   result
@@ -146,7 +157,7 @@ impl Into<usize> for Observation {
 const MINUTE: u32 = 60;
 
 /// Delta discretization to encounter observaiton bucket.
-pub fn delta_to_observation(delta_sec: u32) -> Observation {
+fn delta_to_observation(delta_sec: u32) -> Observation {
   match delta_sec {
     d if d < 5 * MINUTE => Observation::VeryShort,
     d if d < 60 * MINUTE => Observation::Short,
@@ -167,11 +178,20 @@ pub fn delta_to_observation(delta_sec: u32) -> Observation {
 /// This keeps the entire pipeline aligned:
 ///
 /// events → deltas → observations → hidden states
-pub fn deltas_to_observations(delta_sec: Vec<u32>) -> Vec<Observation> {
+pub fn deltas_to_observations(delta_sec: Vec<u32>) -> Array1<usize> {
   delta_sec
     .into_iter()
-    .map(|d| delta_to_observation(d))
-    .collect()
+    .map(|d| {
+      let obs = delta_to_observation(d);
+      obs.as_index()
+    })
+    .collect::<Array1<usize>>()
+}
+
+pub fn events_to_observations<T: TimeSeries>(events: &Vec<T>) -> Array1<usize> {
+  let timestamps: Vec<_> = events.iter().map(|e| e.timestamp()).collect();
+  let deltas = move_to_deltas(&timestamps);
+  deltas_to_observations(deltas)
 }
 
 #[cfg(test)]
@@ -227,7 +247,7 @@ mod tests {
       let usr_events = groups
         .get(card)
         .unwrap_or_else(|| panic!("missing card {card}"));
-      let timestamps: Vec<_> = usr_events.iter().map(|e| e.timestamp).collect();
+      let timestamps: Vec<_> = usr_events.iter().map(|e| e.t).collect();
       let got = move_to_deltas(&timestamps);
       let expected: Vec<_> = expected_hours
         .clone()

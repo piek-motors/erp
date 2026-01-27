@@ -30,13 +30,8 @@ impl TrainingData {
 
   /// Add a sequence from delta times
   pub fn add_delta_sequence(&mut self, deltas: Vec<u32>, states: Vec<State>) {
-    let observations: Vec<usize> = deltas_to_observations(deltas.clone())
-      .iter()
-      .map(|obs| obs.as_index())
-      .collect();
-
+    let observations: Vec<usize> = deltas_to_observations(deltas.clone()).to_vec();
     let states: Vec<usize> = states.into_iter().map(|delta| delta.into()).collect();
-
     self.add_sequence(states, observations);
   }
 
