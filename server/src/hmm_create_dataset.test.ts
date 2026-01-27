@@ -7,9 +7,9 @@ import { endOfUTCMonth, startOfUTCMonth } from './lib/time.js'
 const DELIMETER = '\t'
 
 const SELECT = {
-	name: 'Владимир',
-	lastname: 'Матвеев',
-	start: startOfUTCMonth(new Date(2025, 10 - 1)),
+	name: 'Александр',
+	lastname: 'Терентьев',
+	start: startOfUTCMonth(new Date(2026, 1 - 1)),
 }
 
 describe('hmm create dataset', () => {

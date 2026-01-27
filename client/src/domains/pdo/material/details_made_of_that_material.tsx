@@ -19,7 +19,7 @@ export const DetailsMadeOfMaterialModal = observer(
 
 		if (m.loadingWall.loading) return <Loading />
 
-		if (m.detailsMadeFromThisMaterial.length === 0)
+		if (m.details_made_from_this_material.length === 0)
 			return (
 				<P color="danger" level="body-xs" width={'min-content'}>
 					Материал не используется
@@ -42,7 +42,7 @@ export const DetailsMadeOfMaterialModal = observer(
 					static={<P level="h4">Детали из этого материала</P>}
 					scroll={
 						<Stack sx={{ overflowY: 'scroll' }} pb={5} p={1}>
-							{m.detailsMadeFromThisMaterial.map(each => (
+							{m.details_made_from_this_material.map(each => (
 								<Box display={'flex'}>
 									<DetailName detail={each} withGroupName />
 								</Box>

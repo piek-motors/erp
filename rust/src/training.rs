@@ -62,6 +62,7 @@ pub fn train_hmm(test_ratio: f32) -> Result<(), Box<dyn std::error::Error>> {
   let mut predictions = 0;
 
   for dataset_path in &dataset.test {
+    println!("\nTest on dataset {:?}", dataset_path);
     let mut events = dataset::load_dataset(&dataset_path);
     events.sort_by_key(|e| e.t.clone());
 
@@ -82,6 +83,10 @@ pub fn train_hmm(test_ratio: f32) -> Result<(), Box<dyn std::error::Error>> {
 
       predictions += 1;
       if t.state as usize != *model_predicted_state {
+        println!(
+          "Error: event {} expects {} actual {}",
+          t.id, t.state as u32, model_predicted_state
+        );
         errors += 1;
       }
     });

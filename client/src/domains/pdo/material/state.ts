@@ -58,22 +58,11 @@ export class MaterialState {
 	}
 
 	detailCount: number = 0
-	setDetailCount(detailCount: number) {
-		this.detailCount = detailCount
-	}
-	detailsMadeFromThisMaterial: {
+	details_made_from_this_material: {
 		id: number
 		name: string
 		group_id: number | null
 	}[] = []
-	setDetailsMadeFromThisMaterial(
-		details: { id: number; name: string; group_id: number | null }[],
-	) {
-		this.detailsMadeFromThisMaterial = details
-	}
-	resetDetails() {
-		this.detailsMadeFromThisMaterial = []
-	}
 
 	shortage_prediction_horizon_days?: number
 	set_shortage_orediction_horizon_days(v?: number) {

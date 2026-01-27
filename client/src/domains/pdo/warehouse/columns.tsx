@@ -1,4 +1,4 @@
-import { Button, Label, Link, openPage, Row, routeMap } from 'lib/index'
+import { Button, Label, Link, openPage, routeMap, Row } from 'lib/index'
 import {
 	OperationType,
 	type SupplyReason,
@@ -66,11 +66,10 @@ export const columns: Column<Operation>[] = [
 					to={openPage(routeMap.pdo.order.edit, data.manufacturing_order_id)}
 				>
 					<Button
-						variant="soft"
+						variant="outlined"
 						size="sm"
 						color="neutral"
 						sx={{
-							fontWeight: 'normal',
 							fontSize: '0.7rem',
 							whiteSpace: 'nowrap',
 							p: 0.5,

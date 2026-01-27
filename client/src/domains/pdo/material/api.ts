@@ -14,7 +14,10 @@ export class MaterialApi {
 
 	async load(id: number) {
 		return this.loader.run(async () => {
-			const res = await rpc.pdo.material.get.query({ id })
+			const [res, details] = await Promise.all([
+				rpc.pdo.material.get.query({ id }),
+				api.get_details_made_from_material(id),
+			])
 			const { material, writeoff_stat, detailCount } = res
 			const m = new MaterialState()
 
@@ -25,7 +28,7 @@ export class MaterialApi {
 				m.alloy = material.alloy || ''
 				m.unit = material.unit
 				m.detailCount = Number(detailCount)
-
+				m.details_made_from_this_material = details
 				m.writeoff_stat = {
 					monthly: writeoff_stat.monthly,
 					quarterly: writeoff_stat.quarterly,

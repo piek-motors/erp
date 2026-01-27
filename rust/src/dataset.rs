@@ -12,7 +12,7 @@ const CSV_FIEL_DELIMITER: &str = "\t";
 
 #[derive(Debug, Clone)]
 pub struct TrainingEvent {
-  // pub id: u32,
+  pub id: u32,
   // pub card: String,
   pub t: i64,
   pub state: State,
@@ -26,12 +26,12 @@ fn matrix_to_training_events(matrix: &Array2<String>) -> Vec<TrainingEvent> {
     let state: usize = matrix[[row_idx, 1]]
       .parse()
       .unwrap_or_else(|e| panic!("Failed to parse state at row {}: {}", row_idx, e));
-    // let id: u32 = matrix[[row_idx, 2]]
-    //   .parse()
-    //   .unwrap_or_else(|e| panic!("Failed to parse id at row {}: {}", row_idx, e));
+    let id: u32 = matrix[[row_idx, 2]]
+      .parse()
+      .unwrap_or_else(|e| panic!("Failed to parse id at row {}: {}", row_idx, e));
 
     result.push(TrainingEvent {
-      // id,
+      id,
       // card: card.to_owned(),
       t: must_parse_timestamp(&t),
       state: State::from(state),
