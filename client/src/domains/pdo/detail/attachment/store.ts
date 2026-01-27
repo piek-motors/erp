@@ -1,7 +1,7 @@
+import { Attachment } from 'components/attachments/store'
 import { rpc } from 'lib/rpc/rpc.client'
 import { FileService } from 'lib/services/file.service'
 import { makeAutoObservable } from 'mobx'
-import { Attachment } from 'models'
 
 interface UploadFileResp {
 	filename: string

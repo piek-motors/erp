@@ -1,6 +1,6 @@
 import { AttachmentList } from 'components/attachments/attachment-list'
+import { Attachment } from 'components/attachments/store'
 import { observer } from 'mobx-react-lite'
-import type { Attachment } from 'models'
 import { orderStore } from './order.store'
 
 interface OrderAttachmentListProps {

@@ -1,5 +1,5 @@
 import { makeAutoObservable, rpc } from 'lib/deps'
-import { type WriteoffDirectUnit, WriteoffReason } from 'models'
+import { WriteoffReason } from 'models'
 
 export class MaterialWriteoffSt {
 	length = ''
@@ -21,9 +21,7 @@ export class MaterialWriteoffSt {
 	reset() {
 		this.length = ''
 	}
-	getTypeData(): WriteoffDirectUnit {
-		return {}
-	}
+
 	disabled() {
 		return this.length === '' || this.reason == null
 	}
@@ -35,7 +33,7 @@ export class MaterialWriteoffSt {
 			material_id: materialId,
 			lengthMeters: Number(this.length),
 			reason: this.reason,
-			type_data: this.getTypeData(),
+			type_data: {},
 		})
 
 		return Number(stock)

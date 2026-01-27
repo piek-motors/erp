@@ -11,7 +11,7 @@ import {
 	UseIcon,
 	useState,
 } from 'lib/index'
-import type { Attachment } from 'models'
+import { Attachment } from './store'
 
 export const AttachmentComponent = (props: {
 	attachment: Attachment

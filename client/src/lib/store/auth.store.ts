@@ -1,8 +1,25 @@
 import axios from 'axios'
 import { API_URL } from 'lib/axios'
 import { makeAutoObservable } from 'mobx'
-import { User } from 'models'
+import { UserRole } from 'models'
 import { AuthService } from '../services/auth.service'
+
+export class User {
+	constructor(
+		readonly id: number,
+		readonly roles: UserRole[] | null,
+		readonly firstName: string,
+		readonly lastName: string | null,
+		readonly email: string | null,
+	) {}
+
+	get fullName() {
+		return `${this.firstName} ${this.lastName ?? ''}`.trim()
+	}
+	get shortName() {
+		return `${this.firstName} ${this.lastName?.slice(0, 1)}`.trim()
+	}
+}
 
 export class AuthStore {
 	user: User | null = null

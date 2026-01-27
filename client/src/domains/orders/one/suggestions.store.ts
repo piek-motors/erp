@@ -1,6 +1,6 @@
 import { rpc } from 'lib/rpc/rpc.client'
+import { User } from 'lib/store/auth.store'
 import { makeAutoObservable } from 'mobx'
-import { User } from 'models'
 
 export class SuggestionsStore {
 	constructor() {
