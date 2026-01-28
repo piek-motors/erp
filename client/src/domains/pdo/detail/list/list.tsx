@@ -1,6 +1,7 @@
 import { Divider } from '@mui/joy'
 import type { SxProps } from '@mui/joy/styles/types'
-import { ScrollableWindow, Search } from 'components/inputs'
+import { ScrollableWindow } from 'components/inputs'
+import { SearchWithCriteria } from 'components/inputs/search_input_with_criteria'
 import { InModal } from 'components/modal'
 import { SearchResults } from 'components/search-paginated'
 import { Table } from 'components/table.impl'
@@ -14,7 +15,6 @@ import {
 	routeMap,
 	Row,
 	Stack,
-	useEffect,
 	useNavigate,
 	useState,
 } from 'lib/index'
@@ -23,17 +23,15 @@ import type { Column } from 'react-table'
 import type { DetailSt } from '../detail.state'
 import { DetailName } from '../name'
 import { AlphabetIndex } from './alphabet_index'
-import { detailListStore as state } from './store'
+import { DetailSearchCriteria, detailListStore as state } from './store'
 
 export const DetailsListPage = () => (
 	<ScrollableWindow
 		static={
-			<MobilePadding>
+			<MobilePadding desktop_too>
 				<Stack gap={0.5}>
 					<MobileNavModal t={'Детали'} />
-					<Box>
-						<SearchArguments />
-					</Box>
+					<Search />
 				</Stack>
 			</MobilePadding>
 		}
@@ -46,6 +44,18 @@ export const DetailsListPage = () => (
 		}
 	/>
 )
+
+const Search = observer(() => (
+	<SearchWithCriteria
+		variant="soft"
+		color="primary"
+		criteriaOptions={DetailSearchCriteria}
+		criteria={state.search_criteria}
+		onCriteriaChange={c => state.set_search_criteria(c)}
+		query={state.query ?? ''}
+		onQueryChange={v => state.set_query(v)}
+	/>
+))
 
 const columnList: Column<DetailSt>[] = [
 	{
@@ -85,9 +95,6 @@ interface DetailsTableProps {
 
 const DetailList = observer((props: DetailsTableProps) => {
 	const navigate = useNavigate()
-	useEffect(() => {
-		state.index()
-	}, [])
 	return (
 		<Table
 			sx={props.sx}
@@ -131,7 +138,7 @@ export const DetailSelectModal = observer((props: DetailSelectModalProps) => {
 				refreshTrigger={false}
 				scroll={
 					<Box p={1} mb={3}>
-						<SearchArguments />
+						<Search />
 						<DetailsList
 							onRowClick={v => {
 								props.onRowClick(v)
@@ -144,38 +151,6 @@ export const DetailSelectModal = observer((props: DetailSelectModalProps) => {
 		</InModal>
 	)
 })
-
-const SearchArguments = observer(() => (
-	<Stack flexWrap={'wrap'} direction="row" gap={0.5}>
-		<Search
-			size="sm"
-			variant="soft"
-			color="primary"
-			width={80}
-			placeholder="№"
-			value={state.search_id}
-			onChange={v => state.set_id(v.target.value)}
-		/>
-		<Search
-			size="sm"
-			placeholder="Название"
-			variant="soft"
-			width={150}
-			color="primary"
-			onChange={e => state.set_keyword(e.target.value)}
-			value={state.search_keyword}
-		/>
-		<Search
-			size="sm"
-			width={150}
-			placeholder="Номер чертежа"
-			variant="soft"
-			color="primary"
-			onChange={e => state.set_drawing_num(e.target.value)}
-			value={state.drawing_num}
-		/>
-	</Stack>
-))
 
 const DetailsList = observer((props: DetailsTableProps) => (
 	<Stack gap={1} sx={props.sx}>

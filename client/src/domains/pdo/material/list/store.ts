@@ -13,12 +13,12 @@ export enum MaterialFilterCriteria {
 
 export class MaterialListStore {
 	readonly async = new LoadingController()
-	searchResult: Material[] = []
 
 	search_query: string = ''
 	shape_filter?: MaterialShape | null
-
 	filter_criteria = MaterialFilterCriteria.Label
+
+	search_result: Material[] = []
 
 	debouncedFilter: () => void
 	constructor() {
@@ -26,14 +26,14 @@ export class MaterialListStore {
 		this.debouncedFilter = debounce(this.filter.bind(this), 300)
 
 		reaction(
-			() => app_cache.materials.getMaterials(),
+			() => app_cache.materials.normalized_materials,
 			() => this.filter(),
 		)
 	}
 
 	private filter() {
 		const query = this.search_query
-		let items = app_cache.materials.getMaterials()
+		let items = app_cache.materials.normalized_materials
 
 		if (this.shape_filter != null) {
 			items = items.filter(m => m.shape === this.shape_filter)
@@ -47,11 +47,11 @@ export class MaterialListStore {
 			)
 		}
 
-		this.searchResult = items
+		this.search_result = items
 	}
 
 	set_search_query(keyword: string) {
-		this.search_query = keyword.toLowerCase()
+		this.search_query = keyword
 		this.debouncedFilter()
 	}
 
@@ -91,7 +91,7 @@ export function material_search_config(
 			return {
 				fields: [
 					{
-						get: (m: Material) => m.label ?? '',
+						get: (m: Material) => m.label,
 						weight: 2,
 					},
 					{

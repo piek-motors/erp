@@ -118,16 +118,16 @@ export const ManufacturingList = observer(() => {
 		s.tab === ManufacturingOrderStatus.Collected ? (
 			<Search
 				size="sm"
-				sx={{ borderRadius: 0 }}
-				variant="outlined"
+				color="primary"
+				variant="soft"
 				value={archive_search.query}
 				onChange={e => archive_search.setQuery(e.target.value)}
 			/>
 		) : (
 			<Search
 				size="sm"
-				sx={{ borderRadius: 0 }}
-				variant="outlined"
+				color="primary"
+				variant="soft"
 				value={s.query}
 				onChange={e => s.setQuery(e.target.value)}
 			/>
@@ -160,7 +160,9 @@ export const ManufacturingList = observer(() => {
 								</Tab>
 							))}
 						</TabList>
-						<Row gap={0}>{search}</Row>
+						<Row gap={0} p={0.5}>
+							{search}
+						</Row>
 					</Stack>
 				}
 				scroll={

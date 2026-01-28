@@ -1,12 +1,12 @@
 /** @jsxImportSource @emotion/react */
-import { ScrollableWindow, Search } from 'components/inputs'
-import { Select } from 'components/select'
+import { ToggleButtonGroupProps } from '@mui/joy'
+import { ScrollableWindow } from 'components/inputs'
+import { SearchWithCriteria } from 'components/inputs/search_input_with_criteria'
 import { Table } from 'components/table.impl'
 import { MobileNavModal, MobilePadding } from 'domains/pdo/root_layout'
 import {
 	Button,
 	observer,
-	Row,
 	Stack,
 	ToggleButtonGroup,
 	useNavigate,
@@ -26,7 +26,7 @@ const MaterialList = observer((props: MaterialsTableProps) => {
 	return (
 		<Table
 			columns={columns}
-			data={materialListStore.searchResult}
+			data={materialListStore.search_result}
 			onRowClick={row => {
 				if (props.onRowClick) {
 					props.onRowClick(row)
@@ -43,33 +43,19 @@ const MaterialList = observer((props: MaterialsTableProps) => {
 export const MaterialListPage = observer((props: MaterialsTableProps) => (
 	<ScrollableWindow
 		static={
-			<MobilePadding>
+			<MobilePadding desktop_too>
 				<Stack gap={0.5}>
 					<MobileNavModal t={'Материалы'} />
-					<ShapeFilter />
-					<Row px={1}>
-						<Search
-							variant="outlined"
-							placeholder={materialListStore.filter_criteria}
-							value={materialListStore.search_query}
-							onChange={v => {
-								materialListStore.set_search_query(v.target.value)
-							}}
-						>
-							<Select
-								width="min-content"
-								size="sm"
-								value={materialListStore.filter_criteria}
-								onChange={e => materialListStore.set_filter_criteria(e)}
-								selectElements={Object.values(MaterialFilterCriteria).map(
-									v => ({
-										name: v,
-										value: v,
-									}),
-								)}
-							/>
-						</Search>
-					</Row>
+					<ShapeFilter variant="soft" color="primary" />
+					<SearchWithCriteria
+						variant="soft"
+						color="primary"
+						criteria={materialListStore.filter_criteria}
+						criteriaOptions={MaterialFilterCriteria}
+						onCriteriaChange={v => materialListStore.set_filter_criteria(v)}
+						query={materialListStore.search_query}
+						onQueryChange={s => materialListStore.set_search_query(s)}
+					/>
 				</Stack>
 			</MobilePadding>
 		}
@@ -77,15 +63,14 @@ export const MaterialListPage = observer((props: MaterialsTableProps) => (
 	/>
 ))
 
-const ShapeFilter = observer(() => {
+const ShapeFilter = observer((props?: ToggleButtonGroupProps) => {
 	const shapes = Object.entries(UiMaterialShape)
 	const value = materialListStore.shape_filter?.toString()
 	return (
 		<ToggleButtonGroup
 			size="sm"
-			variant="soft"
-			color="primary"
 			value={value}
+			{...props}
 			sx={{ overflow: 'scroll' }}
 			onChange={(_, value) => {
 				if (value == null) {

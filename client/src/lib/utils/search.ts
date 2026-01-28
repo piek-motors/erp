@@ -11,7 +11,7 @@ export interface SearchConfig<T> {
 	minScore?: number
 }
 
-function toNormalForm(str: string) {
+export function toNormalForm(str: string) {
 	return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
 }
 
@@ -48,7 +48,7 @@ export function tokenSearch<T>(
 					let tokenMatched = false
 
 					for (const field of config.fields) {
-						const value = toNormalForm(field.get(item).toLowerCase())
+						const value = field.get(item).toLowerCase()
 
 						// Exact fields require strict equality (e.g. IDs)
 						// Fuzzy fields use substring matching (e.g. labels)

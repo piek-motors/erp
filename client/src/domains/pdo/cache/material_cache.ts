@@ -1,5 +1,6 @@
 import { matrixDecoder } from 'lib/rpc/matrix_decoder'
 import { rpc } from 'lib/rpc/rpc.client'
+import { toNormalForm } from 'lib/utils/search'
 import { makeAutoObservable } from 'mobx'
 import type { Material } from 'srv/rpc/pdo/materials'
 
@@ -17,6 +18,13 @@ export class MaterialCache {
 	}
 	getMaterials() {
 		return this.materials
+	}
+	/** for searching */
+	get normalized_materials() {
+		return this.materials.map(m => ({
+			...m,
+			label: toNormalForm(m.label),
+		}))
 	}
 	removeMaterial(material: Material) {
 		this.setMaterials(this.materials.filter(m => m.id !== material.id))
