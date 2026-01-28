@@ -19,14 +19,14 @@ export class AttendanceEventPairingJob implements Job {
 				events.map(e => ({ ...e, timestamp: e.timestamp.toUTCString() })),
 			)
 
-			empl_intervals.forEach(empl => {
-				logger.info(`Intervals for employee ${empl.card}:`)
-				empl.shifts.forEach(interval => {
-					logger.info(
-						`${[interval.entry.datetime.slice(0, 16), interval.exit?.datetime.slice(0, 16)].join(' - ')}`,
-					)
-				})
-			})
+			// empl_intervals.forEach(empl => {
+			// 	logger.info(`Intervals for employee ${empl.card}:`)
+			// 	empl.shifts.forEach(interval => {
+			// 		logger.info(
+			// 			`${[interval.entry.datetime.slice(0, 16), interval.exit?.datetime.slice(0, 16)].join(' - ')}`,
+			// 		)
+			// 	})
+			// })
 		} catch (error) {
 			logger.error(error, 'Hidden markov model failed')
 		}

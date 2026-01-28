@@ -1,7 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { ToggleButtonGroupProps } from '@mui/joy'
-import { ScrollableWindow } from 'components/inputs'
-import { SearchWithCriteria } from 'components/inputs/search_input_with_criteria'
+import { ScrollableWindow, Search } from 'components/inputs'
 import { Table } from 'components/table.impl'
 import { MobileNavModal, MobilePadding } from 'domains/pdo/root_layout'
 import {
@@ -15,7 +14,7 @@ import { openPage, routeMap } from 'lib/routes'
 import { UiMaterialShape } from 'models'
 import type { Material } from 'srv/rpc/pdo/materials'
 import { columns } from './columns'
-import { MaterialFilterCriteria, materialListStore } from './store'
+import { materialListStore } from './store'
 
 interface MaterialsTableProps {
 	onRowClick?: (material: Material) => void
@@ -47,14 +46,11 @@ export const MaterialListPage = observer((props: MaterialsTableProps) => (
 				<Stack gap={0.5}>
 					<MobileNavModal t={'Материалы'} />
 					<ShapeFilter variant="soft" color="primary" />
-					<SearchWithCriteria
+					<Search
 						variant="soft"
 						color="primary"
-						criteria={materialListStore.filter_criteria}
-						criteriaOptions={MaterialFilterCriteria}
-						onCriteriaChange={v => materialListStore.set_filter_criteria(v)}
-						query={materialListStore.search_query}
-						onQueryChange={s => materialListStore.set_search_query(s)}
+						value={materialListStore.search_query}
+						onChange={e => materialListStore.set_search_query(e.target.value)}
 					/>
 				</Stack>
 			</MobilePadding>
