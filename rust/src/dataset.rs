@@ -6,29 +6,11 @@ use std::{
 use ndarray::Array2;
 use rand::seq::SliceRandom as _;
 
-use crate::{
-  csv,
-  observation::{must_parse_timestamp, TimeSeries},
-  state::State,
-};
+use crate::{csv, intervaling::LabeledEvent, observation::must_parse_timestamp, state::State};
 
 const CSV_FIEL_DELIMITER: &str = "\t";
 
-#[derive(Debug, Clone)]
-pub struct TrainingEvent {
-  pub id: u32,
-  // pub card: String,
-  pub t: i64,
-  pub state: State,
-}
-
-impl TimeSeries for TrainingEvent {
-  fn timestamp(&self) -> i64 {
-    self.t
-  }
-}
-
-fn matrix_to_training_events(matrix: &Array2<String>) -> Vec<TrainingEvent> {
+fn matrix_to_training_events(matrix: &Array2<String>) -> Vec<LabeledEvent> {
   let mut result = Vec::new();
 
   for row_idx in 1..matrix.nrows() {
@@ -40,7 +22,7 @@ fn matrix_to_training_events(matrix: &Array2<String>) -> Vec<TrainingEvent> {
       .parse()
       .unwrap_or_else(|e| panic!("Failed to parse id at row {}: {}", row_idx, e));
 
-    result.push(TrainingEvent {
+    result.push(LabeledEvent {
       id,
       // card: card.to_owned(),
       t: must_parse_timestamp(&t),
@@ -83,7 +65,7 @@ pub fn split_dataset<T: Clone>(dataset: Vec<T>, test_ratio: f64) -> Dataset<T> {
   dataset
 }
 
-pub fn load_dataset(path: &PathBuf) -> Vec<TrainingEvent> {
+pub fn load_dataset(path: &PathBuf) -> Vec<LabeledEvent> {
   let lines = fs::read(&path).unwrap_or_else(|e| panic!("cannot read seed file {e}"));
   let matrix =
     csv::parse(&lines, CSV_FIEL_DELIMITER, 2).unwrap_or_else(|e| panic!("cant load dataset: {e}"));

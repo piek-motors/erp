@@ -7,21 +7,20 @@ mod intervaling;
 mod normalization;
 mod observation;
 mod state;
+mod time;
 mod training;
 mod training_data;
 
 use napi_derive::napi;
 
 use crate::{
-  inference::{infer_work_intervals, EmployeeWorkIntervals},
+  inference::{infer_work_intervals, EmployeeShifts},
   observation::Event,
   training::train_hmm,
 };
 
 #[napi]
-pub fn run_hidden_markov_model(
-  events: Vec<Event>,
-) -> Result<Vec<EmployeeWorkIntervals>, napi::Error> {
+pub fn run_hidden_markov_model(events: Vec<Event>) -> Result<Vec<EmployeeShifts>, napi::Error> {
   infer_work_intervals(&events).map_err(|e| napi::Error::new(napi::Status::GenericFailure, e))
 }
 
