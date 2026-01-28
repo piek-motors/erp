@@ -1,23 +1,32 @@
 /** @jsxImportSource @emotion/react */
 import { ScrollableWindow, Search } from 'components/inputs'
+import { Select } from 'components/select'
 import { Table } from 'components/table.impl'
 import { MobileNavModal, MobilePadding } from 'domains/pdo/root_layout'
-import { observer, Row, Stack, useNavigate } from 'lib/index'
+import {
+	Button,
+	observer,
+	Row,
+	Stack,
+	ToggleButtonGroup,
+	useNavigate,
+} from 'lib/index'
 import { openPage, routeMap } from 'lib/routes'
+import { UiMaterialShape } from 'models'
 import type { Material } from 'srv/rpc/pdo/materials'
 import { columns } from './columns'
-import { materialListStore } from './store'
+import { MaterialFilterCriteria, materialListStore } from './store'
 
 interface MaterialsTableProps {
 	onRowClick?: (material: Material) => void
 }
 
-export const MaterialList = observer((props: MaterialsTableProps) => {
+const MaterialList = observer((props: MaterialsTableProps) => {
 	const navigate = useNavigate()
 	return (
 		<Table
 			columns={columns}
-			data={materialListStore.getFilteredMaterials()}
+			data={materialListStore.searchResult}
 			onRowClick={row => {
 				if (props.onRowClick) {
 					props.onRowClick(row)
@@ -38,26 +47,28 @@ export const MaterialListPage = observer((props: MaterialsTableProps) => (
 				<Stack gap={0.5}>
 					<MobileNavModal t={'Материалы'} />
 					<ShapeFilter />
-					<Row>
+					<Row px={1}>
 						<Search
-							width={100}
-							variant="soft"
-							color="primary"
-							placeholder="№"
-							value={materialListStore.searchId}
+							variant="outlined"
+							placeholder={materialListStore.filter_criteria}
+							value={materialListStore.search_query}
 							onChange={v => {
-								materialListStore.setSearchId(v.target.value)
+								materialListStore.set_search_query(v.target.value)
 							}}
-						/>
-						<Search
-							variant="soft"
-							color="primary"
-							placeholder="Название"
-							onChange={e => {
-								materialListStore.setSearchKeyword(e.target.value)
-							}}
-							value={materialListStore.filterKeyword}
-						/>
+						>
+							<Select
+								width="min-content"
+								size="sm"
+								value={materialListStore.filter_criteria}
+								onChange={e => materialListStore.set_filter_criteria(e)}
+								selectElements={Object.values(MaterialFilterCriteria).map(
+									v => ({
+										name: v,
+										value: v,
+									}),
+								)}
+							/>
+						</Search>
 					</Row>
 				</Stack>
 			</MobilePadding>
@@ -66,12 +77,9 @@ export const MaterialListPage = observer((props: MaterialsTableProps) => (
 	/>
 ))
 
-import { Button, ToggleButtonGroup } from 'lib/index'
-import { UiMaterialShape } from 'models'
-
 const ShapeFilter = observer(() => {
 	const shapes = Object.entries(UiMaterialShape)
-	const value = materialListStore.filterShape?.toString()
+	const value = materialListStore.shape_filter?.toString()
 	return (
 		<ToggleButtonGroup
 			size="sm"
@@ -81,9 +89,9 @@ const ShapeFilter = observer(() => {
 			sx={{ overflow: 'scroll' }}
 			onChange={(_, value) => {
 				if (value == null) {
-					materialListStore.setFilterShape()
+					materialListStore.set_shape_filter()
 				} else {
-					materialListStore.setFilterShape(Number(value))
+					materialListStore.set_shape_filter(Number(value))
 				}
 			}}
 		>

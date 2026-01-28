@@ -9,6 +9,7 @@ export function percentage(value: number, whole: number) {
 	if (!value || !whole) return ''
 	return ((value / whole) * 100).toFixed(0) + '%'
 }
+
 export function roundAndTrim(value: unknown, precision: number = 1): string {
 	if (!value) return ''
 
