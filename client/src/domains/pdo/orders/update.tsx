@@ -296,8 +296,8 @@ const Cost = observer(({ detail, order }: DetailStProp & OrderStProp) => {
 	if (order?.status === OrderStatus.Collected) {
 		return null
 	}
-	const materialCost = detail.autoWriteoff.materialCost
-	const details = detail.autoWriteoff.detailsCost
+	const materialCost = detail.blank.materialCost
+	const details = detail.blank.detailsCost
 	return (
 		<Row alignItems={'start'}>
 			{materialCost ? (
@@ -524,7 +524,8 @@ const MaterialCostCalculations = observer(
 		const costCalculations = () => {
 			if (!order.qty) return null
 			const totalConsumedAmount = order.qty * (cost.length || 0)
-			const remainingAmount = (cost.material?.stock || 0) - totalConsumedAmount
+			const remainingAmount =
+				(cost.material?.on_hand_balance || 0) - totalConsumedAmount
 			const unit = uiUnit(cost?.material?.unit)
 			return (
 				<>
@@ -534,7 +535,8 @@ const MaterialCostCalculations = observer(
 					</P>
 
 					<P level="body-sm" color="neutral">
-						Остаток: {roundAndTrim(cost.material?.stock, 3) || 0} {unit}
+						Остаток: {roundAndTrim(cost.material?.on_hand_balance, 3) || 0}{' '}
+						{unit}
 					</P>
 
 					{order?.status === OrderStatus.Preparation && (

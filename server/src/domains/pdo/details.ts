@@ -1,7 +1,4 @@
-import type { DB } from 'db'
-import { type Selectable, sql } from 'kysely'
-import { SupplyReason, Unit, WriteoffReason } from 'models'
-import { z } from 'zod'
+import { Warehouse } from '#root/domains/pdo/warehouse.service.js'
 import { logger } from '#root/ioc/log.js'
 import { matrixEncoder } from '#root/lib/matrix_encoder.js'
 import {
@@ -12,7 +9,10 @@ import {
 	Scope,
 	TRPCError,
 } from '#root/sdk.js'
-import { Warehouse } from '#root/service/warehouse.service.js'
+import type { DB } from 'db'
+import { type Selectable, sql } from 'kysely'
+import { SupplyReason, Unit, WriteoffReason } from 'models'
+import { z } from 'zod'
 
 const isDetailPertCodeUniqueError = (e: Error) => {
 	return e.message.includes(
@@ -25,11 +25,11 @@ const ErrDetailPartCodeUnique = new TRPCError({
 	message: 'Деталь с таким конструкторским кодом уже существует',
 })
 
-const processingRouteSchema = z.object({
+const ProcessingRouteSchema = z.object({
 	steps: z.array(z.number()),
 })
 
-const blankSpecSchema = z.object({
+const BlankSpecSchema = z.object({
 	arr: z.array(
 		z.object({
 			key: z.string(),
@@ -38,7 +38,7 @@ const blankSpecSchema = z.object({
 	),
 })
 
-const automaticWriteoffSchema = z.object({
+const BlankSchema = z.object({
 	details: z.array(
 		z.object({
 			detail_id: z.number(),
@@ -48,17 +48,17 @@ const automaticWriteoffSchema = z.object({
 	material: z.tuple([z.number(), z.number()]).nullable(),
 })
 
-const detailBaseSchema = z.object({
+const DetailSchema = z.object({
 	name: z.string().min(5, 'Название должно быть не менее 5 символов'),
 	description: z.string().nullable(),
-	partCode: z.string().nullable(),
-	groupId: z.number().nullable(),
-	blankSpec: blankSpecSchema.nullable(),
-	processingRoute: processingRouteSchema.nullable(),
-	drawingName: z.string().nullable(),
-	automaticWriteoff: automaticWriteoffSchema.nullable(),
-	stockLocation: z.string().nullable(),
-	recommendedBatchSize: z.number().nullable(),
+	drawing_number: z.string().nullable(),
+	drawing_name: z.string().nullable(),
+	logical_group_id: z.number().nullable(),
+	blank_spec: BlankSpecSchema.nullable(), // TODO: rename to blank.params
+	processing_route: ProcessingRouteSchema.nullable(),
+	blank: BlankSchema.nullable(),
+	stock_location: z.string().nullable(),
+	recommended_batch_size: z.number().nullable(),
 })
 
 export interface ListDetailsOutput {
@@ -70,7 +70,7 @@ export interface ListDetailsOutput {
 }
 
 export type SelectableDetail = Selectable<DB.DetailTable>
-export type DetailAutomaticWriteoffData = DB.DetailAutomaticWriteoffData
+export type DetailAutomaticWriteoffData = DB.MetalBlank
 
 export const details = router({
 	get: procedure
@@ -127,9 +127,9 @@ export const details = router({
 			.select([
 				'd.id',
 				'd.name',
-				'd.part_code',
+				'd.drawing_number',
 				'd.logical_group_id',
-				'd.stock',
+				'd.on_hand_balance',
 			])
 			.orderBy('d.id', 'desc')
 			.execute()
@@ -138,24 +138,15 @@ export const details = router({
 	//
 	create: procedure
 		.use(requireScope(Scope.pdo))
-		.input(detailBaseSchema)
+		.input(DetailSchema)
 		.mutation(async ({ input }) => {
 			const detail = await db
 				.insertInto('pdo.details')
 				.values({
-					name: input.name,
-					description: input.description,
-					part_code: input.partCode,
-					stock: 0,
-					stock_location: input.stockLocation,
-					logical_group_id: input.groupId,
-					blank_spec: input.blankSpec || null,
-					processing_route: input.processingRoute || null,
-					drawing_name: input.drawingName || null,
-					automatic_writeoff: input.automaticWriteoff,
+					...input,
+					on_hand_balance: 0,
 					updated_at: new Date(),
 					unit: Unit.Countable,
-					recommended_batch_size: input.recommendedBatchSize || null,
 				})
 				.returning('id')
 				.executeTakeFirstOrThrow()
@@ -174,7 +165,7 @@ export const details = router({
 	update: procedure
 		.use(requireScope(Scope.pdo))
 		.input(
-			detailBaseSchema.extend({
+			DetailSchema.extend({
 				id: z.number(),
 			}),
 		)
@@ -182,16 +173,7 @@ export const details = router({
 			await db
 				.updateTable('pdo.details')
 				.set({
-					name: input.name,
-					description: input.description,
-					part_code: input.partCode,
-					logical_group_id: input.groupId,
-					blank_spec: input.blankSpec || null,
-					processing_route: input.processingRoute || null,
-					drawing_name: input.drawingName || null,
-					automatic_writeoff: input.automaticWriteoff,
-					recommended_batch_size: input.recommendedBatchSize || null,
-					stock_location: input.stockLocation,
+					...input,
 					updated_at: new Date(),
 				})
 				.where('id', '=', input.id)
@@ -223,7 +205,7 @@ export const details = router({
 				.execute(async trx =>
 					new Warehouse(trx, ctx.user.id)
 						.writeoffDetails(input.detailId, input.qty, input.reason)
-						.then(({ stock }) => stock),
+						.then(({ on_hand_balance }) => on_hand_balance),
 				),
 		),
 	//
@@ -242,7 +224,7 @@ export const details = router({
 				.execute(async trx =>
 					new Warehouse(trx, ctx.user.id)
 						.supplyDetails(input.detailId, input.qty, input.reason)
-						.then(({ stock }) => ({ stock })),
+						.then(({ on_hand_balance }) => ({ stock: on_hand_balance })),
 				),
 		),
 	//
@@ -252,7 +234,7 @@ export const details = router({
 			db
 				.selectFrom('pdo.details')
 				.where(
-					sql<boolean>`(automatic_writeoff->'material'->>0)::int = ${input.material_id}`,
+					sql<boolean>`(blank->'material'->>0)::int = ${input.material_id}`,
 				)
 				.selectAll()
 				.execute(),

@@ -54,7 +54,7 @@ export class MaterialState {
 	}
 
 	get stock() {
-		return this.warehouse.stock
+		return this.warehouse.on_hand_balance
 	}
 
 	detailCount: number = 0

@@ -20,7 +20,7 @@ class MaterialMapper {
 		const m = new MaterialConstructor(material.id, material.label)
 		m.linearMass = material.linear_mass
 		MaterialShapeAbstractionLayer.importShapeData(m, material.shape_data)
-		m.stock = material.stock
+		m.stock = material.on_hand_balance
 
 		return m
 	}

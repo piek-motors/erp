@@ -9,8 +9,8 @@
 		"typescript": "^5.9.3"
 	},
 	"scripts": {
-		"biome:format": "pnpm exec biome format --write",
-		"biome:lint": "pnpm exec biome lint --write",
+		"fmt": "pnpm exec biome format --write",
+		"lint": "pnpm exec biome lint --write",
 		"biome": "pnpm exec biome check --write",
 		"build": "pnpm run -r --filter=!./client/** build",
 		"deploy": "sh ./infra/deploy.sh",

@@ -1,9 +1,9 @@
-import { ManufacturingOrderStatus as OrderStatus } from 'models'
-import z from 'zod'
 import { Day, Scope } from '#root/lib/constants.js'
 import { router } from '#root/lib/trpc/trpc.js'
 import { type DB, db, procedure, requireScope, TRPCError } from '#root/sdk.js'
-import { Manufacturing } from '#root/service/manufacturing.service.js'
+import { ManufacturingOrderStatus as OrderStatus } from 'models'
+import z from 'zod'
+import { Manufacturing } from './manufacturing.service.js'
 
 export const orders_mut = router({
 	create: procedure

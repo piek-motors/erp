@@ -4,7 +4,7 @@ import { debounce } from 'lib/utils/debounce'
 import { tokenSearch } from 'lib/utils/search'
 import { makeAutoObservable, reaction } from 'mobx'
 import type { MaterialShape } from 'models'
-import type { Material } from 'srv/rpc/pdo/materials'
+import type { Material } from 'srv/domains/pdo/materials'
 
 export class MaterialListStore {
 	readonly async = new LoadingController()

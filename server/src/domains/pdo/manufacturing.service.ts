@@ -1,8 +1,8 @@
+import { type IDB, TRPCError } from '#root/sdk.js'
 import type { DB } from 'db'
 import { Decimal } from 'decimal.js'
 import type { Selectable } from 'kysely'
 import { ManufacturingOrderStatus, WriteoffReason } from 'models'
-import { type IDB, TRPCError } from '#root/sdk.js'
 import { Warehouse } from './warehouse.service.js'
 
 type MaterialWriteoff = {
@@ -86,14 +86,14 @@ export class Manufacturing {
 		const detail = await this.trx
 			.selectFrom('pdo.details')
 			.where('id', '=', order.detail_id)
-			.select('automatic_writeoff')
+			.select('blank')
 			.executeTakeFirstOrThrow()
 
 		if (!force) {
 			await this.deduplicateProductionList(order.detail_id)
 		}
 
-		const materialCost = detail.automatic_writeoff?.material
+		const materialCost = detail.blank?.material
 		let writeoff: MaterialWriteoff = null
 		if (materialCost) {
 			const [id, cost] = materialCost
@@ -108,7 +108,7 @@ export class Manufacturing {
 					material_id: id,
 					cost: cost,
 					label: material.label,
-					stock: material.stock,
+					stock: material.on_hand_balance,
 				},
 				qty,
 				order,
@@ -163,7 +163,7 @@ export class Manufacturing {
 		await this.trx
 			.updateTable('pdo.details')
 			.set(eb => ({
-				stock: eb('stock', '+', manufacturing.qty),
+				on_hand_balance: eb('on_hand_balance', '+', manufacturing.qty),
 			}))
 			.where('id', '=', manufacturing.detail_id)
 			.execute()
@@ -227,7 +227,7 @@ export class Manufacturing {
 				material_id: material.material_id,
 				material_name: material.label,
 				writeoff_id: res.operation_id,
-				stock: res.stock,
+				stock: res.on_hand_balance,
 				totalCost,
 			}))
 	}

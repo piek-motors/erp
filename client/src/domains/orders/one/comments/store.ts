@@ -1,6 +1,6 @@
 import { rpc } from 'lib/rpc/rpc.client'
 import { makeAutoObservable } from 'mobx'
-import type { OrderComment } from 'srv/rpc/orders/comments'
+import { OrderComment } from 'srv/domains/orders/comments'
 
 export class CommentsStore {
 	showMentionList = false

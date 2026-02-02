@@ -1,5 +1,5 @@
-import { OperationType, type SupplyReason, type WriteoffReason } from 'models'
 import { type IDB, TRPCError } from '#root/sdk.js'
+import { OperationType, type SupplyReason, type WriteoffReason } from 'models'
 
 export class Warehouse {
 	constructor(
@@ -7,8 +7,8 @@ export class Warehouse {
 		private readonly userId: number,
 	) {}
 
-	supplyMaterial(id: number, qty: number, reason: SupplyReason) {
-		return Promise.all([
+	async supplyMaterial(id: number, qty: number, reason: SupplyReason) {
+		const [operation, { on_hand_balance }] = await Promise.all([
 			this.trx
 				.insertInto('pdo.operations')
 				.values({
@@ -24,15 +24,16 @@ export class Warehouse {
 			this.trx
 				.updateTable('pdo.materials')
 				.set(eb => ({
-					stock: eb('stock', '+', qty),
+					on_hand_balance: eb('on_hand_balance', '+', qty),
 				}))
 				.where('id', '=', id)
-				.returning(['stock'])
+				.returning(['on_hand_balance'])
 				.executeTakeFirstOrThrow(),
-		]).then(([operation, { stock }]) => ({
+		])
+		return {
 			operation_id: operation.id,
-			stock,
-		}))
+			on_hand_balance,
+		}
 	}
 
 	async subtractMaterial(
@@ -44,10 +45,10 @@ export class Warehouse {
 	) {
 		const current_stock = await this.trx
 			.selectFrom('pdo.materials')
-			.select(['stock', 'label'])
+			.select(['on_hand_balance', 'label'])
 			.where('id', '=', id)
 			.executeTakeFirstOrThrow()
-		if (current_stock.stock < qty) {
+		if (current_stock.on_hand_balance < qty) {
 			throw new ErrNotEnoughStock(
 				`Недостаточно материала id=${id} ${current_stock.label}`,
 			)
@@ -70,15 +71,15 @@ export class Warehouse {
 		const res = await this.trx
 			.updateTable('pdo.materials')
 			.set(eb => ({
-				stock: eb('stock', '-', qty),
+				on_hand_balance: eb('on_hand_balance', '-', qty),
 			}))
 			.where('id', '=', id)
-			.returning(['stock'])
+			.returning(['on_hand_balance'])
 			.executeTakeFirstOrThrow()
 
 		return {
 			operation_id: operation.id,
-			stock: res.stock,
+			on_hand_balance: res.on_hand_balance,
 		}
 	}
 
@@ -97,35 +98,35 @@ export class Warehouse {
 		const detail = await this.trx
 			.updateTable('pdo.details')
 			.set(eb => ({
-				stock: eb('stock', '+', qty),
+				on_hand_balance: eb('on_hand_balance', '+', qty),
 			}))
 			.where('id', '=', id)
-			.returning(['stock'])
+			.returning(['on_hand_balance'])
 			.executeTakeFirstOrThrow()
 
 		return {
 			operation_id: operation.id,
-			stock: detail.stock,
+			on_hand_balance: detail.on_hand_balance,
 		}
 	}
 
 	async writeoffDetails(id: number, qty: number, reason: WriteoffReason) {
-		const { stock } = await this.trx
+		const { on_hand_balance } = await this.trx
 			.selectFrom('pdo.details')
-			.select(['stock'])
+			.select(['on_hand_balance'])
 			.where('id', '=', id)
 			.executeTakeFirstOrThrow()
-		if (stock < qty) {
+		if (on_hand_balance < qty) {
 			throw new ErrNotEnoughStock(`Недостаточно деталей ${id}`)
 		}
 
 		const detail = await this.trx
 			.updateTable('pdo.details')
 			.set(eb => ({
-				stock: eb('stock', '-', qty),
+				on_hand_balance: eb('on_hand_balance', '-', qty),
 			}))
 			.where('id', '=', id)
-			.returning(['stock'])
+			.returning(['on_hand_balance'])
 			.executeTakeFirstOrThrow()
 
 		const operation = await this.trx
@@ -141,7 +142,7 @@ export class Warehouse {
 			.executeTakeFirstOrThrow()
 
 		return {
-			stock: detail.stock,
+			on_hand_balance: detail.on_hand_balance,
 			operation_id: operation.id,
 		}
 	}

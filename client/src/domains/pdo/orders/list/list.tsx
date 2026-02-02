@@ -18,7 +18,7 @@ import {
 	ManufacturingOrderStatus,
 	ManufacturingOrderStatus as OrderStatus,
 } from 'models'
-import type { ListOrdersOutput } from 'srv/rpc/pdo/orders'
+import type { ListOrdersOutput } from 'srv/domains/pdo/orders'
 import { getColumns } from './columns'
 import { archive_search, s } from './store'
 

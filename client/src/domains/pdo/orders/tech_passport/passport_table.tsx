@@ -23,8 +23,8 @@ const L = (props: { children: ReactNode }) => (
 )
 
 export const TechPassportTable = observer(({ order, detail }: Props) => {
-	const materialCost = detail.autoWriteoff.materialCost
-	const detailsCost = detail.autoWriteoff.detailsCost
+	const materialCost = detail.blank.materialCost
+	const detailsCost = detail.blank.detailsCost
 
 	if (!order.resp) return
 	return (

@@ -7,33 +7,30 @@ export class MaterialWarehouseStore {
 	readonly supply = new MaterialSupplySt()
 	readonly writeoff = new MaterialWriteoffSt()
 
-	stock: number = 0
-	setStock(val: number) {
-		this.stock = val
-	}
+	on_hand_balance: number = 0
 
 	constructor() {
 		makeAutoObservable(this)
 	}
 
 	async insertSupply(materialId: number) {
-		const stock = await this.supply.insertSupply(materialId)
+		const on_hand_balance = await this.supply.insertSupply(materialId)
 		this.reset()
-		this.setStock(stock)
-		return stock
+		this.on_hand_balance = on_hand_balance
+		return on_hand_balance
 	}
 
 	async insertWriteoff(materialId: number) {
-		const stock = await this.writeoff.insertWriteoff(materialId)
+		const on_hand_balance = await this.writeoff.insertWriteoff(materialId)
 		this.reset()
-		this.setStock(stock)
-		return stock
+		this.on_hand_balance = on_hand_balance
+		return on_hand_balance
 	}
 
 	private reset() {
 		this.supply.reset()
 		this.writeoff.reset()
 		app_cache.materials.invalidate()
-		this.stock = 0
+		this.on_hand_balance = 0
 	}
 }

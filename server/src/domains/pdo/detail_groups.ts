@@ -1,13 +1,13 @@
-import { Color } from 'models'
-import { z } from 'zod'
 import { matrixEncoder } from '#root/lib/matrix_encoder.js'
 import { router } from '#root/lib/trpc/trpc.js'
 import { db, procedure, requireScope, Scope, TRPCError } from '#root/sdk.js'
+import { Color } from 'models'
+import { z } from 'zod'
 
 export interface DetailInTheGroup {
 	id: number
 	name: string
-	part_code: string | null
+	drawing_number: string | null
 	group_id: number | null
 	colors: Color[]
 }
@@ -32,12 +32,17 @@ export const detail_groups = router({
 						.where('dgd.group_id', '=', input.groupId)
 						.leftJoin('pdo.details as d', 'd.id', 'dgd.detail_id')
 						.where('d.logical_group_id', 'is', null)
-						.select(['d.id', 'd.name', 'd.part_code', 'd.logical_group_id'])
+						.select([
+							'd.id',
+							'd.name',
+							'd.drawing_number',
+							'd.logical_group_id',
+						])
 						.orderBy('d.name', 'asc')
 						.execute(),
 					db
 						.selectFrom('pdo.details')
-						.select(['id', 'name', 'part_code', 'logical_group_id'])
+						.select(['id', 'name', 'drawing_number', 'logical_group_id'])
 						.where('logical_group_id', '=', input.groupId)
 						.execute(),
 					db
@@ -58,7 +63,7 @@ export const detail_groups = router({
 			].map(d => ({
 				id: d.id as number,
 				name: d.name as string,
-				part_code: d.part_code as string | null,
+				drawing_number: d.drawing_number as string | null,
 				group_id: d.logical_group_id as number | null,
 				colors: colorAnnotations.find(ca => ca.detail_id === d.id)
 					?.colors as Color[],

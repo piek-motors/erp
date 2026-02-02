@@ -1,8 +1,8 @@
 import { makeAutoObservable } from 'mobx'
-import type { DetailAutomaticWriteoffData } from 'srv/rpc/pdo/details'
+import type { DetailAutomaticWriteoffData } from 'srv/domains/pdo/details'
 import { DetailCost, MaterialCost } from './cost.store'
 
-export class DetailAutomaticWriteoffStore {
+export class MetalBlankSt {
 	detailsCost: DetailCost[] = []
 	setDetailCost(detailCosts?: DetailCost[]) {
 		this.detailsCost = detailCosts || []

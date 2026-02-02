@@ -4,7 +4,7 @@ import { matrixDecoder } from 'lib/rpc/matrix_decoder'
 import { LoadingController } from 'lib/store/loading_controller'
 import { makeAutoObservable, reaction } from 'mobx'
 import { ManufacturingOrderStatus as OrderStatus } from 'models'
-import type { ListOrdersOutput } from 'srv/rpc/pdo/orders'
+import type { ListOrdersOutput } from 'srv/domains/pdo/orders'
 
 export class ManufacturingListStore {
 	readonly async = new LoadingController()

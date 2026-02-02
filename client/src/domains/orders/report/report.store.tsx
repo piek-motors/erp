@@ -4,7 +4,10 @@ import { rpc } from 'lib/rpc/rpc.client'
 import { makeAutoObservable } from 'mobx'
 import { OrderStatus } from 'models'
 import moment from 'moment'
-import type { ClientOrder, OrderPosition } from 'srv/rpc/orders/orders_router'
+import type {
+	ClientOrder,
+	OrderPosition,
+} from 'srv/domains/orders/orders_router'
 import type { UnpackedOrder } from '../api'
 
 class ReportPageStore {

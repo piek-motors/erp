@@ -96,7 +96,7 @@ export namespace DB {
 		label: string // unique
 		shape: MaterialShape
 		shape_data: JSONColumnType<any, any, any>
-		stock: number
+		on_hand_balance: number
 		linear_mass: number // kg/m
 		alloy: string | null
 		/**
@@ -111,40 +111,64 @@ export namespace DB {
 	export interface DetailTable {
 		id: Generated<number>
 		name: string
-		unit: Unit // defailt Countable
+		unit: Unit // Defailt Unit.Countable
 		description: string | null
-		logical_group_id: number | null // hash index
-		part_code: string | null
-		stock: number
+		logical_group_id: number | null // Index - hash
+		drawing_number: string | null
+		drawing_name: string | null
+		on_hand_balance: number
 		stock_location: string | null
 		blank_spec: JSONColumnType<any, any, any>
 		updated_at: Date
+		recommended_batch_size: number | null
 		processing_route: JSONColumnType<
 			ProcessingRoute,
 			ProcessingRoute,
 			ProcessingRoute
 		> | null
-		drawing_name: string | null
-		automatic_writeoff: JSONColumnType<
-			DetailAutomaticWriteoffData,
-			DetailAutomaticWriteoffData,
-			DetailAutomaticWriteoffData
-		> | null
-		recommended_batch_size: number | null
+		blank: JSONColumnType<MetalBlank, MetalBlank, MetalBlank> | null
 	}
 
 	type MaterialId = number
 	type Cost = number
-	export interface DetailAutomaticWriteoffData {
+
+	export interface MetalBlank {
 		material: [MaterialId, Cost] | null
-		details: Array<{
+		details: {
 			detail_id: number
 			qty: number
-		}>
+		}[]
+	}
+
+	export type MaterialRequirement = {
+		/** Shared ID for both unit-based and batch-based logic */
+		material_id: number
+		/** Discriminated union for calculation logic */
+		logic:
+			| {
+					type: 'per_unit'
+					/** Gross length: Includes all waste (saw kerf/cut width,
+					 * clamping margins, and end-trimming). */
+					gross_length: number
+					/** Blank length: The actual size of the cut piece
+					 * before further machining/processing. */
+					blank_length: number
+			  }
+			| {
+					type: 'batch_optimized'
+					/** Full length of the raw stock */
+					stock_length: number
+					/** Number of blanks produced from one stock length */
+					yield_per_stock: number
+			  }
+			| {
+					type: 'countable'
+					count: number
+			  }
 	}
 
 	export interface ProcessingRoute {
-		steps: number[] // pdo.dict_operation_kinds
+		steps: number[] // ids in table pdo.dict_operation_kinds
 	}
 
 	interface MetarialWiteoffData {
@@ -182,6 +206,7 @@ export namespace DB {
 		reason: SupplyReason | WriteoffReason
 		user_id: number
 		material_id: number | null
+		material_unit: Unit | null
 		detail_id: number | null
 		// string on read
 		qty: number // numeric in db

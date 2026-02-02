@@ -4,7 +4,7 @@ import { uiMaterialShape, uiUnit } from './ui.translators'
 export abstract class Material {
 	readonly id: number
 	label: string
-	stock: number = 0
+	on_hand_balance: number = 0
 	/**
 	 * Linear mass in kilograms per meter (kg/m).
 	 * Represents the weight of one meter of the material.

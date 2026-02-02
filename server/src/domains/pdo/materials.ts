@@ -1,3 +1,4 @@
+import { Warehouse } from '#root/domains/pdo/warehouse.service.js'
 import { materials_stat_container } from '#root/ioc/index.js'
 import { logger } from '#root/ioc/log.js'
 import { isDuplicateKeyError } from '#root/lib/kysely.js'
@@ -10,7 +11,6 @@ import {
 	Scope,
 	TRPCError,
 } from '#root/sdk.js'
-import { Warehouse } from '#root/service/warehouse.service.js'
 import type { DB } from 'db'
 import { sql } from 'kysely'
 import {
@@ -49,7 +49,7 @@ export const material = router({
 				.executeTakeFirstOrThrow(),
 			db
 				.selectFrom('pdo.details')
-				.where(sql<boolean>`(automatic_writeoff->'material'->>0)::int = ${id}`)
+				.where(sql<boolean>`(blank->'material'->>0)::int = ${id}`)
 				.select(eb => eb.fn.countAll().as('count'))
 				.executeTakeFirstOrThrow(),
 		])
@@ -82,7 +82,7 @@ export const material = router({
 				.values({
 					...input,
 					label: derive_label(input),
-					stock: 0,
+					on_hand_balance: 0,
 					linear_mass: 0,
 				})
 				.returningAll()
@@ -147,7 +147,7 @@ export const material = router({
 			db.transaction().execute(async trx =>
 				new Warehouse(trx, ctx.user.id)
 					.supplyMaterial(input.material_id, input.lengthMeters, input.reason)
-					.then(({ stock }) => ({
+					.then(({ on_hand_balance: stock }) => ({
 						qty: stock.toString(),
 					})),
 			),
@@ -171,7 +171,7 @@ export const material = router({
 					input.lengthMeters,
 					input.reason,
 				)
-				return result.stock.toString()
+				return result.on_hand_balance.toString()
 			})
 		}),
 	//

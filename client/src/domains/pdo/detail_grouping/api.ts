@@ -3,7 +3,7 @@ import { matrixDecoder } from 'lib/rpc/matrix_decoder'
 import { rpc } from 'lib/rpc/rpc.client'
 import { LoadingController } from 'lib/store/loading_controller'
 import { makeAutoObservable } from 'mobx'
-import type { DetailInTheGroup } from 'srv/rpc/pdo/detail_groups'
+import type { DetailInTheGroup } from 'srv/domains/pdo/detail_groups'
 import { Detail, DetailGroupStore } from './group.store'
 
 export class DetailGroupingApi {
@@ -31,7 +31,7 @@ export class DetailGroupingApi {
 					const detail = new Detail()
 					detail.id = d.id
 					detail.name = d.name
-					detail.part_code = d.part_code
+					detail.drawing_number = d.drawing_number
 					detail.group_id = d.group_id
 					detail.colors = d.colors
 					return detail

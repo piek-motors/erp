@@ -25,7 +25,7 @@ export interface Group {
 export class Detail {
 	id!: number
 	name!: string
-	part_code!: string | null
+	drawing_number!: string | null
 	group_id!: number | null
 	colors?: Color[]
 	setColors(colors: Color[]) {

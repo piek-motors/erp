@@ -2,7 +2,7 @@
 import { css } from '@emotion/react'
 import { Sheet } from 'lib'
 import { useTable } from 'react-table'
-import type { Employee } from 'srv/rpc/attendance/report_generator'
+import { Employee } from 'srv/domains/attendance/report_generator'
 
 interface ITableProps {
 	readonly columns: any[]

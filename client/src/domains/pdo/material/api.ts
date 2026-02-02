@@ -35,7 +35,7 @@ export class MaterialApi {
 				}
 				m.shortage_prediction_horizon_days =
 					material.shortage_prediction_horizon_days
-				m.warehouse.stock = material.stock
+				m.warehouse.on_hand_balance = material.on_hand_balance
 			})
 			return m
 		})

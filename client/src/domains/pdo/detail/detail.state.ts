@@ -1,10 +1,10 @@
 import { AttachmentsStore } from 'components/attachments/store'
 import { makeAutoObservable } from 'mobx'
 import { Unit } from 'models'
+import type { SelectableDetail } from 'srv/domains/pdo/details'
 import type { RouterInput, RouterOutput } from 'srv/lib/trpc'
-import type { SelectableDetail } from 'srv/rpc/pdo/details'
 import { app_cache } from '../cache'
-import { DetailAutomaticWriteoffStore } from './warehouse/auto_writeoff.store'
+import { MetalBlankSt } from './warehouse/auto_writeoff.store'
 import { DetailWarehouseStore } from './warehouse/store'
 
 type DetailResponse = RouterOutput['pdo']['details']['get']['detail']
@@ -57,23 +57,24 @@ export type DetailStProp = { detail: DetailSt }
 export class DetailSt {
 	readonly attachments = new AttachmentsStore()
 	readonly warehouse = new DetailWarehouseStore()
-	readonly autoWriteoff = new DetailAutomaticWriteoffStore()
+	/** metal blank */
+	readonly blank = new MetalBlankSt()
 	readonly processingRoute = new ProcessingRoute()
 
 	static fromDto(detail: Partial<SelectableDetail>): DetailSt {
 		return new DetailSt().init({
 			id: detail.id ?? 0,
 			name: detail.name ?? '',
-			part_code: detail.part_code ?? null,
+			drawing_number: detail.drawing_number ?? null,
 			logical_group_id: detail.logical_group_id ?? null,
-			stock: detail.stock || 0,
+			on_hand_balance: detail.on_hand_balance || 0,
 			description: detail.description || '',
 			drawing_name: detail.drawing_name ?? '',
 			updated_at: detail.updated_at?.toString() ?? '',
 			blank_spec: detail.blank_spec,
 			recommended_batch_size: detail.recommended_batch_size ?? null,
 			processing_route: detail.processing_route ?? null,
-			automatic_writeoff: detail.automatic_writeoff ?? null,
+			blank: detail.blank ?? null,
 			unit: detail.unit ?? Unit.Countable,
 			stock_location: detail.stock_location ?? null,
 		})
@@ -143,11 +144,11 @@ export class DetailSt {
 	init(d: DetailResponse) {
 		this.setId(d.id!)
 		this.setName(d.name!)
-		this.setDrawingNumber(d.part_code!)
+		this.setDrawingNumber(d.drawing_number!)
 		this.setGroupId(d.logical_group_id)
 		this.setBlankSpec(d.blank_spec)
 		this.setDescription(d.description)
-		this.warehouse.setStock(d.stock)
+		this.warehouse.setStock(d.on_hand_balance)
 		this.setUpdatedAt(d.updated_at ? new Date(d.updated_at) : undefined)
 		this.processingRoute.init(
 			d.processing_route && d.processing_route.steps
@@ -157,8 +158,8 @@ export class DetailSt {
 				: [],
 		)
 		this.setDrawingName(d.drawing_name ?? '')
-		if (d.automatic_writeoff) {
-			this.autoWriteoff.init(d.automatic_writeoff)
+		if (d.blank) {
+			this.blank.init(d.blank)
 		}
 		this.setRecommendedBatchSize(d.recommended_batch_size ?? undefined)
 		this.stockLocation = d.stock_location
@@ -179,7 +180,7 @@ export class DetailSt {
 		this.lastManufacturingQty = undefined
 		this.drawingName = ''
 		this.processingRoute.reset()
-		this.autoWriteoff.reset()
+		this.blank.reset()
 	}
 
 	payload(): UpdateDetailRequest {
@@ -187,9 +188,9 @@ export class DetailSt {
 			id: this.id ?? 0,
 			description: this.description ?? '',
 			name: this.name ?? '',
-			partCode: this.drawingNumber ?? null,
-			groupId: this.groupId ?? null,
-			blankSpec: {
+			drawing_number: this.drawingNumber ?? null,
+			logical_group_id: this.groupId ?? null,
+			blank_spec: {
 				arr:
 					this.blankSpec?.arr
 						?.map(({ key, value }) => ({
@@ -198,15 +199,15 @@ export class DetailSt {
 						}))
 						.filter(({ key, value }) => key) ?? [],
 			},
-			recommendedBatchSize: Number(this.recommendedBatchSize) ?? null,
-			processingRoute: this.processingRoute
+			recommended_batch_size: Number(this.recommendedBatchSize) ?? null,
+			processing_route: this.processingRoute
 				? {
 						steps: this.processingRoute.steps.map(s => s.id!) ?? null,
 					}
 				: null,
-			drawingName: this.drawingName ?? null,
-			automaticWriteoff: this.autoWriteoff.payload,
-			stockLocation: this.stockLocation || null,
+			drawing_name: this.drawingName ?? null,
+			blank: this.blank.payload,
+			stock_location: this.stockLocation || null,
 		}
 	}
 }

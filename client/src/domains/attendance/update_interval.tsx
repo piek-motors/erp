@@ -14,7 +14,7 @@ import { InputLabled, Label, P, Row, SaveIconButton, UseIcon } from 'lib/index'
 import { makeAutoObservable } from 'mobx'
 import { observer } from 'mobx-react-lite'
 import type { AbsenceReason } from 'models'
-import type { Employee, Interval } from 'srv/rpc/attendance/report_generator'
+import { Employee, Interval } from 'srv/domains/attendance/report_generator'
 import { AbsenceReasons, absenceReasonState } from './absence'
 import { store } from './store'
 

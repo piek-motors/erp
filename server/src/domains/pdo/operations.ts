@@ -1,9 +1,9 @@
-import type { DB, Selectable } from 'db'
-import { OperationType, type Unit } from 'models'
 import { matrixEncoder } from '#root/lib/matrix_encoder.js'
 import { formatDate } from '#root/lib/time.js'
 import { router } from '#root/lib/trpc/trpc.js'
 import { db, procedure, requireScope, Scope, z } from '#root/sdk.js'
+import type { DB, Selectable } from 'db'
+import { OperationType, type Unit } from 'models'
 
 const Limit = 100
 
@@ -121,7 +121,7 @@ export const operations = router({
 				await db
 					.updateTable(update.table)
 					.set(eb => ({
-						stock: eb('stock', '+', stockChange),
+						on_hand_balance: eb('on_hand_balance', '+', stockChange),
 					}))
 					.where('id', '=', update.id)
 					.execute()

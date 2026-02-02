@@ -63,7 +63,7 @@ export const MaterialWarehouseCard = observer(({ m }: { m: MaterialState }) => {
 	const { id } = useParams<{ id: string }>()
 	if (!id) throw new Error('No id')
 	const materialId = Number(id)
-	const stock = m.warehouse.stock.toFixed(0)
+	const stock = m.warehouse.on_hand_balance.toFixed(0)
 	const stockMsg = `Остаток: ${stock} ${uiUnit(m.unit)}`
 	return (
 		<WarehouseCard

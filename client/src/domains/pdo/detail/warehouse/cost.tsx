@@ -4,7 +4,7 @@ import { AccordionCard } from 'components/accordion_card'
 import { NumberInput } from 'components/inputs/number_input'
 import { app_cache } from 'domains/pdo/cache'
 import { Box, Label, observer, P, PlusIcon, Row, UseIcon } from 'lib/index'
-import { Unit, uiUnit } from 'models'
+import { uiUnit, Unit } from 'models'
 import type { DetailSt } from '../detail.state'
 import { MaterialSelect } from '../inputs'
 import { DetailSelectModal } from '../list/list'
@@ -31,21 +31,21 @@ const CostRow = ({ children, onDelete }: CostRowProps) => {
 
 export const MaterialCostInputs = observer(
 	({ detail }: { detail: DetailSt }) => {
-		const materialCost = detail.autoWriteoff.materialCost
+		const materialCost = detail.blank.materialCost
 		const material = app_cache.materials.get(materialCost?.materialId || 0)
 
 		return (
 			<Base
 				label="Расход материала"
 				handleAdd={() => {
-					detail.autoWriteoff.insertMaterialCost()
+					detail.blank.insertMaterialCost()
 				}}
 				hideAddButton={!!materialCost}
 			>
 				{materialCost && (
 					<CostRow
 						key={materialCost.materialId}
-						onDelete={() => detail.autoWriteoff.setMaterialCost(null)}
+						onDelete={() => detail.blank.setMaterialCost(null)}
 					>
 						<Stack gap={0.5}>
 							<Label xs>
@@ -55,10 +55,7 @@ export const MaterialCostInputs = observer(
 								value={materialCost}
 								index={0}
 								onChange={cost => {
-									detail.autoWriteoff.updateMaterial(
-										cost.materialId,
-										cost.length!,
-									)
+									detail.blank.updateMaterial(cost.materialId, cost.length!)
 								}}
 							/>
 							<Row>
@@ -96,16 +93,13 @@ export const AutomaticWriteoffAccordion = observer(
 )
 
 export const DetailCostInputs = observer(({ detail }: { detail: DetailSt }) => (
-	<Base
-		label="Расход деталей"
-		handleAdd={() => detail.autoWriteoff.insertDetail()}
-	>
+	<Base label="Расход деталей" handleAdd={() => detail.blank.insertDetail()}>
 		<Label xs>
 			Укажите детали, которые используются в заготовке данной детали, и их
 			количество
 		</Label>
 
-		{detail.autoWriteoff.detailsCost.map((cost, index) => {
+		{detail.blank.detailsCost.map((cost, index) => {
 			const detailCache = app_cache.details.get(cost.detailId)
 			if (app_cache.details.loader.loading) return <Label xs>Загрузка..7</Label>
 			else if (!detailCache)
@@ -125,7 +119,7 @@ export const DetailCostInputs = observer(({ detail }: { detail: DetailSt }) => (
 				<CostRow
 					key={detailCache.id + index.toString()}
 					onDelete={() => {
-						detail.autoWriteoff.deleteDetail(cost.detailId)
+						detail.blank.deleteDetail(cost.detailId)
 					}}
 				>
 					<Row

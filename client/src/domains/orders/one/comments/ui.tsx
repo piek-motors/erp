@@ -7,7 +7,7 @@ import { User } from 'lib/store/auth.store'
 import { observer } from 'mobx-react-lite'
 import moment from 'moment'
 import { useState } from 'react'
-import type { OrderComment } from 'srv/rpc/orders/comments'
+import { OrderComment } from 'srv/domains/orders/comments'
 import { orderStore } from '../order.store'
 import { TextEditor } from './text-editor'
 
