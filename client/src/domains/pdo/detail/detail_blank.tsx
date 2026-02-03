@@ -1,14 +1,13 @@
 import { UilMinus } from '@iconscout/react-unicons'
-import { Button, Divider, IconButton, Stack } from '@mui/joy'
-import { AccordionCard } from 'components/accordion_card'
+import { Button, IconButton, Stack } from '@mui/joy'
 import { NumberInput } from 'components/inputs/number_input'
 import { app_cache } from 'domains/pdo/cache'
 import { Box, Label, observer, PlusIcon, Row, UseIcon } from 'lib/index'
 import { MaterialRequirement, uiUnit } from 'models'
-import type { DetailSt, DetailStProp } from '../detail.state'
-import { MaterialSelect } from '../inputs'
-import { DetailSelectModal } from '../list/list'
-import { DetailName } from '../name'
+import type { DetailSt, DetailStProp } from './detail.state'
+import { MaterialSelect } from './inputs'
+import { DetailSelectModal } from './list/list'
+import { DetailName } from './name'
 
 interface CostRowProps {
 	children: React.ReactNode
@@ -32,7 +31,7 @@ const CostRow = ({ children, onDelete }: CostRowProps) => {
 export const MaterialCostInputs = observer(
 	({ detail }: { detail: DetailSt }) => {
 		const materialCost = detail.blank.materialCost
-		const material = app_cache.materials.get(materialCost?.materialId || 0)
+		const material = app_cache.materials.get(materialCost?.material_id || 0)
 
 		return (
 			<Base
@@ -44,7 +43,7 @@ export const MaterialCostInputs = observer(
 			>
 				{materialCost && (
 					<CostRow
-						key={materialCost.materialId}
+						key={materialCost.material_id}
 						onDelete={() => detail.blank.setMaterialCost(null)}
 					>
 						<Stack gap={0.5}>
@@ -131,16 +130,6 @@ const BatchMaterialRequirement = observer(() => {
 const CountableMaterialRequirement = observer(() => {
 	return <></>
 })
-
-export const AutomaticWriteoffAccordion = observer(
-	({ detail }: { detail: DetailSt }) => (
-		<AccordionCard title="Расход" defaultExpanded>
-			<MaterialCostInputs detail={detail} />
-			<Divider sx={{ my: 0.5 }} />
-			<DetailCostInputs detail={detail} />
-		</AccordionCard>
-	),
-)
 
 export const DetailCostInputs = observer(({ detail }: { detail: DetailSt }) => (
 	<Base label="Расход деталей" handleAdd={() => detail.blank.insertDetail()}>

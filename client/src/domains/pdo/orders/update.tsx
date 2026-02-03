@@ -33,8 +33,8 @@ import {
 } from 'models'
 import { app_cache } from '../cache'
 import type { BlankSpec, DetailSt, DetailStProp } from '../detail/detail.state'
+import { MaterialRequirementSt } from '../detail/detail_blank.store'
 import { TechParamsDisplay } from '../detail/inputs'
-import type { MaterialCost } from '../detail/warehouse/cost.store'
 import { MaterialName } from '../material/name'
 import { MetalPageTitle } from '../shared/basic'
 import { api } from './api'
@@ -518,7 +518,7 @@ const DuplicationCheckModal = observer(({ order }: { order: OrderSt }) => {
 })
 
 const MaterialCostCalculations = observer(
-	(props: { cost: MaterialCost; order: OrderSt }) => {
+	(props: { cost: MaterialRequirementSt; order: OrderSt }) => {
 		const { cost, order } = props
 
 		const costCalculations = () => {
@@ -563,7 +563,7 @@ const MaterialCostCalculations = observer(
 			<Box>
 				<Row>
 					<MaterialName
-						materialId={cost.materialId}
+						materialId={cost.material_id}
 						materialLabel={cost.material?.label || ''}
 					/>
 					<Label level="body-sm" color="primary">

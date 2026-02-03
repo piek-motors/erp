@@ -59,8 +59,8 @@ export const TechPassportTable = observer(({ order, detail }: Props) => {
 						<L>Заготовка</L>
 						<Box pb={0.5}>
 							<P fontSize={14} fontWeight={500}>
-								{materialCost?.materialId
-									? app_cache.materials.getLabel(materialCost.materialId)
+								{materialCost?.material_id
+									? app_cache.materials.getLabel(materialCost.material_id)
 									: ''}
 							</P>
 							{detailsCost.map(d => (

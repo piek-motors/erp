@@ -4,7 +4,7 @@ import { Unit } from 'models'
 import type { SelectableDetail } from 'srv/domains/pdo/details'
 import type { RouterInput, RouterOutput } from 'srv/lib/trpc'
 import { app_cache } from '../cache'
-import { MetalBlankSt } from './warehouse/auto_writeoff.store'
+import { DetailBlankSt } from './detail_blank.store'
 import { DetailWarehouseStore } from './warehouse/store'
 
 type DetailResponse = RouterOutput['pdo']['details']['get']['detail']
@@ -58,7 +58,7 @@ export class DetailSt {
 	readonly attachments = new AttachmentsStore()
 	readonly warehouse = new DetailWarehouseStore()
 	/** metal blank */
-	readonly blank = new MetalBlankSt()
+	readonly blank = new DetailBlankSt()
 	readonly processingRoute = new ProcessingRoute()
 
 	static fromDto(detail: Partial<SelectableDetail>): DetailSt {

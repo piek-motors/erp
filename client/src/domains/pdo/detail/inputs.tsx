@@ -31,7 +31,7 @@ import {
 import type { ReactNode } from 'react'
 import { DetailAttachmentList } from './attachment/list'
 import type { BlankSpec, DetailSt, DetailStProp } from './detail.state'
-import { DetailCostInputs, MaterialCostInputs } from './warehouse/cost'
+import { DetailCostInputs, MaterialCostInputs } from './detail_blank'
 
 export const DetailInputs = observer(
 	({
