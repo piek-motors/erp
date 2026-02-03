@@ -9,7 +9,7 @@ import { formatMoney } from 'lib/utils/fmt'
 import { makeAutoObservable } from 'mobx'
 import { OrderStatus } from 'models'
 import moment from 'moment'
-import type { OrderUpdateInput } from 'srv/domains/orders/orders_router'
+import type { OrderUpdateInput } from 'srv/domains/orders/orders_rpc'
 import type { RouterInput, RouterOutput } from 'srv/lib/trpc'
 import { SuggestionsStore } from '../suggestions.store'
 

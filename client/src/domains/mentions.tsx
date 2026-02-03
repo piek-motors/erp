@@ -19,7 +19,7 @@ import { rpc } from 'lib/rpc/rpc.client'
 import { authStore } from 'lib/store/auth.store'
 import moment from 'moment'
 import { useEffect } from 'react'
-import { Mention } from 'srv/domains/orders/mentions'
+import { Mention } from 'srv/domains/orders/mentions_rpc'
 
 function MentionComponent({ data }: { data: Mention }) {
 	const navigate = useNavigate()

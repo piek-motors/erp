@@ -1,8 +1,8 @@
+import { TokenRepository } from '#root/domains/auth/repositories/token_repo.js'
+import { Day } from '#root/lib/constants.js'
+import { config } from '#root/sdk.js'
 import jwt from 'jsonwebtoken'
 import type { UserRole } from 'models'
-import { Day } from '#root/lib/constants.js'
-import { config } from '../config/env.js'
-import type { TokenRepository } from '../repositories/token.js'
 
 export interface TokenPayload {
 	id: number

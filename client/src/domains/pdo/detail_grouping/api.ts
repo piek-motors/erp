@@ -3,7 +3,7 @@ import { matrixDecoder } from 'lib/rpc/matrix_decoder'
 import { rpc } from 'lib/rpc/rpc.client'
 import { LoadingController } from 'lib/store/loading_controller'
 import { makeAutoObservable } from 'mobx'
-import type { DetailInTheGroup } from 'srv/domains/pdo/detail_groups'
+import type { DetailInTheGroup } from 'srv/domains/pdo/detail_groups_rpc'
 import { Detail, DetailGroupStore } from './group.store'
 
 export class DetailGroupingApi {

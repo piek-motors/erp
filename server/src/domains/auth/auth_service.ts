@@ -1,10 +1,10 @@
+import { logger } from '#root/ioc/log.js'
+import { ApiError } from '#root/lib/api.error.js'
+import { Errcode } from '#root/lib/error-code.js'
 import type { UserRole } from 'models'
 import { safe } from 'safe-wrapper'
-import { logger } from '#root/ioc/log.js'
-import { ApiError } from '../lib/api.error.js'
-import { Errcode } from '../lib/error-code.js'
-import type { UserRepository } from '../repositories/user.js'
-import type { TokenPayload, TokenService } from './token.service.js'
+import { UserRepository } from './repositories/user_repo.js'
+import type { TokenPayload, TokenService } from './token_service.js'
 
 export class AuthSevice {
 	constructor(

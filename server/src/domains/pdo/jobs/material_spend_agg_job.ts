@@ -8,14 +8,14 @@ import {
 } from '#root/lib/time.js'
 import { db } from '#root/sdk.js'
 import { OperationType, WriteoffReason } from 'models'
+import type { Job } from '../../../lib/jobs_runner.js'
 import {
 	MonthStrategy,
 	PeriodAggregator,
 	QuarterStrategy,
 	TimeSeriesRollup,
 	TimeWindow,
-} from '../lib/statistic/period_aggregator.js'
-import type { Job } from './jobs_runner.js'
+} from '../../../lib/statistic/period_aggregator.js'
 
 export class MaterialSpendAggJob implements Job {
 	constructor(

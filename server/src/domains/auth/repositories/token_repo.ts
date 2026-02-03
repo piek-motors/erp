@@ -2,7 +2,7 @@ import { ApiError } from '#root/lib/api.error.js'
 import { Day } from '#root/lib/constants.js'
 import { Errcode } from '#root/lib/error-code.js'
 import { config, type IDB } from '#root/sdk.js'
-import type { UserRepository } from './user.js'
+import type { UserRepository } from './user_repo.js'
 
 export class TokenRepository {
 	constructor(

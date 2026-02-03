@@ -12,7 +12,7 @@ import {
 } from 'lib/index'
 import { openPage, routeMap } from 'lib/routes'
 import { UiMaterialShape } from 'models'
-import { Material } from 'srv/domains/pdo/materials'
+import { Material } from 'srv/domains/pdo/materials_rpc'
 import { columns } from './columns'
 import { materialListStore } from './store'
 

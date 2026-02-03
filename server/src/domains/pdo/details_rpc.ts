@@ -1,4 +1,4 @@
-import { Warehouse } from '#root/domains/pdo/warehouse.service.js'
+import { Warehouse } from '#root/domains/pdo/warehouse_service.js'
 import { logger } from '#root/ioc/log.js'
 import { matrixEncoder } from '#root/lib/matrix_encoder.js'
 import {

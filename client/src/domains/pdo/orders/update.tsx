@@ -31,7 +31,7 @@ import {
 	uiManufacturingOrderStatus,
 	uiUnit,
 } from 'models'
-import { Blank } from 'srv/domains/pdo/details'
+import { Blank } from 'srv/domains/pdo/details_rpc'
 import { app_cache } from '../cache'
 import type { DetailSt, DetailStProp } from '../detail/detail.state'
 import { MaterialRequirementSt } from '../detail/detail_blank.store'

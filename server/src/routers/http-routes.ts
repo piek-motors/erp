@@ -1,12 +1,12 @@
-import { Router } from 'express'
-import { body } from 'express-validator'
 import {
 	getBinaryFile,
 	uploadBinaryFiles,
-} from '#root/controllers/s3.controller.js'
+} from '#root/domains/attachment/s3_controller.js'
 import { userController } from '#root/ioc/index.js'
 import { logger } from '#root/ioc/log.js'
 import { multerMiddleware } from '#root/lib/index.js'
+import { Router } from 'express'
+import { body } from 'express-validator'
 
 export const router: Router = Router()
 	.post('/login', body('email').isEmail(), (req, res, next) => {

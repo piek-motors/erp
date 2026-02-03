@@ -1,7 +1,7 @@
 import { AttachmentsStore } from 'components/attachments/store'
 import { makeAutoObservable } from 'mobx'
 import { Unit } from 'models'
-import type { SelectableDetail } from 'srv/domains/pdo/details'
+import type { SelectableDetail } from 'srv/domains/pdo/details_rpc'
 import type { RouterInput, RouterOutput } from 'srv/lib/trpc'
 import { app_cache } from '../cache'
 import { DetailBlankSt } from './detail_blank.store'

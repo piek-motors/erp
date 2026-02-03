@@ -2,7 +2,7 @@ import { matrixDecoder } from 'lib/rpc/matrix_decoder'
 import { rpc } from 'lib/rpc/rpc.client'
 import { makeAutoObservable } from 'mobx'
 import type { OrderStatus } from 'models'
-import { ClientOrder, OrderPosition } from 'srv/domains/orders/orders_router'
+import { ClientOrder, OrderPosition } from 'srv/domains/orders/orders_rpc'
 import type { RouterInput } from 'srv/lib/trpc'
 
 export type UnpackedOrder = Omit<ClientOrder, 'positions'> & {

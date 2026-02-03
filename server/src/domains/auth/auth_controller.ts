@@ -1,10 +1,10 @@
-import type { Request, Response } from 'express'
+import { AuthSevice } from '#root/domains/auth/auth_service.js'
 import { ApiError } from '#root/lib/api.error.js'
 import { Day } from '#root/lib/constants.js'
 import { Errcode } from '#root/lib/error-code.js'
-import type { AuthSevice } from '#root/service/auth.service.js'
+import type { Request, Response } from 'express'
 
-export class UserController {
+export class AuthController {
 	private tokenCookieKey = 'refreshToken'
 	constructor(private readonly authService: AuthSevice) {}
 

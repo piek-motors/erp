@@ -2,7 +2,7 @@ import { matrixDecoder } from 'lib/rpc/matrix_decoder'
 import { rpc } from 'lib/rpc/rpc.client'
 import { LoadingController } from 'lib/store/loading_controller'
 import { makeAutoObservable, runInAction } from 'mobx'
-import type { ListDetailsOutput } from 'srv/domains/pdo/details'
+import type { ListDetailsOutput } from 'srv/domains/pdo/details_rpc'
 import { DetailSt } from '../detail/detail.state'
 
 const alphabet = 'АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ'.split('')

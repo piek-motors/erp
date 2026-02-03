@@ -2,7 +2,7 @@ import { AdaptiveNumberFormatter } from 'domains/pdo/shared/adaptive_number_form
 import { value_with_unit } from 'domains/pdo/shared/basic'
 import { Label, P } from 'lib/index'
 import type { Column } from 'react-table'
-import type { Material } from 'srv/domains/pdo/materials'
+import type { Material } from 'srv/domains/pdo/materials_rpc'
 
 const formatter = new AdaptiveNumberFormatter(0, 0, true)
 

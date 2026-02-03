@@ -3,7 +3,8 @@
 	"version": "1.0.0",
 	"scripts": {
 		"barrels:generate": "barrelsby --config barrelsby.json",
-		"build": "tsc -p tsconfig.json"
+		"build": "tsc -p tsconfig.json",
+		"check": "tsc -p tsconfig.json --noEmit"
 	},
 	"author": "",
 	"types": "dist/index.d.ts",

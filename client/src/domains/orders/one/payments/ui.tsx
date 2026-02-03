@@ -12,7 +12,7 @@ import { formatOnlyDate } from 'lib/utils/date_fmt'
 import { formatMoney, percentage } from 'lib/utils/fmt'
 import { observer } from 'mobx-react-lite'
 import { useState } from 'react'
-import { Payment } from 'srv/domains/orders/payments'
+import { Payment } from 'srv/domains/orders/payments_rpc'
 import { orderStore, orderStore as os } from '../order.store'
 
 export const Paymnets = observer(({ order }: { order: UnpackedOrder }) => {

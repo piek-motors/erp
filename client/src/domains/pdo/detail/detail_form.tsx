@@ -29,7 +29,7 @@ import {
 	Row,
 } from 'lib/index'
 import type { ReactNode } from 'react'
-import { Blank } from 'srv/domains/pdo/details'
+import { Blank } from 'srv/domains/pdo/details_rpc'
 import { DetailAttachmentList } from './attachment/list'
 import type { DetailSt, DetailStProp } from './detail.state'
 import {

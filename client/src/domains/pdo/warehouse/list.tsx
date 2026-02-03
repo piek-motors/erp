@@ -9,7 +9,7 @@ import { makeAutoObservable } from 'mobx'
 import { observer } from 'mobx-react-lite'
 import { OperationType } from 'models'
 import { useEffect, useState } from 'react'
-import { OperationListItem } from 'srv/domains/pdo/operations'
+import { OperationListItem } from 'srv/domains/pdo/operations_rpc'
 import { MobileNavModal, MobilePadding } from '../root_layout'
 import { columns } from './columns'
 

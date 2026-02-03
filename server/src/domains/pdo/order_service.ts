@@ -7,7 +7,7 @@ import {
 	MaterialRequirement,
 	WriteoffReason,
 } from 'models'
-import { Warehouse } from './warehouse.service.js'
+import { Warehouse } from './warehouse_service.js'
 
 type MaterialWriteoff = {
 	material_id: number
