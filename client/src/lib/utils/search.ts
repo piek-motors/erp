@@ -11,7 +11,8 @@ export interface SearchConfig<T> {
 	minScore?: number
 }
 
-export function toNormalForm(str: string) {
+export function toNormalForm(str?: string | null) {
+	if (!str) return ''
 	return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
 }
 

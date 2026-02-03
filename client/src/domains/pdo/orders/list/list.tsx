@@ -1,5 +1,6 @@
 import { Tab, TabList, TabPanel, Tabs } from '@mui/joy'
 import { ScrollableWindow, Search } from 'components/inputs'
+import { SearchWithCriteria } from 'components/inputs/search_input_with_criteria'
 import { Table } from 'components/table.impl'
 import type { TabConfig } from 'components/tabs'
 import { MobileNavModal, MobilePadding } from 'domains/pdo/root_layout'
@@ -20,7 +21,7 @@ import {
 } from 'models'
 import type { ListOrdersOutput } from 'srv/domains/pdo/orders_rpc'
 import { getColumns } from './columns'
-import { archive_search, s } from './store'
+import { archive_search, OrderSearchCriteria, s } from './store'
 
 const getTabConfig = (
 	data: ListOrdersOutput[],
@@ -124,12 +125,12 @@ export const ManufacturingList = observer(() => {
 				onChange={e => archive_search.setQuery(e.target.value)}
 			/>
 		) : (
-			<Search
-				size="sm"
-				color="primary"
-				variant="soft"
-				value={s.query}
-				onChange={e => s.setQuery(e.target.value)}
+			<SearchWithCriteria
+				criteria={s.search_criteria}
+				criteriaOptions={OrderSearchCriteria}
+				onCriteriaChange={c => s.set_search_criteria(c)}
+				query={s.query}
+				onQueryChange={q => s.set_query(q)}
 			/>
 		)
 
