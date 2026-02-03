@@ -96,7 +96,7 @@ export const RenderInput = observer(
 					<Select
 						key={key}
 						label={label}
-						selectElements={managerSuggestions}
+						options={managerSuggestions}
 						value={value}
 						onChange={newValue => {
 							orderStore.statment.setManagerId(newValue)

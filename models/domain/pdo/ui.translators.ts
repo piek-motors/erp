@@ -1,5 +1,6 @@
 import {
 	ManufacturingOrderStatus,
+	MaterialRequirement,
 	MaterialShape,
 	SupplyReason,
 	Unit,
@@ -72,4 +73,10 @@ export const UiManufacturingOrderStatus = {
 
 export function uiManufacturingOrderStatus(status: ManufacturingOrderStatus) {
 	return UiManufacturingOrderStatus[status]
+}
+
+export const UiMaterialRequirement = {
+	[MaterialRequirement.Single]: 'Eдиничная',
+	[MaterialRequirement.Batch]: 'Пруток',
+	[MaterialRequirement.Countable]: 'Штучная',
 }

@@ -1,6 +1,7 @@
 import { UilMinus } from '@iconscout/react-unicons'
 import { IconButton, Stack } from '@mui/joy'
 import { NumberInput } from 'components/inputs/number_input'
+import { EnumSelect } from 'components/select'
 import { app_cache } from 'domains/pdo/cache'
 import {
 	Box,
@@ -11,7 +12,12 @@ import {
 	UseIcon,
 	useState,
 } from 'lib/index'
-import { MaterialRequirement, uiUnit } from 'models'
+import {
+	MaterialRequirement,
+	UiMaterialRequirement,
+	uiUnit,
+	Unit,
+} from 'models'
 import type { DetailSt, DetailStProp } from './detail.state'
 import { MaterialSelect } from './inputs'
 import { DetailSelectModal } from './list/list'
@@ -65,6 +71,7 @@ export const MaterialRequirementInput = observer(
 									detail.blank.updateMaterial(material_id)
 								}}
 							/>
+							<MaterialRequirementTypeSelect detail={detail} />
 							<MaterialRequirementSelector detail={detail} />
 						</Stack>
 					</CostRow>
@@ -74,24 +81,42 @@ export const MaterialRequirementInput = observer(
 	},
 )
 
+const MaterialRequirementTypeSelect = observer(
+	({ detail }: { detail: DetailSt }) => (
+		<EnumSelect
+			label="Тип заготовки"
+			enum={MaterialRequirement}
+			value={detail.blank.materialCost?.data.type}
+			labels={UiMaterialRequirement}
+			onChange={type => {
+				detail.blank.materialCost?.set_data({
+					type,
+				})
+			}}
+		/>
+	),
+)
+
 const MaterialRequirementSelector = observer((props: DetailStProp) => {
 	const { materialCost } = props.detail.blank
-	switch (materialCost?.data?.type) {
+	const type = materialCost?.data?.type
+	if (type == null) return
+
+	switch (+type) {
 		case MaterialRequirement.Single:
 			return <SingleMaterialRequirement detail={props.detail} />
 		case MaterialRequirement.Batch:
-			return <BatchMaterialRequirement />
+			return <BatchMaterialRequirement detail={props.detail} />
 		case MaterialRequirement.Countable:
-			return <CountableMaterialRequirement />
+			return <CountableMaterialRequirement detail={props.detail} />
 		default:
 			throw Error('unrecognized material reuirement')
 	}
 })
 
 const SingleMaterialRequirement = observer((props: DetailStProp) => {
-	const { materialCost } = props.detail.blank
 	const type = MaterialRequirement.Single
-
+	const { materialCost } = props.detail.blank
 	if (materialCost?.data?.type != type) return
 
 	const material = materialCost.material
@@ -131,12 +156,61 @@ const SingleMaterialRequirement = observer((props: DetailStProp) => {
 	)
 })
 
-const BatchMaterialRequirement = observer(() => {
-	return <></>
+const BatchMaterialRequirement = observer((props: DetailStProp) => {
+	const type = MaterialRequirement.Batch
+	const { materialCost } = props.detail.blank
+	if (materialCost?.data?.type != type) return
+	const material = materialCost.material
+	const existing = materialCost.data
+
+	return (
+		<Row>
+			<NumberInput
+				label="Длина прутка"
+				unit={uiUnit(material?.unit)}
+				value={materialCost?.data.stock_length}
+				onChange={v => {
+					materialCost.set_data({
+						type,
+						stock_length: v,
+						yield_per_stock: existing.yield_per_stock,
+					})
+				}}
+			/>
+			<NumberInput
+				label="Выход с прутка"
+				unit={uiUnit(Unit.Countable)}
+				value={materialCost?.data.yield_per_stock}
+				onChange={v => {
+					materialCost.set_data({
+						type,
+						stock_length: existing.stock_length,
+						yield_per_stock: v,
+					})
+				}}
+			/>
+		</Row>
+	)
 })
 
-const CountableMaterialRequirement = observer(() => {
-	return <></>
+const CountableMaterialRequirement = observer((props: DetailStProp) => {
+	const type = MaterialRequirement.Countable
+	const { materialCost } = props.detail.blank
+	if (materialCost?.data?.type != type) return
+
+	return (
+		<NumberInput
+			label="Кол-во"
+			unit={uiUnit(Unit.Countable)}
+			value={materialCost.data.count}
+			onChange={count => {
+				materialCost.set_data({
+					type,
+					count,
+				})
+			}}
+		/>
+	)
 })
 
 export const DetailRequirementInput = observer(
