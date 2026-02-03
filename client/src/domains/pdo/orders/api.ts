@@ -4,8 +4,8 @@ import { notifier } from 'lib/store/notifier.store'
 import { makeAutoObservable } from 'mobx'
 import { uiUnit } from 'models'
 import { app_cache } from '../cache'
-import { DetailApi } from '../detail/api'
 import type { DetailSt } from '../detail/detail.state'
+import { DetailApi } from '../detail/detail_api'
 import type { ManufacturingOrderOutput, OrderSt } from './order.state'
 
 export class ManufacturingApi {

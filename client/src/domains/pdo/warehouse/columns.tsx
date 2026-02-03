@@ -7,7 +7,7 @@ import {
 	type WriteoffReason,
 } from 'models'
 import type { Column } from 'react-table'
-import { DetailName } from '../detail/name'
+import { DetailName } from '../detail/detail_name'
 import { AdaptiveNumberFormatter } from '../shared/adaptive_number_formatter'
 import { value_with_unit } from '../shared/basic'
 import type { Operation } from './list'

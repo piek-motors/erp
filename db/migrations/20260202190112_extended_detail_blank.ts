@@ -40,7 +40,7 @@ export async function up(db: KDB): Promise<void> {
 								blank_length: 0,
 							},
 						},
-						attributes: d.blank_spec,
+						attributes: d.blank_spec?.arr ?? undefined,
 					},
 				})
 				.where('id', '=', d.id)

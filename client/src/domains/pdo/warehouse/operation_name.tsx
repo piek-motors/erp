@@ -1,4 +1,4 @@
-import { DetailName } from 'domains/pdo/detail/name'
+import { DetailName } from 'domains/pdo/detail/detail_name'
 import { MaterialName } from 'domains/pdo/material/name'
 import { observer } from 'mobx-react-lite'
 

@@ -13,7 +13,7 @@ export class DetailApi {
 		makeAutoObservable(this)
 	}
 
-	async get(detailId: number) {
+	async get(detailId: number): Promise<DetailSt> {
 		return this.loader.run(async () => {
 			const detail = new DetailSt()
 			const res = await rpc.pdo.details.get.query({ id: detailId })

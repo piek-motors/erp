@@ -1,5 +1,5 @@
 import { Row } from 'lib/index'
-import { DetailName } from '../detail/name'
+import { DetailName } from '../detail/detail_name'
 import type { Detail } from './group.store'
 
 interface DetailRowProps {

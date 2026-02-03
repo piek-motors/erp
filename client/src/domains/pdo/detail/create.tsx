@@ -7,9 +7,9 @@ import {
 	useState,
 } from 'lib/index'
 import { openPage, routeMap } from 'lib/routes'
-import { api } from './api'
 import { DetailSt } from './detail.state'
-import { DetailInputs } from './inputs'
+import { api } from './detail_api'
+import { DetailForm } from './detail_form'
 
 export const CreateDetailPage = observer(() => {
 	const [detail, setDetail] = useState(() => new DetailSt())
@@ -23,7 +23,7 @@ export const CreateDetailPage = observer(() => {
 					link={openPage(routeMap.pdo.detail.edit, insertedDetailId)}
 				/>
 			)}
-			<DetailInputs detail={detail} />
+			<DetailForm detail={detail} />
 			<ActionButton
 				onClick={() =>
 					api.insert(detail).then(id => {

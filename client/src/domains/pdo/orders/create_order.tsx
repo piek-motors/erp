@@ -5,7 +5,7 @@ import {
 	routeMap,
 	useNavigate,
 } from 'lib/index'
-import { api } from '../detail/api'
+import { api } from '../detail/detail_api'
 
 export const CreateManufacturingOrder = observer(
 	({ detailId }: { detailId: number }) => {

@@ -4,7 +4,7 @@ import { BaseAutocomplete, type BaseOption } from 'components/base-autocomplete'
 import { InModal } from 'components/modal'
 import { observer, P, Row, UseIcon, useState } from 'lib/index'
 import { app_cache } from '../cache'
-import { DetailName } from '../detail/name'
+import { DetailName } from '../detail/detail_name'
 import { api } from './api'
 
 const UniversalDetailSelection = observer(() => {

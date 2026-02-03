@@ -1,14 +1,16 @@
 import { matrixEncoder } from '#root/lib/matrix_encoder.js'
 import { formatDate } from '#root/lib/time.js'
 import { router } from '#root/lib/trpc/trpc.js'
-import { db, procedure, requireScope, Scope, z } from '#root/sdk.js'
+import { db, procedure, z } from '#root/sdk.js'
 import type { DB, Selectable } from 'db'
-import { OperationType, type Unit } from 'models'
+import { type Unit } from 'models'
 
 const Limit = 100
 
-export interface OperationListItem
-	extends Omit<Selectable<DB.OperationsTable>, 'timestamp'> {
+export type OperationListItem = Omit<
+	Selectable<DB.OperationsTable>,
+	'timestamp'
+> & {
 	timestamp: string | null
 	detail_name: string | null
 	detail_group_id: number | null
@@ -16,56 +18,6 @@ export interface OperationListItem
 	manufacturing_order_id: number | null
 	manufacturing_order_qty: number | null
 	unit: Unit
-}
-
-interface StockUpdate {
-	table: 'pdo.materials' | 'pdo.details'
-	id: number
-	quantity: number
-	isSupply: boolean
-}
-
-type Operation = Awaited<ReturnType<typeof getOperation>>
-
-async function getOperation(id: number) {
-	const operation = await db
-		.selectFrom('pdo.operations')
-		.where('id', '=', id)
-		.selectAll()
-		.executeTakeFirst()
-
-	if (!operation) {
-		throw new Error('Operation not found')
-	}
-
-	return operation
-}
-
-function buildStockUpdates(operation: Operation): StockUpdate[] {
-	const updates: StockUpdate[] = []
-	const isSupply = Number(operation.operation_type) === OperationType.Supply
-
-	// Add material stock update if operation affects materials
-	if (operation.material_id) {
-		updates.push({
-			table: 'pdo.materials',
-			id: operation.material_id,
-			quantity: operation.qty,
-			isSupply,
-		})
-	}
-
-	// Add detail stock update if operation affects details
-	if (operation.detail_id) {
-		updates.push({
-			table: 'pdo.details',
-			id: operation.detail_id,
-			quantity: operation.qty,
-			isSupply,
-		})
-	}
-
-	return updates
 }
 
 export const operations = router({
@@ -103,34 +55,5 @@ export const operations = router({
 				operation.timestamp = formatDate(operation.timestamp) as any
 			})
 			return matrixEncoder(operations)
-		}),
-	//
-	revert: procedure
-		.use(requireScope(Scope.pdo))
-		.input(
-			z.object({
-				id: z.number(),
-			}),
-		)
-		.mutation(async ({ input }) => {
-			const operation = await getOperation(input.id)
-			const stockUpdates = buildStockUpdates(operation)
-
-			for (const update of stockUpdates) {
-				const stockChange = update.isSupply ? -update.quantity : update.quantity
-				await db
-					.updateTable(update.table)
-					.set(eb => ({
-						on_hand_balance: eb('on_hand_balance', '+', stockChange),
-					}))
-					.where('id', '=', update.id)
-					.execute()
-			}
-
-			await db.deleteFrom('pdo.operations').where('id', '=', input.id).execute()
-			return {
-				success: true,
-				message: `Operation ${input.id} reverted successfully`,
-			}
 		}),
 })

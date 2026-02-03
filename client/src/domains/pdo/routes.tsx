@@ -1,8 +1,8 @@
 import { routeMap } from 'lib/routes'
 import type { RouteConfig } from 'lib/types/global'
 import { CreateDetailPage } from './detail/create'
+import { DetailPage } from './detail/detail'
 import { DetailsListPage } from './detail/list/list'
-import { UpdateDetailPage } from './detail/update'
 import { DetailGroupById, DetailGroupListPage } from './detail_grouping/main'
 import { CreateMaterialPage } from './material/create'
 import { MaterialListPage } from './material/list/list'
@@ -54,7 +54,7 @@ const innerRoutes = [
 	{
 		element: (
 			<MobilePadding desktop_too>
-				<UpdateDetailPage />
+				<DetailPage />
 			</MobilePadding>
 		),
 		path: metalflow.detail.edit,

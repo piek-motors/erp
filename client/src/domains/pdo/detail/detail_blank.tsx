@@ -19,9 +19,9 @@ import {
 	Unit,
 } from 'models'
 import type { DetailSt, DetailStProp } from './detail.state'
-import { MaterialSelect } from './inputs'
+import { MaterialSelect } from './detail_form'
+import { DetailName } from './detail_name'
 import { DetailSelectModal } from './list/list'
-import { DetailName } from './name'
 
 interface CostRowProps {
 	children: React.ReactNode

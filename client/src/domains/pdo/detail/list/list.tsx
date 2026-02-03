@@ -19,7 +19,7 @@ import {
 } from 'lib/index'
 import type { Column } from 'react-table'
 import type { DetailSt } from '../detail.state'
-import { DetailName } from '../name'
+import { DetailName } from '../detail_name'
 import { AlphabetIndex } from './alphabet_index'
 import { DetailSearchCriteria, detailListStore as state } from './store'
 

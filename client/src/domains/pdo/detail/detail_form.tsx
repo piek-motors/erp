@@ -37,7 +37,7 @@ import {
 	MaterialRequirementInput,
 } from './detail_blank'
 
-export const DetailInputs = observer(
+export const DetailForm = observer(
 	({
 		detail: d,
 		leftChildren,

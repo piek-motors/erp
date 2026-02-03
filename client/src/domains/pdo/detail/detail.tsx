@@ -14,12 +14,12 @@ import {
 } from 'lib/index'
 import { fmtDate, fmtTimestamp } from 'lib/utils/date_fmt'
 import { CreateManufacturingOrder } from '../orders/create_order'
-import { api } from './api'
 import type { DetailSt, DetailStProp } from './detail.state'
-import { DetailInputs } from './inputs'
+import { api } from './detail_api'
+import { DetailForm } from './detail_form'
 import { DetailWarehouseModal } from './warehouse/ui'
 
-export const UpdateDetailPage = observer(() => {
+export const DetailPage = observer(() => {
 	const { id } = useParams<{ id: string }>()
 	if (!id) {
 		throw new Error('Invalid page params; id is required')
@@ -48,7 +48,7 @@ export const UpdateDetailPage = observer(() => {
 				<DetailWarehouseModal detail={detail} />
 				<CreateManufacturingOrder detailId={detail.id} />
 			</Row>
-			<DetailInputs detail={detail} />
+			<DetailForm detail={detail} />
 
 			<Box pt={1}>
 				<Metadata
@@ -56,13 +56,13 @@ export const UpdateDetailPage = observer(() => {
 					lastManufacturingDate={detail.lastManufacturingDate}
 					lastManufacturingQty={detail.lastManufacturingQty}
 				/>
-				<SaveFloatingButton detail={detail} />
+				<Save detail={detail} />
 			</Box>
 		</Stack>
 	)
 })
 
-const SaveFloatingButton = ({ detail }: DetailStProp) => {
+const Save = ({ detail }: DetailStProp) => {
 	const navigate = useNavigate()
 	return (
 		<SaveAndDelete

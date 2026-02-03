@@ -1,4 +1,4 @@
-import { DetailName } from 'domains/pdo/detail/name'
+import { DetailName } from 'domains/pdo/detail/detail_name'
 import { Label, P } from 'lib/index'
 import { timeDeltaDays } from 'lib/utils/date_fmt'
 import { ManufacturingOrderStatus as Status } from 'models'
