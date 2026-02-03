@@ -7,17 +7,17 @@
  * @returns A new, debounced function.
  */
 export const debounce = <F extends (...args: any[]) => any>(
-	callback: F,
-	waitFor: number,
+  callback: F,
+  waitFor: number,
 ): ((...args: Parameters<F>) => void) => {
-	let timeout: ReturnType<typeof setTimeout> | null = null
+  let timeout: ReturnType<typeof setTimeout> | null = null
 
-	return (...args: Parameters<F>): void => {
-		if (timeout !== null) {
-			clearTimeout(timeout)
-		}
-		timeout = setTimeout(() => {
-			callback(...args)
-		}, waitFor)
-	}
+  return (...args: Parameters<F>): void => {
+    if (timeout !== null) {
+      clearTimeout(timeout)
+    }
+    timeout = setTimeout(() => {
+      callback(...args)
+    }, waitFor)
+  }
 }

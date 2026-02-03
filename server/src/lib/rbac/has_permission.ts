@@ -5,24 +5,24 @@
  * @returns true if the user has the required permission, false otherwise
  */
 export const hasPermission = (
-	requiredPermission: string,
-	userPermissions: readonly string[],
+  requiredPermission: string,
+  userPermissions: readonly string[],
 ): boolean => {
-	// If role has the exact permission, grant access
-	if (userPermissions.includes(requiredPermission)) {
-		return true
-	}
+  // If role has the exact permission, grant access
+  if (userPermissions.includes(requiredPermission)) {
+    return true
+  }
 
-	// Check for wildcard permissions
-	for (const permission of userPermissions) {
-		if (permission.includes('*')) {
-			const pattern = permission.replace('*', '.*')
-			const regex = new RegExp(`^${pattern}$`)
-			if (regex.test(requiredPermission)) {
-				return true
-			}
-		}
-	}
+  // Check for wildcard permissions
+  for (const permission of userPermissions) {
+    if (permission.includes('*')) {
+      const pattern = permission.replace('*', '.*')
+      const regex = new RegExp(`^${pattern}$`)
+      if (regex.test(requiredPermission)) {
+        return true
+      }
+    }
+  }
 
-	return false
+  return false
 }

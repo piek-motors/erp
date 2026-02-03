@@ -6,100 +6,100 @@ import { makeAutoObservable } from 'mobx'
 import { observer } from 'mobx-react-lite'
 
 const months = [
-	'янв',
-	'фев',
-	'мар',
-	'апр',
-	'май',
-	'июн',
-	'июл',
-	'авг',
-	'сен',
-	'окт',
-	'ноя',
-	'дек',
+  'янв',
+  'фев',
+  'мар',
+  'апр',
+  'май',
+  'июн',
+  'июл',
+  'авг',
+  'сен',
+  'окт',
+  'ноя',
+  'дек',
 ]
 
 const startYear = 2022
 
 const years = Array.from(
-	{ length: new Date().getFullYear() - startYear + 1 },
-	(_, i) => startYear + i,
+  { length: new Date().getFullYear() - startYear + 1 },
+  (_, i) => startYear + i,
 )
 
 export class MonthSelectStore {
-	month = new Date().getMonth()
-	year = new Date().getFullYear()
-	isLoading = false
-	constructor() {
-		makeAutoObservable(this)
-	}
-	setMonth(month: number) {
-		this.month = month
-	}
-	setYear(year: number) {
-		this.year = year
-	}
-	getMonthLabel() {
-		return new Date(this.year, this.month, 1).toLocaleDateString('ru-RU', {
-			month: 'long',
-			year: 'numeric',
-		})
-	}
-	setIsLoading(isLoading: boolean) {
-		this.isLoading = isLoading
-	}
+  month = new Date().getMonth()
+  year = new Date().getFullYear()
+  isLoading = false
+  constructor() {
+    makeAutoObservable(this)
+  }
+  setMonth(month: number) {
+    this.month = month
+  }
+  setYear(year: number) {
+    this.year = year
+  }
+  getMonthLabel() {
+    return new Date(this.year, this.month, 1).toLocaleDateString('ru-RU', {
+      month: 'long',
+      year: 'numeric',
+    })
+  }
+  setIsLoading(isLoading: boolean) {
+    this.isLoading = isLoading
+  }
 }
 
 interface IReportConfiguratorProps {
-	store: MonthSelectStore
-	onSearch?: (month: number, year: number) => void
-	onChange?: () => void
+  store: MonthSelectStore
+  onSearch?: (month: number, year: number) => void
+  onChange?: () => void
 }
 
 function _MonthSelect({ onSearch, store, onChange }: IReportConfiguratorProps) {
-	return (
-		<Row gap={0.5}>
-			<Select
-				placeholder="Месяц"
-				options={months.map((month, idx) => ({
-					name: month,
-					value: idx,
-				}))}
-				value={store.month}
-				onChange={v => {
-					store.setMonth(Number(v))
-					onChange?.()
-				}}
-				width="100px"
-			/>
-			<Select
-				placeholder="Год"
-				options={years.map(e => ({
-					name: e.toString(),
-					value: e,
-				}))}
-				width="100px"
-				value={store.year}
-				onChange={v => {
-					store.setYear(Number(v))
-					onChange?.()
-				}}
-			/>
-			{onSearch && (
-				<IconButton
-					loading={store.isLoading}
-					variant="soft"
-					color="primary"
-					onClick={() => {
-						onSearch(store.month, store.year)
-					}}
-				>
-					<UseIcon icon={UilSearch} />
-				</IconButton>
-			)}
-		</Row>
-	)
+  return (
+    <Row gap={0.5}>
+      <Select
+        placeholder="Месяц"
+        options={months.map((month, idx) => ({
+          name: month,
+          value: idx,
+        }))}
+        value={store.month}
+        onChange={v => {
+          store.setMonth(Number(v))
+          onChange?.()
+        }}
+        width="100px"
+      />
+      <Select
+        placeholder="Год"
+        options={years.map(e => ({
+          name: e.toString(),
+          value: e,
+        }))}
+        width="100px"
+        value={store.year}
+        onChange={v => {
+          store.setYear(Number(v))
+          onChange?.()
+        }}
+      />
+      {onSearch && (
+        <IconButton
+          loading={store.isLoading}
+          variant="soft"
+          color="primary"
+          onClick={() => {
+            onSearch(store.month, store.year)
+          }}
+        >
+          <UseIcon icon={UilSearch} />
+        </IconButton>
+      )}
+    </Row>
+  )
 }
 
 export const MonthSelect = observer(_MonthSelect)

@@ -11,71 +11,71 @@ import type { IMaterialShapeState } from './shape_state.interface'
 import { MaterialWarehouseStore } from './warehouse/state'
 
 export class MaterialState {
-	readonly loadingWall = new LoadingController()
-	readonly warehouse = new MaterialWarehouseStore()
-	constructor() {
-		makeAutoObservable(this)
-	}
+  readonly loadingWall = new LoadingController()
+  readonly warehouse = new MaterialWarehouseStore()
+  constructor() {
+    makeAutoObservable(this)
+  }
 
-	list = new ListState()
-	round = new RoundBarState()
-	square = new SquareState()
-	pipe = new PipeState()
-	hexagon = new HexagonBarState()
-	arbitrary = new ArbitraryState()
+  list = new ListState()
+  round = new RoundBarState()
+  square = new SquareState()
+  pipe = new PipeState()
+  hexagon = new HexagonBarState()
+  arbitrary = new ArbitraryState()
 
-	shapeState = {
-		[MaterialShape.RoundBar]: this.round,
-		[MaterialShape.SquareBar]: this.square,
-		[MaterialShape.Pipe]: this.pipe,
-		[MaterialShape.List]: this.list,
-		[MaterialShape.HexagonBar]: this.hexagon,
-		[MaterialShape.Arbitrary]: this.arbitrary,
-	} as const
+  shapeState = {
+    [MaterialShape.RoundBar]: this.round,
+    [MaterialShape.SquareBar]: this.square,
+    [MaterialShape.Pipe]: this.pipe,
+    [MaterialShape.List]: this.list,
+    [MaterialShape.HexagonBar]: this.hexagon,
+    [MaterialShape.Arbitrary]: this.arbitrary,
+  } as const
 
-	get_shape_state(shape: MaterialShape): IMaterialShapeState {
-		return this.shapeState[shape]
-	}
+  get_shape_state(shape: MaterialShape): IMaterialShapeState {
+    return this.shapeState[shape]
+  }
 
-	id?: number
-	label?: string
-	unit?: Unit
-	set_unit(unit: Unit) {
-		this.unit = unit
-	}
-	shape: MaterialShape = MaterialShape.RoundBar
-	set_shape(shape: MaterialShape) {
-		this.shape = shape
-	}
+  id?: number
+  label?: string
+  unit?: Unit
+  set_unit(unit: Unit) {
+    this.unit = unit
+  }
+  shape: MaterialShape = MaterialShape.RoundBar
+  set_shape(shape: MaterialShape) {
+    this.shape = shape
+  }
 
-	alloy?: string
-	set_alloy(alloy: string) {
-		this.alloy = alloy
-	}
+  alloy?: string
+  set_alloy(alloy: string) {
+    this.alloy = alloy
+  }
 
-	get stock() {
-		return this.warehouse.on_hand_balance
-	}
+  get stock() {
+    return this.warehouse.on_hand_balance
+  }
 
-	detailCount: number = 0
-	details_made_from_this_material: {
-		id: number
-		name: string
-		group_id: number | null
-	}[] = []
+  detailCount: number = 0
+  details_made_from_this_material: {
+    id: number
+    name: string
+    group_id: number | null
+  }[] = []
 
-	shortage_prediction_horizon_days?: number
-	set_shortage_orediction_horizon_days(v?: number) {
-		this.shortage_prediction_horizon_days = v
-	}
+  shortage_prediction_horizon_days?: number
+  set_shortage_orediction_horizon_days(v?: number) {
+    this.shortage_prediction_horizon_days = v
+  }
 
-	writeoff_stat?: {
-		monthly?: [string, number][]
-		quarterly?: [string, number][]
-	}
+  writeoff_stat?: {
+    monthly?: [string, number][]
+    quarterly?: [string, number][]
+  }
 
-	syncState(material: Material) {
-		this.shape = material.shape
-		this.get_shape_state(this.shape).sync(material)
-	}
+  syncState(material: Material) {
+    this.shape = material.shape
+    this.get_shape_state(this.shape).sync(material)
+  }
 }

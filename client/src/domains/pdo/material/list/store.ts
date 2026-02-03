@@ -7,64 +7,64 @@ import type { MaterialShape } from 'models'
 import type { Material } from 'srv/domains/pdo/materials_rpc'
 
 export class MaterialListStore {
-	readonly async = new LoadingController()
+  readonly async = new LoadingController()
 
-	search_query: string = ''
-	shape_filter?: MaterialShape | null
-	search_result: Material[] = []
+  search_query: string = ''
+  shape_filter?: MaterialShape | null
+  search_result: Material[] = []
 
-	debouncedFilter: () => void
-	constructor() {
-		makeAutoObservable(this)
-		this.debouncedFilter = debounce(this.filter.bind(this), 300)
+  debouncedFilter: () => void
+  constructor() {
+    makeAutoObservable(this)
+    this.debouncedFilter = debounce(this.filter.bind(this), 300)
 
-		reaction(
-			() => app_cache.materials.normalized_materials,
-			() => this.filter(),
-		)
-	}
+    reaction(
+      () => app_cache.materials.normalized_materials,
+      () => this.filter(),
+    )
+  }
 
-	private filter() {
-		const query = normalize(this.search_query)
-		let items = app_cache.materials.normalized_materials
+  private filter() {
+    const query = normalize(this.search_query)
+    let items = app_cache.materials.normalized_materials
 
-		if (this.shape_filter != null) {
-			items = items.filter(m => m.shape === this.shape_filter)
-		}
+    if (this.shape_filter != null) {
+      items = items.filter(m => m.shape === this.shape_filter)
+    }
 
-		if (query) {
-			items = token_search(items, query, {
-				fields: [
-					{
-						get: (m: Material) => m.label,
-						weight: 2,
-					},
-					{
-						get: (m: Material) => m.id.toString(),
-						weight: 1,
-						exact: true,
-					},
-				],
-			})
-		}
+    if (query) {
+      items = token_search(items, query, {
+        fields: [
+          {
+            get: (m: Material) => m.label,
+            weight: 2,
+          },
+          {
+            get: (m: Material) => m.id.toString(),
+            weight: 1,
+            exact: true,
+          },
+        ],
+      })
+    }
 
-		this.search_result = items
-	}
+    this.search_result = items
+  }
 
-	set_search_query(keyword: string) {
-		this.search_query = keyword
-		this.debouncedFilter()
-	}
+  set_search_query(keyword: string) {
+    this.search_query = keyword
+    this.debouncedFilter()
+  }
 
-	set_shape_filter(shape?: MaterialShape) {
-		this.shape_filter = shape
-		this.filter()
-	}
+  set_shape_filter(shape?: MaterialShape) {
+    this.shape_filter = shape
+    this.filter()
+  }
 
-	clear() {
-		this.search_query = ''
-		this.async.reset()
-	}
+  clear() {
+    this.search_query = ''
+    this.async.reset()
+  }
 }
 
 export const materialListStore = new MaterialListStore()

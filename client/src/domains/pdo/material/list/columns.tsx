@@ -7,17 +7,17 @@ import type { Material } from 'srv/domains/pdo/materials_rpc'
 const formatter = new AdaptiveNumberFormatter(0, 0, true)
 
 export const columns: Column<Material>[] = [
-	{
-		Header: '№',
-		accessor: m => <Label xs>{m.id}</Label>,
-	},
-	{
-		Header: 'Наим.',
-		id: 'name',
-		accessor: m => <P>{m.label}</P>,
-	},
-	{
-		Header: 'Остаток',
-		accessor: m => value_with_unit(formatter.format(m.on_hand_balance), m.unit),
-	},
+  {
+    Header: '№',
+    accessor: m => <Label xs>{m.id}</Label>,
+  },
+  {
+    Header: 'Наим.',
+    id: 'name',
+    accessor: m => <P>{m.label}</P>,
+  },
+  {
+    Header: 'Остаток',
+    accessor: m => value_with_unit(formatter.format(m.on_hand_balance), m.unit),
+  },
 ]

@@ -2,165 +2,165 @@ import { type IDB, TRPCError } from '#root/sdk.js'
 import { OperationType, type SupplyReason, type WriteoffReason } from 'models'
 
 export class Warehouse {
-	constructor(
-		private readonly trx: IDB,
-		private readonly userId: number,
-	) {}
+  constructor(
+    private readonly trx: IDB,
+    private readonly userId: number,
+  ) {}
 
-	async supplyMaterial(material_id: number, qty: number, reason: SupplyReason) {
-		const material = await this.trx
-			.selectFrom('pdo.materials')
-			.select(['unit'])
-			.where('id', '=', material_id)
-			.executeTakeFirstOrThrow()
+  async supplyMaterial(material_id: number, qty: number, reason: SupplyReason) {
+    const material = await this.trx
+      .selectFrom('pdo.materials')
+      .select(['unit'])
+      .where('id', '=', material_id)
+      .executeTakeFirstOrThrow()
 
-		const [operation, { on_hand_balance }] = await Promise.all([
-			this.trx
-				.insertInto('pdo.operations')
-				.values({
-					operation_type: OperationType.Supply,
-					user_id: this.userId,
-					material_id,
-					material_unit: material.unit,
-					qty,
-					reason,
-				})
-				.returning(['id'])
-				.executeTakeFirstOrThrow(),
-			//
-			this.trx
-				.updateTable('pdo.materials')
-				.set(eb => ({
-					on_hand_balance: eb('on_hand_balance', '+', qty),
-				}))
-				.where('id', '=', material_id)
-				.returning(['on_hand_balance'])
-				.executeTakeFirstOrThrow(),
-		])
-		return {
-			operation_id: operation.id,
-			on_hand_balance,
-		}
-	}
+    const [operation, { on_hand_balance }] = await Promise.all([
+      this.trx
+        .insertInto('pdo.operations')
+        .values({
+          operation_type: OperationType.Supply,
+          user_id: this.userId,
+          material_id,
+          material_unit: material.unit,
+          qty,
+          reason,
+        })
+        .returning(['id'])
+        .executeTakeFirstOrThrow(),
+      //
+      this.trx
+        .updateTable('pdo.materials')
+        .set(eb => ({
+          on_hand_balance: eb('on_hand_balance', '+', qty),
+        }))
+        .where('id', '=', material_id)
+        .returning(['on_hand_balance'])
+        .executeTakeFirstOrThrow(),
+    ])
+    return {
+      operation_id: operation.id,
+      on_hand_balance,
+    }
+  }
 
-	async subtractMaterial(
-		material_id: number,
-		qty: number,
-		reason: WriteoffReason,
-		detail_id?: number,
-		manufacturing_order_id?: number,
-	) {
-		const material = await this.trx
-			.selectFrom('pdo.materials')
-			.select(['on_hand_balance', 'label', 'unit'])
-			.where('id', '=', material_id)
-			.executeTakeFirstOrThrow()
-		if (material.on_hand_balance < qty) {
-			throw new ErrNotEnoughStock(
-				`Недостаточно материала id=${material_id} ${material.label}`,
-			)
-		}
+  async subtractMaterial(
+    material_id: number,
+    qty: number,
+    reason: WriteoffReason,
+    detail_id?: number,
+    manufacturing_order_id?: number,
+  ) {
+    const material = await this.trx
+      .selectFrom('pdo.materials')
+      .select(['on_hand_balance', 'label', 'unit'])
+      .where('id', '=', material_id)
+      .executeTakeFirstOrThrow()
+    if (material.on_hand_balance < qty) {
+      throw new ErrNotEnoughStock(
+        `Недостаточно материала id=${material_id} ${material.label}`,
+      )
+    }
 
-		const operation = await this.trx
-			.insertInto('pdo.operations')
-			.values({
-				operation_type: OperationType.Writeoff,
-				user_id: this.userId,
-				material_id,
-				material_unit: material.unit,
-				detail_id,
-				qty,
-				reason,
-				manufacturing_order_id,
-			})
-			.returning(['id'])
-			.executeTakeFirstOrThrow()
+    const operation = await this.trx
+      .insertInto('pdo.operations')
+      .values({
+        operation_type: OperationType.Writeoff,
+        user_id: this.userId,
+        material_id,
+        material_unit: material.unit,
+        detail_id,
+        qty,
+        reason,
+        manufacturing_order_id,
+      })
+      .returning(['id'])
+      .executeTakeFirstOrThrow()
 
-		const res = await this.trx
-			.updateTable('pdo.materials')
-			.set(eb => ({
-				on_hand_balance: eb('on_hand_balance', '-', qty),
-			}))
-			.where('id', '=', material_id)
-			.returning(['on_hand_balance'])
-			.executeTakeFirstOrThrow()
+    const res = await this.trx
+      .updateTable('pdo.materials')
+      .set(eb => ({
+        on_hand_balance: eb('on_hand_balance', '-', qty),
+      }))
+      .where('id', '=', material_id)
+      .returning(['on_hand_balance'])
+      .executeTakeFirstOrThrow()
 
-		return {
-			operation_id: operation.id,
-			on_hand_balance: res.on_hand_balance,
-		}
-	}
+    return {
+      operation_id: operation.id,
+      on_hand_balance: res.on_hand_balance,
+    }
+  }
 
-	async supplyDetails(id: number, qty: number, reason: SupplyReason) {
-		const operation = await this.trx
-			.insertInto('pdo.operations')
-			.values({
-				operation_type: OperationType.Supply,
-				user_id: this.userId,
-				detail_id: id,
-				qty,
-				reason,
-			})
-			.returning(['id'])
-			.executeTakeFirstOrThrow()
-		const detail = await this.trx
-			.updateTable('pdo.details')
-			.set(eb => ({
-				on_hand_balance: eb('on_hand_balance', '+', qty),
-			}))
-			.where('id', '=', id)
-			.returning(['on_hand_balance'])
-			.executeTakeFirstOrThrow()
+  async supplyDetails(id: number, qty: number, reason: SupplyReason) {
+    const operation = await this.trx
+      .insertInto('pdo.operations')
+      .values({
+        operation_type: OperationType.Supply,
+        user_id: this.userId,
+        detail_id: id,
+        qty,
+        reason,
+      })
+      .returning(['id'])
+      .executeTakeFirstOrThrow()
+    const detail = await this.trx
+      .updateTable('pdo.details')
+      .set(eb => ({
+        on_hand_balance: eb('on_hand_balance', '+', qty),
+      }))
+      .where('id', '=', id)
+      .returning(['on_hand_balance'])
+      .executeTakeFirstOrThrow()
 
-		return {
-			operation_id: operation.id,
-			on_hand_balance: detail.on_hand_balance,
-		}
-	}
+    return {
+      operation_id: operation.id,
+      on_hand_balance: detail.on_hand_balance,
+    }
+  }
 
-	async writeoffDetails(id: number, qty: number, reason: WriteoffReason) {
-		const { on_hand_balance } = await this.trx
-			.selectFrom('pdo.details')
-			.select(['on_hand_balance'])
-			.where('id', '=', id)
-			.executeTakeFirstOrThrow()
-		if (on_hand_balance < qty) {
-			throw new ErrNotEnoughStock(`Недостаточно деталей ${id}`)
-		}
+  async writeoffDetails(id: number, qty: number, reason: WriteoffReason) {
+    const { on_hand_balance } = await this.trx
+      .selectFrom('pdo.details')
+      .select(['on_hand_balance'])
+      .where('id', '=', id)
+      .executeTakeFirstOrThrow()
+    if (on_hand_balance < qty) {
+      throw new ErrNotEnoughStock(`Недостаточно деталей ${id}`)
+    }
 
-		const detail = await this.trx
-			.updateTable('pdo.details')
-			.set(eb => ({
-				on_hand_balance: eb('on_hand_balance', '-', qty),
-			}))
-			.where('id', '=', id)
-			.returning(['on_hand_balance'])
-			.executeTakeFirstOrThrow()
+    const detail = await this.trx
+      .updateTable('pdo.details')
+      .set(eb => ({
+        on_hand_balance: eb('on_hand_balance', '-', qty),
+      }))
+      .where('id', '=', id)
+      .returning(['on_hand_balance'])
+      .executeTakeFirstOrThrow()
 
-		const operation = await this.trx
-			.insertInto('pdo.operations')
-			.values({
-				operation_type: OperationType.Writeoff,
-				user_id: this.userId,
-				detail_id: id,
-				qty,
-				reason,
-			})
-			.returning('id')
-			.executeTakeFirstOrThrow()
+    const operation = await this.trx
+      .insertInto('pdo.operations')
+      .values({
+        operation_type: OperationType.Writeoff,
+        user_id: this.userId,
+        detail_id: id,
+        qty,
+        reason,
+      })
+      .returning('id')
+      .executeTakeFirstOrThrow()
 
-		return {
-			on_hand_balance: detail.on_hand_balance,
-			operation_id: operation.id,
-		}
-	}
+    return {
+      on_hand_balance: detail.on_hand_balance,
+      operation_id: operation.id,
+    }
+  }
 }
 
 class ErrNotEnoughStock extends TRPCError {
-	constructor(message: string) {
-		super({
-			code: 'BAD_REQUEST',
-			message,
-		})
-	}
+  constructor(message: string) {
+    super({
+      code: 'BAD_REQUEST',
+      message,
+    })
+  }
 }

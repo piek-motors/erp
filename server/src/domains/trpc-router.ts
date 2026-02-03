@@ -7,27 +7,27 @@ import { orders } from './orders/orders_rpc.js'
 import { pdo } from './pdo/pdo_router.js'
 
 export const trpcRouter = router({
-	orders,
-	//
-	pdo,
-	//
-	attachments,
-	//
-	attendance,
-	//
-	users: procedure.query(async () =>
-		db
-			.selectFrom('users')
-			.select(['id', 'first_name', 'last_name', 'roles'])
-			.where('is_deleted', '=', false)
-			.execute(),
-	),
-	//
-	read_notifications: procedure.mutation(async ({ ctx }) => {
-		await db
-			.updateTable('orders.notifications')
-			.set({ seen: true })
-			.where('user_id', '=', ctx.user.id)
-			.execute()
-	}),
+  orders,
+  //
+  pdo,
+  //
+  attachments,
+  //
+  attendance,
+  //
+  users: procedure.query(async () =>
+    db
+      .selectFrom('users')
+      .select(['id', 'first_name', 'last_name', 'roles'])
+      .where('is_deleted', '=', false)
+      .execute(),
+  ),
+  //
+  read_notifications: procedure.mutation(async ({ ctx }) => {
+    await db
+      .updateTable('orders.notifications')
+      .set({ seen: true })
+      .where('user_id', '=', ctx.user.id)
+      .execute()
+  }),
 })

@@ -12,43 +12,43 @@ import { useEffect, useState } from 'react'
 import { suggestion } from './mention-suggestion'
 
 export const TextEditor = (props: {
-	defaultValue?: string
-	placeholder?: string
-	onSubmit?: (content: string) => Promise<void>
-	onChange?: (content: string) => void
-	editable?: boolean
-	variant?: SheetProps['variant']
+  defaultValue?: string
+  placeholder?: string
+  onSubmit?: (content: string) => Promise<void>
+  onChange?: (content: string) => void
+  editable?: boolean
+  variant?: SheetProps['variant']
 }) => {
-	const [key] = useState(0)
-	const editable = props.editable === undefined ? true : props.editable
+  const [key] = useState(0)
+  const editable = props.editable === undefined ? true : props.editable
 
-	const handleChange = () => {
-		props.onChange?.(editor?.getHTML() ?? '')
-	}
+  const handleChange = () => {
+    props.onChange?.(editor?.getHTML() ?? '')
+  }
 
-	const editor = useEditor({
-		extensions: [
-			StarterKit,
-			Placeholder.configure({
-				placeholder: props.placeholder,
-			}),
-			Highlight,
-			Mention.configure({
-				HTMLAttributes: {
-					class: 'mention',
-				},
-				renderText: mention => {
-					return `<span class="mention" data-mention="${mention.node.attrs.id}">${mention.node.attrs.label}</span>`
-				},
-				suggestion,
-			}),
-		],
-		content: props.defaultValue,
-		editable,
-		shouldRerenderOnTransaction: false,
-	})
+  const editor = useEditor({
+    extensions: [
+      StarterKit,
+      Placeholder.configure({
+        placeholder: props.placeholder,
+      }),
+      Highlight,
+      Mention.configure({
+        HTMLAttributes: {
+          class: 'mention',
+        },
+        renderText: mention => {
+          return `<span class="mention" data-mention="${mention.node.attrs.id}">${mention.node.attrs.label}</span>`
+        },
+        suggestion,
+      }),
+    ],
+    content: props.defaultValue,
+    editable,
+    shouldRerenderOnTransaction: false,
+  })
 
-	const styles = css`
+  const styles = css`
     .mention {
       background-color: #308ef860;
       border-radius: 1rem;
@@ -66,46 +66,46 @@ export const TextEditor = (props: {
     }
   `
 
-	useEffect(() => {
-		if (props.defaultValue) {
-			editor?.commands.setContent(props.defaultValue)
-		}
-	}, [editor])
+  useEffect(() => {
+    if (props.defaultValue) {
+      editor?.commands.setContent(props.defaultValue)
+    }
+  }, [editor])
 
-	if (!editor) return null
-	return (
-		<Stack gap={1} key={key} css={styles} sx={{ position: 'relative' }}>
-			<Sheet
-				sx={{ borderRadius: 'md', p: 1 }}
-				variant={props.variant || 'outlined'}
-			>
-				{editable && (
-					<Row>
-						<TooltipIconButton
-							icon={UilBold}
-							variant={editor.isActive('bold') ? 'soft' : 'outlined'}
-							color={editor.isActive('bold') ? 'primary' : 'neutral'}
-							onClick={() => {
-								editor.chain().focus().toggleBold().run()
-								handleChange()
-							}}
-						/>
-						<TooltipIconButton
-							icon={UilPaintTool}
-							variant={editor.isActive('highlight') ? 'soft' : 'outlined'}
-							color={editor.isActive('highlight') ? 'primary' : 'neutral'}
-							onClick={() => {
-								editor.chain().focus().toggleHighlight().run()
-								handleChange()
-							}}
-						/>
-					</Row>
-				)}
-				<EditorContent
-					disabled={!editable}
-					editor={editor}
-					onInput={() => editable && handleChange()}
-					css={css`
+  if (!editor) return null
+  return (
+    <Stack gap={1} key={key} css={styles} sx={{ position: 'relative' }}>
+      <Sheet
+        sx={{ borderRadius: 'md', p: 1 }}
+        variant={props.variant || 'outlined'}
+      >
+        {editable && (
+          <Row>
+            <TooltipIconButton
+              icon={UilBold}
+              variant={editor.isActive('bold') ? 'soft' : 'outlined'}
+              color={editor.isActive('bold') ? 'primary' : 'neutral'}
+              onClick={() => {
+                editor.chain().focus().toggleBold().run()
+                handleChange()
+              }}
+            />
+            <TooltipIconButton
+              icon={UilPaintTool}
+              variant={editor.isActive('highlight') ? 'soft' : 'outlined'}
+              color={editor.isActive('highlight') ? 'primary' : 'neutral'}
+              onClick={() => {
+                editor.chain().focus().toggleHighlight().run()
+                handleChange()
+              }}
+            />
+          </Row>
+        )}
+        <EditorContent
+          disabled={!editable}
+          editor={editor}
+          onInput={() => editable && handleChange()}
+          css={css`
             .tiptap {
               padding: 5px;
             }
@@ -114,41 +114,41 @@ export const TextEditor = (props: {
               margin: 0 !important;
             }
           `}
-				/>
-			</Sheet>
-			{props.onSubmit && (
-				<PublishButton editor={editor} onSubmit={props.onSubmit} />
-			)}
-		</Stack>
-	)
+        />
+      </Sheet>
+      {props.onSubmit && (
+        <PublishButton editor={editor} onSubmit={props.onSubmit} />
+      )}
+    </Stack>
+  )
 }
 
 function PublishButton(props: {
-	editor: Editor | null
-	onSubmit: (content: string) => Promise<void>
+  editor: Editor | null
+  onSubmit: (content: string) => Promise<void>
 }) {
-	const { editor, onSubmit } = props
-	const handleReset = () => {
-		editor?.commands.clearContent()
-	}
-	return (
-		<Box>
-			<Button
-				color="neutral"
-				variant="soft"
-				size="sm"
-				startDecorator={<UseIcon icon={UilMessage} small />}
-				onClick={() => {
-					const content = editor?.getHTML()
-					if (!content) return
+  const { editor, onSubmit } = props
+  const handleReset = () => {
+    editor?.commands.clearContent()
+  }
+  return (
+    <Box>
+      <Button
+        color="neutral"
+        variant="soft"
+        size="sm"
+        startDecorator={<UseIcon icon={UilMessage} small />}
+        onClick={() => {
+          const content = editor?.getHTML()
+          if (!content) return
 
-					onSubmit(content).then(() => {
-						handleReset()
-					})
-				}}
-			>
-				Прикрепить
-			</Button>
-		</Box>
-	)
+          onSubmit(content).then(() => {
+            handleReset()
+          })
+        }}
+      >
+        Прикрепить
+      </Button>
+    </Box>
+  )
 }

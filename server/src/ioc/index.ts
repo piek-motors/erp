@@ -16,10 +16,10 @@ const userRepo = new UserRepository(db)
 const tokenRepo = new TokenRepository(userRepo, db)
 
 export class MaterialStatDataContainer {
-	writeoffs: {
-		monthly?: PeriodAggregator
-		quarterly?: PeriodAggregator
-	} = {}
+  writeoffs: {
+    monthly?: PeriodAggregator
+    quarterly?: PeriodAggregator
+  } = {}
 }
 
 export const materials_stat_container = new MaterialStatDataContainer()
@@ -33,7 +33,7 @@ export const attendanceReportGenerator = new AttendanceReportGenerator(db)
 export const userController = new AuthController(authService)
 
 new JobsRunner([
-	new MaterialSpendAggJob(materials_stat_container),
-	new OutdatedPdoOrdersRemovalJob(),
-	new AttendanceEventPairingJob(),
+  new MaterialSpendAggJob(materials_stat_container),
+  new OutdatedPdoOrdersRemovalJob(),
+  new AttendanceEventPairingJob(),
 ]).setup()

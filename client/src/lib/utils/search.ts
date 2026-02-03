@@ -1,19 +1,19 @@
 export type SearchField<T> = {
-	/** Extract searchable string from entity */
-	get: (item: T) => string
-	/** Relative importance of this field */
-	weight?: number
-	exact?: boolean
+  /** Extract searchable string from entity */
+  get: (item: T) => string
+  /** Relative importance of this field */
+  weight?: number
+  exact?: boolean
 }
 
 export interface SearchConfig<T> {
-	fields: SearchField<T>[]
-	minScore?: number
+  fields: SearchField<T>[]
+  minScore?: number
 }
 
 export function normalize(str?: string | null) {
-	if (!str) return ''
-	return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+  if (!str) return ''
+  return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
 }
 
 /**
@@ -27,54 +27,54 @@ export function normalize(str?: string | null) {
  * - Function is pure and immutable
  */
 export function token_search<T>(
-	items: readonly T[],
-	query: string,
-	config: { fields: SearchField<T>[] },
+  items: readonly T[],
+  query: string,
+  config: { fields: SearchField<T>[] },
 ): T[] {
-	// Tokenize query
-	const tokens = query.toLowerCase().split(/\s+/).filter(Boolean)
+  // Tokenize query
+  const tokens = query.toLowerCase().split(/\s+/).filter(Boolean)
 
-	// Empty query → return shallow copy (immutability)
-	if (!tokens.length) {
-		return items.slice()
-	}
+  // Empty query → return shallow copy (immutability)
+  if (!tokens.length) {
+    return items.slice()
+  }
 
-	return (
-		items
-			.map(item => {
-				let score = 0
+  return (
+    items
+      .map(item => {
+        let score = 0
 
-				// Each token must match at least one field
-				for (const token of tokens) {
-					let tokenMatched = false
+        // Each token must match at least one field
+        for (const token of tokens) {
+          let tokenMatched = false
 
-					for (const field of config.fields) {
-						const value = field.get(item).toLowerCase()
+          for (const field of config.fields) {
+            const value = field.get(item).toLowerCase()
 
-						// Exact fields require strict equality (e.g. IDs)
-						// Fuzzy fields use substring matching (e.g. labels)
-						const matched = field.exact
-							? value === token
-							: value.includes(token)
+            // Exact fields require strict equality (e.g. IDs)
+            // Fuzzy fields use substring matching (e.g. labels)
+            const matched = field.exact
+              ? value === token
+              : value.includes(token)
 
-						if (matched) {
-							score += field.weight || 1
-							tokenMatched = true
-						}
-					}
+            if (matched) {
+              score += field.weight || 1
+              tokenMatched = true
+            }
+          }
 
-					// If any token fails to match → discard item
-					if (!tokenMatched) return null
-				}
+          // If any token fails to match → discard item
+          if (!tokenMatched) return null
+        }
 
-				// Item passed all tokens; keep score for ranking
-				return { item, score }
-			})
-			// Remove rejected items
-			.filter((v): v is { item: T; score: number } => v !== null)
-			// Higher score = more relevant
-			.sort((a, b) => b.score - a.score)
-			// Return ranked items only
-			.map(v => v.item)
-	)
+        // Item passed all tokens; keep score for ranking
+        return { item, score }
+      })
+      // Remove rejected items
+      .filter((v): v is { item: T; score: number } => v !== null)
+      // Higher score = more relevant
+      .sort((a, b) => b.score - a.score)
+      // Return ranked items only
+      .map(v => v.item)
+  )
 }

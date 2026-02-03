@@ -5,28 +5,28 @@ import { Navigate } from 'react-router'
 import { Loading } from '..'
 
 type IRequireAuthProps = {
-	children: ReactElement
+  children: ReactElement
 }
 
 const RequireAuth = observer((props: IRequireAuthProps) => {
-	const [isLoaded, setisLoaded] = useState(false)
-	const [token, setToken] = useState(authStore.token)
+  const [isLoaded, setisLoaded] = useState(false)
+  const [token, setToken] = useState(authStore.token)
 
-	async function getToken() {
-		authStore.checkAuth().then(res => {
-			setToken(res)
-			setisLoaded(true)
-		})
-	}
+  async function getToken() {
+    authStore.checkAuth().then(res => {
+      setToken(res)
+      setisLoaded(true)
+    })
+  }
 
-	useEffect(() => {
-		if (token) setisLoaded(true)
-		else getToken()
-	}, [])
+  useEffect(() => {
+    if (token) setisLoaded(true)
+    else getToken()
+  }, [])
 
-	if (!isLoaded) return <Loading />
+  if (!isLoaded) return <Loading />
 
-	return token ? props.children : <Navigate to="/login" />
+  return token ? props.children : <Navigate to="/login" />
 })
 
 export default RequireAuth

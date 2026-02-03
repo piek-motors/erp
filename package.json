@@ -1,31 +1,31 @@
 {
-	"name": "erp",
-	"version": "1.0.0",
-	"main": "ecosystem.config.js",
-	"devDependencies": {
-		"@biomejs/biome": "2.3.11",
-		"commander": "^13.1.0",
-		"husky": "^9.1.7",
-		"typescript": "^5.9.3"
-	},
-	"scripts": {
-		"fmt": "pnpm exec biome format --write",
-		"lint": "pnpm exec biome lint --write",
-		"biome": "pnpm exec biome check --write",
-		"build": "pnpm run -r --filter=!./client/** build",
-		"check": "pnpm run -r --filter=!./client/** check",
-		"deploy": "sh ./infra/deploy.sh",
-		"prepare": "husky"
-	},
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/piek-motors/erp.git"
-	},
-	"author": "",
-	"license": "ISC",
-	"bugs": {
-		"url": "https://github.com/piek-motors/erp/issues"
-	},
-	"homepage": "https://github.com/piek-motors/erp#readme",
-	"description": ""
+  "name": "erp",
+  "version": "1.0.0",
+  "main": "ecosystem.config.js",
+  "devDependencies": {
+    "@biomejs/biome": "2.3.11",
+    "commander": "^13.1.0",
+    "husky": "^9.1.7",
+    "typescript": "^5.9.3"
+  },
+  "scripts": {
+    "fmt": "pnpm exec biome format --write",
+    "lint": "pnpm exec biome lint --write",
+    "biome": "pnpm exec biome check --write",
+    "build": "pnpm run -r --filter=!./client/** build",
+    "check": "pnpm run -r --filter=!./client/** check",
+    "deploy": "sh ./infra/deploy.sh",
+    "prepare": "husky"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/piek-motors/erp.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/piek-motors/erp/issues"
+  },
+  "homepage": "https://github.com/piek-motors/erp#readme",
+  "description": ""
 }

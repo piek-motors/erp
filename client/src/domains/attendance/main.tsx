@@ -7,22 +7,22 @@ import { AttendanceReportComponent } from './report'
 import { store } from './store'
 
 const Attendance = observer(() => {
-	useEffect(() => {
-		store.load()
-	}, [])
-	return (
-		<FactoryPage title={'Рабочее время'}>
-			<WebOnly>
-				<ReportConfigurator />
-			</WebOnly>
-			{store.report && <AttendanceReportComponent report={store.report} />}
-		</FactoryPage>
-	)
+  useEffect(() => {
+    store.load()
+  }, [])
+  return (
+    <FactoryPage title={'Рабочее время'}>
+      <WebOnly>
+        <ReportConfigurator />
+      </WebOnly>
+      {store.report && <AttendanceReportComponent report={store.report} />}
+    </FactoryPage>
+  )
 })
 
 export default [
-	{
-		element: <Attendance />,
-		path: routeMap.attendance,
-	},
+  {
+    element: <Attendance />,
+    path: routeMap.attendance,
+  },
 ] as RouteConfig[]

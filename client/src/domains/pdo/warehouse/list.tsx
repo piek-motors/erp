@@ -16,76 +16,76 @@ import { columns } from './columns'
 export type Operation = OperationListItem
 
 class OperationsStore {
-	readonly loader = new LoadingController()
-	operations: Operation[] = []
-	constructor() {
-		makeAutoObservable(this)
-	}
-	setOperations(operations: Operation[]) {
-		this.operations = operations
-	}
-	async load(materialId?: number, detailId?: number) {
-		this.setOperations([])
-		this.loader.run(async () => {
-			const operationsRaw = await rpc.pdo.operations.list.query({
-				materialId,
-				detailId,
-			})
-			const operations = matrixDecoder<Operation>(operationsRaw)
-			this.setOperations(operations)
-		})
-	}
+  readonly loader = new LoadingController()
+  operations: Operation[] = []
+  constructor() {
+    makeAutoObservable(this)
+  }
+  setOperations(operations: Operation[]) {
+    this.operations = operations
+  }
+  async load(materialId?: number, detailId?: number) {
+    this.setOperations([])
+    this.loader.run(async () => {
+      const operationsRaw = await rpc.pdo.operations.list.query({
+        materialId,
+        detailId,
+      })
+      const operations = matrixDecoder<Operation>(operationsRaw)
+      this.setOperations(operations)
+    })
+  }
 
-	get no_data() {
-		return !this.loader.loading && this.operations.length == 0
-	}
+  get no_data() {
+    return !this.loader.loading && this.operations.length == 0
+  }
 }
 
 interface Props {
-	materialId?: number
-	detailId?: number
+  materialId?: number
+  detailId?: number
 }
 
 export const OperationsTitle = () => <MetalPageTitle t={'Журнал остатков'} />
 
 export const OperationsTable = observer((props: Props) => {
-	const { materialId, detailId } = props
-	const [store] = useState(() => new OperationsStore())
+  const { materialId, detailId } = props
+  const [store] = useState(() => new OperationsStore())
 
-	useEffect(() => {
-		store.load(materialId, detailId)
-	}, [materialId, detailId])
+  useEffect(() => {
+    store.load(materialId, detailId)
+  }, [materialId, detailId])
 
-	return (
-		<ScrollableWindow
-			scroll={
-				<>
-					{store.no_data && <Label px={1}>Нет информации</Label>}
-					<Table
-						sx={{ cursor: 'initial' }}
-						columns={columns}
-						data={store.operations}
-						rowStyleCb={op => {
-							const type = Number(op.original.operation_type)
-							if (type === OperationType.Supply) {
-								return {
-									backgroundColor: '#c6e7c3b9',
-								}
-							}
-							return {}
-						}}
-					/>
-				</>
-			}
-		/>
-	)
+  return (
+    <ScrollableWindow
+      scroll={
+        <>
+          {store.no_data && <Label px={1}>Нет информации</Label>}
+          <Table
+            sx={{ cursor: 'initial' }}
+            columns={columns}
+            data={store.operations}
+            rowStyleCb={op => {
+              const type = Number(op.original.operation_type)
+              if (type === OperationType.Supply) {
+                return {
+                  backgroundColor: '#c6e7c3b9',
+                }
+              }
+              return {}
+            }}
+          />
+        </>
+      }
+    />
+  )
 })
 
 export const OperationsPage = () => (
-	<>
-		<MobilePadding>
-			<MobileNavModal t={'Журнал'} />
-		</MobilePadding>
-		<OperationsTable />
-	</>
+  <>
+    <MobilePadding>
+      <MobileNavModal t={'Журнал'} />
+    </MobilePadding>
+    <OperationsTable />
+  </>
 )

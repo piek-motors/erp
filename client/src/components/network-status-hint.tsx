@@ -5,27 +5,27 @@ import { Box } from '@mui/joy'
 import { useEffect, useState } from 'react'
 
 export function NetworkStatusMessage() {
-	const [isNetworkAvailable, setIsNetworkAvailable] = useState(true)
+  const [isNetworkAvailable, setIsNetworkAvailable] = useState(true)
 
-	function _onLine() {
-		setIsNetworkAvailable(true)
-	}
+  function _onLine() {
+    setIsNetworkAvailable(true)
+  }
 
-	function _offLine() {
-		setIsNetworkAvailable(false)
-	}
+  function _offLine() {
+    setIsNetworkAvailable(false)
+  }
 
-	useEffect(() => {
-		window.addEventListener('online', _onLine)
-		window.addEventListener('offline', _offLine)
+  useEffect(() => {
+    window.addEventListener('online', _onLine)
+    window.addEventListener('offline', _offLine)
 
-		return () => {
-			window.addEventListener('online', _onLine)
-			window.addEventListener('offline', _offLine)
-		}
-	}, [])
+    return () => {
+      window.addEventListener('online', _onLine)
+      window.addEventListener('offline', _offLine)
+    }
+  }, [])
 
-	const Wrap = styled.div`
+  const Wrap = styled.div`
     display: flex;
     align-items: center;
     transform: translateX(-50%);
@@ -43,17 +43,17 @@ export function NetworkStatusMessage() {
     pointer-events: all;
   `
 
-	if (isNetworkAvailable) return <></>
-	return (
-		<Box
-			css={css`
+  if (isNetworkAvailable) return <></>
+  return (
+    <Box
+      css={css`
         position: absolute;
         bottom: 24px;
         left: 50%;
         max-width: 344px;
       `}
-		>
-			<Wrap>You are offline</Wrap>
-		</Box>
-	)
+    >
+      <Wrap>You are offline</Wrap>
+    </Box>
+  )
 }

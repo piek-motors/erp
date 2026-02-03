@@ -5,13 +5,13 @@ export type Matrix<T extends object> = (keyof T | T[keyof T])[][]
  * @returns A matrix where the first row is the keys (headers) and subsequent rows are values.
  */
 export function matrixEncoder<T extends object>(
-	data: T[],
+  data: T[],
 ): (keyof T | T[keyof T])[][] {
-	if (!data || data.length === 0) {
-		return []
-	}
+  if (!data || data.length === 0) {
+    return []
+  }
 
-	const headers = Object.keys(data[0]) as (keyof T)[]
-	const rows = data.map(obj => headers.map(header => obj[header]))
-	return [headers, ...rows]
+  const headers = Object.keys(data[0]) as (keyof T)[]
+  const rows = data.map(obj => headers.map(header => obj[header]))
+  return [headers, ...rows]
 }

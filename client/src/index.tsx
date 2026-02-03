@@ -10,25 +10,25 @@ import { AppRouter } from './lib/routers/Router'
 import theme from './theme'
 
 const App = observer(() => {
-	return (
-		<>
-			<NotifierOverlay />
-			<DictManagerModal />
-			<NetworkStatusMessage />
-			<AppRouter />
-		</>
-	)
+  return (
+    <>
+      <NotifierOverlay />
+      <DictManagerModal />
+      <NetworkStatusMessage />
+      <AppRouter />
+    </>
+  )
 })
 
 const container =
-	document.getElementById('app') || document.createElement('div')
+  document.getElementById('app') || document.createElement('div')
 const root = createRoot(container) // createRoot(container!) if you use TypeScript
 
 root.render(
-	<BrowserRouter>
-		<ThemeProvider theme={theme}>
-			<CssBaseline />
-			<App />
-		</ThemeProvider>
-	</BrowserRouter>,
+  <BrowserRouter>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <App />
+    </ThemeProvider>
+  </BrowserRouter>,
 )

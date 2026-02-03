@@ -3,12 +3,12 @@ import { openPage, routeMap } from 'lib/routes'
 import { observer } from 'mobx-react-lite'
 
 export const MaterialName = observer(
-	(props: { label: string; id?: number }) => {
-		const { label, id } = props
-		return (
-			<Link to={openPage(routeMap.pdo.material.edit, id)}>
-				<P whiteSpace={'nowrap'}>{label}</P>
-			</Link>
-		)
-	},
+  (props: { label: string; id?: number }) => {
+    const { label, id } = props
+    return (
+      <Link to={openPage(routeMap.pdo.material.edit, id)}>
+        <P whiteSpace={'nowrap'}>{label}</P>
+      </Link>
+    )
+  },
 )
