@@ -17,6 +17,48 @@ type MaterialWriteoff = {
 	totalCost: number
 } | null
 
+/**
+ * Calculates how much material should be deducted from the inventory.
+ * @param requirement - The material specification logic
+ * @param quantity_to_produce - How many finished parts/details are needed
+ * @returns The total amount of raw material to decrease (in units of material accounting)
+ */
+export function calc_material_deduction(
+	requirement: DB.Blank['material'],
+	quantity_to_produce: number,
+): number {
+	if (!requirement) return 0
+	const { data } = requirement
+	switch (data.type) {
+		case MaterialRequirement.Single:
+			if (!data.gross_length) return 0
+			/**
+			 * Total length consumed.
+			 * We use gross_length because it includes the waste (saw kerf/scraps)
+			 * that is removed from the warehouse stock.
+			 */
+			return data.gross_length * quantity_to_produce
+
+		case MaterialRequirement.Batch:
+			if (!data.yield_per_stock || !data.stock_length) return 0
+			/**
+			 * Number of full stock lengths (bars/sheets) required.
+			 * Since we can't cut from half a bar in the warehouse, we round UP
+			 * to the nearest whole stock unit.
+			 */
+			const bars_needed = Math.ceil(quantity_to_produce / data.yield_per_stock)
+			return bars_needed * data.stock_length
+
+		case MaterialRequirement.Countable:
+			if (!data.count) return 0
+
+			return data.count * quantity_to_produce
+
+		default:
+			throw new Error('Unknown material logic type')
+	}
+}
+
 export class OrderService {
 	private readonly warehouse: Warehouse
 
@@ -25,50 +67,6 @@ export class OrderService {
 		userId: number,
 	) {
 		this.warehouse = new Warehouse(trx, userId)
-	}
-
-	/**
-	 * Calculates how much material should be deducted from the inventory.
-	 * @param requirement - The material specification logic
-	 * @param quantity_to_produce - How many finished parts/details are needed
-	 * @returns The total amount of raw material to decrease (in units of material accounting)
-	 */
-	private calc_material_deduction(
-		requirement: DB.Blank['material'],
-		quantity_to_produce: number,
-	): number {
-		if (!requirement) return 0
-		const { data } = requirement
-		switch (data.type) {
-			case MaterialRequirement.Single:
-				if (!data.gross_length) return 0
-				/**
-				 * Total length consumed.
-				 * We use gross_length because it includes the waste (saw kerf/scraps)
-				 * that is removed from the warehouse stock.
-				 */
-				return data.gross_length * quantity_to_produce
-
-			case MaterialRequirement.Batch:
-				if (!data.yield_per_stock || !data.stock_length) return 0
-				/**
-				 * Number of full stock lengths (bars/sheets) required.
-				 * Since we can't cut from half a bar in the warehouse, we round UP
-				 * to the nearest whole stock unit.
-				 */
-				const bars_needed = Math.ceil(
-					quantity_to_produce / data.yield_per_stock,
-				)
-				return bars_needed * data.stock_length
-
-			case MaterialRequirement.Countable:
-				if (!data.count) return 0
-
-				return data.count * quantity_to_produce
-
-			default:
-				throw new Error('Unknown material logic type')
-		}
 	}
 
 	async createOrder(
@@ -146,7 +144,7 @@ export class OrderService {
 
 		if (material_cost) {
 			const { material_id } = material_cost
-			const cost = this.calc_material_deduction(detail.blank?.material, qty)
+			const cost = calc_material_deduction(detail.blank?.material, qty)
 			const material = await this.trx
 				.selectFrom('pdo.materials')
 				.where('id', '=', material_id)

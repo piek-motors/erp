@@ -95,7 +95,7 @@ export class DetailBlankSt {
 					material_id: this.material_requirement.material.id,
 					data: this.material_requirement.data,
 				},
-			attributes: this.attributes,
+			attributes: this.attributes.filter(each => each.key),
 		}
 	}
 

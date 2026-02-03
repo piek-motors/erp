@@ -17,12 +17,7 @@ export const OperationName = observer((props: Props) => {
 	const { operation: op } = props
 
 	if (op.material_label && op.material_id) {
-		return (
-			<MaterialName
-				materialLabel={op.material_label}
-				materialId={op.material_id}
-			/>
-		)
+		return <MaterialName label={op.material_label} id={op.material_id} />
 	}
 
 	if (op.detail_name && op.detail_id) {

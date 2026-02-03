@@ -1,11 +1,12 @@
-import type { Selectable } from 'kysely'
-import { ManufacturingOrderStatus as OrderStatus } from 'models'
-import z from 'zod'
 import { Day } from '#root/lib/constants.js'
 import { matrixEncoder } from '#root/lib/matrix_encoder.js'
 import { formatDate, timedeltaInSeconds } from '#root/lib/time.js'
 import { router } from '#root/lib/trpc/trpc.js'
 import { type DB, db, procedure, TRPCError } from '#root/sdk.js'
+import type { Selectable } from 'kysely'
+import { ManufacturingOrderStatus as OrderStatus } from 'models'
+import z from 'zod'
+import { calc_material_deduction } from './order_service.js'
 
 export const FinishedOrderRetentionDays = 30
 
@@ -51,23 +52,34 @@ const base_query = db
 export const orders = router({
 	get: procedure
 		.input(z.object({ id: z.number() }))
-		.query(async ({ input }) => {
+		.query(async ({ input, ctx }) => {
 			const order = await db
 				.selectFrom('pdo.orders as m')
 				.selectAll('m')
 				.innerJoin('pdo.details as d', 'm.detail_id', 'd.id')
-				.select(['d.name as detail_name', 'd.logical_group_id as group_id'])
+				.select([
+					'd.name as detail_name',
+					'd.logical_group_id as group_id',
+					'blank',
+				])
 				.where('m.id', '=', input.id)
 				.executeTakeFirst()
+
 			if (!order) {
 				throw new TRPCError({
 					code: 'NOT_FOUND',
 					message: `Manufacturing order with id ${input.id} not found`,
 				})
 			}
+
+			const material_deduction = calc_material_deduction(
+				order?.blank?.material,
+				order?.qty,
+			)
 			return {
 				...order,
 				material_writeoffs: undefined,
+				material_deduction,
 			}
 		}),
 	//

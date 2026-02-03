@@ -8,7 +8,7 @@ import type { DetailSt } from '../detail/detail.state'
 import { DetailApi } from '../detail/detail_api'
 import type { ManufacturingOrderOutput, OrderSt } from './order.state'
 
-export class ManufacturingApi {
+export class OrderApi {
 	readonly loader = new LoadingController()
 	readonly detailApi = new DetailApi()
 	constructor() {
@@ -112,4 +112,4 @@ export class ManufacturingApi {
 	}
 }
 
-export const api = new ManufacturingApi()
+export const api = new OrderApi()

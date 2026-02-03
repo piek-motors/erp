@@ -38,8 +38,8 @@ import { MaterialRequirementSt } from '../detail/detail_blank.store'
 import { BlankAttributes } from '../detail/detail_form'
 import { MaterialName } from '../material/name'
 import { MetalPageTitle } from '../shared/basic'
-import { api } from './api'
 import { OrderSt, type OrderStProp } from './order.state'
+import { api } from './order_api'
 import { TechPassportTable } from './tech_passport/passport_table'
 import { ProductionRoute } from './tech_passport/production_route_table'
 import { DetailDescription } from './tech_passport/shared'
@@ -511,11 +511,11 @@ const MaterialCostCalculations = observer(
 
 		const costCalculations = () => {
 			if (!order.qty) return null
-			// const totalConsumedAmount = order.qty * (cost.length || 0)
-			const totalConsumedAmount = order.qty * (0 || 0)
+			const totalConsumedAmount = order.resp?.material_deduction || 0
 
 			const remainingAmount =
 				(cost.material?.on_hand_balance || 0) - totalConsumedAmount
+
 			const unit = uiUnit(cost?.material?.unit)
 			return (
 				<>
@@ -551,8 +551,8 @@ const MaterialCostCalculations = observer(
 			<Box>
 				<Row>
 					<MaterialName
-						materialId={cost.material_id}
-						materialLabel={cost.material?.label || ''}
+						id={cost.material_id}
+						label={cost.material?.label || ''}
 					/>
 					<Label level="body-sm" color="primary">
 						{/* Расход {cost?.length || 'не указано'}{' '} */}

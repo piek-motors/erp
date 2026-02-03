@@ -211,7 +211,7 @@ const BlankAttributesInput = observer(({ detail }: { detail: DetailSt }) => (
 			value={detail.blank.attributes}
 			onChange={attributes => detail.blank.set_attributes(attributes ?? [])}
 			newItem={{ key: '', value: '' }}
-			placeholders={['Параметр', 'Значение']}
+			placeholders={['Название', 'Значение']}
 			width={[70, 30]}
 		/>
 	</AccordionCard>

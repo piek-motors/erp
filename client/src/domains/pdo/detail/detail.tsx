@@ -13,7 +13,7 @@ import {
 	useState,
 } from 'lib/index'
 import { fmtDate, fmtTimestamp } from 'lib/utils/date_fmt'
-import { CreateManufacturingOrder } from '../orders/create_order'
+import { CreateManufacturingOrder } from '../orders/order_create'
 import type { DetailSt, DetailStProp } from './detail.state'
 import { api } from './detail_api'
 import { DetailForm } from './detail_form'
