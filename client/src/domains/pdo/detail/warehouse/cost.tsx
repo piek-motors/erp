@@ -3,9 +3,9 @@ import { Button, Divider, IconButton, Stack } from '@mui/joy'
 import { AccordionCard } from 'components/accordion_card'
 import { NumberInput } from 'components/inputs/number_input'
 import { app_cache } from 'domains/pdo/cache'
-import { Box, Label, observer, P, PlusIcon, Row, UseIcon } from 'lib/index'
-import { uiUnit, Unit } from 'models'
-import type { DetailSt } from '../detail.state'
+import { Box, Label, observer, PlusIcon, Row, UseIcon } from 'lib/index'
+import { MaterialRequirement, uiUnit } from 'models'
+import type { DetailSt, DetailStProp } from '../detail.state'
 import { MaterialSelect } from '../inputs'
 import { DetailSelectModal } from '../list/list'
 import { DetailName } from '../name'
@@ -52,28 +52,13 @@ export const MaterialCostInputs = observer(
 								Автоматическое списание материала при запуске в производство
 							</Label>
 							<MaterialSelect
-								value={materialCost}
+								value={material?.id}
 								index={0}
-								onChange={cost => {
-									detail.blank.updateMaterial(cost.materialId, cost.length!)
+								onChange={material_id => {
+									detail.blank.updateMaterial(material_id)
 								}}
 							/>
-							<Row>
-								<NumberInput
-									width={100}
-									size="sm"
-									unit={uiUnit(material?.unit)}
-									value={materialCost.length}
-									onChange={v => {
-										materialCost.setLength(v)
-									}}
-								/>
-								{material?.unit === Unit.M && materialCost.length && (
-									<P color="neutral" level="body-xs">
-										{materialCost.length * 1000} мм
-									</P>
-								)}
-							</Row>
+							<MaterialRequirementSelector detail={detail} />
 						</Stack>
 					</CostRow>
 				)}
@@ -81,6 +66,71 @@ export const MaterialCostInputs = observer(
 		)
 	},
 )
+
+const MaterialRequirementSelector = observer((props: DetailStProp) => {
+	const { materialCost } = props.detail.blank
+	switch (materialCost?.data?.type) {
+		case MaterialRequirement.Single:
+			return <SingleMaterialRequirement detail={props.detail} />
+		case MaterialRequirement.Batch:
+			return <BatchMaterialRequirement />
+		case MaterialRequirement.Countable:
+			return <CountableMaterialRequirement />
+		default:
+			throw Error('unrecognized material reuirement')
+	}
+})
+
+const SingleMaterialRequirement = observer((props: DetailStProp) => {
+	const { materialCost } = props.detail.blank
+	const type = MaterialRequirement.Single
+
+	if (materialCost?.data?.type != type) return
+
+	const material = materialCost.material
+	const existing = materialCost.data
+	return (
+		<Row>
+			<NumberInput
+				label="Расход"
+				unit={uiUnit(material?.unit)}
+				value={materialCost?.data.gross_length}
+				onChange={v => {
+					materialCost.set_data({
+						type,
+						blank_length: existing.blank_length,
+						gross_length: v,
+					})
+				}}
+			/>
+			<NumberInput
+				label="Длина заготовки"
+				unit={uiUnit(material?.unit)}
+				value={materialCost?.data.blank_length}
+				onChange={v => {
+					materialCost.set_data({
+						type,
+						gross_length: existing.gross_length,
+						blank_length: v,
+					})
+				}}
+			/>
+			{/* {material?.unit === Unit.M && materialCost.length && (
+			<P color="neutral" level="body-xs">
+				{materialCost.length * 1000} мм
+			</P>
+		)} */}
+		</Row>
+	)
+})
+
+const BatchMaterialRequirement = observer(() => {
+	return <></>
+})
+
+const CountableMaterialRequirement = observer(() => {
+	return <></>
+})
 
 export const AutomaticWriteoffAccordion = observer(
 	({ detail }: { detail: DetailSt }) => (

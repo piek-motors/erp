@@ -6,7 +6,7 @@ import type {
 	Selectable as KyselySelectable,
 	Updateable as KyselyUpdateable,
 } from 'kysely'
-import type {
+import {
 	AbsenceReason,
 	Color,
 	ManufacturingOrderStatus,
@@ -18,6 +18,8 @@ import type {
 	UserRole,
 	WriteoffReason,
 } from 'models'
+import { BlankSchema } from 'validators'
+import z from 'zod'
 
 export type KDB = Kysely<DB.Schema>
 export type Selectable<T> = KyselySelectable<T>
@@ -105,8 +107,9 @@ export namespace DB {
 		 */
 		shortage_prediction_horizon_days: number
 	}
-
 	export type Material = KyselySelectable<MaterialTable>
+
+	export type Blank = z.infer<typeof BlankSchema>
 
 	export interface DetailTable {
 		id: Generated<number>
@@ -118,7 +121,7 @@ export namespace DB {
 		drawing_name: string | null
 		on_hand_balance: number
 		stock_location: string | null
-		blank_spec: JSONColumnType<any, any, any>
+		blank_spec: JSONColumnType<any, any, any> // Deprecated
 		updated_at: Date
 		recommended_batch_size: number | null
 		processing_route: JSONColumnType<
@@ -126,45 +129,7 @@ export namespace DB {
 			ProcessingRoute,
 			ProcessingRoute
 		> | null
-		blank: JSONColumnType<MetalBlank, MetalBlank, MetalBlank> | null
-	}
-
-	type MaterialId = number
-	type Cost = number
-
-	export interface MetalBlank {
-		material: [MaterialId, Cost] | null
-		details: {
-			detail_id: number
-			qty: number
-		}[]
-	}
-
-	export type MaterialRequirement = {
-		/** Shared ID for both unit-based and batch-based logic */
-		material_id: number
-		/** Discriminated union for calculation logic */
-		logic:
-			| {
-					type: 'per_unit'
-					/** Gross length: Includes all waste (saw kerf/cut width,
-					 * clamping margins, and end-trimming). */
-					gross_length: number
-					/** Blank length: The actual size of the cut piece
-					 * before further machining/processing. */
-					blank_length: number
-			  }
-			| {
-					type: 'batch_optimized'
-					/** Full length of the raw stock */
-					stock_length: number
-					/** Number of blanks produced from one stock length */
-					yield_per_stock: number
-			  }
-			| {
-					type: 'countable'
-					count: number
-			  }
+		blank: JSONColumnType<Blank, Blank, Blank> | null
 	}
 
 	export interface ProcessingRoute {

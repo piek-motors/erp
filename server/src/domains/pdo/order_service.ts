@@ -2,7 +2,11 @@ import { type IDB, TRPCError } from '#root/sdk.js'
 import type { DB } from 'db'
 import { Decimal } from 'decimal.js'
 import type { Selectable } from 'kysely'
-import { ManufacturingOrderStatus, WriteoffReason } from 'models'
+import {
+	ManufacturingOrderStatus,
+	MaterialRequirement,
+	WriteoffReason,
+} from 'models'
 import { Warehouse } from './warehouse.service.js'
 
 type MaterialWriteoff = {
@@ -13,7 +17,7 @@ type MaterialWriteoff = {
 	totalCost: number
 } | null
 
-export class Manufacturing {
+export class OrderService {
 	private readonly warehouse: Warehouse
 
 	constructor(
@@ -21,6 +25,50 @@ export class Manufacturing {
 		userId: number,
 	) {
 		this.warehouse = new Warehouse(trx, userId)
+	}
+
+	/**
+	 * Calculates how much material should be deducted from the inventory.
+	 * @param requirement - The material specification logic
+	 * @param quantity_to_produce - How many finished parts/details are needed
+	 * @returns The total amount of raw material to decrease (in units of material accounting)
+	 */
+	private calc_material_deduction(
+		requirement: DB.Blank['material'],
+		quantity_to_produce: number,
+	): number {
+		if (!requirement) return 0
+		const { data } = requirement
+		switch (data.type) {
+			case MaterialRequirement.Single:
+				if (!data.gross_length) return 0
+				/**
+				 * Total length consumed.
+				 * We use gross_length because it includes the waste (saw kerf/scraps)
+				 * that is removed from the warehouse stock.
+				 */
+				return data.gross_length * quantity_to_produce
+
+			case MaterialRequirement.Batch:
+				if (!data.yield_per_stock || !data.stock_length) return 0
+				/**
+				 * Number of full stock lengths (bars/sheets) required.
+				 * Since we can't cut from half a bar in the warehouse, we round UP
+				 * to the nearest whole stock unit.
+				 */
+				const bars_needed = Math.ceil(
+					quantity_to_produce / data.yield_per_stock,
+				)
+				return bars_needed * data.stock_length
+
+			case MaterialRequirement.Countable:
+				if (!data.count) return 0
+
+				return data.count * quantity_to_produce
+
+			default:
+				throw new Error('Unknown material logic type')
+		}
 	}
 
 	async createOrder(
@@ -78,11 +126,11 @@ export class Manufacturing {
 	}
 
 	async startProductionPhase(
-		orderId: number,
+		order_id: number,
 		qty: number,
 		force?: boolean,
 	): Promise<MaterialWriteoff> {
-		const order = await this.getOrder(orderId)
+		const order = await this.getOrder(order_id)
 		const detail = await this.trx
 			.selectFrom('pdo.details')
 			.where('id', '=', order.detail_id)
@@ -90,23 +138,25 @@ export class Manufacturing {
 			.executeTakeFirstOrThrow()
 
 		if (!force) {
-			await this.deduplicateProductionList(order.detail_id)
+			await this.deduplicate_production_list(order.detail_id)
 		}
 
-		const materialCost = detail.blank?.material
+		const material_cost = detail.blank?.material
 		let writeoff: MaterialWriteoff = null
-		if (materialCost) {
-			const [id, cost] = materialCost
+
+		if (material_cost) {
+			const { material_id } = material_cost
+			const cost = this.calc_material_deduction(detail.blank?.material, qty)
 			const material = await this.trx
 				.selectFrom('pdo.materials')
-				.where('id', '=', id)
+				.where('id', '=', material_id)
 				.selectAll()
 				.executeTakeFirstOrThrow()
 
 			writeoff = await this.subtractMaterials(
 				{
-					material_id: id,
-					cost: cost,
+					material_id,
+					cost,
 					label: material.label,
 					stock: material.on_hand_balance,
 				},
@@ -122,13 +172,13 @@ export class Manufacturing {
 				started_at: new Date(),
 				status: ManufacturingOrderStatus.Production,
 			})
-			.where('id', '=', orderId)
+			.where('id', '=', order_id)
 			.execute()
 		return writeoff
 	}
 
 	/** deduplication check:  if order already started production */
-	private async deduplicateProductionList(detail_id: number) {
+	private async deduplicate_production_list(detail_id: number) {
 		const order = await this.trx
 			.selectFrom('pdo.orders')
 			.where('detail_id', '=', detail_id)

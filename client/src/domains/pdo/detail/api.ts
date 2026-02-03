@@ -52,14 +52,14 @@ export class DetailApi {
 	}
 
 	async insert(detail: DetailSt) {
-		const res = await rpc.pdo.details.create.mutate(detail.payload())
+		const res = await rpc.pdo.details.create.mutate(detail.payload)
 		await app_cache.details.load()
 		return res.id
 	}
 
 	async update(detail: DetailSt) {
 		try {
-			await rpc.pdo.details.update.mutate(detail.payload())
+			await rpc.pdo.details.update.mutate(detail.payload)
 			app_cache.details.update(detail)
 			detail.setUpdatedAt(new Date())
 			notifier.ok(`Деталь обновлена`)

@@ -1,5 +1,5 @@
 import { makeAutoObservable } from 'mobx'
-import type { DetailAutomaticWriteoffData } from 'srv/domains/pdo/details'
+import type { Blank } from 'srv/domains/pdo/details'
 import { DetailCost, MaterialCost } from './cost.store'
 
 export class MetalBlankSt {
@@ -8,22 +8,22 @@ export class MetalBlankSt {
 		this.detailsCost = detailCosts || []
 	}
 	materialCost: MaterialCost | null = null
-	setMaterialCost(material?: MaterialCost | null) {
-		this.materialCost = material || null
+	setMaterialCost(c?: MaterialCost | null) {
+		this.materialCost = c || null
 	}
 
 	constructor() {
 		makeAutoObservable(this)
 	}
 
-	init(writeoffData: DetailAutomaticWriteoffData) {
-		this.setDetailCost(writeoffData.details.map(d => new DetailCost(d)))
+	init(blank: Blank) {
+		this.setDetailCost(blank?.details?.map(d => new DetailCost(d)))
 		this.setMaterialCost(
-			writeoffData.material ? new MaterialCost(writeoffData.material) : null,
+			blank.material ? new MaterialCost(blank.material) : null,
 		)
 	}
 
-	get payload(): DetailAutomaticWriteoffData {
+	get payload(): Blank {
 		return {
 			details: this.detailsCost
 				.map(d => ({
@@ -31,7 +31,11 @@ export class MetalBlankSt {
 					qty: d.qty ?? 1,
 				}))
 				.filter(e => e.detail_id && e.qty),
-			material: this.materialCost ? this.materialCost.getCost() : null,
+			material: this.materialCost?.data &&
+				this.materialCost?.material && {
+					material_id: this.materialCost.material.id,
+					data: this.materialCost.data,
+				},
 		}
 	}
 
@@ -48,13 +52,12 @@ export class MetalBlankSt {
 		this.detailsCost.push(new DetailCost())
 	}
 
-	updateMaterial(materialId: number, length: number) {
+	updateMaterial(materialId: number) {
 		if (!this.materialCost) {
 			this.insertMaterialCost()
 		}
 		if (this.materialCost) {
 			this.materialCost.materialId = materialId
-			this.materialCost.length = length
 		}
 	}
 

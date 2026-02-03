@@ -34,7 +34,7 @@ export const columns: Column<Operation>[] = [
 		accessor: data => {
 			const sign = data.operation_type == OperationType.Supply ? '+' : '-'
 			return (
-				<Row whiteSpace={'nowrap'} gap={0.3}>
+				<Row flexWrap={'nowrap'} gap={0.3}>
 					<Label>{sign}</Label>{' '}
 					{value_with_unit(formatter.format(data.qty), data.unit)}
 				</Row>

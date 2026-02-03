@@ -9,7 +9,7 @@ import {
 	Scope,
 	TRPCError,
 } from '#root/sdk.js'
-import type { DB } from 'db'
+import { BlankSchema, type DB } from 'db'
 import { type Selectable, sql } from 'kysely'
 import { SupplyReason, Unit, WriteoffReason } from 'models'
 import { z } from 'zod'
@@ -29,24 +29,24 @@ const ProcessingRouteSchema = z.object({
 	steps: z.array(z.number()),
 })
 
-const BlankSpecSchema = z.object({
-	arr: z.array(
-		z.object({
-			key: z.string(),
-			value: z.any(),
-		}),
-	),
-})
+// const BlankSpecSchema = z.object({
+// 	arr: z.array(
+// 		z.object({
+// 			key: z.string(),
+// 			value: z.any(),
+// 		}),
+// 	),
+// })
 
-const BlankSchema = z.object({
-	details: z.array(
-		z.object({
-			detail_id: z.number(),
-			qty: z.number(),
-		}),
-	),
-	material: z.tuple([z.number(), z.number()]).nullable(),
-})
+// const BlankSchema = z.object({
+// 	details: z.array(
+// 		z.object({
+// 			detail_id: z.number(),
+// 			qty: z.number(),
+// 		}),
+// 	),
+// 	material: z.tuple([z.number(), z.number()]).nullable(),
+// })
 
 const DetailSchema = z.object({
 	name: z.string().min(5, 'Название должно быть не менее 5 символов'),
@@ -54,7 +54,7 @@ const DetailSchema = z.object({
 	drawing_number: z.string().nullable(),
 	drawing_name: z.string().nullable(),
 	logical_group_id: z.number().nullable(),
-	blank_spec: BlankSpecSchema.nullable(), // TODO: rename to blank.params
+	// blank_spec: BlankSpecSchema.nullable(), // TODO: rename to blank.params
 	processing_route: ProcessingRouteSchema.nullable(),
 	blank: BlankSchema.nullable(),
 	stock_location: z.string().nullable(),
@@ -70,7 +70,7 @@ export interface ListDetailsOutput {
 }
 
 export type SelectableDetail = Selectable<DB.DetailTable>
-export type DetailAutomaticWriteoffData = DB.MetalBlank
+export type Blank = DB.Blank
 
 export const details = router({
 	get: procedure

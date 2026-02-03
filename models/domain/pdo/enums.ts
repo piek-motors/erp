@@ -55,3 +55,9 @@ export enum Color {
 	Black = 6,
 	Grey = 7,
 }
+
+export enum MaterialRequirement {
+	Single = 0,
+	Batch = 1,
+	Countable = 2,
+}

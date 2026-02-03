@@ -1,35 +1,36 @@
 import { app_cache } from 'domains/pdo/cache'
 import { makeAutoObservable } from 'mobx'
-import type { DetailAutomaticWriteoffData } from 'srv/domains/pdo/details'
+import { MaterialRequirement } from 'models'
+import type { Blank } from 'srv/domains/pdo/details'
+
+export type BlankData = Exclude<Blank['material'], undefined>['data']
 
 export class MaterialCost {
 	materialId!: number
 	setMaterialId(materialId: number) {
 		this.materialId = materialId
 	}
-	length?: number
-	setLength(length?: number) {
-		this.length = length
+
+	data?: BlankData
+	set_data(d?: BlankData) {
+		this.data = d
 	}
-	constructor(init?: DetailAutomaticWriteoffData['material']) {
-		if (init) {
-			if (init[0]) {
-				this.materialId = init[0]
-			}
-			if (init[1]) {
-				this.length = init[1]
-			}
+
+	constructor(b?: Blank['material']) {
+		this.data = {
+			type: MaterialRequirement.Single,
 		}
+
+		if (b) {
+			this.materialId = b.material_id
+			this.data = b.data
+		}
+
 		makeAutoObservable(this)
 	}
+
 	get material() {
 		return app_cache.materials.get(this.materialId)
-	}
-	getCost(): [number, number] {
-		if (!this.length) {
-			throw Error(`Не указан расход для материала ${this.material?.label}`)
-		}
-		return [this.materialId, this.length]
 	}
 }
 

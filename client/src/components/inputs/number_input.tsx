@@ -1,3 +1,5 @@
+/** @jsxImportSource @emotion/react */
+import { css } from '@emotion/react'
 import type { InputProps } from '@mui/joy'
 import { InputWithUnit, useState } from 'lib/index'
 
@@ -11,13 +13,26 @@ interface Props {
 	onChange: (v?: number) => void
 }
 
-export function NumberInput(props: Omit<InputProps, 'onChange'> & Props) {
+export function NumberInput(
+	props: Omit<InputProps, 'onChange' | 'value'> & Props,
+) {
 	const [error, setError] = useState<boolean>(false)
 	return (
 		<InputWithUnit
-			sx={{ width: props.width ? `${props.width}px` : '120px' }}
+			sx={{ width: props.width ? `${props.width}px` : '100px' }}
 			{...props}
 			type="number"
+			size={props.size ?? 'sm'}
+			css={css`
+				input::-webkit-outer-spin-button,
+				input::-webkit-inner-spin-button {
+				-webkit-appearance: none;
+				margin: 0;
+				}
+
+				input[type=number] {
+				-moz-appearance: textfield;
+				}`}
 			error={error}
 			value={props.value == null ? '' : Number(props.value)}
 			onChange={e => {

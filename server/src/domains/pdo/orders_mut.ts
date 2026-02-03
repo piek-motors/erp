@@ -3,7 +3,7 @@ import { router } from '#root/lib/trpc/trpc.js'
 import { type DB, db, procedure, requireScope, TRPCError } from '#root/sdk.js'
 import { ManufacturingOrderStatus as OrderStatus } from 'models'
 import z from 'zod'
-import { Manufacturing } from './manufacturing.service.js'
+import { OrderService } from './order_service.js'
 
 export const orders_mut = router({
 	create: procedure
@@ -11,7 +11,7 @@ export const orders_mut = router({
 		.input(z.object({ detailId: z.number() }))
 		.mutation(({ input, ctx }) =>
 			db.transaction().execute(trx =>
-				new Manufacturing(trx, ctx.user.id)
+				new OrderService(trx, ctx.user.id)
 					.createOrder(input.detailId)
 					.then(order => ({
 						...order,
@@ -65,7 +65,7 @@ export const orders_mut = router({
 			db
 				.transaction()
 				.execute(async trx =>
-					new Manufacturing(trx, ctx.user.id)
+					new OrderService(trx, ctx.user.id)
 						.deleteOrder(input.id)
 						.then(() => 'ok'),
 				),
@@ -76,7 +76,7 @@ export const orders_mut = router({
 		.input(z.object({ orderId: z.number() }))
 		.mutation(({ input, ctx }) =>
 			db.transaction().execute(trx =>
-				new Manufacturing(trx, ctx.user.id)
+				new OrderService(trx, ctx.user.id)
 					.startMaterialPreparationPhase(input.orderId)
 					.then(() => ({
 						success: true,
@@ -97,7 +97,7 @@ export const orders_mut = router({
 			db
 				.transaction()
 				.execute(trx =>
-					new Manufacturing(trx, ctx.user.id).startProductionPhase(
+					new OrderService(trx, ctx.user.id).startProductionPhase(
 						input.orderId,
 						input.qty,
 						input.force,
@@ -147,7 +147,7 @@ export const orders_mut = router({
 			db
 				.transaction()
 				.execute(async trx =>
-					new Manufacturing(trx, ctx.user.id).finishOrder(input.id),
+					new OrderService(trx, ctx.user.id).finishOrder(input.id),
 				),
 		),
 	//

@@ -523,7 +523,9 @@ const MaterialCostCalculations = observer(
 
 		const costCalculations = () => {
 			if (!order.qty) return null
-			const totalConsumedAmount = order.qty * (cost.length || 0)
+			// const totalConsumedAmount = order.qty * (cost.length || 0)
+			const totalConsumedAmount = order.qty * (0 || 0)
+
 			const remainingAmount =
 				(cost.material?.on_hand_balance || 0) - totalConsumedAmount
 			const unit = uiUnit(cost?.material?.unit)
@@ -565,7 +567,7 @@ const MaterialCostCalculations = observer(
 						materialLabel={cost.material?.label || ''}
 					/>
 					<Label level="body-sm" color="primary">
-						Расход {cost?.length || 'не указано'}{' '}
+						{/* Расход {cost?.length || 'не указано'}{' '} */}
 						{uiUnit(cost.material?.unit) || ''}
 					</Label>
 				</Row>

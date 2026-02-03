@@ -4,7 +4,7 @@ import { Box, Label, observer, PlusIcon, Row, Stack, UseIcon } from 'lib/index'
 import * as dnd from 'react-beautiful-dnd'
 
 interface ArrayJsonEditorProps {
-	value: any[] | null
+	value?: any[] | null
 	onChange: (value: any[] | null) => void
 	newItem?: Record<string, any>
 	width?: number[]

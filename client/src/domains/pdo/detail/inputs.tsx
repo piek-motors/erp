@@ -29,11 +29,9 @@ import {
 	Row,
 } from 'lib/index'
 import type { ReactNode } from 'react'
-import { MaterialAutocomplete } from '../shared/material_autocomplete'
 import { DetailAttachmentList } from './attachment/list'
 import type { BlankSpec, DetailSt, DetailStProp } from './detail.state'
 import { DetailCostInputs, MaterialCostInputs } from './warehouse/cost'
-import { MaterialCost } from './warehouse/cost.store'
 
 export const DetailInputs = observer(
 	({
@@ -93,21 +91,38 @@ export const DetailAccordionGroup = observer(({ d }: { d: DetailSt }) => (
 ))
 
 export const MaterialSelect = observer(
-	(props: {
-		value: MaterialCost
-		index: number
-		onChange: (m: MaterialCost) => void
-	}) => {
-		const data = app_cache.materials
-			.getMaterials()
-			.map(e => new MaterialCost([e.id, props.value.length ?? 0]))
+	(props: { value?: number; index: number; onChange: (m: number) => void }) => {
+		const { value, onChange } = props
+		const options: BaseOption[] =
+			app_cache.materials.getMaterials()?.map(material => ({
+				label: app_cache.materials.get(material.id)?.label || '',
+				value: material.id,
+			})) || []
+
 		return (
-			<MaterialAutocomplete
-				data={data}
-				value={props.value}
-				onChange={m => {
-					props.onChange(m)
+			<BaseAutocomplete
+				size={'sm'}
+				options={options}
+				placeholder="Выберите материал"
+				value={
+					value
+						? {
+								label: app_cache.materials.getLabel(value) || '',
+								value,
+							}
+						: null
+				}
+				onChange={newValue => {
+					if (newValue && !Array.isArray(newValue)) {
+						onChange(newValue.value)
+					}
 				}}
+				getOptionLabel={option =>
+					typeof option === 'string' ? option : option.label
+				}
+				isOptionEqualToValue={(option, value) =>
+					option.value.id === value.value.id
+				}
 			/>
 		)
 	},

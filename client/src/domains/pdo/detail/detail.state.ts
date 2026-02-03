@@ -183,22 +183,13 @@ export class DetailSt {
 		this.blank.reset()
 	}
 
-	payload(): UpdateDetailRequest {
+	get payload(): UpdateDetailRequest {
 		return {
 			id: this.id ?? 0,
 			description: this.description ?? '',
 			name: this.name ?? '',
 			drawing_number: this.drawingNumber ?? null,
 			logical_group_id: this.groupId ?? null,
-			blank_spec: {
-				arr:
-					this.blankSpec?.arr
-						?.map(({ key, value }) => ({
-							key: key?.trim(),
-							value: value?.trim(),
-						}))
-						.filter(({ key, value }) => key) ?? [],
-			},
 			recommended_batch_size: Number(this.recommendedBatchSize) ?? null,
 			processing_route: this.processingRoute
 				? {
