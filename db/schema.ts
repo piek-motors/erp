@@ -121,7 +121,6 @@ export namespace DB {
 		drawing_name: string | null
 		on_hand_balance: number
 		stock_location: string | null
-		blank_spec: JSONColumnType<any, any, any> // Deprecated
 		updated_at: Date
 		recommended_batch_size: number | null
 		processing_route: JSONColumnType<

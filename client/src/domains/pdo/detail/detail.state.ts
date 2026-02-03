@@ -71,7 +71,6 @@ export class DetailSt {
 			description: detail.description || '',
 			drawing_name: detail.drawing_name ?? '',
 			updated_at: detail.updated_at?.toString() ?? '',
-			blank_spec: detail.blank_spec,
 			recommended_batch_size: detail.recommended_batch_size ?? null,
 			processing_route: detail.processing_route ?? null,
 			blank: detail.blank ?? null,
