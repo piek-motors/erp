@@ -16,9 +16,7 @@ import {
 	Row,
 	Stack,
 	useNavigate,
-	useState,
 } from 'lib/index'
-import type { ReactNode } from 'react'
 import type { Column } from 'react-table'
 import type { DetailSt } from '../detail.state'
 import { DetailName } from '../name'
@@ -70,7 +68,7 @@ const columnList: Column<DetailSt>[] = [
 				detail={{
 					id: r.id || 0,
 					name: r.name,
-					group_id: r.groupId || null,
+					group_id: r.group_id || null,
 				}}
 				disableLink
 				withGroupName
@@ -122,35 +120,28 @@ const DetailList = observer((props: DetailsTableProps) => {
 interface DetailSelectModalProps {
 	value?: DetailSt
 	onRowClick: (row: DetailSt) => void
-	openButton: ReactNode
+	open: boolean
+	setOpen: (v: boolean) => void
 }
 
-export const DetailSelectModal = observer((props: DetailSelectModalProps) => {
-	const [opnen, setOpen] = useState(false)
-	return (
-		<InModal
-			layout="fullscreen"
-			open={opnen}
-			setOpen={() => setOpen(!opnen)}
-			openButton={props.openButton}
-		>
-			<ScrollableWindow
-				refreshTrigger={false}
-				scroll={
-					<Box p={1} mb={3}>
-						<Search />
-						<DetailsList
-							onRowClick={v => {
-								props.onRowClick(v)
-								setOpen(false)
-							}}
-						/>
-					</Box>
-				}
-			/>
-		</InModal>
-	)
-})
+export const DetailSelectModal = observer((props: DetailSelectModalProps) => (
+	<InModal layout="fullscreen" open={props.open} setOpen={props.setOpen}>
+		<ScrollableWindow
+			refreshTrigger={false}
+			scroll={
+				<Box p={1} mb={3}>
+					<Search />
+					<DetailsList
+						onRowClick={v => {
+							props.onRowClick(v)
+							props.setOpen(false)
+						}}
+					/>
+				</Box>
+			}
+		/>
+	</InModal>
+))
 
 const DetailsList = observer((props: DetailsTableProps) => (
 	<Stack gap={1} sx={props.sx}>

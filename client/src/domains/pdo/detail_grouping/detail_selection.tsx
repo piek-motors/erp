@@ -8,7 +8,7 @@ import { DetailName } from '../detail/name'
 import { api } from './api'
 
 const UniversalDetailSelection = observer(() => {
-	const universalDetails = app_cache.details.getUniversalDetails()
+	const universalDetails = app_cache.details.universal_details
 
 	if (!universalDetails.length) {
 		return null
@@ -59,13 +59,7 @@ const UniversalDetailSelection = observer(() => {
 									justifyContent="space-between"
 									alignItems="center"
 								>
-									<DetailName
-										detail={{
-											id: detail.id,
-											name: detail.name,
-											group_id: detail.groupId ?? null,
-										}}
-									/>
+									<DetailName detail={detail} />
 									<IconButton
 										variant="soft"
 										color="danger"
@@ -141,7 +135,7 @@ export const UniversalDetailsModalSelect = observer(() => {
 			<Stack sx={{ flex: 1 }} gap={1}>
 				<P>
 					Доступные универсальные детали [
-					{app_cache.details.getUniversalDetails().length}]
+					{app_cache.details.universal_details.length}]
 				</P>
 				<UniversalDetailSelection />
 				<Box>

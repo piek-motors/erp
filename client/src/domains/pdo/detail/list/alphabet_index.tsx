@@ -7,7 +7,7 @@ export const AlphabetIndex = observer(({ sx }: { sx?: SxProps }) => {
 	const isActive = (letter: string) => detailListStore.index_letter === letter
 	return (
 		<Stack sx={{ flexWrap: 'wrap', width: 'fit-content', ...sx }}>
-			{app_cache.details.getFirstLetterIndex().map((letter, index) => (
+			{app_cache.details.first_letter_index.map((letter, index) => (
 				<Button
 					key={letter}
 					size="sm"

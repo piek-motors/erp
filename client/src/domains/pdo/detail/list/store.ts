@@ -79,7 +79,7 @@ export class DetailListStore {
 				.map(detail => {
 					const name = detail.name.toLowerCase()
 					const group = (
-						app_cache.detailGroups.getGroupName(detail.groupId) ?? ''
+						app_cache.detailGroups.getGroupName(detail.group_id) ?? ''
 					).toLowerCase()
 
 					let score = 0

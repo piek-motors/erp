@@ -7,7 +7,7 @@ import { openPage, routeMap } from 'lib/routes'
 interface Detail {
 	id: number
 	name: string
-	group_id: number | null
+	group_id?: number | null
 }
 
 interface Props {
@@ -40,7 +40,7 @@ export const DetailName = observer((props: Props) => {
 	)
 })
 
-const GroupName = observer(({ groupId }: { groupId: number | null }) => {
+const GroupName = observer(({ groupId }: { groupId?: number | null }) => {
 	if (!groupId) return null
 	const groupName = app_cache.detailGroups.getGroupName(groupId)
 	return (

@@ -21,7 +21,7 @@ export class Operation {
 	}
 	get name(): string {
 		if (!this.id) return ''
-		const name = app_cache.details.dictProcessingOperaions.find(
+		const name = app_cache.details.dict_processing_operaions.find(
 			each => each.id === this.id,
 		)?.v
 		return name ?? 'No value in the dict'
@@ -92,9 +92,9 @@ export class DetailSt {
 	setDescription(description?: string | null) {
 		this.description = description ?? ''
 	}
-	groupId?: number | null
+	group_id?: number | null
 	setGroupId(groupId: number | null) {
-		this.groupId = groupId
+		this.group_id = groupId
 	}
 	drawingName?: string
 	setDrawingName(name: string) {
@@ -172,7 +172,7 @@ export class DetailSt {
 		this.description = ''
 		this.recentlyAdded = undefined
 		this.recentlyUpdated = undefined
-		this.groupId = undefined
+		this.group_id = undefined
 		this.drawingNumber = ''
 		this.blankSpec = null
 		this.updatedAt = undefined
@@ -189,7 +189,7 @@ export class DetailSt {
 			description: this.description ?? '',
 			name: this.name ?? '',
 			drawing_number: this.drawingNumber ?? null,
-			logical_group_id: this.groupId ?? null,
+			logical_group_id: this.group_id ?? null,
 			recommended_batch_size: Number(this.recommendedBatchSize) ?? null,
 			processing_route: this.processingRoute
 				? {

@@ -1,8 +1,16 @@
 import { UilMinus } from '@iconscout/react-unicons'
-import { Button, IconButton, Stack } from '@mui/joy'
+import { IconButton, Stack } from '@mui/joy'
 import { NumberInput } from 'components/inputs/number_input'
 import { app_cache } from 'domains/pdo/cache'
-import { Box, Label, observer, PlusIcon, Row, UseIcon } from 'lib/index'
+import {
+	Box,
+	Label,
+	observer,
+	PlusIcon,
+	Row,
+	UseIcon,
+	useState,
+} from 'lib/index'
 import { MaterialRequirement, uiUnit } from 'models'
 import type { DetailSt, DetailStProp } from './detail.state'
 import { MaterialSelect } from './inputs'
@@ -28,7 +36,7 @@ const CostRow = ({ children, onDelete }: CostRowProps) => {
 	)
 }
 
-export const MaterialCostInputs = observer(
+export const MaterialRequirementInput = observer(
 	({ detail }: { detail: DetailSt }) => {
 		const materialCost = detail.blank.materialCost
 		const material = app_cache.materials.get(materialCost?.material_id || 0)
@@ -131,63 +139,62 @@ const CountableMaterialRequirement = observer(() => {
 	return <></>
 })
 
-export const DetailCostInputs = observer(({ detail }: { detail: DetailSt }) => (
-	<Base label="Расход деталей" handleAdd={() => detail.blank.insertDetail()}>
-		<Label xs>
-			Укажите детали, которые используются в заготовке данной детали, и их
-			количество
-		</Label>
-
-		{detail.blank.detailsCost.map((cost, index) => {
-			const detailCache = app_cache.details.get(cost.detailId)
-			if (app_cache.details.loader.loading) return <Label xs>Загрузка..7</Label>
-			else if (!detailCache)
-				return (
-					<DetailSelectModal
-						openButton={
-							<Button variant="solid" size="sm">
-								Выбрать
-							</Button>
-						}
-						onRowClick={detail => {
-							cost.setDetailId(detail.id)
-						}}
-					/>
-				)
-			return (
-				<CostRow
-					key={detailCache.id + index.toString()}
-					onDelete={() => {
-						detail.blank.deleteDetail(cost.detailId)
-					}}
-				>
-					<Row
-						width={'-webkit-fill-available'}
-						justifyContent={'space-between'}
-					>
-						<DetailName
-							detail={{
-								id: detailCache.id ?? 0,
-								name: detailCache.name,
-								group_id: detailCache.groupId ?? 0,
+export const DetailRequirementInput = observer(
+	({ detail }: { detail: DetailSt }) => {
+		const [open, setOpen] = useState(false)
+		const handle_add = () => {
+			detail.blank.insertDetail()
+			setOpen(true)
+		}
+		return (
+			<Base label="Расход деталей" handleAdd={handle_add}>
+				<Label xs>
+					Укажите детали, которые используются в заготовке данной детали, и их
+					количество
+				</Label>
+				{detail.blank.detailsCost.map((cost, index) => {
+					const detail = app_cache.details.get(cost.detailId)
+					if (app_cache.details.loader.loading)
+						return <Label xs>Загрузка..7</Label>
+					else if (!detail)
+						return (
+							<DetailSelectModal
+								open={open}
+								setOpen={setOpen}
+								onRowClick={detail => {
+									cost.setDetailId(detail.id)
+								}}
+							/>
+						)
+					return (
+						<CostRow
+							key={detail.id + index.toString()}
+							onDelete={() => {
+								detail.blank.deleteDetail(cost.detailId)
 							}}
-							withGroupName
-						/>
-						<NumberInput
-							variant="plain"
-							width={70}
-							size="sm"
-							value={cost.qty}
-							onChange={v => {
-								cost.setQty(v)
-							}}
-						/>
-					</Row>
-				</CostRow>
-			)
-		})}
-	</Base>
-))
+						>
+							<Row
+								width={'-webkit-fill-available'}
+								justifyContent={'space-between'}
+							>
+								<DetailName detail={detail} withGroupName />
+								<NumberInput
+									variant="plain"
+									width={70}
+									size="sm"
+									value={cost.qty}
+									onChange={v => {
+										cost.setQty(v)
+									}}
+								/>
+							</Row>
+						</CostRow>
+					)
+				})}
+			</Base>
+		)
+	},
+)
 
 interface BaseProps {
 	label: string

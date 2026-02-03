@@ -31,7 +31,10 @@ import {
 import type { ReactNode } from 'react'
 import { DetailAttachmentList } from './attachment/list'
 import type { BlankSpec, DetailSt, DetailStProp } from './detail.state'
-import { DetailCostInputs, MaterialCostInputs } from './detail_blank'
+import {
+	DetailRequirementInput,
+	MaterialRequirementInput,
+} from './detail_blank'
 
 export const DetailInputs = observer(
 	({
@@ -173,7 +176,7 @@ const DetailGroupInput = observer(({ detail }: { detail: DetailSt }) => {
 		}))
 
 	const selectedGroup =
-		groupOptions.find(option => option.value === detail.groupId) || null
+		groupOptions.find(option => option.value === detail.group_id) || null
 
 	return (
 		<Stack>
@@ -198,11 +201,10 @@ const DetailAttachmentInput = observer(({ detail }: { detail: DetailSt }) => (
 
 const BlankSpecInput = observer(({ detail }: { detail: DetailSt }) => (
 	<AccordionCard title="Заготовка" defaultExpanded>
-		<MaterialCostInputs detail={detail} />
+		<MaterialRequirementInput detail={detail} />
 		<Divider sx={{ my: 0.5 }} />
-		<DetailCostInputs detail={detail} />
+		<DetailRequirementInput detail={detail} />
 		<Divider sx={{ my: 0.5 }} />
-
 		<Label color="primary">Параметры</Label>
 		<ArrayJsonEditor
 			value={detail.blankSpec?.arr ?? null}
@@ -239,7 +241,7 @@ const ProcessingRouteAccordion = observer(
 									dictManager.open({
 										ls: () =>
 											dict.ls.query().then(res => {
-												app_cache.details.setDictProcessingOperations(res)
+												app_cache.details.set_dict_processing_operations(res)
 												return res
 											}),
 										add: operation => dict.add.mutate({ v: operation }),

@@ -87,14 +87,7 @@ export const OrderUpdatePage = observer(() => {
 									</P>
 									<OrderStatusChip status={order.resp.status} />
 								</Row>
-								<DetailName
-									detail={{
-										id: detail.id,
-										name: detail.name,
-										group_id: detail.groupId || null,
-									}}
-									withGroupName
-								/>
+								<DetailName detail={detail} withGroupName />
 							</Box>
 						}
 					/>
@@ -312,15 +305,9 @@ const Cost = observer(({ detail, order }: DetailStProp & OrderStProp) => {
 				<Stack>
 					<Label label="Детали к потреблению" />
 					<Stack gap={0.5}>
-						{details.map((cost, index) => (
+						{details.map(cost => (
 							<Row justifyContent={'space-between'}>
-								<DetailName
-									detail={{
-										id: cost.detailId,
-										name: cost.detail?.name || '',
-										group_id: cost.detail?.groupId || null,
-									}}
-								/>
+								{cost.detail && <DetailName detail={cost.detail} />}
 								<P>
 									{cost.qty} <Label xs>шт</Label>
 								</P>
