@@ -31,10 +31,11 @@ import {
 	uiManufacturingOrderStatus,
 	uiUnit,
 } from 'models'
+import { Blank } from 'srv/domains/pdo/details'
 import { app_cache } from '../cache'
-import type { BlankSpec, DetailSt, DetailStProp } from '../detail/detail.state'
+import type { DetailSt, DetailStProp } from '../detail/detail.state'
 import { MaterialRequirementSt } from '../detail/detail_blank.store'
-import { TechParamsDisplay } from '../detail/inputs'
+import { BlankAttributes } from '../detail/inputs'
 import { MaterialName } from '../material/name'
 import { MetalPageTitle } from '../shared/basic'
 import { api } from './api'
@@ -102,7 +103,7 @@ export const OrderUpdatePage = observer(() => {
 							/>
 						</Stack>
 						<Cost order={order} detail={detail} />
-						<BlankSpecDisplay blankSpec={detail?.blankSpec} />
+						<BlankAttributesDisplay attributes={detail?.blank.attributes} />
 						<DetailAttachments detail={detail} />
 						<DetailDescription htmlContent={detail.description} />
 					</RowWithDividers>
@@ -186,13 +187,13 @@ const ProductionSteps = observer(
 	},
 )
 
-const BlankSpecDisplay = observer(
-	({ blankSpec }: { blankSpec?: BlankSpec | null }) => {
-		if (blankSpec == null || blankSpec.arr.length === 0) return null
+const BlankAttributesDisplay = observer(
+	({ attributes }: { attributes?: Blank['attributes'] | null }) => {
+		if (attributes == null || attributes.length === 0) return null
 		return (
 			<Stack display={'flex'} alignSelf={'start'}>
 				<Label label="Заготовка" />
-				<TechParamsDisplay params={blankSpec} level="body-md" />
+				<BlankAttributes attributes={attributes} level="body-md" />
 			</Stack>
 		)
 	},
@@ -289,8 +290,8 @@ const Cost = observer(({ detail, order }: DetailStProp & OrderStProp) => {
 	if (order?.status === OrderStatus.Collected) {
 		return null
 	}
-	const materialCost = detail.blank.materialCost
-	const details = detail.blank.detailsCost
+	const materialCost = detail.blank.material_requirement
+	const details = detail.blank.details_requirement
 	return (
 		<Row alignItems={'start'}>
 			{materialCost ? (

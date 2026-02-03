@@ -108,10 +108,6 @@ export class DetailSt {
 	setStockLocation(v: string) {
 		this.stockLocation = v
 	}
-	blankSpec?: BlankSpec | null = null
-	setBlankSpec(params?: BlankSpec | null) {
-		this.blankSpec = params
-	}
 	updatedAt?: Date
 	setUpdatedAt(date: Date | undefined) {
 		this.updatedAt = date
@@ -146,7 +142,6 @@ export class DetailSt {
 		this.setName(d.name!)
 		this.setDrawingNumber(d.drawing_number!)
 		this.setGroupId(d.logical_group_id)
-		this.setBlankSpec(d.blank_spec)
 		this.setDescription(d.description)
 		this.warehouse.setStock(d.on_hand_balance)
 		this.setUpdatedAt(d.updated_at ? new Date(d.updated_at) : undefined)
@@ -174,7 +169,6 @@ export class DetailSt {
 		this.recentlyUpdated = undefined
 		this.group_id = undefined
 		this.drawingNumber = ''
-		this.blankSpec = null
 		this.updatedAt = undefined
 		this.lastManufacturingDate = undefined
 		this.lastManufacturingQty = undefined

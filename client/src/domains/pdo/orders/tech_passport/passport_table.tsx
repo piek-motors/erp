@@ -3,7 +3,7 @@ import { css } from '@emotion/react'
 import { Box } from '@mui/joy'
 import { app_cache } from 'domains/pdo/cache'
 import type { DetailSt } from 'domains/pdo/detail/detail.state'
-import { TechParamsRowDisplay } from 'domains/pdo/detail/inputs'
+import { BlankAttributesRowDisplay } from 'domains/pdo/detail/inputs'
 import { capitalize } from 'domains/pdo/shared/basic'
 import { Label, observer, P } from 'lib/index'
 import { fmtDate } from 'lib/utils/date_fmt'
@@ -23,8 +23,8 @@ const L = (props: { children: ReactNode }) => (
 )
 
 export const TechPassportTable = observer(({ order, detail }: Props) => {
-	const materialCost = detail.blank.materialCost
-	const detailsCost = detail.blank.detailsCost
+	const materialCost = detail.blank.material_requirement
+	const detailsCost = detail.blank.details_requirement
 
 	if (!order.resp) return
 	return (
@@ -69,7 +69,10 @@ export const TechPassportTable = observer(({ order, detail }: Props) => {
 								</P>
 							))}
 						</Box>
-						<TechParamsRowDisplay fontSize={14} params={detail.blankSpec} />
+						<BlankAttributesRowDisplay
+							fontSize={14}
+							attributes={detail.blank.attributes}
+						/>
 					</td>
 					<td colSpan={3}>
 						<L>Наименование детали</L>

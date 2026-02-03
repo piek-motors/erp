@@ -29,8 +29,9 @@ import {
 	Row,
 } from 'lib/index'
 import type { ReactNode } from 'react'
+import { Blank } from 'srv/domains/pdo/details'
 import { DetailAttachmentList } from './attachment/list'
-import type { BlankSpec, DetailSt, DetailStProp } from './detail.state'
+import type { DetailSt, DetailStProp } from './detail.state'
 import {
 	DetailRequirementInput,
 	MaterialRequirementInput,
@@ -88,7 +89,7 @@ export const DetailInputs = observer(
 export const DetailAccordionGroup = observer(({ d }: { d: DetailSt }) => (
 	<AccordionGroup>
 		<DetailAttachmentInput detail={d} />
-		<BlankSpecInput detail={d} />
+		<BlankAttributesInput detail={d} />
 		<ProcessingRouteAccordion detail={d} />
 	</AccordionGroup>
 ))
@@ -199,18 +200,16 @@ const DetailAttachmentInput = observer(({ detail }: { detail: DetailSt }) => (
 	</AccordionCard>
 ))
 
-const BlankSpecInput = observer(({ detail }: { detail: DetailSt }) => (
+const BlankAttributesInput = observer(({ detail }: { detail: DetailSt }) => (
 	<AccordionCard title="Заготовка" defaultExpanded>
 		<MaterialRequirementInput detail={detail} />
 		<Divider sx={{ my: 0.5 }} />
 		<DetailRequirementInput detail={detail} />
 		<Divider sx={{ my: 0.5 }} />
-		<Label color="primary">Параметры</Label>
+		<Label color="primary">Атрибуты</Label>
 		<ArrayJsonEditor
-			value={detail.blankSpec?.arr ?? null}
-			onChange={parameters =>
-				detail.setBlankSpec(parameters ? { arr: parameters } : null)
-			}
+			value={detail.blank.attributes}
+			onChange={attributes => detail.blank.set_attributes(attributes ?? [])}
 			newItem={{ key: '', value: '' }}
 			placeholders={['Параметр', 'Значение']}
 			width={[70, 30]}
@@ -263,13 +262,19 @@ const ProcessingRouteAccordion = observer(
 	},
 )
 
-export const TechParamsDisplay = observer(
-	(props: { params?: BlankSpec | null; level: keyof TypographySystem }) => (
+export const BlankAttributes = observer(
+	({
+		attributes,
+		level,
+	}: {
+		attributes?: Blank['attributes'] | null
+		level: keyof TypographySystem
+	}) => (
 		<>
-			{!!props.params?.arr?.length && props.params.arr.length > 0 && (
+			{!!attributes?.length && attributes.length > 0 && (
 				<Stack width={'max-content'}>
-					{props.params?.arr.map(({ key, value }, idx) => (
-						<P key={key + idx} level={props.level} sx={{ ml: 0.5 }}>
+					{attributes?.map(({ key, value }, idx) => (
+						<P key={key + idx} level={level} sx={{ ml: 0.5 }}>
 							{key}: {String(value)}
 						</P>
 					))}
@@ -279,16 +284,16 @@ export const TechParamsDisplay = observer(
 	),
 )
 
-export const TechParamsRowDisplay = observer(
+export const BlankAttributesRowDisplay = observer(
 	(props: {
-		params?: BlankSpec | null
+		attributes?: Blank['attributes'] | null
 		level?: keyof TypographySystem
 		fontSize?: number
 	}) => (
 		<>
-			{!!props.params?.arr?.length && props.params.arr.length > 0 && (
+			{!!props.attributes?.length && props.attributes.length > 0 && (
 				<Row flexWrap={'wrap'} justifyContent={'center'}>
-					{props.params?.arr.map(({ key, value }, idx) => (
+					{props.attributes?.map(({ key, value }, idx) => (
 						<Box
 							key={key + idx}
 							fontSize={props.fontSize}
@@ -296,7 +301,7 @@ export const TechParamsRowDisplay = observer(
 							sx={{ lineHeight: 0.8 }}
 						>
 							{key}: {String(value)}
-							{idx < props.params!.arr.length - 1 ? ',' : ''}
+							{idx < props.attributes!.length - 1 ? ',' : ''}
 						</Box>
 					))}
 				</Row>

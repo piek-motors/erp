@@ -44,21 +44,21 @@ const CostRow = ({ children, onDelete }: CostRowProps) => {
 
 export const MaterialRequirementInput = observer(
 	({ detail }: { detail: DetailSt }) => {
-		const materialCost = detail.blank.materialCost
+		const materialCost = detail.blank.material_requirement
 		const material = app_cache.materials.get(materialCost?.material_id || 0)
 
 		return (
 			<Base
 				label="Расход материала"
 				handleAdd={() => {
-					detail.blank.insertMaterialCost()
+					detail.blank.add_material_requirement()
 				}}
 				hideAddButton={!!materialCost}
 			>
 				{materialCost && (
 					<CostRow
 						key={materialCost.material_id}
-						onDelete={() => detail.blank.setMaterialCost(null)}
+						onDelete={() => detail.blank.set_material_requirement(null)}
 					>
 						<Stack gap={0.5}>
 							<Label xs>
@@ -68,7 +68,7 @@ export const MaterialRequirementInput = observer(
 								value={material?.id}
 								index={0}
 								onChange={material_id => {
-									detail.blank.updateMaterial(material_id)
+									detail.blank.update_material_requirement(material_id)
 								}}
 							/>
 							<MaterialRequirementTypeSelect detail={detail} />
@@ -86,10 +86,10 @@ const MaterialRequirementTypeSelect = observer(
 		<EnumSelect
 			label="Тип заготовки"
 			enum={MaterialRequirement}
-			value={detail.blank.materialCost?.data.type}
+			value={detail.blank.material_requirement?.data.type}
 			labels={UiMaterialRequirement}
 			onChange={type => {
-				detail.blank.materialCost?.set_data({
+				detail.blank.material_requirement?.set_data({
 					type,
 				})
 			}}
@@ -98,7 +98,7 @@ const MaterialRequirementTypeSelect = observer(
 )
 
 const MaterialRequirementSelector = observer((props: DetailStProp) => {
-	const { materialCost } = props.detail.blank
+	const { material_requirement: materialCost } = props.detail.blank
 	const type = materialCost?.data?.type
 	if (type == null) return
 
@@ -116,7 +116,7 @@ const MaterialRequirementSelector = observer((props: DetailStProp) => {
 
 const SingleMaterialRequirement = observer((props: DetailStProp) => {
 	const type = MaterialRequirement.Single
-	const { materialCost } = props.detail.blank
+	const { material_requirement: materialCost } = props.detail.blank
 	if (materialCost?.data?.type != type) return
 
 	const material = materialCost.material
@@ -158,7 +158,7 @@ const SingleMaterialRequirement = observer((props: DetailStProp) => {
 
 const BatchMaterialRequirement = observer((props: DetailStProp) => {
 	const type = MaterialRequirement.Batch
-	const { materialCost } = props.detail.blank
+	const { material_requirement: materialCost } = props.detail.blank
 	if (materialCost?.data?.type != type) return
 	const material = materialCost.material
 	const existing = materialCost.data
@@ -195,7 +195,7 @@ const BatchMaterialRequirement = observer((props: DetailStProp) => {
 
 const CountableMaterialRequirement = observer((props: DetailStProp) => {
 	const type = MaterialRequirement.Countable
-	const { materialCost } = props.detail.blank
+	const { material_requirement: materialCost } = props.detail.blank
 	if (materialCost?.data?.type != type) return
 
 	return (
@@ -217,7 +217,7 @@ export const DetailRequirementInput = observer(
 	({ detail }: { detail: DetailSt }) => {
 		const [open, setOpen] = useState(false)
 		const handle_add = () => {
-			detail.blank.insertDetail()
+			detail.blank.add_detail_requirement()
 			setOpen(true)
 		}
 		return (
@@ -226,7 +226,7 @@ export const DetailRequirementInput = observer(
 					Укажите детали, которые используются в заготовке данной детали, и их
 					количество
 				</Label>
-				{detail.blank.detailsCost.map((cost, index) => {
+				{detail.blank.details_requirement.map((cost, index) => {
 					const detail = app_cache.details.get(cost.detailId)
 					if (app_cache.details.loader.loading)
 						return <Label xs>Загрузка..7</Label>
@@ -244,7 +244,7 @@ export const DetailRequirementInput = observer(
 						<CostRow
 							key={detail.id + index.toString()}
 							onDelete={() => {
-								detail.blank.deleteDetail(cost.detailId)
+								detail.blank.delete_detail_requirement(cost.detailId)
 							}}
 						>
 							<Row
