@@ -7,14 +7,21 @@ export class Warehouse {
 		private readonly userId: number,
 	) {}
 
-	async supplyMaterial(id: number, qty: number, reason: SupplyReason) {
+	async supplyMaterial(material_id: number, qty: number, reason: SupplyReason) {
+		const material = await this.trx
+			.selectFrom('pdo.materials')
+			.select(['unit'])
+			.where('id', '=', material_id)
+			.executeTakeFirstOrThrow()
+
 		const [operation, { on_hand_balance }] = await Promise.all([
 			this.trx
 				.insertInto('pdo.operations')
 				.values({
 					operation_type: OperationType.Supply,
 					user_id: this.userId,
-					material_id: id,
+					material_id,
+					material_unit: material.unit,
 					qty,
 					reason,
 				})
@@ -26,7 +33,7 @@ export class Warehouse {
 				.set(eb => ({
 					on_hand_balance: eb('on_hand_balance', '+', qty),
 				}))
-				.where('id', '=', id)
+				.where('id', '=', material_id)
 				.returning(['on_hand_balance'])
 				.executeTakeFirstOrThrow(),
 		])
@@ -37,20 +44,20 @@ export class Warehouse {
 	}
 
 	async subtractMaterial(
-		id: number,
+		material_id: number,
 		qty: number,
 		reason: WriteoffReason,
 		detail_id?: number,
 		manufacturing_order_id?: number,
 	) {
-		const current_stock = await this.trx
+		const material = await this.trx
 			.selectFrom('pdo.materials')
-			.select(['on_hand_balance', 'label'])
-			.where('id', '=', id)
+			.select(['on_hand_balance', 'label', 'unit'])
+			.where('id', '=', material_id)
 			.executeTakeFirstOrThrow()
-		if (current_stock.on_hand_balance < qty) {
+		if (material.on_hand_balance < qty) {
 			throw new ErrNotEnoughStock(
-				`Недостаточно материала id=${id} ${current_stock.label}`,
+				`Недостаточно материала id=${material_id} ${material.label}`,
 			)
 		}
 
@@ -59,7 +66,8 @@ export class Warehouse {
 			.values({
 				operation_type: OperationType.Writeoff,
 				user_id: this.userId,
-				material_id: id,
+				material_id,
+				material_unit: material.unit,
 				detail_id,
 				qty,
 				reason,
@@ -73,7 +81,7 @@ export class Warehouse {
 			.set(eb => ({
 				on_hand_balance: eb('on_hand_balance', '-', qty),
 			}))
-			.where('id', '=', id)
+			.where('id', '=', material_id)
 			.returning(['on_hand_balance'])
 			.executeTakeFirstOrThrow()
 
