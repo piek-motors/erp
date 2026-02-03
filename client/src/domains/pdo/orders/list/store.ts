@@ -3,13 +3,13 @@ import { rpc } from 'lib/deps'
 import { matrixDecoder } from 'lib/rpc/matrix_decoder'
 import { LoadingController } from 'lib/store/loading_controller'
 import { debounce } from 'lib/utils/debounce'
-import { SearchConfig, tokenSearch, toNormalForm } from 'lib/utils/search'
+import { SearchConfig, token_search } from 'lib/utils/search'
 import { makeAutoObservable, reaction } from 'mobx'
 import { ManufacturingOrderStatus as OrderStatus } from 'models'
 import type { ListOrdersOutput } from 'srv/domains/pdo/orders_rpc'
 
 export enum OrderSearchCriteria {
-	Id = 'N',
+	Id = '№',
 	Detail = 'Деталь',
 	Operation = 'Операция',
 	Group = 'Группа',
@@ -30,7 +30,7 @@ const search_config: Record<
 	[OrderSearchCriteria.Detail]: {
 		fields: [
 			{
-				get: o => toNormalForm(o.detail_name),
+				get: o => o.detail_name,
 				weight: 3,
 			},
 			{
@@ -42,14 +42,14 @@ const search_config: Record<
 	[OrderSearchCriteria.Operation]: {
 		fields: [
 			{
-				get: o => toNormalForm(o.current_operation),
+				get: o => o.current_operation || '',
 			},
 		],
 	},
 	[OrderSearchCriteria.Group]: {
 		fields: [
 			{
-				get: o => toNormalForm(app_cache.detailGroups.getGroupName(o.group_id)),
+				get: o => app_cache.detailGroups.getGroupName(o.group_id) ?? '',
 			},
 		],
 	},
@@ -116,7 +116,7 @@ export class OrderListSt {
 		}
 
 		const config = search_config[this.search_criteria]
-		return tokenSearch(this.orders, q, config)
+		return token_search(this.orders, q, config)
 	}
 }
 

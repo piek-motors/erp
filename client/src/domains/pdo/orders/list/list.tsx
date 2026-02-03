@@ -131,6 +131,8 @@ export const ManufacturingList = observer(() => {
 				onCriteriaChange={c => s.set_search_criteria(c)}
 				query={s.query}
 				onQueryChange={q => s.set_query(q)}
+				variant="soft"
+				color="primary"
 			/>
 		)
 

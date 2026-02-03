@@ -1,6 +1,6 @@
 import { matrixDecoder } from 'lib/rpc/matrix_decoder'
 import { rpc } from 'lib/rpc/rpc.client'
-import { toNormalForm } from 'lib/utils/search'
+import { normalize } from 'lib/utils/search'
 import { makeAutoObservable } from 'mobx'
 import type { Material } from 'srv/domains/pdo/materials_rpc'
 
@@ -23,7 +23,7 @@ export class MaterialCache {
 	get normalized_materials() {
 		return this.materials.map(m => ({
 			...m,
-			label: toNormalForm(m.label),
+			label: normalize(m.label),
 		}))
 	}
 	removeMaterial(material: Material) {

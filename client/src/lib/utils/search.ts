@@ -11,7 +11,7 @@ export interface SearchConfig<T> {
 	minScore?: number
 }
 
-export function toNormalForm(str?: string | null) {
+export function normalize(str?: string | null) {
 	if (!str) return ''
 	return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
 }
@@ -26,13 +26,13 @@ export function toNormalForm(str?: string | null) {
  * - Results are ranked by total accumulated weight
  * - Function is pure and immutable
  */
-export function tokenSearch<T>(
+export function token_search<T>(
 	items: readonly T[],
 	query: string,
 	config: { fields: SearchField<T>[] },
 ): T[] {
-	// Normalize and tokenize query
-	const tokens = toNormalForm(query.toLowerCase()).split(/\s+/).filter(Boolean)
+	// Tokenize query
+	const tokens = query.toLowerCase().split(/\s+/).filter(Boolean)
 
 	// Empty query → return shallow copy (immutability)
 	if (!tokens.length) {

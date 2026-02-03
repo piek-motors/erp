@@ -1,7 +1,7 @@
 import { app_cache } from 'domains/pdo/cache'
 import { LoadingController } from 'lib/store/loading_controller'
 import { debounce } from 'lib/utils/debounce'
-import { tokenSearch } from 'lib/utils/search'
+import { normalize, token_search } from 'lib/utils/search'
 import { makeAutoObservable, reaction } from 'mobx'
 import type { MaterialShape } from 'models'
 import type { Material } from 'srv/domains/pdo/materials_rpc'
@@ -25,7 +25,7 @@ export class MaterialListStore {
 	}
 
 	private filter() {
-		const query = this.search_query
+		const query = normalize(this.search_query)
 		let items = app_cache.materials.normalized_materials
 
 		if (this.shape_filter != null) {
@@ -33,7 +33,7 @@ export class MaterialListStore {
 		}
 
 		if (query) {
-			items = tokenSearch(items, query, {
+			items = token_search(items, query, {
 				fields: [
 					{
 						get: (m: Material) => m.label,
