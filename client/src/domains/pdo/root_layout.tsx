@@ -61,7 +61,7 @@ export const MobilePadding = (props: {
     sx={{
       p: {
         xs: 1,
-        md: props.desktop_too ? 1 : 0,
+        sm: props.desktop_too ? 1 : 0,
       },
     }}
   >
