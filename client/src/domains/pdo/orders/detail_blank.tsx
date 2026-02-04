@@ -79,7 +79,13 @@ const BlankTypeProperties = ({
               suffix={unit}
             />
           </WebOnly>
-          <InfoLabel label="Длина" value={data.blank_length} suffix={unit} />
+          {!!data.blank_length && (
+            <InfoLabel
+              label="Длина заготовки"
+              value={data.blank_length}
+              suffix={unit}
+            />
+          )}
         </Stack>
       )
 

@@ -1,3 +1,2 @@
 pnpm fmt
 pnpm check
-git add .
