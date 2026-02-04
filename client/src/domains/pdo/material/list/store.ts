@@ -42,7 +42,7 @@ export class MaterialListStore {
           {
             get: (m: Material) => m.id.toString(),
             weight: 1,
-            exact: true,
+            match: 'exact',
           },
         ],
       })

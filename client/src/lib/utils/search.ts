@@ -3,7 +3,8 @@ export type SearchField<T> = {
   get: (item: T) => string
   /** Relative importance of this field */
   weight?: number
-  exact?: boolean
+  /** Default match includes */
+  match?: 'includes' | 'start_with' | 'exact'
 }
 
 export interface SearchConfig<T> {
@@ -22,19 +23,20 @@ export function normalize(str?: string | null) {
  * Rules:
  * - Query is split into lowercase tokens by whitespace
  * - Every token MUST match at least one field (AND semantics)
- * - Fields can be fuzzy (includes) or exact (===)
+ * - Fields can be fuzzy (includes), start_with, or exact
  * - Results are ranked by total accumulated weight
  * - Function is pure and immutable
+ *
+ * Note: Normalization should be done by the caller on both query and field values
  */
 export function token_search<T>(
   items: readonly T[],
   query: string,
   config: { fields: SearchField<T>[] },
 ): T[] {
-  // Tokenize query
-  const tokens = query.toLowerCase().split(/\s+/).filter(Boolean)
+  const queryLower = query.toLowerCase().trim()
+  const tokens = queryLower.split(/\s+/).filter(Boolean)
 
-  // Empty query → return shallow copy (immutability)
   if (!tokens.length) {
     return items.slice()
   }
@@ -51,11 +53,24 @@ export function token_search<T>(
           for (const field of config.fields) {
             const value = field.get(item).toLowerCase()
 
-            // Exact fields require strict equality (e.g. IDs)
-            // Fuzzy fields use substring matching (e.g. labels)
-            const matched = field.exact
-              ? value === token
-              : value.includes(token)
+            let matched: boolean
+
+            switch (field.match) {
+              case 'exact': {
+                matched = value == token
+                break
+              }
+              case 'start_with': {
+                // For start_with: check if field starts with token
+                // OR if field starts with full query (for multi-word queries)
+                matched =
+                  value.startsWith(token) || value.startsWith(queryLower)
+                break
+              }
+              default: {
+                matched = value.includes(token)
+              }
+            }
 
             if (matched) {
               score += field.weight || 1

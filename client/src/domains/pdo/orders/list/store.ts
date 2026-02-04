@@ -23,7 +23,7 @@ const search_config: Record<
     fields: [
       {
         get: o => String(o.id),
-        exact: true,
+        match: 'exact',
       },
     ],
   },
@@ -35,7 +35,7 @@ const search_config: Record<
       },
       {
         get: o => String(o.id),
-        exact: true,
+        match: 'exact',
       },
     ],
   },
@@ -43,6 +43,7 @@ const search_config: Record<
     fields: [
       {
         get: o => o.current_operation || '',
+        match: 'start_with',
       },
     ],
   },
