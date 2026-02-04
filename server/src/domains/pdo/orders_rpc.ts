@@ -17,17 +17,17 @@ export interface ListOrdersOutput {
   detail_id: number
   detail_name: string
   qty: number
-  output_qty?: number
+  output_qty: number | null
   group_id: number | null
   status: OrderStatus
-  created_at: string
+  created_at: string | null
   started_at: string | null
   finished_at: string | null
   current_operation: string | null
   current_operation_start_at: string | null
   time_delta: number | null
-  /** for orders in status before production and if this detail id already in production */
-  duplicated: boolean
+  /** order id of the same detail already in production, if this order is waiting/preparing */
+  duplicated: number | null
 }
 
 const base_query = db
@@ -103,10 +103,12 @@ export const orders = router({
       },
       {},
     )
-    const details_in_production: Record<number, 1> = orders
+
+    // detail_id -> order_id
+    const details_in_production: Record<number, number> = orders
       .filter(e => e.status == OrderStatus.Production)
-      .reduce((acc, each) => {
-        acc[each.detail_id] = 1
+      .reduce((acc, order) => {
+        acc[order.detail_id] = order.id
         return acc
       }, {})
 
@@ -116,17 +118,17 @@ export const orders = router({
           ? o.processing_route?.steps.at(o.current_operation)
           : null
 
-      const duplicated =
+      const duplicated_order_id =
         [OrderStatus.Waiting, OrderStatus.Preparation].includes(o.status) &&
         details_in_production[o.detail_id]
 
       return {
         ...o,
         current_operation:
-          current_op_id != null && operationsMap[current_op_id],
-        duplicated,
+          (current_op_id != null && operationsMap[current_op_id]) || null,
+        duplicated: duplicated_order_id || null,
         ...dates_formatter(o),
-      }
+      } satisfies ListOrdersOutput
     })
 
     return matrixEncoder(result)

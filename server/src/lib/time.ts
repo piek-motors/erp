@@ -12,7 +12,10 @@ export function fromMs(date?: number | null): Date | null {
   return new Date(date)
 }
 
-export const formatDate = (date?: Date | null, withYear?: boolean) => {
+export const formatDate = <D extends Date | null>(
+  date?: D,
+  withYear?: boolean,
+) => {
   if (!date) return null
   return Intl.DateTimeFormat('ru-RU', {
     month: 'short',

@@ -16,7 +16,7 @@ const commonColumns: Column<ListOrdersOutput>[] = [
     accessor: d => (
       <Row>
         {d.duplicated && (
-          <Tooltip title="Дубликат" size="sm">
+          <Tooltip title={`Дублирует заказ №${d.duplicated}`} size="sm">
             <Box width={10} height={10} bgcolor={'red'} borderRadius={10} />
           </Tooltip>
         )}
