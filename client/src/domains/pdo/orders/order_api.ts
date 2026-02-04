@@ -91,6 +91,16 @@ export class OrderApi {
     order.resp.current_operation_start_at = null
   }
 
+  async set_qty(order: OrderSt, qty: number) {
+    await this.loader.run(async () => {
+      await rpc.pdo.orders_mut.update_qty.mutate({
+        id: order.id,
+        qty,
+      })
+      await this.reload(order)
+    })
+  }
+
   async finish(order: OrderSt) {
     await this.loader.run(async () => {
       await rpc.pdo.orders_mut.finish.mutate({ id: order.id })

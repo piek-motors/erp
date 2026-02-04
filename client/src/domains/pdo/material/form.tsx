@@ -4,7 +4,7 @@ import { AlloyAutocomplete, MaterialUnitSelect } from 'domains/pdo/shared/basic'
 import { Box, Label, observer, Stack } from 'lib/index'
 import { MaterialShape, UiMaterialShape } from 'models'
 import { MaterialSpecificInput } from './shape/main'
-import type { MaterialState } from './state'
+import type { MaterialSt } from './state'
 
 export const MaterialForm = observer(
   ({
@@ -13,7 +13,7 @@ export const MaterialForm = observer(
     disabled,
   }: {
     showTabs?: boolean
-    m: MaterialState
+    m: MaterialSt
     disabled?: boolean
   }) => (
     <Stack gap={0.5}>

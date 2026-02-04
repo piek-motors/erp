@@ -2,10 +2,10 @@ import { BarChart } from '@mui/x-charts'
 import { Tabs } from 'components/tabs'
 import { Label, observer, Stack } from 'lib/index'
 import { uiUnit } from 'models'
-import type { MaterialState } from './state'
+import type { MaterialSt } from './state'
 
 export const MaterialQuntifiedExpenses = observer(
-  ({ m }: { m: MaterialState }) => {
+  ({ m }: { m: MaterialSt }) => {
     if (!m.writeoff_stat?.monthly || !m.writeoff_stat?.quarterly) return null
 
     const height = 300

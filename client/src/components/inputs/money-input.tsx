@@ -1,5 +1,5 @@
 import { InputLabled } from 'lib/index'
-import { formatMoney } from 'lib/utils/fmt'
+import { fmt } from 'models'
 import { useCallback, useMemo } from 'react'
 
 interface Props {
@@ -34,7 +34,7 @@ export function MoneyInput({
   )
 
   const formattedValue = useMemo(() => {
-    return value ? formatMoney(value) : ''
+    return value ? fmt.money(value) : ''
   }, [value])
 
   return (

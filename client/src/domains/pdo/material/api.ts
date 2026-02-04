@@ -4,7 +4,7 @@ import { makeAutoObservable, runInAction } from 'mobx'
 import type { RouterInput } from 'srv/lib/trpc'
 import { app_cache } from '../cache'
 import { map } from '../mappers'
-import { MaterialState } from './state'
+import { MaterialSt } from './state'
 
 export class MaterialApi {
   readonly loader = new LoadingController()
@@ -19,7 +19,7 @@ export class MaterialApi {
         api.get_details_made_from_material(id),
       ])
       const { material, writeoff_stat, detailCount } = res
-      const m = new MaterialState()
+      const m = new MaterialSt()
 
       runInAction(() => {
         m.syncState(map.material.from_dto(material))
@@ -41,15 +41,15 @@ export class MaterialApi {
     })
   }
 
-  async insert(m: MaterialState) {
+  async insert(m: MaterialSt) {
     const payload = this.create_payload(m)
     const res = await rpc.pdo.material.create.mutate(payload)
-    m = new MaterialState()
+    m = new MaterialSt()
     await app_cache.materials.invalidate()
     return res.id
   }
 
-  async update(m: MaterialState) {
+  async update(m: MaterialSt) {
     if (!m.id) throw new Error('Material id is not set')
     const payload = this.create_payload(m)
     return rpc.pdo.material.update
@@ -66,7 +66,7 @@ export class MaterialApi {
   }
 
   private create_payload(
-    m: MaterialState,
+    m: MaterialSt,
   ): RouterInput['pdo']['material']['create'] {
     if (m.unit == null) throw new Error('Не выбрана единица учета остатков')
     return {

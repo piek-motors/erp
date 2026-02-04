@@ -20,7 +20,7 @@ import { api } from './api'
 import { DetailsMadeOfMaterialModal } from './details_made_of_that_material'
 import { MaterialForm } from './form'
 import { MaterialQuntifiedExpenses } from './quantified_expenses'
-import type { MaterialState } from './state'
+import type { MaterialSt } from './state'
 import { MaterialWarehouseCard } from './warehouse'
 
 export const MaterialUpdatePage = observer(() => {
@@ -29,7 +29,7 @@ export const MaterialUpdatePage = observer(() => {
 
   const navigate = useNavigate()
   const materialId = Number(id)
-  const [m, setMaterial] = useState<MaterialState | null>(null)
+  const [m, setMaterial] = useState<MaterialSt | null>(null)
 
   useEffect(() => {
     api.load(materialId).then(async m => {

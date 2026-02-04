@@ -1,5 +1,6 @@
+import { Tooltip } from '@mui/joy'
 import { DetailName } from 'domains/pdo/detail/detail_name'
-import { Label, P } from 'lib/index'
+import { Box, Label, P, Row } from 'lib/index'
 import { timeDeltaDays } from 'lib/utils/date_fmt'
 import { ManufacturingOrderStatus as Status } from 'models'
 import type { Column } from 'react-table'
@@ -13,15 +14,22 @@ const commonColumns: Column<ListOrdersOutput>[] = [
   {
     Header: 'Деталь',
     accessor: d => (
-      <DetailName
-        detail={{
-          id: d.detail_id,
-          name: d.detail_name,
-          group_id: d.group_id,
-        }}
-        disableLink
-        withGroupName
-      />
+      <Row>
+        {d.duplicated && (
+          <Tooltip title="Дубликат" size="sm">
+            <Box width={10} height={10} bgcolor={'red'} borderRadius={10} />
+          </Tooltip>
+        )}
+        <DetailName
+          detail={{
+            id: d.detail_id,
+            name: d.detail_name,
+            group_id: d.group_id,
+          }}
+          disableLink
+          withGroupName
+        />
+      </Row>
     ),
   },
   {

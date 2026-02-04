@@ -5,6 +5,7 @@ import {
   Divider,
   Grid,
   Stack,
+  StackProps,
   type TypographySystem,
 } from '@mui/joy'
 import { AccordionCard } from 'components/accordion_card'
@@ -24,7 +25,6 @@ import {
   MinusIcon,
   MultilineInput,
   observer,
-  P,
   PlusIcon,
   Row,
 } from 'lib/index'
@@ -263,36 +263,15 @@ const ProcessingRouteAccordion = observer(
 )
 
 export const BlankAttributes = observer(
-  ({
-    attributes,
-    level,
-  }: {
-    attributes?: Blank['attributes'] | null
-    level: keyof TypographySystem
-  }) => (
-    <>
-      {!!attributes?.length && attributes.length > 0 && (
-        <Stack width={'max-content'}>
-          {attributes?.map(({ key, value }, idx) => (
-            <P key={key + idx} level={level} sx={{ ml: 0.5 }}>
-              {key}: {String(value)}
-            </P>
-          ))}
-        </Stack>
-      )}
-    </>
-  ),
-)
-
-export const BlankAttributesRowDisplay = observer(
   (props: {
     attributes?: Blank['attributes'] | null
     level?: keyof TypographySystem
     fontSize?: number
+    rowProps?: StackProps
   }) => (
     <>
       {!!props.attributes?.length && props.attributes.length > 0 && (
-        <Row flexWrap={'wrap'} justifyContent={'center'}>
+        <Row flexWrap={'wrap'} justifyContent={'left'} {...props.rowProps}>
           {props.attributes?.map(({ key, value }, idx) => (
             <Box
               key={key + idx}
@@ -300,7 +279,8 @@ export const BlankAttributesRowDisplay = observer(
               whiteSpace={'nowrap'}
               sx={{ lineHeight: 0.8 }}
             >
-              {key}: {String(value)}
+              {key}
+              {value && ': ' + String(value)}
               {idx < props.attributes!.length - 1 ? ',' : ''}
             </Box>
           ))}

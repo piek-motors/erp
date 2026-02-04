@@ -4,7 +4,6 @@ import { NumberInput } from 'components/inputs/number_input'
 import { InModal } from 'components/modal'
 import { PrintOnly, WebOnly } from 'components/utilities/conditional-display'
 import { DetailName } from 'domains/pdo/detail/detail_name'
-import { rpc } from 'lib/deps'
 import {
   Button,
   DeleteResourceButton,
@@ -25,19 +24,15 @@ import {
 } from 'lib/index'
 import { notifier } from 'lib/store/notifier.store'
 import { fmtDate, timeDeltaDays } from 'lib/utils/date_fmt'
-import { roundAndTrim } from 'lib/utils/fmt'
 import {
   ManufacturingOrderStatus as OrderStatus,
   uiManufacturingOrderStatus,
-  uiUnit,
 } from 'models'
-import { Blank } from 'srv/domains/pdo/details_rpc'
 import { app_cache } from '../cache'
 import type { DetailSt, DetailStProp } from '../detail/detail.state'
-import { MaterialRequirementSt } from '../detail/detail_blank.store'
-import { BlankAttributes } from '../detail/detail_form'
-import { MaterialName } from '../material/name'
+import { DetailBlankSt } from '../detail/detail_blank.store'
 import { MetalPageTitle } from '../shared/basic'
+import { DetailBlank } from './detail_blank'
 import { OrderSt, type OrderStProp } from './order.state'
 import { api } from './order_api'
 import { TechPassportTable } from './tech_passport/passport_table'
@@ -102,8 +97,7 @@ export const OrderUpdatePage = observer(() => {
                 recBatchSize={detail.recommendedBatchSize}
               />
             </Stack>
-            <Cost order={order} detail={detail} />
-            <BlankAttributesDisplay attributes={detail?.blank.attributes} />
+            <BlankDisplay blank={detail?.blank} order={order} />
             <DetailAttachments detail={detail} />
             <DetailDescription htmlContent={detail.description} />
           </RowWithDividers>
@@ -187,13 +181,13 @@ const ProductionSteps = observer(
   },
 )
 
-const BlankAttributesDisplay = observer(
-  ({ attributes }: { attributes?: Blank['attributes'] | null }) => {
-    if (attributes == null || attributes.length === 0) return null
+const BlankDisplay = observer(
+  ({ blank, order }: { blank?: DetailBlankSt | null; order: OrderSt }) => {
+    if (!blank) return null
     return (
-      <Stack display={'flex'} alignSelf={'start'}>
+      <Stack>
         <Label label="Заготовка" />
-        <BlankAttributes attributes={attributes} level="body-md" />
+        <DetailBlank blank={blank} order={order} />
       </Stack>
     )
   },
@@ -286,41 +280,6 @@ const DeleteOrderButton = observer(({ order }: OrderStProp) => {
   )
 })
 
-const Cost = observer(({ detail, order }: DetailStProp & OrderStProp) => {
-  if (order?.status === OrderStatus.Collected) {
-    return null
-  }
-  const materialCost = detail.blank.material_requirement
-  const details = detail.blank.details_requirement
-  return (
-    <Row alignItems={'start'}>
-      {materialCost ? (
-        <Stack>
-          <Label label="Материал к потреблению" />
-          <Stack gap={0.5}>
-            <MaterialCostCalculations cost={materialCost} order={order} />
-          </Stack>
-        </Stack>
-      ) : null}
-      {details.length ? (
-        <Stack>
-          <Label label="Детали к потреблению" />
-          <Stack gap={0.5}>
-            {details.map(cost => (
-              <Row justifyContent={'space-between'}>
-                {cost.detail && <DetailName detail={cost.detail} />}
-                <P>
-                  {cost.qty} <Label xs>шт</Label>
-                </P>
-              </Row>
-            ))}
-          </Stack>
-        </Stack>
-      ) : null}
-    </Row>
-  )
-})
-
 const QuantityInput = observer(
   ({ recBatchSize, order }: OrderStProp & { recBatchSize?: number }) => {
     const isProduction = order.status === OrderStatus.Production
@@ -346,13 +305,14 @@ const QuantityInput = observer(
 
     const handleSave = async () => {
       if (qty == null) return
-      await rpc.pdo.orders_mut.update_qty.mutate({
-        id: order.id,
-        qty,
-      })
+      await api.set_qty(order, qty)
       mode.save(qty)
       notifier.ok(mode.notification)
     }
+
+    useEffect(() => {
+      setQty(mode.initialQty)
+    }, [mode.initialQty])
 
     if (isCollected) {
       return (
@@ -411,7 +371,7 @@ const ActionButton = observer(({ order }: OrderStProp) => {
           onClick={() => api.startPreparation(order)}
           disabled={api.loader.loading}
         >
-          Начать подготовку материалов
+          В подготовку
         </Button>
       )
     case OrderStatus.Preparation:
@@ -422,7 +382,7 @@ const ActionButton = observer(({ order }: OrderStProp) => {
           onClick={() => api.startProduction(order)}
           disabled={api.loader.loading || !order.qty}
         >
-          Начать производство
+          В производство
         </Button>
       )
     case OrderStatus.Production:
@@ -504,63 +464,3 @@ const DuplicationCheckModal = observer(({ order }: { order: OrderSt }) => {
     </InModal>
   )
 })
-
-const MaterialCostCalculations = observer(
-  (props: { cost: MaterialRequirementSt; order: OrderSt }) => {
-    const { cost, order } = props
-
-    const costCalculations = () => {
-      if (!order.qty) return null
-      const totalConsumedAmount = order.resp?.material_deduction || 0
-
-      const remainingAmount =
-        (cost.material?.on_hand_balance || 0) - totalConsumedAmount
-
-      const unit = uiUnit(cost?.material?.unit)
-      return (
-        <>
-          <Divider sx={{ my: 0.5 }} />
-          <P level="body-sm" color="neutral">
-            Потребное кол-во: {roundAndTrim(totalConsumedAmount, 3) || 0} {unit}
-          </P>
-
-          <P level="body-sm" color="neutral">
-            Остаток: {roundAndTrim(cost.material?.on_hand_balance, 3) || 0}{' '}
-            {unit}
-          </P>
-
-          {order?.status === OrderStatus.Preparation && (
-            <P
-              color={
-                remainingAmount >= 0
-                  ? 'success'
-                  : remainingAmount < 0
-                    ? 'danger'
-                    : 'primary'
-              }
-              level="body-sm"
-            >
-              Остаток после запуска {remainingAmount.toFixed(1)} {unit}
-            </P>
-          )}
-        </>
-      )
-    }
-
-    return (
-      <Box>
-        <Row>
-          <MaterialName
-            id={cost.material_id}
-            label={cost.material?.label || ''}
-          />
-          <Label level="body-sm" color="primary">
-            {/* Расход {cost?.length || 'не указано'}{' '} */}
-            {uiUnit(cost.material?.unit) || ''}
-          </Label>
-        </Row>
-        {costCalculations()}
-      </Box>
-    )
-  },
-)

@@ -4,7 +4,7 @@ import { formatDate, timedeltaInSeconds } from '#root/lib/time.js'
 import { router } from '#root/lib/trpc/trpc.js'
 import { type DB, db, procedure, TRPCError } from '#root/sdk.js'
 import type { Selectable } from 'kysely'
-import { ManufacturingOrderStatus as OrderStatus } from 'models'
+import { fmt, ManufacturingOrderStatus as OrderStatus } from 'models'
 import z from 'zod'
 import { calc_material_deduction } from './order_service.js'
 
@@ -26,6 +26,8 @@ export interface ListOrdersOutput {
   current_operation: string | null
   current_operation_start_at: string | null
   time_delta: number | null
+  /** for orders in status before production and if this detail id already in production */
+  duplicated: boolean
 }
 
 const base_query = db
@@ -79,7 +81,7 @@ export const orders = router({
       return {
         ...order,
         material_writeoffs: undefined,
-        material_deduction,
+        material_deduction: fmt.roundAndTrim(material_deduction, 3),
       }
     }),
   //
@@ -101,16 +103,28 @@ export const orders = router({
       },
       {},
     )
+    const details_in_production: Record<number, 1> = orders
+      .filter(e => e.status == OrderStatus.Production)
+      .reduce((acc, each) => {
+        acc[each.detail_id] = 1
+        return acc
+      }, {})
 
     const result = orders.map(o => {
       const current_op_id =
         o.current_operation != null
           ? o.processing_route?.steps.at(o.current_operation)
           : null
+
+      const duplicated =
+        [OrderStatus.Waiting, OrderStatus.Preparation].includes(o.status) &&
+        details_in_production[o.detail_id]
+
       return {
         ...o,
         current_operation:
           current_op_id != null && operationsMap[current_op_id],
+        duplicated,
         ...dates_formatter(o),
       }
     })

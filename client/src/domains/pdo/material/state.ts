@@ -10,7 +10,7 @@ import { SquareState } from './shape/square_state'
 import type { IMaterialShapeState } from './shape_state.interface'
 import { MaterialWarehouseStore } from './warehouse/state'
 
-export class MaterialState {
+export class MaterialSt {
   readonly loadingWall = new LoadingController()
   readonly warehouse = new MaterialWarehouseStore()
   constructor() {

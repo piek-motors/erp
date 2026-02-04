@@ -9,10 +9,10 @@ import {
 import { openPage, routeMap } from 'lib/routes'
 import { api } from './api'
 import { MaterialForm } from './form'
-import { MaterialState } from './state'
+import { MaterialSt } from './state'
 
 export const CreateMaterialPage = observer(() => {
-  const [material, setMaterial] = useState(() => new MaterialState())
+  const [material, setMaterial] = useState(() => new MaterialSt())
   const [insertedMaterialId, setInsertedMaterialId] = useState<number | null>(
     null,
   )
@@ -31,7 +31,7 @@ export const CreateMaterialPage = observer(() => {
           onClick={() =>
             api.insert(material).then(id => {
               setInsertedMaterialId(id)
-              setMaterial(new MaterialState())
+              setMaterial(new MaterialSt())
             })
           }
         />

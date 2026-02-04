@@ -5,9 +5,8 @@ import {
 } from 'components/utilities/conditional-display'
 import { Textarea } from 'lib/index'
 import { fmtDate } from 'lib/utils/date_fmt'
-import { formatMoney } from 'lib/utils/fmt'
 import { makeAutoObservable } from 'mobx'
-import { OrderStatus } from 'models'
+import { fmt, OrderStatus } from 'models'
 import moment from 'moment'
 import type { OrderUpdateInput } from 'srv/domains/orders/orders_rpc'
 import type { RouterInput, RouterOutput } from 'srv/lib/trpc'
@@ -202,7 +201,7 @@ export class StatementStore {
           if (!this.order?.total_paid) return ''
           const totalPaid = this.order?.total_paid
 
-          return `${formatMoney(totalPaid)} (${(
+          return `${fmt.money(totalPaid)} (${(
             (totalPaid / Number(this.totalAmount)) * 100
           ).toFixed(0)}%)`
         },
@@ -215,7 +214,7 @@ export class StatementStore {
         onChange: (v: string) => {
           this.setTotalAmount(v)
         },
-        view: formatMoney(this.order?.total_amount ?? 0),
+        view: fmt.money(this.order?.total_amount ?? 0),
       },
       {
         label: 'Менеджер',

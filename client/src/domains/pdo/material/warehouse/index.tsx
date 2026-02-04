@@ -16,10 +16,10 @@ import { modalState } from 'domains/pdo/warehouse/modals.store'
 import { ActionButton, Label, observer, P, Row, useParams } from 'lib/index'
 import { notifier } from 'lib/store/notifier.store'
 import { uiUnit } from 'models'
-import type { MaterialState } from '../state'
+import type { MaterialSt } from '../state'
 
 interface Props {
-  material: MaterialState
+  material: MaterialSt
   lengthValue: string
   lengthSetValue: (value: string) => void
   reasonComponent: React.ReactNode
@@ -59,7 +59,7 @@ const CreateWarehouseMaterialOperation = observer(
   ),
 )
 
-export const MaterialWarehouseCard = observer(({ m }: { m: MaterialState }) => {
+export const MaterialWarehouseCard = observer(({ m }: { m: MaterialSt }) => {
   const { id } = useParams<{ id: string }>()
   if (!id) throw new Error('No id')
   const materialId = Number(id)

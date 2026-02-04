@@ -5,10 +5,10 @@ import { InModal } from 'components/modal'
 import { DetailName } from 'domains/pdo/detail/detail_name'
 import { useEscapeClose } from 'hooks/use-escape-close'
 import { Loading, observer, P, Stack, useCallback, useState } from 'lib/index'
-import type { MaterialState } from './state'
+import type { MaterialSt } from './state'
 
 export const DetailsMadeOfMaterialModal = observer(
-  ({ m }: { m: MaterialState }) => {
+  ({ m }: { m: MaterialSt }) => {
     const count = m.detailCount > 0 ? `[${m.detailCount}]` : undefined
 
     const [modal, setModal] = useState(false)

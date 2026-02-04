@@ -8,12 +8,12 @@ import {
   Stack,
   ToggleButtonGroup,
 } from 'lib/index'
-import { MaterialShape, Unit, uiUnit } from 'models'
+import { MaterialShape, uiUnit, Unit } from 'models'
 import type { ReactNode } from 'react'
-import type { MaterialState } from '../state'
+import type { MaterialSt } from '../state'
 
 export interface ShapeProps {
-  m: MaterialState
+  m: MaterialSt
   disabled?: boolean
 }
 

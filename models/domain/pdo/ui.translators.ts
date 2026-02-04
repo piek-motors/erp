@@ -76,7 +76,7 @@ export function uiManufacturingOrderStatus(status: ManufacturingOrderStatus) {
 }
 
 export const UiMaterialRequirement = {
-  [MaterialRequirement.Single]: 'Eдиничная',
-  [MaterialRequirement.Batch]: 'Пруток',
-  [MaterialRequirement.Countable]: 'Штучная',
+  [MaterialRequirement.Single]: 'В размер',
+  [MaterialRequirement.Batch]: 'С прутка',
+  [MaterialRequirement.Countable]: 'Готовая',
 }

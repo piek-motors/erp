@@ -9,8 +9,8 @@ import type { UnpackedOrder } from 'domains/orders/api'
 import { useEscapeClose } from 'hooks/use-escape-close'
 import { DeleteResourceButton, Label, P, Row, UseIcon } from 'lib/index'
 import { formatOnlyDate } from 'lib/utils/date_fmt'
-import { formatMoney, percentage } from 'lib/utils/fmt'
 import { observer } from 'mobx-react-lite'
+import { fmt } from 'models'
 import { useState } from 'react'
 import { Payment } from 'srv/domains/orders/payments_rpc'
 import { orderStore, orderStore as os } from '../order.store'
@@ -56,7 +56,7 @@ const PaymentsTable = observer(
       return acc + Number(payment.amount)
     }, 0)
 
-    const totalPaidPercent = percentage(totalPaid, totalAmount)
+    const totalPaidPercent = fmt.percentage(totalPaid, totalAmount)
 
     if (props.loading) {
       return <P>Загрузка платежей...</P>
@@ -82,8 +82,8 @@ const PaymentsTable = observer(
             {!!props.data.length &&
               props.data.map(payment => (
                 <tr key={payment.id}>
-                  <td>{percentage(payment.amount, totalAmount)}</td>
-                  <td>{formatMoney(payment.amount)}</td>
+                  <td>{fmt.percentage(payment.amount, totalAmount)}</td>
+                  <td>{fmt.money(payment.amount)}</td>
                   <td>{formatOnlyDate(payment.date.toISOString())}</td>
                   {orderStore.editMode && (
                     <td>
@@ -99,7 +99,7 @@ const PaymentsTable = observer(
             <tr>
               <td> {totalPaidPercent}</td>
               <td>
-                {!!totalPaid && 'Σ'} {!!totalPaid && formatMoney(totalPaid)}
+                {!!totalPaid && 'Σ'} {!!totalPaid && fmt.money(totalPaid)}
               </td>
               {props.footerComponent && <td>{props.footerComponent}</td>}
             </tr>
@@ -187,7 +187,7 @@ const NewPaymentInput = observer((props: NewPaymentInputProps) => {
                 os.payments.setAmount(props.order.total_amount ?? 0)
               }}
             >
-              <P>из {formatMoney(props.order.total_amount ?? 0)}</P>
+              <P>из {fmt.money(props.order.total_amount ?? 0)}</P>
             </Button>
           </Row>
           {os.payments.error && (

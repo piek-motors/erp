@@ -35,7 +35,7 @@ import {
   type TypographyProps,
 } from '@mui/joy'
 import { observer } from 'mobx-react-lite'
-import React from 'react'
+import React, { ReactNode } from 'react'
 import { Link as ReactLink, useNavigate } from 'react-router'
 
 export { Observer, observer } from 'mobx-react-lite'
@@ -65,6 +65,27 @@ export const Label = (
         {props.label || props.children}
       </Typography>
     )
+  )
+}
+
+export const InfoLabel = ({
+  label,
+  value,
+  suffix,
+  ...rest
+}: {
+  label: ReactNode
+  value?: ReactNode
+  suffix?: ReactNode
+} & TypographyProps) => {
+  if (value == null) return null
+  return (
+    <Label {...rest}>
+      {label}{' '}
+      <b>
+        {value} {suffix}
+      </b>
+    </Label>
   )
 }
 
