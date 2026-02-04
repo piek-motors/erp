@@ -73,13 +73,12 @@ export function MetalFlowRootLayout(props: { children?: React.ReactNode }) {
   useEffect(() => {
     app_cache.init()
   }, [])
+
   return (
     <Box
       sx={{
-        height: '100vh',
+        minHeight: '100vh',
         display: 'flex',
-        alignItems: 'stretch',
-        justifyContent: 'start',
         flexDirection: {
           xs: 'column',
           sm: 'row',
@@ -94,19 +93,24 @@ export function MetalFlowRootLayout(props: { children?: React.ReactNode }) {
             p={1}
             pr={0}
             sx={{
-              background: 'lightgrey',
-              height: 'inherit',
+              backgroundColor: 'lightgrey',
+              position: 'sticky',
+              top: 0,
+              height: '100vh',
+              flexShrink: 0,
             }}
           />
         </WebOnly>
       </DesktopOnly>
-      {props.children && (
-        <Sheet sx={{ width: '100%', height: 'min-content' }}>
-          <Stack sx={{ flexGrow: 1, overflowX: 'auto' }}>
-            {props.children}
-          </Stack>
-        </Sheet>
-      )}
+      <Sheet
+        sx={{
+          flex: 1,
+          minHeight: 0,
+          overflowY: 'auto',
+        }}
+      >
+        <Stack sx={{ minHeight: '100%' }}>{props.children}</Stack>
+      </Sheet>
     </Box>
   )
 }
