@@ -2,7 +2,7 @@ import { Tooltip } from '@mui/joy'
 import { DetailName } from 'domains/pdo/detail/detail_name'
 import { Box, Label, P, Row } from 'lib/index'
 import { timeDeltaDays } from 'lib/utils/date_fmt'
-import { ManufacturingOrderStatus as Status } from 'models'
+import { OrderPriority, ManufacturingOrderStatus as Status } from 'models'
 import type { Column } from 'react-table'
 import type { ListOrdersOutput } from 'srv/domains/pdo/orders_rpc'
 
@@ -29,6 +29,11 @@ const commonColumns: Column<ListOrdersOutput>[] = [
           disableLink
           withGroupName
         />
+        {d.priority == OrderPriority.High && (
+          <Tooltip title={`Высокий приоритет`} size="sm">
+            <Box width={10} height={10} bgcolor={'red'} borderRadius={10} />
+          </Tooltip>
+        )}
       </Row>
     ),
   },

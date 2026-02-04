@@ -1,7 +1,7 @@
 import { Day, Scope } from '#root/lib/constants.js'
 import { router } from '#root/lib/trpc/trpc.js'
 import { type DB, db, procedure, requireScope, TRPCError } from '#root/sdk.js'
-import { ManufacturingOrderStatus as OrderStatus } from 'models'
+import { OrderPriority, ManufacturingOrderStatus as OrderStatus } from 'models'
 import z from 'zod'
 import { OrderService } from './order_service.js'
 
@@ -150,6 +150,24 @@ export const orders_mut = router({
           new OrderService(trx, ctx.user.id).finishOrder(input.id),
         ),
     ),
+  //
+  set_priority: procedure
+    .use(requireScope(Scope.pdo))
+    .input(
+      z.object({
+        id: z.number(),
+        priority: z.enum(OrderPriority),
+      }),
+    )
+    .mutation(async ({ input }) => {
+      await db
+        .updateTable('pdo.orders')
+        .set({
+          priority: input.priority,
+        })
+        .where('id', '=', input.id)
+        .execute()
+    }),
   //
   set_current_operation: procedure
     .use(requireScope(Scope.pdo))

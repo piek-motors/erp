@@ -19,7 +19,7 @@ type Props = {
 export function Select(props: Props) {
   return (
     <Box sx={{ width: props.width }}>
-      <FormControl sx={{ width: 'min-content', minWidth: '207px' }}>
+      <FormControl sx={{ width: 'min-content' }}>
         <Label label={props.label} />
         <MuiSelect
           sx={{ width: props.width }}
@@ -63,6 +63,7 @@ export function EnumSelect<E extends TsEnum>(props: EnumSelectProps<E>) {
 
   return (
     <Select
+      width="min-content"
       {...rest}
       options={options}
       value={value}

@@ -1,4 +1,6 @@
+import { rpc } from 'lib/deps'
 import { makeAutoObservable } from 'mobx'
+import { OrderPriority } from 'models'
 import type { RouterOutput } from 'srv/lib/trpc'
 
 export type ManufacturingOrderOutput = RouterOutput['pdo']['orders']['get']
@@ -32,6 +34,7 @@ export class OrderSt {
     this.outputQty = order.output_qty ?? undefined
     this.currentOperation = order.current_operation
     this.orderAlreadyInProductionModal = null
+    this.priority = order.priority
   }
 
   qty?: number
@@ -46,6 +49,12 @@ export class OrderSt {
   currentOperation: number | null = null
   setCurrentOperationIndex(index: number | null) {
     this.currentOperation = index
+  }
+
+  priority?: OrderPriority
+  async set_priority(priority: OrderPriority) {
+    this.priority = priority
+    await rpc.pdo.orders_mut.set_priority.mutate({ id: this.id, priority })
   }
 
   get id() {

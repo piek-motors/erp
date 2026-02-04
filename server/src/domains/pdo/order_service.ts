@@ -5,6 +5,7 @@ import type { Selectable } from 'kysely'
 import {
   ManufacturingOrderStatus,
   MaterialRequirement,
+  OrderPriority,
   WriteoffReason,
 } from 'models'
 import { Warehouse } from './warehouse_service.js'
@@ -98,6 +99,7 @@ export class OrderService {
           writeoffs: [],
         },
         status: ManufacturingOrderStatus.Waiting,
+        priority: OrderPriority.Normal,
       })
       .returningAll()
       .executeTakeFirstOrThrow()

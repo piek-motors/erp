@@ -5,6 +5,7 @@ import type { DetailSt } from 'domains/pdo/detail/detail.state'
 import { capitalize } from 'domains/pdo/shared/basic'
 import { Label, observer, P, Row } from 'lib/index'
 import { fmtDate } from 'lib/utils/date_fmt'
+import { UiOrderPriority } from 'models'
 import type { ReactNode } from 'react'
 import { DetailBlank } from '../detail_blank'
 import type { OrderSt } from '../order.state'
@@ -25,9 +26,15 @@ export const TechPassportTable = observer(({ order, detail }: Props) => {
   if (!order.resp) return
   return (
     <>
-      <Row my={1}>
-        <L>Технологический паспорт</L>
-        <P fontSize={16}>№{order.id}</P>
+      <Row my={0.5} justifyContent={'center'}>
+        <Row>
+          <L>Технологический паспорт</L>
+          <P fontSize={16}>№ {order.id}</P>
+        </Row>
+        |
+        <L>
+          {order.priority != null && UiOrderPriority[order.priority]} приоритет
+        </L>
       </Row>
       <table css={css(tableStyles)} style={{ textAlign: 'center' }}>
         <tbody>

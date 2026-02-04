@@ -1,7 +1,8 @@
-import { Box, Card, Chip, type ChipProps, Divider } from '@mui/joy'
+import { Box, Chip, type ChipProps, Divider } from '@mui/joy'
 import { AttachmentComponent } from 'components/attachments/attachment'
 import { NumberInput } from 'components/inputs/number_input'
 import { InModal } from 'components/modal'
+import { EnumSelect } from 'components/select'
 import { PrintOnly, WebOnly } from 'components/utilities/conditional-display'
 import { DetailName } from 'domains/pdo/detail/detail_name'
 import {
@@ -25,8 +26,10 @@ import {
 import { notifier } from 'lib/store/notifier.store'
 import { fmtDate, timeDeltaDays } from 'lib/utils/date_fmt'
 import {
+  OrderPriority,
   ManufacturingOrderStatus as OrderStatus,
   uiManufacturingOrderStatus,
+  UiOrderPriority,
 } from 'models'
 import { app_cache } from '../cache'
 import type { DetailSt, DetailStProp } from '../detail/detail.state'
@@ -90,12 +93,14 @@ export const OrderUpdatePage = observer(() => {
           <Divider />
           <RowWithDividers gap={2} alignItems={'start'}>
             <ProductionSteps order={order} detail={detail} />
-            <Stack gap={1}>
-              <TechPassportButton order={order} />
+            <Stack spacing={1}>
               <QuantityInput
                 order={order}
                 recBatchSize={detail.recommendedBatchSize}
               />
+              <Divider />
+              <OrderPrioritySelect order={order} />
+              <TechPassportButton order={order} />
             </Stack>
             <BlankDisplay blank={detail?.blank} order={order} />
             <DetailAttachments detail={detail} />
@@ -247,7 +252,7 @@ const TechPassportButton = ({ order }: OrderStProp) => {
     <Button
       onClick={() => window.print()}
       color="primary"
-      variant="soft"
+      variant="outlined"
       sx={{ width: 'fit-content' }}
     >
       Тех. паспорт
@@ -324,39 +329,36 @@ const QuantityInput = observer(
     }
 
     return (
-      <Card size="sm" variant="soft" color="success">
-        <Stack>
-          {recBatchSize && (
-            <P level="body-xs" color="primary">
-              Реком. размер партии — {recBatchSize} шт
-            </P>
-          )}
+      <Stack>
+        {recBatchSize && (
+          <P level="body-xs" color="primary">
+            Реком. размер партии — {recBatchSize}
+          </P>
+        )}
 
-          {isProduction && (
-            <P level="body-xs" color="neutral">
-              Заказано — {order.qty} шт
-            </P>
-          )}
+        {isProduction && (
+          <P level="body-xs" color="neutral">
+            Заказано — {order.qty}
+          </P>
+        )}
 
-          <Row alignItems="end">
-            <NumberInput
-              label={mode.label}
-              size="sm"
-              sx={{ maxWidth: 80 }}
-              value={qty}
-              variant="outlined"
-              onChange={setQty}
-            />
-
-            <SaveIconButton
-              size="sm"
-              variant="soft"
-              disabled={qty == null || isUnchanged}
-              onClick={handleSave}
-            />
-          </Row>
-        </Stack>
-      </Card>
+        <Row alignItems="end">
+          <NumberInput
+            label={mode.label}
+            size="sm"
+            sx={{ maxWidth: 80 }}
+            value={qty}
+            variant="outlined"
+            onChange={setQty}
+          />
+          <SaveIconButton
+            size="sm"
+            variant="soft"
+            disabled={qty == null || isUnchanged}
+            onClick={handleSave}
+          />
+        </Row>
+      </Stack>
     )
   },
 )
@@ -464,3 +466,13 @@ const DuplicationCheckModal = observer(({ order }: { order: OrderSt }) => {
     </InModal>
   )
 })
+
+const OrderPrioritySelect = observer(({ order }: { order: OrderSt }) => (
+  <EnumSelect
+    labels={UiOrderPriority}
+    label="Приоритет"
+    enum={OrderPriority}
+    onChange={v => order.set_priority(v)}
+    value={order.priority}
+  />
+))

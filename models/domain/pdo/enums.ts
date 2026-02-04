@@ -61,3 +61,9 @@ export enum MaterialRequirement {
   Batch = 1,
   Countable = 2,
 }
+
+export enum OrderPriority {
+  Low = 0,
+  Normal = 1,
+  High = 2,
+}

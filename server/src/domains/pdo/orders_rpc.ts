@@ -4,7 +4,11 @@ import { formatDate, timedeltaInSeconds } from '#root/lib/time.js'
 import { router } from '#root/lib/trpc/trpc.js'
 import { type DB, db, procedure, TRPCError } from '#root/sdk.js'
 import type { Selectable } from 'kysely'
-import { fmt, ManufacturingOrderStatus as OrderStatus } from 'models'
+import {
+  fmt,
+  OrderPriority,
+  ManufacturingOrderStatus as OrderStatus,
+} from 'models'
 import z from 'zod'
 import { calc_material_deduction } from './order_service.js'
 
@@ -26,25 +30,27 @@ export interface ListOrdersOutput {
   current_operation: string | null
   current_operation_start_at: string | null
   time_delta: number | null
-  /** order id of the same detail already in production, if this order is waiting/preparing */
+  /** order id of the same detail already in production, value presented only for orders in waiting/preparing status */
   duplicated: number | null
+  priority: OrderPriority
 }
 
 const base_query = db
-  .selectFrom('pdo.orders as m')
+  .selectFrom('pdo.orders as o')
   .select([
-    'm.id',
-    'm.status',
-    'm.detail_id',
-    'm.qty',
-    'm.output_qty',
-    'm.finished_at',
-    'm.created_at',
-    'm.started_at',
-    'm.current_operation',
-    'm.current_operation_start_at',
+    'o.id',
+    'o.status',
+    'o.detail_id',
+    'o.qty',
+    'o.output_qty',
+    'o.finished_at',
+    'o.created_at',
+    'o.started_at',
+    'o.current_operation',
+    'o.current_operation_start_at',
+    'o.priority',
   ])
-  .innerJoin('pdo.details as d', 'm.detail_id', 'd.id')
+  .innerJoin('pdo.details as d', 'o.detail_id', 'd.id')
   .select([
     'd.name as detail_name',
     'd.logical_group_id as group_id',
@@ -88,9 +94,9 @@ export const orders = router({
   list: procedure.query(async () => {
     const [orders, dict_operations] = await Promise.all([
       base_query
-        .where('m.finished_at', 'is', null)
-        .where('m.status', '!=', OrderStatus.Collected)
-        .orderBy('m.started_at', 'desc')
+        .where('o.finished_at', 'is', null)
+        .where('o.status', '!=', OrderStatus.Collected)
+        .orderBy('o.started_at', 'desc')
         .execute(),
 
       db.selectFrom('pdo.dict_operation_kinds').selectAll().execute(),
@@ -137,8 +143,8 @@ export const orders = router({
   list_last_archived: procedure.query(async () => {
     const cutoffDate = new Date(Date.now() - FinishedOrderRetentionPeriod)
     const finished = await base_query
-      .where('m.finished_at', '>=', cutoffDate)
-      .orderBy('m.finished_at', 'desc')
+      .where('o.finished_at', '>=', cutoffDate)
+      .orderBy('o.finished_at', 'desc')
       .execute()
     return matrixEncoder(
       finished.map(o => ({

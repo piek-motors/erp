@@ -2,6 +2,7 @@ import {
   ManufacturingOrderStatus,
   MaterialRequirement,
   MaterialShape,
+  OrderPriority,
   SupplyReason,
   Unit,
   WriteoffReason,
@@ -79,4 +80,10 @@ export const UiMaterialRequirement = {
   [MaterialRequirement.Single]: 'В размер',
   [MaterialRequirement.Batch]: 'С прутка',
   [MaterialRequirement.Countable]: 'Готовая',
+}
+
+export const UiOrderPriority = {
+  [OrderPriority.Low]: 'Низкий',
+  [OrderPriority.Normal]: 'Обычный',
+  [OrderPriority.High]: 'Высокий',
 }

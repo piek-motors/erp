@@ -12,6 +12,7 @@ import {
   ManufacturingOrderStatus,
   MaterialShape,
   OperationType,
+  OrderPriority,
   OrderStatus,
   SupplyReason,
   Unit,
@@ -158,6 +159,7 @@ export namespace DB {
       MetarialWiteoffData,
       MetarialWiteoffData
     >
+    priority: OrderPriority
   }
 
   export interface ManufacturingData {
@@ -261,6 +263,7 @@ export namespace DB {
     firstname: string
     lastname: string
     card: string
+    job_title: string | null
     created_at: GeneratedAlways<Date>
   }
 
