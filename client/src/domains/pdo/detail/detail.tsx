@@ -14,10 +14,30 @@ import {
 } from 'lib/index'
 import { fmtDate, fmtTimestamp } from 'lib/utils/date_fmt'
 import { CreateManufacturingOrder } from '../orders/order_create'
-import type { DetailSt, DetailStProp } from './detail.state'
+import { DetailSt, DetailStProp } from './detail.state'
 import { api } from './detail_api'
 import { DetailForm } from './detail_form'
 import { DetailWarehouseModal } from './warehouse/ui'
+
+import { ActionButton } from 'lib/index'
+
+export const CreateDetailPage = observer(() => {
+  const [detail] = useState(() => new DetailSt())
+  const navigate = useNavigate()
+  return (
+    <Stack gap={2} p={1}>
+      <MetalPageTitle t={'Добавить деталь'} />
+      <DetailForm detail={detail} />
+      <ActionButton
+        onClick={() =>
+          api.insert(detail).then(id => {
+            navigate(openPage(routeMap.pdo.detail.edit, id))
+          })
+        }
+      />
+    </Stack>
+  )
+})
 
 export const DetailPage = observer(() => {
   const { id } = useParams<{ id: string }>()

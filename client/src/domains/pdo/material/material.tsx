@@ -20,8 +20,30 @@ import { api } from './api'
 import { DetailsMadeOfMaterialModal } from './details_made_of_that_material'
 import { MaterialForm } from './form'
 import { MaterialQuntifiedExpenses } from './quantified_expenses'
-import type { MaterialSt } from './state'
+import { MaterialSt } from './state'
 import { MaterialWarehouseCard } from './warehouse'
+
+import { ActionButton } from 'lib/index'
+
+export const CreateMaterialPage = observer(() => {
+  const [material] = useState(() => new MaterialSt())
+  const navigate = useNavigate()
+  return (
+    <Stack gap={1} p={1}>
+      <MetalPageTitle t={'Добавить материал'} />
+      <Stack gap={1}>
+        <MaterialForm showTabs m={material} />
+        <ActionButton
+          onClick={() =>
+            api.insert(material).then(id => {
+              navigate(openPage(routeMap.pdo.material.edit, id))
+            })
+          }
+        />
+      </Stack>
+    </Stack>
+  )
+})
 
 export const MaterialUpdatePage = observer(() => {
   const { id } = useParams<{ id: string }>()
