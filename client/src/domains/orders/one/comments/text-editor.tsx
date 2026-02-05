@@ -2,6 +2,7 @@
 import { css } from '@emotion/react'
 import { UilBold, UilMessage, UilPaintTool } from '@iconscout/react-unicons'
 import { Box, Button, Sheet, type SheetProps, Stack } from '@mui/joy'
+import { PaddingProps } from '@mui/system'
 import Highlight from '@tiptap/extension-highlight'
 import Mention from '@tiptap/extension-mention'
 import Placeholder from '@tiptap/extension-placeholder'
@@ -18,6 +19,7 @@ export const TextEditor = (props: {
   onChange?: (content: string) => void
   editable?: boolean
   variant?: SheetProps['variant']
+  p?: PaddingProps['p']
 }) => {
   const [key] = useState(0)
   const editable = props.editable === undefined ? true : props.editable
@@ -76,7 +78,7 @@ export const TextEditor = (props: {
   return (
     <Stack gap={1} key={key} css={styles} sx={{ position: 'relative' }}>
       <Sheet
-        sx={{ borderRadius: 'md', p: 1 }}
+        sx={{ borderRadius: 'md', p: props.p ?? 1 }}
         variant={props.variant || 'outlined'}
       >
         {editable && (

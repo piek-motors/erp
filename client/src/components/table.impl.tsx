@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
-import { Table as MuiTable, Stack } from '@mui/joy'
+import { Table as MuiTable } from '@mui/joy'
 import type { SxProps } from '@mui/joy/styles/types'
 import { P } from 'lib/index'
 import { type Row, type TableOptions, useSortBy, useTable } from 'react-table'
@@ -38,12 +38,9 @@ export function Table<T extends object>(props: Props<T>) {
         {headerGroups.map((headerGroup, i) => (
           <tr {...headerGroup.getHeaderGroupProps()} key={i}>
             {headerGroup.headers.map((column, i) => {
-              const col = column as any
               return (
-                <th key={i}>
-                  <Stack direction={'row'} alignItems={'center'}>
-                    <P>{column.render('Header')}</P>
-                  </Stack>
+                <th key={i} style={{ height: 'min-content' }}>
+                  <P fontSize={12}>{column.render('Header')}</P>
                 </th>
               )
             })}

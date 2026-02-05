@@ -271,17 +271,22 @@ export const BlankAttributes = observer(
   }) => (
     <>
       {!!props.attributes?.length && props.attributes.length > 0 && (
-        <Row flexWrap={'wrap'} justifyContent={'left'} {...props.rowProps}>
+        <Row
+          flexWrap={'wrap'}
+          justifyContent={'left'}
+          {...props.rowProps}
+          gap={1}
+        >
           {props.attributes?.map(({ key, value }, idx) => (
             <Box
+              pr={1}
               key={key + idx}
               fontSize={props.fontSize}
               whiteSpace={'nowrap'}
               sx={{ lineHeight: 0.8 }}
             >
               {key}
-              {value && ': ' + String(value)}
-              {idx < props.attributes!.length - 1 ? ',' : ''}
+              {value && ' ' + String(value)}
             </Box>
           ))}
         </Row>

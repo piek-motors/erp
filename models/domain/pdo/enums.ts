@@ -42,7 +42,7 @@ export enum ManufacturingOrderStatus {
   Waiting = 0,
   Preparation = 1,
   Production = 2,
-  Collected = 3,
+  Archived = 3,
 }
 
 export enum Color {

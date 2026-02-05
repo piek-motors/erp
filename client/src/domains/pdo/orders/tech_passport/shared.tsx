@@ -37,9 +37,14 @@ export const DetailDescription = observer((props: { htmlContent?: string }) => {
   if (!props.htmlContent) return null
   if (!hasTextContent(props.htmlContent)) return null
   return (
-    <Stack width={'max-content'} maxWidth={600}>
+    <Stack width={'max-content'} maxWidth={400}>
       <Label label="Примечание" level="body-sm" />
-      <TextEditor defaultValue={props.htmlContent} editable={false} />
+      <TextEditor
+        defaultValue={props.htmlContent}
+        editable={false}
+        variant="plain"
+        p={0}
+      />
     </Stack>
   )
 })

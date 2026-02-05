@@ -110,7 +110,7 @@ export const OrderUpdatePage = observer(() => {
           <Dates order={order} />
           <Row
             justifyContent={
-              [OrderStatus.Production, OrderStatus.Collected].includes(
+              [OrderStatus.Production, OrderStatus.Archived].includes(
                 order.status,
               )
                 ? 'end'
@@ -138,7 +138,7 @@ const OrderStatusChip = ({ status }: { status: OrderStatus }) => {
     case OrderStatus.Production:
       color = 'primary'
       break
-    case OrderStatus.Collected:
+    case OrderStatus.Archived:
       color = 'success'
       break
   }
@@ -153,7 +153,7 @@ const ProductionSteps = observer(
   ({ detail, order }: DetailStProp & OrderStProp) => {
     if (
       detail.processingRoute.steps.length === 0 ||
-      order.status == OrderStatus.Collected
+      order.status == OrderStatus.Archived
     )
       return null
     return (
@@ -243,9 +243,7 @@ const Dates = observer(({ order }: { order: OrderSt }) => {
 })
 
 const TechPassportButton = ({ order }: OrderStProp) => {
-  if (
-    ![OrderStatus.Preparation, OrderStatus.Production].includes(order.status)
-  ) {
+  if (order.status == OrderStatus.Archived || !order.qty) {
     return null
   }
   return (
@@ -288,7 +286,7 @@ const DeleteOrderButton = observer(({ order }: OrderStProp) => {
 const QuantityInput = observer(
   ({ recBatchSize, order }: OrderStProp & { recBatchSize?: number }) => {
     const isProduction = order.status === OrderStatus.Production
-    const isCollected = order.status === OrderStatus.Collected
+    const isCollected = order.status === OrderStatus.Archived
 
     const mode = isProduction
       ? {
@@ -398,7 +396,7 @@ const ActionButton = observer(({ order }: OrderStProp) => {
           В архив
         </Button>
       )
-    case OrderStatus.Collected:
+    case OrderStatus.Archived:
       return (
         <Button
           onClick={() => api.returnToProduction(order)}

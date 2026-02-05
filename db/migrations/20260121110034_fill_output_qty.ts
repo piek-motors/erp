@@ -19,7 +19,7 @@ export async function up(db: KDB): Promise<void> {
     .select(['id', 'qty'])
     .where('output_qty', 'is', null)
     .where('status', 'in', [
-      ManufacturingOrderStatus.Collected,
+      ManufacturingOrderStatus.Archived,
       ManufacturingOrderStatus.Production,
     ])
     .execute()

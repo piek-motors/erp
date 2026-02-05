@@ -95,7 +95,7 @@ export const orders = router({
     const [orders, dict_operations] = await Promise.all([
       base_query
         .where('o.finished_at', 'is', null)
-        .where('o.status', '!=', OrderStatus.Collected)
+        .where('o.status', '!=', OrderStatus.Archived)
         .orderBy('o.started_at', 'desc')
         .execute(),
 
@@ -180,7 +180,7 @@ export const orders = router({
           'd.logical_group_id',
         )
         .select('pdo.detail_group.name as group_name')
-        .where('o.status', '=', OrderStatus.Collected)
+        .where('o.status', '=', OrderStatus.Archived)
         .where('o.finished_at', 'is not', null)
         .orderBy('o.finished_at', 'desc')
 

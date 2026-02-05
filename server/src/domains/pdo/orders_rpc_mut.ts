@@ -112,7 +112,7 @@ export const orders_mut = router({
       const order = await db
         .selectFrom('pdo.orders')
         .select('finished_at')
-        .where('status', '=', OrderStatus.Collected)
+        .where('status', '=', OrderStatus.Archived)
         .where('id', '=', input.id)
         .executeTakeFirst()
       if (!order) {

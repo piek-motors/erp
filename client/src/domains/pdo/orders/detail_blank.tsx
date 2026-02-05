@@ -31,7 +31,7 @@ export const DetailBlank = observer(({ blank, order }: DetailBlankProps) => {
 
   const unit = uiUnit(material.unit)
   return (
-    <Stack>
+    <Stack maxWidth={300}>
       <MaterialName id={material.id} label={material.label} />
       <InfoLabel
         label="Потребное кол."

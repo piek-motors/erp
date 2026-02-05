@@ -64,7 +64,7 @@ const getTabConfig = (
     ),
   },
   {
-    value: OrderStatus.Collected,
+    value: OrderStatus.Archived,
     label: 'Архив',
     component: <ArchiveSearch data={data} onRowClick={onRowClick} />,
   },
@@ -89,7 +89,7 @@ const ArchiveSearch = observer(
         <Table
           onRowClick={props.onRowClick}
           data={archive_search.orders_to_render}
-          columns={getColumns(OrderStatus.Collected)}
+          columns={getColumns(OrderStatus.Archived)}
         />
         {archive_search.loader.loading && (
           <Label xs px={1}>
@@ -116,7 +116,7 @@ export const ManufacturingList = observer(() => {
   const tabs = getTabConfig(s.filtered, onRowClick)
 
   const search =
-    s.tab === ManufacturingOrderStatus.Collected ? (
+    s.tab === ManufacturingOrderStatus.Archived ? (
       <Search
         size="sm"
         color="primary"

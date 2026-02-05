@@ -199,7 +199,7 @@ export class OrderService {
       .updateTable('pdo.orders')
       .set({
         finished_at: new Date(),
-        status: ManufacturingOrderStatus.Collected,
+        status: ManufacturingOrderStatus.Archived,
       })
       .where('id', '=', orderId)
       .returningAll()
@@ -221,7 +221,7 @@ export class OrderService {
 
   async deleteOrder(manufacturingId: number): Promise<void> {
     const manufacturing = await this.getOrder(manufacturingId)
-    if (manufacturing.status === ManufacturingOrderStatus.Collected) {
+    if (manufacturing.status === ManufacturingOrderStatus.Archived) {
       throw new TRPCError({
         code: 'BAD_REQUEST',
         message: 'Cannot delete completed order',

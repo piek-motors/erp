@@ -90,8 +90,6 @@ export function MetalFlowRootLayout(props: { children?: React.ReactNode }) {
           <NavigationSideBar
             links={nav_links}
             title={title}
-            p={1}
-            pr={0}
             sx={{
               backgroundColor: 'lightgrey',
               position: 'sticky',

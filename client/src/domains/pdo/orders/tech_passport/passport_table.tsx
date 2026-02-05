@@ -39,7 +39,7 @@ export const TechPassportTable = observer(({ order, detail }: Props) => {
       <table css={css(tableStyles)} style={{ textAlign: 'center' }}>
         <tbody>
           <tr>
-            <td rowSpan={2} style={{ textAlign: 'left' }}>
+            <td rowSpan={2} style={{ textAlign: 'left', maxWidth: 200 }}>
               <L>Заготовка</L>
               <DetailBlank order={order} blank={detail.blank} />
             </td>

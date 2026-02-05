@@ -20,7 +20,7 @@ export function Select(props: Props) {
   return (
     <Box sx={{ width: props.width }}>
       <FormControl sx={{ width: 'min-content' }}>
-        <Label label={props.label} />
+        <Label label={props.label} whiteSpace={'nowrap'} />
         <MuiSelect
           sx={{ width: props.width }}
           size={props.size ?? 'sm'}

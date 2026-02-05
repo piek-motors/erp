@@ -38,7 +38,7 @@ const commonColumns: Column<ListOrdersOutput>[] = [
     ),
   },
   {
-    Header: 'Кол-во',
+    Header: 'Кол.',
     accessor: ({ qty }) => (qty ? <P>{qty}</P> : ''),
   },
 ]
@@ -126,7 +126,7 @@ export function getColumns(status: Status) {
       return preparationColumns
     case Status.Production:
       return productionColumns
-    case Status.Collected:
+    case Status.Archived:
       return finishColumns
     default:
       return commonColumns
