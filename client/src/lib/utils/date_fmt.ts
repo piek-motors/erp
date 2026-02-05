@@ -2,10 +2,10 @@ import moment from 'moment'
 import 'moment/locale/ru'
 moment.locale('ru')
 
-export function timeDeltaDays(t?: string | null) {
+export function timeDeltaDays(t?: string | null | number) {
   if (!t) return null
 
-  const t1 = new Date(Number(t))
+  const t1 = new Date(t)
   if (isNaN(t1.getTime())) return null
 
   const now = new Date()
@@ -22,7 +22,7 @@ export function timeDeltaDays(t?: string | null) {
     style: 'narrow',
   })
   const days = Math.floor(hours / 24)
-  return rtf.format(-days, 'day')
+  return rtf.format(-days, 'day').replace('-', '')
 }
 
 export const formatOnlyDate = (date?: string | Date | null) => {
@@ -40,7 +40,10 @@ export function fmtTimestamp(date: Date): string {
   }).format(date)
 }
 
-export function fmtDate(date?: Date | string | null, noYear?: boolean): string {
+export function fmtDate(
+  date?: Date | string | null | number,
+  noYear?: boolean,
+): string {
   if (!date) return ''
   return Intl.DateTimeFormat('ru-RU', {
     day: 'numeric',

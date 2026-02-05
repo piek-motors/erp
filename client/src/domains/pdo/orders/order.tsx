@@ -164,7 +164,7 @@ const ProductionSteps = observer(
           const timedelta =
             current &&
             order.resp?.current_operation_start_at &&
-            timeDeltaDays(order.resp.current_operation_start_at)
+            timeDeltaDays(Number(order.resp.current_operation_start_at))
           return (
             <Row>
               <Button

@@ -1,7 +1,7 @@
 import { Tooltip } from '@mui/joy'
 import { DetailName } from 'domains/pdo/detail/detail_name'
 import { Box, Label, P, Row } from 'lib/index'
-import { timeDeltaDays } from 'lib/utils/date_fmt'
+import { fmtDate, timeDeltaDays } from 'lib/utils/date_fmt'
 import { OrderPriority, ManufacturingOrderStatus as Status } from 'models'
 import type { Column } from 'react-table'
 import type { ListOrdersOutput } from 'srv/domains/pdo/orders_rpc'
@@ -57,11 +57,18 @@ const preparationColumns = commonColumns.concat([
 const productionColumns = commonColumns.concat([
   {
     Header: 'Запуск',
-    accessor: m => (
-      <P noWrap level="body-xs">
-        {m.started_at}
-      </P>
-    ),
+    accessor: m => {
+      const timedelta = timeDeltaDays(m.started_at)
+
+      return (
+        <Row flexWrap={'nowrap'}>
+          <P>{fmtDate(m.started_at, true)}</P>
+          <Label color="neutral" xs fontWeight={400}>
+            {timedelta}
+          </Label>
+        </Row>
+      )
+    },
   },
   {
     Header: 'Операция',
@@ -70,12 +77,12 @@ const productionColumns = commonColumns.concat([
   {
     Header: '_',
     accessor: m => {
-      const timedelta = timeDeltaDays(m.current_operation_start_at)
+      const timedelta = timeDeltaDays(Number(m.current_operation_start_at))
       return (
         <>
           {timedelta && (
             <P level="body-xs" noWrap>
-              {timedelta.replace('-', '')}
+              {timedelta}
             </P>
           )}
         </>

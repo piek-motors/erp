@@ -25,7 +25,7 @@ export interface ListOrdersOutput {
   group_id: number | null
   status: OrderStatus
   created_at: string | null
-  started_at: string | null
+  started_at: number | null
   finished_at: string | null
   current_operation: string | null
   current_operation_start_at: string | null
@@ -134,6 +134,7 @@ export const orders = router({
           (current_op_id != null && operationsMap[current_op_id]) || null,
         duplicated: duplicated_order_id || null,
         ...dates_formatter(o),
+        started_at: o.started_at?.valueOf() ?? null,
       } satisfies ListOrdersOutput
     })
 
@@ -227,7 +228,6 @@ const dates_formatter = (
   withYear?: boolean,
 ) => ({
   created_at: formatDate(order.created_at),
-  started_at: formatDate(order.started_at, withYear),
   finished_at: formatDate(order.finished_at),
   time_delta:
     order.finished_at && order.started_at
