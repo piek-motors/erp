@@ -1,16 +1,26 @@
-import { Button, Label, Link, openPage, routeMap, Row } from 'lib/index'
+import { UilHistory } from '@iconscout/react-unicons'
+import { IconButton } from '@mui/joy'
+import {
+  Button,
+  Label,
+  Link,
+  openPage,
+  routeMap,
+  Row,
+  UseIcon,
+} from 'lib/index'
 import {
   OperationType,
-  type SupplyReason,
   uiSupplyReason,
   uiWriteoffReason,
+  type SupplyReason,
   type WriteoffReason,
 } from 'models'
 import type { Column } from 'react-table'
 import { DetailName } from '../detail/detail_name'
 import { AdaptiveNumberFormatter } from '../shared/adaptive_number_formatter'
 import { value_with_unit } from '../shared/basic'
-import type { Operation } from './list'
+import { operations_st, type Operation } from './list'
 import { OperationName } from './operation_name'
 
 const formatter = new AdaptiveNumberFormatter(2)
@@ -90,5 +100,25 @@ export const columns: Column<Operation>[] = [
         : uiWriteoffReason(data?.reason as WriteoffReason)
       return <Label xs>{op}</Label>
     },
+  },
+  {
+    Header: 'Откат',
+    accessor: data => (
+      <IconButton
+        size="sm"
+        variant="solid"
+        color="danger"
+        sx={{
+          '--IconButton-size': '20px',
+          opacity: 0.05,
+          '&:hover': {
+            opacity: 1,
+          },
+        }}
+        onClick={() => operations_st.revert(data.id)}
+      >
+        <UseIcon icon={UilHistory} small invert />
+      </IconButton>
+    ),
   },
 ]

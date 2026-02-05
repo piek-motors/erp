@@ -1,12 +1,14 @@
+import { logger } from '#root/ioc/log.js'
 import { matrixEncoder } from '#root/lib/matrix_encoder.js'
 import { formatDate } from '#root/lib/time.js'
 import { router } from '#root/lib/trpc/trpc.js'
-import { db, procedure, z } from '#root/sdk.js'
+import { db, procedure, requireScope, Scope, z } from '#root/sdk.js'
 import { OperationType, SupplyReason, Unit, WriteoffReason } from 'models'
 
 const Limit = 100
 
 export type OperationListItem = {
+  id: number
   operation_type: OperationType
   timestamp: string
   qty: number
@@ -55,5 +57,67 @@ export const operations = router({
         operation.timestamp = formatDate(operation.timestamp) as any
       })
       return matrixEncoder(operations)
+    }),
+  //
+  revert: procedure
+    .use(requireScope(Scope.pdo))
+    .input(
+      z.object({
+        id: z.number(),
+      }),
+    )
+    .mutation(async ({ input }) => {
+      const operation = await db
+        .selectFrom('pdo.operations')
+        .where('id', '=', input.id)
+        .selectAll()
+        .executeTakeFirstOrThrow()
+
+      interface StockUpdate {
+        table: 'pdo.materials' | 'pdo.details'
+        id: number
+        qty: number
+        is_supply: boolean
+      }
+
+      let update: StockUpdate
+      const is_supply = operation.operation_type == OperationType.Supply
+
+      // Add material stock update if operation affects materials
+      if (operation.material_id) {
+        update = {
+          table: 'pdo.materials',
+          id: operation.material_id,
+          qty: operation.qty,
+          is_supply: is_supply,
+        }
+      } else if (operation.detail_id) {
+        // Add detail stock update if operation affects details
+        update = {
+          table: 'pdo.details',
+          id: operation.detail_id,
+          qty: operation.qty,
+          is_supply: is_supply,
+        }
+      } else {
+        throw Error('cant define stock update')
+      }
+
+      const balance_change = update.is_supply ? -update.qty : update.qty
+      await db
+        .updateTable(update.table)
+        .set(eb => ({
+          on_hand_balance: eb('on_hand_balance', '+', balance_change),
+        }))
+        .where('id', '=', update.id)
+        .execute()
+
+      await db.deleteFrom('pdo.operations').where('id', '=', input.id).execute()
+
+      logger.warn(update, 'Выполнен откат операции')
+      return {
+        success: true,
+        message: `Operation ${input.id} reverted successfully`,
+      }
     }),
 })

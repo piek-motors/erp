@@ -1,6 +1,5 @@
 import { type IDB, TRPCError } from '#root/sdk.js'
 import type { DB } from 'db'
-import { Decimal } from 'decimal.js'
 import type { Selectable } from 'kysely'
 import {
   ManufacturingOrderStatus,
@@ -163,7 +162,6 @@ export class OrderService {
           label: material.label,
           stock: material.on_hand_balance,
         },
-        qty,
         order,
       )
     }
@@ -244,25 +242,16 @@ export class OrderService {
       stock: number
       label: string
     },
-    qty: number,
     order: Selectable<DB.ProductionOrderTable>,
   ): Promise<MaterialWriteoff> {
     const { material_id, label, material_deduction } = material
-    if (!material_deduction) {
-      throw new Error('Не задан расход материала')
-    }
-    const qty_decimal = new Decimal(qty)
-    if (!qty_decimal) {
-      throw Error('Не задано кол-во изделий')
-    }
-    const totalCost = material_deduction
 
-    if (material.stock < totalCost) {
+    if (material.stock < material_deduction) {
       throw new ErrNotEnoughMaterial(
-        `Недостаточно материала (id=${material_id}) ${label}, требуется ${totalCost}, имеется ${material.stock}`,
+        `Недостаточно материала (id=${material_id}) ${label}, требуется ${material_deduction}, имеется ${material.stock}`,
       )
     }
-    if (totalCost === 0) {
+    if (material_deduction === 0) {
       throw new ErrZeroCost(
         `Не указан расход материала (id=${material_id}) ${label}`,
       )
@@ -271,7 +260,7 @@ export class OrderService {
     return await this.warehouse
       .subtractMaterial(
         material.material_id,
-        totalCost,
+        material_deduction,
         WriteoffReason.UsedInProduction,
         order.detail_id,
         order.id,
@@ -281,7 +270,7 @@ export class OrderService {
         material_name: material.label,
         writeoff_id: res.operation_id,
         stock: res.on_hand_balance,
-        totalCost,
+        totalCost: material_deduction,
       }))
   }
 

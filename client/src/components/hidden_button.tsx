@@ -16,6 +16,7 @@ export const HoverReveal = (props: StackProps & HoverRevealProps) => {
   const className = 'hover-reveal-hidden'
   return (
     <Row
+      gap={0}
       css={css`
         &:hover {
           .${className} {
