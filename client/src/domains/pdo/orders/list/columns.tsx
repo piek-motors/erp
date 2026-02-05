@@ -14,10 +14,15 @@ const commonColumns: Column<ListOrdersOutput>[] = [
   {
     Header: 'Деталь',
     accessor: d => (
-      <Row>
+      <Row flexWrap={'nowrap'}>
         {d.duplicated && (
           <Tooltip title={`Дублирует заказ №${d.duplicated}`} size="sm">
-            <Box width={10} height={10} bgcolor={'red'} borderRadius={10} />
+            <Box
+              width={12}
+              height={12}
+              bgcolor={'rgb(255, 111, 7)'}
+              borderRadius={12}
+            />
           </Tooltip>
         )}
         <DetailName
@@ -31,7 +36,7 @@ const commonColumns: Column<ListOrdersOutput>[] = [
         />
         {d.priority == OrderPriority.High && (
           <Tooltip title={`Высокий приоритет`} size="sm">
-            <Box width={10} height={10} bgcolor={'red'} borderRadius={10} />
+            <Box width={12} height={12} bgcolor={'red'} borderRadius={10} />
           </Tooltip>
         )}
       </Row>
@@ -62,8 +67,10 @@ const productionColumns = commonColumns.concat([
 
       return (
         <Row flexWrap={'nowrap'}>
-          <P level="body-xs">{fmtDate(m.started_at, true)}</P>
-          <Label color="neutral" xs fontWeight={400}>
+          <P level="body-xs" noWrap>
+            {fmtDate(m.started_at, true)}
+          </P>
+          <Label color="neutral" xs fontWeight={400} noWrap>
             {timedelta}
           </Label>
         </Row>

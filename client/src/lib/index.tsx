@@ -80,7 +80,7 @@ export const InfoLabel = ({
 } & TypographyProps) => {
   if (value == null) return null
   return (
-    <Label {...rest}>
+    <Label {...rest} flexWrap={'nowrap'}>
       {label}{' '}
       <b>
         {value} {suffix}
