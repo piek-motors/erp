@@ -62,7 +62,7 @@ const productionColumns = commonColumns.concat([
 
       return (
         <Row flexWrap={'nowrap'}>
-          <P>{fmtDate(m.started_at, true)}</P>
+          <P level="body-xs">{fmtDate(m.started_at, true)}</P>
           <Label color="neutral" xs fontWeight={400}>
             {timedelta}
           </Label>

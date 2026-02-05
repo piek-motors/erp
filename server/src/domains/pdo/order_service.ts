@@ -146,7 +146,10 @@ export class OrderService {
 
     if (material_cost) {
       const { material_id } = material_cost
-      const cost = calc_material_deduction(detail.blank?.material, qty)
+      const material_deduction = calc_material_deduction(
+        detail.blank?.material,
+        qty,
+      )
       const material = await this.trx
         .selectFrom('pdo.materials')
         .where('id', '=', material_id)
@@ -156,7 +159,7 @@ export class OrderService {
       writeoff = await this.subtractMaterials(
         {
           material_id,
-          cost,
+          material_deduction: material_deduction,
           label: material.label,
           stock: material.on_hand_balance,
         },
@@ -237,22 +240,22 @@ export class OrderService {
   private async subtractMaterials(
     material: {
       material_id: number
-      cost: number
+      material_deduction: number
       stock: number
       label: string
     },
     qty: number,
     order: Selectable<DB.ProductionOrderTable>,
   ): Promise<MaterialWriteoff> {
-    const { material_id, label, cost } = material
-    if (!cost) {
+    const { material_id, label, material_deduction } = material
+    if (!material_deduction) {
       throw new Error('Не задан расход материала')
     }
     const qty_decimal = new Decimal(qty)
     if (!qty_decimal) {
       throw Error('Не задано кол-во изделий')
     }
-    const totalCost = new Decimal(cost).mul(qty_decimal).toNumber()
+    const totalCost = material_deduction
 
     if (material.stock < totalCost) {
       throw new ErrNotEnoughMaterial(
