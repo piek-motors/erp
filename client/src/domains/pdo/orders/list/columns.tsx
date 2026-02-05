@@ -100,7 +100,7 @@ const finishColumns = commonColumns.concat([
     Header: 'Запуск',
     accessor: m => (
       <P noWrap level="body-xs">
-        {m.started_at}
+        {fmtDate(m.started_at, true)}
       </P>
     ),
   },
