@@ -38,7 +38,6 @@ export class AuthSevice {
     const tokenPayload = this.createTokenPayload(token.user)
     const newTokenPair = this.tokenService.generateTokenPair(tokenPayload)
     await this.tokenService.update(refreshToken, newTokenPair.refreshToken)
-    logger.info(`auth ${token.user.first_name} ${token.user.last_name}`)
     return { ...newTokenPair, user: tokenPayload }
   }
 

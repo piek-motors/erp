@@ -8,6 +8,7 @@ import {
   matrixEncoder,
   procedure,
   requireScope,
+  RpcError,
   Scope,
   TRPCError,
 } from '#root/sdk.js'
@@ -22,6 +23,7 @@ import {
   WriteoffReason,
 } from 'models'
 import { z } from 'zod'
+import { get_details_by_material_id } from './details_rpc.js'
 
 export type Material = DB.Material & {}
 
@@ -49,7 +51,7 @@ export const material = router({
         .executeTakeFirstOrThrow(),
       db
         .selectFrom('pdo.details')
-        .where(sql<boolean>`(blank->'material'->>0)::int = ${id}`)
+        .where(sql<boolean>`(blank->'material'->>'material_id')::int = ${id}`)
         .select(eb => eb.fn.countAll().as('count'))
         .executeTakeFirstOrThrow(),
     ])
@@ -104,6 +106,15 @@ export const material = router({
     .input(id_payload)
     .mutation(async ({ input: { id } }) => {
       await db.transaction().execute(async trx => {
+        // Check if we have some relationships with details
+        const details = await get_details_by_material_id(id)
+        if (details.length) {
+          throw new RpcError(
+            'FORBIDDEN',
+            `Нельзя удалить материал поскольку на него ссылаются ${details.length} деталей`,
+          )
+        }
+
         await trx
           .deleteFrom('pdo.operations')
           .where('material_id', '=', id)

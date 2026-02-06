@@ -230,15 +230,7 @@ export const details = router({
   //
   filter_by_material: procedure
     .input(z.object({ material_id: z.number() }))
-    .query(async ({ input }) =>
-      db
-        .selectFrom('pdo.details')
-        .where(
-          sql<boolean>`(blank->'material'->>0)::int = ${input.material_id}`,
-        )
-        .selectAll()
-        .execute(),
-    ),
+    .query(async ({ input }) => get_details_by_material_id(input.material_id)),
   //
   delete: procedure
     .use(requireScope(Scope.pdo))
@@ -257,3 +249,13 @@ export const details = router({
       }),
     ),
 })
+
+export const get_details_by_material_id = (material_id: number) => {
+  return db
+    .selectFrom('pdo.details')
+    .where(
+      sql<boolean>`(blank->'material'->>'material_id')::int = ${material_id}`,
+    )
+    .selectAll()
+    .execute()
+}
