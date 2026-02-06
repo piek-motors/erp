@@ -52,9 +52,6 @@ type BlankAttributes = { key: string; value: any }[]
 
 export class DetailBlankSt {
   details_requirement: DetailRequirementSt[] = []
-  set_details_requirement(detailCosts?: DetailRequirementSt[]) {
-    this.details_requirement = detailCosts || []
-  }
   material_requirement: MaterialRequirementSt | null = null
   set_material_requirement(c?: MaterialRequirementSt | null) {
     this.material_requirement = c || null
@@ -70,9 +67,9 @@ export class DetailBlankSt {
   }
 
   init(blank: Blank) {
-    this.set_details_requirement(
-      blank?.details?.map(d => new DetailRequirementSt(d)),
-    )
+    this.details_requirement =
+      blank?.details?.map(d => new DetailRequirementSt(d)) || []
+
     this.set_material_requirement(
       blank.material ? new MaterialRequirementSt(blank.material) : null,
     )
@@ -122,8 +119,8 @@ export class DetailBlankSt {
   }
 
   delete_detail_requirement(detailId: number) {
-    this.set_details_requirement(
-      this.details_requirement.filter(d => d.detailId !== detailId),
+    this.details_requirement = this.details_requirement.filter(
+      d => d.detailId != detailId,
     )
   }
 }

@@ -227,12 +227,13 @@ export const DetailRequirementInput = observer(
           количество
         </Label>
         {detail.blank.details_requirement.map((cost, index) => {
-          const detail = app_cache.details.get(cost.detailId)
+          const detail_req = app_cache.details.get(cost.detailId)
           if (app_cache.details.loader.loading)
             return <Label xs>Загрузка..7</Label>
-          else if (!detail)
+          else if (!detail_req)
             return (
               <DetailSelectModal
+                excludeDetailById={detail.id}
                 open={open}
                 setOpen={setOpen}
                 onRowClick={detail => {
@@ -242,7 +243,7 @@ export const DetailRequirementInput = observer(
             )
           return (
             <CostRow
-              key={detail.id + index.toString()}
+              key={detail_req.id + index.toString()}
               onDelete={() => {
                 detail.blank.delete_detail_requirement(cost.detailId)
               }}
@@ -251,7 +252,7 @@ export const DetailRequirementInput = observer(
                 width={'-webkit-fill-available'}
                 justifyContent={'space-between'}
               >
-                <DetailName detail={detail} withGroupName />
+                <DetailName detail={detail_req} withGroupName />
                 <NumberInput
                   variant="plain"
                   width={70}

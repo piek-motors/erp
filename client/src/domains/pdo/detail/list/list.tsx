@@ -89,6 +89,7 @@ interface DetailsTableProps {
   highlight?: (row: DetailSt) => boolean
   highlightColor?: string
   sx?: SxProps
+  excludeDetailById?: number
 }
 
 const DetailList = observer((props: DetailsTableProps) => {
@@ -97,7 +98,9 @@ const DetailList = observer((props: DetailsTableProps) => {
     <Table
       sx={props.sx}
       columns={columnList}
-      data={state.displayed_results}
+      data={state.displayed_results.filter(
+        e => e.id != props.excludeDetailById,
+      )}
       rowStyleCb={row => {
         if (props.highlight) {
           return props.highlight(row.original)
@@ -122,6 +125,7 @@ interface DetailSelectModalProps {
   onRowClick: (row: DetailSt) => void
   open: boolean
   setOpen: (v: boolean) => void
+  excludeDetailById?: number
 }
 
 export const DetailSelectModal = observer((props: DetailSelectModalProps) => (
@@ -132,6 +136,7 @@ export const DetailSelectModal = observer((props: DetailSelectModalProps) => (
         <Box p={1} mb={3}>
           <Search />
           <DetailsList
+            excludeDetailById={props.excludeDetailById}
             onRowClick={v => {
               props.onRowClick(v)
               props.setOpen(false)
@@ -147,11 +152,7 @@ const DetailsList = observer((props: DetailsTableProps) => (
   <Stack gap={1} sx={props.sx}>
     {state.loader.loading && <Loading />}
     <SearchResults store={state.searchStore} emptyMessage="Детали не найдены">
-      <DetailList
-        highlight={props.highlight}
-        highlightColor={props.highlightColor}
-        onRowClick={props.onRowClick}
-      />
+      <DetailList {...props} />
     </SearchResults>
   </Stack>
 ))
