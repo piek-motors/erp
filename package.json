@@ -13,7 +13,7 @@
     "lint": "pnpm exec biome lint --write",
     "biome": "pnpm exec biome check --write",
     "build": "pnpm run -r --filter=!./client/** build",
-    "check": "pnpm run -r --filter=!./client/** check",
+    "check": "pnpm run -r check",
     "deploy": "sh ./infra/deploy.sh",
     "prepare": "husky"
   },

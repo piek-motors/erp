@@ -10,7 +10,7 @@ import {
   UilListOl,
   UilWrench,
 } from '@iconscout/react-unicons'
-import { Badge, Box, Button, Typography } from '@mui/joy'
+import { Badge, Box, Button, Divider, Stack, Typography } from '@mui/joy'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
 
@@ -87,9 +87,9 @@ const AnimatedBackground = () => {
           width: '200%',
           height: '200%',
           background: `
-            radial-gradient(circle at 20% 50%, rgba(200, 210, 230, 0.15) 0%, transparent 50%),
-            radial-gradient(circle at 80% 80%, rgba(220, 230, 240, 0.2) 0%, transparent 50%),
-            radial-gradient(circle at 40% 20%, rgba(210, 220, 235, 0.15) 0%, transparent 50%)
+          radial-gradient(circle at 20% 50%, rgba(200, 210, 230, 0.15) 0%, transparent 50%),
+          radial-gradient(circle at 80% 80%, rgba(220, 230, 240, 0.2) 0%, transparent 50%),
+          radial-gradient(circle at 40% 20%, rgba(210, 220, 235, 0.15) 0%, transparent 50%)
           `,
           animation: 'rotate 40s linear infinite',
         },
@@ -210,7 +210,6 @@ const MenuCard = ({ icon, name, count, onClick }: MenuCardProps) => {
         cursor: 'pointer',
         transition: 'all 0.3s ease',
         '&:hover': {
-          transform: 'translateY(-4px)',
           bgcolor: 'rgba(255, 255, 255, 0.9)',
           borderColor: 'rgba(100, 120, 150, 0.25)',
           boxShadow: '0 8px 24px rgba(100, 120, 150, 0.12)',
@@ -313,16 +312,19 @@ export const IndexPage = observer(() => {
           ))}
         </Box>
 
-        <Row mt={4} rowGap={2} alignItems="center">
-          <UserInfo />
+        <Stack justifyContent={'space-between'} gap={1}>
+          <Row mt={4} rowGap={4} alignItems="center" justifyContent={'center'}>
+            <UserInfo />
+            <Divider orientation="vertical" />
+            <Button color="danger" variant="soft" onClick={handleLogout}>
+              Выйти
+            </Button>
+          </Row>
           <P level="body-xs">
             Предложения: <strong>{SUPPORT_CONTACT.telegram}</strong> (Telegram)
             или <strong>{SUPPORT_CONTACT.email}</strong>
           </P>
-          <Button color="danger" variant="soft" onClick={handleLogout}>
-            Выйти
-          </Button>
-        </Row>
+        </Stack>
       </Box>
     </>
   )

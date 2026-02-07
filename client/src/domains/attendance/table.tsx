@@ -1,9 +1,9 @@
 /** @jsxImportSource @emotion/react */
 
-import { css } from '@emotion/react'
-import { useTable } from 'react-table'
 import { Sheet } from '@/lib'
 import type { Employee } from '@/server/domains/attendance/report_generator'
+import { css } from '@emotion/react'
+import { useTable } from 'react-table'
 
 interface ITableProps {
   readonly columns: any[]
@@ -18,11 +18,11 @@ export function Table({ columns, data }: ITableProps) {
     })
 
   return (
-    <Sheet sx={{ overflow: 'visible', width: '100%' }}>
+    <Sheet sx={{ overflow: 'visible' }}>
       <table
         {...getTableProps()}
         css={css`
-          width: 100%;
+          width: fit-content;
           border-collapse: collapse;
         `}
       >
