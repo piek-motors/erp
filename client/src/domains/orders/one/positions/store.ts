@@ -1,5 +1,5 @@
-import { rpc } from 'lib/rpc/rpc.client'
-import { notifier } from 'lib/store/notifier.store'
+import { rpc } from '@/lib/rpc/rpc.client'
+import { notifier } from '@/lib/store/notifier.store'
 import { makeAutoObservable } from 'mobx'
 
 class Position {

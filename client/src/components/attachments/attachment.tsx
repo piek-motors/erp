@@ -1,8 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { css } from '@emotion/react'
-import { UilEllipsisV, UilPen } from '@iconscout/react-unicons'
-import { Dropdown, IconButton, Menu, MenuButton, Stack } from '@mui/joy'
-import { WebOnly } from 'components/utilities/conditional-display'
+import { WebOnly } from '@/components/utilities/conditional-display'
 import {
   DeleteResourceButton,
   InputLabled,
@@ -10,7 +7,10 @@ import {
   Row,
   UseIcon,
   useState,
-} from 'lib/index'
+} from '@/lib/index'
+import { css } from '@emotion/react'
+import { UilEllipsisV, UilPen } from '@iconscout/react-unicons'
+import { Dropdown, IconButton, Menu, MenuButton, Stack } from '@mui/joy'
 import { Attachment } from './store'
 
 export const AttachmentComponent = (props: {
@@ -54,7 +54,7 @@ export const AttachmentComponent = (props: {
                 text-decoration: underline;
               }
             `}
-            href={`${process.env.REACT_APP_API_URL}/s3/${props.attachment.key}`}
+            href={`${import.meta.env.VITE_API_URL}/s3/${props.attachment.key}`}
             target="_blank"
             rel="noreferrer"
           >

@@ -1,20 +1,20 @@
-import { Box, Divider, Stack } from '@mui/joy'
-import { QtyInputWithUnit } from 'components/inputs'
-import { AdaptiveNumberFormatter } from 'domains/pdo/shared/adaptive_number_formatter'
-import { value_with_unit } from 'domains/pdo/shared/basic'
+import { QtyInputWithUnit } from '@/components/inputs'
+import { AdaptiveNumberFormatter } from '@/domains/pdo/shared/adaptive_number_formatter'
+import { value_with_unit } from '@/domains/pdo/shared/basic'
 import {
   SupplyReasonSelect,
   WriteoffReasonSelect,
-} from 'domains/pdo/shared/reason-select'
+} from '@/domains/pdo/shared/reason-select'
 import {
   SupplyCompletedText,
   WarehouseCard,
   WriteoffCompletedText,
-} from 'domains/pdo/warehouse/card'
-import { OperationsListModal } from 'domains/pdo/warehouse/modals'
-import { modalState } from 'domains/pdo/warehouse/modals.store'
-import { ActionButton, Label, observer, P, Row, useParams } from 'lib/index'
-import { notifier } from 'lib/store/notifier.store'
+} from '@/domains/pdo/warehouse/card'
+import { OperationsListModal } from '@/domains/pdo/warehouse/modals'
+import { modalState } from '@/domains/pdo/warehouse/modals.store'
+import { ActionButton, Label, observer, P, Row, useParams } from '@/lib/index'
+import { notifier } from '@/lib/store/notifier.store'
+import { Box, Divider, Stack } from '@mui/joy'
 import { uiUnit } from 'models'
 import type { MaterialSt } from '../state'
 

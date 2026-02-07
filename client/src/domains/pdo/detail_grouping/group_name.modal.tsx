@@ -1,7 +1,14 @@
+import { InModal } from '@/components/modal'
+import {
+  InputLabled,
+  Loading,
+  observer,
+  P,
+  UseIcon,
+  useState,
+} from '@/lib/index'
 import { UilPlusCircle } from '@iconscout/react-unicons'
 import { Button, Stack } from '@mui/joy'
-import { InModal } from 'components/modal'
-import { InputLabled, Loading, observer, P, UseIcon, useState } from 'lib/index'
 import { type ReactNode, useEffect } from 'react'
 import { api } from './api'
 

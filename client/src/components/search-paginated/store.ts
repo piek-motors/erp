@@ -1,4 +1,4 @@
-import { debounceMs } from 'lib/constants'
+import { debounceMs } from '@/lib/constants'
 import { makeAutoObservable, reaction, runInAction } from 'mobx'
 import { sort_rus } from 'models'
 

@@ -1,16 +1,16 @@
 /** @jsxImportSource @emotion/react */
-import { ToggleButtonGroupProps } from '@mui/joy'
-import { ScrollableWindow, Search } from 'components/inputs'
-import { Table } from 'components/table.impl'
-import { MobileNavModal, MobilePadding } from 'domains/pdo/root_layout'
+import { ScrollableWindow, Search } from '@/components/inputs'
+import { Table } from '@/components/table.impl'
+import { MobileNavModal, MobilePadding } from '@/domains/pdo/root_layout'
 import {
   Button,
   observer,
   Stack,
   ToggleButtonGroup,
   useNavigate,
-} from 'lib/index'
-import { openPage, routeMap } from 'lib/routes'
+} from '@/lib/index'
+import { openPage, routeMap } from '@/lib/routes'
+import { ToggleButtonGroupProps } from '@mui/joy'
 import { UiMaterialShape } from 'models'
 import { Material } from 'srv/domains/pdo/materials_rpc'
 import { columns } from './columns'

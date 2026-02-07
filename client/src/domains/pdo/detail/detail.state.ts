@@ -1,4 +1,4 @@
-import { AttachmentsStore } from 'components/attachments/store'
+import { AttachmentsStore } from '@/components/attachments/store'
 import { makeAutoObservable } from 'mobx'
 import { Unit } from 'models'
 import type { SelectableDetail } from 'srv/domains/pdo/details_rpc'

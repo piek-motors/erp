@@ -1,12 +1,12 @@
 /** @jsxImportSource @emotion/react */
+import { CenteredContainer } from '@/components/utilities/centered-container'
+import { InputLabled, observer, P, UseIcon } from '@/lib/index'
+import { AuthService } from '@/lib/services/auth.service'
+import { authStore } from '@/lib/store/auth.store'
+import type { ServerErrorResponse } from '@/lib/types/global'
 import { UilEye, UilEyeSlash } from '@iconscout/react-unicons'
 import { Box, Button, IconButton, Input, Stack } from '@mui/joy'
 import axios from 'axios'
-import { CenteredContainer } from 'components/utilities/centered-container'
-import { InputLabled, observer, P, UseIcon } from 'lib/index'
-import { AuthService } from 'lib/services/auth.service'
-import { authStore } from 'lib/store/auth.store'
-import type { ServerErrorResponse } from 'lib/types/global'
 import { useState } from 'react'
 import { useNavigate } from 'react-router'
 

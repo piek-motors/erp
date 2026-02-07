@@ -1,5 +1,5 @@
-import { makeAutoObservable } from 'lib/deps'
-import { LoadingController } from 'lib/store/loading_controller'
+import { makeAutoObservable } from '@/lib/deps'
+import { LoadingController } from '@/lib/store/loading_controller'
 import { type Material, MaterialShape, type Unit } from 'models'
 import { ArbitraryState } from './shape/arbitrary.state'
 import { HexagonBarState } from './shape/hexagon_bar.state'

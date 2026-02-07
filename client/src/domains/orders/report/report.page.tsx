@@ -1,6 +1,6 @@
+import { MonthSelect } from '@/components/inputs/month-select'
+import { P } from '@/lib/index'
 import { Box } from '@mui/joy'
-import { MonthSelect } from 'components/inputs/month-select'
-import { P } from 'lib/index'
 import { observer } from 'mobx-react-lite'
 import { fmt } from 'models'
 import { useEffect } from 'react'

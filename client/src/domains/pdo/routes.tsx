@@ -1,5 +1,5 @@
-import { routeMap } from 'lib/routes'
-import type { RouteConfig } from 'lib/types/global'
+import { routeMap } from '@/lib/routes'
+import type { RouteConfig } from '@/lib/types/global'
 import { CreateDetailPage, DetailPage } from './detail/detail'
 import { DetailsListPage } from './detail/list/list'
 import { DetailGroupById, DetailGroupListPage } from './detail_grouping/main'

@@ -1,6 +1,6 @@
+import { Box, Stack } from '@/lib'
 import { Divider } from '@mui/joy'
 import type { SxProps } from '@mui/joy/styles/types'
-import { Box, Stack } from 'lib'
 
 type Props = {
   first: React.ReactNode

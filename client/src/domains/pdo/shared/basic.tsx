@@ -1,10 +1,16 @@
+import {
+  BaseAutocomplete,
+  type BaseOption,
+} from '@/components/base-autocomplete'
+import { DeleteConfirmDialog } from '@/components/delete_confirm_dialog'
+import {
+  NavTopBar,
+  type Props as PageTitleProps,
+} from '@/components/nav_topbar'
+import { ActionButton, DeleteResourceButton, Label, P, Row } from '@/lib/index'
+import { rpc } from '@/lib/rpc/rpc.client'
 import { Button, Stack, ToggleButtonGroup } from '@mui/joy'
 import type { SxProps } from '@mui/joy/styles/types'
-import { BaseAutocomplete, type BaseOption } from 'components/base-autocomplete'
-import { DeleteConfirmDialog } from 'components/delete_confirm_dialog'
-import { NavTopBar, type Props as PageTitleProps } from 'components/nav_topbar'
-import { ActionButton, DeleteResourceButton, Label, P, Row } from 'lib/index'
-import { rpc } from 'lib/rpc/rpc.client'
 import { UiUnit, Unit, uiUnit } from 'models'
 import { useEffect, useState } from 'react'
 import { MobileNavModal } from '../root_layout'

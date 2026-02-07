@@ -1,7 +1,10 @@
-import { NumberInput } from 'components/inputs/number_input'
-import { Tabs } from 'components/tabs'
-import { AlloyAutocomplete, MaterialUnitSelect } from 'domains/pdo/shared/basic'
-import { Box, Label, observer, Stack } from 'lib/index'
+import { NumberInput } from '@/components/inputs/number_input'
+import { Tabs } from '@/components/tabs'
+import {
+  AlloyAutocomplete,
+  MaterialUnitSelect,
+} from '@/domains/pdo/shared/basic'
+import { Box, Label, observer, Stack } from '@/lib/index'
 import { MaterialShape, UiMaterialShape } from 'models'
 import { MaterialSpecificInput } from './shape/main'
 import type { MaterialSt } from './state'

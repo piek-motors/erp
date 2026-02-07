@@ -1,5 +1,5 @@
+import { InputLabled, P } from '@/lib/index'
 import { Stack } from '@mui/joy'
-import { InputLabled, P } from 'lib/index'
 import { useCallback, useMemo } from 'react'
 
 interface Props {

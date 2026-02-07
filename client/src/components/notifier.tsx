@@ -1,5 +1,5 @@
+import { notifier } from '@/lib/store/notifier.store'
 import { Alert, Box, Container, Stack } from '@mui/joy'
-import { notifier } from 'lib/store/notifier.store'
 import { observer } from 'mobx-react-lite'
 import { WebOnly } from './utilities/conditional-display'
 

@@ -1,6 +1,6 @@
+import { WebOnly } from '@/components/utilities/conditional-display'
+import { Label, Loading } from '@/lib/index'
 import { Box, Stack } from '@mui/joy'
-import { WebOnly } from 'components/utilities/conditional-display'
-import { Label, Loading } from 'lib/index'
 import { InputFiles } from '../input-files'
 import { AttachmentComponent } from './attachment'
 import { Attachment } from './store'

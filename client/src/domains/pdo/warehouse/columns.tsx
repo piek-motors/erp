@@ -1,5 +1,3 @@
-import { UilHistory } from '@iconscout/react-unicons'
-import { IconButton } from '@mui/joy'
 import {
   Button,
   Label,
@@ -8,7 +6,9 @@ import {
   routeMap,
   Row,
   UseIcon,
-} from 'lib/index'
+} from '@/lib/index'
+import { UilHistory } from '@iconscout/react-unicons'
+import { IconButton } from '@mui/joy'
 import {
   OperationType,
   uiSupplyReason,

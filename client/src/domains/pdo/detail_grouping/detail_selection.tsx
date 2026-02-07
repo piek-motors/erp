@@ -1,8 +1,11 @@
+import {
+  BaseAutocomplete,
+  type BaseOption,
+} from '@/components/base-autocomplete'
+import { InModal } from '@/components/modal'
+import { observer, P, Row, UseIcon, useState } from '@/lib/index'
 import { UilBackspace, UilMinus } from '@iconscout/react-unicons'
 import { Box, Button, IconButton, Stack } from '@mui/joy'
-import { BaseAutocomplete, type BaseOption } from 'components/base-autocomplete'
-import { InModal } from 'components/modal'
-import { observer, P, Row, UseIcon, useState } from 'lib/index'
 import { app_cache } from '../cache'
 import { DetailName } from '../detail/detail_name'
 import { api } from './api'

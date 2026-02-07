@@ -1,4 +1,4 @@
-import { rpc } from 'lib/rpc/rpc.client'
+import { rpc } from '@/lib/rpc/rpc.client'
 import { makeAutoObservable } from 'mobx'
 import type { RouterOutput } from 'srv/lib/trpc'
 

@@ -1,5 +1,5 @@
-import { MonthSelect } from 'components/inputs/month-select'
-import { Button, Checkbox, InputWithUnit, observer, Row, Stack } from 'lib'
+import { MonthSelect } from '@/components/inputs/month-select'
+import { Button, Checkbox, InputWithUnit, observer, Row, Stack } from '@/lib'
 import { store } from './store'
 
 const ReportConfigurator = observer(() => (

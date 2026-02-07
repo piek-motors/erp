@@ -1,6 +1,6 @@
+import { Row, text, UseIcon } from '@/lib/index'
 import * as icons from '@iconscout/react-unicons'
 import { IconButton, Tooltip } from '@mui/joy'
-import { Row, text, UseIcon } from 'lib/index'
 import { observer } from 'mobx-react-lite'
 import { OrderStatus } from 'models'
 import type React from 'react'

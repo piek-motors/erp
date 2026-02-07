@@ -2,9 +2,9 @@ import {
   type Layout,
   PrintOnly,
   WebOnly,
-} from 'components/utilities/conditional-display'
-import { Textarea } from 'lib/index'
-import { fmtDate } from 'lib/utils/date_fmt'
+} from '@/components/utilities/conditional-display'
+import { Textarea } from '@/lib/index'
+import { fmtDate } from '@/lib/utils/date_fmt'
 import { makeAutoObservable } from 'mobx'
 import { fmt, OrderStatus } from 'models'
 import moment from 'moment'

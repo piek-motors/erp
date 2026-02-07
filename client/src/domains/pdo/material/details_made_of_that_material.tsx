@@ -1,10 +1,10 @@
 /** @jsxImportSource @emotion/react */
+import { ScrollableWindow } from '@/components/inputs'
+import { InModal } from '@/components/modal'
+import { DetailName } from '@/domains/pdo/detail/detail_name'
+import { useEscapeClose } from '@/hooks/use-escape-close'
+import { Loading, observer, P, Stack, useCallback, useState } from '@/lib/index'
 import { Box, Button } from '@mui/joy'
-import { ScrollableWindow } from 'components/inputs'
-import { InModal } from 'components/modal'
-import { DetailName } from 'domains/pdo/detail/detail_name'
-import { useEscapeClose } from 'hooks/use-escape-close'
-import { Loading, observer, P, Stack, useCallback, useState } from 'lib/index'
 import type { MaterialSt } from './state'
 
 export const DetailsMadeOfMaterialModal = observer(

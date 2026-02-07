@@ -1,10 +1,9 @@
-import { Box, Chip, type ChipProps, Divider } from '@mui/joy'
-import { AttachmentComponent } from 'components/attachments/attachment'
-import { NumberInput } from 'components/inputs/number_input'
-import { InModal } from 'components/modal'
-import { EnumSelect } from 'components/select'
-import { PrintOnly, WebOnly } from 'components/utilities/conditional-display'
-import { DetailName } from 'domains/pdo/detail/detail_name'
+import { AttachmentComponent } from '@/components/attachments/attachment'
+import { NumberInput } from '@/components/inputs/number_input'
+import { InModal } from '@/components/modal'
+import { EnumSelect } from '@/components/select'
+import { PrintOnly, WebOnly } from '@/components/utilities/conditional-display'
+import { DetailName } from '@/domains/pdo/detail/detail_name'
 import {
   Button,
   DeleteResourceButton,
@@ -22,9 +21,10 @@ import {
   useNavigate,
   useParams,
   useState,
-} from 'lib/index'
-import { notifier } from 'lib/store/notifier.store'
-import { fmtDate, timeDeltaDays } from 'lib/utils/date_fmt'
+} from '@/lib/index'
+import { notifier } from '@/lib/store/notifier.store'
+import { fmtDate, timeDeltaDays } from '@/lib/utils/date_fmt'
+import { Box, Chip, type ChipProps, Divider } from '@mui/joy'
 import {
   OrderPriority,
   ManufacturingOrderStatus as OrderStatus,

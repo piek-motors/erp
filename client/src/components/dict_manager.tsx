@@ -1,3 +1,7 @@
+import { Label, Loading, PlusIcon, Row } from '@/lib/index'
+import { LoadingController } from '@/lib/store/loading_controller'
+import { notifier } from '@/lib/store/notifier.store'
+import type { DictEntry } from '@/server/lib/create_dict_router'
 import {
   Button,
   Container,
@@ -7,13 +11,9 @@ import {
   ModalDialog,
   Stack,
 } from '@mui/joy'
-import { Label, Loading, PlusIcon, Row } from 'lib/index'
-import { LoadingController } from 'lib/store/loading_controller'
-import { notifier } from 'lib/store/notifier.store'
 import { makeAutoObservable } from 'mobx'
 import { observer } from 'mobx-react-lite'
 import { sort_rus } from 'models'
-import type { DictEntry } from 'srv/lib/create_dict_router'
 
 export interface Dict<V extends DictEntry> {
   ls(): Promise<V[]>

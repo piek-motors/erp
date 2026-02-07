@@ -1,22 +1,16 @@
 /** @jsxImportSource @emotion/react */
+import { AccordionCard } from '@/components/accordion_card'
+import { ArrayJsonEditor } from '@/components/array-json-editor'
 import {
-  AccordionGroup,
-  Button,
-  Divider,
-  Grid,
-  Stack,
-  StackProps,
-  type TypographySystem,
-} from '@mui/joy'
-import { AccordionCard } from 'components/accordion_card'
-import { ArrayJsonEditor } from 'components/array-json-editor'
-import { BaseAutocomplete, type BaseOption } from 'components/base-autocomplete'
-import { dictManager } from 'components/dict_manager'
-import { HoverReveal } from 'components/hidden_button'
-import { NumberInput } from 'components/inputs/number_input'
-import { TextEditor } from 'domains/orders/one/comments/text-editor'
-import { app_cache } from 'domains/pdo/cache'
-import { rpc } from 'lib/deps'
+  BaseAutocomplete,
+  type BaseOption,
+} from '@/components/base-autocomplete'
+import { dictManager } from '@/components/dict_manager'
+import { HoverReveal } from '@/components/hidden_button'
+import { NumberInput } from '@/components/inputs/number_input'
+import { TextEditor } from '@/domains/orders/one/comments/text-editor'
+import { app_cache } from '@/domains/pdo/cache'
+import { rpc } from '@/lib/deps'
 import {
   Box,
   InputLabled,
@@ -27,7 +21,16 @@ import {
   observer,
   PlusIcon,
   Row,
-} from 'lib/index'
+} from '@/lib/index'
+import {
+  AccordionGroup,
+  Button,
+  Divider,
+  Grid,
+  Stack,
+  StackProps,
+  type TypographySystem,
+} from '@mui/joy'
 import type { ReactNode } from 'react'
 import { Blank } from 'srv/domains/pdo/details_rpc'
 import { DetailAttachmentList } from './attachment/list'

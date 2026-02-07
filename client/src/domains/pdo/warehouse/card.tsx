@@ -1,5 +1,5 @@
+import { Btn, observer, P, Row } from '@/lib/index'
 import { Box, Card, type CardProps, Stack } from '@mui/joy'
-import { Btn, observer, P, Row } from 'lib/index'
 import type { ReactNode } from 'react'
 import { OperationModal } from './modals'
 import { modalState } from './modals.store'

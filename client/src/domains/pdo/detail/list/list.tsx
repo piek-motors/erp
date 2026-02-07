@@ -1,11 +1,9 @@
-import { Divider } from '@mui/joy'
-import type { SxProps } from '@mui/joy/styles/types'
-import { ScrollableWindow } from 'components/inputs'
-import { SearchWithCriteria } from 'components/inputs/search_input_with_criteria'
-import { InModal } from 'components/modal'
-import { SearchResults } from 'components/search-paginated'
-import { Table } from 'components/table.impl'
-import { MobileNavModal, MobilePadding } from 'domains/pdo/root_layout'
+import { ScrollableWindow } from '@/components/inputs'
+import { SearchWithCriteria } from '@/components/inputs/search_input_with_criteria'
+import { InModal } from '@/components/modal'
+import { SearchResults } from '@/components/search-paginated'
+import { Table } from '@/components/table.impl'
+import { MobileNavModal, MobilePadding } from '@/domains/pdo/root_layout'
 import {
   Box,
   Label,
@@ -16,7 +14,9 @@ import {
   Row,
   Stack,
   useNavigate,
-} from 'lib/index'
+} from '@/lib/index'
+import { Divider } from '@mui/joy'
+import type { SxProps } from '@mui/joy/styles/types'
 import type { Column } from 'react-table'
 import type { DetailSt } from '../detail.state'
 import { DetailName } from '../detail_name'

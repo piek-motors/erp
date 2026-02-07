@@ -1,4 +1,4 @@
-import { rpc } from 'lib/deps'
+import { rpc } from '@/lib/deps'
 import { makeAutoObservable } from 'mobx'
 import { OrderPriority } from 'models'
 import type { RouterOutput } from 'srv/lib/trpc'

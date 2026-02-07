@@ -1,6 +1,6 @@
-import { AttachmentList } from 'components/attachments/attachment-list'
-import { Attachment } from 'components/attachments/store'
-import { observer } from 'lib'
+import { AttachmentList } from '@/components/attachments/attachment-list'
+import { Attachment } from '@/components/attachments/store'
+import { observer } from '@/lib'
 import type { DetailSt } from '../detail.state'
 
 interface Props {

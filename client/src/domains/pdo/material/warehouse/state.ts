@@ -1,4 +1,4 @@
-import { app_cache } from 'domains/pdo/cache'
+import { app_cache } from '@/domains/pdo/cache'
 import { makeAutoObservable } from 'mobx'
 import { MaterialSupplySt } from './supply_st'
 import { MaterialWriteoffSt } from './writeoff_st'

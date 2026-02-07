@@ -12,7 +12,7 @@ This directory contains a reusable paginated search functionality using composit
 ### Basic Usage
 
 ```typescript
-import { PaginatedSearchStore, SearchResults } from 'components/search-paginated'
+import { PaginatedSearchStore, SearchResults } from '@/components/search-paginated'
 
 // Create a store with a data source
 const searchStore = new PaginatedSearchStore(

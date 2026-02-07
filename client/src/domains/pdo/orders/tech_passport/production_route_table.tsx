@@ -1,8 +1,8 @@
 /** @jsxImportSource @emotion/react */
+import type { DetailStProp, Operation } from '@/domains/pdo/detail/detail.state'
+import { Label } from '@/lib/index'
 import { css } from '@emotion/react'
 import { Stack } from '@mui/joy'
-import type { DetailStProp, Operation } from 'domains/pdo/detail/detail.state'
-import { Label } from 'lib/index'
 import { observer } from 'mobx-react-lite'
 import { tableStyles } from './shared'
 

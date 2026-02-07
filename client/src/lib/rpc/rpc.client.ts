@@ -1,11 +1,11 @@
+import { authStore } from '@/lib/store/auth.store'
+import { notifier } from '@/lib/store/notifier.store'
 import { createTRPCClient, httpLink } from '@trpc/client'
-import { authStore } from 'lib/store/auth.store'
-import { notifier } from 'lib/store/notifier.store'
 import type { AppRouter } from 'srv/lib/trpc/index.js'
 
-const url = process.env.REACT_APP_RPC_URL
+const url = import.meta.env.VITE_RPC_URL
 if (!url) {
-  throw new Error('REACT_APP_RPC_URL is not set')
+  throw new Error('VITE_RPC_URL is not set')
 }
 
 let refreshTokenPromise: Promise<string> | null = null

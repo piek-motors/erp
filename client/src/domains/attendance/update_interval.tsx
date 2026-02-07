@@ -1,3 +1,13 @@
+import { WebOnly } from '@/components/utilities/conditional-display'
+import { rpc } from '@/lib/deps'
+import {
+  InputLabled,
+  Label,
+  P,
+  Row,
+  SaveIconButton,
+  UseIcon,
+} from '@/lib/index'
 import { UilExchange } from '@iconscout/react-unicons'
 import {
   Button,
@@ -8,9 +18,6 @@ import {
   ModalDialog,
   Stack,
 } from '@mui/joy'
-import { WebOnly } from 'components/utilities/conditional-display'
-import { rpc } from 'lib/deps'
-import { InputLabled, Label, P, Row, SaveIconButton, UseIcon } from 'lib/index'
 import { makeAutoObservable } from 'mobx'
 import { observer } from 'mobx-react-lite'
 import type { AbsenceReason } from 'models'

@@ -1,5 +1,5 @@
+import { observer, P, Stack } from '@/lib/index'
 import { Box, Button } from '@mui/joy'
-import { observer, P, Stack } from 'lib/index'
 import type { ReactNode } from 'react'
 import type { PaginatedSearchStore, SearchableItem } from './store'
 

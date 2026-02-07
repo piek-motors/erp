@@ -1,4 +1,4 @@
-import { Row } from 'lib/index'
+import { Row } from '@/lib/index'
 import { DetailName } from '../detail/detail_name'
 import type { Detail } from './group.store'
 

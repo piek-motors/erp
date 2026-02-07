@@ -1,5 +1,5 @@
-import { makeAutoObservable, rpc } from 'lib/deps'
-import { FileService } from 'lib/services/file.service'
+import { makeAutoObservable, rpc } from '@/lib/deps'
+import { FileService } from '@/lib/services/file.service'
 
 export class Attachment {
   constructor(

@@ -1,5 +1,5 @@
-import { rpc } from 'lib/deps'
-import { LoadingController } from 'lib/store/loading_controller'
+import { rpc } from '@/lib/deps'
+import { LoadingController } from '@/lib/store/loading_controller'
 import { makeAutoObservable, runInAction } from 'mobx'
 import type { RouterInput } from 'srv/lib/trpc'
 import { app_cache } from '../cache'

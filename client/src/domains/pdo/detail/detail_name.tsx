@@ -1,8 +1,8 @@
 /** @jsxImportSource @emotion/react */
+import { app_cache } from '@/domains/pdo/cache'
+import { Box, Link, observer, P, Row } from '@/lib/index'
+import { openPage, routeMap } from '@/lib/routes'
 import type { SxProps } from '@mui/joy/styles/types'
-import { app_cache } from 'domains/pdo/cache'
-import { Box, Link, observer, P, Row } from 'lib/index'
-import { openPage, routeMap } from 'lib/routes'
 import { capitalize } from '../shared/basic'
 
 interface Detail {

@@ -1,4 +1,4 @@
-import { routeMap } from 'lib/routes'
+import { routeMap } from '@/lib/routes'
 import type { Link } from '../../components/nav_sidebar'
 
 export const nav_links: Link[] = [

@@ -1,7 +1,7 @@
+import type { SxProperty } from '@/lib/constants'
+import { routeMap } from '@/lib/routes'
 import { UilHome } from '@iconscout/react-unicons'
 import { Box, IconButton, Stack } from '@mui/joy'
-import type { SxProperty } from 'lib/constants'
-import { routeMap } from 'lib/routes'
 import type React from 'react'
 import type { ReactNode } from 'react'
 import { Link } from 'react-router'
@@ -20,7 +20,7 @@ export interface Props {
 }
 
 export function NavTopBar(props: Props) {
-  const isDev = process.env.REACT_APP_NODE_ENV === 'development'
+  const isDev = import.meta.env.VITE_NODE_ENV === 'development'
   return (
     <Stack
       direction="row"

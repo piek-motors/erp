@@ -1,4 +1,4 @@
-import { app_cache } from 'domains/pdo/cache'
+import { app_cache } from '@/domains/pdo/cache'
 import { makeAutoObservable } from 'mobx'
 import type { Color } from 'models'
 import { ColorSegmentation } from './color_segmentation.store'

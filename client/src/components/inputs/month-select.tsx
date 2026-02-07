@@ -1,7 +1,7 @@
+import { Select } from '@/components/select'
+import { Row, UseIcon } from '@/lib/index'
 import { UilSearch } from '@iconscout/react-unicons'
 import { IconButton } from '@mui/joy'
-import { Select } from 'components/select'
-import { Row, UseIcon } from 'lib/index'
 import { makeAutoObservable } from 'mobx'
 import { observer } from 'mobx-react-lite'
 

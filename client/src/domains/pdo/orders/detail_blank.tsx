@@ -1,6 +1,6 @@
+import { WebOnly } from '@/components/utilities/conditional-display'
+import { InfoLabel, Label, Row } from '@/lib/index'
 import { Box, Divider, Stack } from '@mui/joy'
-import { WebOnly } from 'components/utilities/conditional-display'
-import { InfoLabel, Label, Row } from 'lib/index'
 import { observer } from 'mobx-react-lite'
 import {
   fmt,

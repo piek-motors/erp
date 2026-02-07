@@ -1,6 +1,6 @@
+import { rpc } from '@/lib/deps'
+import { Label, Row } from '@/lib/index'
 import { Button } from '@mui/joy'
-import { rpc } from 'lib/deps'
-import { Label, Row } from 'lib/index'
 import { makeAutoObservable } from 'mobx'
 import { observer } from 'mobx-react-lite'
 import { AbsenceReason } from 'models'

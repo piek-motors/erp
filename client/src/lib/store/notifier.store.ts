@@ -1,5 +1,5 @@
+import { Second } from '@/lib/constants'
 import type { AlertProps } from '@mui/joy'
-import { Second } from 'lib/constants'
 import { makeAutoObservable, runInAction } from 'mobx'
 
 type Notification = {

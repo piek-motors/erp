@@ -1,4 +1,4 @@
-import { NumberInput } from 'components/inputs/number_input'
+import { NumberInput } from '@/components/inputs/number_input'
 import {
   Button,
   InputLabled,
@@ -7,7 +7,7 @@ import {
   observer,
   Stack,
   ToggleButtonGroup,
-} from 'lib/index'
+} from '@/lib/index'
 import { MaterialShape, uiUnit, Unit } from 'models'
 import type { ReactNode } from 'react'
 import type { MaterialSt } from '../state'

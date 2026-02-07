@@ -1,8 +1,6 @@
-import { UilMinus } from '@iconscout/react-unicons'
-import { IconButton, Stack } from '@mui/joy'
-import { NumberInput } from 'components/inputs/number_input'
-import { EnumSelect } from 'components/select'
-import { app_cache } from 'domains/pdo/cache'
+import { NumberInput } from '@/components/inputs/number_input'
+import { EnumSelect } from '@/components/select'
+import { app_cache } from '@/domains/pdo/cache'
 import {
   Box,
   Label,
@@ -11,7 +9,9 @@ import {
   Row,
   UseIcon,
   useState,
-} from 'lib/index'
+} from '@/lib/index'
+import { UilMinus } from '@iconscout/react-unicons'
+import { IconButton, Stack } from '@mui/joy'
 import {
   MaterialRequirement,
   UiMaterialRequirement,

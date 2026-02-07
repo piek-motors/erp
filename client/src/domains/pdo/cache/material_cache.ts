@@ -1,6 +1,6 @@
-import { matrixDecoder } from 'lib/rpc/matrix_decoder'
-import { rpc } from 'lib/rpc/rpc.client'
-import { normalize } from 'lib/utils/search'
+import { matrixDecoder } from '@/lib/rpc/matrix_decoder'
+import { rpc } from '@/lib/rpc/rpc.client'
+import { normalize } from '@/lib/utils/search'
 import { makeAutoObservable } from 'mobx'
 import type { Material } from 'srv/domains/pdo/materials_rpc'
 

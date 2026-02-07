@@ -1,10 +1,9 @@
-import { Tab, TabList, TabPanel, Tabs } from '@mui/joy'
-import { ScrollableWindow, Search } from 'components/inputs'
-import { SearchWithCriteria } from 'components/inputs/search_input_with_criteria'
-import { Table } from 'components/table.impl'
-import type { TabConfig } from 'components/tabs'
-import { MobileNavModal, MobilePadding } from 'domains/pdo/root_layout'
-import { observer } from 'lib/deps'
+import { ScrollableWindow, Search } from '@/components/inputs'
+import { SearchWithCriteria } from '@/components/inputs/search_input_with_criteria'
+import { Table } from '@/components/table.impl'
+import type { TabConfig } from '@/components/tabs'
+import { MobileNavModal, MobilePadding } from '@/domains/pdo/root_layout'
+import { observer } from '@/lib/deps'
 import {
   Label,
   Loading,
@@ -14,7 +13,8 @@ import {
   Stack,
   useEffect,
   useNavigate,
-} from 'lib/index'
+} from '@/lib/index'
+import { Tab, TabList, TabPanel, Tabs } from '@mui/joy'
 import {
   ManufacturingOrderStatus,
   ManufacturingOrderStatus as OrderStatus,

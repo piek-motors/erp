@@ -1,6 +1,6 @@
+import { Tabs } from '@/components/tabs'
+import { Label, observer, Stack } from '@/lib/index'
 import { BarChart } from '@mui/x-charts'
-import { Tabs } from 'components/tabs'
-import { Label, observer, Stack } from 'lib/index'
 import { uiUnit } from 'models'
 import type { MaterialSt } from './state'
 

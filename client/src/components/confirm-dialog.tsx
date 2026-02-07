@@ -1,5 +1,5 @@
+import { P } from '@/lib/index'
 import { Box, Button, Modal, ModalDialog, Sheet } from '@mui/joy'
-import { P } from 'lib/index'
 import { type ReactNode, useState } from 'react'
 
 // extrnalСomponent is the whichever component which will be go out

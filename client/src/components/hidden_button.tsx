@@ -1,8 +1,8 @@
 /** @jsxImportSource @emotion/react */
+import { P, Row } from '@/lib/index'
 import { css } from '@emotion/react'
 import { UilLink } from '@iconscout/react-unicons'
 import type { StackProps } from '@mui/joy'
-import { P, Row } from 'lib/index'
 import { ExtraSmallIconButton } from './buttons'
 
 // Generic abstract component for showing hidden content on hover

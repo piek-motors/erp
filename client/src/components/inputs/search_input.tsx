@@ -1,6 +1,6 @@
+import { Row, UseIcon } from '@/lib'
 import { UilSearch } from '@iconscout/react-unicons'
 import { Input, type InputProps } from '@mui/joy'
-import { Row, UseIcon } from 'lib'
 import type React from 'react'
 
 interface ISearchInputWithFiltersProps {

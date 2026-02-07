@@ -1,20 +1,20 @@
-import { Divider } from '@mui/joy'
-import { NumberInput } from 'components/inputs/number_input'
-import { AdaptiveNumberFormatter } from 'domains/pdo/shared/adaptive_number_formatter'
-import { value_with_unit } from 'domains/pdo/shared/basic'
+import { NumberInput } from '@/components/inputs/number_input'
+import { AdaptiveNumberFormatter } from '@/domains/pdo/shared/adaptive_number_formatter'
+import { value_with_unit } from '@/domains/pdo/shared/basic'
 import {
   SupplyReasonSelect,
   WriteoffReasonSelect,
-} from 'domains/pdo/shared/reason-select'
+} from '@/domains/pdo/shared/reason-select'
 import {
   SupplyCompletedText,
   WarehouseCard,
   WriteoffCompletedText,
-} from 'domains/pdo/warehouse/card'
-import { OperationsListModal } from 'domains/pdo/warehouse/modals'
-import { modalState } from 'domains/pdo/warehouse/modals.store'
-import { ActionButton, Box, Label, observer, P, Row } from 'lib/index'
-import { notifier } from 'lib/store/notifier.store'
+} from '@/domains/pdo/warehouse/card'
+import { OperationsListModal } from '@/domains/pdo/warehouse/modals'
+import { modalState } from '@/domains/pdo/warehouse/modals.store'
+import { ActionButton, Box, Label, observer, P, Row } from '@/lib/index'
+import { notifier } from '@/lib/store/notifier.store'
+import { Divider } from '@mui/joy'
 import { Unit } from 'models'
 import type { DetailSt, DetailStProp } from '../detail.state'
 

@@ -1,9 +1,9 @@
 /** @jsxImportSource @emotion/react */
+import { FactoryPage } from '@/components/factory_page'
+import { AddResourceButton, Loading, P, Pre } from '@/lib/index'
+import { openOrderDetailPage, routeMap } from '@/lib/routes'
+import type { RouteConfig } from '@/lib/types/global'
 import { Box, Card } from '@mui/joy'
-import { FactoryPage } from 'components/factory_page'
-import { AddResourceButton, Loading, P, Pre } from 'lib/index'
-import { openOrderDetailPage, routeMap } from 'lib/routes'
-import type { RouteConfig } from 'lib/types/global'
 import { observer } from 'mobx-react-lite'
 import { useEffect } from 'react'
 import * as dnd from 'react-beautiful-dnd'

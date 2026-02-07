@@ -1,10 +1,10 @@
 import {
   PaginatedSearchStore,
   type SearchFilters,
-} from 'components/search-paginated'
-import { app_cache } from 'domains/pdo/cache'
-import { LoadingController } from 'lib/store/loading_controller'
-import { debounce } from 'lib/utils/debounce'
+} from '@/components/search-paginated'
+import { app_cache } from '@/domains/pdo/cache'
+import { LoadingController } from '@/lib/store/loading_controller'
+import { debounce } from '@/lib/utils/debounce'
 import { makeAutoObservable, reaction } from 'mobx'
 import type { DetailSt } from '../detail.state'
 

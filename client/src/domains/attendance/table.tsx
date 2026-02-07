@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
+import { Sheet } from '@/lib'
 import { css } from '@emotion/react'
-import { Sheet } from 'lib'
 import { useTable } from 'react-table'
 import { Employee } from 'srv/domains/attendance/report_generator'
 

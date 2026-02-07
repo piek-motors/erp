@@ -1,6 +1,14 @@
+import {
+  Box,
+  Label,
+  observer,
+  PlusIcon,
+  Row,
+  Stack,
+  UseIcon,
+} from '@/lib/index'
 import { UilMinus } from '@iconscout/react-unicons'
 import { Divider, IconButton, Textarea } from '@mui/joy'
-import { Box, Label, observer, PlusIcon, Row, Stack, UseIcon } from 'lib/index'
 import * as dnd from 'react-beautiful-dnd'
 
 interface ArrayJsonEditorProps {

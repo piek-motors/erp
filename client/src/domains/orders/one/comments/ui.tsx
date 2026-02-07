@@ -1,9 +1,9 @@
 /** @jsxImportSource @emotion/react */
+import { DeleteResourceButton, P, Row, text } from '@/lib/index'
+import { rpc } from '@/lib/rpc/rpc.client'
+import { User } from '@/lib/store/auth.store'
 import { css } from '@emotion/react'
 import { Box, Button, Card, Divider } from '@mui/joy'
-import { DeleteResourceButton, P, Row, text } from 'lib/index'
-import { rpc } from 'lib/rpc/rpc.client'
-import { User } from 'lib/store/auth.store'
 import { observer } from 'mobx-react-lite'
 import moment from 'moment'
 import { useState } from 'react'

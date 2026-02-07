@@ -1,5 +1,4 @@
-import { Box, Stack } from '@mui/joy'
-import { MetalPageTitle, SaveAndDelete } from 'domains/pdo/shared/basic'
+import { MetalPageTitle, SaveAndDelete } from '@/domains/pdo/shared/basic'
 import {
   Loading,
   observer,
@@ -11,15 +10,16 @@ import {
   useNavigate,
   useParams,
   useState,
-} from 'lib/index'
-import { fmtDate, fmtTimestamp } from 'lib/utils/date_fmt'
+} from '@/lib/index'
+import { fmtDate, fmtTimestamp } from '@/lib/utils/date_fmt'
+import { Box, Stack } from '@mui/joy'
 import { CreateManufacturingOrder } from '../orders/order_create'
 import { DetailSt, DetailStProp } from './detail.state'
 import { api } from './detail_api'
 import { DetailForm } from './detail_form'
 import { DetailWarehouseModal } from './warehouse/ui'
 
-import { ActionButton } from 'lib/index'
+import { ActionButton } from '@/lib/index'
 
 export const CreateDetailPage = observer(() => {
   const [detail] = useState(() => new DetailSt())

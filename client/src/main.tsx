@@ -1,6 +1,6 @@
+import { DictManagerModal } from '@/components/dict_manager'
 import '@fontsource/inter'
 import { CssBaseline, ThemeProvider } from '@mui/joy'
-import { DictManagerModal } from 'components/dict_manager'
 import { observer } from 'mobx-react-lite'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router'
@@ -9,6 +9,7 @@ import { NotifierOverlay } from './components/notifier'
 import { AppRouter } from './lib/routers/Router'
 import theme from './theme'
 
+console.log('main exec')
 const App = observer(() => {
   return (
     <>
@@ -21,7 +22,7 @@ const App = observer(() => {
 })
 
 const container =
-  document.getElementById('app') || document.createElement('div')
+  document.getElementById('root') || document.createElement('div')
 const root = createRoot(container) // createRoot(container!) if you use TypeScript
 
 root.render(

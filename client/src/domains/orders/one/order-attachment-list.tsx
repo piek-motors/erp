@@ -1,5 +1,5 @@
-import { AttachmentList } from 'components/attachments/attachment-list'
-import { Attachment } from 'components/attachments/store'
+import { AttachmentList } from '@/components/attachments/attachment-list'
+import { Attachment } from '@/components/attachments/store'
 import { observer } from 'mobx-react-lite'
 import { orderStore } from './order.store'
 
