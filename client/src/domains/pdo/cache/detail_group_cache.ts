@@ -1,6 +1,6 @@
 import { rpc } from '@/lib/rpc/rpc.client'
+import type { RouterOutput } from '@/server/lib/trpc'
 import { makeAutoObservable } from 'mobx'
-import type { RouterOutput } from 'srv/lib/trpc'
 
 export type DetailGroup = RouterOutput['pdo']['detail_groups']['list'][number]
 

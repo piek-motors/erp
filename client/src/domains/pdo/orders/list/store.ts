@@ -4,9 +4,9 @@ import { matrixDecoder } from '@/lib/rpc/matrix_decoder'
 import { LoadingController } from '@/lib/store/loading_controller'
 import { debounce } from '@/lib/utils/debounce'
 import { SearchConfig, token_search } from '@/lib/utils/search'
+import type { ListOrdersOutput } from '@/server/domains/pdo/orders_rpc'
 import { makeAutoObservable, reaction } from 'mobx'
 import { ManufacturingOrderStatus as OrderStatus } from 'models'
-import type { ListOrdersOutput } from 'srv/domains/pdo/orders_rpc'
 
 export enum OrderSearchCriteria {
   Id = '№',

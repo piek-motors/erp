@@ -1,7 +1,7 @@
 import { authStore } from '@/lib/store/auth.store'
 import { notifier } from '@/lib/store/notifier.store'
+import type { AppRouter } from '@/server/lib/trpc/index.js'
 import { createTRPCClient, httpLink } from '@trpc/client'
-import type { AppRouter } from 'srv/lib/trpc/index.js'
 
 const url = import.meta.env.VITE_RPC_URL
 if (!url) {

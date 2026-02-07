@@ -1,8 +1,8 @@
 /** @jsxImportSource @emotion/react */
 import { Sheet } from '@/lib'
+import { Employee } from '@/server/domains/attendance/report_generator'
 import { css } from '@emotion/react'
 import { useTable } from 'react-table'
-import { Employee } from 'srv/domains/attendance/report_generator'
 
 interface ITableProps {
   readonly columns: any[]

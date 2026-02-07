@@ -1,8 +1,11 @@
 import { matrixDecoder } from '@/lib/rpc/matrix_decoder'
 import { rpc } from '@/lib/rpc/rpc.client'
+import type {
+  ClientOrder,
+  OrderPosition,
+} from '@/server/domains/orders/orders_rpc'
 import { makeAutoObservable } from 'mobx'
 import { OrderStatus } from 'models'
-import type { ClientOrder, OrderPosition } from 'srv/domains/orders/orders_rpc'
 import type { UnpackedOrder } from '../api'
 
 export type ColocatedStateKey = 'inbox' | 'decision' | 'inproduction'

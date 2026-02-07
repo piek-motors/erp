@@ -16,10 +16,10 @@ import { openOrderDetailPage } from '@/lib/routes'
 import { matrixDecoder } from '@/lib/rpc/matrix_decoder'
 import { rpc } from '@/lib/rpc/rpc.client'
 import { authStore } from '@/lib/store/auth.store'
+import { Mention } from '@/server/domains/orders/mentions_rpc'
 import styled from '@emotion/styled'
 import moment from 'moment'
 import { useEffect } from 'react'
-import { Mention } from 'srv/domains/orders/mentions_rpc'
 
 function MentionComponent({ data }: { data: Mention }) {
   const navigate = useNavigate()

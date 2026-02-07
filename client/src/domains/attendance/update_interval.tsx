@@ -8,6 +8,10 @@ import {
   SaveIconButton,
   UseIcon,
 } from '@/lib/index'
+import {
+  Employee,
+  Interval,
+} from '@/server/domains/attendance/report_generator'
 import { UilExchange } from '@iconscout/react-unicons'
 import {
   Button,
@@ -21,7 +25,6 @@ import {
 import { makeAutoObservable } from 'mobx'
 import { observer } from 'mobx-react-lite'
 import type { AbsenceReason } from 'models'
-import { Employee, Interval } from 'srv/domains/attendance/report_generator'
 import { AbsenceReasons, absenceReasonState } from './absence'
 import { store } from './store'
 

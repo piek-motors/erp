@@ -1,7 +1,7 @@
 import { rpc } from '@/lib/deps'
 import { LoadingController } from '@/lib/store/loading_controller'
+import type { RouterInput } from '@/server/lib/trpc'
 import { makeAutoObservable, runInAction } from 'mobx'
-import type { RouterInput } from 'srv/lib/trpc'
 import { app_cache } from '../cache'
 import { map } from '../mappers'
 import { MaterialSt } from './state'

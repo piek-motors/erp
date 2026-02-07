@@ -1,10 +1,13 @@
 import { MonthSelectStore } from '@/components/inputs/month-select'
 import { matrixDecoder } from '@/lib/rpc/matrix_decoder'
 import { rpc } from '@/lib/rpc/rpc.client'
+import type {
+  ClientOrder,
+  OrderPosition,
+} from '@/server/domains/orders/orders_rpc'
 import { makeAutoObservable } from 'mobx'
 import { OrderStatus } from 'models'
 import moment from 'moment'
-import type { ClientOrder, OrderPosition } from 'srv/domains/orders/orders_rpc'
 import type { UnpackedOrder } from '../api'
 
 class ReportPageStore {

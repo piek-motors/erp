@@ -5,11 +5,11 @@ import {
 } from '@/components/utilities/conditional-display'
 import { Textarea } from '@/lib/index'
 import { fmtDate } from '@/lib/utils/date_fmt'
+import type { OrderUpdateInput } from '@/server/domains/orders/orders_rpc'
+import type { RouterInput, RouterOutput } from '@/server/lib/trpc'
 import { makeAutoObservable } from 'mobx'
 import { fmt, OrderStatus } from 'models'
 import moment from 'moment'
-import type { OrderUpdateInput } from 'srv/domains/orders/orders_rpc'
-import type { RouterInput, RouterOutput } from 'srv/lib/trpc'
 import { SuggestionsStore } from '../suggestions.store'
 
 export enum InputTypes {

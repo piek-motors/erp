@@ -2,9 +2,9 @@ import { app_cache } from '@/domains/pdo/cache'
 import { LoadingController } from '@/lib/store/loading_controller'
 import { debounce } from '@/lib/utils/debounce'
 import { normalize, token_search } from '@/lib/utils/search'
+import type { Material } from '@/server/domains/pdo/materials_rpc'
 import { makeAutoObservable, reaction } from 'mobx'
 import type { MaterialShape } from 'models'
-import type { Material } from 'srv/domains/pdo/materials_rpc'
 
 export class MaterialListStore {
   readonly async = new LoadingController()

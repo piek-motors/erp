@@ -22,6 +22,7 @@ import {
   PlusIcon,
   Row,
 } from '@/lib/index'
+import { Blank } from '@/server/domains/pdo/details_rpc'
 import {
   AccordionGroup,
   Button,
@@ -32,7 +33,6 @@ import {
   type TypographySystem,
 } from '@mui/joy'
 import type { ReactNode } from 'react'
-import { Blank } from 'srv/domains/pdo/details_rpc'
 import { DetailAttachmentList } from './attachment/list'
 import type { DetailSt, DetailStProp } from './detail.state'
 import {

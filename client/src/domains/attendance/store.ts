@@ -1,8 +1,8 @@
 import { MonthSelectStore } from '@/components/inputs/month-select'
 import { rpc } from '@/lib/rpc/rpc.client'
 import { LoadingController } from '@/lib/store/loading_controller'
+import { AttendanceReport } from '@/server/domains/attendance/report_generator'
 import { makeAutoObservable } from 'mobx'
-import { AttendanceReport } from 'srv/domains/attendance/report_generator'
 
 export class Report {
   constructor(

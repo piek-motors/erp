@@ -14,12 +14,12 @@ import {
   useEffect,
   useNavigate,
 } from '@/lib/index'
+import type { ListOrdersOutput } from '@/server/domains/pdo/orders_rpc'
 import { Tab, TabList, TabPanel, Tabs } from '@mui/joy'
 import {
   ManufacturingOrderStatus,
   ManufacturingOrderStatus as OrderStatus,
 } from 'models'
-import type { ListOrdersOutput } from 'srv/domains/pdo/orders_rpc'
 import { getColumns } from './columns'
 import { archive_search, OrderSearchCriteria, s } from './store'
 
