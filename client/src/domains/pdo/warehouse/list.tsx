@@ -1,7 +1,3 @@
-import { makeAutoObservable } from 'mobx'
-import { observer } from 'mobx-react-lite'
-import { OperationType } from 'models'
-import { useEffect } from 'react'
 import { ScrollableWindow } from '@/components/scrollable_window'
 import { Table } from '@/components/table.impl'
 import { MetalPageTitle } from '@/domains/pdo/shared/basic'
@@ -10,6 +6,10 @@ import { matrixDecoder } from '@/lib/rpc/matrix_decoder'
 import { rpc } from '@/lib/rpc/rpc.client'
 import { LoadingController } from '@/lib/store/loading_controller'
 import type { OperationListItem } from '@/server/domains/pdo/operations_rpc'
+import { makeAutoObservable } from 'mobx'
+import { observer } from 'mobx-react-lite'
+import { OperationType } from 'models'
+import { useEffect } from 'react'
 import { MobileNavModal, MobilePadding } from '../root_layout'
 import { columns } from './columns'
 
@@ -37,8 +37,11 @@ class OperationsSt {
   }
 
   async revert(operation_id: number) {
-    await rpc.pdo.operations.revert.mutate({ id: operation_id })
-    await this.load()
+    const msg = `Вы хотите отменить операцию?`
+    if (window.confirm(msg)) {
+      await rpc.pdo.operations.revert.mutate({ id: operation_id })
+      await this.load()
+    }
   }
 
   get no_data() {
