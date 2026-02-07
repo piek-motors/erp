@@ -1,5 +1,7 @@
-/** @jsxImportSource @emotion/react */
-
+import { observer, P, Row, UseIcon } from '@/lib/index'
+import { routeMap } from '@/lib/routes'
+import { rpc } from '@/lib/rpc/rpc.client'
+import { authStore } from '@/lib/store/auth.store'
 import {
   type Icon,
   UilBell,
@@ -8,130 +10,320 @@ import {
   UilListOl,
   UilWrench,
 } from '@iconscout/react-unicons'
-import { Badge, Button, IconButton, Stack } from '@mui/joy'
+import { Badge, Box, Button, Typography } from '@mui/joy'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
-import { observer, P, Row, UseIcon } from '@/lib/index'
-import { routeMap } from '@/lib/routes'
-import { rpc } from '@/lib/rpc/rpc.client'
-import { authStore } from '@/lib/store/auth.store'
 
-export const links = [
+interface MenuLink {
+  href: string
+  icon: Icon
+  name: string
+  badgeKey?: 'mentions'
+}
+
+interface MenuCardProps {
+  icon: Icon
+  name: string
+  count?: number
+  onClick: () => void
+}
+
+const MENU_LINKS: MenuLink[] = [
   {
     href: routeMap.orders.priorityList,
     icon: UilListOl,
     name: 'Заказы & Очередность',
   },
   { href: routeMap.reclamation, icon: UilWrench, name: 'Рекламации' },
-  {
-    href: routeMap.pdo.index,
-    icon: UilCalculatorAlt,
-    name: 'ПДО',
-  },
-  {
-    href: routeMap.attendance,
-    icon: UilConstructor,
-    name: 'Рабочее время',
-  },
+  { href: routeMap.pdo.index, icon: UilCalculatorAlt, name: 'ПДО' },
+  { href: routeMap.attendance, icon: UilConstructor, name: 'Рабочее время' },
   {
     href: routeMap.mentions,
     icon: UilBell,
     name: 'Упоминания',
+    badgeKey: 'mentions',
   },
 ]
 
-export const IndexPage = observer(() => {
-  const navigate = useNavigate()
+const SUPPORT_CONTACT = {
+  telegram: 'invalid_parameter',
+  email: 'loseev5@gmail.com',
+}
+
+function useMentionsCount() {
   const [count, setCount] = useState(0)
 
   useEffect(() => {
-    if (authStore.user?.id) {
-      rpc.orders.mentions.count
-        .query({
-          user_id: authStore.user.id,
-        })
-        .then(setCount)
-    }
+    const userId = authStore.user?.id
+    if (!userId) return
+
+    rpc.orders.mentions.count
+      .query({ user_id: userId })
+      .then(setCount)
+      .catch(err => console.error('Failed to fetch mentions count:', err))
   }, [])
 
-  async function handleLogout() {
+  return count
+}
+
+// Animated background component
+const AnimatedBackground = () => {
+  return (
+    <Box
+      sx={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        zIndex: 0,
+        overflow: 'hidden',
+        background: 'linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%)',
+        '&::before': {
+          content: '""',
+          position: 'absolute',
+          top: '-50%',
+          left: '-50%',
+          width: '200%',
+          height: '200%',
+          background: `
+            radial-gradient(circle at 20% 50%, rgba(200, 210, 230, 0.15) 0%, transparent 50%),
+            radial-gradient(circle at 80% 80%, rgba(220, 230, 240, 0.2) 0%, transparent 50%),
+            radial-gradient(circle at 40% 20%, rgba(210, 220, 235, 0.15) 0%, transparent 50%)
+          `,
+          animation: 'rotate 40s linear infinite',
+        },
+        '&::after': {
+          content: '""',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: `
+            repeating-linear-gradient(
+              45deg,
+              transparent,
+              transparent 80px,
+              rgba(100, 120, 150, 0.02) 80px,
+              rgba(100, 120, 150, 0.02) 160px
+            )
+          `,
+        },
+        '@keyframes rotate': {
+          '0%': {
+            transform: 'rotate(0deg)',
+          },
+          '100%': {
+            transform: 'rotate(360deg)',
+          },
+        },
+      }}
+    >
+      {/* Floating geometric shapes */}
+      <Box
+        sx={{
+          position: 'absolute',
+          width: 350,
+          height: 350,
+          border: '1px solid rgba(100, 120, 150, 0.08)',
+          borderRadius: '50%',
+          top: '8%',
+          left: '10%',
+          animation: 'float 25s ease-in-out infinite',
+          '@keyframes float': {
+            '0%, 100%': { transform: 'translate(0, 0) rotate(0deg)' },
+            '33%': { transform: 'translate(40px, -40px) rotate(120deg)' },
+            '66%': { transform: 'translate(-30px, 30px) rotate(240deg)' },
+          },
+        }}
+      />
+      <Box
+        sx={{
+          position: 'absolute',
+          width: 250,
+          height: 250,
+          border: '1px solid rgba(100, 120, 150, 0.06)',
+          borderRadius: '30px',
+          bottom: '12%',
+          right: '12%',
+          animation: 'float2 18s ease-in-out infinite',
+          '@keyframes float2': {
+            '0%, 100%': { transform: 'translate(0, 0) rotate(0deg)' },
+            '50%': { transform: 'translate(-50px, -50px) rotate(180deg)' },
+          },
+        }}
+      />
+      <Box
+        sx={{
+          position: 'absolute',
+          width: 180,
+          height: 180,
+          background: 'rgba(100, 120, 150, 0.03)',
+          borderRadius: '50%',
+          top: '55%',
+          left: '75%',
+          animation: 'pulse 10s ease-in-out infinite',
+          '@keyframes pulse': {
+            '0%, 100%': { transform: 'scale(1)', opacity: 0.03 },
+            '50%': { transform: 'scale(1.3)', opacity: 0.06 },
+          },
+        }}
+      />
+      <Box
+        sx={{
+          position: 'absolute',
+          width: 200,
+          height: 200,
+          border: '1px solid rgba(100, 120, 150, 0.05)',
+          borderRadius: '50%',
+          top: '70%',
+          left: '5%',
+          animation: 'float3 22s ease-in-out infinite',
+          '@keyframes float3': {
+            '0%, 100%': { transform: 'translate(0, 0)' },
+            '50%': { transform: 'translate(30px, -30px)' },
+          },
+        }}
+      />
+    </Box>
+  )
+}
+
+const MenuCard = ({ icon, name, count, onClick }: MenuCardProps) => {
+  const hasNotification = count !== undefined && count > 0
+  return (
+    <Box
+      onClick={onClick}
+      sx={{
+        position: 'relative',
+        border: '1px solid',
+        borderColor: 'rgba(100, 120, 150, 0.15)',
+        bgcolor: 'rgba(255, 255, 255, 0.7)',
+        backdropFilter: 'blur(10px)',
+        borderRadius: 3,
+        p: 3,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        cursor: 'pointer',
+        transition: 'all 0.3s ease',
+        '&:hover': {
+          transform: 'translateY(-4px)',
+          bgcolor: 'rgba(255, 255, 255, 0.9)',
+          borderColor: 'rgba(100, 120, 150, 0.25)',
+          boxShadow: '0 8px 24px rgba(100, 120, 150, 0.12)',
+        },
+      }}
+    >
+      <Box sx={{ fontSize: 36, mb: 1.5, color: '#4a5568' }}>
+        <UseIcon icon={icon} />
+      </Box>
+      <Typography
+        level="body-md"
+        textAlign="center"
+        fontWeight={600}
+        sx={{ color: '#2d3748' }}
+      >
+        {name}
+      </Typography>
+      {hasNotification && (
+        <Badge
+          color="danger"
+          badgeContent={count}
+          sx={{ position: 'absolute', top: 12, right: 12 }}
+        />
+      )}
+    </Box>
+  )
+}
+
+const UserInfo = () => {
+  const user = authStore.user
+  if (!user) return null
+  return (
+    <P level="body-xs">
+      {user.email} {user.fullName} - {user.roles}
+    </P>
+  )
+}
+
+export const IndexPage = observer(() => {
+  const navigate = useNavigate()
+  const mentionsCount = useMentionsCount()
+
+  const handleLogout = async () => {
     await authStore.logout()
     navigate('/login')
   }
 
-  return (
-    <Stack py={3} gap={2} p={2}>
-      {links.map((each, idx) => {
-        if (each.name === 'Упоминания') {
-          return (
-            <BadgeWrapper content={count}>
-              <Element key={idx} {...each} count={count} />
-            </BadgeWrapper>
-          )
-        }
+  const getBadgeCount = (link: MenuLink): number | undefined => {
+    if (link.badgeKey === 'mentions') return mentionsCount
+    return undefined
+  }
 
-        return <Element key={idx} {...each} />
-      })}
-      <Stack width={300} gap={1}>
-        <P level="body-xs">
-          Аккаунт: {authStore.user?.email} {authStore.user?.fullName}
-          <br />
-          Роль: {authStore.user?.roles}
-        </P>
-        <P level="body-xs" color="neutral">
-          Предложения по улучшению можно отправить в телеграме{' '}
-          <P fontWeight={700}>invalid_parameter</P> или на почту{' '}
-          <P fontWeight={700}>loseev5@gmail.com</P>
-        </P>
-        <Button
-          sx={{ width: 'fit-content' }}
-          onClick={handleLogout}
-          size="sm"
-          color="danger"
-          variant="outlined"
+  return (
+    <>
+      <AnimatedBackground />
+      <Box
+        sx={{
+          position: 'relative',
+          zIndex: 1,
+          minHeight: '100vh',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          p: 3,
+        }}
+      >
+        <P
+          color="primary"
+          level="h3"
+          sx={{
+            fontWeight: 700,
+            fontFamily: 'monospace',
+            fontSize: 28,
+            mb: 1,
+            letterSpacing: '2px',
+          }}
         >
-          Выйти
-        </Button>
-      </Stack>
-    </Stack>
+          PIEK ERP
+        </P>
+
+        {/* Menu grid */}
+        <Box
+          sx={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))',
+            gap: 2,
+            width: '100%',
+            maxWidth: 900,
+          }}
+        >
+          {MENU_LINKS.map(link => (
+            <MenuCard
+              key={link.href}
+              icon={link.icon}
+              name={link.name}
+              count={getBadgeCount(link)}
+              onClick={() => navigate(link.href)}
+            />
+          ))}
+        </Box>
+
+        <Row mt={4} rowGap={2} alignItems="center">
+          <UserInfo />
+          <P level="body-xs">
+            Предложения: <strong>{SUPPORT_CONTACT.telegram}</strong> (Telegram)
+            или <strong>{SUPPORT_CONTACT.email}</strong>
+          </P>
+          <Button color="danger" variant="soft" onClick={handleLogout}>
+            Выйти
+          </Button>
+        </Row>
+      </Box>
+    </>
   )
 })
-
-function Element(props: {
-  href: string
-  icon: Icon
-  name: string
-  count?: number
-}) {
-  const navigate = useNavigate()
-  return (
-    <Stack sx={{ alignSelf: 'flex-start' }}>
-      <IconButton
-        variant="plain"
-        color="neutral"
-        onClick={() => navigate(props.href)}
-      >
-        <Row gap={2}>
-          <UseIcon icon={props.icon} />
-          <P>{props.name}</P>
-        </Row>
-      </IconButton>
-    </Stack>
-  )
-}
-
-const BadgeWrapper = (props: {
-  children: React.ReactNode
-  content: number
-}) => (
-  <Badge
-    color="danger"
-    anchorOrigin={{
-      vertical: 'top',
-      horizontal: 'left',
-    }}
-    badgeContent={props.content}
-  >
-    {props.children}
-  </Badge>
-)
