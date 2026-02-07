@@ -1,7 +1,7 @@
+import type { SxProps } from '@mui/joy/styles/types'
 import { ScrollPreserv } from '@/components/utilities/scroll_preserve'
 import { ScrollPreservNavigation } from '@/components/utilities/scroll_preserve_navigation'
 import { Box, Stack } from '@/lib'
-import type { SxProps } from '@mui/joy/styles/types'
 
 export const ScrollableWindow = (props: {
   scroll: React.ReactNode

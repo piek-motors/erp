@@ -1,3 +1,4 @@
+import { MaterialShape, UiMaterialShape } from 'models'
 import { NumberInput } from '@/components/inputs/number_input'
 import { Tabs } from '@/components/tabs'
 import {
@@ -5,7 +6,6 @@ import {
   MaterialUnitSelect,
 } from '@/domains/pdo/shared/basic'
 import { Box, Label, observer, Stack } from '@/lib/index'
-import { MaterialShape, UiMaterialShape } from 'models'
 import { MaterialSpecificInput } from './shape/main'
 import type { MaterialSt } from './state'
 
@@ -41,10 +41,10 @@ export const MaterialForm = observer(
       )}
       <MaterialUnitSelect value={m.unit} onChange={v => m.set_unit(v)} />
       <AlloyAutocomplete
-        setAlloy={alloy => {
+        on_change={alloy => {
           m.set_alloy(alloy)
         }}
-        alloy={m.alloy}
+        value={m.alloy}
       />
       <Box>
         <Stack>

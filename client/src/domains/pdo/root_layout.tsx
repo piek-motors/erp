@@ -1,9 +1,3 @@
-import {
-  DesktopOnly,
-  MobileOnly,
-  WebOnly,
-} from '@/components/utilities/conditional-display'
-import { P, Row, UseIcon } from '@/lib/index'
 import { UilBars } from '@iconscout/react-unicons'
 import {
   Box,
@@ -14,7 +8,13 @@ import {
   Sheet,
   Stack,
 } from '@mui/joy'
-import { ReactNode, useEffect, useState } from 'react'
+import { type ReactNode, useEffect, useState } from 'react'
+import {
+  DesktopOnly,
+  MobileOnly,
+  WebOnly,
+} from '@/components/utilities/conditional-display'
+import { P, Row, UseIcon } from '@/lib/index'
 import { NavigationSideBar } from '../../components/nav_sidebar'
 import { app_cache } from './cache'
 import { nav_links } from './nav.links'

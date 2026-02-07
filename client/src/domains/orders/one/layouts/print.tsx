@@ -1,10 +1,10 @@
+import { Box, Grid, Stack } from '@mui/joy'
+import { observer } from 'mobx-react-lite'
 import { PrintOnly } from '@/components/utilities/conditional-display'
 import { Label, P } from '@/lib/index'
 import { formatOnlyDate } from '@/lib/utils/date_fmt'
-import { Box, Grid, Stack } from '@mui/joy'
-import { observer } from 'mobx-react-lite'
-import { OrderAttachmentList } from '../order-attachment-list'
 import { orderStore } from '../order.store'
+import { OrderAttachmentList } from '../order-attachment-list'
 import { PositionsList } from '../positions/ui'
 import { StatementView } from '../statement/ui'
 

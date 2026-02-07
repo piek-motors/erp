@@ -1,4 +1,4 @@
-import { type KDB } from '../schema'
+import type { KDB } from '../schema'
 
 export async function up(db: KDB): Promise<void> {
   await db.schema

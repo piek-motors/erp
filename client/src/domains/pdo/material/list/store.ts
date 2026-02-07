@@ -10,7 +10,7 @@ export class MaterialListStore {
   readonly async = new LoadingController()
 
   search_query: string = ''
-  shape_filter?: MaterialShape | null
+  shape_filter: MaterialShape | null = null
   search_result: Material[] = []
 
   debouncedFilter: () => void
@@ -56,7 +56,7 @@ export class MaterialListStore {
     this.debouncedFilter()
   }
 
-  set_shape_filter(shape?: MaterialShape) {
+  set_shape_filter(shape: MaterialShape | null) {
     this.shape_filter = shape
     this.filter()
   }

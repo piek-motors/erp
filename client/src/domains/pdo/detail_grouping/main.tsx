@@ -1,11 +1,11 @@
+import { Divider } from '@mui/joy'
+import { useParams } from 'react-router'
 import { ScrollableWindow } from '@/components/inputs'
 import {
   DesktopOnly,
   MobileOnly,
 } from '@/components/utilities/conditional-display'
 import { Box, Loading, observer, P, Row, Stack, useEffect } from '@/lib/index'
-import { Divider } from '@mui/joy'
-import { useParams } from 'react-router'
 import { MobileNavModal, MobilePadding } from '../root_layout'
 import { api } from './api'
 import { GroupActions, TargetGroupDetailList } from './detail_list'

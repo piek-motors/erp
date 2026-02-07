@@ -1,3 +1,4 @@
+import { makeAutoObservable, reaction } from 'mobx'
 import {
   PaginatedSearchStore,
   type SearchFilters,
@@ -5,7 +6,6 @@ import {
 import { app_cache } from '@/domains/pdo/cache'
 import { LoadingController } from '@/lib/store/loading_controller'
 import { debounce } from '@/lib/utils/debounce'
-import { makeAutoObservable, reaction } from 'mobx'
 import type { DetailSt } from '../detail.state'
 
 export enum DetailSearchCriteria {
@@ -100,7 +100,7 @@ export class DetailListStore {
     [DetailSearchCriteria.DrawingNum]: (details, query) => {
       const q = query.toLowerCase()
       return details.filter(
-        d => d.drawingNumber && d.drawingNumber.toLowerCase().includes(q),
+        d => d.drawing_number && d.drawing_number.toLowerCase().includes(q),
       )
     },
   }

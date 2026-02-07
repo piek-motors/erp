@@ -9,13 +9,13 @@ import {
   uiUnit,
 } from 'models'
 import { app_cache } from '../cache'
-import {
+import type {
   DetailBlankSt,
   MaterialRequirementSt,
 } from '../detail/detail_blank.store'
 import { BlankAttributes } from '../detail/detail_form'
 import { MaterialName } from '../material/name'
-import { OrderSt } from './order.state'
+import type { OrderSt } from './order.state'
 
 interface DetailBlankProps {
   blank: DetailBlankSt
@@ -24,7 +24,7 @@ interface DetailBlankProps {
 
 export const DetailBlank = observer(({ blank, order }: DetailBlankProps) => {
   const requirement = blank.material_requirement
-  if (!requirement) return null
+  if (!requirement || !requirement.material_id) return null
 
   const material = app_cache.materials.get(requirement.material_id)
   if (!material) return null
@@ -58,7 +58,7 @@ export const DetailBlank = observer(({ blank, order }: DetailBlankProps) => {
 interface BlankTypePropertiesProps {
   requirement: MaterialRequirementSt
   unit: string
-  quantity_to_produce?: number
+  quantity_to_produce: number | null
 }
 
 const BlankTypeProperties = ({
@@ -148,7 +148,9 @@ export const CalcMaterialRemainings = observer(
       return
 
     const material = cost.material
-    const unit = uiUnit(material?.unit)
+    if (!material) return null
+
+    const unit = uiUnit(material.unit)
     const totalConsumed = order.resp?.material_deduction || 0
     const remainingAmount = (material?.on_hand_balance || 0) - totalConsumed
     const color =

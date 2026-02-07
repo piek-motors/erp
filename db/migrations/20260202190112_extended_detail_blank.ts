@@ -1,6 +1,6 @@
 import { sql } from 'kysely'
 import { MaterialRequirement } from 'models'
-import { type KDB } from '../schema'
+import type { KDB } from '../schema'
 
 type MaterialId = number
 type Cost = number

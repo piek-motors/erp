@@ -1,8 +1,8 @@
+import { makeAutoObservable } from 'mobx'
+import { uiUnit } from 'models'
 import { rpc } from '@/lib/rpc/rpc.client'
 import { LoadingController } from '@/lib/store/loading_controller'
 import { notifier } from '@/lib/store/notifier.store'
-import { makeAutoObservable } from 'mobx'
-import { uiUnit } from 'models'
 import { app_cache } from '../cache'
 import type { DetailSt } from '../detail/detail.state'
 import { DetailApi } from '../detail/detail_api'
@@ -49,8 +49,10 @@ export class OrderApi {
         })
         await this.reload(order)
         if (writeoff) {
-          const material = app_cache.materials.get(writeoff.material_id)
-          const unitStr = uiUnit(material?.unit)
+          const material = app_cache.materials.get_or_throw(
+            writeoff.material_id,
+          )
+          const unitStr = uiUnit(material.unit)
           notifier.ok(
             `Списано ${writeoff.totalCost} ${unitStr} ${writeoff.material_name}`,
             10,

@@ -1,4 +1,5 @@
 /** @jsxImportSource @emotion/react */
+
 import type { DetailStProp, Operation } from '@/domains/pdo/detail/detail.state'
 import { Label } from '@/lib/index'
 import { css } from '@emotion/react'
@@ -15,7 +16,7 @@ const signW = 100
 const dateW = 80
 
 export const ProductionRoute = observer(({ detail }: DetailStProp) => {
-  const steps = detail.processingRoute.steps
+  const steps = detail.processingRoute.operations
   if (steps.length === 0) return null
   return (
     <Stack>

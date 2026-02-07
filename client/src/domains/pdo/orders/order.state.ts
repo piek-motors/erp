@@ -31,17 +31,17 @@ export class OrderSt {
   setOrder(order: ManufacturingOrderOutput) {
     this.resp = order
     this.qty = order.qty
-    this.outputQty = order.output_qty ?? undefined
+    this.outputQty = order.output_qty ?? null
     this.currentOperation = order.current_operation
     this.orderAlreadyInProductionModal = null
     this.priority = order.priority
   }
 
-  qty?: number
+  qty: number | null = null
   setQty(qty: number) {
     this.qty = qty
   }
-  outputQty?: number
+  outputQty: number | null = null
   setOutputQty(qty: number) {
     this.outputQty = qty
   }
@@ -51,7 +51,7 @@ export class OrderSt {
     this.currentOperation = index
   }
 
-  priority?: OrderPriority
+  priority: OrderPriority = OrderPriority.Normal
   async set_priority(priority: OrderPriority) {
     this.priority = priority
     await rpc.pdo.orders_mut.set_priority.mutate({ id: this.id, priority })

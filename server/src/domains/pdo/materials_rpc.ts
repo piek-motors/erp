@@ -34,9 +34,7 @@ const payload = z.object({
   shape: z.enum(MaterialShape),
   shape_data: z.any(),
   alloy: z.string().nullable(),
-  shortage_prediction_horizon_days: z
-    .number()
-    .default(DEFAULT_SHORTAGE_PREDICTION_HORIZON_DAYS),
+  shortage_prediction_horizon_days: z.number().nullable(),
 })
 const id_payload = z.object({ id: z.number() })
 const update_payload = payload.extend({ id: z.number() })
@@ -83,6 +81,9 @@ export const material = router({
         .insertInto('pdo.materials')
         .values({
           ...input,
+          shortage_prediction_horizon_days:
+            input.shortage_prediction_horizon_days ||
+            DEFAULT_SHORTAGE_PREDICTION_HORIZON_DAYS,
           label: derive_label(input),
           on_hand_balance: 0,
           linear_mass: 0,
@@ -138,6 +139,9 @@ export const material = router({
         .updateTable('pdo.materials')
         .set({
           ...input,
+          shortage_prediction_horizon_days:
+            input.shortage_prediction_horizon_days ||
+            DEFAULT_SHORTAGE_PREDICTION_HORIZON_DAYS,
           label: derive_label(input),
         })
         .where('id', '=', input.id)

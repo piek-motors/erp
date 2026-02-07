@@ -1,9 +1,9 @@
-import { InModal } from '@/components/modal'
-import { observer, P, UseIcon, useState } from '@/lib/index'
-import { openPage, routeMap } from '@/lib/routes'
 import { UilBars } from '@iconscout/react-unicons'
 import { Button, Divider, Stack } from '@mui/joy'
 import { Link } from 'react-router'
+import { InModal } from '@/components/modal'
+import { observer, P, UseIcon, useState } from '@/lib/index'
+import { openPage, routeMap } from '@/lib/routes'
 import { api } from './api'
 import { CreateGroupModal } from './group_name.modal'
 

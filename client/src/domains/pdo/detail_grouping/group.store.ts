@@ -23,16 +23,18 @@ export interface Group {
 }
 
 export class Detail {
-  id!: number
-  name!: string
-  drawing_number!: string | null
-  group_id!: number | null
-  colors?: Color[]
+  constructor(
+    readonly id: number,
+    readonly name: string,
+    readonly drawing_number: string | null,
+    readonly group_id: number | null,
+    public colors?: Color[],
+  ) {
+    makeAutoObservable(this)
+  }
+
   setColors(colors: Color[]) {
     this.colors = colors
-  }
-  constructor() {
-    makeAutoObservable(this)
   }
 }
 
@@ -42,13 +44,13 @@ export interface GroupWithDetails {
 }
 
 export class DetailListStore {
-  query?: string
+  query: string = ''
 
   constructor() {
     makeAutoObservable(this)
   }
 
-  setQuery(q?: string) {
+  setQuery(q: string) {
     this.query = q
   }
 

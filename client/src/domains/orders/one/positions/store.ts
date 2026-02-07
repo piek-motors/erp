@@ -1,14 +1,14 @@
+import { makeAutoObservable } from 'mobx'
 import { rpc } from '@/lib/rpc/rpc.client'
 import { notifier } from '@/lib/store/notifier.store'
-import { makeAutoObservable } from 'mobx'
 
 class Position {
-  id!: number
-  name!: string
-  description?: string | null
-  quantity!: number
-  assembler_name?: string | null
-  constructor() {
+  constructor(
+    readonly id: number,
+    readonly name: string,
+    readonly description: string | null,
+    readonly qty: number,
+  ) {
     makeAutoObservable(this)
   }
 }
@@ -16,20 +16,20 @@ class Position {
 export class PositionsStore {
   items: Position[] = []
   isOpen = false
-  editedOrderItem: Partial<Position> | null = null
+  editedOrderItem: Position | null = null
   name = ''
   description = ''
-  qty?: number
+  qty: number | null = null
   constructor() {
     makeAutoObservable(this)
   }
-  openDialog(position: Partial<Position> | null = null) {
+  openDialog(position: Position | null = null) {
     this.editedOrderItem = position
     this.isOpen = true
     if (position) {
       this.name = position.name ?? ''
       this.description = position.description ?? ''
-      this.qty = position.quantity
+      this.qty = position.qty
     } else {
       this.clear()
     }
@@ -42,7 +42,7 @@ export class PositionsStore {
   clear() {
     this.name = ''
     this.description = ''
-    this.qty = undefined
+    this.qty = null
   }
   setName(value: string) {
     this.name = value
@@ -50,7 +50,7 @@ export class PositionsStore {
   setDescription(value: string) {
     this.description = value
   }
-  setQty(qty?: number) {
+  setQty(qty: number | null) {
     this.qty = qty
   }
   get canSave(): boolean {
@@ -100,19 +100,18 @@ export class PositionsStore {
   }
 
   private async insertOrderItem(orderId: number) {
+    if (!this.qty) {
+      throw new Error('Количество обязательно')
+    }
     const result = await rpc.orders.positions.insert.mutate({
       order_id: orderId,
       name: this.name,
-      quantity: this.qty!,
+      quantity: this.qty,
       description: this.description,
     })
-    // update local state
-    const item = new Position()
-    item.id = result.id
-    item.name = this.name
-    item.quantity = this.qty!
-    item.description = this.description
-    this.items.push(item)
+    this.items.push(
+      new Position(result.id, this.name, this.description, this.qty),
+    )
   }
 
   async delete(positionId: number) {

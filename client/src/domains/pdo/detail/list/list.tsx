@@ -1,3 +1,6 @@
+import { Divider } from '@mui/joy'
+import type { SxProps } from '@mui/joy/styles/types'
+import type { Column } from 'react-table'
 import { ScrollableWindow } from '@/components/inputs'
 import { SearchWithCriteria } from '@/components/inputs/search_input_with_criteria'
 import { InModal } from '@/components/modal'
@@ -10,14 +13,11 @@ import {
   Loading,
   observer,
   openPage,
-  routeMap,
   Row,
+  routeMap,
   Stack,
   useNavigate,
 } from '@/lib/index'
-import { Divider } from '@mui/joy'
-import type { SxProps } from '@mui/joy/styles/types'
-import type { Column } from 'react-table'
 import type { DetailSt } from '../detail.state'
 import { DetailName } from '../detail_name'
 import { AlphabetIndex } from './alphabet_index'
@@ -70,8 +70,8 @@ const columnList: Column<DetailSt>[] = [
           name: r.name,
           group_id: r.group_id || null,
         }}
-        disableLink
-        withGroupName
+        disable_link
+        with_group_name
       />
     ),
   },

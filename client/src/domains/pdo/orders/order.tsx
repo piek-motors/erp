@@ -33,7 +33,7 @@ import {
 } from 'models'
 import { app_cache } from '../cache'
 import type { DetailSt, DetailStProp } from '../detail/detail.state'
-import { DetailBlankSt } from '../detail/detail_blank.store'
+import type { DetailBlankSt } from '../detail/detail_blank.store'
 import { MetalPageTitle } from '../shared/basic'
 import { DetailBlank } from './detail_blank'
 import { OrderSt, type OrderStProp } from './order.state'
@@ -86,7 +86,7 @@ export const OrderUpdatePage = observer(() => {
                   </P>
                   <OrderStatusChip status={order.resp.status} />
                 </Row>
-                <DetailName detail={detail} withGroupName />
+                <DetailName detail={detail} with_group_name />
               </Box>
             }
           />
@@ -96,7 +96,7 @@ export const OrderUpdatePage = observer(() => {
             <Stack spacing={1}>
               <QuantityInput
                 order={order}
-                recBatchSize={detail.recommendedBatchSize}
+                rec_batch_size={detail.recommended_batch_size}
               />
               <Divider />
               <OrderPrioritySelect order={order} />
@@ -152,14 +152,14 @@ const OrderStatusChip = ({ status }: { status: OrderStatus }) => {
 const ProductionSteps = observer(
   ({ detail, order }: DetailStProp & OrderStProp) => {
     if (
-      detail.processingRoute.steps.length === 0 ||
+      detail.processingRoute.operations.length === 0 ||
       order.status == OrderStatus.Archived
     )
       return null
     return (
       <Stack>
         <Label label="Этапы обработки" />
-        {detail.processingRoute.steps.map((operation, operation_index) => {
+        {detail.processingRoute.operations.map((operation, operation_index) => {
           const current = order.currentOperation === operation_index
           const timedelta =
             current &&
@@ -284,7 +284,10 @@ const DeleteOrderButton = observer(({ order }: OrderStProp) => {
 })
 
 const QuantityInput = observer(
-  ({ recBatchSize, order }: OrderStProp & { recBatchSize?: number }) => {
+  ({
+    rec_batch_size: recBatchSize,
+    order,
+  }: OrderStProp & { rec_batch_size: number | null }) => {
     const isProduction = order.status === OrderStatus.Production
     const isCollected = order.status === OrderStatus.Archived
 
@@ -302,7 +305,7 @@ const QuantityInput = observer(
           notification: 'Кол-во установлено',
         }
 
-    const [qty, setQty] = useState<number | undefined>(mode.initialQty)
+    const [qty, setQty] = useState<number | null>(mode.initialQty)
 
     const isUnchanged = qty === mode.initialQty
 

@@ -1,4 +1,3 @@
-import { type IDB, TRPCError } from '#root/sdk.js'
 import type { DB } from 'db'
 import type { Selectable } from 'kysely'
 import {
@@ -7,6 +6,7 @@ import {
   OrderPriority,
   WriteoffReason,
 } from 'models'
+import { type IDB, TRPCError } from '#root/sdk.js'
 import { Warehouse } from './warehouse_service.js'
 
 type MaterialWriteoff = {
@@ -39,7 +39,7 @@ export function calc_material_deduction(
        */
       return data.gross_length * quantity_to_produce
 
-    case MaterialRequirement.Batch:
+    case MaterialRequirement.Batch: {
       if (!data.yield_per_stock || !data.stock_length) return 0
       /**
        * Number of full stock lengths (bars/sheets) required.
@@ -48,6 +48,7 @@ export function calc_material_deduction(
        */
       const bars_needed = Math.ceil(quantity_to_produce / data.yield_per_stock)
       return bars_needed * data.stock_length
+    }
 
     case MaterialRequirement.Countable:
       if (!data.count) return 0

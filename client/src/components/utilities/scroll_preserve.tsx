@@ -1,6 +1,6 @@
-import { Box } from '@/lib'
 import type { BoxProps } from '@mui/joy'
 import { useEffect, useLayoutEffect, useRef } from 'react'
+import { Box } from '@/lib'
 
 export const ScrollPreserv = ({
   children,

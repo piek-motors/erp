@@ -1,13 +1,14 @@
 /** @jsxImportSource @emotion/react */
-import { FactoryPage } from '@/components/factory_page'
-import { AddResourceButton, Loading, P, Pre } from '@/lib/index'
-import { openOrderDetailPage, routeMap } from '@/lib/routes'
-import type { RouteConfig } from '@/lib/types/global'
+
 import { Box, Card } from '@mui/joy'
 import { observer } from 'mobx-react-lite'
 import { useEffect } from 'react'
 import * as dnd from 'react-beautiful-dnd'
 import { useNavigate } from 'react-router'
+import { FactoryPage } from '@/components/factory_page'
+import { AddResourceButton, Loading, P, Pre } from '@/lib/index'
+import { openOrderDetailPage, routeMap } from '@/lib/routes'
+import type { RouteConfig } from '@/lib/types/global'
 import type { UnpackedOrder } from '../api'
 import { getBackgroundColor } from '../utils'
 import { type ColocatedStateKey, store } from './store'

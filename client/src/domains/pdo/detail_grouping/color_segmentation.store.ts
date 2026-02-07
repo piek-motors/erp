@@ -1,6 +1,6 @@
-import { rpc } from '@/lib/rpc/rpc.client'
 import { makeAutoObservable } from 'mobx'
 import type { Color } from 'models'
+import { rpc } from '@/lib/rpc/rpc.client'
 import type { Detail } from './group.store'
 
 export class ColorSegmentation {

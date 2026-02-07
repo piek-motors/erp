@@ -1,8 +1,8 @@
+import type { Column } from 'react-table'
 import { AdaptiveNumberFormatter } from '@/domains/pdo/shared/adaptive_number_formatter'
 import { value_with_unit } from '@/domains/pdo/shared/basic'
 import { Label, P } from '@/lib/index'
 import type { Material } from '@/server/domains/pdo/materials_rpc'
-import type { Column } from 'react-table'
 
 const formatter = new AdaptiveNumberFormatter(0, 0, true)
 

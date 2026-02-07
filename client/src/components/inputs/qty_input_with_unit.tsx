@@ -1,9 +1,9 @@
-import { InputLabled, Label } from '@/lib/index'
 import type { InputProps } from '@mui/joy'
-import { uiUnit } from 'models'
+import { type Unit, uiUnit } from 'models'
+import { InputLabled, Label } from '@/lib/index'
 
 export const QtyInputWithUnit = (props: {
-  unitId?: number
+  unit: Unit | null
   autoFocus?: boolean
   value?: string
   setValue: (num: string) => void
@@ -12,7 +12,7 @@ export const QtyInputWithUnit = (props: {
   size?: InputProps['size']
   sx?: InputProps['sx']
 }) => {
-  const { unitId, value: qty, setValue: setQty } = props
+  const { unit, value: qty, setValue: setQty } = props
   return (
     <InputLabled
       autoFocus={props.autoFocus}
@@ -25,7 +25,7 @@ export const QtyInputWithUnit = (props: {
       size={props.size}
       type="number"
       sx={{ maxWidth: 150, ...props.sx }}
-      endDecorator={<Label color="primary">{uiUnit(unitId)}</Label>}
+      endDecorator={<Label color="primary">{uiUnit(unit)}</Label>}
     />
   )
 }

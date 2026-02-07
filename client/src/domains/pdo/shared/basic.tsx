@@ -1,3 +1,7 @@
+import { Button, Stack, ToggleButtonGroup } from '@mui/joy'
+import type { SxProps } from '@mui/joy/styles/types'
+import { UiUnit, Unit, uiUnit } from 'models'
+import { useEffect, useState } from 'react'
 import {
   BaseAutocomplete,
   type BaseOption,
@@ -9,14 +13,10 @@ import {
 } from '@/components/nav_topbar'
 import { ActionButton, DeleteResourceButton, Label, P, Row } from '@/lib/index'
 import { rpc } from '@/lib/rpc/rpc.client'
-import { Button, Stack, ToggleButtonGroup } from '@mui/joy'
-import type { SxProps } from '@mui/joy/styles/types'
-import { UiUnit, Unit, uiUnit } from 'models'
-import { useEffect, useState } from 'react'
 import { MobileNavModal } from '../root_layout'
 
 export function MaterialUnitSelect(props: {
-  value?: Unit
+  value: Unit | null
   onChange: (e: Unit) => void
   disabled?: boolean
 }) {
@@ -43,10 +43,10 @@ export function MaterialUnitSelect(props: {
 }
 
 export function AlloyAutocomplete(props: {
-  setAlloy: (alloy: string) => void
-  alloy?: string
+  on_change: (alloy: string) => void
+  value: string
 }) {
-  const { setAlloy, alloy } = props
+  const { on_change: setAlloy, value: alloy } = props
   const [alloys, setAlloys] = useState<string[]>([])
   useEffect(() => {
     rpc.pdo.material.dict_distinct_alloys
@@ -118,7 +118,10 @@ export function capitalize(text: string) {
   return text[0].toUpperCase() + text.slice(1)
 }
 
-export const value_with_unit = (value: string | number | null, unit?: Unit) =>
+export const value_with_unit = (
+  value: string | number | null,
+  unit: Unit | null,
+) =>
   Boolean(value) && (
     <Row gap={0.5} flexWrap="nowrap">
       <P>{value}</P>

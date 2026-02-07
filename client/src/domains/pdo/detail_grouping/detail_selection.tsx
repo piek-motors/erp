@@ -23,8 +23,8 @@ const UniversalDetailSelection = observer(() => {
     .map(detail => {
       const baseLabel = `${detail.id} - ${detail.name}`
       return {
-        label: detail.drawingNumber
-          ? `${baseLabel} (${detail.drawingNumber})`
+        label: detail.drawing_number
+          ? `${baseLabel} (${detail.drawing_number})`
           : baseLabel,
         value: detail.id,
       }
@@ -56,9 +56,8 @@ const UniversalDetailSelection = observer(() => {
               const detail = app_cache.details.get(id)
               if (!detail) return null
               return (
-                <Stack
+                <Row
                   key={id}
-                  direction="row"
                   justifyContent="space-between"
                   alignItems="center"
                 >
@@ -77,14 +76,14 @@ const UniversalDetailSelection = observer(() => {
                   >
                     <UseIcon icon={UilMinus} />
                   </IconButton>
-                </Stack>
+                </Row>
               )
             })}
           </Stack>
         )}
       </Stack>
       <Stack gap={1}>
-        <Row>
+        <Row noWrap>
           <BaseAutocomplete
             placeholder="Выберите детали"
             options={availableOptions}

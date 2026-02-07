@@ -1,4 +1,5 @@
 /** @jsxImportSource @emotion/react */
+
 import { ScrollableWindow, Search } from '@/components/inputs'
 import { Table } from '@/components/table.impl'
 import { MobileNavModal, MobilePadding } from '@/domains/pdo/root_layout'
@@ -10,8 +11,8 @@ import {
   useNavigate,
 } from '@/lib/index'
 import { openPage, routeMap } from '@/lib/routes'
-import { Material } from '@/server/domains/pdo/materials_rpc'
-import { ToggleButtonGroupProps } from '@mui/joy'
+import type { Material } from '@/server/domains/pdo/materials_rpc'
+import type { ToggleButtonGroupProps } from '@mui/joy'
 import { UiMaterialShape } from 'models'
 import { columns } from './columns'
 import { materialListStore } from './store'
@@ -70,7 +71,7 @@ const ShapeFilter = observer((props?: ToggleButtonGroupProps) => {
       sx={{ overflow: 'scroll' }}
       onChange={(_, value) => {
         if (value == null) {
-          materialListStore.set_shape_filter()
+          materialListStore.set_shape_filter(null)
         } else {
           materialListStore.set_shape_filter(Number(value))
         }

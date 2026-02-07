@@ -1,4 +1,3 @@
-import { useIsMobile } from '@/hooks/use-media-query'
 import {
   Box,
   ModalClose,
@@ -7,6 +6,7 @@ import {
   Modal as MuiModal,
   Stack,
 } from '@mui/joy'
+import { useIsMobile } from '@/hooks/use-media-query'
 
 export function InModal(props: {
   openButton?: React.ReactNode

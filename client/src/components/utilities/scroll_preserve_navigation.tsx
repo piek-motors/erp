@@ -1,7 +1,7 @@
-import { Box } from '@/lib'
 import type { BoxProps } from '@mui/joy'
 import { useEffect, useLayoutEffect, useRef } from 'react'
 import { useLocation } from 'react-router'
+import { Box } from '@/lib'
 
 export const ScrollPreservNavigation = ({
   children,

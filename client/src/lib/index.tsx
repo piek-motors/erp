@@ -35,7 +35,7 @@ import {
   type TypographyProps,
 } from '@mui/joy'
 import { observer } from 'mobx-react-lite'
-import React, { ReactNode } from 'react'
+import React, { type ReactNode } from 'react'
 import { Link as ReactLink, useNavigate } from 'react-router'
 
 export { Observer, observer } from 'mobx-react-lite'
@@ -128,13 +128,17 @@ export function InputWithUnit(
   )
 }
 
-export function Row(props: { children: React.ReactNode } & StackProps) {
+export interface RowProps extends StackProps {
+  noWrap?: boolean
+}
+
+export function Row(props: RowProps) {
   return (
     <Stack
       direction="row"
       gap={1}
       alignItems="center"
-      flexWrap={'wrap'}
+      flexWrap={props.noWrap ? 'nowrap' : 'wrap'}
       {...props}
     />
   )

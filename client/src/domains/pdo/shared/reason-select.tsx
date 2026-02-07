@@ -1,14 +1,14 @@
-import { Label } from '@/lib/index'
 import { Button, Stack, ToggleButtonGroup } from '@mui/joy'
 import { observer } from 'mobx-react-lite'
 import {
   SupplyReason,
   UiSupplyReason,
-  uiSupplyReason,
   UiWriteoffReason,
+  uiSupplyReason,
   uiWriteoffReason,
   WriteoffReason,
 } from 'models'
+import { Label } from '@/lib/index'
 
 interface WriteoffReasonSelectProps {
   reason: WriteoffReason

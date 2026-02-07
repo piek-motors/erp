@@ -1,3 +1,6 @@
+import type { DB } from 'db'
+import type { Selectable } from 'kysely'
+import { OrderStatus, UserRole } from 'models'
 import { attachmentService } from '#root/ioc/index.js'
 import { logger } from '#root/ioc/log.js'
 import { type Matrix, matrixEncoder } from '#root/lib/matrix_encoder.js'
@@ -12,9 +15,6 @@ import {
   TRPCError,
   z,
 } from '#root/sdk.js'
-import type { DB } from 'db'
-import type { Selectable } from 'kysely'
-import { OrderStatus, UserRole } from 'models'
 import { comments, type OrderComment } from './comments_rpc.js'
 import { mentions } from './mentions_rpc.js'
 import { payments } from './payments_rpc.js'

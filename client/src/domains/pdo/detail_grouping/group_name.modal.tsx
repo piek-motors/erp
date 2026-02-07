@@ -1,3 +1,6 @@
+import { UilPlusCircle } from '@iconscout/react-unicons'
+import { Button, Stack } from '@mui/joy'
+import { type ReactNode, useEffect } from 'react'
 import { InModal } from '@/components/modal'
 import {
   InputLabled,
@@ -7,9 +10,6 @@ import {
   UseIcon,
   useState,
 } from '@/lib/index'
-import { UilPlusCircle } from '@iconscout/react-unicons'
-import { Button, Stack } from '@mui/joy'
-import { type ReactNode, useEffect } from 'react'
 import { api } from './api'
 
 interface BaseGroupModalProps {

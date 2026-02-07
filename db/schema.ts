@@ -6,7 +6,7 @@ import type {
   Selectable as KyselySelectable,
   Updateable as KyselyUpdateable,
 } from 'kysely'
-import {
+import type {
   AbsenceReason,
   Color,
   ManufacturingOrderStatus,
@@ -19,8 +19,8 @@ import {
   UserRole,
   WriteoffReason,
 } from 'models'
-import { BlankSchema } from 'validators'
-import z from 'zod'
+import type { BlankSchema } from 'validators'
+import type z from 'zod'
 
 export type KDB = Kysely<DB.Schema>
 export type Selectable<T> = KyselySelectable<T>

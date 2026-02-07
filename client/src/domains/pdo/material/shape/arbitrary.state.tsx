@@ -3,7 +3,7 @@ import type { Arbitrary, ArbitraryShapeData } from 'models'
 import type { IMaterialShapeState } from '../shape_state.interface'
 
 export class ArbitraryState implements IMaterialShapeState {
-  name!: string
+  name: string = ''
   setName(name: string) {
     this.name = name
   }

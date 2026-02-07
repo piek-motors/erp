@@ -1,3 +1,5 @@
+import { MaterialShape, Unit, uiUnit } from 'models'
+import type { ReactNode } from 'react'
 import { NumberInput } from '@/components/inputs/number_input'
 import {
   Button,
@@ -8,8 +10,6 @@ import {
   Stack,
   ToggleButtonGroup,
 } from '@/lib/index'
-import { MaterialShape, uiUnit, Unit } from 'models'
-import type { ReactNode } from 'react'
 import type { MaterialSt } from '../state'
 
 export interface ShapeProps {

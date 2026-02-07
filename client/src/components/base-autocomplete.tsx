@@ -1,4 +1,3 @@
-import { Label } from '@/lib/index'
 import {
   Autocomplete,
   Box,
@@ -7,6 +6,7 @@ import {
 } from '@mui/joy'
 import type { SxProps } from '@mui/joy/styles/types'
 import type { ReactNode } from 'react'
+import { Label } from '@/lib/index'
 
 export interface BaseOption {
   label: string

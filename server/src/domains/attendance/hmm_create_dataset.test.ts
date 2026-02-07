@@ -1,7 +1,8 @@
 // npx tsx --test ./src/domains/attendance/hmm_create_dataset.test.ts
-import { db } from '#root/sdk.js'
-import { writeFileSync } from 'fs'
+
 import { describe, it } from 'node:test'
+import { writeFileSync } from 'fs'
+import { db } from '#root/sdk.js'
 import { endOfUTCMonth, startOfUTCMonth } from '../../lib/time.js'
 
 const DELIMETER = '\t'

@@ -34,7 +34,7 @@ export const GroupActions = observer(() => {
 export const TargetGroupDetailList = observer(() => {
   const { detailList } = api.store
   useEffect(() => {
-    detailList.setQuery()
+    detailList.setQuery('')
   }, [])
 
   if (api.store.openedGroup?.details.length === 0)

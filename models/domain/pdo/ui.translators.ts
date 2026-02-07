@@ -51,7 +51,7 @@ export const UiUnit = {
   [Unit.Countable]: 'шт',
 }
 
-export function uiUnit(unit?: Unit) {
+export function uiUnit(unit: Unit | null) {
   if (unit == null) return '-'
   return UiUnit[unit]
 }

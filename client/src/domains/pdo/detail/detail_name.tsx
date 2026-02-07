@@ -1,8 +1,9 @@
 /** @jsxImportSource @emotion/react */
+
+import type { SxProps } from '@mui/joy/styles/types'
 import { app_cache } from '@/domains/pdo/cache'
 import { Box, Link, observer, P, Row } from '@/lib/index'
 import { openPage, routeMap } from '@/lib/routes'
-import type { SxProps } from '@mui/joy/styles/types'
 import { capitalize } from '../shared/basic'
 
 interface Detail {
@@ -13,13 +14,18 @@ interface Detail {
 
 interface Props {
   detail: Detail
-  withGroupName?: boolean
-  disableLink?: boolean
+  with_group_name?: boolean
+  disable_link?: boolean
   sx?: SxProps
 }
 
 export const DetailName = observer(
-  ({ detail, withGroupName, disableLink, sx }: Props) => {
+  ({
+    detail,
+    with_group_name: withGroupName,
+    disable_link: disableLink,
+    sx,
+  }: Props) => {
     const content = (
       <Row gap={1} rowGap={0} flexWrap="wrap">
         <P sx={sx}>{capitalize(detail.name)}</P>

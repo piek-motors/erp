@@ -37,9 +37,9 @@ export class MaterialSt {
     return this.shapeState[shape]
   }
 
-  id?: number
-  label?: string
-  unit?: Unit
+  id: number | null = null
+  label: string = ''
+  unit: Unit | null = null
   set_unit(unit: Unit) {
     this.unit = unit
   }
@@ -48,7 +48,7 @@ export class MaterialSt {
     this.shape = shape
   }
 
-  alloy?: string
+  alloy: string = ''
   set_alloy(alloy: string) {
     this.alloy = alloy
   }
@@ -57,24 +57,24 @@ export class MaterialSt {
     return this.warehouse.on_hand_balance
   }
 
-  detailCount: number = 0
+  details_count: number = 0
   details_made_from_this_material: {
     id: number
     name: string
     group_id: number | null
   }[] = []
 
-  shortage_prediction_horizon_days?: number
-  set_shortage_orediction_horizon_days(v?: number) {
+  shortage_prediction_horizon_days: number | null = null
+  set_shortage_orediction_horizon_days(v: number | null) {
     this.shortage_prediction_horizon_days = v
   }
 
-  writeoff_stat?: {
+  writeoff_stat: {
     monthly?: [string, number][]
     quarterly?: [string, number][]
-  }
+  } | null = null
 
-  syncState(material: Material) {
+  sync_state(material: Material) {
     this.shape = material.shape
     this.get_shape_state(this.shape).sync(material)
   }

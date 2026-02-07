@@ -1,4 +1,5 @@
 /** @jsxImportSource @emotion/react */
+
 import { AccordionCard } from '@/components/accordion_card'
 import { ArrayJsonEditor } from '@/components/array-json-editor'
 import {
@@ -14,37 +15,34 @@ import { rpc } from '@/lib/deps'
 import {
   Box,
   InputLabled,
-  type InputLabledProps,
   Label,
   MinusIcon,
   MultilineInput,
-  observer,
+  P,
   PlusIcon,
   Row,
+  type InputLabledProps,
 } from '@/lib/index'
-import { Blank } from '@/server/domains/pdo/details_rpc'
+import type { Blank } from '@/server/domains/pdo/details_rpc'
 import {
   AccordionGroup,
-  Button,
   Divider,
   Grid,
   Stack,
-  StackProps,
+  type StackProps,
   type TypographySystem,
 } from '@mui/joy'
+import { observer } from 'mobx-react-lite'
 import type { ReactNode } from 'react'
 import { DetailAttachmentList } from './attachment/list'
-import type { DetailSt, DetailStProp } from './detail.state'
+import { Operation, type DetailSt, type DetailStProp } from './detail.state'
 import {
   DetailRequirementInput,
   MaterialRequirementInput,
 } from './detail_blank'
 
 export const DetailForm = observer(
-  ({
-    detail: d,
-    leftChildren,
-  }: DetailStProp & { leftChildren?: ReactNode }) => (
+  ({ detail, leftChildren }: DetailStProp & { leftChildren?: ReactNode }) => (
     <Grid container direction={{ xs: 'column', md: 'row' }} spacing={1}>
       <Grid xs={12} md={7}>
         <MultilineInput
@@ -52,38 +50,38 @@ export const DetailForm = observer(
           color="primary"
           label="Название со склада"
           onChange={e => {
-            d.setName(e.target.value)
+            detail.setName(e.target.value)
           }}
-          value={d.name}
+          value={detail.name}
         />
         <MultilineInput
           sx={{ width: '100%' }}
           label="Название чертежа"
+          value={detail.drawing_name}
           onChange={e => {
-            d.setDrawingName(e.target.value)
+            detail.set_drawing_name(e.target.value)
           }}
-          value={d.drawingName}
         />
         <Input
           label="Номер чертежа"
           onChange={v => {
-            d.setDrawingNumber(v)
+            detail.set_drawing_number(v)
             if (v.startsWith('ВЗИС')) {
               alert('Впишите конструкторский номер без приставки "ВЗИС"')
             }
           }}
-          value={d.drawingNumber}
+          value={detail.drawing_number}
         />
-        <DetailGroupInput detail={d} />
+        <DetailGroupInput detail={detail} />
         <Row alignItems={'end'}>
-          <StockLocationInput detail={d} />
-          <DetailRecommendedBatchSizeInput detail={d} />
+          <StockLocationInput detail={detail} />
+          <DetailRecommendedBatchSizeInput detail={detail} />
         </Row>
-        <DetailDescriptionInput detail={d} />
+        <DetailDescriptionInput detail={detail} />
         {leftChildren}
       </Grid>
       <Grid xs={12} md={5}>
-        <DetailAccordionGroup d={d} />
+        <DetailAccordionGroup d={detail} />
       </Grid>
     </Grid>
   ),
@@ -141,7 +139,7 @@ const DetailDescriptionInput = observer(({ detail }: { detail: DetailSt }) => (
     <TextEditor
       defaultValue={detail.description}
       onChange={content => {
-        detail.setDescription(content)
+        detail.set_description(content)
       }}
     />
   </Box>
@@ -151,9 +149,9 @@ const DetailRecommendedBatchSizeInput = observer(
   ({ detail }: { detail: DetailSt }) => (
     <NumberInput
       label="Рекоменд. размер партии"
-      value={detail.recommendedBatchSize}
+      value={detail.recommended_batch_size}
       onChange={v => {
-        detail.setRecommendedBatchSize(v)
+        detail.set_recommended_batch_size(v)
       }}
     />
   ),
@@ -162,8 +160,8 @@ const DetailRecommendedBatchSizeInput = observer(
 const StockLocationInput = observer(({ detail }: { detail: DetailSt }) => (
   <Input
     label="Адрес на складе"
-    value={detail.stockLocation}
-    onChange={v => detail.setStockLocation(v)}
+    value={detail.stock_location}
+    onChange={v => detail.set_stock_location(v)}
   />
 ))
 
@@ -190,7 +188,7 @@ const DetailGroupInput = observer(({ detail }: { detail: DetailSt }) => {
         options={groupOptions}
         value={selectedGroup}
         onChange={group => {
-          detail.setGroupId(group?.value || null)
+          detail.set_group_id(group?.value || null)
         }}
       />
     </Stack>
@@ -223,11 +221,29 @@ const BlankAttributesInput = observer(({ detail }: { detail: DetailSt }) => (
 const ProcessingRouteAccordion = observer(
   ({ detail }: { detail: DetailSt }) => {
     const dict = rpc.pdo.dict.operation_kinds
+
+    const openDict = () => {
+      dictManager.open({
+        ls: () =>
+          dict.ls.query().then(res => {
+            app_cache.details.set_dict_processing_operations(res)
+            return res
+          }),
+        add: operation => dict.add.mutate({ v: operation }),
+        rm: id => dict.rm.mutate({ id }),
+        onClick: entry => {
+          detail.processingRoute.add(new Operation(entry.id))
+        },
+      })
+    }
+
     return (
       <AccordionCard title="Маршрут" defaultExpanded>
         <Stack>
-          {detail.processingRoute.steps.map((op, idx) => (
+          {detail.processingRoute.operations.map((op, idx) => (
             <HoverReveal
+              gap={1}
+              noWrap
               key={op.id}
               alignSelf={'start'}
               hiddenComp={
@@ -235,30 +251,10 @@ const ProcessingRouteAccordion = observer(
               }
             >
               <Label>{idx + 1}</Label>
-              <Button
-                variant="plain"
-                color="neutral"
-                sx={{ fontWeight: 'normal', textAlign: 'left' }}
-                onClick={() =>
-                  dictManager.open({
-                    ls: () =>
-                      dict.ls.query().then(res => {
-                        app_cache.details.set_dict_processing_operations(res)
-                        return res
-                      }),
-                    add: operation => dict.add.mutate({ v: operation }),
-                    rm: id => dict.rm.mutate({ id }),
-                    onClick: operation => {
-                      op.setId(operation.id)
-                    },
-                  })
-                }
-              >
-                {op.name || 'Выбрать'}
-              </Button>
+              <P>{op.name}</P>
             </HoverReveal>
           ))}
-          <PlusIcon onClick={() => detail.processingRoute.addEmpty()} />
+          <PlusIcon onClick={() => openDict()} />
         </Stack>
       </AccordionCard>
     )

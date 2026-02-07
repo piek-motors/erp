@@ -6,11 +6,13 @@ import { makeAutoObservable } from 'mobx'
 
 export class MaterialCache {
   private materials: Material[] = []
-  setMaterials(materials: Material[]) {
-    this.materials = materials
-  }
   get(id: number): Material | undefined {
     return this.materials.find(material => material.id === id)
+  }
+  get_or_throw(id: number): Material {
+    const m = this.materials.find(material => material.id === id)
+    if (!m) throw Error(`material ${id} not found in cache`)
+    return m
   }
   getLabel(id: number): string | null {
     const material = this.get(id)
@@ -27,22 +29,15 @@ export class MaterialCache {
     }))
   }
   removeMaterial(material: Material) {
-    this.setMaterials(this.materials.filter(m => m.id !== material.id))
+    this.materials = this.materials.filter(m => m.id !== material.id)
   }
-  addMaterial(material: Material) {
-    this.setMaterials([...this.materials, material])
-  }
-  updateMaterial(material: Material) {
-    this.setMaterials(
-      this.materials.map(m => (m.id === material.id ? material : m)),
-    )
-  }
+
   constructor() {
     makeAutoObservable(this)
   }
   async invalidate() {
     const materials = await rpc.pdo.material.list.query()
     const decodedMaterials = matrixDecoder<Material>(materials)
-    this.setMaterials(decodedMaterials)
+    this.materials = decodedMaterials
   }
 }

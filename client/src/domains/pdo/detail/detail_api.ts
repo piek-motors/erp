@@ -1,10 +1,10 @@
+import { makeAutoObservable, runInAction } from 'mobx'
 import { Attachment } from '@/components/attachments/store'
 import { rpc } from '@/lib/rpc/rpc.client'
 import { LoadingController } from '@/lib/store/loading_controller'
 import { notifier } from '@/lib/store/notifier.store'
-import { makeAutoObservable } from 'mobx'
 import { app_cache } from '../cache'
-import { DetailSt } from './detail.state'
+import { DetailSt, LastProduction } from './detail.state'
 import { detailListStore } from './list/store'
 
 export class DetailApi {
@@ -17,24 +17,29 @@ export class DetailApi {
     return this.loader.run(async () => {
       const detail = new DetailSt()
       const res = await rpc.pdo.details.get.query({ id: detailId })
-      detail.init(res.detail)
-      detail.setLastManufacturingDate(
-        res.last_manufacturing?.date
-          ? new Date(res.last_manufacturing.date)
-          : undefined,
-      )
-      detail.setLastManufacturingQty(res.last_manufacturing?.qty)
-      detail.attachments.setFiles(
-        res.attachments.map(
-          a =>
-            new Attachment(
-              a.id ?? 0,
-              a.filename ?? '',
-              a.size ?? 0,
-              a.key ?? '',
-            ),
-        ),
-      )
+
+      runInAction(() => {
+        detail.init(res.detail)
+
+        if (res.last_manufacturing?.date) {
+          detail.last_production = new LastProduction(
+            new Date(res.last_manufacturing.date),
+            res.last_manufacturing.qty,
+          )
+        }
+
+        detail.attachments.setFiles(
+          res.attachments.map(
+            a =>
+              new Attachment(
+                a.id ?? 0,
+                a.filename ?? '',
+                a.size ?? 0,
+                a.key ?? '',
+              ),
+          ),
+        )
+      })
       return detail
     })
   }
@@ -61,7 +66,7 @@ export class DetailApi {
     try {
       await rpc.pdo.details.update.mutate(detail.payload)
       app_cache.details.update(detail)
-      detail.setUpdatedAt(new Date())
+      detail.set_updated_at(new Date())
       notifier.ok(`Деталь обновлена`)
       return detail
     } catch (e: any) {

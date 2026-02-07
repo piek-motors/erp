@@ -1,6 +1,6 @@
-import { rpc } from '@/lib/rpc/rpc.client'
 import { ReactRenderer } from '@tiptap/react'
 import tippy from 'tippy.js'
+import { rpc } from '@/lib/rpc/rpc.client'
 import { MentionSelectUser } from './mention-user-list'
 
 export type SuggestionItem = {

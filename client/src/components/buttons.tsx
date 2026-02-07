@@ -1,7 +1,7 @@
-import { UseIcon } from '@/lib/index'
 import type { Icon } from '@iconscout/react-unicons'
 import { IconButton, type IconButtonProps } from '@mui/joy'
 import { Link } from 'react-router'
+import { UseIcon } from '@/lib/index'
 
 export const ExtraSmallIconButton = (props: {
   icon: Icon

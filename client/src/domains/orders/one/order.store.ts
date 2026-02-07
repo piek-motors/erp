@@ -1,8 +1,8 @@
+import { makeAutoObservable, runInAction } from 'mobx'
+import { OrderItem, OrderStatus, Payment } from 'models'
 import { Attachment, AttachmentsStore } from '@/components/attachments/store'
 import type { UnpackedOrder } from '@/domains/orders/api'
 import { rpc } from '@/lib/rpc/rpc.client'
-import { makeAutoObservable } from 'mobx'
-import { OrderItem, OrderStatus, Payment } from 'models'
 import { CommentsStore } from './comments/store'
 import { PaymentStore } from './payments/store'
 import { PositionsStore } from './positions/store'
@@ -50,62 +50,53 @@ export class OrderStore {
 
   async loadOrder(orderId: number) {
     const order = await rpc.orders.get.query({ id: orderId })
-    this.setOrder({
-      ...order,
-      payments: [],
-      created_at: new Date(order.created_at),
-      shipping_date: order.shipping_date ? new Date(order.shipping_date) : null,
-      acceptance_date: order.acceptance_date
-        ? new Date(order.acceptance_date)
-        : null,
-      actual_shipping_date: order.actual_shipping_date
-        ? new Date(order.actual_shipping_date)
-        : null,
-      positions: [],
-      comments: [],
-      attachments: [],
+    runInAction(() => {
+      this.order = {
+        ...order,
+        payments: [],
+        created_at: new Date(order.created_at),
+        shipping_date: order.shipping_date
+          ? new Date(order.shipping_date)
+          : null,
+        acceptance_date: order.acceptance_date
+          ? new Date(order.acceptance_date)
+          : null,
+        actual_shipping_date: order.actual_shipping_date
+          ? new Date(order.actual_shipping_date)
+          : null,
+        positions: [],
+        comments: [],
+        attachments: [],
+      }
+      this.positions.items = order.positions.map(
+        p => new OrderItem(p.id, p.name, p.description, p.quantity),
+      )
+
+      this.payments.payments = order.payments.map(
+        p => new Payment(p.id, p.amount, new Date(p.date)),
+      )
+
+      this.comments.setComments(
+        order.comments.map(comment => ({
+          ...comment,
+          created_at: new Date(comment.created_at),
+          first_name: comment.first_name ?? '',
+          last_name: comment.last_name ?? '',
+        })),
+      )
+      this.attachments.setFiles(
+        order.attachments.map(
+          attachment =>
+            new Attachment(
+              attachment.id,
+              attachment.filename,
+              attachment.size,
+              attachment.key,
+            ),
+        ),
+      )
+      this.statment.applyState(order)
     })
-    this.positions.setItems(
-      order.positions.map(p => {
-        const item = new OrderItem({
-          id: p.id,
-          name: p.name,
-          description: p.description,
-          quantity: p.quantity,
-        })
-        return item
-      }),
-    )
-    this.payments.setPayments(
-      order.payments.map(
-        p =>
-          new Payment({
-            id: p.id,
-            amount: p.amount,
-            date: new Date(p.date),
-          }),
-      ),
-    )
-    this.comments.setComments(
-      order.comments.map(comment => ({
-        ...comment,
-        created_at: new Date(comment.created_at),
-        first_name: comment.first_name ?? '',
-        last_name: comment.last_name ?? '',
-      })),
-    )
-    this.attachments.setFiles(
-      order.attachments.map(
-        attachment =>
-          new Attachment(
-            attachment.id,
-            attachment.filename,
-            attachment.size,
-            attachment.key,
-          ),
-      ),
-    )
-    this.statment.applyState(order)
   }
 
   async update() {

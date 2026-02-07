@@ -1,18 +1,17 @@
 /** @jsxImportSource @emotion/react */
-import { P, Row } from '@/lib/index'
+
+import { P, Row, RowProps } from '@/lib/index'
 import { css } from '@emotion/react'
 import { UilLink } from '@iconscout/react-unicons'
-import type { StackProps } from '@mui/joy'
 import { ExtraSmallIconButton } from './buttons'
 
 // Generic abstract component for showing hidden content on hover
 interface HoverRevealProps {
-  children: React.ReactNode
   hiddenComp: React.ReactNode
   css?: any
 }
 
-export const HoverReveal = (props: StackProps & HoverRevealProps) => {
+export const HoverReveal = (props: RowProps & HoverRevealProps) => {
   const className = 'hover-reveal-hidden'
   return (
     <Row

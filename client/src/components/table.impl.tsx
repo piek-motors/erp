@@ -1,9 +1,10 @@
 /** @jsxImportSource @emotion/react */
-import { P } from '@/lib/index'
+
 import { css } from '@emotion/react'
 import { Table as MuiTable } from '@mui/joy'
 import type { SxProps } from '@mui/joy/styles/types'
 import { type Row, type TableOptions, useSortBy, useTable } from 'react-table'
+import { P } from '@/lib/index'
 
 type Props<T extends object> = TableOptions<T> & {
   onRowClick?: (row: T) => void

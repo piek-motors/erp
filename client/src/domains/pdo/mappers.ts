@@ -1,9 +1,9 @@
-import type { RouterOutput } from '@/server/lib/trpc'
 import {
   getMaterialConstructor,
   type Material,
   MaterialShapeAbstractionLayer,
 } from 'models'
+import type { RouterOutput } from '@/server/lib/trpc'
 
 type GetMaterialsOutput = RouterOutput['pdo']['material']['get']['material']
 

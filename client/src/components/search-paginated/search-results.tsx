@@ -1,6 +1,6 @@
-import { observer, P, Stack } from '@/lib/index'
 import { Box, Button } from '@mui/joy'
 import type { ReactNode } from 'react'
+import { observer, P, Stack } from '@/lib/index'
 import type { PaginatedSearchStore, SearchableItem } from './store'
 
 interface SearchResultsProps<T extends SearchableItem> {

@@ -1,26 +1,26 @@
+import { UilHistory } from '@iconscout/react-unicons'
+import { IconButton } from '@mui/joy'
+import {
+  OperationType,
+  type SupplyReason,
+  uiSupplyReason,
+  uiWriteoffReason,
+  type WriteoffReason,
+} from 'models'
+import type { Column } from 'react-table'
 import {
   Button,
   Label,
   Link,
   openPage,
-  routeMap,
   Row,
+  routeMap,
   UseIcon,
 } from '@/lib/index'
-import { UilHistory } from '@iconscout/react-unicons'
-import { IconButton } from '@mui/joy'
-import {
-  OperationType,
-  uiSupplyReason,
-  uiWriteoffReason,
-  type SupplyReason,
-  type WriteoffReason,
-} from 'models'
-import type { Column } from 'react-table'
 import { DetailName } from '../detail/detail_name'
 import { AdaptiveNumberFormatter } from '../shared/adaptive_number_formatter'
 import { value_with_unit } from '../shared/basic'
-import { operations_st, type Operation } from './list'
+import { type Operation, operations_st } from './list'
 import { OperationName } from './operation_name'
 
 const formatter = new AdaptiveNumberFormatter(2)
@@ -63,7 +63,7 @@ export const columns: Column<Operation>[] = [
             name: data.detail_name!,
             group_id: data.detail_group_id!,
           }}
-          withGroupName
+          with_group_name
         />
       )
     },

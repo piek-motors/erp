@@ -1,15 +1,16 @@
 /** @jsxImportSource @emotion/react */
+
+import { Box, Button } from '@mui/joy'
 import { ScrollableWindow } from '@/components/inputs'
 import { InModal } from '@/components/modal'
 import { DetailName } from '@/domains/pdo/detail/detail_name'
 import { useEscapeClose } from '@/hooks/use-escape-close'
 import { Loading, observer, P, Stack, useCallback, useState } from '@/lib/index'
-import { Box, Button } from '@mui/joy'
 import type { MaterialSt } from './state'
 
 export const DetailsMadeOfMaterialModal = observer(
   ({ m }: { m: MaterialSt }) => {
-    const count = m.detailCount > 0 ? `[${m.detailCount}]` : undefined
+    const count = m.details_count > 0 ? `[${m.details_count}]` : undefined
 
     const [modal, setModal] = useState(false)
     const handleClose = useCallback(() => {
@@ -44,7 +45,7 @@ export const DetailsMadeOfMaterialModal = observer(
             <Stack sx={{ overflowY: 'scroll' }} pb={5} p={1}>
               {m.details_made_from_this_material.map(each => (
                 <Box display={'flex'}>
-                  <DetailName detail={each} withGroupName />
+                  <DetailName detail={each} with_group_name />
                 </Box>
               ))}
             </Stack>

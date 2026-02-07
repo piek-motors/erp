@@ -19,7 +19,7 @@ export interface Dict<V extends DictEntry> {
   ls(): Promise<V[]>
   rm(id: number): Promise<void>
   add(v: V['v']): Promise<V>
-  onClick(V): void
+  onClick(V: DictEntry): void
 }
 
 class State {
@@ -28,8 +28,8 @@ class State {
   }
   readonly loader = new LoadingController()
 
-  search?: string
-  setSearch(s?: string) {
+  search: string = ''
+  setSearch(s: string) {
     this.search = s
   }
 
@@ -42,13 +42,13 @@ class State {
     this.modalOpen = v
   }
 
-  dict?: Dict<DictEntry>
-  setDict(d?: Dict<any>) {
+  dict: Dict<DictEntry> | null = null
+  setDict(d: Dict<DictEntry> | null) {
     this.dict = d
   }
 
-  newValue?: string
-  setNewValue(s?: string) {
+  newValue: string = ''
+  setNewValue(s: string) {
     this.newValue = s
   }
 
@@ -69,9 +69,9 @@ class State {
   }
 
   async close() {
-    this.search = undefined
+    this.search = ''
     this.setModalOpen(false)
-    this.setDict(undefined)
+    this.setDict(null)
   }
 
   async rm(id: number) {
@@ -92,11 +92,11 @@ class State {
     }
     notifier.ok(`В справочник добавлено значение ${this.newValue}`)
 
-    this.setNewValue(undefined)
-    this.setSearch(undefined)
+    this.setNewValue('')
+    this.setSearch('')
   }
 
-  async onClick(v) {
+  async onClick(v: DictEntry) {
     if (!this.dict) throw Error('dict is undefined')
     this.dict?.onClick(v)
     this.close()

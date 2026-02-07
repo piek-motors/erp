@@ -1,8 +1,8 @@
+import { makeAutoObservable, runInAction } from 'mobx'
 import { matrixDecoder } from '@/lib/rpc/matrix_decoder'
 import { rpc } from '@/lib/rpc/rpc.client'
 import { LoadingController } from '@/lib/store/loading_controller'
 import type { ListDetailsOutput } from '@/server/domains/pdo/details_rpc'
-import { makeAutoObservable, runInAction } from 'mobx'
 import { DetailSt } from '../detail/detail.state'
 
 const alphabet = 'АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ'.split('')
@@ -38,8 +38,7 @@ export class DetailCache {
     const arr = Array.from(index).filter(
       letter => letter && alphabet.includes(letter),
     )
-    arr.sort()
-    return arr
+    return arr.toSorted()
   }
 
   get universal_details() {

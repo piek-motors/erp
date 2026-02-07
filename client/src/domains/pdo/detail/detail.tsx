@@ -1,25 +1,28 @@
+import { Box, Stack } from '@mui/joy'
 import { MetalPageTitle, SaveAndDelete } from '@/domains/pdo/shared/basic'
 import {
+  ActionButton,
   Loading,
   observer,
   openPage,
   P,
-  routeMap,
   Row,
+  routeMap,
   useEffect,
   useNavigate,
   useParams,
   useState,
 } from '@/lib/index'
 import { fmtDate, fmtTimestamp } from '@/lib/utils/date_fmt'
-import { Box, Stack } from '@mui/joy'
 import { CreateManufacturingOrder } from '../orders/order_create'
-import { DetailSt, DetailStProp } from './detail.state'
+import {
+  DetailSt,
+  type DetailStProp,
+  type LastProduction,
+} from './detail.state'
 import { api } from './detail_api'
 import { DetailForm } from './detail_form'
 import { DetailWarehouseModal } from './warehouse/ui'
-
-import { ActionButton } from '@/lib/index'
 
 export const CreateDetailPage = observer(() => {
   const [detail] = useState(() => new DetailSt())
@@ -72,9 +75,8 @@ export const DetailPage = observer(() => {
 
       <Box pt={1}>
         <Metadata
-          updatedAt={detail.updatedAt}
-          lastManufacturingDate={detail.lastManufacturingDate}
-          lastManufacturingQty={detail.lastManufacturingQty}
+          updated_at={detail.updated_at}
+          last_production={detail.last_production}
         />
         <Save detail={detail} />
       </Box>
@@ -99,24 +101,23 @@ const Save = ({ detail }: DetailStProp) => {
 }
 
 function Metadata(props: {
-  updatedAt?: Date
-  lastManufacturingDate?: Date
-  lastManufacturingQty?: number
+  updated_at: Date | null
+  last_production: LastProduction | null
 }) {
   return (
     <Stack gap={0.5}>
-      {props.lastManufacturingDate && (
+      {props.last_production?.date && (
         <P level="body-xs" color="neutral" sx={{ whiteSpace: 'nowrap' }}>
           <b>Последнее производство:</b>{' '}
-          {fmtTimestamp(props.lastManufacturingDate)}
-          {props.lastManufacturingQty && (
-            <span> ({props.lastManufacturingQty} шт)</span>
+          {fmtTimestamp(props.last_production.date)}
+          {props.last_production.qty && (
+            <span> ({props.last_production.qty} шт)</span>
           )}
         </P>
       )}
-      {props.updatedAt && (
+      {props.updated_at && (
         <P level="body-xs" color="neutral" sx={{ whiteSpace: 'nowrap' }}>
-          <b>Обновлено:</b> {fmtDate(props.updatedAt)}
+          <b>Обновлено:</b> {fmtDate(props.updated_at)}
         </P>
       )}
     </Stack>

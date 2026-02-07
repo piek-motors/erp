@@ -1,8 +1,9 @@
 /** @jsxImportSource @emotion/react */
-import { TextEditor } from '@/domains/orders/one/comments/text-editor'
-import { Label, Stack } from '@/lib/index'
+
 import { css } from '@emotion/react'
 import { observer } from 'mobx-react-lite'
+import { TextEditor } from '@/domains/orders/one/comments/text-editor'
+import { Label, Stack } from '@/lib/index'
 
 export const border = '1px solid #7c7c7c'
 

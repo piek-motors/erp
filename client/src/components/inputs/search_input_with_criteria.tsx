@@ -1,7 +1,7 @@
-import { Row, UseIcon } from '@/lib'
 import { UilSearch } from '@iconscout/react-unicons'
 import { Input, Option, Select } from '@mui/joy'
-import { ColorPaletteProp, VariantProp } from '@mui/joy/styles/types'
+import type { ColorPaletteProp, VariantProp } from '@mui/joy/styles/types'
+import { Row, UseIcon } from '@/lib'
 
 interface SearchCriterionOption {
   value: string

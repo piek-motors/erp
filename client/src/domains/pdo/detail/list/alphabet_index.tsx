@@ -1,6 +1,6 @@
+import type { SxProps } from '@mui/joy/styles/types'
 import { app_cache } from '@/domains/pdo/cache'
 import { Button, observer, Stack } from '@/lib'
-import type { SxProps } from '@mui/joy/styles/types'
 import { detailListStore } from './store'
 
 export const AlphabetIndex = observer(({ sx }: { sx?: SxProps }) => {

@@ -1,7 +1,7 @@
-import { InModal } from '@/components/modal'
 import { Button } from '@mui/joy'
 import { observer } from 'mobx-react-lite'
 import { type ReactNode, useCallback, useState } from 'react'
+import { InModal } from '@/components/modal'
 import { useEscapeClose } from '../../../hooks/use-escape-close'
 import { OperationsTable, OperationsTitle } from './list'
 

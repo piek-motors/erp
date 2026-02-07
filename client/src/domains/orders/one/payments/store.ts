@@ -1,8 +1,8 @@
-import type { UnpackedOrder } from '@/domains/orders/api'
-import { rpc } from '@/lib/deps'
 import { makeAutoObservable } from 'mobx'
 import { Payment } from 'models'
 import moment from 'moment'
+import type { UnpackedOrder } from '@/domains/orders/api'
+import { rpc } from '@/lib/deps'
 
 export class PaymentStore {
   modalOpen = false
@@ -77,11 +77,7 @@ export class PaymentStore {
 
       this.setPayments([
         ...this.payments,
-        new Payment({
-          id,
-          amount: this.amount,
-          date: date.toDate(),
-        }),
+        new Payment(id, this.amount, date.toDate()),
       ])
 
       this.closeModal()

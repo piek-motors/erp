@@ -6,7 +6,7 @@ import { MaterialRequirement } from 'models'
 export type BlankData = Exclude<Blank['material'], undefined>['data']
 
 export class MaterialRequirementSt {
-  material_id!: number
+  material_id: number | null = null
   setMaterialId(materialId: number) {
     this.material_id = materialId
   }
@@ -17,6 +17,8 @@ export class MaterialRequirementSt {
   constructor(b?: Blank['material']) {
     this.data = {
       type: MaterialRequirement.Single,
+      blank_length: null,
+      gross_length: null,
     }
     if (b) {
       this.material_id = b.material_id
@@ -25,6 +27,7 @@ export class MaterialRequirementSt {
     makeAutoObservable(this)
   }
   get material() {
+    if (!this.material_id) return null
     return app_cache.materials.get(this.material_id)
   }
 }
@@ -34,8 +37,8 @@ export class DetailRequirementSt {
   setDetailId(id: number) {
     this.detailId = id
   }
-  qty?: number = 1
-  setQty(qty?: number) {
+  qty: number | null = 1
+  setQty(qty: number | null) {
     this.qty = qty
   }
   constructor(init: { detail_id?: number; qty?: number } = {}) {
@@ -87,11 +90,13 @@ export class DetailBlankSt {
         }))
         .filter(e => e.detail_id && e.qty),
 
-      material: this.material_requirement?.data &&
-        this.material_requirement?.material && {
-          material_id: this.material_requirement.material.id,
-          data: this.material_requirement.data,
-        },
+      material:
+        this.material_requirement?.data && this.material_requirement?.material
+          ? {
+              material_id: this.material_requirement.material.id,
+              data: this.material_requirement.data,
+            }
+          : undefined,
       attributes: this.attributes.filter(each => each.key),
     }
   }

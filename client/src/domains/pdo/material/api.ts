@@ -18,16 +18,17 @@ export class MaterialApi {
         rpc.pdo.material.get.query({ id }),
         api.get_details_made_from_material(id),
       ])
+
       const { material, writeoff_stat, detailCount } = res
       const m = new MaterialSt()
 
       runInAction(() => {
-        m.syncState(map.material.from_dto(material))
+        m.sync_state(map.material.from_dto(material))
         m.id = material.id
         m.label = material.label
         m.alloy = material.alloy || ''
         m.unit = material.unit
-        m.detailCount = Number(detailCount)
+        m.details_count = Number(detailCount)
         m.details_made_from_this_material = details
         m.writeoff_stat = {
           monthly: writeoff_stat.monthly,

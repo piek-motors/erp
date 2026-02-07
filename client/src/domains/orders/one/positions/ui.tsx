@@ -1,7 +1,8 @@
 /** @jsxImportSource @emotion/react */
-import { DeleteResourceButton, P, Row, UpdateResourceButton } from '@/lib/index'
+
 import { Box, Stack } from '@mui/joy'
 import { observer } from 'mobx-react-lite'
+import { DeleteResourceButton, P, Row, UpdateResourceButton } from '@/lib/index'
 import { orderStore } from '../order.store'
 import { orderPositionsItemStyle } from '../prints.styles'
 
@@ -32,7 +33,7 @@ export const PositionsList = observer(() => {
                 fontSize={'1.2rem'}
                 sx={{ whiteSpace: 'nowrap' }}
               >
-                {position.quantity} шт
+                {position.qty} шт
               </P>
               {orderStore.editMode && (
                 <Row gap={1}>

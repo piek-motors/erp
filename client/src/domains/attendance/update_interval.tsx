@@ -8,7 +8,7 @@ import {
   SaveIconButton,
   UseIcon,
 } from '@/lib/index'
-import {
+import type {
   Employee,
   Interval,
 } from '@/server/domains/attendance/report_generator'
@@ -38,29 +38,30 @@ class State {
   constructor() {
     makeAutoObservable(this)
   }
-  interval?: Interval
-  intervalDate?: Date | null
-  meta?: UpdateIntervalMetadata
+  interval: Interval | null = null
+  intervalDate: Date | null = null
+  meta: UpdateIntervalMetadata | null = null
 
-  open(meta: this['meta'], interval?: Interval) {
+  open(meta: this['meta'], interval: Interval | null = null) {
     // reset
-    this.ent = undefined
-    this.ext = undefined
+    this.ent = ''
+    this.ext = ''
 
     this.interval = interval
     this.meta = meta
-    this.intervalDate = meta?.date
+    this.intervalDate = meta?.date ?? null
+
     if (interval) {
       this.ent = fmtDateToHoursAndMinutes(interval.ent)
       this.ext = fmtDateToHoursAndMinutes(interval.ext)
     }
   }
 
-  ent?: string
+  ent: string = ''
   setEnt(v: string) {
     this.ent = v
   }
-  ext?: string
+  ext: string = ''
   setExt(v: string) {
     this.ext = v
   }
@@ -78,9 +79,9 @@ class State {
   }
 
   close() {
-    this.interval = undefined
-    this.meta = undefined
-    this.intervalDate = undefined
+    this.interval = null
+    this.meta = null
+    this.intervalDate = null
   }
 
   async save() {

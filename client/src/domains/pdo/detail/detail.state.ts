@@ -11,16 +11,11 @@ type DetailResponse = RouterOutput['pdo']['details']['get']['detail']
 type UpdateDetailRequest = RouterInput['pdo']['details']['update']
 
 export class Operation {
-  id: number | null
-  setId(id: number | null) {
-    this.id = id
-  }
-  constructor(id: number | null) {
+  constructor(readonly id: number) {
     makeAutoObservable(this)
-    this.id = id
   }
   get name(): string {
-    if (!this.id) return ''
+    if (!this.id) throw new Error('Operation id is not set')
     const name = app_cache.details.dict_processing_operaions.find(
       each => each.id === this.id,
     )?.v
@@ -29,22 +24,25 @@ export class Operation {
 }
 
 class ProcessingRoute {
-  steps: Operation[] = []
+  operations: Operation[] = []
   init(steps: Operation[]) {
-    this.steps = steps
+    this.operations = steps
   }
   constructor() {
     makeAutoObservable(this)
   }
-  addEmpty() {
-    this.steps = [...this.steps, new Operation(null)]
+  add(op: Operation) {
+    this.operations = [...this.operations, op]
   }
   remove(idx: number) {
-    if (idx < 0 || idx >= this.steps.length) return
-    this.steps = [...this.steps.slice(0, idx), ...this.steps.slice(idx + 1)]
+    if (idx < 0 || idx >= this.operations.length) return
+    this.operations = [
+      ...this.operations.slice(0, idx),
+      ...this.operations.slice(idx + 1),
+    ]
   }
   reset() {
-    this.steps = []
+    this.operations = []
   }
 }
 
@@ -53,6 +51,13 @@ export type BlankSpec = {
 }
 
 export type DetailStProp = { detail: DetailSt }
+
+export class LastProduction {
+  constructor(
+    readonly date: Date,
+    readonly qty: number,
+  ) {}
+}
 
 export class DetailSt {
   readonly attachments = new AttachmentsStore()
@@ -87,49 +92,36 @@ export class DetailSt {
   setName(name: string) {
     this.name = name
   }
-  description?: string
-  setDescription(description?: string | null) {
-    this.description = description ?? ''
+  description: string = ''
+  set_description(d: string) {
+    this.description = d ?? ''
   }
-  group_id?: number | null
-  setGroupId(groupId: number | null) {
+  group_id: number | null = null
+  set_group_id(groupId: number | null) {
     this.group_id = groupId
   }
-  drawingName?: string
-  setDrawingName(name: string) {
-    this.drawingName = name
+  drawing_name: string = ''
+  set_drawing_name(name: string) {
+    this.drawing_name = name
   }
-  drawingNumber?: string
-  setDrawingNumber(drawingNumber: string) {
-    this.drawingNumber = drawingNumber
+  drawing_number: string = ''
+  set_drawing_number(drawingNumber: string) {
+    this.drawing_number = drawingNumber
   }
-  stockLocation?: string | null
-  setStockLocation(v: string) {
-    this.stockLocation = v
+  stock_location: string | null = null
+  set_stock_location(v: string) {
+    this.stock_location = v
   }
-  updatedAt?: Date
-  setUpdatedAt(date: Date | undefined) {
-    this.updatedAt = date
+  updated_at: Date | null = null
+  set_updated_at(date: Date | null) {
+    this.updated_at = date
   }
-  lastManufacturingDate?: Date
-  setLastManufacturingDate(date: Date | undefined) {
-    this.lastManufacturingDate = date
-  }
-  lastManufacturingQty?: number
-  setLastManufacturingQty(qty: number | undefined) {
-    this.lastManufacturingQty = qty
-  }
-  recentlyAdded?: number
-  setRecentlyAdded(id: number) {
-    this.recentlyAdded = id
-  }
-  recentlyUpdated?: number
-  setRecentlyUpdated(id: number) {
-    this.recentlyUpdated = id
-  }
-  recommendedBatchSize?: number
-  setRecommendedBatchSize(size?: number) {
-    this.recommendedBatchSize = size
+
+  last_production: LastProduction | null = null
+
+  recommended_batch_size: number | null = null
+  set_recommended_batch_size(size: number | null) {
+    this.recommended_batch_size = size
   }
 
   constructor() {
@@ -137,13 +129,13 @@ export class DetailSt {
   }
 
   init(d: DetailResponse) {
-    this.setId(d.id!)
-    this.setName(d.name!)
-    this.setDrawingNumber(d.drawing_number!)
-    this.setGroupId(d.logical_group_id)
-    this.setDescription(d.description)
+    this.id = d.id!
+    this.name = d.name!
+    this.drawing_number = d.drawing_number!
+    this.group_id = d.logical_group_id
+    this.description = d.description || ''
     this.warehouse.setStock(d.on_hand_balance)
-    this.setUpdatedAt(d.updated_at ? new Date(d.updated_at) : undefined)
+    this.updated_at = d.updated_at ? new Date(d.updated_at) : null
     this.processingRoute.init(
       d.processing_route && d.processing_route.steps
         ? d.processing_route.steps.map(
@@ -151,29 +143,13 @@ export class DetailSt {
           )
         : [],
     )
-    this.setDrawingName(d.drawing_name ?? '')
+    this.drawing_name = d.drawing_name ?? ''
     if (d.blank) {
       this.blank.init(d.blank)
     }
-    this.setRecommendedBatchSize(d.recommended_batch_size ?? undefined)
-    this.stockLocation = d.stock_location
+    this.recommended_batch_size = d.recommended_batch_size ?? null
+    this.stock_location = d.stock_location
     return this
-  }
-
-  reset() {
-    this.id = 0
-    this.name = ''
-    this.description = ''
-    this.recentlyAdded = undefined
-    this.recentlyUpdated = undefined
-    this.group_id = undefined
-    this.drawingNumber = ''
-    this.updatedAt = undefined
-    this.lastManufacturingDate = undefined
-    this.lastManufacturingQty = undefined
-    this.drawingName = ''
-    this.processingRoute.reset()
-    this.blank.reset()
   }
 
   get payload(): UpdateDetailRequest {
@@ -181,17 +157,17 @@ export class DetailSt {
       id: this.id ?? 0,
       description: this.description ?? '',
       name: this.name ?? '',
-      drawing_number: this.drawingNumber ?? null,
+      drawing_number: this.drawing_number ?? null,
       logical_group_id: this.group_id ?? null,
-      recommended_batch_size: Number(this.recommendedBatchSize) ?? null,
+      recommended_batch_size: Number(this.recommended_batch_size) ?? null,
       processing_route: this.processingRoute
         ? {
-            steps: this.processingRoute.steps.map(s => s.id!) ?? null,
+            steps: this.processingRoute.operations.map(s => s.id!) ?? null,
           }
         : null,
-      drawing_name: this.drawingName ?? null,
+      drawing_name: this.drawing_name ?? null,
       blank: this.blank.payload,
-      stock_location: this.stockLocation || null,
+      stock_location: this.stock_location || null,
     }
   }
 }

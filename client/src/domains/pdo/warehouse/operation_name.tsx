@@ -1,6 +1,6 @@
+import { observer } from 'mobx-react-lite'
 import { DetailName } from '@/domains/pdo/detail/detail_name'
 import { MaterialName } from '@/domains/pdo/material/name'
-import { observer } from 'mobx-react-lite'
 
 interface Props {
   operation: {
@@ -28,7 +28,7 @@ export const OperationName = observer((props: Props) => {
           name: op.detail_name,
           group_id: op.detail_group_id!,
         }}
-        withGroupName
+        with_group_name
       />
     )
   }

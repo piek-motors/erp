@@ -1,15 +1,16 @@
 /** @jsxImportSource @emotion/react */
-import { Row, TooltipIconButton, UseIcon } from '@/lib/index'
+
 import { css } from '@emotion/react'
 import { UilBold, UilMessage, UilPaintTool } from '@iconscout/react-unicons'
 import { Box, Button, Sheet, type SheetProps, Stack } from '@mui/joy'
-import { PaddingProps } from '@mui/system'
+import type { PaddingProps } from '@mui/system'
 import Highlight from '@tiptap/extension-highlight'
 import Mention from '@tiptap/extension-mention'
 import Placeholder from '@tiptap/extension-placeholder'
 import { type Editor, EditorContent, useEditor } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import { useEffect, useState } from 'react'
+import { Row, TooltipIconButton, UseIcon } from '@/lib/index'
 import { suggestion } from './mention-suggestion'
 
 export const TextEditor = (props: {

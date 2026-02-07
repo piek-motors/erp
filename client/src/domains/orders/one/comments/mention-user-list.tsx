@@ -1,6 +1,6 @@
-import { P } from '@/lib/index'
 import { Sheet, Stack } from '@mui/joy'
 import { useEffect, useImperativeHandle, useState } from 'react'
+import { P } from '@/lib/index'
 import type { SuggestionItem } from './mention-suggestion'
 
 export const MentionSelectUser = (props: {

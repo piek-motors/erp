@@ -1,6 +1,6 @@
-import { InputLabled } from '@/lib/index'
 import { fmt } from 'models'
 import { useCallback, useMemo } from 'react'
+import { InputLabled } from '@/lib/index'
 
 interface Props {
   label?: string

@@ -1,6 +1,6 @@
-import { notifier } from '@/lib/store/notifier.store'
 import { Alert, Box, Container, Stack } from '@mui/joy'
 import { observer } from 'mobx-react-lite'
+import { notifier } from '@/lib/store/notifier.store'
 import { WebOnly } from './utilities/conditional-display'
 
 export const NotifierOverlay = observer(() => (

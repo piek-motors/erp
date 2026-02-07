@@ -1,12 +1,13 @@
 /** @jsxImportSource @emotion/react */
-import type { DetailSt } from '@/domains/pdo/detail/detail.state'
-import { capitalize } from '@/domains/pdo/shared/basic'
-import { Label, observer, P, Row } from '@/lib/index'
-import { fmtDate } from '@/lib/utils/date_fmt'
+
 import { css } from '@emotion/react'
 import { Box } from '@mui/joy'
 import { UiOrderPriority } from 'models'
 import type { ReactNode } from 'react'
+import type { DetailSt } from '@/domains/pdo/detail/detail.state'
+import { capitalize } from '@/domains/pdo/shared/basic'
+import { Label, observer, P, Row } from '@/lib/index'
+import { fmtDate } from '@/lib/utils/date_fmt'
 import { DetailBlank } from '../detail_blank'
 import type { OrderSt } from '../order.state'
 import { tableStyles } from './shared'
@@ -45,8 +46,8 @@ export const TechPassportTable = observer(({ order, detail }: Props) => {
             </td>
             <td>
               <L>Обозначение детали</L>
-              <P fontSize={14}>{detail.drawingNumber}</P>
-              <P fontSize={14}>{detail.drawingName}</P>
+              <P fontSize={14}>{detail.drawing_number}</P>
+              <P fontSize={14}>{detail.drawing_name}</P>
             </td>
             <td width={70}>Заказ № {emptySpace}</td>
             <td width={70}>

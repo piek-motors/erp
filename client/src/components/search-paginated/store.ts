@@ -1,6 +1,6 @@
-import { debounceMs } from '@/lib/constants'
 import { makeAutoObservable, reaction, runInAction } from 'mobx'
 import { sort_rus } from 'models'
+import { debounceMs } from '@/lib/constants'
 
 export interface SearchableItem {
   id?: number

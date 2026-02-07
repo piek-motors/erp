@@ -1,7 +1,7 @@
-import { authStore } from '@/lib/store/auth.store'
 import { observer } from 'mobx-react-lite'
 import { type ReactElement, useEffect, useState } from 'react'
 import { Navigate } from 'react-router'
+import { authStore } from '@/lib/store/auth.store'
 import { Loading } from '..'
 
 type IRequireAuthProps = {

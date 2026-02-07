@@ -1,6 +1,6 @@
-import { rpc } from '@/lib/rpc/rpc.client'
 import { makeAutoObservable } from 'mobx'
 import { SupplyReason, WriteoffReason } from 'models'
+import { rpc } from '@/lib/rpc/rpc.client'
 
 class Supply {
   constructor() {
@@ -28,7 +28,7 @@ export class DetailWarehouseStore {
   constructor() {
     makeAutoObservable(this)
   }
-  qty?: number
+  qty: number | null = null
   setQty(qty: number) {
     this.qty = qty
   }

@@ -1,8 +1,8 @@
-import { Row, UseIcon } from '@/lib/index'
 import { UilPalette } from '@iconscout/react-unicons'
 import { Box, Button, Menu } from '@mui/joy'
 import { observer } from 'mobx-react-lite'
 import { Color } from 'models'
+import { Row, UseIcon } from '@/lib/index'
 import { api } from './api'
 import type { Detail } from './group.store'
 

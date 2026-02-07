@@ -1,4 +1,8 @@
 /** @jsxImportSource @emotion/react */
+
+import { css } from '@emotion/react'
+import { UilEllipsisV, UilPen } from '@iconscout/react-unicons'
+import { Dropdown, IconButton, Menu, MenuButton, Stack } from '@mui/joy'
 import { WebOnly } from '@/components/utilities/conditional-display'
 import {
   DeleteResourceButton,
@@ -8,10 +12,7 @@ import {
   UseIcon,
   useState,
 } from '@/lib/index'
-import { css } from '@emotion/react'
-import { UilEllipsisV, UilPen } from '@iconscout/react-unicons'
-import { Dropdown, IconButton, Menu, MenuButton, Stack } from '@mui/joy'
-import { Attachment } from './store'
+import type { Attachment } from './store'
 
 export const AttachmentComponent = (props: {
   attachment: Attachment

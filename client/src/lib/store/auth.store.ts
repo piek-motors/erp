@@ -1,7 +1,7 @@
-import { API_URL } from '@/lib/axios'
 import axios from 'axios'
 import { makeAutoObservable } from 'mobx'
-import { UserRole } from 'models'
+import type { UserRole } from 'models'
+import { API_URL } from '@/lib/axios'
 import { AuthService } from '../services/auth.service'
 
 export class User {

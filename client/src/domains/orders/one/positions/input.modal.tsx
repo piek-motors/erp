@@ -1,8 +1,8 @@
-import { NumberInput } from '@/components/inputs/number_input'
-import { CancelButton, InputLabled, MultilineInput, P, Row } from '@/lib/index'
 import { Box, Button, Modal, ModalClose, ModalDialog } from '@mui/joy'
 import { observer } from 'mobx-react-lite'
 import { useEffect } from 'react'
+import { NumberInput } from '@/components/inputs/number_input'
+import { CancelButton, InputLabled, MultilineInput, P, Row } from '@/lib/index'
 import { orderStore } from '../order.store'
 
 export const InputPositionModal = observer(() => {

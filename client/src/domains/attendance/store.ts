@@ -1,8 +1,8 @@
+import { makeAutoObservable } from 'mobx'
 import { MonthSelectStore } from '@/components/inputs/month-select'
 import { rpc } from '@/lib/rpc/rpc.client'
 import { LoadingController } from '@/lib/store/loading_controller'
-import { AttendanceReport } from '@/server/domains/attendance/report_generator'
-import { makeAutoObservable } from 'mobx'
+import type { AttendanceReport } from '@/server/domains/attendance/report_generator'
 
 export class Report {
   constructor(
@@ -13,10 +13,10 @@ export class Report {
   ) {}
 }
 
-export class AttendanceStore {
+export class AttendanceSt {
   loader = new LoadingController()
   monthSelect = new MonthSelectStore()
-  report?: Report
+  report: Report | null = null
 
   timeRetention: number = 30
   setTimeRetention(timeRetention: string) {
@@ -50,8 +50,8 @@ export class AttendanceStore {
   }
 
   reset() {
-    this.report = undefined
+    this.report = null
   }
 }
 
-export const store = new AttendanceStore()
+export const store = new AttendanceSt()

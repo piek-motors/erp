@@ -1,9 +1,9 @@
-import { rpc } from '@/lib/deps'
-import { Label, Row } from '@/lib/index'
 import { Button } from '@mui/joy'
 import { makeAutoObservable } from 'mobx'
 import { observer } from 'mobx-react-lite'
 import { AbsenceReason } from 'models'
+import { rpc } from '@/lib/deps'
+import { Label, Row } from '@/lib/index'
 
 type OpenParams = {
   employeeId: number
@@ -21,7 +21,7 @@ class AbsenceReasonMenuState {
     this.isOpen = false
   }
 
-  openParams?: OpenParams
+  openParams: OpenParams | null = null
   open(params: OpenParams) {
     this.isOpen = true
     this.openParams = params

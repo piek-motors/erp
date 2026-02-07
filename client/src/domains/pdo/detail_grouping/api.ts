@@ -27,15 +27,9 @@ export class DetailGroupingApi {
       const details = matrixDecoder<DetailInTheGroup>(resp.details)
       this.store.openGroup({
         group: resp.group,
-        details: details.map(d => {
-          const detail = new Detail()
-          detail.id = d.id
-          detail.name = d.name
-          detail.drawing_number = d.drawing_number
-          detail.group_id = d.group_id
-          detail.colors = d.colors
-          return detail
-        }),
+        details: details.map(
+          d => new Detail(d.id, d.name, d.drawing_number, d.group_id, d.colors),
+        ),
       })
     })
   }
