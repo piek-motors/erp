@@ -56,7 +56,7 @@ type BlankAttributes = { key: string; value: any }[]
 export class DetailBlankSt {
   details_requirement: DetailRequirementSt[] = []
   material_requirement: MaterialRequirementSt | null = null
-  set_material_requirement(c?: MaterialRequirementSt | null) {
+  set_material_requirement(c: MaterialRequirementSt | null) {
     this.material_requirement = c || null
   }
 

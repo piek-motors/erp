@@ -1,4 +1,3 @@
-import { OperationType, WriteoffReason } from 'models'
 import type { MaterialStatDataContainer } from '#root/ioc/index.js'
 import { logger } from '#root/ioc/log.js'
 import { Day } from '#root/lib/constants.js'
@@ -8,6 +7,7 @@ import {
   startOfUTCMonth,
 } from '#root/lib/time.js'
 import { db } from '#root/sdk.js'
+import { OperationType, WriteoffReason } from 'models'
 import type { Job } from '../../../lib/jobs_runner.js'
 import {
   MonthStrategy,
@@ -58,7 +58,7 @@ export class MaterialSpendAggJob implements Job {
 
       const is_writeoff =
         op.operation_type == OperationType.Writeoff &&
-        op.reason == WriteoffReason.UsedInProduction
+        op.reason == WriteoffReason.ProductionUse
 
       if (is_writeoff) {
         writeoff_agg.add(op.material_id, op.timestamp, Number(op.qty))

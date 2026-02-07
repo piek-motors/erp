@@ -9,11 +9,11 @@ import type {
 import type {
   AbsenceReason,
   Color,
-  ManufacturingOrderStatus,
   MaterialShape,
   OperationType,
   OrderPriority,
   OrderStatus,
+  ProductionOrderStatus,
   SupplyReason,
   Unit,
   UserRole,
@@ -145,7 +145,7 @@ export namespace DB {
   }
   export interface ProductionOrderTable {
     id: GeneratedAlways<number>
-    status: ManufacturingOrderStatus
+    status: ProductionOrderStatus
     detail_id: number
     qty: number
     output_qty: number | null

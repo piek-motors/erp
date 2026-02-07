@@ -1,12 +1,12 @@
+import { rpc } from '@/lib/rpc/rpc.client'
 import { makeAutoObservable } from 'mobx'
 import { SupplyReason, WriteoffReason } from 'models'
-import { rpc } from '@/lib/rpc/rpc.client'
 
 class Supply {
   constructor() {
     makeAutoObservable(this)
   }
-  reason: SupplyReason = SupplyReason.FromSupplier
+  reason: SupplyReason = SupplyReason.Purchase
   setReason(reason: SupplyReason) {
     this.reason = reason
   }
@@ -16,7 +16,7 @@ class Writeoff {
   constructor() {
     makeAutoObservable(this)
   }
-  reason: WriteoffReason = WriteoffReason.UsedInProduction
+  reason: WriteoffReason = WriteoffReason.ProductionUse
   setReason(reason: WriteoffReason) {
     this.reason = reason
   }

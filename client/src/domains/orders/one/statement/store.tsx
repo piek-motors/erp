@@ -1,6 +1,3 @@
-import { makeAutoObservable } from 'mobx'
-import { fmt, OrderStatus } from 'models'
-import moment from 'moment'
 import {
   type Layout,
   PrintOnly,
@@ -10,6 +7,9 @@ import { Textarea } from '@/lib/index'
 import { fmtDate } from '@/lib/utils/date_fmt'
 import type { OrderUpdateInput } from '@/server/domains/orders/orders_rpc'
 import type { RouterInput, RouterOutput } from '@/server/lib/trpc'
+import { makeAutoObservable } from 'mobx'
+import { fmt, OrderStatus } from 'models'
+import moment from 'moment'
 import { SuggestionsStore } from '../suggestions.store'
 
 export enum InputTypes {
@@ -38,10 +38,8 @@ export type ColumnDefinition = {
 type Order = RouterOutput['orders']['get']
 
 export class StatementStore {
-  suggestions = new SuggestionsStore()
-
-  order?: Order | null
-
+  readonly suggestions = new SuggestionsStore()
+  order: Order | null = null
   status: OrderStatus = OrderStatus.PreOrder
   invoiceNumber = ''
   shippingDate: string | null = null
@@ -79,11 +77,11 @@ export class StatementStore {
   setManagerId(value: string) {
     this.managerId = value
   }
-  setContractor(value?: string) {
-    this.contractor = value || ''
+  setContractor(value: string) {
+    this.contractor = value
   }
-  setCity(value?: string) {
-    this.city = value || ''
+  setCity(value: string) {
+    this.city = value
   }
   setTotalAmount(value: string) {
     this.totalAmount = value

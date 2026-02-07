@@ -2,12 +2,7 @@ import { WebOnly } from '@/components/utilities/conditional-display'
 import { InfoLabel, Label, Row } from '@/lib/index'
 import { Box, Divider, Stack } from '@mui/joy'
 import { observer } from 'mobx-react-lite'
-import {
-  fmt,
-  ManufacturingOrderStatus,
-  MaterialRequirement,
-  uiUnit,
-} from 'models'
+import { fmt, MaterialRequirement, ProductionOrderStatus, uiUnit } from 'models'
 import { app_cache } from '../cache'
 import type {
   DetailBlankSt,
@@ -141,8 +136,8 @@ export const CalcMaterialRemainings = observer(
   ({ requirement: cost, order }: CalcMaterialRemainingsProps) => {
     if (
       ![
-        ManufacturingOrderStatus.Preparation,
-        ManufacturingOrderStatus.Waiting,
+        ProductionOrderStatus.Preparation,
+        ProductionOrderStatus.Waiting,
       ].includes(order.status)
     )
       return

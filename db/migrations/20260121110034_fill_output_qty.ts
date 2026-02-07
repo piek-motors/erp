@@ -1,4 +1,4 @@
-import { ManufacturingOrderStatus } from 'models'
+import { ProductionOrderStatus } from 'models'
 import type { KDB } from '../schema'
 
 export async function up(db: KDB): Promise<void> {
@@ -19,8 +19,8 @@ export async function up(db: KDB): Promise<void> {
     .select(['id', 'qty'])
     .where('output_qty', 'is', null)
     .where('status', 'in', [
-      ManufacturingOrderStatus.Archived,
-      ManufacturingOrderStatus.Production,
+      ProductionOrderStatus.Archived,
+      ProductionOrderStatus.Production,
     ])
     .execute()
 

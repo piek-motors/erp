@@ -37,7 +37,7 @@ class OperationsSt {
   }
 
   async revert(operation_id: number) {
-    const msg = `Вы хотите отменить операцию?`
+    const msg = `Вы хотите откатить операцию?`
     if (window.confirm(msg)) {
       await rpc.pdo.operations.revert.mutate({ id: operation_id })
       await this.load()

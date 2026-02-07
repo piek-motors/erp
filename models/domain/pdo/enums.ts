@@ -1,14 +1,49 @@
+/**
+ * Reasons why inventory quantity is decreased.
+ * Used for write-offs, consumption, and other outbound stock movements.
+ */
 export enum WriteoffReason {
-  UsedInProduction = 0,
-  Defective = 1,
-  InventoryAdjustment = 2,
-  Sell = 3,
+  /**
+   * Materials or goods were consumed during the production process
+   * and are no longer available in stock.
+   */
+  ProductionUse = 0,
+  /**
+   * Items were written off due to defects, damage, or loss
+   * making them unsuitable for further use or sale.
+   */
+  DefectLoss = 1,
+  /**
+   * Manual or system-driven correction of stock levels
+   * caused by inventory count discrepancies or accounting adjustments.
+   */
+  StockCorrection = 2,
+  /**
+   * Items were sold to a customer and physically left the inventory.
+   */
+  Sale = 3,
 }
 
+/**
+ * Reasons why inventory quantity is increased.
+ * Used for inbound stock movements.
+ */
 export enum SupplyReason {
-  FromSupplier = 0,
-  InternalProduction = 1,
-  InventoryAdjustment = 2,
+  /**
+   * Items were received from an external supplier
+   * as a result of a purchase or delivery.
+   */
+  Purchase = 0,
+  /**
+   * Finished or semi-finished goods produced internally
+   * and added to inventory as production output.
+   */
+  ProductionOutput = 1,
+  /**
+   * Manual or system-driven correction of stock levels
+   * caused by inventory count discrepancies or accounting adjustments.
+   */
+  StockCorrection = 2,
 }
 
 export enum MaterialShape {
@@ -38,7 +73,7 @@ export enum OperationType {
   Supply = 1,
 }
 
-export enum ManufacturingOrderStatus {
+export enum ProductionOrderStatus {
   Waiting = 0,
   Preparation = 1,
   Production = 2,

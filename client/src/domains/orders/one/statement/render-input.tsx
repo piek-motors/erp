@@ -112,7 +112,7 @@ export const RenderInput = observer(
             value={value ? { label: value, value } : null}
             freeSolo
             onChange={newValue => {
-              orderStore.statment.setContractor(newValue?.value)
+              orderStore.statment.setContractor(newValue?.value || '')
             }}
           />
         )
@@ -125,7 +125,7 @@ export const RenderInput = observer(
             value={value ? { label: value, value } : null}
             freeSolo
             onChange={newValue => {
-              orderStore.statment.setCity(newValue?.value)
+              orderStore.statment.setCity(newValue?.value || '')
             }}
           />
         )

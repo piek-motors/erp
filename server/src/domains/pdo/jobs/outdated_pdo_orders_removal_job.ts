@@ -1,8 +1,8 @@
-import { ManufacturingOrderStatus } from 'models'
 import { logger } from '#root/ioc/log.js'
 import { Day } from '#root/lib/constants.js'
 import type { Job } from '#root/lib/jobs_runner.js'
 import { db } from '#root/sdk.js'
+import { ProductionOrderStatus } from 'models'
 
 const OutdatedManufacturingOrderDeletionAfter = 7 * Day
 
@@ -19,8 +19,8 @@ export class OutdatedPdoOrdersRemovalJob implements Job {
       .deleteFrom('pdo.orders')
       .where('created_at', '<', cutoffDate)
       .where('status', 'in', [
-        ManufacturingOrderStatus.Waiting,
-        ManufacturingOrderStatus.Preparation,
+        ProductionOrderStatus.Waiting,
+        ProductionOrderStatus.Preparation,
       ])
       .returning('id')
       .execute()

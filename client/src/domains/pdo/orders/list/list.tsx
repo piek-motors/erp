@@ -1,8 +1,3 @@
-import { Tab, TabList, TabPanel, Tabs } from '@mui/joy'
-import {
-  ManufacturingOrderStatus,
-  ManufacturingOrderStatus as OrderStatus,
-} from 'models'
 import { ScrollableWindow, Search } from '@/components/inputs'
 import { SearchWithCriteria } from '@/components/inputs/search_input_with_criteria'
 import { Table } from '@/components/table.impl'
@@ -13,13 +8,18 @@ import {
   Label,
   Loading,
   openPage,
-  Row,
   routeMap,
+  Row,
   Stack,
   useEffect,
   useNavigate,
 } from '@/lib/index'
 import type { ListOrdersOutput } from '@/server/domains/pdo/orders_rpc'
+import { Tab, TabList, TabPanel, Tabs } from '@mui/joy'
+import {
+  ProductionOrderStatus as OrderStatus,
+  ProductionOrderStatus,
+} from 'models'
 import { getColumns } from './columns'
 import { archive_search, OrderSearchCriteria, s } from './store'
 
@@ -116,7 +116,7 @@ export const ManufacturingList = observer(() => {
   const tabs = getTabConfig(s.filtered, onRowClick)
 
   const search =
-    s.tab === ManufacturingOrderStatus.Archived ? (
+    s.tab === ProductionOrderStatus.Archived ? (
       <Search
         size="sm"
         color="primary"

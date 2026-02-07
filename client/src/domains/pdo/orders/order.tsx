@@ -27,7 +27,7 @@ import { fmtDate, timeDeltaDays } from '@/lib/utils/date_fmt'
 import { Box, Chip, type ChipProps, Divider } from '@mui/joy'
 import {
   OrderPriority,
-  ManufacturingOrderStatus as OrderStatus,
+  ProductionOrderStatus as OrderStatus,
   uiManufacturingOrderStatus,
   UiOrderPriority,
 } from 'models'

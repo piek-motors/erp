@@ -1,5 +1,3 @@
-import { Divider } from '@mui/joy'
-import { Unit } from 'models'
 import { NumberInput } from '@/components/inputs/number_input'
 import { AdaptiveNumberFormatter } from '@/domains/pdo/shared/adaptive_number_formatter'
 import { value_with_unit } from '@/domains/pdo/shared/basic'
@@ -16,6 +14,8 @@ import { OperationsListModal } from '@/domains/pdo/warehouse/modals'
 import { modalState } from '@/domains/pdo/warehouse/modals.store'
 import { ActionButton, Box, Label, observer, P, Row } from '@/lib/index'
 import { notifier } from '@/lib/store/notifier.store'
+import { Divider } from '@mui/joy'
+import { SupplyReason, Unit, WriteoffReason } from 'models'
 import type { DetailSt, DetailStProp } from '../detail.state'
 
 const formatter = new AdaptiveNumberFormatter(0)
@@ -69,6 +69,12 @@ export const DetailWarehouseModal = observer(({ detail }: DetailStProp) => (
         detail={detail}
         reasonComponent={
           <WriteoffReasonSelect
+            reasons={[
+              WriteoffReason.ProductionUse,
+              WriteoffReason.StockCorrection,
+              WriteoffReason.DefectLoss,
+              WriteoffReason.Sale,
+            ]}
             reason={detail.warehouse.writeoff.reason}
             setReason={reason => detail.warehouse.writeoff.setReason(reason)}
           />
@@ -90,6 +96,11 @@ export const DetailWarehouseModal = observer(({ detail }: DetailStProp) => (
         detail={detail}
         reasonComponent={
           <SupplyReasonSelect
+            reasons={[
+              SupplyReason.Purchase,
+              SupplyReason.ProductionOutput,
+              SupplyReason.StockCorrection,
+            ]}
             reason={detail.warehouse.supply.reason}
             setReason={reason => detail.warehouse.supply.setReason(reason)}
           />

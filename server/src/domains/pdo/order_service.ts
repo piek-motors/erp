@@ -1,12 +1,12 @@
+import { type IDB, TRPCError } from '#root/sdk.js'
 import type { DB } from 'db'
 import type { Selectable } from 'kysely'
 import {
-  ManufacturingOrderStatus,
   MaterialRequirement,
   OrderPriority,
+  ProductionOrderStatus,
   WriteoffReason,
 } from 'models'
-import { type IDB, TRPCError } from '#root/sdk.js'
 import { Warehouse } from './warehouse_service.js'
 
 type MaterialWriteoff = {
@@ -78,8 +78,8 @@ export class OrderService {
       .selectFrom('pdo.orders')
       .where('detail_id', '=', detail_id)
       .where('status', 'in', [
-        ManufacturingOrderStatus.Waiting,
-        ManufacturingOrderStatus.Preparation,
+        ProductionOrderStatus.Waiting,
+        ProductionOrderStatus.Preparation,
       ])
       .select('id')
       .executeTakeFirst()
@@ -98,7 +98,7 @@ export class OrderService {
         material_writeoffs: {
           writeoffs: [],
         },
-        status: ManufacturingOrderStatus.Waiting,
+        status: ProductionOrderStatus.Waiting,
         priority: OrderPriority.Normal,
       })
       .returningAll()
@@ -109,7 +109,7 @@ export class OrderService {
     orderId: number,
   ): Promise<Selectable<DB.ProductionOrderTable>> {
     const order = await this.getOrder(orderId)
-    if (order.status !== ManufacturingOrderStatus.Waiting) {
+    if (order.status !== ProductionOrderStatus.Waiting) {
       throw new ErrForbiddenStatusTransition(
         `Manufacturing with id ${orderId} not waiting`,
       )
@@ -117,11 +117,11 @@ export class OrderService {
 
     await this.trx
       .updateTable('pdo.orders')
-      .set({ status: ManufacturingOrderStatus.Preparation })
+      .set({ status: ProductionOrderStatus.Preparation })
       .where('id', '=', orderId)
       .execute()
 
-    order.status = ManufacturingOrderStatus.Preparation
+    order.status = ProductionOrderStatus.Preparation
     return order
   }
 
@@ -172,7 +172,7 @@ export class OrderService {
       .set({
         qty,
         started_at: new Date(),
-        status: ManufacturingOrderStatus.Production,
+        status: ProductionOrderStatus.Production,
       })
       .where('id', '=', order_id)
       .execute()
@@ -184,7 +184,7 @@ export class OrderService {
     const order = await this.trx
       .selectFrom('pdo.orders')
       .where('detail_id', '=', detail_id)
-      .where('status', '=', ManufacturingOrderStatus.Production)
+      .where('status', '=', ProductionOrderStatus.Production)
       .select(['id', 'qty'])
       .executeTakeFirst()
 
@@ -201,7 +201,7 @@ export class OrderService {
       .updateTable('pdo.orders')
       .set({
         finished_at: new Date(),
-        status: ManufacturingOrderStatus.Archived,
+        status: ProductionOrderStatus.Archived,
       })
       .where('id', '=', orderId)
       .returningAll()
@@ -223,7 +223,7 @@ export class OrderService {
 
   async deleteOrder(manufacturingId: number): Promise<void> {
     const manufacturing = await this.getOrder(manufacturingId)
-    if (manufacturing.status === ManufacturingOrderStatus.Archived) {
+    if (manufacturing.status === ProductionOrderStatus.Archived) {
       throw new TRPCError({
         code: 'BAD_REQUEST',
         message: 'Cannot delete completed order',
@@ -262,7 +262,7 @@ export class OrderService {
       .subtractMaterial(
         material.material_id,
         material_deduction,
-        WriteoffReason.UsedInProduction,
+        WriteoffReason.ProductionUse,
         order.detail_id,
         order.id,
       )

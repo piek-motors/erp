@@ -1,16 +1,17 @@
+import { Label } from '@/lib/index'
 import { Button, Stack, ToggleButtonGroup } from '@mui/joy'
 import { observer } from 'mobx-react-lite'
 import {
   SupplyReason,
   UiSupplyReason,
-  UiWriteoffReason,
   uiSupplyReason,
+  UiWriteoffReason,
   uiWriteoffReason,
   WriteoffReason,
 } from 'models'
-import { Label } from '@/lib/index'
 
 interface WriteoffReasonSelectProps {
+  reasons: WriteoffReason[]
   reason: WriteoffReason
   setReason: (reason: WriteoffReason) => void
 }
@@ -18,8 +19,11 @@ interface WriteoffReasonSelectProps {
 export const WriteoffReasonSelect = observer(
   (props: WriteoffReasonSelectProps) => (
     <ReasonSelect
-      label={'Тип списания'}
-      enum={WriteoffReason}
+      label={'Причина'}
+      enum={props.reasons.reduce(
+        (acc, reason) => ({ ...acc, [reason]: reason }),
+        {},
+      )}
       enumTranslationEnum={UiWriteoffReason}
       value={{
         label: uiWriteoffReason(props.reason),
@@ -31,14 +35,18 @@ export const WriteoffReasonSelect = observer(
 )
 
 interface Props {
+  reasons: SupplyReason[]
   reason: SupplyReason
   setReason: (reason: SupplyReason) => void
 }
 
 export const SupplyReasonSelect = observer((props: Props) => (
   <ReasonSelect
-    label={'Тип поставки'}
-    enum={SupplyReason}
+    label={'Причина'}
+    enum={props.reasons.reduce(
+      (acc, reason) => ({ ...acc, [reason]: reason }),
+      {},
+    )}
     enumTranslationEnum={UiSupplyReason}
     value={{
       label: uiSupplyReason(props.reason),

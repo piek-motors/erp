@@ -1,12 +1,12 @@
-import { WriteoffReason } from 'models'
 import { makeAutoObservable, rpc } from '@/lib/deps'
+import { WriteoffReason } from 'models'
 
 export class MaterialWriteoffSt {
   length = ''
   setLength(length: string) {
     this.length = length
   }
-  reason: WriteoffReason = WriteoffReason.UsedInProduction
+  reason: WriteoffReason = WriteoffReason.ProductionUse
   setReason(reason: WriteoffReason) {
     this.reason = reason
   }

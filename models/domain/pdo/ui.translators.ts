@@ -1,8 +1,8 @@
 import {
-  ManufacturingOrderStatus,
   MaterialRequirement,
   MaterialShape,
   OrderPriority,
+  ProductionOrderStatus,
   SupplyReason,
   Unit,
   WriteoffReason,
@@ -10,10 +10,10 @@ import {
 } from './enums'
 
 export const UiWriteoffReason = {
-  [WriteoffReason.UsedInProduction]: 'Производство',
-  [WriteoffReason.Defective]: 'Брак',
-  [WriteoffReason.InventoryAdjustment]: 'Инвентаризация',
-  [WriteoffReason.Sell]: 'Продажа',
+  [WriteoffReason.ProductionUse]: 'Производство',
+  [WriteoffReason.DefectLoss]: 'Брак',
+  [WriteoffReason.StockCorrection]: 'Коррект.',
+  [WriteoffReason.Sale]: 'Продажа',
 }
 export function uiWriteoffReason(reason?: WriteoffReason | null) {
   if (reason == null) return '-'
@@ -21,10 +21,11 @@ export function uiWriteoffReason(reason?: WriteoffReason | null) {
 }
 
 export const UiSupplyReason = {
-  [SupplyReason.FromSupplier]: 'Поставка',
-  [SupplyReason.InternalProduction]: 'Собств. производство',
-  [SupplyReason.InventoryAdjustment]: 'Инвентаризация',
+  [SupplyReason.Purchase]: 'Покупка',
+  [SupplyReason.ProductionOutput]: 'Собств. производство',
+  [SupplyReason.StockCorrection]: 'Коррект.',
 }
+
 export function uiSupplyReason(reason?: SupplyReason | null) {
   if (reason == null) return '-'
   return UiSupplyReason[reason]
@@ -66,13 +67,13 @@ export function uiWriteoffType(type: WriteoffType) {
 }
 
 export const UiManufacturingOrderStatus = {
-  [ManufacturingOrderStatus.Waiting]: 'Ожидание',
-  [ManufacturingOrderStatus.Preparation]: 'Подготовка',
-  [ManufacturingOrderStatus.Production]: 'Производство',
-  [ManufacturingOrderStatus.Archived]: 'Архив',
+  [ProductionOrderStatus.Waiting]: 'Ожидание',
+  [ProductionOrderStatus.Preparation]: 'Подготовка',
+  [ProductionOrderStatus.Production]: 'Производство',
+  [ProductionOrderStatus.Archived]: 'Архив',
 }
 
-export function uiManufacturingOrderStatus(status: ManufacturingOrderStatus) {
+export function uiManufacturingOrderStatus(status: ProductionOrderStatus) {
   return UiManufacturingOrderStatus[status]
 }
 
