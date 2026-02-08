@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use chrono::FixedOffset;
+use chrono::{Duration, FixedOffset};
 use napi_derive::napi;
 use ndarray::Array1;
 use serde::Deserialize;
@@ -28,7 +28,7 @@ pub struct Event {
 #[derive(Debug, Clone)]
 pub struct EmployeeEvent {
   pub id: u32,
-  pub t: i64,
+  pub t: i64, // unix timestamp (seconds)
 }
 
 pub trait TimeSeries {
@@ -78,6 +78,41 @@ pub fn group_events(events: &Vec<Event>) -> GroupedUserEvents {
 
   for events in result.values_mut() {
     events.sort_by_key(|e| e.t);
+  }
+
+  result
+}
+
+/// Time window used to consider two events as duplicates.
+const DUPLICATION_WINDOW: i64 = Duration::minutes(30).num_seconds();
+
+/// Removes near-duplicate events for a single user.
+///
+/// # Preconditions
+/// - `events` must be sorted by `t` ascending
+///
+/// # Semantics
+/// - The earliest event is kept
+/// - Subsequent events within `DUPLICATION_WINDOW` are dropped
+pub fn suppress_bursts(events: Vec<EmployeeEvent>) -> Vec<EmployeeEvent> {
+  debug_assert!(
+    events.windows(2).all(|w| w[0].t <= w[1].t),
+    "invalidate_duplicates expects events sorted by t"
+  );
+
+  let mut result = Vec::with_capacity(events.len());
+  let mut last_t: Option<i64> = None;
+
+  for event in events {
+    match last_t {
+      Some(prev) if event.t - prev <= DUPLICATION_WINDOW => {
+        // duplicate → skip
+      }
+      _ => {
+        last_t = Some(event.t);
+        result.push(event);
+      }
+    }
   }
 
   result
@@ -272,5 +307,45 @@ mod tests {
     assert_eq!(delta_to_observation(60 * 60 - 1), Observation::Short);
     assert_eq!(delta_to_observation(60 * 60), Observation::Medium);
     assert_eq!(delta_to_observation(24 * 60 * 60 - 1), Observation::Long);
+  }
+
+  #[test]
+  fn it_suppress_bursts() {
+    let window = DUPLICATION_WINDOW;
+    // Events timeline (seconds)
+    // Only the earliest event in each window is kept
+    let events = vec![
+      EmployeeEvent { id: 1, t: 1000 }, // keep: first event
+      EmployeeEvent {
+        id: 2,
+        t: 1000 + window - 10,
+      }, // drop: inside first window
+      EmployeeEvent {
+        id: 3,
+        t: 1000 + window,
+      }, // drop: boundary of first window
+      EmployeeEvent {
+        id: 4,
+        t: 1000 + window + 1,
+      }, // keep: first event outside first window
+      EmployeeEvent {
+        id: 5,
+        t: 1000 + window + 10,
+      }, // drop: inside second window
+      EmployeeEvent {
+        id: 6,
+        t: 1000 + 2 * window + 2,
+      }, // keep: first event outside second window
+    ];
+    let result = suppress_bursts(events);
+    let kept_times: Vec<i64> = result.iter().map(|e| e.t).collect();
+    assert_eq!(
+      kept_times,
+      vec![
+        1000,                  // first window
+        1000 + window + 1,     // second window
+        1000 + 2 * window + 2, // third window
+      ]
+    );
   }
 }

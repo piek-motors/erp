@@ -1,17 +1,23 @@
-import { runHiddenMarkovModel } from 'rust'
 import { logger } from '#root/ioc/log.js'
 import { Day } from '#root/lib/constants.js'
 import type { Job } from '#root/lib/jobs_runner.js'
-import { db } from '#root/sdk.js'
+import { DB, db } from '#root/sdk.js'
+import { runHiddenMarkovModel } from 'rust'
 
 export class AttendanceEventPairingJob implements Job {
   async run(): Promise<void> {
-    // TODO: remove where
+    const cutoff_date = new Date(Date.now() - 60 * Day)
+
+    if (process.env.NODE_ENV != 'development') {
+      return
+    }
+
     const events = await db
       .selectFrom('attendance.events')
       .selectAll()
-      .where('card', '=', '10996559')
+      .where('timestamp', '>', cutoff_date)
       .execute()
+
     logger.info(`Selected ${events.length} employess events for consolidation`)
 
     try {
@@ -19,14 +25,32 @@ export class AttendanceEventPairingJob implements Job {
         events.map(e => ({ ...e, timestamp: e.timestamp.toUTCString() })),
       )
 
-      // empl_intervals.forEach(empl => {
-      // 	logger.info(`Intervals for employee ${empl.card}:`)
-      // 	empl.shifts.forEach(interval => {
-      // 		logger.info(
-      // 			`${[interval.entry.datetime.slice(0, 16), interval.exit?.datetime.slice(0, 16)].join(' - ')}`,
-      // 		)
-      // 	})
-      // })
+      await db.deleteFrom('attendance.intervals').execute()
+
+      const res = await db
+        .insertInto('attendance.intervals')
+        .values(
+          empl_intervals.flatMap(each => {
+            const card = each.card
+            if (!card || card == '0') return []
+            return each.shifts.map(
+              s =>
+                ({
+                  card,
+                  database: '',
+                  ent: new Date(s.entry.datetime),
+                  ent_event_id: s.entry.id,
+                  ext: s.exit ? new Date(s.exit.datetime) : null,
+                  ext_event_id: s.exit?.id ?? null,
+                  updated_manually: null,
+                }) satisfies DB.AttendanceIntervalTable,
+            )
+          }),
+        )
+        .onConflict(oc => oc.doNothing())
+        .executeTakeFirst()
+
+      logger.info(`Inserted ${res.numInsertedOrUpdatedRows} intervals`)
     } catch (error) {
       logger.error(error, 'Hidden markov model failed')
     }

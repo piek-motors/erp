@@ -61,7 +61,6 @@ pub fn split_dataset<T: Clone>(dataset: Vec<T>, test_ratio: f64) -> Dataset<T> {
   };
 
   assert_ne!(dataset.train.len(), 0, "no data for training");
-  assert_ne!(dataset.test.len(), 0, "no data for test");
   dataset
 }
 

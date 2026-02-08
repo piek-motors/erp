@@ -1,15 +1,15 @@
 // npx tsx --test ./src/domains/attendance/hmm_create_dataset.test.ts
 
-import { describe, it } from 'node:test'
-import { writeFileSync } from 'fs'
 import { db } from '#root/sdk.js'
+import { writeFileSync } from 'fs'
+import { describe, it } from 'node:test'
 import { endOfUTCMonth, startOfUTCMonth } from '../../lib/time.js'
 
 const DELIMETER = '\t'
 
 const SELECT = {
-  name: 'Александр',
-  lastname: 'Терентьев',
+  name: 'Евгений',
+  lastname: 'Иванов',
   start: startOfUTCMonth(new Date(2026, 1 - 1)),
 }
 

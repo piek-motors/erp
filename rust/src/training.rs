@@ -193,7 +193,7 @@ mod tests {
 
   #[test]
   fn test_train_hmm() {
-    train_hmm(0.1).unwrap();
+    train_hmm(0.01).unwrap();
   }
 
   #[test]

@@ -4,7 +4,7 @@ use napi_derive::napi;
 
 use crate::{
   intervaling::{self, LabeledEvent},
-  observation::{self, events_to_observations, Event},
+  observation::{self, events_to_observations, suppress_bursts, Event},
   state::State,
   time,
   training::Weights,
@@ -42,6 +42,7 @@ pub fn infer_work_intervals(events: &Vec<Event>) -> Result<Vec<EmployeeShifts>, 
       // Need at least 2 events to calculate deltas
       continue;
     }
+    let events = suppress_bursts(events);
 
     let observations = &events_to_observations(&events);
     let states = model
@@ -90,4 +91,61 @@ pub fn infer_work_intervals(events: &Vec<Event>) -> Result<Vec<EmployeeShifts>, 
   }
 
   Ok(result)
+}
+
+#[cfg(test)]
+mod tests {
+  use super::*;
+  use crate::dataset;
+  use std::path::PathBuf;
+
+  #[test]
+  fn test_infer_work_intervals_from_dataset_file() {
+    let dataset_path = PathBuf::from("./dataset/1-2026_8170321.tsv");
+    let labeled_events = dataset::load_dataset(&dataset_path);
+
+    let events: Vec<Event> = labeled_events
+      .iter()
+      .map(|labeled| {
+        // Convert Unix timestamp back to RFC2822 format for parsing
+        if let Some(dt) = time::parse_unix(labeled.t) {
+          Event {
+            id: labeled.id,
+            card: "unknown".to_string(),
+            timestamp: dt.to_rfc2822(),
+          }
+        } else {
+          panic!("Invalid timestamp");
+        }
+      })
+      .collect();
+
+    let result = infer_work_intervals(&events);
+
+    assert!(result.is_ok(), "Inference should succeed");
+    let shifts = result.unwrap();
+    assert!(!shifts.is_empty(), "Should have at least one employee");
+
+    if let Some(employee) = shifts.first() {
+      println!("Employee: {}", employee.card);
+      let mut current_date = String::new();
+      for shift in &employee.shifts {
+        let entry_date = shift.entry.datetime.split('T').next().unwrap_or("");
+        if entry_date != current_date {
+          current_date = entry_date.to_string();
+          println!("\n {}", current_date);
+        }
+        println!(
+          "  -> {} (id: {})",
+          &shift.entry.datetime[0..16],
+          shift.entry.id
+        );
+        if let Some(exit) = &shift.exit {
+          println!("  <- {} (id: {})", &exit.datetime[0..16], exit.id);
+        } else {
+          println!("  <-  (ongoing)");
+        }
+      }
+    }
+  }
 }

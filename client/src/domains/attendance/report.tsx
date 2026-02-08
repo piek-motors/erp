@@ -1,9 +1,10 @@
+import { Box, Label, Loading, observer, P, Sheet, useState } from '@/lib'
+import { Hour } from '@/lib/constants'
+import { createDateAsUTC } from '@/lib/utils/date_fmt'
+import type { Employee } from '@/server/domains/attendance/report_generator'
 import { type BoxProps, Stack, Tooltip } from '@mui/joy'
 import moment from 'moment'
 import type { Column } from 'react-table'
-import { Box, Label, Loading, observer, P, Sheet, useState } from '@/lib'
-import { createDateAsUTC } from '@/lib/utils/date_fmt'
-import type { Employee } from '@/server/domains/attendance/report_generator'
 import { AbsenceLabels } from './absence'
 import { type Report, store } from './store'
 import { Table } from './table'
@@ -113,14 +114,8 @@ const ReportCell = observer(
               )}
             </>
           ))}
-          <Box>
-            {!!data.total_dur && (
-              <Time sx={{ fontWeight: 600, color: 'primary.500' }}>
-                {moment(data.total_dur * 1000)
-                  .utcOffset(0, false)
-                  .format('H:mm')}
-              </Time>
-            )}
+          <Box textAlign={'center'}>
+            {!!data.total_dur && <ShiftDuration total_dur={data.total_dur} />}
           </Box>
           {props.report.isFull && (
             <UpdateIntervalButton
@@ -134,6 +129,12 @@ const ReportCell = observer(
     )
   },
 )
+const ShiftDuration = (props: { total_dur: number }) => {
+  let dur_ms = props.total_dur * 1000
+  const value =
+    dur_ms == 8 * Hour ? '8' : moment(dur_ms).utcOffset(0, false).format('H:mm')
+  return <Time sx={{ fontWeight: 600, color: 'primary.500' }}>{value}</Time>
+}
 
 const Time = (props: { children: React.ReactNode; sx?: BoxProps }) => (
   <Box sx={{ ...props.sx, whiteSpace: 'nowrap', fontSize: '0.86rem' }}>
