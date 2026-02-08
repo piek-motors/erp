@@ -5,23 +5,23 @@ const SingleMaterialRequirement = z.object({
   type: z.literal(MaterialRequirement.Single),
   /** Gross length: Includes all waste (saw kerf/cut width,
    * clamping margins, and end-trimming). */
-  gross_length: z.number().nullable(),
+  gross_length: z.number().nullish(),
   /** Blank length: The actual size of the cut piece
    * before further machining/processing. */
-  blank_length: z.number().nullable(),
+  blank_length: z.number().nullish(),
 })
 
 const BatchMaterialRequirement = z.object({
   type: z.literal(MaterialRequirement.Batch),
   /** Full length of the raw stock */
-  stock_length: z.number().nullable(),
+  stock_length: z.number().nullish(),
   /** Number of blanks produced from one stock length */
-  yield_per_stock: z.number().nullable(),
+  yield_per_stock: z.number().nullish(),
 })
 
 const CountableMaterialRequirement = z.object({
   type: z.literal(MaterialRequirement.Countable),
-  count: z.int().nullable(),
+  count: z.int().nullish(),
 })
 
 const BlankMaterialRequirement = z.object({

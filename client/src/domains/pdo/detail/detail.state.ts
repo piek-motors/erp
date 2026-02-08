@@ -31,13 +31,17 @@ class ProcessingRoute {
   constructor() {
     makeAutoObservable(this)
   }
-  add(op: Operation) {
-    this.operations = [...this.operations, op]
+  add(id: number) {
+    this.operations = [...this.operations, new Operation(id)]
   }
   remove(idx: number) {
+    this.operations = this.operations.filter((_, i) => i !== idx)
+  }
+  update(idx: number, id: number) {
     if (idx < 0 || idx >= this.operations.length) return
     this.operations = [
       ...this.operations.slice(0, idx),
+      new Operation(id),
       ...this.operations.slice(idx + 1),
     ]
   }

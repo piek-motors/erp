@@ -1,11 +1,3 @@
-import { UilMinus } from '@iconscout/react-unicons'
-import { IconButton, Stack } from '@mui/joy'
-import {
-  MaterialRequirement,
-  UiMaterialRequirement,
-  Unit,
-  uiUnit,
-} from 'models'
 import { NumberInput } from '@/components/inputs/number_input'
 import { EnumSelect } from '@/components/select'
 import { app_cache } from '@/domains/pdo/cache'
@@ -18,6 +10,14 @@ import {
   UseIcon,
   useState,
 } from '@/lib/index'
+import { UilMinus } from '@iconscout/react-unicons'
+import { IconButton, Stack } from '@mui/joy'
+import {
+  MaterialRequirement,
+  UiMaterialRequirement,
+  uiUnit,
+  Unit,
+} from 'models'
 import type { DetailSt, DetailStProp } from './detail.state'
 import { MaterialSelect } from './detail_form'
 import { DetailName } from './detail_name'
@@ -130,7 +130,7 @@ const SingleMaterialRequirement = observer((props: DetailStProp) => {
       <NumberInput
         label="Расход"
         unit={uiUnit(material.unit)}
-        value={materialCost?.data.gross_length}
+        value={materialCost?.data.gross_length ?? null}
         onChange={v => {
           materialCost.set_data({
             type,
@@ -142,7 +142,7 @@ const SingleMaterialRequirement = observer((props: DetailStProp) => {
       <NumberInput
         label="Длина заготовки"
         unit={uiUnit(material?.unit)}
-        value={materialCost?.data.blank_length}
+        value={materialCost?.data.blank_length ?? null}
         onChange={v => {
           materialCost.set_data({
             type,
@@ -173,7 +173,7 @@ const BatchMaterialRequirement = observer((props: DetailStProp) => {
       <NumberInput
         label="Длина прутка"
         unit={uiUnit(material.unit)}
-        value={material_requirement?.data.stock_length}
+        value={material_requirement?.data.stock_length ?? null}
         onChange={v => {
           material_requirement.set_data({
             type,
@@ -185,7 +185,7 @@ const BatchMaterialRequirement = observer((props: DetailStProp) => {
       <NumberInput
         label="Выход с прутка"
         unit={uiUnit(Unit.Countable)}
-        value={material_requirement?.data.yield_per_stock}
+        value={material_requirement?.data.yield_per_stock ?? null}
         onChange={v => {
           material_requirement.set_data({
             type,
@@ -207,7 +207,7 @@ const CountableMaterialRequirement = observer((props: DetailStProp) => {
     <NumberInput
       label="Кол-во"
       unit={uiUnit(Unit.Countable)}
-      value={materialCost.data.count}
+      value={materialCost.data.count ?? null}
       onChange={count => {
         materialCost.set_data({
           type,

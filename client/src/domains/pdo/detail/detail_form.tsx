@@ -24,6 +24,7 @@ import {
   type InputLabledProps,
 } from '@/lib/index'
 import type { Blank } from '@/server/domains/pdo/details_rpc'
+import { DictEntry } from '@/server/lib/create_dict_router'
 import {
   AccordionGroup,
   Divider,
@@ -35,7 +36,7 @@ import {
 import { observer } from 'mobx-react-lite'
 import type { ReactNode } from 'react'
 import { DetailAttachmentList } from './attachment/list'
-import { Operation, type DetailSt, type DetailStProp } from './detail.state'
+import { type DetailSt, type DetailStProp } from './detail.state'
 import {
   DetailRequirementInput,
   MaterialRequirementInput,
@@ -222,7 +223,7 @@ const ProcessingRouteAccordion = observer(
   ({ detail }: { detail: DetailSt }) => {
     const dict = rpc.pdo.dict.operation_kinds
 
-    const openDict = () => {
+    const openDict = (onClick: (entry: DictEntry) => void) => {
       dictManager.open({
         ls: () =>
           dict.ls.query().then(res => {
@@ -231,9 +232,7 @@ const ProcessingRouteAccordion = observer(
           }),
         add: operation => dict.add.mutate({ v: operation }),
         rm: id => dict.rm.mutate({ id }),
-        onClick: entry => {
-          detail.processingRoute.add(new Operation(entry.id))
-        },
+        onClick,
       })
     }
 
@@ -251,10 +250,22 @@ const ProcessingRouteAccordion = observer(
               }
             >
               <Label>{idx + 1}</Label>
-              <P>{op.name}</P>
+              <P
+                onClick={() =>
+                  openDict(entry =>
+                    detail.processingRoute.update(idx, entry.id),
+                  )
+                }
+              >
+                {op.name}
+              </P>
             </HoverReveal>
           ))}
-          <PlusIcon onClick={() => openDict()} />
+          <PlusIcon
+            onClick={() =>
+              openDict(entry => detail.processingRoute.add(entry.id))
+            }
+          />
         </Stack>
       </AccordionCard>
     )
