@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 
-import type { DetailStProp, Operation } from '@/domains/pdo/detail/detail.state'
+import type { DetailStProp, WorkflowTask } from '@/domains/pdo/detail/detail.state'
 import { Label } from '@/lib/index'
 import { css } from '@emotion/react'
 import { Stack } from '@mui/joy'
@@ -8,7 +8,7 @@ import { observer } from 'mobx-react-lite'
 import { tableStyles } from './shared'
 
 type Props = {
-  operations: Operation[]
+  operations: WorkflowTask[]
 }
 
 const qtyInpW = 50
@@ -16,7 +16,7 @@ const signW = 100
 const dateW = 80
 
 export const ProductionRoute = observer(({ detail }: DetailStProp) => {
-  const steps = detail.processingRoute.operations
+  const steps = detail.workflow.tasks
   if (steps.length === 0) return null
   return (
     <Stack>

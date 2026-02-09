@@ -1,7 +1,3 @@
-import { BlankSchema, type DB } from 'db'
-import { type Selectable, sql } from 'kysely'
-import { SupplyReason, Unit, WriteoffReason } from 'models'
-import { z } from 'zod'
 import { Warehouse } from '#root/domains/pdo/warehouse_service.js'
 import { logger } from '#root/ioc/log.js'
 import { matrixEncoder } from '#root/lib/matrix_encoder.js'
@@ -13,6 +9,10 @@ import {
   Scope,
   TRPCError,
 } from '#root/sdk.js'
+import { BlankSchema, DetailWorkFlowSchema, type DB } from 'db'
+import { sql, type Selectable } from 'kysely'
+import { SupplyReason, Unit, WriteoffReason } from 'models'
+import { z } from 'zod'
 
 const isDetailPertCodeUniqueError = (e: Error) => {
   return e.message.includes(
@@ -25,28 +25,7 @@ const ErrDetailPartCodeUnique = new TRPCError({
   message: 'Деталь с таким конструкторским кодом уже существует',
 })
 
-const ProcessingRouteSchema = z.object({
-  steps: z.array(z.number()),
-})
-
-// const BlankSpecSchema = z.object({
-// 	arr: z.array(
-// 		z.object({
-// 			key: z.string(),
-// 			value: z.any(),
-// 		}),
-// 	),
-// })
-
-// const BlankSchema = z.object({
-// 	details: z.array(
-// 		z.object({
-// 			detail_id: z.number(),
-// 			qty: z.number(),
-// 		}),
-// 	),
-// 	material: z.tuple([z.number(), z.number()]).nullable(),
-// })
+export type DetailWorkflow = DB.DetailWorkflow
 
 const DetailSchema = z.object({
   name: z.string().min(5, 'Название должно быть не менее 5 символов'),
@@ -54,8 +33,7 @@ const DetailSchema = z.object({
   drawing_number: z.string().nullable(),
   drawing_name: z.string().nullable(),
   logical_group_id: z.number().nullable(),
-  // blank_spec: BlankSpecSchema.nullable(), // TODO: rename to blank.params
-  processing_route: ProcessingRouteSchema.nullable(),
+  workflow: DetailWorkFlowSchema.nullable(),
   blank: BlankSchema.nullable(),
   stock_location: z.string().nullable(),
   recommended_batch_size: z.number().nullable(),
@@ -70,7 +48,7 @@ export interface ListDetailsOutput {
 }
 
 export type SelectableDetail = Selectable<DB.DetailTable>
-export type Blank = DB.Blank
+export type Blank = DB.DetailBlank
 
 export const details = router({
   get: procedure
@@ -114,9 +92,9 @@ export const details = router({
         attachments,
         last_manufacturing: lastManufacturing
           ? {
-              date: lastManufacturing.finished_at,
-              qty: lastManufacturing.qty,
-            }
+            date: lastManufacturing.finished_at,
+            qty: lastManufacturing.qty,
+          }
           : null,
       }
     }),

@@ -152,14 +152,14 @@ const OrderStatusChip = ({ status }: { status: OrderStatus }) => {
 const ProductionSteps = observer(
   ({ detail, order }: DetailStProp & OrderStProp) => {
     if (
-      detail.processingRoute.operations.length === 0 ||
+      detail.workflow.tasks.length === 0 ||
       order.status == OrderStatus.Archived
     )
       return null
     return (
       <Stack>
         <Label label="Этапы обработки" />
-        {detail.processingRoute.operations.map((operation, operation_index) => {
+        {detail.workflow.tasks.map((operation, operation_index) => {
           const current = order.currentOperation === operation_index
           const timedelta =
             current &&
@@ -293,17 +293,17 @@ const QuantityInput = observer(
 
     const mode = isProduction
       ? {
-          label: 'Выпуск',
-          initialQty: order.outputQty,
-          save: (qty: number) => order.setOutputQty(qty),
-          notification: 'Выпуск установлен',
-        }
+        label: 'Выпуск',
+        initialQty: order.outputQty,
+        save: (qty: number) => order.setOutputQty(qty),
+        notification: 'Выпуск установлен',
+      }
       : {
-          label: 'Кол-во',
-          initialQty: order.qty,
-          save: (qty: number) => order.setQty(qty),
-          notification: 'Кол-во установлено',
-        }
+        label: 'Кол-во',
+        initialQty: order.qty,
+        save: (qty: number) => order.setQty(qty),
+        notification: 'Кол-во установлено',
+      }
 
     const [qty, setQty] = useState<number | null>(mode.initialQty)
 

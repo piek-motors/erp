@@ -7,7 +7,7 @@ import {
   Unit,
   WriteoffReason,
   WriteoffType,
-} from './enums'
+} from './enums.js'
 
 export const UiWriteoffReason = {
   [WriteoffReason.ProductionUse]: 'Производство',

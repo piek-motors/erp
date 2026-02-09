@@ -1,5 +1,5 @@
-import { MaterialShape, Unit } from './enums'
-import { uiMaterialShape, uiUnit } from './ui.translators'
+import { MaterialShape, Unit } from './enums.js'
+import { uiMaterialShape, uiUnit } from './ui.translators.js'
 
 export abstract class Material {
   readonly id: number

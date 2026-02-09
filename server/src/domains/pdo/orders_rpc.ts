@@ -54,7 +54,7 @@ const base_query = db
   .select([
     'd.name as detail_name',
     'd.logical_group_id as group_id',
-    'd.processing_route',
+    'd.workflow',
   ])
 
 export const orders = router({
@@ -119,9 +119,9 @@ export const orders = router({
       }, {})
 
     const result = orders.map(o => {
-      const current_op_id =
+      const current_operation =
         o.current_operation != null
-          ? o.processing_route?.steps.at(o.current_operation)
+          ? o.workflow?.workflow?.at(o.current_operation)
           : null
 
       const duplicated_order_id =
@@ -131,7 +131,8 @@ export const orders = router({
       return {
         ...o,
         current_operation:
-          (current_op_id != null && operationsMap[current_op_id]) || null,
+          (current_operation != null && operationsMap[current_operation[0]]) ||
+          null,
         duplicated: duplicated_order_id || null,
         ...dates_formatter(o),
         started_at: o.started_at?.valueOf() ?? null,

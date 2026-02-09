@@ -1,2 +1,2 @@
-export * as fmt from './fmt'
-export * from './sorting'
+export * as fmt from './fmt.js'
+export * from './sorting.js'

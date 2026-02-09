@@ -6,7 +6,7 @@ import {
   Pipe,
   RoundBar,
   SquareBar,
-} from '../materials'
+} from '../materials.js'
 import type {
   ArbitraryShapeData,
   HexagonBarShapeData,
@@ -14,7 +14,7 @@ import type {
   PipeShapeData,
   RoundBarShapeData,
   SquareBarShapeData,
-} from './material-shape'
+} from './material-shape.js'
 
 export class MaterialShapeAbstractionLayer {
   static exportShapeData(

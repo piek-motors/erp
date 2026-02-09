@@ -1,5 +1,5 @@
 import { ProductionOrderStatus } from 'models'
-import type { KDB } from '../schema'
+import type { KDB } from '../schema.js'
 
 export async function up(db: KDB): Promise<void> {
   await db.schema

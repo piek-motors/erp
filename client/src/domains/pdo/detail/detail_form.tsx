@@ -92,7 +92,7 @@ export const DetailAccordionGroup = observer(({ d }: { d: DetailSt }) => (
   <AccordionGroup>
     <DetailAttachmentInput detail={d} />
     <BlankAttributesInput detail={d} />
-    <ProcessingRouteAccordion detail={d} />
+    <WorkflowAccordion detail={d} />
   </AccordionGroup>
 ))
 
@@ -113,9 +113,9 @@ export const MaterialSelect = observer(
         value={
           value
             ? {
-                label: app_cache.materials.getLabel(value) || '',
-                value,
-              }
+              label: app_cache.materials.getLabel(value) || '',
+              value,
+            }
             : null
         }
         onChange={newValue => {
@@ -219,7 +219,7 @@ const BlankAttributesInput = observer(({ detail }: { detail: DetailSt }) => (
   </AccordionCard>
 ))
 
-const ProcessingRouteAccordion = observer(
+const WorkflowAccordion = observer(
   ({ detail }: { detail: DetailSt }) => {
     const dict = rpc.pdo.dict.operation_kinds
 
@@ -239,21 +239,21 @@ const ProcessingRouteAccordion = observer(
     return (
       <AccordionCard title="Маршрут" defaultExpanded>
         <Stack>
-          {detail.processingRoute.operations.map((op, idx) => (
+          {detail.workflow.tasks.map((op, idx) => (
             <HoverReveal
               gap={1}
               noWrap
               key={op.id}
               alignSelf={'start'}
               hiddenComp={
-                <MinusIcon onClick={() => detail.processingRoute.remove(idx)} />
+                <MinusIcon onClick={() => detail.workflow.remove(idx)} />
               }
             >
               <Label>{idx + 1}</Label>
               <P
                 onClick={() =>
                   openDict(entry =>
-                    detail.processingRoute.update(idx, entry.id),
+                    detail.workflow.update(idx, entry.id),
                   )
                 }
               >
@@ -263,7 +263,7 @@ const ProcessingRouteAccordion = observer(
           ))}
           <PlusIcon
             onClick={() =>
-              openDict(entry => detail.processingRoute.add(entry.id))
+              openDict(entry => detail.workflow.add(entry.id))
             }
           />
         </Stack>

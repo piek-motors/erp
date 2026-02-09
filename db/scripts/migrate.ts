@@ -1,19 +1,12 @@
-import dotenv from 'dotenv'
-import path from 'path'
-
-const err = dotenv.config({ path: '../.env' })
-if (err.error) {
-  throw err.error
-}
-
-import { promises as fs } from 'node:fs'
 import { Command } from 'commander'
 import {
   FileMigrationProvider,
   type MigrationResultSet,
   Migrator,
 } from 'kysely'
-import { connect } from '../connect'
+import { promises as fs } from 'node:fs'
+import path from 'path'
+import { connect } from '../connect.js'
 
 const program = new Command()
   .option('-r, --revert', 'Revert migrations')
@@ -35,7 +28,7 @@ async function migrateToLatest() {
     provider: new FileMigrationProvider({
       fs,
       path,
-      migrationFolder: path.join(__dirname, '../migrations'),
+      migrationFolder: path.join(import.meta.dirname, '../migrations'),
     }),
   })
 

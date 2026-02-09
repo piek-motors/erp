@@ -24,7 +24,7 @@ type MaterialWriteoff = {
  * @returns The total amount of raw material to decrease (in units of material accounting)
  */
 export function calc_material_deduction(
-  requirement: DB.Blank['material'],
+  requirement: DB.DetailBlank['material'],
   quantity_to_produce: number,
 ): number {
   if (!requirement) return 0

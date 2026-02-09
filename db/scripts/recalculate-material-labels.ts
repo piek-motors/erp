@@ -1,15 +1,13 @@
-import dotenv from 'dotenv'
 import { sql } from 'kysely'
 import {
   getMaterialConstructor,
   type Material,
   MaterialShapeAbstractionLayer,
 } from 'models'
-import type { KDB } from 'schema'
-import { connect } from '../connect'
+import type { KDB } from 'schema.js'
+import { connect } from '../connect.js'
 
 function main() {
-  dotenv.config({ path: '../.env' })
   const dbConnectionUrl = process.env['PG_CONN_STR']
   if (!dbConnectionUrl) {
     throw new Error('PG_CONN_STR is not set')

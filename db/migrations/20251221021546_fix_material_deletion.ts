@@ -1,4 +1,4 @@
-import { type KDB, sql } from '../index'
+import { type KDB, sql } from '../index.js'
 
 export async function up(db: KDB): Promise<void> {
   await sql`

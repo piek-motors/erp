@@ -10,10 +10,14 @@
   "types": "dist/index.d.ts",
   "main": "dist/index.js",
   "module": "dist/index.js",
+  "type": "module",
   "license": "ISC",
   "description": "",
   "exports": {
-    ".": "./dist/index.js"
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
   },
   "devDependencies": {
     "barrelsby": "^2.8.1",

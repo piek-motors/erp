@@ -1,4 +1,4 @@
-import { OrderStatus } from './enums'
+import { OrderStatus } from './enums.js'
 
 export const UiOrderStatus = {
   [OrderStatus.PreOrder]: 'Предзаказ',

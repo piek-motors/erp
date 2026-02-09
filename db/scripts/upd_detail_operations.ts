@@ -1,7 +1,6 @@
 import { Command } from 'commander'
-import dotenv from 'dotenv'
-import type { KDB } from 'schema'
-import { connect } from '../connect'
+import type { KDB } from 'schema.js'
+import { connect } from '../connect.js'
 
 const prog = new Command()
   .requiredOption('--old <name>', 'Old operation name to replace')
@@ -9,7 +8,6 @@ const prog = new Command()
   .parse(process.argv)
 
 function main() {
-  dotenv.config({ path: '../.env' })
   const dbConnectionUrl = process.env['PG_CONN_STR']
   if (!dbConnectionUrl) {
     throw new Error('PG_CONN_STR is not set')
@@ -23,8 +21,8 @@ async function updateOperationNames(db: KDB) {
   console.log('upd starts')
   const details = await db
     .selectFrom('pdo.details')
-    .select(['id', 'processing_route'])
-    .where('processing_route', 'is not', null)
+    .select(['id', 'workflow'])
+    .where('workflow', 'is not', null)
     .execute()
   const dict = await db
     .selectFrom('pdo.dict_operation_kinds')
@@ -43,29 +41,29 @@ async function updateOperationNames(db: KDB) {
     )
 
   const promises: Promise<any>[] = []
-  for (const d of details) {
-    if (!d.processing_route) continue
-    let shoudlUpdate = false
+  // for (const d of details) {
+  //   if (!d.processing_route) continue
+  //   let shoudlUpdate = false
 
-    const update = d.processing_route.steps.map(operation_id => {
-      if (operation_id === old_op_id) {
-        shoudlUpdate = true
-        return new_op_id
-      }
+  //   const update = d.processing_route.steps.map(operation_id => {
+  //     if (operation_id === old_op_id) {
+  //       shoudlUpdate = true
+  //       return new_op_id
+  //     }
 
-      return operation_id
-    })
+  //     return operation_id
+  //   })
 
-    if (shoudlUpdate) {
-      promises.push(
-        db
-          .updateTable('pdo.details')
-          .set({ processing_route: { steps: update } })
-          .where('id', '=', d.id)
-          .executeTakeFirstOrThrow(),
-      )
-    }
-  }
+  //   if (shoudlUpdate) {
+  //     promises.push(
+  //       db
+  //         .updateTable('pdo.details')
+  //         .set({ processing_route: { steps: update } })
+  //         .where('id', '=', d.id)
+  //         .executeTakeFirstOrThrow(),
+  //     )
+  //   }
+  // }
 
   await Promise.all(promises)
   console.log(`Updated ${promises.length} details`)

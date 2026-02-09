@@ -19,7 +19,7 @@ import type {
   UserRole,
   WriteoffReason,
 } from 'models'
-import type { BlankSchema } from 'validators'
+import type { BlankSchema, DetailWorkFlowSchema } from 'validators/index.js'
 import type z from 'zod'
 
 export type KDB = Kysely<DB.Schema>
@@ -110,7 +110,8 @@ export namespace DB {
   }
   export type Material = KyselySelectable<MaterialTable>
 
-  export type Blank = z.infer<typeof BlankSchema>
+  export type DetailBlank = z.infer<typeof BlankSchema>
+  export type DetailWorkflow = z.infer<typeof DetailWorkFlowSchema>
 
   export interface DetailTable {
     id: Generated<number>
@@ -124,16 +125,12 @@ export namespace DB {
     stock_location: string | null
     updated_at: Date
     recommended_batch_size: number | null
-    processing_route: JSONColumnType<
-      ProcessingRoute,
-      ProcessingRoute,
-      ProcessingRoute
+    workflow: JSONColumnType<
+      DetailWorkflow,
+      DetailWorkflow,
+      DetailWorkflow
     > | null
-    blank: JSONColumnType<Blank, Blank, Blank> | null
-  }
-
-  export interface ProcessingRoute {
-    steps: number[] // ids in table pdo.dict_operation_kinds
+    blank: JSONColumnType<DetailBlank, DetailBlank, DetailBlank> | null
   }
 
   interface MetarialWiteoffData {
@@ -143,6 +140,7 @@ export namespace DB {
       writeoff_id: number
     }>
   }
+
   export interface ProductionOrderTable {
     id: GeneratedAlways<number>
     status: ProductionOrderStatus
@@ -163,7 +161,7 @@ export namespace DB {
   }
 
   export interface ManufacturingData {
-    processing_route: ProcessingRoute
+    processing_route: DetailWorkflow
   }
 
   export interface OperationsTable {

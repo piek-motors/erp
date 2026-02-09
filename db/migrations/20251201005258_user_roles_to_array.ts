@@ -1,6 +1,6 @@
 import { sql } from 'kysely'
 import { UserRole } from 'models'
-import type { KDB } from '../schema'
+import type { KDB } from '../schema.js'
 
 const transationMap: Record<string, UserRole> = {
   admin: UserRole.Admin,

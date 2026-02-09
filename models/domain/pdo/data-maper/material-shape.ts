@@ -1,4 +1,4 @@
-import { MaterialShape } from '../enums'
+import { MaterialShape } from '../enums.js'
 
 export class RoundBarShapeData {
   diameter!: number
