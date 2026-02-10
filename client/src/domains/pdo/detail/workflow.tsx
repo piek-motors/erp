@@ -262,6 +262,7 @@ export const SingleWorkflowTask = (props: {
   task: WorkflowTask
   idx: number
   textSlot?: TypographyProps
+  taskNameSlot?: TypographyProps
   onClick?: (task: WorkflowTask, idx: number) => {}
 }) => {
   const t = props.task.text
@@ -272,14 +273,19 @@ export const SingleWorkflowTask = (props: {
         cursor: props.onClick ? 'pointer' : 'initial',
       }}
     >
-      <Row noWrap alignItems={'center'}>
+      <Row noWrap alignItems={'center'} gap={0.5}>
+        {/* index */}
         {props.idx != null && (
           <Label xs {...props.textSlot}>
             {props.idx + 1}.
           </Label>
         )}
-        <P {...props.textSlot}>{props.task.name}</P>
+        {/* workflow task name */}
+        <P {...props.textSlot} {...props.taskNameSlot}>
+          {props.task.name}
+        </P>
       </Row>
+      {/* description */}
       {t && (
         <P level="body-xs" sx={{ maxWidth: 300 }} {...props.textSlot}>
           {t}

@@ -46,8 +46,8 @@ export const TechPassportTable = observer(({ order, detail }: Props) => {
             </td>
             <td>
               <L>Обозначение детали</L>
-              <P fontSize={14}>{detail.drawing_number}</P>
-              <P fontSize={14}>{detail.drawing_name}</P>
+              <P fontSize={15}>{detail.drawing_number}</P>
+              <P fontSize={15}>{detail.drawing_name}</P>
             </td>
             <td width={70}>Заказ № {emptySpace}</td>
             <td width={70}>
@@ -65,7 +65,7 @@ export const TechPassportTable = observer(({ order, detail }: Props) => {
 
           <tr>
             <td colSpan={3}>
-              <L>Наименование детали</L>
+              <L>Наим. детали</L>
               <P fontWeight={500} fontSize={16}>
                 {capitalize(detail.name)}
               </P>

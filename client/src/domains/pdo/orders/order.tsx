@@ -171,8 +171,10 @@ const Workflow = observer(({ detail, order }: DetailStProp & OrderStProp) => {
               task={task}
               idx={i}
               textSlot={{
-                color: current ? 'primary' : 'neutral',
-                fontWeight: current ? 500 : 'normal',
+                color: current ? 'success' : undefined,
+              }}
+              taskNameSlot={{
+                fontWeight: 500,
               }}
               onClick={() => api.setCurrentOperation(order, i)}
             />

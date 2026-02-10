@@ -13,7 +13,7 @@ type Props = {
 }
 
 const qtyInpW = 50
-const signW = 100
+const signW = 50
 const dateW = 80
 
 export const ProductionRoute = observer(({ detail }: DetailStProp) => {
@@ -31,7 +31,7 @@ const DetailProductionRouteTable = observer((props: Props) => (
   <table css={css(tableStyles)}>
     <thead>
       <tr>
-        <th rowSpan={2}>Наименование операции</th>
+        <th rowSpan={2}>Наим. операции</th>
         <th colSpan={4}>Исполнитель</th>
         <th colSpan={6}>Приемка ОТК</th>
       </tr>
