@@ -19,6 +19,8 @@ export function Search(props: ISearchInputWithFiltersProps & InputProps) {
         type="text"
         placeholder={props.placeholder || 'Найти'}
         value={props.value}
+        variant={props.variant ?? 'soft'}
+        color={props.color ?? 'primary'}
         sx={{
           width: props.width,
           maxWidth: props.maxWidth,

@@ -13,7 +13,7 @@ import { PrintOnly, WebOnly } from '@/components/utilities/conditional-display'
 import { DetailName } from '@/domains/pdo/detail/detail_name'
 import {
   Button,
-  DeleteResourceButton,
+  DeleteIcon,
   Label,
   Loading,
   observer,
@@ -270,7 +270,7 @@ const DeleteOrderButton = observer(({ order }: OrderStProp) => {
   const msg = `Удалить заказ?\nEсли заказ находится в состоянии "Производство" - значит материал уже был списан. 
 												В этом случае необходимо вручную скорректировать остатки через поставку.`
   return (
-    <DeleteResourceButton
+    <DeleteIcon
       onClick={e => {
         e.stopPropagation()
         if (window.confirm(msg)) {

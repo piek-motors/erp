@@ -11,7 +11,7 @@ import {
   NavTopBar,
   type Props as PageTitleProps,
 } from '@/components/nav_topbar'
-import { ActionButton, DeleteResourceButton, Label, P, Row } from '@/lib/index'
+import { ActionButton, DeleteIcon, Label, P, Row } from '@/lib/index'
 import { rpc } from '@/lib/rpc/rpc.client'
 import { MobileNavModal } from '../root_layout'
 
@@ -98,7 +98,7 @@ export const SaveAndDelete = (props: {
       <DeleteConfirmDialog
         title={props.itemName}
         handleDelete={() => props.handleDelete()}
-        button={<DeleteResourceButton />}
+        button={<DeleteIcon />}
       />
     </Row>
   )

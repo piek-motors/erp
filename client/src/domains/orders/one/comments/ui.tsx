@@ -5,7 +5,7 @@ import { Box, Button, Card, Divider } from '@mui/joy'
 import { observer } from 'mobx-react-lite'
 import moment from 'moment'
 import { useState } from 'react'
-import { DeleteResourceButton, P, Row, text } from '@/lib/index'
+import { DeleteIcon, P, Row, text } from '@/lib/index'
 import { rpc } from '@/lib/rpc/rpc.client'
 import type { User } from '@/lib/store/auth.store'
 import type { OrderComment } from '@/server/domains/orders/comments_rpc'
@@ -58,7 +58,7 @@ export const Comment = observer(({ comment, userID }: ICommentProps) => {
 
   function actions() {
     if (orderStore.editMode && userID === comment.user_id)
-      return <DeleteResourceButton onClick={handleDelete} />
+      return <DeleteIcon onClick={handleDelete} />
   }
 
   return (

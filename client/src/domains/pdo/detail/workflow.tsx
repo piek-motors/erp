@@ -1,13 +1,7 @@
 /** @jsxImportSource @emotion/react */
 
 import { UilSubject } from '@iconscout/react-unicons'
-import {
-  Button,
-  IconButton,
-  Input,
-  Stack,
-  type TypographyProps,
-} from '@mui/joy'
+import { Input, Stack, type TypographyProps } from '@mui/joy'
 import { observer } from 'mobx-react-lite'
 import { useState } from 'react'
 import { AccordionCard } from '@/components/accordion_card'
@@ -16,13 +10,13 @@ import { HoverReveal } from '@/components/hidden_button'
 import { app_cache } from '@/domains/pdo/cache'
 import { makeAutoObservable, rpc } from '@/lib/deps'
 import {
+  IconButtonXxs,
   Label,
   MinusIcon,
   MultilineInput,
   P,
   PlusIcon,
   Row,
-  UseIcon,
 } from '@/lib/index'
 import type { DetailWorkflow } from '@/server/domains/pdo/details_rpc'
 import type { DictEntry } from '@/server/lib/create_dict_router'
@@ -179,10 +173,10 @@ export const WorkflowAccordion = observer(
             )
 
             const TaskLabel = (
-              <Button
+              <P
                 variant="plain"
                 color="neutral"
-                sx={{ textAlign: 'left', px: 0.5 }}
+                sx={{ fontWeight: 'normal', cursor: 'text' }}
                 onClick={() =>
                   openDict(entry =>
                     detail.workflow.update(idx, entry.id, op.text),
@@ -190,7 +184,7 @@ export const WorkflowAccordion = observer(
                 }
               >
                 {op.name}
-              </Button>
+              </P>
             )
 
             const TaskDescription = (
@@ -200,7 +194,7 @@ export const WorkflowAccordion = observer(
                 color="neutral"
                 placeholder="Описание"
                 value={op.text ?? ''}
-                sx={{ width: '100%', pt: 0 }}
+                sx={{ width: '100%' }}
                 onChange={e => {
                   detail.workflow.update(idx, op.id, e.target.value)
                 }}
@@ -220,24 +214,23 @@ export const WorkflowAccordion = observer(
                   <Row alignItems={'center'} gap={1}>
                     {/* Toggle comment button */}
                     {!show_comment && (
-                      <IconButton
+                      <IconButtonXxs
                         onClick={() =>
                           setShowComment(s => ({ ...s, [op.id]: !s[op.id] }))
                         }
                         title="Описание"
-                        variant="soft"
+                        variant="solid"
                         color="primary"
                         size="sm"
-                      >
-                        <UseIcon icon={UilSubject} small />
-                      </IconButton>
+                        icon={UilSubject}
+                      />
                     )}
                     <MinusIcon onClick={() => detail.workflow.remove(idx)} />
                   </Row>
                 }
               >
                 <Stack flexGrow={1}>
-                  <Row alignItems={'center'} gap={0.5}>
+                  <Row alignItems={'center'} gap={1}>
                     {/* Editable index */}
                     {EditableTaskIndex}
                     {/* operation selector */}

@@ -28,7 +28,7 @@ export const HoverReveal = (props: RowProps & HoverRevealProps) => {
       {props.children}
       <div
         className={className}
-        style={{ opacity: 0, transition: 'opacity 100ms ease-in-out' }}
+        css={css({ opacity: 0, transition: 'opacity 100ms ease-in-out' })}
       >
         {props.hiddenComp}
       </div>

@@ -1,5 +1,4 @@
 import {
-  Button,
   Container,
   Input,
   Modal,
@@ -10,17 +9,12 @@ import {
 import { makeAutoObservable } from 'mobx'
 import { observer } from 'mobx-react-lite'
 import { sort_rus } from 'models'
-import {
-  DeleteResourceButton,
-  Label,
-  Loading,
-  PlusIcon,
-  Row,
-} from '@/lib/index'
+import { DeleteIcon, Loading, P, PlusIcon, Row } from '@/lib/index'
 import { LoadingController } from '@/lib/store/loading_controller'
 import { notifier } from '@/lib/store/notifier.store'
 import type { DictEntry } from '@/server/lib/create_dict_router'
 import { HoverReveal } from './hidden_button'
+import { Search } from './inputs'
 
 export interface Dict<V extends DictEntry> {
   ls(): Promise<V[]>
@@ -114,13 +108,10 @@ export const DictManagerModal = observer(() => (
   <Modal open={state.modalOpen} onClose={() => state.setModalOpen(false)}>
     <ModalDialog layout="fullscreen">
       <Container maxWidth="xs" sx={{ overflow: 'auto' }}>
-        <ModalClose />
-        <Label>Справочник</Label>
+        <ModalClose variant="solid" color="neutral" />
         {state.loader.loading && <Loading />}
-        <Input
-          size="sm"
-          placeholder="Поиск"
-          variant="outlined"
+        <P level="h4">Справочник</P>
+        <Search
           autoFocus
           value={state.search}
           onChange={e => state.setSearch(e.target.value)}
@@ -131,7 +122,7 @@ export const DictManagerModal = observer(() => (
               flexWrap={'nowrap'}
               direction={'row'}
               hiddenComp={
-                <DeleteResourceButton
+                <DeleteIcon
                   onClick={() => {
                     if (window.confirm(`Удалить значение ${option.v}`)) {
                       state.rm(option.id)
@@ -140,12 +131,13 @@ export const DictManagerModal = observer(() => (
                 />
               }
             >
-              <Button
+              <P
                 sx={{
                   textAlign: 'left',
                   width: '100%',
                   fontWeight: 'normal',
                   justifyContent: 'start',
+                  cursor: 'pointer',
                 }}
                 variant="plain"
                 color="neutral"
@@ -153,7 +145,7 @@ export const DictManagerModal = observer(() => (
                 onClick={() => state.onClick(option)}
               >
                 {option.v}
-              </Button>
+              </P>
             </HoverReveal>
           ))}
           <Row py={1}>
@@ -163,12 +155,14 @@ export const DictManagerModal = observer(() => (
               placeholder="Новое значение"
               value={state.newValue}
               onChange={e => state.setNewValue(e.target.value)}
+              onKeyDown={e => {
+                if (e.code === 'Enter') {
+                  state.add()
+                }
+              }}
+              sx={{ flexGrow: 2 }}
             />
-            <PlusIcon
-              onClick={() => state.add()}
-              variant="outlined"
-              size="sm"
-            />
+            <PlusIcon onClick={() => state.add()} size="sm" />
           </Row>
         </Stack>
       </Container>

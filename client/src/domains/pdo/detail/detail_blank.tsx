@@ -1,5 +1,4 @@
-import { UilMinus } from '@iconscout/react-unicons'
-import { IconButton, Stack } from '@mui/joy'
+import { Stack } from '@mui/joy'
 import {
   MaterialRequirement,
   UiMaterialRequirement,
@@ -12,10 +11,10 @@ import { app_cache } from '@/domains/pdo/cache'
 import {
   Box,
   Label,
+  MinusIcon,
   observer,
   PlusIcon,
   Row,
-  UseIcon,
   useState,
 } from '@/lib/index'
 import type { DetailSt, DetailStProp } from './detail.state'
@@ -29,15 +28,10 @@ interface CostRowProps {
 }
 
 const CostRow = ({ children, onDelete }: CostRowProps) => {
-  const delete_btn = (
-    <IconButton variant="soft" color="danger" size="sm" onClick={onDelete}>
-      <UseIcon icon={UilMinus} />
-    </IconButton>
-  )
   return (
     <Row justifyContent={'space-between'} flexWrap={'nowrap'}>
       {children}
-      {delete_btn}
+      <MinusIcon onClick={onDelete} variant="soft" />
     </Row>
   )
 }

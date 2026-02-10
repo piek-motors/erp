@@ -2,10 +2,11 @@
 
 import { css } from '@emotion/react'
 import { UilEllipsisV, UilPen } from '@iconscout/react-unicons'
-import { Dropdown, IconButton, Menu, MenuButton, Stack } from '@mui/joy'
+import { Dropdown, Menu, MenuButton, Stack } from '@mui/joy'
 import { WebOnly } from '@/components/utilities/conditional-display'
 import {
-  DeleteResourceButton,
+  DeleteIcon,
+  IconButtonXxs,
   InputLabled,
   P,
   Row,
@@ -72,18 +73,17 @@ export const AttachmentComponent = (props: {
             </MenuButton>
             <Menu size="sm" sx={{ gap: 1, p: 0.5 }}>
               <Row>
-                <IconButton
+                <IconButtonXxs
                   size="sm"
                   onClick={() => {
                     setEditMode(true)
                   }}
-                >
-                  <UseIcon icon={UilPen} />
-                </IconButton>
+                  icon={UilPen}
+                />
 
                 {props.handleDelete && (
                   <>
-                    <DeleteResourceButton
+                    <DeleteIcon
                       onClick={() => props.handleDelete!(props.attachment)}
                     />
                   </>

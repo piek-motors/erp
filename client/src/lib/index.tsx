@@ -220,24 +220,49 @@ export function CancelButton(props: { onClick: () => void }) {
   )
 }
 
-export function DeleteResourceButton(props: {
-  variant?: IconButtonProps['variant']
-  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void
-}) {
+export const ButtonXxs = (props: ButtonProps) => (
+  <Button
+    size="sm"
+    sx={{
+      minWidth: '24px',
+      minHeight: '24px',
+      fontSize: '0.875rem',
+      ...props.sx,
+    }}
+    {...props}
+  />
+)
+
+export const IconButtonXxs = (props: IconButtonProps & { icon: Icon }) => {
+  const variant = props.variant ?? 'soft'
+  const invert = variant === 'solid'
   return (
     <IconButton
-      variant={props.variant ?? 'soft'}
-      color="danger"
-      onClick={props.onClick}
       size="sm"
       sx={{
+        ...props.sx,
         minWidth: '24px',
         minHeight: '24px',
         fontSize: '0.875rem',
       }}
+      {...props}
     >
-      <UseIcon icon={UilTrashAlt} small={true} />
+      <UseIcon icon={props.icon} small invert={invert} />
     </IconButton>
+  )
+}
+
+export function DeleteIcon(props: {
+  variant?: IconButtonProps['variant']
+  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void
+}) {
+  return (
+    <IconButtonXxs
+      variant={props.variant ?? 'soft'}
+      color="danger"
+      onClick={props.onClick}
+      icon={UilTrashAlt}
+    />
   )
 }
 
@@ -272,17 +297,18 @@ export const AddResourceButton = (props: {
   )
 }
 
-export const MinusIcon = (props: IconButtonProps) => (
-  <IconButton
-    variant="soft"
-    color="danger"
-    {...props}
-    size="sm"
-    sx={{ width: 'min-content', ...props.sx }}
-  >
-    <UseIcon icon={UilMinus} />
-  </IconButton>
-)
+export const MinusIcon = (props: IconButtonProps) => {
+  const variant = props.variant ?? 'soft'
+  return (
+    <IconButtonXxs
+      size="sm"
+      variant={variant}
+      color="danger"
+      {...props}
+      icon={UilMinus}
+    />
+  )
+}
 
 export const PlusIcon = (props: IconButtonProps & { invert?: boolean }) => (
   <IconButton

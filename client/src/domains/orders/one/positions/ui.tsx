@@ -2,7 +2,7 @@
 
 import { Box, Stack } from '@mui/joy'
 import { observer } from 'mobx-react-lite'
-import { DeleteResourceButton, P, Row, UpdateResourceButton } from '@/lib/index'
+import { DeleteIcon, P, Row, UpdateResourceButton } from '@/lib/index'
 import { orderStore } from '../order.store'
 import { orderPositionsItemStyle } from '../prints.styles'
 
@@ -40,7 +40,7 @@ export const PositionsList = observer(() => {
                   <UpdateResourceButton
                     onClick={() => orderStore.positions.openDialog(position)}
                   />
-                  <DeleteResourceButton
+                  <DeleteIcon
                     onClick={() => orderStore.positions.delete(position.id)}
                   />
                 </Row>

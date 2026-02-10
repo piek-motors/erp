@@ -1,14 +1,13 @@
-import { UilMinus } from '@iconscout/react-unicons'
-import { Divider, IconButton, Textarea } from '@mui/joy'
+import { Divider, Textarea } from '@mui/joy'
 import * as dnd from 'react-beautiful-dnd'
 import {
   Box,
   Label,
+  MinusIcon,
   observer,
   PlusIcon,
   Row,
   Stack,
-  UseIcon,
 } from '@/lib/index'
 
 interface ArrayJsonEditorProps {
@@ -124,14 +123,7 @@ export const ArrayJsonEditor = observer((props: ArrayJsonEditorProps) => {
                             </Box>
                           ))}
                         </Row>
-                        <IconButton
-                          variant="soft"
-                          color="danger"
-                          size="sm"
-                          onClick={() => removeItem(index)}
-                        >
-                          <UseIcon icon={UilMinus} />
-                        </IconButton>
+                        <MinusIcon onClick={() => removeItem(index)} />
                       </Row>
                       {index !== items.length - 1 && (
                         <Divider sx={{ opacity: 0.5 }} />

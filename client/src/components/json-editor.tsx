@@ -1,8 +1,7 @@
 /** @jsxImportSource @emotion/react */
 
-import { UilMinus } from '@iconscout/react-unicons'
-import { IconButton, Textarea } from '@mui/joy'
-import { Box, observer, PlusIcon, Row, Stack, UseIcon } from '@/lib/index'
+import { Textarea } from '@mui/joy'
+import { Box, MinusIcon, observer, PlusIcon, Row, Stack } from '@/lib/index'
 
 interface JsonField {
   key: string
@@ -83,14 +82,7 @@ export const JsonEditor = observer((props: JsonEditorProps) => {
             onChange={e => updateField(index, 'value', e.target.value)}
             sx={{ flex: 1 }}
           />
-          <IconButton
-            variant="soft"
-            color="danger"
-            size="sm"
-            onClick={() => removeField(index)}
-          >
-            <UseIcon icon={UilMinus} />
-          </IconButton>
+          <MinusIcon onClick={() => removeField(index)} />
         </Row>
       ))}
       <Box sx={{ alignSelf: 'flex-start' }}>

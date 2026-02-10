@@ -1,11 +1,11 @@
-import { UilBackspace, UilMinus } from '@iconscout/react-unicons'
+import { UilBackspace } from '@iconscout/react-unicons'
 import { Box, Button, IconButton, Stack } from '@mui/joy'
 import {
   BaseAutocomplete,
   type BaseOption,
 } from '@/components/base-autocomplete'
 import { InModal } from '@/components/modal'
-import { observer, P, Row, UseIcon, useState } from '@/lib/index'
+import { MinusIcon, observer, P, Row, UseIcon, useState } from '@/lib/index'
 import { app_cache } from '../cache'
 import { DetailName } from '../detail/detail_name'
 import { api } from './api'
@@ -44,6 +44,12 @@ const UniversalDetailSelection = observer(() => {
     }
   }
 
+  const handleDelete = (id: number) => {
+    api.store.setSelectedDetailIds(
+      api.store.selectedDetailIds.filter(selectedId => selectedId !== id),
+    )
+  }
+
   return (
     <Stack sx={{ flex: 1 }}>
       <Stack py={2}>
@@ -62,20 +68,7 @@ const UniversalDetailSelection = observer(() => {
                   alignItems="center"
                 >
                   <DetailName detail={detail} />
-                  <IconButton
-                    variant="soft"
-                    color="danger"
-                    size="sm"
-                    onClick={() => {
-                      api.store.setSelectedDetailIds(
-                        api.store.selectedDetailIds.filter(
-                          selectedId => selectedId !== id,
-                        ),
-                      )
-                    }}
-                  >
-                    <UseIcon icon={UilMinus} />
-                  </IconButton>
+                  <MinusIcon onClick={() => handleDelete(id)} />
                 </Row>
               )
             })}

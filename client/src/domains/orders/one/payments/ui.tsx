@@ -11,7 +11,7 @@ import { DateInput } from '@/components/inputs/date_input'
 import { MoneyInput } from '@/components/inputs/money-input'
 import type { UnpackedOrder } from '@/domains/orders/api'
 import { useEscapeClose } from '@/hooks/use-escape-close'
-import { DeleteResourceButton, Label, P, Row, UseIcon } from '@/lib/index'
+import { DeleteIcon, Label, P, Row, UseIcon } from '@/lib/index'
 import { formatOnlyDate } from '@/lib/utils/date_fmt'
 import type { Payment } from '@/server/domains/orders/payments_rpc'
 import { orderStore, orderStore as os } from '../order.store'
@@ -88,7 +88,7 @@ const PaymentsTable = observer(
                   <td>{formatOnlyDate(payment.date.toISOString())}</td>
                   {orderStore.editMode && (
                     <td>
-                      <DeleteResourceButton
+                      <DeleteIcon
                         onClick={() => props?.onDelete?.(payment.id)}
                       />
                     </td>
