@@ -1,64 +1,14 @@
 import { AttachmentsStore } from '@/components/attachments/store'
-import type { DetailWorkflow, SelectableDetail } from '@/server/domains/pdo/details_rpc'
+import type { SelectableDetail } from '@/server/domains/pdo/details_rpc'
 import type { RouterInput, RouterOutput } from '@/server/lib/trpc'
 import { makeAutoObservable } from 'mobx'
 import { Unit } from 'models'
-import { app_cache } from '../cache'
 import { DetailBlankSt } from './detail_blank.store'
 import { DetailWarehouseStore } from './warehouse/store'
+import { Workflow, WorkflowTask } from './workflow'
 
 type DetailResponse = RouterOutput['pdo']['details']['get']['detail']
 type UpdateDetailRequest = RouterInput['pdo']['details']['update']
-
-export class WorkflowTask {
-  constructor(readonly id: number, readonly text?: string | null) {
-    makeAutoObservable(this)
-  }
-  get name(): string {
-    const name = app_cache.details.dict_processing_operaions.find(
-      each => each.id === this.id,
-    )?.v
-    return name ?? 'No value in the dict'
-  }
-
-  get payload(): [number] | [number, string] {
-    if (this.text) return [this.id, this.text]
-    else return [this.id]
-  }
-}
-
-class Workflow {
-  tasks: WorkflowTask[] = []
-  init(o: WorkflowTask[]) {
-    this.tasks = o
-  }
-  constructor() {
-    makeAutoObservable(this)
-  }
-  add(id: number) {
-    this.tasks = [...this.tasks, new WorkflowTask(id)]
-  }
-  remove(idx: number) {
-    this.tasks = this.tasks.filter((_, i) => i !== idx)
-  }
-  update(idx: number, id: number, text?: string | null) {
-    if (idx < 0 || idx >= this.tasks.length) return
-    this.tasks = [
-      ...this.tasks.slice(0, idx),
-      new WorkflowTask(id, text),
-      ...this.tasks.slice(idx + 1),
-    ]
-  }
-  reset() {
-    this.tasks = []
-  }
-
-  get payload(): DetailWorkflow {
-    return {
-      workflow: this.tasks.map(o => o.payload)
-    }
-  }
-}
 
 export type BlankSpec = {
   arr: { key: string; value: any }[]
@@ -70,7 +20,7 @@ export class LastProduction {
   constructor(
     readonly date: Date,
     readonly qty: number,
-  ) { }
+  ) {}
 }
 
 export class DetailSt {
@@ -152,9 +102,7 @@ export class DetailSt {
     this.updated_at = d.updated_at ? new Date(d.updated_at) : null
     this.workflow.init(
       d.workflow
-        ? d.workflow.workflow.map(
-          op => new WorkflowTask(op[0], op[1]),
-        )
+        ? d.workflow.workflow.map(op => new WorkflowTask(op[0], op[1]))
         : [],
     )
     this.drawing_name = d.drawing_name ?? ''

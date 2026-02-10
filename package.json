@@ -11,7 +11,7 @@
   "scripts": {
     "fmt": "pnpm exec biome format --write",
     "lint": "pnpm exec biome lint --write",
-    "biome": "pnpm exec biome check --write",
+    "fix": "pnpm exec biome check --write",
     "build": "pnpm run -r --filter=!./client/** build",
     "check": "pnpm run -r check",
     "deploy": "sh ./infra/deploy.sh",

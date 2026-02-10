@@ -1,30 +1,5 @@
 /** @jsxImportSource @emotion/react */
 
-import { AccordionCard } from '@/components/accordion_card'
-import { ArrayJsonEditor } from '@/components/array-json-editor'
-import {
-  BaseAutocomplete,
-  type BaseOption,
-} from '@/components/base-autocomplete'
-import { dictManager } from '@/components/dict_manager'
-import { HoverReveal } from '@/components/hidden_button'
-import { NumberInput } from '@/components/inputs/number_input'
-import { TextEditor } from '@/domains/orders/one/comments/text-editor'
-import { app_cache } from '@/domains/pdo/cache'
-import { rpc } from '@/lib/deps'
-import {
-  Box,
-  InputLabled,
-  Label,
-  MinusIcon,
-  MultilineInput,
-  P,
-  PlusIcon,
-  Row,
-  type InputLabledProps,
-} from '@/lib/index'
-import type { Blank } from '@/server/domains/pdo/details_rpc'
-import { DictEntry } from '@/server/lib/create_dict_router'
 import {
   AccordionGroup,
   Divider,
@@ -35,12 +10,31 @@ import {
 } from '@mui/joy'
 import { observer } from 'mobx-react-lite'
 import type { ReactNode } from 'react'
+import { AccordionCard } from '@/components/accordion_card'
+import { ArrayJsonEditor } from '@/components/array-json-editor'
+import {
+  BaseAutocomplete,
+  type BaseOption,
+} from '@/components/base-autocomplete'
+import { NumberInput } from '@/components/inputs/number_input'
+import { TextEditor } from '@/domains/orders/one/comments/text-editor'
+import { app_cache } from '@/domains/pdo/cache'
+import {
+  Box,
+  InputLabled,
+  type InputLabledProps,
+  Label,
+  MultilineInput,
+  Row,
+} from '@/lib/index'
+import type { Blank } from '@/server/domains/pdo/details_rpc'
 import { DetailAttachmentList } from './attachment/list'
-import { type DetailSt, type DetailStProp } from './detail.state'
+import type { DetailSt, DetailStProp } from './detail.state'
 import {
   DetailRequirementInput,
   MaterialRequirementInput,
 } from './detail_blank'
+import { WorkflowAccordion } from './workflow'
 
 export const DetailForm = observer(
   ({ detail, leftChildren }: DetailStProp & { leftChildren?: ReactNode }) => (
@@ -113,9 +107,9 @@ export const MaterialSelect = observer(
         value={
           value
             ? {
-              label: app_cache.materials.getLabel(value) || '',
-              value,
-            }
+                label: app_cache.materials.getLabel(value) || '',
+                value,
+              }
             : null
         }
         onChange={newValue => {
@@ -219,59 +213,6 @@ const BlankAttributesInput = observer(({ detail }: { detail: DetailSt }) => (
   </AccordionCard>
 ))
 
-const WorkflowAccordion = observer(
-  ({ detail }: { detail: DetailSt }) => {
-    const dict = rpc.pdo.dict.operation_kinds
-
-    const openDict = (onClick: (entry: DictEntry) => void) => {
-      dictManager.open({
-        ls: () =>
-          dict.ls.query().then(res => {
-            app_cache.details.set_dict_processing_operations(res)
-            return res
-          }),
-        add: operation => dict.add.mutate({ v: operation }),
-        rm: id => dict.rm.mutate({ id }),
-        onClick,
-      })
-    }
-
-    return (
-      <AccordionCard title="Маршрут" defaultExpanded>
-        <Stack>
-          {detail.workflow.tasks.map((op, idx) => (
-            <HoverReveal
-              gap={1}
-              noWrap
-              key={op.id}
-              alignSelf={'start'}
-              hiddenComp={
-                <MinusIcon onClick={() => detail.workflow.remove(idx)} />
-              }
-            >
-              <Label>{idx + 1}</Label>
-              <P
-                onClick={() =>
-                  openDict(entry =>
-                    detail.workflow.update(idx, entry.id),
-                  )
-                }
-              >
-                {op.name}
-              </P>
-            </HoverReveal>
-          ))}
-          <PlusIcon
-            onClick={() =>
-              openDict(entry => detail.workflow.add(entry.id))
-            }
-          />
-        </Stack>
-      </AccordionCard>
-    )
-  },
-)
-
 export const BlankAttributes = observer(
   (props: {
     attributes?: Blank['attributes'] | null
@@ -287,16 +228,16 @@ export const BlankAttributes = observer(
           {...props.rowProps}
           gap={1}
         >
-          {props.attributes?.map(({ key, value }, idx) => (
+          {props.attributes?.map(({ key, value }) => (
             <Box
               pr={1}
-              key={key + idx}
+              key={key + value}
               fontSize={props.fontSize}
               whiteSpace={'nowrap'}
               sx={{ lineHeight: 0.8 }}
             >
               {key}
-              {value && ' ' + String(value)}
+              {value && ` ${String(value)}`}
             </Box>
           ))}
         </Row>

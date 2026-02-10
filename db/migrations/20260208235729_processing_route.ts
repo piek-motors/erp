@@ -18,8 +18,10 @@ export async function up(db: KDB): Promise<void> {
     AND processing_route ? 'steps'
     `.execute(db)
 
-
-  await db.schema.alterTable('pdo.details').renameColumn('processing_route', 'workflow').execute()
+  await db.schema
+    .alterTable('pdo.details')
+    .renameColumn('processing_route', 'workflow')
+    .execute()
 }
 
-export async function down(db: KDB): Promise<void> { }
+export async function down(db: KDB): Promise<void> {}

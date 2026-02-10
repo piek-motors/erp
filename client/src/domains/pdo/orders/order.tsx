@@ -34,6 +34,7 @@ import {
 import { app_cache } from '../cache'
 import type { DetailSt, DetailStProp } from '../detail/detail.state'
 import type { DetailBlankSt } from '../detail/detail_blank.store'
+import { SingleWorkflowTask } from '../detail/workflow'
 import { MetalPageTitle } from '../shared/basic'
 import { DetailBlank } from './detail_blank'
 import { OrderSt, type OrderStProp } from './order.state'
@@ -92,7 +93,7 @@ export const OrderUpdatePage = observer(() => {
           />
           <Divider />
           <RowWithDividers gap={2} alignItems={'start'}>
-            <ProductionSteps order={order} detail={detail} />
+            <Workflow order={order} detail={detail} />
             <Stack spacing={1}>
               <QuantityInput
                 order={order}
@@ -149,42 +150,39 @@ const OrderStatusChip = ({ status }: { status: OrderStatus }) => {
   )
 }
 
-const ProductionSteps = observer(
-  ({ detail, order }: DetailStProp & OrderStProp) => {
-    if (
-      detail.workflow.tasks.length === 0 ||
-      order.status == OrderStatus.Archived
-    )
-      return null
-    return (
-      <Stack>
-        <Label label="Этапы обработки" />
-        {detail.workflow.tasks.map((operation, operation_index) => {
-          const current = order.currentOperation === operation_index
-          const timedelta =
-            current &&
-            order.resp?.current_operation_start_at &&
-            timeDeltaDays(Number(order.resp.current_operation_start_at))
-          return (
-            <Row>
-              <Button
-                size="sm"
-                key={operation.name}
-                variant={current ? 'solid' : 'plain'}
-                sx={{ width: 'fit-content', textAlign: 'left' }}
-                color={current ? 'success' : 'neutral'}
-                onClick={() => api.setCurrentOperation(order, operation_index)}
-              >
-                {operation.name}
-              </Button>
-              <Label>{timedelta}</Label>
-            </Row>
-          )
-        })}
-      </Stack>
-    )
-  },
-)
+const Workflow = observer(({ detail, order }: DetailStProp & OrderStProp) => {
+  if (
+    detail.workflow.tasks.length === 0 ||
+    order.status == OrderStatus.Archived
+  )
+    return null
+  return (
+    <Stack gap={1}>
+      <Label label="Этапы обработки" />
+      {detail.workflow.tasks.map((task, i) => {
+        const current = order.currentOperation === i
+        const timedelta =
+          current &&
+          order.resp?.current_operation_start_at &&
+          timeDeltaDays(Number(order.resp.current_operation_start_at))
+        return (
+          <Row>
+            <SingleWorkflowTask
+              task={task}
+              idx={i}
+              textSlot={{
+                color: current ? 'primary' : 'neutral',
+                fontWeight: current ? 500 : 'normal',
+              }}
+              onClick={() => api.setCurrentOperation(order, i)}
+            />
+            <Label>{timedelta}</Label>
+          </Row>
+        )
+      })}
+    </Stack>
+  )
+})
 
 const BlankDisplay = observer(
   ({ blank, order }: { blank?: DetailBlankSt | null; order: OrderSt }) => {
@@ -293,17 +291,17 @@ const QuantityInput = observer(
 
     const mode = isProduction
       ? {
-        label: 'Выпуск',
-        initialQty: order.outputQty,
-        save: (qty: number) => order.setOutputQty(qty),
-        notification: 'Выпуск установлен',
-      }
+          label: 'Выпуск',
+          initialQty: order.outputQty,
+          save: (qty: number) => order.setOutputQty(qty),
+          notification: 'Выпуск установлен',
+        }
       : {
-        label: 'Кол-во',
-        initialQty: order.qty,
-        save: (qty: number) => order.setQty(qty),
-        notification: 'Кол-во установлено',
-      }
+          label: 'Кол-во',
+          initialQty: order.qty,
+          save: (qty: number) => order.setQty(qty),
+          notification: 'Кол-во установлено',
+        }
 
     const [qty, setQty] = useState<number | null>(mode.initialQty)
 

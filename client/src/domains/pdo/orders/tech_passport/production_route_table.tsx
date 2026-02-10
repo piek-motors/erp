@@ -1,10 +1,11 @@
 /** @jsxImportSource @emotion/react */
 
-import type { DetailStProp, WorkflowTask } from '@/domains/pdo/detail/detail.state'
+import type { DetailStProp } from '@/domains/pdo/detail/detail.state'
 import { Label } from '@/lib/index'
 import { css } from '@emotion/react'
 import { Stack } from '@mui/joy'
 import { observer } from 'mobx-react-lite'
+import { SingleWorkflowTask, WorkflowTask } from '../../detail/workflow'
 import { tableStyles } from './shared'
 
 type Props = {
@@ -30,7 +31,6 @@ const DetailProductionRouteTable = observer((props: Props) => (
   <table css={css(tableStyles)}>
     <thead>
       <tr>
-        <th rowSpan={2}>№</th>
         <th rowSpan={2}>Наименование операции</th>
         <th colSpan={4}>Исполнитель</th>
         <th colSpan={6}>Приемка ОТК</th>
@@ -48,7 +48,7 @@ const DetailProductionRouteTable = observer((props: Props) => (
       </tr>
     </thead>
     <tbody>
-      {props.operations.map((operation, i) => (
+      {props.operations.map((workflow_task, i) => (
         <tr
           key={i}
           css={css({
@@ -57,8 +57,9 @@ const DetailProductionRouteTable = observer((props: Props) => (
             },
           })}
         >
-          <td width={'1%'}>{i + 1}</td>
-          <td width={'1%'}>{operation.name}</td>
+          <td width={'1%'}>
+            <SingleWorkflowTask task={workflow_task} idx={i} />
+          </td>
           <td width={150} />
           <td width={qtyInpW} />
           <td width={dateW} />

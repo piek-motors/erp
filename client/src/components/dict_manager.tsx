@@ -118,7 +118,7 @@ export const DictManagerModal = observer(() => (
           value={state.search}
           onChange={e => state.setSearch(e.target.value)}
         />
-        <Stack>
+        <Stack py={1}>
           {state.filtredOptions.map(option => (
             <Button
               sx={{
@@ -126,8 +126,6 @@ export const DictManagerModal = observer(() => (
                 width: '100%',
                 fontWeight: 'normal',
                 justifyContent: 'start',
-                py: 0.3,
-                minHeight: 20,
               }}
               variant="plain"
               color="neutral"

@@ -13,5 +13,5 @@ export const WorkflowTask = z.tuple([
 ])
 
 export const DetailWorkFlowSchema = z.object({
-  workflow: z.array(WorkflowTask)
+  workflow: z.array(WorkflowTask),
 })

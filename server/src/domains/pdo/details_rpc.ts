@@ -92,9 +92,9 @@ export const details = router({
         attachments,
         last_manufacturing: lastManufacturing
           ? {
-            date: lastManufacturing.finished_at,
-            qty: lastManufacturing.qty,
-          }
+              date: lastManufacturing.finished_at,
+              qty: lastManufacturing.qty,
+            }
           : null,
       }
     }),
