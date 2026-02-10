@@ -10,7 +10,7 @@ export const NotifierOverlay = observer(() => (
         position: 'fixed',
         bottom: 10,
         right: 10,
-        zIndex: 1000,
+        zIndex: 1400,
       }}
     >
       <Stack gap={1}>

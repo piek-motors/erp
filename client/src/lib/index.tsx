@@ -223,7 +223,6 @@ export function CancelButton(props: { onClick: () => void }) {
 export function DeleteResourceButton(props: {
   variant?: IconButtonProps['variant']
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void
-  small?: boolean
 }) {
   return (
     <IconButton
@@ -231,8 +230,13 @@ export function DeleteResourceButton(props: {
       color="danger"
       onClick={props.onClick}
       size="sm"
+      sx={{
+        minWidth: '24px',
+        minHeight: '24px',
+        fontSize: '0.875rem',
+      }}
     >
-      <UseIcon icon={UilTrashAlt} small={props.small} />
+      <UseIcon icon={UilTrashAlt} small={true} />
     </IconButton>
   )
 }

@@ -10,10 +10,17 @@ import {
 import { makeAutoObservable } from 'mobx'
 import { observer } from 'mobx-react-lite'
 import { sort_rus } from 'models'
-import { Label, Loading, PlusIcon, Row } from '@/lib/index'
+import {
+  DeleteResourceButton,
+  Label,
+  Loading,
+  PlusIcon,
+  Row,
+} from '@/lib/index'
 import { LoadingController } from '@/lib/store/loading_controller'
 import { notifier } from '@/lib/store/notifier.store'
 import type { DictEntry } from '@/server/lib/create_dict_router'
+import { HoverReveal } from './hidden_button'
 
 export interface Dict<V extends DictEntry> {
   ls(): Promise<V[]>
@@ -120,20 +127,34 @@ export const DictManagerModal = observer(() => (
         />
         <Stack py={1}>
           {state.filtredOptions.map(option => (
-            <Button
-              sx={{
-                textAlign: 'left',
-                width: '100%',
-                fontWeight: 'normal',
-                justifyContent: 'start',
-              }}
-              variant="plain"
-              color="neutral"
-              key={option.id}
-              onClick={() => state.onClick(option)}
+            <HoverReveal
+              flexWrap={'nowrap'}
+              direction={'row'}
+              hiddenComp={
+                <DeleteResourceButton
+                  onClick={() => {
+                    if (window.confirm(`Удалить значение ${option.v}`)) {
+                      state.rm(option.id)
+                    }
+                  }}
+                />
+              }
             >
-              {option.v}
-            </Button>
+              <Button
+                sx={{
+                  textAlign: 'left',
+                  width: '100%',
+                  fontWeight: 'normal',
+                  justifyContent: 'start',
+                }}
+                variant="plain"
+                color="neutral"
+                key={option.id}
+                onClick={() => state.onClick(option)}
+              >
+                {option.v}
+              </Button>
+            </HoverReveal>
           ))}
           <Row py={1}>
             <Input

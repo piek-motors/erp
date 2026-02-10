@@ -161,7 +161,7 @@ export const WorkflowAccordion = observer(
                       }
                     }}
                     autoFocus
-                    sx={{ width: '40px' }}
+                    sx={{ width: '35px' }}
                   />
                 ) : (
                   <Label
@@ -169,7 +169,7 @@ export const WorkflowAccordion = observer(
                       setEditingIndex(idx)
                       setTempIndex(String(idx + 1))
                     }}
-                    sx={{ cursor: 'text', userSelect: 'none', px: 0.5 }}
+                    sx={{ cursor: 'text', userSelect: 'none' }}
                     title="Изменить позицию"
                   >
                     {idx + 1}
@@ -200,7 +200,7 @@ export const WorkflowAccordion = observer(
                 color="neutral"
                 placeholder="Описание"
                 value={op.text ?? ''}
-                sx={{ width: '100%', pl: 2 }}
+                sx={{ width: '100%', pt: 0 }}
                 onChange={e => {
                   detail.workflow.update(idx, op.id, e.target.value)
                 }}
@@ -237,7 +237,7 @@ export const WorkflowAccordion = observer(
                 }
               >
                 <Stack flexGrow={1}>
-                  <Row alignItems={'center'} gap={1}>
+                  <Row alignItems={'center'} gap={0.5}>
                     {/* Editable index */}
                     {EditableTaskIndex}
                     {/* operation selector */}

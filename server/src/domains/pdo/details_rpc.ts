@@ -237,3 +237,15 @@ export const get_details_by_material_id = (material_id: number) => {
     .selectAll()
     .execute()
 }
+
+export const get_details_by_operation_id = async (
+  dict_operation_id: number,
+) => {
+  const details = await db
+    .selectFrom('pdo.details')
+    .select(['id', 'workflow'])
+    .execute()
+  return details.filter(d =>
+    d.workflow?.workflow.some(task => task[0] == dict_operation_id),
+  )
+}

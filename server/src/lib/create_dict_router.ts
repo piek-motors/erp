@@ -5,6 +5,7 @@ export type DictEntry = Selectable<DB.Dict<string>>
 
 export const create_dict_router = <TE extends keyof DB.Schema & string>(
   table: TE,
+  delete_check?: (id: number) => Promise<void>,
 ) =>
   router({
     ls: procedure.query(
@@ -23,10 +24,11 @@ export const create_dict_router = <TE extends keyof DB.Schema & string>(
       }),
     rm: procedure
       .input(z.object({ id: z.number() }))
-      .mutation(async ({ input }) => {
+      .mutation(async ({ input: { id } }) => {
+        await delete_check?.(id)
         await db
           .deleteFrom(table)
-          .where('id' as any, '=', input.id)
+          .where('id' as any, '=', id)
           .execute()
       }),
   })
