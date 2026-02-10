@@ -1,3 +1,10 @@
+import { Box, Chip, type ChipProps, Divider } from '@mui/joy'
+import {
+  OrderPriority,
+  ProductionOrderStatus as OrderStatus,
+  UiOrderPriority,
+  uiManufacturingOrderStatus,
+} from 'models'
 import { AttachmentComponent } from '@/components/attachments/attachment'
 import { NumberInput } from '@/components/inputs/number_input'
 import { InModal } from '@/components/modal'
@@ -12,9 +19,9 @@ import {
   observer,
   openPage,
   P,
-  routeMap,
   Row,
   RowWithDividers,
+  routeMap,
   SaveIconButton,
   Stack,
   useEffect,
@@ -24,13 +31,6 @@ import {
 } from '@/lib/index'
 import { notifier } from '@/lib/store/notifier.store'
 import { fmtDate, timeDeltaDays } from '@/lib/utils/date_fmt'
-import { Box, Chip, type ChipProps, Divider } from '@mui/joy'
-import {
-  OrderPriority,
-  ProductionOrderStatus as OrderStatus,
-  uiManufacturingOrderStatus,
-  UiOrderPriority,
-} from 'models'
 import { app_cache } from '../cache'
 import type { DetailSt, DetailStProp } from '../detail/detail.state'
 import type { DetailBlankSt } from '../detail/detail_blank.store'

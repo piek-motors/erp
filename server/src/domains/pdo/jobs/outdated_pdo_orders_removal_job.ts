@@ -1,8 +1,8 @@
+import { ProductionOrderStatus } from 'models'
 import { logger } from '#root/ioc/log.js'
 import { Day } from '#root/lib/constants.js'
 import type { Job } from '#root/lib/jobs_runner.js'
 import { db } from '#root/sdk.js'
-import { ProductionOrderStatus } from 'models'
 
 const OutdatedManufacturingOrderDeletionAfter = 7 * Day
 

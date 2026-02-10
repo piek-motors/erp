@@ -1,7 +1,3 @@
-import { observer, P, Row, UseIcon } from '@/lib/index'
-import { routeMap } from '@/lib/routes'
-import { rpc } from '@/lib/rpc/rpc.client'
-import { authStore } from '@/lib/store/auth.store'
 import {
   type Icon,
   UilBell,
@@ -13,6 +9,10 @@ import {
 import { Badge, Box, Button, Divider, Stack, Typography } from '@mui/joy'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
+import { observer, P, Row, UseIcon } from '@/lib/index'
+import { routeMap } from '@/lib/routes'
+import { rpc } from '@/lib/rpc/rpc.client'
+import { authStore } from '@/lib/store/auth.store'
 
 interface MenuLink {
   href: string

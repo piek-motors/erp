@@ -1,3 +1,11 @@
+import { UilMinus } from '@iconscout/react-unicons'
+import { IconButton, Stack } from '@mui/joy'
+import {
+  MaterialRequirement,
+  UiMaterialRequirement,
+  Unit,
+  uiUnit,
+} from 'models'
 import { NumberInput } from '@/components/inputs/number_input'
 import { EnumSelect } from '@/components/select'
 import { app_cache } from '@/domains/pdo/cache'
@@ -10,14 +18,6 @@ import {
   UseIcon,
   useState,
 } from '@/lib/index'
-import { UilMinus } from '@iconscout/react-unicons'
-import { IconButton, Stack } from '@mui/joy'
-import {
-  MaterialRequirement,
-  UiMaterialRequirement,
-  uiUnit,
-  Unit,
-} from 'models'
 import type { DetailSt, DetailStProp } from './detail.state'
 import { MaterialSelect } from './detail_form'
 import { DetailName } from './detail_name'

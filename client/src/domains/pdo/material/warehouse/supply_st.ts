@@ -1,6 +1,6 @@
-import { rpc } from '@/lib/rpc/rpc.client'
 import { makeAutoObservable } from 'mobx'
 import { SupplyReason } from 'models'
+import { rpc } from '@/lib/rpc/rpc.client'
 
 export class MaterialSupplySt {
   length: string = ''

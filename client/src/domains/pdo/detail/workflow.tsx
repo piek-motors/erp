@@ -1,5 +1,15 @@
 /** @jsxImportSource @emotion/react */
 
+import { UilSubject } from '@iconscout/react-unicons'
+import {
+  Button,
+  IconButton,
+  Input,
+  Stack,
+  type TypographyProps,
+} from '@mui/joy'
+import { observer } from 'mobx-react-lite'
+import { useState } from 'react'
 import { AccordionCard } from '@/components/accordion_card'
 import { dictManager } from '@/components/dict_manager'
 import { HoverReveal } from '@/components/hidden_button'
@@ -16,10 +26,6 @@ import {
 } from '@/lib/index'
 import type { DetailWorkflow } from '@/server/domains/pdo/details_rpc'
 import type { DictEntry } from '@/server/lib/create_dict_router'
-import { UilSubject } from '@iconscout/react-unicons'
-import { Button, IconButton, Input, Stack, TypographyProps } from '@mui/joy'
-import { observer } from 'mobx-react-lite'
-import { useState } from 'react'
 import type { DetailSt } from './detail.state'
 
 export class WorkflowTask {

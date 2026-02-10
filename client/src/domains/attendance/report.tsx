@@ -1,10 +1,10 @@
+import { type BoxProps, Stack, Tooltip } from '@mui/joy'
+import moment from 'moment'
+import type { Column } from 'react-table'
 import { Box, Label, Loading, observer, P, Sheet, useState } from '@/lib'
 import { Hour } from '@/lib/constants'
 import { createDateAsUTC } from '@/lib/utils/date_fmt'
 import type { Employee } from '@/server/domains/attendance/report_generator'
-import { type BoxProps, Stack, Tooltip } from '@mui/joy'
-import moment from 'moment'
-import type { Column } from 'react-table'
 import { AbsenceLabels } from './absence'
 import { type Report, store } from './store'
 import { Table } from './table'
@@ -130,7 +130,7 @@ const ReportCell = observer(
   },
 )
 const ShiftDuration = (props: { total_dur: number }) => {
-  let dur_ms = props.total_dur * 1000
+  const dur_ms = props.total_dur * 1000
   const value =
     dur_ms == 8 * Hour ? '8' : moment(dur_ms).utcOffset(0, false).format('H:mm')
   return <Time sx={{ fontWeight: 600, color: 'primary.500' }}>{value}</Time>

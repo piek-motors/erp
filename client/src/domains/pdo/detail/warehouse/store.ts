@@ -1,6 +1,6 @@
-import { rpc } from '@/lib/rpc/rpc.client'
 import { makeAutoObservable } from 'mobx'
 import { SupplyReason, WriteoffReason } from 'models'
+import { rpc } from '@/lib/rpc/rpc.client'
 
 class Supply {
   constructor() {

@@ -1,8 +1,8 @@
+import { runHiddenMarkovModel } from 'rust'
 import { logger } from '#root/ioc/log.js'
 import { Day } from '#root/lib/constants.js'
 import type { Job } from '#root/lib/jobs_runner.js'
-import { DB, db } from '#root/sdk.js'
-import { runHiddenMarkovModel } from 'rust'
+import { type DB, db } from '#root/sdk.js'
 
 export class AttendanceEventPairingJob implements Job {
   async run(): Promise<void> {

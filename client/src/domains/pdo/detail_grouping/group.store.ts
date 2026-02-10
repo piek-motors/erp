@@ -1,6 +1,6 @@
-import { app_cache } from '@/domains/pdo/cache'
 import { makeAutoObservable } from 'mobx'
 import type { Color } from 'models'
+import { app_cache } from '@/domains/pdo/cache'
 import { ColorSegmentation } from './color_segmentation.store'
 
 class GroupNameState {

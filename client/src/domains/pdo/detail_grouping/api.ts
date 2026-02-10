@@ -1,9 +1,9 @@
+import { makeAutoObservable } from 'mobx'
 import { app_cache } from '@/domains/pdo/cache'
 import { matrixDecoder } from '@/lib/rpc/matrix_decoder'
 import { rpc } from '@/lib/rpc/rpc.client'
 import { LoadingController } from '@/lib/store/loading_controller'
 import type { DetailInTheGroup } from '@/server/domains/pdo/detail_groups_rpc'
-import { makeAutoObservable } from 'mobx'
 import { Detail, DetailGroupStore } from './group.store'
 
 export class DetailGroupingApi {

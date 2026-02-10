@@ -1,3 +1,16 @@
+import { UilExchange } from '@iconscout/react-unicons'
+import {
+  Button,
+  Divider,
+  IconButton,
+  Modal,
+  ModalClose,
+  ModalDialog,
+  Stack,
+} from '@mui/joy'
+import { makeAutoObservable } from 'mobx'
+import { observer } from 'mobx-react-lite'
+import type { AbsenceReason } from 'models'
 import { WebOnly } from '@/components/utilities/conditional-display'
 import { rpc } from '@/lib/deps'
 import {
@@ -12,19 +25,6 @@ import type {
   Employee,
   Interval,
 } from '@/server/domains/attendance/report_generator'
-import { UilExchange } from '@iconscout/react-unicons'
-import {
-  Button,
-  Divider,
-  IconButton,
-  Modal,
-  ModalClose,
-  ModalDialog,
-  Stack,
-} from '@mui/joy'
-import { makeAutoObservable } from 'mobx'
-import { observer } from 'mobx-react-lite'
-import type { AbsenceReason } from 'models'
 import { AbsenceReasons, absenceReasonState } from './absence'
 import { store } from './store'
 

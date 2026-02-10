@@ -1,7 +1,7 @@
-import { app_cache } from '@/domains/pdo/cache'
-import type { Blank } from '@/server/domains/pdo/details_rpc'
 import { makeAutoObservable } from 'mobx'
 import { MaterialRequirement } from 'models'
+import { app_cache } from '@/domains/pdo/cache'
+import type { Blank } from '@/server/domains/pdo/details_rpc'
 
 export type BlankData = Exclude<Blank['material'], undefined>['data']
 

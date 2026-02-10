@@ -1,11 +1,11 @@
 /** @jsxImportSource @emotion/react */
 
-import type { DetailStProp } from '@/domains/pdo/detail/detail.state'
-import { Label } from '@/lib/index'
 import { css } from '@emotion/react'
 import { Stack } from '@mui/joy'
 import { observer } from 'mobx-react-lite'
-import { SingleWorkflowTask, WorkflowTask } from '../../detail/workflow'
+import type { DetailStProp } from '@/domains/pdo/detail/detail.state'
+import { Label } from '@/lib/index'
+import { SingleWorkflowTask, type WorkflowTask } from '../../detail/workflow'
 import { tableStyles } from './shared'
 
 type Props = {

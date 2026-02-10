@@ -1,6 +1,6 @@
+import { Box, Button } from '@mui/joy'
 import { Search } from '@/components/inputs'
 import { observer, P, Stack, useEffect } from '@/lib/index'
-import { Box, Button } from '@mui/joy'
 import { api } from './api'
 import { DetailRow } from './detail_row'
 import { UniversalDetailsModalSelect } from './detail_selection'
