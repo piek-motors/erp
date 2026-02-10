@@ -30,7 +30,7 @@ import {
   useState,
 } from '@/lib/index'
 import { notifier } from '@/lib/store/notifier.store'
-import { fmtDate, timeDeltaDays } from '@/lib/utils/date_fmt'
+import { fmtDate } from '@/lib/utils/date_fmt'
 import { app_cache } from '../cache'
 import type { DetailSt, DetailStProp } from '../detail/detail.state'
 import type { DetailBlankSt } from '../detail/detail_blank.store'
@@ -160,25 +160,28 @@ const Workflow = observer(({ detail, order }: DetailStProp & OrderStProp) => {
     <Stack gap={1}>
       <Label label="Этапы обработки" />
       {detail.workflow.tasks.map((task, i) => {
-        const current = order.currentOperation === i
-        const timedelta =
-          current &&
-          order.resp?.current_operation_start_at &&
-          timeDeltaDays(Number(order.resp.current_operation_start_at))
+        const is_task_active = order.current_task?.idx == i
         return (
           <Row>
             <SingleWorkflowTask
               task={task}
               idx={i}
               textSlot={{
-                color: current ? 'success' : undefined,
+                color: is_task_active ? 'success' : undefined,
               }}
               taskNameSlot={{
                 fontWeight: 500,
               }}
-              onClick={() => api.setCurrentOperation(order, i)}
+              onClick={() => api.save_current_task(order, i)}
             />
-            <Label>{timedelta}</Label>
+            <Label
+              variant="solid"
+              color="success"
+              sx={{ borderRadius: 20, px: 0.8 }}
+              level="body-xs"
+            >
+              {is_task_active && order.current_task?.time_since()}
+            </Label>
           </Row>
         )
       })}

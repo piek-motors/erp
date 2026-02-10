@@ -2,6 +2,7 @@ import { makeAutoObservable } from 'mobx'
 import { OrderPriority } from 'models'
 import { rpc } from '@/lib/deps'
 import type { RouterOutput } from '@/server/lib/trpc'
+import { timeDeltaDays } from '@/lib/utils/date_fmt'
 
 export type ManufacturingOrderOutput = RouterOutput['pdo']['orders']['get']
 
@@ -12,6 +13,24 @@ type OrderAlreadyInProductionModal = {
 } | null
 
 export type OrderStProp = { order: OrderSt }
+
+export class CurrentWorkflowTask {
+  timestamp: Date | null = null
+  constructor(
+    public idx: number,
+    time: Date | number | null,
+  ) {
+    if (time) {
+      this.timestamp = new Date(time)
+    }
+    makeAutoObservable(this)
+  }
+
+  time_since() {
+    const t = this.timestamp
+    return t != null && !Number.isNaN(t) && timeDeltaDays(t.valueOf())
+  }
+}
 
 export class OrderSt {
   constructor() {
@@ -32,7 +51,12 @@ export class OrderSt {
     this.resp = order
     this.qty = order.qty
     this.outputQty = order.output_qty ?? null
-    this.currentOperation = order.current_operation
+    if (order.current_operation != null) {
+      this.current_task = new CurrentWorkflowTask(
+        order.current_operation,
+        Number(order.current_operation_start_at),
+      )
+    }
     this.orderAlreadyInProductionModal = null
     this.priority = order.priority
   }
@@ -46,10 +70,7 @@ export class OrderSt {
     this.outputQty = qty
   }
 
-  currentOperation: number | null = null
-  setCurrentOperationIndex(index: number | null) {
-    this.currentOperation = index
-  }
+  current_task: CurrentWorkflowTask | null = null
 
   priority: OrderPriority = OrderPriority.Normal
   async set_priority(priority: OrderPriority) {

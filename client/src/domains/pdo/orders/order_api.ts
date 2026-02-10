@@ -1,4 +1,4 @@
-import { makeAutoObservable } from 'mobx'
+import { makeAutoObservable, runInAction } from 'mobx'
 import { uiUnit } from 'models'
 import { rpc } from '@/lib/rpc/rpc.client'
 import { LoadingController } from '@/lib/store/loading_controller'
@@ -6,7 +6,11 @@ import { notifier } from '@/lib/store/notifier.store'
 import { app_cache } from '../cache'
 import type { DetailSt } from '../detail/detail.state'
 import { DetailApi } from '../detail/detail_api'
-import type { ManufacturingOrderOutput, OrderSt } from './order.state'
+import {
+  CurrentWorkflowTask,
+  type ManufacturingOrderOutput,
+  type OrderSt,
+} from './order.state'
 
 export class OrderApi {
   readonly loader = new LoadingController()
@@ -83,14 +87,28 @@ export class OrderApi {
     })
   }
 
-  async setCurrentOperation(order: OrderSt, index: number) {
+  async save_current_task(order: OrderSt, index: number) {
     if (!order.resp) throw new Error('Заказ не найден')
-    order.setCurrentOperationIndex(index)
-    await rpc.pdo.orders_mut.set_current_operation.mutate({
-      id: order.id,
-      operation_index: index,
-    })
-    order.resp.current_operation_start_at = null
+
+    const previousTask = order.current_task
+    const t = new CurrentWorkflowTask(index, null)
+
+    // Optimistic update
+    t.timestamp = new Date()
+    order.current_task = t
+
+    try {
+      await rpc.pdo.orders_mut.set_current_operation.mutate({
+        id: order.id,
+        operation_index: index,
+      })
+    } catch (error) {
+      // Rollback on failure
+      runInAction(() => {
+        order.current_task = previousTask
+      })
+      throw error
+    }
   }
 
   async set_qty(order: OrderSt, qty: number) {
