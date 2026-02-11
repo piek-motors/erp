@@ -3,7 +3,6 @@
 import { Sheet } from '@mui/joy'
 import { observer } from 'mobx-react-lite'
 import { OrderStatus } from 'models'
-import moment from 'moment'
 import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router'
 import { FactoryPage } from '@/components/factory_page'
@@ -92,6 +91,11 @@ const RegistrationList = observer(() => {
   )
 })
 
+const ruFormatter = new Intl.DateTimeFormat('ru-RU', {
+  day: 'numeric',
+  month: 'short',
+})
+
 const NewOrderList = observer(({ daysCount = 5 }: { daysCount?: number }) => {
   const [orders, setOrders] = useState<UnpackedOrder[]>([])
 
@@ -100,10 +104,12 @@ const NewOrderList = observer(({ daysCount = 5 }: { daysCount?: number }) => {
   }, [])
 
   const lastNDates = Array.from({ length: daysCount }, (_, i) => {
-    const date = moment().subtract(i, 'day')
+    const date = new Date()
+    date.setDate(date.getDate() - i)
+
     return {
       key: formatOnlyDate(date.toISOString()) as string,
-      label: i === 0 ? 'Сегодня' : i === 1 ? 'Вчера' : date.format('D MMM'),
+      label: i === 0 ? 'Сегодня' : i === 1 ? 'Вчера' : ruFormatter.format(date),
     }
   })
 

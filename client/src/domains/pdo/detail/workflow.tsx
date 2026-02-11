@@ -31,10 +31,7 @@ export class WorkflowTask {
   }
 
   get name(): string {
-    const name = app_cache.details.dict_processing_operaions.find(
-      each => each.id === this.id,
-    )?.v
-    return name ?? 'No value in the dict'
+    return app_cache.details.get_operation_label(this.id)
   }
 
   get payload(): [number] | [number, string] {

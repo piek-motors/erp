@@ -62,6 +62,13 @@ export class DetailCache {
     this.dict_processing_operaions = v
   }
 
+  get_operation_label(id: number) {
+    return (
+      this.dict_processing_operaions.find(each => each.id === id)?.v ??
+      'No value in the dict'
+    )
+  }
+
   async load() {
     this.loader.run(async () => {
       const [detailsRaw, operationsDict] = await Promise.all([

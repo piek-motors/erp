@@ -6,7 +6,6 @@ import {
 } from 'models'
 import { logger } from '#root/ioc/log.js'
 import { matrixEncoder } from '#root/lib/matrix_encoder.js'
-import { formatDate } from '#root/lib/time.js'
 import { router } from '#root/lib/trpc/trpc.js'
 import { db, procedure, requireScope, Scope, z } from '#root/sdk.js'
 
@@ -15,7 +14,7 @@ const Limit = 100
 export type OperationListItem = {
   id: number
   operation_type: OperationType
-  timestamp: string
+  timestamp: number
   qty: number
   manufacturing_order_id: number
   reason: SupplyReason | WriteoffReason
@@ -57,10 +56,6 @@ export const operations = router({
         .orderBy('o.id', 'desc')
         .limit(Limit)
         .execute()
-
-      operations.forEach(operation => {
-        operation.timestamp = formatDate(operation.timestamp) as any
-      })
       return matrixEncoder(operations)
     }),
   //

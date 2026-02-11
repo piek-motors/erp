@@ -16,6 +16,7 @@ export const ManagerFilter = observer(
     return (
       <FormControl>
         <Select
+          size="sm"
           value={value}
           onChange={(e, v) => onChange(parseInt(v))}
           placeholder="Менеджер"
