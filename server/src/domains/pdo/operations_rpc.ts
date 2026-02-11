@@ -1,6 +1,7 @@
 import {
   OperationType,
   type SupplyReason,
+  time,
   type Unit,
   type WriteoffReason,
 } from 'models'
@@ -14,7 +15,7 @@ const Limit = 100
 export type OperationListItem = {
   id: number
   operation_type: OperationType
-  timestamp: number
+  timestamp: string
   qty: number
   manufacturing_order_id: number
   reason: SupplyReason | WriteoffReason
@@ -56,6 +57,13 @@ export const operations = router({
         .orderBy('o.id', 'desc')
         .limit(Limit)
         .execute()
+
+      operations.forEach(each => {
+        each.timestamp = time.fmt_relative_or_calendar_date(
+          each.timestamp,
+        ) as any
+      })
+
       return matrixEncoder(operations)
     }),
   //

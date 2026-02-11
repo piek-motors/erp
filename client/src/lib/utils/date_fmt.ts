@@ -2,7 +2,7 @@ import moment from 'moment'
 import 'moment/locale/ru'
 moment.locale('ru')
 
-export function timeDeltaDays(t?: string | null | number) {
+export function time_delta_days(t?: string | null | number) {
   if (!t) return null
 
   const t1 = new Date(t)
@@ -74,40 +74,4 @@ export function convertDateToUTC(date: Date) {
     date.getUTCMinutes(),
     date.getUTCSeconds(),
   )
-}
-
-const ruShortDateFormatter = new Intl.DateTimeFormat('ru-RU', {
-  day: 'numeric',
-  month: 'short',
-})
-
-/**
- * Formats a date for UI display.
- *
- * If the date falls on today or yesterday (in local time),
- * returns a relative label ("Сегодня" / "Вчера").
- * Otherwise, falls back to a localized short calendar date
- * (e.g. "5 фев") using Intl.
- *
- * Intended for table cells, lists, and other compact UI elements.
- */
-export const formatRelativeOrCalendarDate = (
-  value: string | number | Date,
-): string => {
-  const date = new Date(value)
-
-  const startOfToday = new Date()
-  startOfToday.setHours(0, 0, 0, 0)
-
-  const startOfTargetDay = new Date(date)
-  startOfTargetDay.setHours(0, 0, 0, 0)
-
-  const dayDiff =
-    (startOfToday.getTime() - startOfTargetDay.getTime()) /
-    (24 * 60 * 60 * 1000)
-
-  if (dayDiff === 0) return 'Сегодня'
-  if (dayDiff === 1) return 'Вчера'
-
-  return ruShortDateFormatter.format(date)
 }

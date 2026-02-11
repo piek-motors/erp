@@ -1,9 +1,9 @@
 import { Tooltip } from '@mui/joy'
-import { OrderPriority, ProductionOrderStatus as Status } from 'models'
+import { OrderPriority, ProductionOrderStatus as Status, time } from 'models'
 import type { Column } from 'react-table'
 import { DetailName } from '@/domains/pdo/detail/detail_name'
 import { Box, Label, P, Row } from '@/lib/index'
-import { fmtDate, timeDeltaDays } from '@/lib/utils/date_fmt'
+import { fmtDate, time_delta_days } from '@/lib/utils/date_fmt'
 import type { ListOrdersOutput } from '@/server/domains/pdo/orders_rpc'
 
 const commonColumns: Column<ListOrdersOutput>[] = [
@@ -62,12 +62,12 @@ const productionColumns = commonColumns.concat([
   {
     Header: 'Запуск',
     accessor: m => {
-      const timedelta = timeDeltaDays(m.started_at)
-
+      if (!m.started_at) return null
+      const timedelta = time_delta_days(m.started_at)
       return (
         <Row flexWrap={'nowrap'}>
           <P level="body-xs" noWrap>
-            {fmtDate(m.started_at, true)}
+            {time.fmt_relative_or_calendar_date(m.started_at)}
           </P>
           <Label color="neutral" xs fontWeight={400} noWrap>
             {timedelta}
@@ -83,7 +83,7 @@ const productionColumns = commonColumns.concat([
   {
     Header: '_',
     accessor: m => {
-      const timedelta = timeDeltaDays(Number(m.current_operation_start_at))
+      const timedelta = time_delta_days(Number(m.current_operation_start_at))
       return (
         <>
           {timedelta && (

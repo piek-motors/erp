@@ -1,7 +1,7 @@
 import { makeAutoObservable } from 'mobx'
 import { OrderPriority } from 'models'
 import { rpc } from '@/lib/deps'
-import { timeDeltaDays } from '@/lib/utils/date_fmt'
+import { time_delta_days } from '@/lib/utils/date_fmt'
 import type { RouterOutput } from '@/server/lib/trpc'
 
 export type ManufacturingOrderOutput = RouterOutput['pdo']['orders']['get']
@@ -28,7 +28,7 @@ export class CurrentWorkflowTask {
 
   time_since() {
     const t = this.timestamp
-    return t != null && !Number.isNaN(t) && timeDeltaDays(t.valueOf())
+    return t != null && !Number.isNaN(t) && time_delta_days(t.valueOf())
   }
 }
 

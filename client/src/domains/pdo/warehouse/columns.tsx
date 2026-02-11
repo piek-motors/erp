@@ -22,7 +22,6 @@ import { AdaptiveNumberFormatter } from '../shared/adaptive_number_formatter'
 import { value_with_unit } from '../shared/basic'
 import { type Operation, operations_st } from './list'
 import { OperationName } from './operation_name'
-import { formatRelativeOrCalendarDate } from '@/lib/utils/date_fmt'
 
 const formatter = new AdaptiveNumberFormatter(2)
 
@@ -31,7 +30,7 @@ export const columns: Column<Operation>[] = [
     Header: 'Дата',
     accessor: data => (
       <Label level="body-xs" whiteSpace={'nowrap'}>
-        {formatRelativeOrCalendarDate(data.timestamp)}
+        {data.timestamp}
       </Label>
     ),
   },
