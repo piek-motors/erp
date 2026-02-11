@@ -31,7 +31,6 @@ const commonColumns: Column<ListOrdersOutput>[] = [
             name: d.detail_name,
             group_id: d.group_id,
           }}
-          disable_link
           with_group_name
         />
         {d.priority == OrderPriority.High && (
