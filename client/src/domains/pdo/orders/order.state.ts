@@ -1,8 +1,8 @@
 import { makeAutoObservable } from 'mobx'
 import { OrderPriority } from 'models'
 import { rpc } from '@/lib/deps'
-import type { RouterOutput } from '@/server/lib/trpc'
 import { timeDeltaDays } from '@/lib/utils/date_fmt'
+import type { RouterOutput } from '@/server/lib/trpc'
 
 export type ManufacturingOrderOutput = RouterOutput['pdo']['orders']['get']
 

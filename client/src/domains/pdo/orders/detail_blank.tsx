@@ -10,6 +10,7 @@ import type {
 } from '../detail/detail_blank.store'
 import { BlankAttributes } from '../detail/detail_form'
 import { MaterialName } from '../material/name'
+import { capitalize } from '../shared/basic'
 import type { OrderSt } from './order.state'
 
 interface DetailBlankProps {
@@ -17,16 +18,24 @@ interface DetailBlankProps {
   order: OrderSt
 }
 
-export const DetailBlank = observer(({ blank, order }: DetailBlankProps) => {
+export const DetailBlank = observer(({ blank, order }: DetailBlankProps) => (
+  <Stack maxWidth={300}>
+    <MaterialRequirementUi blank={blank} order={order} />
+    <DetailsRequirementUi blank={blank} order={order} />
+    <Box py={1}>
+      <BlankAttributes fontSize={14} attributes={blank.attributes} />
+    </Box>
+  </Stack>
+))
+
+const MaterialRequirementUi = observer(({ blank, order }: DetailBlankProps) => {
   const requirement = blank.material_requirement
   if (!requirement || !requirement.material_id) return null
-
   const material = app_cache.materials.get(requirement.material_id)
   if (!material) return null
-
   const unit = uiUnit(material.unit)
   return (
-    <Stack maxWidth={300}>
+    <>
       <MaterialName id={material.id} label={material.label} />
       <InfoLabel
         label="Потребное кол."
@@ -41,14 +50,33 @@ export const DetailBlank = observer(({ blank, order }: DetailBlankProps) => {
         unit={unit}
         quantity_to_produce={order.qty}
       />
-
-      <DetailsRequirement blank={blank} />
-      <Box py={1}>
-        <BlankAttributes fontSize={14} attributes={blank.attributes} />
-      </Box>
-    </Stack>
+    </>
   )
 })
+
+const DetailsRequirementUi = observer(
+  ({ blank, order }: { blank: DetailBlankSt; order: OrderSt }) => {
+    if (!blank.details_requirement.length) return null
+    return (
+      <>
+        <Divider sx={{ my: 0.5 }} />
+        {blank.details_requirement.map(each => {
+          const qty =
+            each.qty && order.qty
+              ? parseInt((each.qty * order.qty).toString())
+              : ''
+          return (
+            <Row key={each.detailId} gap={1}>
+              <Label>
+                {capitalize(each.detail?.name ?? '')} - {qty}
+              </Label>
+            </Row>
+          )
+        })}
+      </>
+    )
+  },
+)
 
 interface BlankTypePropertiesProps {
   requirement: MaterialRequirementSt
@@ -110,22 +138,6 @@ const BlankTypeProperties = ({
       return null
   }
 }
-
-const DetailsRequirement = observer(({ blank }: { blank: DetailBlankSt }) => {
-  if (!blank.details_requirement.length) return null
-
-  return (
-    <>
-      <Divider sx={{ my: 0.5 }} />
-      {blank.details_requirement.map(each => (
-        <Row key={each.detailId} gap={1}>
-          <Label>{each.detail?.name}</Label>
-          <InfoLabel label="" value={each.qty} suffix="шт" />
-        </Row>
-      ))}
-    </>
-  )
-})
 
 interface CalcMaterialRemainingsProps {
   requirement: MaterialRequirementSt

@@ -40,8 +40,8 @@ import { DetailBlank } from './detail_blank'
 import { OrderSt, type OrderStProp } from './order.state'
 import { api } from './order_api'
 import { TechPassportTable } from './tech_passport/passport_table'
-import { ProductionRoute } from './tech_passport/production_route_table'
 import { DetailDescription } from './tech_passport/shared'
+import { ProductionRoute } from './tech_passport/workflow_table'
 
 const deletionAllowed = [
   OrderStatus.Waiting,
@@ -334,7 +334,7 @@ const QuantityInput = observer(
 
     return (
       <Stack>
-        {recBatchSize && (
+        {!!recBatchSize && (
           <P level="body-xs" color="primary">
             Реком. размер партии — {recBatchSize}
           </P>
