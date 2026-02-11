@@ -3,6 +3,7 @@ import { capitalize, MetalPageTitle } from '@/domains/pdo/shared/basic'
 import {
   ActionButton,
   Box,
+  Label,
   Loading,
   observer,
   P,
@@ -15,6 +16,7 @@ import {
 } from '@/lib/index'
 import { openPage, routeMap } from '@/lib/routes'
 import { notifier } from '@/lib/store/notifier.store'
+import type { DeficitInfo } from '@/server/domains/pdo/materials_rpc'
 import { MobilePadding } from '../root_layout'
 import { SaveAndDelete } from '../shared/basic'
 import { api } from './api'
@@ -85,7 +87,7 @@ export const MaterialUpdatePage = observer(() => {
             <MaterialWarehouseCard m={m} />
             <DetailsMadeOfMaterialModal m={m} />
           </Row>
-
+          {m.deficit && <DeficitLabel deficitInfo={m.deficit} />}
           <Row flexWrap={'wrap'} alignItems={'start'}>
             <MaterialQuntifiedExpenses m={m} />
             <Card size="md">
@@ -114,3 +116,67 @@ export const MaterialUpdatePage = observer(() => {
     </Stack>
   )
 })
+
+function DeficitLabel({ deficitInfo }: { deficitInfo: DeficitInfo }) {
+  const { deficit, days_until_stockout } = deficitInfo
+
+  // Determine severity level
+  const getSeverity = () => {
+    if (deficit || days_until_stockout <= 0) return 'critical'
+    if (days_until_stockout <= 7) return 'critical'
+    if (days_until_stockout <= 30) return 'warning'
+    if (days_until_stockout <= 90) return 'caution'
+    return 'safe'
+  }
+
+  const severity = getSeverity()
+
+  // Get color based on severity
+  const getColor = () => {
+    switch (severity) {
+      case 'critical':
+        return 'danger'
+      case 'warning':
+        return 'warning'
+      case 'caution':
+        return 'primary'
+      default:
+        return 'success'
+    }
+  }
+
+  // Get text based on state
+  const getText = () => {
+    if (days_until_stockout === Infinity) {
+      return '✓ В наличии'
+    }
+
+    // Format days in Russian
+    const formatDays = (days: number) => {
+      const rounded = Math.floor(days)
+      if (rounded === 1) return '1 день'
+      if (rounded >= 2 && rounded <= 4) return `${rounded} дня`
+      return `${rounded} дней`
+    }
+
+    if (days_until_stockout <= 7) {
+      return `🔴 Осталось ${formatDays(days_until_stockout)}`
+    }
+
+    if (days_until_stockout <= 30) {
+      return `⚠️ Осталось ${formatDays(days_until_stockout)}`
+    }
+
+    if (days_until_stockout <= 90) {
+      return `Запас на ${formatDays(days_until_stockout)}`
+    }
+
+    return `✓ Запас на ${formatDays(days_until_stockout)}`
+  }
+
+  return (
+    <Label color={getColor()}>
+      {deficit && 'Дефицит:'} {getText()}
+    </Label>
+  )
+}

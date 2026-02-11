@@ -1,6 +1,7 @@
 import { type Material, MaterialShape, type Unit } from 'models'
 import { makeAutoObservable } from '@/lib/deps'
 import { LoadingController } from '@/lib/store/loading_controller'
+import type { DeficitInfo } from '@/server/domains/pdo/materials_rpc'
 import { ArbitraryState } from './shape/arbitrary.state'
 import { HexagonBarState } from './shape/hexagon_bar.state'
 import { ListState } from './shape/list_state'
@@ -73,6 +74,8 @@ export class MaterialSt {
     monthly?: [string, number][]
     quarterly?: [string, number][]
   } | null = null
+
+  deficit: DeficitInfo | null = null
 
   sync_state(material: Material) {
     this.shape = material.shape

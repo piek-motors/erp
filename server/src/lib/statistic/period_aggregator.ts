@@ -75,7 +75,7 @@ class BucketSeries {
     return this.percentile(50)
   }
 
-  sum(): number | null {
+  sum(): number {
     let sum = 0
     for (const v of this.map.values()) {
       sum += v

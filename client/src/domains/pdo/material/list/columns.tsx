@@ -1,12 +1,12 @@
 import type { Column } from 'react-table'
 import { AdaptiveNumberFormatter } from '@/domains/pdo/shared/adaptive_number_formatter'
-import { value_with_unit } from '@/domains/pdo/shared/basic'
-import { Label, P } from '@/lib/index'
-import type { Material } from '@/server/domains/pdo/materials_rpc'
+import { Indicator, value_with_unit } from '@/domains/pdo/shared/basic'
+import { Label, P, Row } from '@/lib/index'
+import type { MaterialRes } from '@/server/domains/pdo/materials_rpc'
 
 const formatter = new AdaptiveNumberFormatter(0, 0, true)
 
-export const columns: Column<Material>[] = [
+export const columns: Column<MaterialRes>[] = [
   {
     Header: '№',
     accessor: m => <Label xs>{m.id}</Label>,
@@ -14,7 +14,14 @@ export const columns: Column<Material>[] = [
   {
     Header: 'Наим.',
     id: 'name',
-    accessor: m => <P>{m.label}</P>,
+    accessor: m => (
+      <Row noWrap>
+        <P>{m.label}</P>
+        {m.deficit.deficit && (
+          <Indicator title="Дефицит" color="rgba(255, 7, 7, 0.8)" />
+        )}
+      </Row>
+    ),
   },
   {
     Header: 'Остаток',

@@ -25,7 +25,9 @@ import {
 } from '#root/sdk.js'
 import { get_details_by_material_id } from './details_rpc.js'
 
-export type Material = DB.Material & {}
+export type MaterialRes = DB.Material & {
+  deficit: DeficitInfo
+}
 
 const DEFAULT_SHORTAGE_PREDICTION_HORIZON_DAYS = 60
 
@@ -55,6 +57,7 @@ export const material = router({
     ])
     return {
       material,
+      deficit: predict_deficit(material),
       detailCount: Number(detailCount.count),
       writeoff_stat: {
         monthly: materials_stat_container.writeoffs.monthly?.get(id)?.entries,
@@ -70,7 +73,17 @@ export const material = router({
       .selectAll()
       .orderBy('m.label')
       .execute()
-      .then(materials => matrixEncoder(materials)),
+      .then(materials =>
+        matrixEncoder(
+          materials.map(
+            m =>
+              ({
+                ...m,
+                deficit: predict_deficit(m),
+              }) satisfies MaterialRes,
+          ),
+        ),
+      ),
   ),
   //
   create: procedure
@@ -207,4 +220,64 @@ function derive_label(input: UpdatePayload) {
   const model = new materialConstructor(input.shape_data, '', input.alloy)
   MaterialShapeAbstractionLayer.importShapeData(model, input.shape_data)
   return model.deriveLabel()
+}
+
+export interface DeficitInfo {
+  deficit: boolean
+  days_until_stockout: number
+}
+
+function predict_deficit(
+  material: Pick<
+    DB.Material,
+    'id' | 'on_hand_balance' | 'shortage_prediction_horizon_days'
+  >,
+): DeficitInfo {
+  const series = materials_stat_container.writeoffs.quarterly?.get(material.id)
+  // No data available - can't predict
+  if (!series || !series.map || series.map.size === 0) {
+    return {
+      deficit: false,
+      days_until_stockout: Infinity,
+    }
+  }
+
+  // Already in deficit
+  if (material.on_hand_balance <= 0) {
+    return {
+      deficit: true,
+      days_until_stockout: 0,
+    }
+  }
+
+  // Calculate total consumption and time period
+  const buckets = Array.from(series.map.entries())
+  const total_consumption = series.sum()
+
+  // No consumption - no deficit predicted
+  if (total_consumption === 0) {
+    return {
+      deficit: false,
+      days_until_stockout: Infinity,
+    }
+  }
+
+  // ⚠️ FIX: Count only non-zero quarters to avoid diluting the rate
+  const nonZeroQuarters = buckets.filter(([_, amount]) => amount > 0).length
+  const totalDays = nonZeroQuarters * 91.25
+
+  // Calculate average daily consumption rate
+  const dailyConsumptionRate = total_consumption / totalDays
+
+  // Predict days until stock runs out
+  const daysUntilStockout = material.on_hand_balance / dailyConsumptionRate
+
+  // Return true if predicted stockout is within the warning horizon
+  const in_deficit =
+    daysUntilStockout <= material.shortage_prediction_horizon_days
+
+  return {
+    deficit: in_deficit,
+    days_until_stockout: daysUntilStockout,
+  }
 }

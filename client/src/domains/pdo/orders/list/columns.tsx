@@ -1,10 +1,10 @@
-import { Tooltip } from '@mui/joy'
 import { OrderPriority, ProductionOrderStatus as Status, time } from 'models'
 import type { Column } from 'react-table'
 import { DetailName } from '@/domains/pdo/detail/detail_name'
-import { Box, Label, P, Row } from '@/lib/index'
+import { Label, P, Row } from '@/lib/index'
 import { fmtDate, time_delta_days } from '@/lib/utils/date_fmt'
 import type { ListOrdersOutput } from '@/server/domains/pdo/orders_rpc'
+import { Indicator } from '../../shared/basic'
 
 const commonColumns: Column<ListOrdersOutput>[] = [
   {
@@ -16,14 +16,10 @@ const commonColumns: Column<ListOrdersOutput>[] = [
     accessor: d => (
       <Row flexWrap={'nowrap'}>
         {d.duplicated && (
-          <Tooltip title={`Дублирует заказ №${d.duplicated}`} size="sm">
-            <Box
-              width={12}
-              height={12}
-              bgcolor={'rgb(255, 111, 7)'}
-              borderRadius={12}
-            />
-          </Tooltip>
+          <Indicator
+            title={`Дублирует заказ №${d.duplicated}`}
+            color={'rgb(255, 111, 7)'}
+          />
         )}
         <DetailName
           detail={{
@@ -34,9 +30,7 @@ const commonColumns: Column<ListOrdersOutput>[] = [
           with_group_name
         />
         {d.priority == OrderPriority.High && (
-          <Tooltip title={`Высокий приоритет`} size="sm">
-            <Box width={12} height={12} bgcolor={'red'} borderRadius={10} />
-          </Tooltip>
+          <Indicator title={`Высокий приоритет`} color={'red'} />
         )}
       </Row>
     ),

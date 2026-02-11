@@ -4,14 +4,14 @@ import { app_cache } from '@/domains/pdo/cache'
 import { LoadingController } from '@/lib/store/loading_controller'
 import { debounce } from '@/lib/utils/debounce'
 import { normalize, token_search } from '@/lib/utils/search'
-import type { Material } from '@/server/domains/pdo/materials_rpc'
+import type { MaterialRes } from '@/server/domains/pdo/materials_rpc'
 
 export class MaterialListStore {
   readonly async = new LoadingController()
 
   search_query: string = ''
   shape_filter: MaterialShape | null = null
-  search_result: Material[] = []
+  search_result: MaterialRes[] = []
 
   debouncedFilter: () => void
   constructor() {
@@ -36,11 +36,11 @@ export class MaterialListStore {
       items = token_search(items, query, {
         fields: [
           {
-            get: (m: Material) => m.label,
+            get: (m: MaterialRes) => m.label,
             weight: 2,
           },
           {
-            get: (m: Material) => m.id.toString(),
+            get: (m: MaterialRes) => m.id.toString(),
             weight: 1,
             match: 'exact',
           },

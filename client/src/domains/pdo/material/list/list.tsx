@@ -13,12 +13,12 @@ import {
   useNavigate,
 } from '@/lib/index'
 import { openPage, routeMap } from '@/lib/routes'
-import type { Material } from '@/server/domains/pdo/materials_rpc'
+import type { MaterialRes } from '@/server/domains/pdo/materials_rpc'
 import { columns } from './columns'
 import { materialListStore } from './store'
 
 interface MaterialsTableProps {
-  onRowClick?: (material: Material) => void
+  onRowClick?: (material: MaterialRes) => void
 }
 
 const MaterialList = observer((props: MaterialsTableProps) => {

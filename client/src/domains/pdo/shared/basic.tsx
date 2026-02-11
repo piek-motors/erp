@@ -1,4 +1,11 @@
-import { Button, Stack, ToggleButtonGroup } from '@mui/joy'
+import {
+  Box,
+  Button,
+  Stack,
+  ToggleButtonGroup,
+  Tooltip,
+  type TooltipProps,
+} from '@mui/joy'
 import type { SxProps } from '@mui/joy/styles/types'
 import { UiUnit, Unit, uiUnit } from 'models'
 import { useEffect, useState } from 'react'
@@ -128,3 +135,13 @@ export const value_with_unit = (
       {unit != null && <P level="body-xs">{uiUnit(unit)}</P>}
     </Row>
   )
+
+export const Indicator = (props: {
+  title: string
+  color: string
+  placement?: TooltipProps['placement']
+}) => (
+  <Tooltip title={props.title} size="sm" placement={props.placement ?? 'right'}>
+    <Box width={12} height={12} bgcolor={props.color} borderRadius={12} />
+  </Tooltip>
+)
