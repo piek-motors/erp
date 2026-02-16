@@ -14,6 +14,7 @@ import {
   type UpdateIntervalMetadata,
   UpdateIntervalModal,
 } from './update_interval'
+import { PrintOnly } from '@/components/utilities/conditional-display'
 
 export const AttendanceReportComponent = observer(
   ({ report }: { report: Report }) => {
@@ -21,7 +22,7 @@ export const AttendanceReportComponent = observer(
       {
         Header: 'Фамилия Имя',
         accessor: data => (
-          <Box sx={{ width: 'min-content', p: 0.5 }}>{data.name}</Box>
+          <Box sx={{ width: 'min-content', p: 0.3 }}>{data.name}</Box>
         ),
       },
       {
@@ -90,6 +91,7 @@ const ReportCell = observer(
         <Stack
           sx={{
             fontSize: '0.86rem',
+            lineHeight: 1.2,
             outline: isUpdatedRecently ? '2.5px dashed darkred' : undefined,
           }}
         >
@@ -114,9 +116,17 @@ const ReportCell = observer(
               )}
             </>
           ))}
-          <Box textAlign={'center'}>
-            {!!data.total_dur && <ShiftDuration total_dur={data.total_dur} />}
-          </Box>
+          {!!data.total_dur && (
+            <>
+              <Box textAlign={'center'}>
+                <ShiftDuration total_dur={data.total_dur} />{' '}
+              </Box>
+              {/* // Padding is required to make possible to add handwrited edits */}
+              <PrintOnly>
+                <Box pb={2.5} />
+              </PrintOnly>
+            </>
+          )}
           {props.report.isFull && (
             <UpdateIntervalButton
               data={data}

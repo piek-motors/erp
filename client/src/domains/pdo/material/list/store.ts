@@ -19,14 +19,14 @@ export class MaterialListStore {
     this.debouncedFilter = debounce(this.filter.bind(this), 300)
 
     reaction(
-      () => app_cache.materials.normalized_materials,
+      () => app_cache.materials.getMaterials(),
       () => this.filter(),
     )
   }
 
   private filter() {
     const query = normalize(this.search_query)
-    let items = app_cache.materials.normalized_materials
+    let items = app_cache.materials.getMaterials()
 
     if (this.shape_filter != null) {
       items = items.filter(m => m.shape === this.shape_filter)
