@@ -118,7 +118,7 @@ export const material = router({
   delete: procedure
     .use(requireScope(Scope.pdo))
     .input(id_payload)
-    .mutation(async ({ input: { id } }) => {
+    .mutation(async ({ input: { id }, ctx: { user } }) => {
       await db.transaction().execute(async trx => {
         // Check if we have some relationships with details
         const details = await get_details_by_material_id(id)
@@ -138,7 +138,7 @@ export const material = router({
           .where('id', '=', id)
           .returning(['label'])
           .executeTakeFirstOrThrow()
-        logger.warn(`Material deleted: ${id} ${label}`)
+        logger.info(`Material deleted: ${id} ${label} by ${user.first_name}`)
       })
       return {
         success: true,

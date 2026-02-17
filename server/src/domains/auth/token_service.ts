@@ -62,7 +62,7 @@ export class TokenService {
       if (tokens.length === 0) {
         return
       }
-      await this.tokenRepo.deleteTokens(tokens)
+      await this.tokenRepo.deleteMany(tokens)
     } catch (e) {
       throw Error(`Failed to delete outdated tokens: ${e}`)
     }

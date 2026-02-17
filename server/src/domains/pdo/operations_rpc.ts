@@ -74,7 +74,7 @@ export const operations = router({
         id: z.number(),
       }),
     )
-    .mutation(async ({ input }) => {
+    .mutation(async ({ input, ctx: { user } }) => {
       const operation = await db
         .selectFrom('pdo.operations')
         .where('id', '=', input.id)
@@ -121,11 +121,10 @@ export const operations = router({
         .execute()
 
       await db.deleteFrom('pdo.operations').where('id', '=', input.id).execute()
-
-      logger.warn(update, 'Выполнен откат операции')
+      logger.info(operation, `Balance operation reverted by ${user.full_name}`)
       return {
         success: true,
-        message: `Operation ${input.id} reverted successfully`,
+        message: `Операция изменения баланса отменена id, баланс скорректирован на ${balance_change}`,
       }
     }),
 })

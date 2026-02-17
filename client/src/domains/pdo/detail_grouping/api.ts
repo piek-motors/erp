@@ -69,7 +69,7 @@ export class DetailGroupingApi {
 
   async removeDetailsFromGroup(group_id: number, detail_ids: number[]) {
     return this.groupsLoading.run(async () => {
-      await rpc.pdo.detail_groups.remove_details.mutate({
+      await rpc.pdo.detail_groups.exclude_details.mutate({
         group_id,
         detail_ids,
       })

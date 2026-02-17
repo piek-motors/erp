@@ -51,6 +51,12 @@ export class AdaptiveNumberFormatter {
   }
   /** Removes trailing zeros and dangling decimal point */
   private trimTrailingZeros(value: string): string {
-    return value.replace(/\.?0+$/, '')
+    if (!value.includes('.')) return value
+
+    let end = value.length
+    while (end > 0 && value[end - 1] === '0') end--
+    if (value[end - 1] === '.') end--
+
+    return value.slice(0, end)
   }
 }

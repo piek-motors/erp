@@ -233,7 +233,7 @@ export const detail_groups = router({
       await Promise.all(insertPromises)
     }),
   //
-  remove_details: procedure
+  exclude_details: procedure
     .use(requireScope(Scope.pdo))
     .input(
       z.object({

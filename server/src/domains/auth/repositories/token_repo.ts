@@ -72,7 +72,7 @@ export class TokenRepository {
       .then(res => res.map(r => r.id))
   }
 
-  deleteTokens(ids: number[]) {
+  deleteMany(ids: number[]) {
     return this.db.deleteFrom('refresh_tokens').where('id', 'in', ids).execute()
   }
 }

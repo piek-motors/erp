@@ -249,15 +249,13 @@ export const orders = router({
   delete: procedure
     .use(requireScope(Scope.orders))
     .input(z.object({ id: z.number() }))
-    .mutation(async ({ input, ctx }) => {
+    .mutation(async ({ input, ctx: { user } }) => {
       await db
         .deleteFrom('orders.orders')
         .where('id', '=', input.id)
         .execute()
         .then(() => {
-          logger.info(
-            `Client order ${input.id} deleted by ${ctx.user.first_name} ${ctx.user.last_name}`,
-          )
+          logger.info(`Order ${input.id} deleted by ${user.full_name}`)
         })
     }),
   //

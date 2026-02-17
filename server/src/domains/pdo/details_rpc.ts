@@ -213,14 +213,19 @@ export const details = router({
   delete: procedure
     .use(requireScope(Scope.pdo))
     .input(z.object({ id: z.number() }))
-    .mutation(async ({ input }) =>
+    .mutation(async ({ input: { id }, ctx: { user } }) =>
       db.transaction().execute(async trx => {
+        const detail = await trx
+          .selectFrom('pdo.details')
+          .selectAll()
+          .where('id', '=', id)
+          .executeTakeFirst()
         // CASCADE constraints will automatically delete related records from:
         // - pdo.manufacturing
         // - pdo.operations
         // - pdo.detail_group_details
-        await trx.deleteFrom('pdo.details').where('id', '=', input.id).execute()
-        logger.warn(`Detail deleted: ${input.id}`)
+        await trx.deleteFrom('pdo.details').where('id', '=', id).execute()
+        logger.info(detail, `Detail deleted by ${user.full_name}`)
         return {
           success: true,
         }

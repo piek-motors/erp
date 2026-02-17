@@ -8,6 +8,8 @@ import {
 } from 'models'
 import { type IDB, TRPCError } from '#root/sdk.js'
 import { Warehouse } from './warehouse_service.js'
+import { logger } from '#root/ioc/log.js'
+import { ContextUser } from '#root/lib/trpc/context.js'
 
 type MaterialWriteoff = {
   material_id: number
@@ -65,9 +67,9 @@ export class OrderService {
 
   constructor(
     private readonly trx: IDB,
-    userId: number,
+    readonly user: ContextUser,
   ) {
-    this.warehouse = new Warehouse(trx, userId)
+    this.warehouse = new Warehouse(trx, user.id)
   }
 
   async createOrder(
@@ -221,19 +223,17 @@ export class OrderService {
       .execute()
   }
 
-  async deleteOrder(manufacturingId: number): Promise<void> {
-    const manufacturing = await this.getOrder(manufacturingId)
-    if (manufacturing.status === ProductionOrderStatus.Archived) {
+  async deleteOrder(id: number): Promise<void> {
+    const order = await this.getOrder(id)
+    if (order.status === ProductionOrderStatus.Archived) {
       throw new TRPCError({
         code: 'BAD_REQUEST',
         message: 'Cannot delete completed order',
       })
     }
 
-    await this.trx
-      .deleteFrom('pdo.orders')
-      .where('id', '=', manufacturingId)
-      .execute()
+    await this.trx.deleteFrom('pdo.orders').where('id', '=', id).execute()
+    logger.info(order, `Production order deleted by ${this.user.full_name}`)
   }
 
   private async subtractMaterials(

@@ -11,7 +11,7 @@ export const orders_mut = router({
     .input(z.object({ detailId: z.number() }))
     .mutation(({ input, ctx }) =>
       db.transaction().execute(trx =>
-        new OrderService(trx, ctx.user.id)
+        new OrderService(trx, ctx.user)
           .createOrder(input.detailId)
           .then(order => ({
             ...order,
@@ -65,7 +65,7 @@ export const orders_mut = router({
       db
         .transaction()
         .execute(async trx =>
-          new OrderService(trx, ctx.user.id)
+          new OrderService(trx, ctx.user)
             .deleteOrder(input.id)
             .then(() => 'ok'),
         ),
@@ -76,7 +76,7 @@ export const orders_mut = router({
     .input(z.object({ orderId: z.number() }))
     .mutation(({ input, ctx }) =>
       db.transaction().execute(trx =>
-        new OrderService(trx, ctx.user.id)
+        new OrderService(trx, ctx.user)
           .startMaterialPreparationPhase(input.orderId)
           .then(() => ({
             success: true,
@@ -97,7 +97,7 @@ export const orders_mut = router({
       db
         .transaction()
         .execute(trx =>
-          new OrderService(trx, ctx.user.id).startProductionPhase(
+          new OrderService(trx, ctx.user).startProductionPhase(
             input.orderId,
             input.qty,
             input.force,
@@ -147,7 +147,7 @@ export const orders_mut = router({
       db
         .transaction()
         .execute(async trx =>
-          new OrderService(trx, ctx.user.id).finishOrder(input.id),
+          new OrderService(trx, ctx.user).finishOrder(input.id),
         ),
     ),
   //
