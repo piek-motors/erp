@@ -3,6 +3,7 @@ import { IconButton } from '@mui/joy'
 import {
   OperationType,
   type SupplyReason,
+  time,
   uiSupplyReason,
   uiWriteoffReason,
   type WriteoffReason,
@@ -22,15 +23,17 @@ import { AdaptiveNumberFormatter } from '../shared/adaptive_number_formatter'
 import { value_with_unit } from '../shared/basic'
 import { type Operation, operations_st } from './list'
 import { OperationName } from './operation_name'
+import { Day } from '@/lib/constants'
 
 const formatter = new AdaptiveNumberFormatter(2)
+const ShowRevertButtonWithinDays = 7
 
 export const columns: Column<Operation>[] = [
   {
     Header: 'Дата',
     accessor: data => (
       <Label level="body-xs" whiteSpace={'nowrap'}>
-        {data.timestamp}
+        {time.fmt_relative_or_calendar_date(data.timestamp)}
       </Label>
     ),
   },
@@ -103,22 +106,26 @@ export const columns: Column<Operation>[] = [
   },
   {
     Header: 'Откат',
-    accessor: data => (
-      <IconButton
-        size="sm"
-        variant="solid"
-        color="danger"
-        sx={{
-          '--IconButton-size': '20px',
-          opacity: 0.05,
-          '&:hover': {
-            opacity: 1,
-          },
-        }}
-        onClick={() => operations_st.revert(data.id)}
-      >
-        <UseIcon icon={UilHistory} small invert />
-      </IconButton>
-    ),
+    accessor: op => {
+      const cutoffDate = new Date(Date.now() - ShowRevertButtonWithinDays * Day)
+      if (new Date(op.timestamp) < cutoffDate) return null
+      return (
+        <IconButton
+          size="sm"
+          variant="solid"
+          color="danger"
+          sx={{
+            '--IconButton-size': '20px',
+            opacity: 0.05,
+            '&:hover': {
+              opacity: 1,
+            },
+          }}
+          onClick={() => operations_st.revert(op)}
+        >
+          <UseIcon icon={UilHistory} small invert />
+        </IconButton>
+      )
+    },
   },
 ]

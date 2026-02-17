@@ -1,7 +1,6 @@
 import {
   OperationType,
   type SupplyReason,
-  time,
   type Unit,
   type WriteoffReason,
 } from 'models'
@@ -23,7 +22,7 @@ export type OperationListItem = {
   detail_id: number
   detail_name: string
   detail_group_id: number
-  material_id: number
+  material_id: number | number
   manufacturing_order_qty: number
 }
 
@@ -57,13 +56,6 @@ export const operations = router({
         .orderBy('o.id', 'desc')
         .limit(Limit)
         .execute()
-
-      operations.forEach(each => {
-        each.timestamp = time.fmt_relative_or_calendar_date(
-          each.timestamp,
-        ) as any
-      })
-
       return matrixEncoder(operations)
     }),
   //
@@ -123,8 +115,7 @@ export const operations = router({
       await db.deleteFrom('pdo.operations').where('id', '=', input.id).execute()
       logger.info(operation, `Balance operation reverted by ${user.full_name}`)
       return {
-        success: true,
-        message: `Операция изменения баланса отменена id, баланс скорректирован на ${balance_change}`,
+        message: `Операция изменения баланса отменена, баланс скорректирован на ${balance_change}`,
       }
     }),
 })

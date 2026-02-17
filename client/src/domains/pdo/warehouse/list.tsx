@@ -1,6 +1,6 @@
 import { makeAutoObservable } from 'mobx'
 import { observer } from 'mobx-react-lite'
-import { OperationType } from 'models'
+import { OperationType, uiUnit } from 'models'
 import { useEffect } from 'react'
 import { ScrollableWindow } from '@/components/scrollable_window'
 import { Table } from '@/components/table.impl'
@@ -12,6 +12,8 @@ import { LoadingController } from '@/lib/store/loading_controller'
 import type { OperationListItem } from '@/server/domains/pdo/operations_rpc'
 import { MobileNavModal, MobilePadding } from '../root_layout'
 import { columns } from './columns'
+import { notifier } from '@/lib/store/notifier.store'
+import { app_cache } from '../cache'
 
 export type Operation = OperationListItem
 
@@ -36,10 +38,20 @@ class OperationsSt {
     })
   }
 
-  async revert(operation_id: number) {
-    const msg = `Вы хотите откатить операцию?`
+  async revert(operation: Operation) {
+    let object_title
+    if (operation.material_id) {
+      object_title = app_cache.materials.get(operation.material_id)?.label
+    }
+    if (operation.detail_id) {
+      object_title = app_cache.details.get(operation.detail_id)?.name
+    }
+
+    const msg = `Откатить операцию для ${object_title} на ${operation.qty} ${uiUnit(operation.unit)}?`
+
     if (window.confirm(msg)) {
-      await rpc.pdo.operations.revert.mutate({ id: operation_id })
+      const res = await rpc.pdo.operations.revert.mutate({ id: operation.id })
+      notifier.warn(res.message)
       await this.load()
     }
   }
