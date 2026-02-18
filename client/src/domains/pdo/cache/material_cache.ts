@@ -1,4 +1,4 @@
-import { makeAutoObservable } from 'mobx'
+import { makeAutoObservable, runInAction } from 'mobx'
 import { matrixDecoder } from '@/lib/rpc/matrix_decoder'
 import { rpc } from '@/lib/rpc/rpc.client'
 import { normalize } from '@/lib/utils/search'
@@ -35,9 +35,12 @@ export class MaterialCache {
   constructor() {
     makeAutoObservable(this)
   }
+
   async invalidate() {
     const materials = await rpc.pdo.material.list.query()
     const decodedMaterials = matrixDecoder<MaterialRes>(materials)
-    this.materials = decodedMaterials
+    runInAction(() => {
+      this.materials = decodedMaterials
+    })
   }
 }

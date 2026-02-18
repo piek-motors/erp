@@ -1,7 +1,7 @@
 import { TRPCError } from '@trpc/server'
 import type * as trpcNext from '@trpc/server/adapters/next'
+import type { UserRole } from 'models'
 import { tokenService } from '#root/ioc/index.js'
-import { UserRole } from 'models'
 
 export async function createContext({
   req,

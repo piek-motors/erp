@@ -5,7 +5,7 @@ import { DetailsListPage } from './detail/list/list'
 import { DetailGroupById, DetailGroupListPage } from './detail_grouping/main'
 import { MaterialListPage } from './material/list/list'
 import { CreateMaterialPage, MaterialUpdatePage } from './material/material'
-import { ManufacturingList } from './orders/list/list'
+import { ProductionOrderList } from './orders/list/production'
 import { OrderUpdatePage } from './orders/order'
 import { MetalFlowRootLayout, MobilePadding } from './root_layout'
 import { OperationsPage } from './warehouse/list'
@@ -21,7 +21,7 @@ function wrapEachRoute(route: RouteConfig) {
 
 const innerRoutes = [
   {
-    element: <ManufacturingList />,
+    element: <ProductionOrderList />,
     path: metalflow.index,
   },
   {

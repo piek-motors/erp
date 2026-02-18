@@ -1,4 +1,4 @@
-import { makeAutoObservable } from 'mobx'
+import { makeAutoObservable, runInAction } from 'mobx'
 import { rpc } from '@/lib/rpc/rpc.client'
 import type { RouterOutput } from '@/server/lib/trpc'
 
@@ -23,7 +23,9 @@ export class DetailGroupCache {
   }
   async load() {
     const groups = await rpc.pdo.detail_groups.list.query()
-    this.groups = groups
+    runInAction(() => {
+      this.groups = groups
+    })
     return groups
   }
 }

@@ -9,6 +9,7 @@ import {
   type WriteoffReason,
 } from 'models'
 import type { Column } from 'react-table'
+import { Day } from '@/lib/constants'
 import {
   Button,
   Label,
@@ -23,7 +24,6 @@ import { AdaptiveNumberFormatter } from '../shared/adaptive_number_formatter'
 import { value_with_unit } from '../shared/basic'
 import { type Operation, operations_st } from './list'
 import { OperationName } from './operation_name'
-import { Day } from '@/lib/constants'
 
 const formatter = new AdaptiveNumberFormatter(2)
 const ShowRevertButtonWithinDays = 7

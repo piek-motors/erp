@@ -1,4 +1,5 @@
 import { Card } from '@mui/joy'
+import { fmt } from 'models'
 import { capitalize, MetalPageTitle } from '@/domains/pdo/shared/basic'
 import {
   ActionButton,
@@ -117,26 +118,13 @@ export const MaterialUpdatePage = observer(() => {
   )
 })
 
-const plural = new Intl.PluralRules('ru')
-
-const formatDays = (days: number) => {
-  const n = Math.floor(Math.abs(days))
-  const forms = {
-    one: 'день',
-    few: 'дня',
-    many: 'дней',
-    other: 'дней',
-  }
-  return `${n} ${forms[plural.select(n)]}`
-}
-
 function DeficitLabel({ deficitInfo }: { deficitInfo: DeficitInfo }) {
   const { deficit, days_until_stockout } = deficitInfo
 
   const getText = () => {
     if (deficit) return `Дефицит`
     if (Math.floor(days_until_stockout) == 0) return
-    return `Запас на ${formatDays(days_until_stockout)}`
+    return `Запас на ${fmt.day_count(days_until_stockout)}`
   }
 
   return <Label color={deficit ? 'danger' : 'success'}>{getText()}</Label>

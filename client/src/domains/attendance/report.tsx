@@ -1,6 +1,7 @@
 import { type BoxProps, Stack, Tooltip } from '@mui/joy'
 import moment from 'moment'
 import type { Column } from 'react-table'
+import { PrintOnly } from '@/components/utilities/conditional-display'
 import { Box, Label, Loading, observer, P, Sheet, useState } from '@/lib'
 import { Hour } from '@/lib/constants'
 import { createDateAsUTC } from '@/lib/utils/date_fmt'
@@ -14,7 +15,6 @@ import {
   type UpdateIntervalMetadata,
   UpdateIntervalModal,
 } from './update_interval'
-import { PrintOnly } from '@/components/utilities/conditional-display'
 
 export const AttendanceReportComponent = observer(
   ({ report }: { report: Report }) => {

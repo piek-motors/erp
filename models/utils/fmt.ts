@@ -42,3 +42,29 @@ export function roundAndTrim(value: unknown, precision: number = 1): number {
   if (isNaN(num) || num === 0) return 0
   return parseFloat(num.toFixed(precision))
 }
+
+const plural = new Intl.PluralRules('ru')
+
+/**
+ * Formats a numeric day count using correct Russian pluralization rules.
+ *
+ * Applies the 3-form plural system:
+ * - 1, 21, 31...      → "день"
+ * - 2–4, 22–24...     → "дня"
+ * - 0, 5–20, 11–14... → "дней"
+ *
+ * The value is floored and converted to absolute.
+ *
+ * @param days - Number of days (can be fractional or negative)
+ * @returns Formatted string with correctly pluralized unit
+ */
+export const day_count = (days: number) => {
+  const n = Math.floor(Math.abs(days))
+  const forms: Record<string, string> = {
+    one: 'день',
+    few: 'дня',
+    many: 'дней',
+    other: 'дней',
+  }
+  return `${n} ${forms[plural.select(n)]}`
+}

@@ -1,6 +1,6 @@
 import type { DB, Selectable } from 'db'
-import { db, procedure, router, z } from '#root/sdk.js'
 import { logger } from '#root/ioc/log.js'
+import { db, procedure, router, z } from '#root/sdk.js'
 
 export type DictEntry = Selectable<DB.Dict<string>>
 
