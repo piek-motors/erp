@@ -87,7 +87,7 @@ export const MaterialUpdatePage = observer(() => {
             <MaterialWarehouseCard m={m} />
             <DetailsMadeOfMaterialModal m={m} />
           </Row>
-          {m.deficit && <DeficitLabel deficitInfo={m.deficit} />}
+          {m.deficit_info && <DeficitLabel deficitInfo={m.deficit_info} />}
           <Row flexWrap={'wrap'} alignItems={'start'}>
             <MaterialQuntifiedExpenses m={m} />
             <Card size="md">
@@ -117,66 +117,27 @@ export const MaterialUpdatePage = observer(() => {
   )
 })
 
+const plural = new Intl.PluralRules('ru')
+
+const formatDays = (days: number) => {
+  const n = Math.floor(Math.abs(days))
+  const forms = {
+    one: 'день',
+    few: 'дня',
+    many: 'дней',
+    other: 'дней',
+  }
+  return `${n} ${forms[plural.select(n)]}`
+}
+
 function DeficitLabel({ deficitInfo }: { deficitInfo: DeficitInfo }) {
   const { deficit, days_until_stockout } = deficitInfo
 
-  // Determine severity level
-  const getSeverity = () => {
-    if (deficit || days_until_stockout <= 0) return 'critical'
-    if (days_until_stockout <= 7) return 'critical'
-    if (days_until_stockout <= 30) return 'warning'
-    if (days_until_stockout <= 90) return 'caution'
-    return 'safe'
-  }
-
-  const severity = getSeverity()
-
-  // Get color based on severity
-  const getColor = () => {
-    switch (severity) {
-      case 'critical':
-        return 'danger'
-      case 'warning':
-        return 'warning'
-      case 'caution':
-        return 'primary'
-      default:
-        return 'success'
-    }
-  }
-
-  // Get text based on state
   const getText = () => {
-    if (days_until_stockout === Infinity) {
-      return '✓ В наличии'
-    }
-
-    // Format days in Russian
-    const formatDays = (days: number) => {
-      const rounded = Math.floor(days)
-      if (rounded === 1) return '1 день'
-      if (rounded >= 2 && rounded <= 4) return `${rounded} дня`
-      return `${rounded} дней`
-    }
-
-    if (days_until_stockout <= 7) {
-      return `🔴 Осталось ${formatDays(days_until_stockout)}`
-    }
-
-    if (days_until_stockout <= 30) {
-      return `⚠️ Осталось ${formatDays(days_until_stockout)}`
-    }
-
-    if (days_until_stockout <= 90) {
-      return `Запас на ${formatDays(days_until_stockout)}`
-    }
-
-    return `✓ Запас на ${formatDays(days_until_stockout)}`
+    if (deficit) return `Дефицит`
+    if (Math.floor(days_until_stockout) == 0) return
+    return `Запас на ${formatDays(days_until_stockout)}`
   }
 
-  return (
-    <Label color={getColor()}>
-      {deficit && 'Дефицит:'} {getText()}
-    </Label>
-  )
+  return <Label color={deficit ? 'danger' : 'success'}>{getText()}</Label>
 }

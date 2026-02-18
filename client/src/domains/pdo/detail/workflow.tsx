@@ -86,7 +86,7 @@ export class Workflow {
 
   get payload(): DetailWorkflow {
     return {
-      workflow: this.tasks.map(o => o.payload),
+      workflow: this.tasks.map(o => o.payload).filter(o => o[0] != null),
     }
   }
 }

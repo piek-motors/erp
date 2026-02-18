@@ -75,7 +75,7 @@ export class MaterialSt {
     quarterly?: [string, number][]
   } | null = null
 
-  deficit: DeficitInfo | null = null
+  deficit_info: DeficitInfo | null = null
 
   sync_state(material: Material) {
     this.shape = material.shape
