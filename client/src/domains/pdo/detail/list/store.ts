@@ -6,27 +6,32 @@ import {
 import { app_cache } from '@/domains/pdo/cache'
 import { LoadingController } from '@/lib/store/loading_controller'
 import { debounce } from '@/lib/utils/debounce'
-import type { DetailSt } from '../detail.state'
+import {
+  type CriteriaBasedSearchConfig,
+  normalize,
+  token_search,
+} from '@/lib/utils/search'
+import type { AppDetail } from '../../cache/detail_cache'
 
-export enum DetailSearchCriteria {
+export enum SearchCriteria {
   Id = '№',
   Name = 'Наим.',
-  DrawingNum = 'Чертеж',
+  DrawingNumber = 'Чертеж',
 }
 
-type CriteriaMatcher = (details: DetailSt[], query: string) => DetailSt[]
+type CriteriaMatcher = (details: AppDetail[], query: string) => AppDetail[]
 
 export class DetailListStore {
   readonly loader = new LoadingController()
-  readonly searchStore: PaginatedSearchStore<DetailSt>
+  readonly searchStore: PaginatedSearchStore<AppDetail>
 
-  search_criteria = DetailSearchCriteria.Name
+  search_criteria = SearchCriteria.Name
   query: string = ''
   index_letter: string | null = null
 
   debouncedFilter: () => void
   constructor() {
-    this.searchStore = new PaginatedSearchStore<DetailSt>(
+    this.searchStore = new PaginatedSearchStore<AppDetail>(
       () => app_cache.details.details,
       {
         pageSize: 50,
@@ -41,9 +46,8 @@ export class DetailListStore {
     )
   }
 
-  set_search_criteria(c: DetailSearchCriteria) {
+  set_search_criteria(c: SearchCriteria) {
     this.search_criteria = c
-    this.query = ''
     this.searchStore.search()
   }
 
@@ -63,52 +67,10 @@ export class DetailListStore {
     this.searchStore.clear()
   }
 
-  private readonly criteriaMatchers: Record<
-    DetailSearchCriteria,
-    CriteriaMatcher
-  > = {
-    [DetailSearchCriteria.Id]: (details, query) =>
-      details.filter(d => d.id?.toString() === query),
-
-    [DetailSearchCriteria.Name]: (details, query) => {
-      const tokens = query.toLowerCase().split(/\s+/).filter(Boolean)
-
-      if (!tokens.length) return details
-
-      return details
-        .map(detail => {
-          const name = detail.name.toLowerCase()
-          const group = (
-            app_cache.detailGroups.getGroupName(detail.group_id) ?? ''
-          ).toLowerCase()
-
-          let score = 0
-
-          for (const token of tokens) {
-            if (name.includes(token)) score += 3
-            else if (group.includes(token)) score += 1
-            else return null
-          }
-
-          return { detail, score }
-        })
-        .filter((v): v is { detail: DetailSt; score: number } => v !== null)
-        .sort((a, b) => b.score - a.score)
-        .map(v => v.detail)
-    },
-
-    [DetailSearchCriteria.DrawingNum]: (details, query) => {
-      const q = query.toLowerCase()
-      return details.filter(
-        d => d.drawing_number && d.drawing_number.toLowerCase().includes(q),
-      )
-    },
-  }
-
   private filter_details(
-    details: DetailSt[],
+    details: AppDetail[],
     _filters: SearchFilters,
-  ): DetailSt[] {
+  ): AppDetail[] {
     this.searchStore.setIsSearching(true)
 
     let result = details
@@ -122,8 +84,12 @@ export class DetailListStore {
 
     // Criteria-based search
     if (this.query) {
-      const matcher = this.criteriaMatchers[this.search_criteria]
-      result = matcher(result, this.query)
+      const norm_query = normalize(this.query)
+      result = token_search(
+        result,
+        norm_query,
+        search_config[this.search_criteria],
+      )
     }
 
     return result
@@ -132,6 +98,35 @@ export class DetailListStore {
   get displayed_results() {
     return this.searchStore.displayedResults
   }
+}
+
+const search_config: CriteriaBasedSearchConfig<AppDetail, SearchCriteria> = {
+  [SearchCriteria.Name]: {
+    fields: [
+      {
+        get: d => d.normalized_name,
+      },
+      {
+        get: d => (app_cache.groups.name_for(d.group_id) ?? '').toLowerCase(),
+      },
+    ],
+  },
+  [SearchCriteria.Id]: {
+    fields: [
+      {
+        get: d => d.id.toString(),
+        match: 'exact',
+      },
+    ],
+  },
+  [SearchCriteria.DrawingNumber]: {
+    fields: [
+      {
+        get: d => d.drawing_number ?? '',
+        match: 'includes',
+      },
+    ],
+  },
 }
 
 export const detailListStore = new DetailListStore()

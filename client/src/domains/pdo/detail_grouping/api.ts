@@ -17,7 +17,7 @@ export class DetailGroupingApi {
 
   async listGroups() {
     return this.groupsLoading.run(async () => {
-      await app_cache.detailGroups.load()
+      await app_cache.groups.invalidate()
     })
   }
 
@@ -37,7 +37,7 @@ export class DetailGroupingApi {
   async createGroup(name: string) {
     return this.groupsLoading.run(async () => {
       const newGroup = await rpc.pdo.detail_groups.create.mutate({ name })
-      await app_cache.detailGroups.load()
+      await app_cache.groups.invalidate()
       return newGroup
     })
   }
@@ -48,7 +48,7 @@ export class DetailGroupingApi {
         id,
         name,
       })
-      await app_cache.detailGroups.load()
+      await app_cache.groups.invalidate()
       if (this.store.openedGroup?.group.id === id) {
         await this.loadGroupWithDetails(id)
       }

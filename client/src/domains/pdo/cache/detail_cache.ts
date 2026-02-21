@@ -2,8 +2,8 @@ import { makeAutoObservable, runInAction } from 'mobx'
 import { matrixDecoder } from '@/lib/rpc/matrix_decoder'
 import { rpc } from '@/lib/rpc/rpc.client'
 import { LoadingController } from '@/lib/store/loading_controller'
+import { normalize } from '@/lib/utils/search'
 import type { ListDetailsOutput } from '@/server/domains/pdo/details_rpc'
-import { DetailSt } from '../detail/detail.state'
 
 const alphabet = 'АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ'.split('')
 
@@ -12,16 +12,17 @@ type Operation = {
   v: string
 }
 
+export type AppDetail = ListDetailsOutput & { normalized_name: string }
+
 export class DetailCache {
   readonly loader = new LoadingController()
-
-  private _details: DetailSt[] = []
+  private _details: AppDetail[] = []
 
   constructor() {
     makeAutoObservable(this)
   }
 
-  get(id: number): DetailSt | undefined {
+  get(id: number): AppDetail | undefined {
     return this._details.find(detail => detail.id === id)
   }
 
@@ -49,7 +50,7 @@ export class DetailCache {
     this._details = this._details.filter(d => d.id !== id)
   }
 
-  update(detail: DetailSt) {
+  update(detail: AppDetail) {
     this._details = this._details.map(d => (d.id === detail.id ? detail : d))
   }
 
@@ -69,19 +70,25 @@ export class DetailCache {
     )
   }
 
-  async load() {
+  async invalidate() {
     this.loader.run(async () => {
-      const [detailsRaw, operationsDict] = await Promise.all([
+      const [details_encoded, operations_dict] = await Promise.all([
         rpc.pdo.details.list.query(),
         rpc.pdo.dict.operation_kinds.ls.query(),
       ])
-      const details = matrixDecoder<ListDetailsOutput>(detailsRaw).map(
-        DetailSt.fromDto,
-      )
+      const details = matrixDecoder<ListDetailsOutput>(details_encoded)
+
       runInAction(() => {
-        this._details = details
-        this.dict_processing_operaions = operationsDict
+        this._details = this.normalize_names(details)
+        this.dict_processing_operaions = operations_dict
       })
     })
+  }
+
+  private normalize_names(d: ListDetailsOutput[]): AppDetail[] {
+    return d.map(e => ({
+      ...e,
+      normalized_name: normalize(e.name),
+    }))
   }
 }

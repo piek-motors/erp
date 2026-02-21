@@ -2,6 +2,7 @@ import { action, makeAutoObservable, reaction, runInAction } from 'mobx'
 import { observer } from 'mobx-react-lite'
 import { ProductionOrderStatus as OrderStatus } from 'models'
 import { useEffect } from 'react'
+import { Search } from '@/components/inputs'
 import { Table } from '@/components/table.impl'
 import { Label } from '@/lib'
 import { rpc } from '@/lib/deps'
@@ -10,7 +11,6 @@ import { LoadingController } from '@/lib/store/loading_controller'
 import { debounce } from '@/lib/utils/debounce'
 import type { ListOrdersOutput } from '@/server/domains/pdo/orders_rpc'
 import { getColumns } from './columns'
-import { Search } from '@/components/inputs'
 
 export class ArchiveSearchStore {
   readonly loader = new LoadingController()

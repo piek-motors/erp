@@ -3,6 +3,7 @@ import { Attachment } from '@/components/attachments/store'
 import { rpc } from '@/lib/rpc/rpc.client'
 import { LoadingController } from '@/lib/store/loading_controller'
 import { notifier } from '@/lib/store/notifier.store'
+import { normalize } from '@/lib/utils/search'
 import { app_cache } from '../cache'
 import { DetailSt, LastProduction } from './detail.state'
 import { detailListStore } from './list/store'
@@ -58,14 +59,21 @@ export class DetailApi {
 
   async insert(detail: DetailSt) {
     const res = await rpc.pdo.details.create.mutate(detail.payload)
-    await app_cache.details.load()
+    await app_cache.details.invalidate()
     return res.id
   }
 
   async update(detail: DetailSt) {
     try {
       await rpc.pdo.details.update.mutate(detail.payload)
-      app_cache.details.update(detail)
+      app_cache.details.update({
+        id: detail.id,
+        group_id: detail.group_id,
+        name: detail.name,
+        normalized_name: normalize(detail.name),
+        drawing_number: detail.drawing_number,
+        on_hand_balance: detail.warehouse.stock,
+      })
       detail.set_updated_at(new Date())
       notifier.ok(`Деталь обновлена`)
       return detail

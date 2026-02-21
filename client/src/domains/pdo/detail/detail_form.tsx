@@ -92,9 +92,9 @@ export const DetailAccordionGroup = observer(({ d }: { d: DetailSt }) => (
 
 export const MaterialSelect = observer(
   (props: { value?: number; index: number; onChange: (m: number) => void }) => {
-    const { value, onChange } = props
+    const { value: material, onChange } = props
     const options: BaseOption[] =
-      app_cache.materials.getMaterials()?.map(material => ({
+      app_cache.materials.materials.map(material => ({
         label: app_cache.materials.get(material.id)?.label || '',
         value: material.id,
       })) || []
@@ -105,10 +105,10 @@ export const MaterialSelect = observer(
         options={options}
         placeholder="Выберите материал"
         value={
-          value
+          material
             ? {
-                label: app_cache.materials.getLabel(value) || '',
-                value,
+                label: app_cache.materials.label_for(material) || '',
+                value: material,
               }
             : null
         }
@@ -165,12 +165,10 @@ const Input = (props: InputLabledProps) => (
 )
 
 const DetailGroupInput = observer(({ detail }: { detail: DetailSt }) => {
-  const groupOptions: BaseOption[] = app_cache.detailGroups
-    .getGroups()
-    .map(group => ({
-      label: group.name,
-      value: group.id,
-    }))
+  const groupOptions: BaseOption[] = app_cache.groups.ls().map(group => ({
+    label: group.name,
+    value: group.id,
+  }))
 
   const selectedGroup =
     groupOptions.find(option => option.value === detail.group_id) || null

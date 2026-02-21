@@ -2,11 +2,11 @@ import type { Column } from 'react-table'
 import { AdaptiveNumberFormatter } from '@/domains/pdo/shared/adaptive_number_formatter'
 import { Indicator, value_with_unit } from '@/domains/pdo/shared/basic'
 import { Label, P, Row } from '@/lib/index'
-import type { MaterialRes } from '@/server/domains/pdo/materials_rpc'
+import type { AppMaterial } from '../../cache/material_cache'
 
 const formatter = new AdaptiveNumberFormatter(0, 0, true)
 
-export const columns: Column<MaterialRes>[] = [
+export const columns: Column<AppMaterial>[] = [
   {
     Header: '№',
     accessor: m => <Label xs>{m.id}</Label>,

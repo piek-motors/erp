@@ -18,10 +18,11 @@ import {
   Stack,
   useNavigate,
 } from '@/lib/index'
+import type { AppDetail } from '../../cache/detail_cache'
 import type { DetailSt } from '../detail.state'
 import { DetailName } from '../detail_name'
 import { AlphabetIndex } from './alphabet_index'
-import { DetailSearchCriteria, detailListStore as state } from './store'
+import { SearchCriteria, detailListStore as state } from './store'
 
 export const DetailsListPage = () => (
   <ScrollableWindow
@@ -47,7 +48,7 @@ const Search = observer(() => (
   <SearchWithCriteria
     variant="soft"
     color="primary"
-    criteriaOptions={DetailSearchCriteria}
+    criteriaOptions={SearchCriteria}
     criteria={state.search_criteria}
     onCriteriaChange={c => state.set_search_criteria(c)}
     query={state.query ?? ''}
@@ -55,7 +56,7 @@ const Search = observer(() => (
   />
 ))
 
-const columnList: Column<DetailSt>[] = [
+const columnList: Column<AppDetail>[] = [
   {
     Header: '№',
     accessor: d => <Label xs>{d.id}</Label>,
@@ -78,15 +79,15 @@ const columnList: Column<DetailSt>[] = [
   {
     Header: 'Остаток',
     accessor: r => {
-      if (!r.warehouse.stock) return ''
-      return r.warehouse.stock
+      if (!r.on_hand_balance) return ''
+      return r.on_hand_balance
     },
   },
 ]
 
 interface DetailsTableProps {
-  onRowClick?: (row: DetailSt) => void
-  highlight?: (row: DetailSt) => boolean
+  onRowClick?: (row: AppDetail) => void
+  highlight?: (row: AppDetail) => boolean
   highlightColor?: string
   sx?: SxProps
   excludeDetailById?: number
@@ -122,7 +123,7 @@ const DetailList = observer((props: DetailsTableProps) => {
 
 interface DetailSelectModalProps {
   value?: DetailSt
-  onRowClick: (row: DetailSt) => void
+  onRowClick: (row: AppDetail) => void
   open: boolean
   setOpen: (v: boolean) => void
   excludeDetailById?: number

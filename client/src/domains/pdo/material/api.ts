@@ -82,12 +82,7 @@ export class MaterialApi {
 
   async delete(id: number) {
     await rpc.pdo.material.delete.mutate({ id })
-    const materialToRemove = app_cache.materials
-      .getMaterials()
-      .find(m => m.id === id)
-    if (materialToRemove) {
-      app_cache.materials.removeMaterial(materialToRemove)
-    }
+    app_cache.materials.delete(id)
   }
 
   async get_details_made_from_material(material_id: number) {

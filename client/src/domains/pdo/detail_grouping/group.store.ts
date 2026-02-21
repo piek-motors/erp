@@ -100,7 +100,7 @@ export class DetailGroupStore {
   }
 
   get groups() {
-    return app_cache.detailGroups.getGroups()
+    return app_cache.groups.ls()
   }
 
   get targetGroupDetails() {

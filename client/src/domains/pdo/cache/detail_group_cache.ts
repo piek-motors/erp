@@ -6,7 +6,11 @@ export type DetailGroup = RouterOutput['pdo']['detail_groups']['list'][number]
 
 export class DetailGroupCache {
   private groups: DetailGroup[] = []
-  getGroups() {
+  constructor() {
+    makeAutoObservable(this)
+  }
+
+  ls() {
     return this.groups.slice().sort((a, b) =>
       a.name.localeCompare(b.name, 'ru', {
         numeric: true,
@@ -14,14 +18,13 @@ export class DetailGroupCache {
       }),
     )
   }
-  getGroupName(id?: number | null) {
+
+  name_for(id?: number | null) {
     if (!id) return null
     return this.groups.find(g => g.id === id)?.name
   }
-  constructor() {
-    makeAutoObservable(this)
-  }
-  async load() {
+
+  async invalidate() {
     const groups = await rpc.pdo.detail_groups.list.query()
     runInAction(() => {
       this.groups = groups

@@ -6,16 +6,16 @@ import { MaterialCache } from './material_cache'
 class MetalflowCache {
   details = new DetailCache()
   materials = new MaterialCache()
-  detailGroups = new DetailGroupCache()
+  groups = new DetailGroupCache()
 
   constructor() {
     makeAutoObservable(this)
   }
 
   async init() {
-    await this.details.load()
+    await this.details.invalidate()
     await this.materials.invalidate()
-    await this.detailGroups.load()
+    await this.groups.invalidate()
   }
 }
 

@@ -23,38 +23,39 @@ import {
 import { matrixDecoder } from '@/lib/rpc/matrix_decoder'
 import { LoadingController } from '@/lib/store/loading_controller'
 import { debounce } from '@/lib/utils/debounce'
-import { type SearchConfig, token_search } from '@/lib/utils/search'
+import {
+  type CriteriaBasedSearchConfig,
+  token_search,
+} from '@/lib/utils/search'
 import type { ListOrdersOutput } from '@/server/domains/pdo/orders_rpc'
 import { ArchiveResults, ArchiveSearch } from './archive'
 import { getColumns } from './columns'
 
-export enum OrderSearchCriteria {
+export enum SearchCriteria {
   Id = '№',
   Detail = 'Деталь',
   Operation = 'Операция',
   Group = 'Группа',
 }
 
-const search_config: Record<
-  OrderSearchCriteria,
-  SearchConfig<ListOrdersOutput>
+const search_config: CriteriaBasedSearchConfig<
+  ListOrdersOutput,
+  SearchCriteria
 > = {
-  [OrderSearchCriteria.Id]: {
+  [SearchCriteria.Id]: {
     fields: [{ get: o => String(o.id), match: 'exact' }],
   },
-  [OrderSearchCriteria.Detail]: {
+  [SearchCriteria.Detail]: {
     fields: [
       { get: o => o.detail_name, weight: 3 },
       { get: o => String(o.id), match: 'exact' },
     ],
   },
-  [OrderSearchCriteria.Operation]: {
+  [SearchCriteria.Operation]: {
     fields: [{ get: o => o.current_operation || '', match: 'start_with' }],
   },
-  [OrderSearchCriteria.Group]: {
-    fields: [
-      { get: o => app_cache.detailGroups.getGroupName(o.group_id) ?? '' },
-    ],
+  [SearchCriteria.Group]: {
+    fields: [{ get: o => app_cache.groups.name_for(o.group_id) ?? '' }],
   },
 }
 
@@ -65,7 +66,7 @@ export class OrderListSt {
   orders: ListOrdersOutput[] = []
   query: string = ''
   private debouncedQuery: string = ''
-  search_criteria = OrderSearchCriteria.Detail
+  search_criteria = SearchCriteria.Detail
 
   private readonly runDebouncedSearch: () => void
 
@@ -82,10 +83,10 @@ export class OrderListSt {
     )
   }
 
-  set_еab(v: OrderStatus) {
+  set_tab(v: OrderStatus) {
     this.tab = v
   }
-  set_search_criteria(c: OrderSearchCriteria) {
+  set_search_criteria(c: SearchCriteria) {
     this.search_criteria = c
   }
   set_query(q: string) {
@@ -176,7 +177,7 @@ const OrderSearch = observer(() => {
   return (
     <SearchWithCriteria
       criteria={state.search_criteria}
-      criteriaOptions={OrderSearchCriteria}
+      criteriaOptions={SearchCriteria}
       onCriteriaChange={c => state.set_search_criteria(c)}
       query={state.query}
       onQueryChange={q => state.set_query(q)}
@@ -203,7 +204,7 @@ export const ProductionOrderList = observer(() => {
     <Tabs
       variant="plain"
       value={state.tab}
-      onChange={(_, v) => state.set_еab(v as OrderStatus)}
+      onChange={(_, v) => state.set_tab(v as OrderStatus)}
       size="sm"
     >
       <ScrollableWindow

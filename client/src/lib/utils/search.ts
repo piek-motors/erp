@@ -9,7 +9,10 @@ export type SearchField<T> = {
 
 export interface SearchConfig<T> {
   fields: SearchField<T>[]
-  minScore?: number
+}
+
+export type CriteriaBasedSearchConfig<T, C extends string> = {
+  [K in C]: SearchConfig<T>
 }
 
 export function normalize(str?: string | null) {
@@ -32,7 +35,7 @@ export function normalize(str?: string | null) {
 export function token_search<T>(
   items: readonly T[],
   query: string,
-  config: { fields: SearchField<T>[] },
+  config: SearchConfig<T>,
 ): T[] {
   const queryLower = query.toLowerCase().trim()
   const tokens = queryLower.split(/\s+/).filter(Boolean)

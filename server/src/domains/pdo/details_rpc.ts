@@ -42,9 +42,9 @@ const DetailSchema = z.object({
 export interface ListDetailsOutput {
   id: number
   name: string
-  part_code: string
-  logical_group_id: number | null
-  stock: number
+  drawing_number: string | null
+  group_id: number | null
+  on_hand_balance: number
 }
 
 export type SelectableDetail = Selectable<DB.DetailTable>
@@ -106,12 +106,12 @@ export const details = router({
         'd.id',
         'd.name',
         'd.drawing_number',
-        'd.logical_group_id',
+        'd.logical_group_id as group_id',
         'd.on_hand_balance',
       ])
       .orderBy('d.id', 'desc')
       .execute()
-      .then(rows => matrixEncoder(rows)),
+      .then(rows => matrixEncoder<ListDetailsOutput>(rows)),
   ),
   //
   create: procedure

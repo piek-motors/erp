@@ -48,7 +48,7 @@ export const DetailName = observer(
 const GroupName = observer(({ groupId }: { groupId?: number | null }) => {
   if (!groupId) return null
 
-  const name = app_cache.detailGroups.getGroupName(groupId)
+  const name = app_cache.groups.name_for(groupId)
   if (!name) return null
 
   return (

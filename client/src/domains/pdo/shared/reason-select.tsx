@@ -24,7 +24,7 @@ export const WriteoffReasonSelect = observer(
         (acc, reason) => ({ ...acc, [reason]: reason }),
         {},
       )}
-      enumTranslationEnum={UiWriteoffReason}
+      translationEnum={UiWriteoffReason}
       value={{
         label: uiWriteoffReason(props.reason),
         value: props.reason?.toString() || '0',
@@ -47,7 +47,7 @@ export const SupplyReasonSelect = observer((props: Props) => (
       (acc, reason) => ({ ...acc, [reason]: reason }),
       {},
     )}
-    enumTranslationEnum={UiSupplyReason}
+    translationEnum={UiSupplyReason}
     value={{
       label: uiSupplyReason(props.reason),
       value: props.reason?.toString() || '0',
@@ -64,7 +64,7 @@ interface ReasonOption {
 interface ReasonSelectProps {
   label: string
   enum: object
-  enumTranslationEnum: object
+  translationEnum: object
   value: ReasonOption
   onChange: (value: string | null) => void
 }
@@ -83,7 +83,7 @@ const ReasonSelect = observer((props: ReasonSelectProps) => (
       {Object.entries(props.enum)
         .filter(([k, v]) => !Number.isNaN(Number(k)))
         .map(([k, v]) => ({
-          label: props.enumTranslationEnum[k],
+          label: props.translationEnum[k],
           value: k,
         }))
         .map(option => (
