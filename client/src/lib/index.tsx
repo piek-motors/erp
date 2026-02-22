@@ -18,6 +18,7 @@ import {
   Container,
   Divider,
   FormControl,
+  FormControlProps,
   IconButton,
   type IconButtonProps,
   Input,
@@ -94,11 +95,16 @@ export type InputLabledProps = {
   value?: string | number | null
   onChange?: (value: string) => void
   fullWidth?: boolean
+  width?: string | number
+  minWidth?: string | number
 } & Omit<InputProps, 'value' | 'onChange'>
 
 export const InputLabled = (props: InputLabledProps) => (
   <FormControl
-    sx={{ width: props.fullWidth ? '-webkit-fill-available' : 'auto' }}
+    sx={{
+      width: props.width || props.fullWidth ? '-webkit-fill-available' : 'auto',
+      minWidth: props.minWidth,
+    }}
   >
     <Label label={props.label} />
     <Row>
@@ -333,10 +339,11 @@ export function InputStack(props: { children: React.ReactNode; p?: number }) {
 export function MultilineInput(
   props: {
     label?: string
+    formProps?: FormControlProps
   } & TextareaProps,
 ) {
   return (
-    <FormControl>
+    <FormControl {...props.formProps}>
       <Label label={props.label} />
       <Textarea {...props} />
     </FormControl>

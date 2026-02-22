@@ -91,7 +91,6 @@ export function MetalFlowRootLayout(props: { children?: React.ReactNode }) {
             links={nav_links}
             title={title}
             p={0.5}
-            pr={0}
             sx={{
               backgroundColor: 'lightgrey',
               position: 'sticky',

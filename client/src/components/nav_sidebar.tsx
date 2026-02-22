@@ -1,3 +1,5 @@
+/** @jsxImportSource @emotion/react */
+
 import { UilPlusCircle } from '@iconscout/react-unicons'
 import {
   Box,
@@ -9,7 +11,8 @@ import {
 } from '@mui/joy'
 import { Link, useLocation } from 'react-router'
 import { NavTopBar } from '@/components/nav_topbar'
-import { UseIcon } from '@/lib/index'
+import { css } from '@emotion/react'
+import { UseIcon } from '@/lib'
 
 export type Link = {
   name?: string
@@ -42,7 +45,7 @@ const RenderAction = (props: { action: Link; size: ButtonProps['size'] }) => {
       justifyContent={'space-between'}
     >
       <MenuButton href={action.href} name={action.name} size={size} />
-      <Box>
+      <Box alignItems={'center'}>
         {action.endBlock?.length && (
           <Stack>
             {action.endBlock?.map(e => (
@@ -63,9 +66,14 @@ function MenuButton(props: {
   const location = useLocation()
   const isActive = location.pathname === props.href
   return (
-    <Link to={props.href} key={props.href}>
+    <Link to={props.href} key={props.href} css={css`width: 100%;`}>
       <Button
-        sx={{ textAlign: 'left', lineHeight: 1, width: 'min-content' }}
+        sx={{
+          textAlign: 'left',
+          lineHeight: 1,
+          width: '100%',
+          justifyContent: 'start',
+        }}
         variant={isActive ? 'soft' : 'plain'}
         color={'neutral'}
         size={'sm'}

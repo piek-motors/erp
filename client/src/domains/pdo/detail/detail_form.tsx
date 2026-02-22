@@ -41,32 +41,40 @@ export const DetailForm = observer(
     <Grid container direction={{ xs: 'column', md: 'row' }} spacing={1}>
       <Grid xs={12} md={7}>
         <MultilineInput
-          sx={{ fontWeight: 500, width: '100%' }}
+          sx={{ fontWeight: 500, width: '100%', boxShadow: 'none' }}
           color="primary"
-          label="Название со склада"
+          variant="soft"
+          label="Название"
           onChange={e => {
             detail.setName(e.target.value)
           }}
           value={detail.name}
         />
-        <MultilineInput
-          sx={{ width: '100%' }}
-          label="Название чертежа"
-          value={detail.drawing_name}
-          onChange={e => {
-            detail.set_drawing_name(e.target.value)
-          }}
-        />
-        <Input
-          label="Номер чертежа"
-          onChange={v => {
-            detail.set_drawing_number(v)
-            if (v.startsWith('ВЗИС')) {
-              alert('Впишите конструкторский номер без приставки "ВЗИС"')
-            }
-          }}
-          value={detail.drawing_number}
-        />
+
+        <Stack my={0.5}>
+          <Label>Чертеж</Label>
+          <Row noWrap>
+            <MultilineInput
+              formProps={{ sx: { flexGrow: 1 } }}
+              placeholder="Название"
+              value={detail.drawing_name}
+              onChange={e => {
+                detail.set_drawing_name(e.target.value)
+              }}
+            />
+            <Input
+              placeholder="Номер"
+              onChange={v => {
+                detail.set_drawing_number(v)
+                if (v.startsWith('ВЗИС')) {
+                  alert('Впишите конструкторский номер без приставки "ВЗИС"')
+                }
+              }}
+              value={detail.drawing_number}
+            />
+          </Row>
+        </Stack>
+
         <DetailGroupInput detail={detail} />
         <Row alignItems={'end'}>
           <StockLocationInput detail={detail} />
@@ -143,6 +151,7 @@ const DetailDescriptionInput = observer(({ detail }: { detail: DetailSt }) => (
 const DetailRecommendedBatchSizeInput = observer(
   ({ detail }: { detail: DetailSt }) => (
     <NumberInput
+      size="md"
       label="Рекоменд. размер партии"
       value={detail.recommended_batch_size}
       onChange={v => {
