@@ -9,6 +9,7 @@ import { CreateOrder } from './create'
 import { PrintLayout } from './layouts/print'
 import { WebLayout } from './layouts/web'
 import { orderStore } from './order.store'
+import { WebOnly } from '@/components/utilities/conditional-display'
 
 const OrderDetail = observer(() => {
   const queryParams = useParams<{ id: string }>()
@@ -34,7 +35,9 @@ const OrderDetail = observer(() => {
   return (
     <section {...getRootProps()} id="dropzone">
       <PrintLayout />
-      <WebLayout />
+      <WebOnly display="block">
+        <WebLayout />
+      </WebOnly>
     </section>
   )
 })

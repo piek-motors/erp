@@ -9,7 +9,6 @@ import { NotifierOverlay } from './components/notifier'
 import { AppRouter } from './lib/routers/Router'
 import theme from './theme'
 
-console.log('main exec')
 const App = observer(() => {
   return (
     <>

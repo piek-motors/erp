@@ -22,6 +22,7 @@ export const PositionsList = observer(() => {
             justifyContent="space-between"
             css={orderPositionsItemStyle}
             gap={4}
+            noWrap
           >
             <P fontFamily={'monospace'} fontSize={'1.2rem'}>
               {position.name}

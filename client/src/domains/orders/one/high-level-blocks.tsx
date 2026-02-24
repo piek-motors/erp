@@ -99,9 +99,7 @@ export const OrderLeftPanel = observer(() => (
   <Sheet sx={{ borderRadius: 'sm', p: 2 }}>
     <Stack gap={3}>
       <OrderMetadata />
-      <Box>
-        <PositionsList />
-      </Box>
+      <PositionsList />
       <Divider />
       <OrderInfoSection />
     </Stack>

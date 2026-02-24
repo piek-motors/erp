@@ -24,7 +24,7 @@ export const AttachmentComponent = (props: {
   const [editMode, setEditMode] = useState(false)
   const editable = props.editable ?? true
   return (
-    <Row display={'flex'}>
+    <Row display={'flex'} noWrap>
       {editMode ? (
         <Stack
           flexGrow={1}
