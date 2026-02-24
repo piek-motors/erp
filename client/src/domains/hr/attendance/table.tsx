@@ -3,7 +3,7 @@
 import { css } from '@emotion/react'
 import { useTable } from 'react-table'
 import { Sheet } from '@/lib'
-import type { Employee } from '@/server/domains/attendance/report_generator'
+import type { Employee } from '@/server/domains/hr/attendance/report_generator'
 
 interface ITableProps {
   readonly columns: any[]

@@ -10,7 +10,7 @@ import { matrixEncoder } from '#root/lib/matrix_encoder.js'
 import { formatDate, timedeltaInSeconds } from '#root/lib/time.js'
 import { router } from '#root/lib/trpc/trpc.js'
 import { type DB, db, procedure, TRPCError } from '#root/sdk.js'
-import { calc_material_deduction } from './order_service.js'
+import { calc_material_deduction } from './services/order_service.js'
 
 export const FinishedOrderRetentionDays = 30
 

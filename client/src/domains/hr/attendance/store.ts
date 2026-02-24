@@ -2,7 +2,7 @@ import { makeAutoObservable } from 'mobx'
 import { MonthSelectStore } from '@/components/inputs/month-select'
 import { rpc } from '@/lib/rpc/rpc.client'
 import { LoadingController } from '@/lib/store/loading_controller'
-import type { AttendanceReport } from '@/server/domains/attendance/report_generator'
+import type { AttendanceReport } from '@/server/domains/hr/attendance/report_generator'
 
 export class Report {
   constructor(
@@ -34,7 +34,7 @@ export class AttendanceSt {
 
   async load() {
     const res = await this.loader.run(() =>
-      rpc.attendance.get_report.query({
+      rpc.hr.attendance.get_report.query({
         month: this.monthSelect.month,
         year: this.monthSelect.year,
         timeRetentionMinutes: this.timeRetention,

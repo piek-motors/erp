@@ -31,7 +31,7 @@ class AbsenceReasonMenuState {
     if (!this.openParams) {
       throw new Error('open params is not set')
     }
-    await rpc.attendance.set_absence_reason.mutate({
+    await rpc.hr.attendance.set_absence_reason.mutate({
       user_id: this.openParams.employeeId,
       date: this.openParams.date.toISOString().split('T')[0],
       reason,

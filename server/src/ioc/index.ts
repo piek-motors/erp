@@ -1,6 +1,6 @@
 import { AttachmentService } from '#root/domains/attachment/attachment_service.js'
-import { AttendanceEventPairingJob } from '#root/domains/attendance/attendance_event_pairing_job.js'
-import { AttendanceReportGenerator } from '#root/domains/attendance/report_generator.js'
+import { AttendanceEventPairingJob } from '#root/domains/hr/attendance/event_pairing_job.js'
+import { AttendanceReportGenerator } from '#root/domains/hr/attendance/report_generator.js'
 import { AuthSevice } from '#root/domains/auth/auth_service.js'
 import { TokenService } from '#root/domains/auth/token_service.js'
 import { MaterialSpendAggJob } from '#root/domains/pdo/jobs/material_spend_agg_job.js'

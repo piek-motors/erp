@@ -9,7 +9,7 @@ import {
 import { logger } from '#root/ioc/log.js'
 import type { ContextUser } from '#root/lib/trpc/context.js'
 import { type IDB, TRPCError } from '#root/sdk.js'
-import { Warehouse } from './warehouse_service.js'
+import { Warehouse } from '../services/warehouse_service.js'
 
 type MaterialWriteoff = {
   material_id: number

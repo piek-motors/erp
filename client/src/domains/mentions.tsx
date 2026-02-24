@@ -121,7 +121,7 @@ export const MentionList = observer(() => {
                   size: 'sm',
                 }}
                 label="Прочитать все"
-                onClick={() => rpc.read_notifications.mutate()}
+                onClick={() => rpc.auth.read_notifications.mutate()}
               />
             </Box>
             {!loading &&

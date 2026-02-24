@@ -25,6 +25,12 @@ export class AttendanceEventPairingJob implements Job {
         events.map(e => ({ ...e, timestamp: e.timestamp.toUTCString() })),
       )
 
+      const valid_cards = new Set(
+        (
+          await db.selectFrom('attendance.employees').select('card').execute()
+        ).map(e => e.card),
+      )
+
       await db.deleteFrom('attendance.intervals').execute()
 
       const res = await db
@@ -32,7 +38,7 @@ export class AttendanceEventPairingJob implements Job {
         .values(
           empl_intervals.flatMap(each => {
             const card = each.card
-            if (!card || card == '0') return []
+            if (!card || card == '0' || !valid_cards.has(card)) return []
             return each.shifts.map(
               s =>
                 ({

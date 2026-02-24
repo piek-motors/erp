@@ -3,7 +3,7 @@ import z from 'zod'
 import { Day, Scope } from '#root/lib/constants.js'
 import { router } from '#root/lib/trpc/trpc.js'
 import { type DB, db, procedure, requireScope, TRPCError } from '#root/sdk.js'
-import { OrderService } from './order_service.js'
+import { OrderService } from './services/order_service.js'
 
 export const orders_mut = router({
   create: procedure

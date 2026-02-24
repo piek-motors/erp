@@ -4,7 +4,7 @@ import order_detail from '@/domains/orders/one/main'
 import reclamations from '@/domains/orders/reclamation/ui'
 import metalflow from '@/domains/pdo/routes'
 import { routeMap } from '@/lib/routes'
-import Attendance from './domains/attendance/main'
+import Attendance from './domains/hr/attendance/main'
 import type { RouteConfig } from './lib/types/global'
 import { IndexPage } from './nav_menu.page'
 

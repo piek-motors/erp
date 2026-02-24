@@ -3,7 +3,7 @@
 import { describe, it } from 'node:test'
 import { writeFileSync } from 'fs'
 import { db } from '#root/sdk.js'
-import { endOfUTCMonth, startOfUTCMonth } from '../../lib/time.js'
+import { endOfUTCMonth, startOfUTCMonth } from '../../../lib/time.js'
 
 const DELIMETER = '\t'
 

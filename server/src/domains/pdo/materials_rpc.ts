@@ -9,7 +9,7 @@ import {
   WriteoffReason,
 } from 'models'
 import { z } from 'zod'
-import { Warehouse } from '#root/domains/pdo/warehouse_service.js'
+import { Warehouse } from '#root/domains/pdo/services/warehouse_service.js'
 import { materials_stat_container } from '#root/ioc/index.js'
 import { logger } from '#root/ioc/log.js'
 import { isDuplicateKeyError } from '#root/lib/kysely.js'

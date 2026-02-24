@@ -24,7 +24,7 @@ import {
 import type {
   Employee,
   Interval,
-} from '@/server/domains/attendance/report_generator'
+} from '@/server/domains/hr/attendance/report_generator'
 import { AbsenceReasons, absenceReasonState } from './absence'
 import { store } from './store'
 
@@ -96,14 +96,15 @@ class State {
       upTimeAndMinutesOnDate(this.intervalDate!, each),
     )
 
+    // TODO: fix creating of duplicated intervals
     if (this.interval?.ent_event_id) {
-      await rpc.attendance.update_interval.mutate({
+      await rpc.hr.attendance.update_interval.mutate({
         ent_event_id: this.interval?.ent_event_id,
         ent,
         ext,
       })
     } else {
-      await rpc.attendance.insert_interval.mutate({
+      await rpc.hr.attendance.insert_interval.mutate({
         card: this.meta?.employee.card!,
         ent_event_id: this.generateRandomEntEventId(),
         ent,

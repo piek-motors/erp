@@ -2,7 +2,7 @@ import { BlankSchema, type DB, DetailWorkFlowSchema } from 'db'
 import { type Selectable, sql } from 'kysely'
 import { SupplyReason, Unit, WriteoffReason } from 'models'
 import { z } from 'zod'
-import { Warehouse } from '#root/domains/pdo/warehouse_service.js'
+import { Warehouse } from '#root/domains/pdo/services/warehouse_service.js'
 import { logger } from '#root/ioc/log.js'
 import { matrixEncoder } from '#root/lib/matrix_encoder.js'
 import {

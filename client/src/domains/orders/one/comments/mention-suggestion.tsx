@@ -10,7 +10,7 @@ export type SuggestionItem = {
 
 export const suggestion = {
   items: async () =>
-    rpc.users.query().then(
+    rpc.auth.users.query().then(
       users =>
         users.map(
           e =>

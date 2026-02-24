@@ -1,33 +1,14 @@
-import { db } from '#root/ioc/db.js'
 import { router } from '#root/lib/trpc/trpc.js'
-import { procedure } from '#root/sdk.js'
 import { attachments } from './attachment/attachment_rpc.js'
-import { attendance } from './attendance/attendance_rpc.js'
+import { auth } from './auth/index.js'
+import { hr } from './hr/index.js'
 import { orders } from './orders/orders_rpc.js'
-import { pdo } from './pdo/pdo_router.js'
+import { pdo } from './pdo/index.js'
 
 export const trpcRouter = router({
   orders,
-  //
   pdo,
-  //
   attachments,
-  //
-  attendance,
-  //
-  users: procedure.query(async () =>
-    db
-      .selectFrom('users')
-      .select(['id', 'first_name', 'last_name', 'roles'])
-      .where('is_deleted', '=', false)
-      .execute(),
-  ),
-  //
-  read_notifications: procedure.mutation(async ({ ctx }) => {
-    await db
-      .updateTable('orders.notifications')
-      .set({ seen: true })
-      .where('user_id', '=', ctx.user.id)
-      .execute()
-  }),
+  hr,
+  auth,
 })
