@@ -1,11 +1,4 @@
-import {
-  Box,
-  Button,
-  Stack,
-  ToggleButtonGroup,
-  Tooltip,
-  type TooltipProps,
-} from '@mui/joy'
+import { Box, Tooltip, type TooltipProps } from '@mui/joy'
 import type { SxProps } from '@mui/joy/styles/types'
 import { UiUnit, Unit, uiUnit } from 'models'
 import { useEffect, useState } from 'react'
@@ -18,34 +11,27 @@ import {
   NavTopBar,
   type Props as PageTitleProps,
 } from '@/components/nav_topbar'
-import { ActionButton, DeleteIcon, Label, P, Row } from '@/lib/index'
+import { ActionButton, DeleteIcon, P, Row } from '@/lib/index'
 import { rpc } from '@/lib/rpc/rpc.client'
 import { MobileNavModal } from '../root_layout'
+import { EnumSelect } from '@/components/select'
 
-export function MaterialUnitSelect(props: {
-  value: Unit | null
+export function UnitSelect(props: {
+  value?: Unit
   onChange: (e: Unit) => void
   disabled?: boolean
 }) {
   return (
-    <Stack>
-      <Label label="Ед. учета остатков" />
-      <ToggleButtonGroup
-        disabled={props.disabled}
-        variant="outlined"
-        color="primary"
-        value={props.value != null ? Object.keys(Unit)[props.value] : null}
-        onChange={(e, v) => {
-          props.onChange(parseInt(v as any))
-        }}
-      >
-        {Object.entries(UiUnit).map(([key, value]) => (
-          <Button value={key} key={key}>
-            {value}
-          </Button>
-        ))}
-      </ToggleButtonGroup>
-    </Stack>
+    <EnumSelect
+      enum={Unit}
+      label="Ед. учета остатков"
+      size="sm"
+      value={props.value}
+      onChange={v => {
+        props.onChange(parseInt(v as any))
+      }}
+      labels={UiUnit}
+    />
   )
 }
 

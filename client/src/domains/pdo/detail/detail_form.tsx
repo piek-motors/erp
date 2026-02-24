@@ -43,7 +43,7 @@ export const DetailForm = observer(
         <MultilineInput
           sx={{ fontWeight: 500, width: '100%', boxShadow: 'none' }}
           color="primary"
-          variant="soft"
+          variant="outlined"
           label="Название"
           onChange={e => {
             detail.setName(e.target.value)
