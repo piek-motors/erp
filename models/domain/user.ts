@@ -3,4 +3,5 @@ export enum UserRole {
   OrderManager = 'order_manager',
   PdoManager = 'pdo_manager',
   StaffManager = 'staff_manager',
+  TimeformerSynchronizer = 'sync_timeformers',
 }

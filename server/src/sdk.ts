@@ -11,7 +11,7 @@ export { db } from '#root/ioc/db.js'
 export { s3 } from '#root/ioc/s3.js'
 export { matrixEncoder } from '#root/lib/matrix_encoder.js'
 export { procedure, router } from '#root/lib/trpc/trpc.js'
-export { rbac } from './config/rbac_definition.js'
+export { RolePermissionsConfig } from './config/role_permissions.js'
 export { Scope } from './lib/constants.js'
 export { requireScope } from './lib/rbac/require_scope.middleware.js'
 

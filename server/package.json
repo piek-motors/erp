@@ -4,6 +4,9 @@
   "main": "dist/server.js",
   "type": "module",
   "scripts": {
+    "fmt": "pnpm exec biome format --write",
+    "lint": "pnpm exec biome lint --write",
+    "fix": "pnpm exec biome check --write",
     "start": "tsx ./src/main.ts",
     "dev": "tsx watch ./src/main.ts",
     "build": "tsc -p tsconfig.json",

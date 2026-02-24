@@ -1,4 +1,4 @@
-// npx tsx --test ./src/domains/attendance/hmm_create_dataset.test.ts
+// npx tsx --test ./src/domains/hr/attendance/hmm_create_dataset.test.ts
 
 import { describe, it } from 'node:test'
 import { writeFileSync } from 'fs'

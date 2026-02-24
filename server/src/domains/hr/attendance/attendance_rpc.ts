@@ -1,13 +1,31 @@
+import type { Insertable } from 'kysely'
 import { AbsenceReason } from 'models'
 import { z } from 'zod'
 import { attendanceReportGenerator } from '#root/ioc/index.js'
 import { router } from '#root/lib/trpc/trpc.js'
-import { db, procedure, requireScope, Scope } from '#root/sdk.js'
+import { type DB, db, procedure, requireScope, Scope } from '#root/sdk.js'
 
-const intervalUpdate = z.object({
+const manual_interval_update_dto = z.object({
   ent_event_id: z.number(),
   ent: z.string(),
   ext: z.string(),
+})
+
+const upload_data_dto = z.object({
+  employees: z.array(
+    z.object({
+      firstname: z.string(),
+      lastname: z.string(),
+      card: z.string(),
+    }),
+  ),
+  events: z.array(
+    z.object({
+      id: z.number(),
+      card: z.string().nonempty(),
+      ts: z.number().int().nonnegative(),
+    }),
+  ),
 })
 
 export const attendance = router({
@@ -32,8 +50,8 @@ export const attendance = router({
     ),
   //
   insert_interval: procedure
-    .use(requireScope(Scope.staff))
-    .input(intervalUpdate.extend({ card: z.string() }))
+    .use(requireScope(Scope.hr))
+    .input(manual_interval_update_dto.extend({ card: z.string() }))
     .mutation(async ({ input }) => {
       return db
         .insertInto('attendance.intervals')
@@ -49,8 +67,8 @@ export const attendance = router({
     }),
   //
   update_interval: procedure
-    .use(requireScope(Scope.staff))
-    .input(intervalUpdate)
+    .use(requireScope(Scope.hr))
+    .input(manual_interval_update_dto)
     .mutation(async ({ input }) => {
       const interval = await db
         .updateTable('attendance.intervals')
@@ -68,7 +86,7 @@ export const attendance = router({
     }),
   //
   set_absence_reason: procedure
-    .use(requireScope(Scope.staff))
+    .use(requireScope(Scope.hr))
     .input(
       z.object({
         user_id: z.number(),
@@ -82,5 +100,41 @@ export const attendance = router({
         .values(input)
         .onConflict(b => b.columns(['user_id', 'date']).doUpdateSet(input))
         .execute()
+    }),
+  //
+  upload_data: procedure
+    .use(requireScope('sync_timeformers:upload'))
+    .input(upload_data_dto)
+    .mutation(async ({ input }) => {
+      const events = input.events.map(
+        event =>
+          ({
+            id: event.id,
+            card: event.card,
+            timestamp: new Date(event.ts * 1000),
+          }) satisfies Insertable<DB.AttendanceEventsTable>,
+      )
+
+      const employees_insert_res = await db
+        .insertInto('attendance.employees')
+        .values(input.employees)
+        .onConflict(oc =>
+          oc.column('card').doUpdateSet({
+            firstname: eb => eb.ref('excluded.firstname'),
+            lastname: eb => eb.ref('excluded.lastname'),
+          }),
+        )
+        .executeTakeFirst()
+
+      const events_insert_res = await db
+        .insertInto('attendance.events')
+        .values(events)
+        .onConflict(oc => oc.column('id').doNothing())
+        .executeTakeFirst()
+
+      return {
+        event_insertions: Number(events_insert_res.numInsertedOrUpdatedRows),
+        employee_updates: Number(employees_insert_res.numInsertedOrUpdatedRows),
+      }
     }),
 })

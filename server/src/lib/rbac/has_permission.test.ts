@@ -9,7 +9,7 @@ describe('hasPermission', () => {
     strictEqual(hasPermission('orders:create:order', perms), true)
     strictEqual(hasPermission('orders:read', perms), true)
     strictEqual(hasPermission('orders:update', perms), true)
-    strictEqual(hasPermission('attendance:create', perms), false)
+    strictEqual(hasPermission('hr:create', perms), false)
   })
 
   test('should verify complex wildcard patterns work', () => {
