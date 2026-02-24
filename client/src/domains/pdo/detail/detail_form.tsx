@@ -115,9 +115,9 @@ export const MaterialSelect = observer(
         value={
           material
             ? {
-                label: app_cache.materials.label_for(material) || '',
-                value: material,
-              }
+              label: app_cache.materials.label_for(material) || '',
+              value: material,
+            }
             : null
         }
         onChange={newValue => {
