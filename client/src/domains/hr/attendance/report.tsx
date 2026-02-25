@@ -22,7 +22,9 @@ export const AttendanceReportComponent = observer(
       {
         Header: 'Фамилия Имя',
         accessor: data => (
-          <Box sx={{ width: 'min-content', p: 0.3 }}>{data.name}</Box>
+          <Box sx={{ width: 'min-content', p: 0.3, lineHeight: 1.1 }}>
+            {data.name} <Label xs>{data.card}</Label>
+          </Box>
         ),
       },
       {

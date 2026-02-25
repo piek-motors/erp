@@ -29,10 +29,25 @@ export class AttendanceEventPairing {
       const res = await db
         .insertInto('attendance.intervals')
         .values(intervals)
-        .onConflict(oc => oc.doNothing())
+        .onConflict(oc =>
+          oc
+            .column('ent_event_id')
+            .doUpdateSet({
+              ext: eb => eb.ref('excluded.ext'),
+              ext_event_id: eb => eb.ref('excluded.ext_event_id'),
+            })
+            .where(eb =>
+              eb.and([
+                eb('attendance.intervals.ext', 'is', null),
+                eb('attendance.intervals.updated_manually', 'is', null),
+              ]),
+            ),
+        )
         .executeTakeFirst()
 
-      logger.info(`Inserted ${res.numInsertedOrUpdatedRows ?? 0} intervals`)
+      logger.info(
+        `Inserted or updated ${res.numInsertedOrUpdatedRows ?? 0} intervals`,
+      )
     } catch (error) {
       logger.error(error, 'Hidden Markov model failed')
     }
