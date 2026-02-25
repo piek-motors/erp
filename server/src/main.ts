@@ -22,7 +22,7 @@ process.on('unhandledRejection', (reason, p) => {
 express()
   .use(express.static(clientBuild))
   .use(express.urlencoded({ extended: false }))
-  .use(express.json())
+  .use(express.json({ limit: '1mb' }))
   .use(cookieParser())
   .use(
     cors({

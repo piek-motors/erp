@@ -13,18 +13,23 @@ const manual_interval_update_dto = z.object({
 
 const upload_data_dto = z.object({
   employees: z.array(
-    z.object({
-      firstname: z.string(),
-      lastname: z.string(),
-      card: z.string(),
-    }),
+    z.tuple([
+      z.string(), // firstname
+      z.string(), // lastname
+      z.string(), // card
+    ]),
   ),
   events: z.array(
-    z.object({
-      id: z.number(),
-      card: z.string().nonempty(),
-      ts: z.number().int().nonnegative(),
-    }),
+    z.tuple([
+      z.number(), // id
+      z
+        .string()
+        .nonempty(), // card
+      z
+        .number()
+        .int()
+        .nonnegative(), // ts
+    ]),
   ),
 })
 
@@ -109,15 +114,21 @@ export const attendance = router({
       const events = input.events.map(
         event =>
           ({
-            id: event.id,
-            card: event.card,
-            timestamp: new Date(event.ts * 1000),
+            id: event[0],
+            card: event[1],
+            timestamp: new Date(event[2] * 1000),
           }) satisfies Insertable<DB.AttendanceEventsTable>,
       )
 
       const employees_insert_res = await db
         .insertInto('attendance.employees')
-        .values(input.employees)
+        .values(
+          input.employees.map(e => ({
+            firstname: e[0],
+            lastname: e[1],
+            card: e[2],
+          })),
+        )
         .onConflict(oc =>
           oc.column('card').doUpdateSet({
             firstname: eb => eb.ref('excluded.firstname'),
