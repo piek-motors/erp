@@ -2,6 +2,7 @@ import type { NextFunction, Request, Response } from 'express'
 import { tokenService } from '#root/ioc/index.js'
 import { ApiError } from '#root/lib/api.error.js'
 import { Errcode } from '#root/lib/error-code.js'
+import { logger } from '#root/ioc/log.js'
 
 export default function (req: Request, _res: Response, next: NextFunction) {
   try {
@@ -18,7 +19,8 @@ export default function (req: Request, _res: Response, next: NextFunction) {
       return next(ApiError.Unauthorized(Errcode.INVALID_ACCESS_TOKEN))
     }
     next()
-  } catch (_) {
+  } catch (e) {
+    logger.error(e)
     next(ApiError.Unauthorized(Errcode.UNKNOWN_ERROR_TRY_AGAIN))
   }
 }
