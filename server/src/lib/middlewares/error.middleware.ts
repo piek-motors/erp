@@ -19,7 +19,7 @@ export default function (
     })
   }
 
-  logger.error(err, "Unhandled internal err")
+  logger.error(err, 'Unhandled internal err')
   return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
     error: {
       message: Errcode.UNKNOWN_ERROR_TRY_AGAIN,
