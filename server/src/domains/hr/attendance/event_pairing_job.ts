@@ -8,7 +8,7 @@ export class AttendanceEventPairing {
 
     const hmm_input = events.map(e => ({
       ...e,
-      timestamp: e.timestamp.toISOString(),
+      timestamp: e.timestamp.toUTCString(),
     }))
 
     if (hmm_input.length === 0) {
