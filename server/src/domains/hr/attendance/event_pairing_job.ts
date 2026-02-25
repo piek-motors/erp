@@ -1,68 +1,75 @@
 import { runHiddenMarkovModel } from 'rust'
 import { logger } from '#root/ioc/log.js'
-import { Day } from '#root/lib/constants.js'
-import type { Job } from '#root/lib/jobs_runner.js'
 import { type DB, db } from '#root/sdk.js'
 
-export class AttendanceEventPairingJob implements Job {
-  async run(): Promise<void> {
-    const cutoff_date = new Date(Date.now() - 60 * Day)
+export class AttendanceEventPairing {
+  async run(events: DB.AttendanceEventsTable[]): Promise<void> {
+    if (events.length === 0) return
 
-    if (process.env.NODE_ENV != 'development') {
+    const hmm_input = events.map(e => ({
+      ...e,
+      timestamp: e.timestamp.toISOString(),
+    }))
+
+    if (hmm_input.length === 0) {
+      logger.info('No events eligible for processing')
       return
     }
-
-    const events = await db
-      .selectFrom('attendance.events')
-      .selectAll()
-      .where('timestamp', '>', cutoff_date)
-      .execute()
-
-    logger.info(`Selected ${events.length} employess events for consolidation`)
+    logger.info(`Processing ${hmm_input.length} events`)
 
     try {
-      const empl_intervals = runHiddenMarkovModel(
-        events.map(e => ({ ...e, timestamp: e.timestamp.toUTCString() })),
-      )
+      const modelResult = runHiddenMarkovModel(hmm_input)
+      const intervals = await this.buildIntervals(modelResult)
 
-      const valid_cards = new Set(
-        (
-          await db.selectFrom('attendance.employees').select('card').execute()
-        ).map(e => e.card),
-      )
-
-      await db.deleteFrom('attendance.intervals').execute()
+      if (intervals.length === 0) {
+        logger.info('No valid intervals to insert')
+        return
+      }
 
       const res = await db
         .insertInto('attendance.intervals')
-        .values(
-          empl_intervals.flatMap(each => {
-            const card = each.card
-            if (!card || card == '0' || !valid_cards.has(card)) return []
-            return each.shifts.map(
-              s =>
-                ({
-                  card,
-                  database: '',
-                  ent: new Date(s.entry.datetime),
-                  ent_event_id: s.entry.id,
-                  ext: s.exit ? new Date(s.exit.datetime) : null,
-                  ext_event_id: s.exit?.id ?? null,
-                  updated_manually: null,
-                }) satisfies DB.AttendanceIntervalTable,
-            )
-          }),
-        )
+        .values(intervals)
         .onConflict(oc => oc.doNothing())
         .executeTakeFirst()
 
-      logger.info(`Inserted ${res.numInsertedOrUpdatedRows} intervals`)
+      logger.info(`Inserted ${res.numInsertedOrUpdatedRows ?? 0} intervals`)
     } catch (error) {
-      logger.error(error, 'Hidden markov model failed')
+      logger.error(error, 'Hidden Markov model failed')
     }
   }
 
-  interval(): number {
-    return Day
+  private async getValidCards(): Promise<Set<string>> {
+    const rows = await db
+      .selectFrom('attendance.employees')
+      .select('card')
+      .execute()
+
+    return new Set(rows.map(r => r.card))
+  }
+
+  private async buildIntervals(
+    modelResult: ReturnType<typeof runHiddenMarkovModel>,
+  ): Promise<DB.AttendanceIntervalTable[]> {
+    const intervals: DB.AttendanceIntervalTable[] = []
+    const validCards = await this.getValidCards()
+
+    for (const employee of modelResult) {
+      const card = employee.card
+      if (!card || card === '0' || !validCards.has(card)) continue
+
+      for (const shift of employee.shifts) {
+        intervals.push({
+          card,
+          database: null,
+          ent: new Date(shift.entry.datetime),
+          ent_event_id: shift.entry.id,
+          ext: shift.exit ? new Date(shift.exit.datetime) : null,
+          ext_event_id: shift.exit?.id ?? null,
+          updated_manually: null,
+        })
+      }
+    }
+
+    return intervals
   }
 }

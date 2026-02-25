@@ -4,6 +4,7 @@ import { z } from 'zod'
 import { attendanceReportGenerator } from '#root/ioc/index.js'
 import { router } from '#root/lib/trpc/trpc.js'
 import { type DB, db, procedure, requireScope, Scope } from '#root/sdk.js'
+import { AttendanceEventPairing } from './event_pairing_job.js'
 
 const manual_interval_update_dto = z.object({
   ent_event_id: z.number(),
@@ -143,6 +144,7 @@ export const attendance = router({
         .onConflict(oc => oc.column('id').doNothing())
         .executeTakeFirst()
 
+      await new AttendanceEventPairing().run(events)
       return {
         event_insertions: Number(events_insert_res.numInsertedOrUpdatedRows),
         employee_updates: Number(employees_insert_res.numInsertedOrUpdatedRows),

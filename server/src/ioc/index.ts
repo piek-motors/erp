@@ -1,7 +1,6 @@
 import { AttachmentService } from '#root/domains/attachment/attachment_service.js'
 import { AuthSevice } from '#root/domains/auth/auth_service.js'
 import { TokenService } from '#root/domains/auth/token_service.js'
-import { AttendanceEventPairingJob } from '#root/domains/hr/attendance/event_pairing_job.js'
 import { AttendanceReportGenerator } from '#root/domains/hr/attendance/report_generator.js'
 import { MaterialSpendAggJob } from '#root/domains/pdo/jobs/material_spend_agg_job.js'
 import { OutdatedPdoOrdersRemovalJob } from '#root/domains/pdo/jobs/outdated_pdo_orders_removal_job.js'
@@ -35,5 +34,4 @@ export const userController = new AuthController(authService)
 new JobsRunner([
   new MaterialSpendAggJob(materials_stat_container),
   new OutdatedPdoOrdersRemovalJob(),
-  new AttendanceEventPairingJob(),
 ]).setup()
