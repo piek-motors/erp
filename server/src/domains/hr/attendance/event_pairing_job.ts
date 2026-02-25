@@ -40,6 +40,18 @@ export class AttendanceEventPairing {
               eb.and([
                 eb('attendance.intervals.ext', 'is', null),
                 eb('attendance.intervals.updated_manually', 'is', null),
+                eb.or([
+                  eb(
+                    'attendance.intervals.ext',
+                    'is distinct from',
+                    eb.ref('excluded.ext'),
+                  ),
+                  eb(
+                    'attendance.intervals.ext_event_id',
+                    'is distinct from',
+                    eb.ref('excluded.ext_event_id'),
+                  ),
+                ]),
               ]),
             ),
         )
