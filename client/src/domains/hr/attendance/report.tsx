@@ -62,6 +62,10 @@ export const AttendanceReportComponent = observer(
         <UpdateIntervalModal />
         <Label>Отчет за {report.month}</Label>
         <Label>Норма вычета времени: {report.timeRetention} мин</Label>
+        <Label>
+          Суммарный объём трудозатрат: {store.report?.resp.monthly_labor_hours}{' '}
+          чел-ч
+        </Label>
         <AbsenceLabels />
         <Table columns={columns} data={report.resp.employees} />
       </Sheet>

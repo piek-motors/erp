@@ -33,7 +33,7 @@ export interface Employee {
   id: number
   name: string
   card: string
-  total: number
+  total: number // total working time in seconds
   workDays: number
   totalIntervalsCount: number
   days: {
@@ -44,6 +44,7 @@ export interface Employee {
 export interface AttendanceReport {
   employees: Employee[]
   days: number[]
+  monthly_labor_hours: number
 }
 
 export class AttendanceReportGenerator {
@@ -112,8 +113,13 @@ export class AttendanceReportGenerator {
     }
     result.sort((a, b) => a.name.localeCompare(b.name))
     const weekdays = this.getWeekdays(days, result)
+    const monthly_labor_seconds = result.reduce(
+      (acc, empl) => acc + Number(empl.total),
+      0,
+    )
     return {
       employees: result,
+      monthly_labor_hours: Math.floor(monthly_labor_seconds / 3600),
       days: days.filter(d => !weekdays.includes(d)),
     }
   }

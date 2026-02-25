@@ -4,7 +4,7 @@ import { z } from 'zod'
 import { attendanceReportGenerator } from '#root/ioc/index.js'
 import { router } from '#root/lib/trpc/trpc.js'
 import { type DB, db, procedure, requireScope, Scope } from '#root/sdk.js'
-import { AttendanceEventPairing } from './event_pairing_job.js'
+import { AttendanceEventPairing } from './event_pairing.js'
 import { HrRepo } from './hr.repo.js'
 
 const manual_interval_update_dto = z.object({
