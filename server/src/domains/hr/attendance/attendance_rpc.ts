@@ -112,15 +112,6 @@ export const attendance = router({
     .use(requireScope('sync_timeformers:upload'))
     .input(upload_data_dto)
     .mutation(async ({ input }) => {
-      const events = input.events.map(
-        event =>
-          ({
-            id: event[0],
-            card: event[1],
-            timestamp: new Date(event[2] * 1000),
-          }) satisfies Insertable<DB.AttendanceEventsTable>,
-      )
-
       const employees_insert_res = await db
         .insertInto('attendance.employees')
         .values(
@@ -131,12 +122,37 @@ export const attendance = router({
           })),
         )
         .onConflict(oc =>
-          oc.column('card').doUpdateSet({
-            firstname: eb => eb.ref('excluded.firstname'),
-            lastname: eb => eb.ref('excluded.lastname'),
-          }),
+          oc
+            .column('card')
+            .doUpdateSet({
+              firstname: eb => eb.ref('excluded.firstname'),
+              lastname: eb => eb.ref('excluded.lastname'),
+            })
+            .where(eb =>
+              eb.or([
+                eb(
+                  'attendance.employees.firstname',
+                  'is distinct from',
+                  eb.ref('excluded.firstname'),
+                ),
+                eb(
+                  'attendance.employees.lastname',
+                  'is distinct from',
+                  eb.ref('excluded.lastname'),
+                ),
+              ]),
+            ),
         )
         .executeTakeFirst()
+
+      const events = input.events.map(
+        event =>
+          ({
+            id: event[0],
+            card: event[1],
+            timestamp: new Date(event[2] * 1000),
+          }) satisfies Insertable<DB.AttendanceEventsTable>,
+      )
 
       const events_insert_res = await db
         .insertInto('attendance.events')
