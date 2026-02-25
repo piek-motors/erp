@@ -20,7 +20,7 @@ export class AuthSevice {
     const tokenPayload = this.createTokenPayload(user)
     const tokens = this.tokenService.generateTokenPair(tokenPayload)
     await this.tokenService.insert(user.id, tokens.refreshToken)
-    logger.info(`login ${user.id} ${user.first_name} ${user.last_name}`)
+    logger.info(`login ${user.first_name} ${user.last_name}`)
     return {
       ...tokens,
       user: tokenPayload,

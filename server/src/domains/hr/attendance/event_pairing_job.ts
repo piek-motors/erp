@@ -1,8 +1,11 @@
 import { runHiddenMarkovModel } from 'rust'
 import { logger } from '#root/ioc/log.js'
 import { type DB, db } from '#root/sdk.js'
+import { HrRepo } from './hr.repo.js'
 
 export class AttendanceEventPairing {
+  private repository = new HrRepo()
+
   async run(events: DB.AttendanceEventsTable[]): Promise<void> {
     if (events.length === 0) return
 
@@ -25,41 +28,9 @@ export class AttendanceEventPairing {
         logger.info('No valid intervals to insert')
         return
       }
-
-      const res = await db
-        .insertInto('attendance.intervals')
-        .values(intervals)
-        .onConflict(oc =>
-          oc
-            .column('ent_event_id')
-            .doUpdateSet({
-              ext: eb => eb.ref('excluded.ext'),
-              ext_event_id: eb => eb.ref('excluded.ext_event_id'),
-            })
-            .where(eb =>
-              eb.and([
-                eb('attendance.intervals.ext', 'is', null),
-                eb('attendance.intervals.updated_manually', 'is', null),
-                eb.or([
-                  eb(
-                    'attendance.intervals.ext',
-                    'is distinct from',
-                    eb.ref('excluded.ext'),
-                  ),
-                  eb(
-                    'attendance.intervals.ext_event_id',
-                    'is distinct from',
-                    eb.ref('excluded.ext_event_id'),
-                  ),
-                ]),
-              ]),
-            ),
-        )
-        .executeTakeFirst()
-
-      logger.info(
-        `Inserted or updated ${res.numInsertedOrUpdatedRows ?? 0} intervals`,
-      )
+      const numInsertedOrUpdatedRows =
+        await this.repository.upsert_intervals(intervals)
+      logger.info(`Inserted or updated ${numInsertedOrUpdatedRows} intervals`)
     } catch (error) {
       logger.error(error, 'Hidden Markov model failed')
     }

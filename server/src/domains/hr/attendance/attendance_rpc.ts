@@ -5,6 +5,7 @@ import { attendanceReportGenerator } from '#root/ioc/index.js'
 import { router } from '#root/lib/trpc/trpc.js'
 import { type DB, db, procedure, requireScope, Scope } from '#root/sdk.js'
 import { AttendanceEventPairing } from './event_pairing_job.js'
+import { HrRepo } from './hr.repo.js'
 
 const manual_interval_update_dto = z.object({
   ent_event_id: z.number(),
@@ -112,38 +113,15 @@ export const attendance = router({
     .use(requireScope('sync_timeformers:upload'))
     .input(upload_data_dto)
     .mutation(async ({ input }) => {
-      const employees_insert_res = await db
-        .insertInto('attendance.employees')
-        .values(
-          input.employees.map(e => ({
-            firstname: e[0],
-            lastname: e[1],
-            card: e[2],
-          })),
-        )
-        .onConflict(oc =>
-          oc
-            .column('card')
-            .doUpdateSet({
-              firstname: eb => eb.ref('excluded.firstname'),
-              lastname: eb => eb.ref('excluded.lastname'),
-            })
-            .where(eb =>
-              eb.or([
-                eb(
-                  'attendance.employees.firstname',
-                  'is distinct from',
-                  eb.ref('excluded.firstname'),
-                ),
-                eb(
-                  'attendance.employees.lastname',
-                  'is distinct from',
-                  eb.ref('excluded.lastname'),
-                ),
-              ]),
-            ),
-        )
-        .executeTakeFirst()
+      const repo = new HrRepo()
+
+      const employeesInsertedOrUpdatedRows = await repo.upsert_employees(
+        input.employees.map(e => ({
+          firstname: e[0],
+          lastname: e[1],
+          card: e[2],
+        })),
+      )
 
       const events = input.events.map(
         event =>
@@ -154,16 +132,12 @@ export const attendance = router({
           }) satisfies Insertable<DB.AttendanceEventsTable>,
       )
 
-      const events_insert_res = await db
-        .insertInto('attendance.events')
-        .values(events)
-        .onConflict(oc => oc.column('id').doNothing())
-        .executeTakeFirst()
+      const eventsInsertedOrUpdatedRows = await repo.upsert_events(events)
 
       await new AttendanceEventPairing().run(events)
       return {
-        event_insertions: Number(events_insert_res.numInsertedOrUpdatedRows),
-        employee_updates: Number(employees_insert_res.numInsertedOrUpdatedRows),
+        event_insertions: eventsInsertedOrUpdatedRows,
+        employee_updates: Number(employeesInsertedOrUpdatedRows),
       }
     }),
 })
