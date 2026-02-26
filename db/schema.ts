@@ -243,7 +243,7 @@ export namespace DB {
   export interface AttendanceEventsTable {
     id: number
     card: string
-    employee_id: number | null
+    employee_id: number
     timestamp: Date
   }
 
@@ -251,7 +251,7 @@ export namespace DB {
     ent: Date
     ext: Date | null
     card: string
-    employee_id: number | null
+    employee_id: number
     database: string | null
     ent_event_id: number
     ext_event_id: number | null
