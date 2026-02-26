@@ -1,8 +1,8 @@
 /** @jsxImportSource @emotion/react */
-import { Option, Select, Sheet, Table, Typography } from '@mui/joy'
+import { Sheet, Table } from '@mui/joy'
 import { observer } from 'mobx-react-lite'
 import { BaseAutocomplete } from '@/components/base-autocomplete'
-import { Label, P, Row } from '@/lib'
+import { Label, P } from '@/lib'
 import {
   employeeStore,
   type JobTitleOption,
@@ -12,28 +12,6 @@ import {
 interface EmployeeListProps {
   store?: typeof employeeStore
 }
-
-/** Filter Row */
-const EmployeeFilter = observer(({ store }: { store: EmployeeStore }) => (
-  <Row justifyContent="end" alignItems="center">
-    <Label label="Фильтр" />
-    <Select
-      size="sm"
-      placeholder="Все"
-      value={store.jobTitleFilter || null}
-      onChange={(_, value) => store.setJobTitleFilter(value ?? '')}
-      sx={{ minWidth: 200 }}
-      indicator={null}
-    >
-      <Option value="">Все</Option>
-      {store.jobTitles.map(title => (
-        <Option key={title.value} value={title.value}>
-          {title.label}
-        </Option>
-      ))}
-    </Select>
-  </Row>
-))
 
 /** Single Employee Row */
 const EmployeeRow = observer(
@@ -102,18 +80,16 @@ const EmployeeTable = observer(({ store }: { store: EmployeeStore }) => (
       </tr>
     </thead>
     <tbody>
-      {store.filteredEmployees.length === 0 ? (
+      {store.employees.length === 0 ? (
         <tr>
           <td colSpan={4} style={{ textAlign: 'center' }}>
-            <Typography level="body-sm" textColor="text.tertiary">
-              {store.jobTitleFilter
-                ? 'Нет сотрудников с такой должностью'
-                : 'Список сотрудников пуст'}
-            </Typography>
+            <P level="body-sm" textColor="text.tertiary">
+              'Список сотрудников пуст'
+            </P>
           </td>
         </tr>
       ) : (
-        store.filteredEmployees.map((employee, index) => (
+        store.employees.map((employee, index) => (
           <EmployeeRow
             key={employee.id}
             employee={employee}
@@ -132,7 +108,6 @@ export const EmployeeList = observer((props: EmployeeListProps) => {
 
   return (
     <Sheet sx={{ borderRadius: 5, p: 1 }}>
-      <EmployeeFilter store={store} />
       <EmployeeTable store={store} />
     </Sheet>
   )

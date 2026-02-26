@@ -19,7 +19,6 @@ export class EmployeeStore {
   readonly loading = new LoadingController()
   employees: Employee[] = []
   jobTitles: JobTitleOption[] = []
-  jobTitleFilter: string = ''
   editedJobTitles: Map<number, string> = new Map()
 
   constructor() {
@@ -42,10 +41,6 @@ export class EmployeeStore {
       }))
       this.jobTitles = jobTitles.map(t => ({ label: t, value: t }))
     })
-  }
-
-  setJobTitleFilter(value: string) {
-    this.jobTitleFilter = value
   }
 
   setEditedJobTitle(id: number, value: string) {
@@ -83,13 +78,6 @@ export class EmployeeStore {
 
   cancelEdit(id: number) {
     this.editedJobTitles.delete(id)
-  }
-
-  get filteredEmployees() {
-    if (!this.jobTitleFilter) {
-      return this.employees
-    }
-    return this.employees.filter(e => e.jobTitle === this.jobTitleFilter)
   }
 }
 

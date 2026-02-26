@@ -1,14 +1,25 @@
 import { z } from 'zod'
-import { db, procedure, requireScope, router, Scope } from '#root/sdk.js'
+import { db, procedure, requireScope, router, Scope, sql } from '#root/sdk.js'
+
+const ONE_MONTH_AGO = new Date()
+ONE_MONTH_AGO.setMonth(ONE_MONTH_AGO.getMonth() - 1)
 
 export const employees = router({
-  list: procedure.query(async () =>
-    db
-      .selectFrom('attendance.employees')
+  list: procedure.query(async () => {
+    return db
+      .selectFrom('attendance.employees as e')
       .selectAll()
-      .orderBy('lastname')
-      .execute(),
-  ),
+      .where(
+        sql<boolean>`EXISTS (
+        SELECT 1
+        FROM attendance.events ev
+        WHERE ev.employee_id = e.id
+          AND ev.timestamp >= ${ONE_MONTH_AGO}
+      )`,
+      )
+      .orderBy('e.lastname')
+      .execute()
+  }),
   //
   get_job_titles: procedure.query(async () => {
     const result = await db
