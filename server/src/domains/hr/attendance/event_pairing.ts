@@ -1,12 +1,14 @@
 import { runHiddenMarkovModel } from 'rust'
 import { logger } from '#root/ioc/log.js'
-import { type DB, db } from '#root/sdk.js'
+import { type DB } from '#root/sdk.js'
 import { HrRepo } from './hr.repo.js'
 
 export class AttendanceEventPairing {
   private repository = new HrRepo()
 
-  async run(events: DB.AttendanceEventsTable[]): Promise<void> {
+  async run(
+    events: Array<DB.AttendanceEventsTable & { employee_id: number }>,
+  ): Promise<void> {
     if (events.length === 0) return
 
     const hmm_input = events.map(e => ({
@@ -36,31 +38,23 @@ export class AttendanceEventPairing {
     }
   }
 
-  private async getValidCards(): Promise<Set<string>> {
-    const rows = await db
-      .selectFrom('attendance.employees')
-      .select('card')
-      .execute()
-
-    return new Set(rows.map(r => r.card))
-  }
-
   private async buildIntervals(
     modelResult: ReturnType<typeof runHiddenMarkovModel>,
   ): Promise<DB.AttendanceIntervalTable[]> {
     const intervals: DB.AttendanceIntervalTable[] = []
-    const validCards = await this.getValidCards()
-
+    const employee_id_index =
+      await this.repository.employees_employee_id_index()
     for (const employee of modelResult) {
-      const card = employee.card
-      if (!card || card === '0' || !validCards.has(card)) continue
+      const card = employee_id_index.get(employee.employee_id)
+      if (!employee.employee_id || employee.employee_id === 0 || !card) continue
 
       for (const shift of employee.shifts) {
         intervals.push({
-          card,
           database: null,
+          card,
           ent: new Date(shift.entry.datetime),
           ent_event_id: shift.entry.id,
+          employee_id: employee.employee_id,
           ext: shift.exit ? new Date(shift.exit.datetime) : null,
           ext_event_id: shift.exit?.id ?? null,
           updated_manually: null,

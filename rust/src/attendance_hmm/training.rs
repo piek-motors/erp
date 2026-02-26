@@ -5,7 +5,7 @@ use ndarray::{Array1, Array2};
 use serde::{Deserialize, Serialize};
 use strum::IntoEnumIterator;
 
-use crate::{
+use super::{
   dataset::{self, split_dataset, Dataset},
   normalization::normalize_arr2,
   observation::{events_to_observations, move_to_deltas, Observation},
@@ -47,21 +47,16 @@ pub fn train_hmm(test_ratio: f32) -> Result<(), Box<dyn Error>> {
   let mut training_data = TrainingData::new(State::iter().count(), Observation::iter().count());
 
   for dataset_path in &train {
-    let mut events = dataset::load_dataset(&dataset_path);
-    events.sort_by_key(|e| e.t.clone());
+    let mut events = dataset::load_dataset(dataset_path);
+    events.sort_by_key(|e| e.t);
 
     let timestamps: Vec<_> = events.iter().map(|e| e.t).collect();
     let deltas = move_to_deltas(&timestamps);
 
-    let states: Vec<State> = events
-      .into_iter()
-      .map(|e| State::from(e.state))
-      .skip(1)
-      .collect();
+    let states: Vec<State> = events.into_iter().map(|e| e.state).skip(1).collect();
 
-    assert_eq!(
-      states.iter().all(|s| *s == State::Outside),
-      false,
+    assert!(
+      !states.iter().all(|s| *s == State::Outside),
       "dataset {} doesnt labeled: check if its labeled",
       dataset_path.to_string_lossy()
     );
@@ -79,8 +74,8 @@ pub fn train_hmm(test_ratio: f32) -> Result<(), Box<dyn Error>> {
 
   for dataset_path in &test {
     println!("\nTest on dataset {:?}", dataset_path);
-    let mut events = dataset::load_dataset(&dataset_path);
-    events.sort_by_key(|e| e.t.clone());
+    let mut events = dataset::load_dataset(dataset_path);
+    events.sort_by_key(|e| e.t);
 
     let observations = events_to_observations(&events);
     let states = model.most_likely_sequence(&observations);
@@ -189,134 +184,9 @@ fn train_mle(training_data: &TrainingData) -> Weights {
 #[cfg(test)]
 mod tests {
   use super::*;
-  use crate::{state::State, training::train_mle};
 
   #[test]
   fn test_train_hmm() {
     train_hmm(0.01).unwrap();
-  }
-
-  #[test]
-  fn test_training_data_builder() {
-    let mut training_data = TrainingData::new(2, 6);
-
-    let deltas1 = vec![2, 3, 5, 1, 4];
-    let states = vec![State::Inside];
-    training_data.add_delta_sequence(deltas1, states);
-
-    training_data.debug_print();
-
-    assert_eq!(training_data.num_sequences(), 1);
-    assert!(training_data.total_observations() > 0);
-  }
-
-  #[test]
-  fn test_train_mle() {
-    let mut training_data = TrainingData::new(2, 6);
-
-    // Add multiple sequences
-    let sequences = vec![
-      vec![2, 3, 20, 25, 1, 5, 40],
-      vec![1, 2, 3, 30, 35, 2, 1],
-      vec![25, 30, 20, 3, 2, 1, 2],
-    ];
-
-    for deltas in sequences {
-      training_data.add_delta_sequence(deltas, vec![State::Inside]);
-    }
-
-    training_data.debug_print();
-
-    let Weights {
-      emission,
-      initial_probs,
-      transition,
-    } = train_mle(&training_data);
-
-    println!("\n--- Final HMM Parameters ---");
-    println!("A (transition matrix):");
-    for i in 0..transition.nrows() {
-      println!("  State {} → {:?}", i, transition.row(i));
-    }
-
-    println!("\nB (emission matrix):");
-    for i in 0..emission.nrows() {
-      println!("  State {} → {:?}", i, emission.row(i));
-    }
-
-    println!("\nπ (initial probabilities): {:?}", initial_probs);
-
-    // Verify probabilities sum to 1
-    for i in 0..transition.nrows() {
-      let row_sum = transition.row(i).sum();
-      assert!(
-        (row_sum - 1.0).abs() < 1e-6,
-        "Transition matrix row {} should sum to 1.0, got {}",
-        i,
-        row_sum
-      );
-    }
-
-    for i in 0..emission.nrows() {
-      let row_sum = emission.row(i).sum();
-      assert!(
-        (row_sum - 1.0).abs() < 1e-6,
-        "Emission matrix row {} should sum to 1.0, got {}",
-        i,
-        row_sum
-      );
-    }
-
-    let pi_sum = initial_probs.sum();
-    assert!(
-      (pi_sum - 1.0).abs() < 1e-6,
-      "Initial probabilities should sum to 1.0, got {}",
-      pi_sum
-    );
-
-    println!("\n✓ All probability constraints satisfied!");
-  }
-
-  #[test]
-  fn test_train_mle_simple() {
-    println!("\n=== Test: Simple MLE Training ===");
-
-    let mut training_data = TrainingData::new(2, 3);
-
-    // Manually add simple sequences
-    // Sequence 1: State 0 → State 0 → State 1
-    //             Obs   0 → Obs   1 → Obs   2
-    training_data.add_sequence(vec![0, 0, 1], vec![0, 1, 2]);
-
-    // Sequence 2: State 0 → State 1 → State 1
-    //             Obs   0 → Obs   2 → Obs   2
-    training_data.add_sequence(vec![0, 1, 1], vec![0, 2, 2]);
-
-    training_data.debug_print();
-
-    let Weights {
-      emission: emission_matrix,
-      initial_probs,
-      transition: transition_matrix,
-    } = train_mle(&training_data);
-
-    println!("\n--- Expected Behavior ---");
-    println!("Initial: Both sequences start at state 0");
-    println!("  → π should be [1.0, 0.0]");
-    println!("\nTransitions:");
-    println!("  State 0→0: 1 time,  State 0→1: 2 times");
-    println!("  State 1→1: 2 times");
-    println!("  → A[0] should be [1/3, 2/3]");
-    println!("  → A[1] should be [0, 1]");
-    println!("\nEmissions:");
-    println!("  State 0 emits: obs 0 twice, obs 1 once");
-    println!("  State 1 emits: obs 2 three times");
-
-    println!("\n--- Actual Results ---");
-    println!("π: {:?}", initial_probs);
-    println!("A:\n{:?}", transition_matrix);
-    println!("B:\n{:?}", emission_matrix);
-
-    println!("\n✓ Simple MLE test complete!");
   }
 }

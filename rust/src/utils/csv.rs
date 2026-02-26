@@ -14,11 +14,11 @@ pub enum CsvParseError {
 }
 
 pub fn parse(
-  bytes: &Vec<u8>,
+  bytes: &[u8],
   delimiter: &str,
   skip_first_lines: usize,
 ) -> Result<Array2<String>, CsvParseError> {
-  let text = str::from_utf8(&bytes).map_err(|_| CsvParseError::MalformedUtf8)?;
+  let text = str::from_utf8(bytes).map_err(|_| CsvParseError::MalformedUtf8)?;
 
   // Split into rows, ignore empty trailing lines
   let rows: Vec<Vec<String>> = text
@@ -54,5 +54,5 @@ pub fn parse(
 
   // Flatten row-major into Array2
   let flat: Vec<String> = rows.into_iter().flatten().collect();
-  Array2::from_shape_vec((nrows, ncols), flat).map_err(|e| CsvParseError::ShapeError(e))
+  Array2::from_shape_vec((nrows, ncols), flat).map_err(CsvParseError::ShapeError)
 }

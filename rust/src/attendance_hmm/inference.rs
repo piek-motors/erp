@@ -2,11 +2,12 @@ use std::error::Error;
 
 use napi_derive::napi;
 
-use crate::{
+use crate::utils::time;
+
+use super::{
   intervaling::{self, LabeledEvent},
-  observation::{self, events_to_observations, suppress_bursts, Event},
+  observation::{self, events_to_observations, suppress_bursts, EmployeeId, Event},
   state::State,
-  time,
   training::Weights,
 };
 
@@ -27,7 +28,8 @@ pub struct Shift {
 #[napi(object)]
 #[derive(Debug, Clone)]
 pub struct EmployeeShifts {
-  pub card: String,
+  #[napi(js_name = "employee_id")]
+  pub employee_id: EmployeeId,
   pub shifts: Vec<Shift>,
 }
 
@@ -37,7 +39,7 @@ pub fn infer_work_intervals(events: &Vec<Event>) -> Result<Vec<EmployeeShifts>, 
   let model = Weights::load()?.into_model();
   let mut result: Vec<EmployeeShifts> = Vec::with_capacity(events_grouped.keys().len());
 
-  for (card, events) in events_grouped.into_iter() {
+  for (employee_id, events) in events_grouped.into_iter() {
     if events.len() < 2 {
       // Need at least 2 events to calculate deltas
       continue;
@@ -73,7 +75,7 @@ pub fn infer_work_intervals(events: &Vec<Event>) -> Result<Vec<EmployeeShifts>, 
     shifts.sort_by_key(|k| k.entry.t);
 
     result.push(EmployeeShifts {
-      card: card.to_owned(),
+      employee_id,
       shifts: shifts
         .iter()
         .map(|each| Shift {
@@ -96,13 +98,12 @@ pub fn infer_work_intervals(events: &Vec<Event>) -> Result<Vec<EmployeeShifts>, 
 #[cfg(test)]
 mod tests {
   use super::*;
-  use crate::dataset;
   use std::path::PathBuf;
 
   #[test]
   fn test_infer_work_intervals_from_dataset_file() {
     let dataset_path = PathBuf::from("./dataset/1-2026_8170321.tsv");
-    let labeled_events = dataset::load_dataset(&dataset_path);
+    let labeled_events = crate::attendance_hmm::dataset::load_dataset(&dataset_path);
 
     let events: Vec<Event> = labeled_events
       .iter()
@@ -111,7 +112,7 @@ mod tests {
         if let Some(dt) = time::parse_unix(labeled.t) {
           Event {
             id: labeled.id,
-            card: "unknown".to_string(),
+            employee_id: 11,
             timestamp: dt.to_rfc2822(),
           }
         } else {
@@ -127,7 +128,7 @@ mod tests {
     assert!(!shifts.is_empty(), "Should have at least one employee");
 
     if let Some(employee) = shifts.first() {
-      println!("Employee: {}", employee.card);
+      println!("Employee: {}", employee.employee_id);
       let mut current_date = String::new();
       for shift in &employee.shifts {
         let entry_date = shift.entry.datetime.split('T').next().unwrap_or("");

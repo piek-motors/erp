@@ -11,9 +11,9 @@ pub enum State {
   Inside = 1,
 }
 
-impl Into<usize> for State {
-  fn into(self) -> usize {
-    State::iter().position(|o| o == self).unwrap()
+impl From<State> for usize {
+  fn from(val: State) -> Self {
+    State::iter().position(|o| o == val).unwrap()
   }
 }
 

@@ -1,11 +1,14 @@
 use std::collections::HashMap;
 
-use chrono::{Duration, FixedOffset};
+use chrono::{DateTime, Duration};
 use napi_derive::napi;
 use ndarray::Array1;
 use serde::Deserialize;
 use strum::IntoEnumIterator;
 use strum_macros::EnumIter;
+
+#[napi()]
+pub type EmployeeId = u16;
 
 /// The events we actually observe in the system.
 ///
@@ -20,7 +23,8 @@ use strum_macros::EnumIter;
 #[derive(Debug, Deserialize)]
 pub struct Event {
   pub id: u32,
-  pub card: String,
+  #[napi(js_name = "employee_id")]
+  pub employee_id: EmployeeId,
   pub timestamp: String,
 }
 
@@ -41,20 +45,28 @@ impl TimeSeries for EmployeeEvent {
   }
 }
 
-/// Parse ISO-8601 timestamp into UNIX seconds.
+/// Parse RFC2822 or ISO-8601 timestamp into UNIX seconds.
 ///
-/// Panics if parsing fails — timestamps are assumed to be validated upstream.
-pub fn must_parse_timestamp(ts: &str) -> i64 {
-  chrono::DateTime::<FixedOffset>::parse_from_rfc2822(ts)
-    .unwrap_or_else(|_| panic!("can't parse timestamp {}", ts))
-    .timestamp()
+/// Panics if parsing fails — timestamps are assumed validated upstream.
+pub fn must_parse_timestamp(input: &str) -> i64 {
+  // RFC 2822 (e.g. Fri, 05 Dec 2025 14:18:52 GMT)
+  if let Ok(dt) = DateTime::parse_from_rfc2822(input) {
+    return dt.timestamp();
+  }
+
+  // ISO 8601 / RFC 3339 (e.g. 2025-09-26T09:00:00.000Z)
+  if let Ok(dt) = DateTime::parse_from_rfc3339(input) {
+    return dt.timestamp();
+  }
+
+  panic!("Invalid timestamp: {input}");
 }
 
-/// Events grouped by card (user).
+/// Events grouped by employee_id (user).
 /// Each vector is sorted by timestamp before further processing.
-type GroupedUserEvents = HashMap<String, Vec<EmployeeEvent>>;
+type GroupedUserEvents = HashMap<EmployeeId, Vec<EmployeeEvent>>;
 
-/// Group events by card and sort them by time.
+/// Group events by employee_id and sort them by time.
 ///
 /// After this step:
 /// - Each user's events are in strict chronological order.
@@ -70,10 +82,7 @@ pub fn group_events(events: &Vec<Event>) -> GroupedUserEvents {
       t: must_parse_timestamp(&ev.timestamp),
     };
 
-    result
-      .entry(ev.card.clone())
-      .or_insert_with(Vec::new)
-      .push(user_event);
+    result.entry(ev.employee_id).or_default().push(user_event);
   }
 
   for events in result.values_mut() {
@@ -143,7 +152,7 @@ pub fn suppress_bursts(events: Vec<EmployeeEvent>) -> Vec<EmployeeEvent> {
 /// This is why:
 /// - Number of deltas = number of states
 /// - The first event has no associated state
-pub fn move_to_deltas(timestamps: &Vec<i64>) -> Vec<u32> {
+pub fn move_to_deltas(timestamps: &[i64]) -> Vec<u32> {
   let mut deltas: Vec<u32> = Vec::new();
 
   for i in 1..timestamps.len() {
@@ -184,9 +193,9 @@ impl Observation {
   }
 }
 
-impl Into<usize> for Observation {
-  fn into(self) -> usize {
-    Observation::iter().position(|o| o == self).unwrap()
+impl From<Observation> for usize {
+  fn from(val: Observation) -> Self {
+    Observation::iter().position(|o| o == val).unwrap()
   }
 }
 
@@ -224,7 +233,7 @@ pub fn deltas_to_observations(delta_sec: Vec<u32>) -> Array1<usize> {
     .collect::<Array1<usize>>()
 }
 
-pub fn events_to_observations<T: TimeSeries>(events: &Vec<T>) -> Array1<usize> {
+pub fn events_to_observations<T: TimeSeries>(events: &[T]) -> Array1<usize> {
   let timestamps: Vec<_> = events.iter().map(|e| e.timestamp()).collect();
   let deltas = move_to_deltas(&timestamps);
   deltas_to_observations(deltas)
@@ -245,44 +254,47 @@ mod tests {
     let events: Vec<Event> = vec![
       Event {
         id: 1,
-        card: "1".to_string(),
+        employee_id: 1,
         timestamp: "2025-09-26T09:00:00.000Z".to_string(),
       },
       Event {
         id: 2,
-        card: "2".to_string(),
+        employee_id: 2,
         timestamp: "2025-09-26T10:00:00.000Z".to_string(),
       },
       Event {
         id: 3,
-        card: "1".to_string(),
+        employee_id: 1,
         timestamp: "2025-09-26T19:00:00.000Z".to_string(),
       },
       Event {
         id: 4,
-        card: "2".to_string(),
+        employee_id: 2,
         timestamp: "2025-09-26T21:00:00.000Z".to_string(),
       },
       Event {
         id: 5,
-        card: "1".to_string(),
+        employee_id: 1,
         timestamp: "2025-09-27T09:00:00.000Z".to_string(),
       },
       Event {
         id: 6,
-        card: "1".to_string(),
+        employee_id: 1,
         timestamp: "2025-09-27T15:00:00.000Z".to_string(),
       },
     ];
 
-    let cases = vec![("1", vec![10, 14, 6]), ("2", vec![11])];
+    let cases = vec![
+      (1 as EmployeeId, vec![10, 14, 6]),
+      (2 as EmployeeId, vec![11]),
+    ];
     let groups = group_events(&events);
     assert_eq!(groups.values().len(), 2);
 
-    for (card, expected_hours) in cases {
+    for (employee_id, expected_hours) in cases {
       let usr_events = groups
-        .get(card)
-        .unwrap_or_else(|| panic!("missing card {card}"));
+        .get(&employee_id)
+        .unwrap_or_else(|| panic!("missing employee_id {employee_id}"));
       let timestamps: Vec<_> = usr_events.iter().map(|e| e.t).collect();
       let got = move_to_deltas(&timestamps);
       let expected: Vec<_> = expected_hours
@@ -294,7 +306,7 @@ mod tests {
       assert_eq!(
         got,
         expected,
-        "card {card}: expected {expected_hours:?} h, got {:?}",
+        "employee_id {employee_id}: expected {expected_hours:?} h, got {:?}",
         got.iter().map(|&d| d / 3600).collect::<Vec<_>>()
       )
     }

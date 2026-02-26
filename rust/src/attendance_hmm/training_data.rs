@@ -1,4 +1,4 @@
-use crate::{observation::deltas_to_observations, state::State};
+use super::{observation::deltas_to_observations, state::State};
 
 pub struct TrainingData {
   pub state_seq: Vec<Vec<usize>>,
@@ -38,31 +38,5 @@ impl TrainingData {
   /// Get total number of sequences
   pub fn num_sequences(&self) -> usize {
     self.state_seq.len()
-  }
-
-  /// Get total number of observations across all sequences
-  #[cfg(test)]
-  pub fn total_observations(&self) -> usize {
-    self.observation_seq.iter().map(|seq| seq.len()).sum()
-  }
-
-  /// Print debug information about the training data
-  #[cfg(test)]
-  pub fn debug_print(&self) {
-    println!("\n=== HMM Training Data Summary ===");
-    println!("Number of sequences: {}", self.num_sequences());
-    println!("Total observations: {}", self.total_observations());
-
-    for (i, (states, obs)) in self
-      .state_seq
-      .iter()
-      .zip(self.observation_seq.iter())
-      .enumerate()
-    {
-      println!("\n--- Sequence {} (length: {}) ---", i + 1, states.len());
-      println!("States:       {:?}", states);
-      println!("Observations: {:?}", obs);
-    }
-    println!("\n=================================\n");
   }
 }

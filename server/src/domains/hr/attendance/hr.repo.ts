@@ -88,4 +88,26 @@ export class HrRepo {
 
     return Number(employees_insert_res.numInsertedOrUpdatedRows ?? 0)
   }
+
+  async employees_card_index() {
+    const employees = await db
+      .selectFrom('attendance.employees')
+      .select(['id', 'card'])
+      .execute()
+    return employees.reduce(
+      (acc, empl) => acc.set(empl.card, empl.id),
+      new Map<string, number>(),
+    )
+  }
+
+  async employees_employee_id_index() {
+    const employees = await db
+      .selectFrom('attendance.employees')
+      .select(['id', 'card'])
+      .execute()
+    return employees.reduce(
+      (acc, empl) => acc.set(empl.id, empl.card),
+      new Map<number, string>(),
+    )
+  }
 }

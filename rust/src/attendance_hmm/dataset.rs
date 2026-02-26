@@ -6,7 +6,9 @@ use std::{
 use ndarray::Array2;
 use rand::seq::SliceRandom as _;
 
-use crate::{csv, intervaling::LabeledEvent, observation::must_parse_timestamp, state::State};
+use crate::utils::csv;
+
+use super::{intervaling::LabeledEvent, observation::must_parse_timestamp, state::State};
 
 const CSV_FIEL_DELIMITER: &str = "\t";
 
@@ -24,7 +26,6 @@ fn matrix_to_training_events(matrix: &Array2<String>) -> Vec<LabeledEvent> {
 
     result.push(LabeledEvent {
       id,
-      // card: card.to_owned(),
       t: must_parse_timestamp(&t),
       state: State::from(state),
     });
@@ -35,7 +36,6 @@ fn matrix_to_training_events(matrix: &Array2<String>) -> Vec<LabeledEvent> {
 pub fn ls_dir() -> Result<Vec<PathBuf>, std::io::Error> {
   Ok(
     fs::read_dir("./dataset")?
-      .into_iter()
       .map(|dir_entry| match dir_entry {
         Ok(f) => f.path().to_path_buf(),
         Err(e) => panic!("fail to list dataset dir: {}", e),
@@ -65,7 +65,7 @@ pub fn split_dataset<T: Clone>(dataset: Vec<T>, test_ratio: f64) -> Dataset<T> {
 }
 
 pub fn load_dataset(path: &PathBuf) -> Vec<LabeledEvent> {
-  let lines = fs::read(&path).unwrap_or_else(|e| panic!("cannot read seed file {e}"));
+  let lines = fs::read(path).unwrap_or_else(|e| panic!("cannot read seed file {e}"));
   let matrix =
     csv::parse(&lines, CSV_FIEL_DELIMITER, 2).unwrap_or_else(|e| panic!("cant load dataset: {e}"));
   matrix_to_training_events(&matrix)

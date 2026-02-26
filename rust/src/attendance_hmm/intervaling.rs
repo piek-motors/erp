@@ -1,6 +1,8 @@
 use std::collections::HashMap;
 
-use crate::{observation::TimeSeries, state::State, time};
+use crate::utils::time;
+
+use super::{observation::TimeSeries, state::State};
 
 const MAX_SHIFT_SECONDS: i64 = 12 * 60 * 60;
 
@@ -23,7 +25,7 @@ where
         .nth(0)
         .unwrap_or("fail ot parse unix time");
 
-      let v = r.entry(key.to_string()).or_insert_with(Vec::new);
+      let v = r.entry(key.to_string()).or_default();
 
       // deduplicate events
       v.retain(|e| e.timestamp() != ev.timestamp());
@@ -90,28 +92,28 @@ fn build_shifts_from_events(
 ) -> Vec<Shift> {
   let mut intervals = Vec::new();
 
-  enum FSM {
+  enum Fsm {
     Outside,
     Inside { entry: IntervalEvent },
   }
 
-  let mut state = FSM::Outside;
+  let mut state = Fsm::Outside;
 
   // 1. Process current-day events
   for ev in events {
     match (&state, ev.state) {
-      (FSM::Outside, State::Inside) => {
-        state = FSM::Inside {
+      (Fsm::Outside, State::Inside) => {
+        state = Fsm::Inside {
           entry: IntervalEvent { id: ev.id, t: ev.t },
         };
       }
 
-      (FSM::Inside { entry }, State::Outside) => {
+      (Fsm::Inside { entry }, State::Outside) => {
         intervals.push(Shift {
           entry: entry.clone(),
           exit: Some(IntervalEvent { id: ev.id, t: ev.t }),
         });
-        state = FSM::Outside;
+        state = Fsm::Outside;
       }
 
       _ => {}
@@ -119,20 +121,17 @@ fn build_shifts_from_events(
   }
 
   // 2. Overnight shifts: Attempt to close from event on next day
-  if let FSM::Inside { entry } = state {
+  if let Fsm::Inside { entry } = state {
     let mut exit = None;
 
-    match next_day_events.get(0) {
-      Some(ev) => {
-        if ev.state == State::Outside {
-          let duration = ev.t - entry.t;
+    if let Some(ev) = next_day_events.first() {
+      if ev.state == State::Outside {
+        let duration = ev.t - entry.t;
 
-          if duration > 0 && duration <= MAX_SHIFT_SECONDS {
-            exit = Some(IntervalEvent { id: ev.id, t: ev.t });
-          }
+        if duration > 0 && duration <= MAX_SHIFT_SECONDS {
+          exit = Some(IntervalEvent { id: ev.id, t: ev.t });
         }
       }
-      None => {}
     };
 
     intervals.push(Shift { entry, exit });
@@ -143,6 +142,7 @@ fn build_shifts_from_events(
 
 #[cfg(test)]
 mod tests {
+
   use crate::iso;
 
   use super::*;
