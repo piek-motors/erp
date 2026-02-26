@@ -105,6 +105,7 @@ class State {
       })
     } else {
       await rpc.hr.attendance.insert_interval.mutate({
+        employee_id: this.meta?.employee.id!,
         card: this.meta?.employee.card!,
         ent_event_id: this.generateRandomEntEventId(),
         ent,

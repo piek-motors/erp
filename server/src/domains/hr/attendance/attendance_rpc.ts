@@ -58,11 +58,17 @@ export const attendance = router({
   //
   insert_interval: procedure
     .use(requireScope(Scope.hr))
-    .input(manual_interval_update_dto.extend({ card: z.string() }))
+    .input(
+      manual_interval_update_dto.extend({
+        card: z.string(),
+        employee_id: z.number(),
+      }),
+    )
     .mutation(async ({ input }) => {
       return db
         .insertInto('attendance.intervals')
         .values({
+          employee_id: input.employee_id,
           card: input.card,
           ent_event_id: input.ent_event_id,
           ent: new Date(input.ent),
@@ -124,19 +130,21 @@ export const attendance = router({
       )
       const employees_card_index = await repo.employees_card_index()
 
-      const events = input.events
-        .map(
-          event =>
-            ({
-              id: event[0],
-              card: event[1],
-              employee_id: employees_card_index.get(event[1]) ?? null,
-              timestamp: new Date(event[2] * 1000),
-            }) satisfies Insertable<DB.AttendanceEventsTable>,
-        )
-        .filter(e => e.employee_id) as Array<
-        DB.AttendanceEventsTable & { employee_id: number }
-      >
+      const events: Array<
+        Insertable<DB.AttendanceEventsTable> & { employee_id: number }
+      > = []
+
+      for (const event of input.events) {
+        const employee_id = employees_card_index.get(event[1])
+        if (!employee_id) continue
+
+        events.push({
+          id: event[0],
+          card: event[1],
+          employee_id,
+          timestamp: new Date(event[2] * 1000),
+        })
+      }
 
       const eventsInsertedOrUpdatedRows = await repo.upsert_events(events)
 
