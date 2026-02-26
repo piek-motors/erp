@@ -36,7 +36,7 @@ export const AttendanceReportComponent = observer(
         accessor: data => (
           <Box sx={{ width: 'min-content', p: 0.3, lineHeight: 1.1 }}>
             {data.name}
-            <Label xs width={'max-content'}>
+            <Label xs width={'initial'}>
               {data.job_title}
             </Label>
             <Label xs>{data.card}</Label>{' '}
