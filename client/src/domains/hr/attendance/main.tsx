@@ -12,19 +12,21 @@ const Attendance = observer(() => {
     store.load()
   }, [])
   return (
-    <FactoryPage
-      title={'Рабочее время'}
-      header={
-        <Label>
-          <Link to="/hr/employees">Сотрудники</Link>
-        </Label>
-      }
-    >
+    <>
       <WebOnly>
-        <ReportConfigurator />
+        <FactoryPage
+          title={'Рабочее время'}
+          header={
+            <Label>
+              <Link to="/hr/employees">Сотрудники</Link>
+            </Label>
+          }
+        >
+          <ReportConfigurator />
+        </FactoryPage>
       </WebOnly>
       {store.report && <AttendanceReportComponent report={store.report} />}
-    </FactoryPage>
+    </>
   )
 })
 

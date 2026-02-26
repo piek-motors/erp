@@ -1,8 +1,18 @@
 import { type BoxProps, Stack, Tooltip } from '@mui/joy'
 import moment from 'moment'
+import { useRef } from 'react'
 import type { Column } from 'react-table'
-import { PrintOnly } from '@/components/utilities/conditional-display'
-import { Box, Label, Loading, observer, P, Sheet, useState } from '@/lib'
+import { PrintOnly, WebOnly } from '@/components/utilities/conditional-display'
+import {
+  Box,
+  ButtonXxs,
+  Label,
+  Loading,
+  observer,
+  P,
+  Sheet,
+  useState,
+} from '@/lib'
 import { Hour } from '@/lib/constants'
 import { createDateAsUTC } from '@/lib/utils/date_fmt'
 import type { Employee } from '@/server/domains/hr/attendance/report_generator'
@@ -18,13 +28,18 @@ import {
 
 export const AttendanceReportComponent = observer(
   ({ report }: { report: Report }) => {
+    const printRef = useRef<HTMLDivElement>(null)
+
     const columns: Column<Employee>[] = [
       {
         Header: 'Фамилия Имя',
         accessor: data => (
           <Box sx={{ width: 'min-content', p: 0.3, lineHeight: 1.1 }}>
-            {data.name} <Label xs>{data.card}</Label>{' '}
-            <Label xs>{data.job_title}</Label>
+            {data.name}
+            <Label xs width={'max-content'}>
+              {data.job_title}
+            </Label>
+            <Label xs>{data.card}</Label>{' '}
           </Box>
         ),
       },
@@ -54,14 +69,16 @@ export const AttendanceReportComponent = observer(
     if (store.loader.loading) return <Loading />
     return (
       <Sheet
+        ref={printRef}
         sx={{
           p: 1,
           borderRadius: 'sm',
           width: 'max-content',
         }}
       >
+        <PrintPdfButton printRef={printRef} />
         <UpdateIntervalModal />
-        <Label>Отчет за {report.month}</Label>
+        <Label>Отчёт по рабочему времени за {report.month}</Label>
         <Label>Норма вычета времени: {report.timeRetention} мин</Label>
         <Label>
           Суммарный объём трудозатрат: {store.report?.resp.monthly_labor_hours}{' '}
@@ -166,3 +183,63 @@ const ArrowLeft = () => {
 const ArrowRight = () => {
   return <span>{'\u2192'}</span> // →
 }
+
+const PrintPdfButton = observer(
+  ({ printRef }: { printRef: React.RefObject<HTMLDivElement | null> }) => {
+    const handlePrint = () => {
+      const el = printRef.current
+      if (!el) return
+
+      const originalTransform = el.style.transform
+      const originalTransformOrigin = el.style.transformOrigin
+
+      // Inject @page style — zero margins, landscape
+      const styleId = '__print_page_style__'
+      let styleEl = document.getElementById(styleId) as HTMLStyleElement | null
+      if (!styleEl) {
+        styleEl = document.createElement('style')
+        styleEl.id = styleId
+        document.head.appendChild(styleEl)
+      }
+      styleEl.textContent = `
+    @page {
+      size: A4 landscape;
+      margin: 0;
+      padding: 0;
+    }
+  `
+
+      // Measure content width before any transform
+      el.style.transform = 'none'
+      const contentWidth = el.scrollWidth
+
+      // A4 landscape at 96dpi = 1122px, but browsers apply ~0.75 scale factor
+      // so effective CSS print px width is 1122 * (96/128) ≈ 794px...
+      // empirically, just use 1122 and it matches correctly with margin:0
+      const pagePadding = 5 // px padding on each side
+      const pageWidth = 1122 - pagePadding * 2
+      const scale = pageWidth / contentWidth
+
+      el.style.transformOrigin = 'top left'
+      el.style.transform = `translateX(${pagePadding}px) scale(${scale})`
+
+      document.title = `Отчёт по рабочему времени за ${store.report?.month.replace('.', '')}`
+
+      setTimeout(() => {
+        window.print()
+
+        el.style.transform = originalTransform
+        el.style.transformOrigin = originalTransformOrigin
+        styleEl!.textContent = ''
+      }, 100)
+    }
+
+    return (
+      <WebOnly>
+        <ButtonXxs size="sm" onClick={handlePrint} variant="soft">
+          PDF
+        </ButtonXxs>
+      </WebOnly>
+    )
+  },
+)
