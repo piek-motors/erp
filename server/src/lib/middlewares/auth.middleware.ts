@@ -1,8 +1,8 @@
 import type { NextFunction, Request, Response } from 'express'
 import { tokenService } from '#root/ioc/index.js'
+import { logger } from '#root/ioc/log.js'
 import { ApiError } from '#root/lib/api.error.js'
 import { Errcode } from '#root/lib/error-code.js'
-import { logger } from '#root/ioc/log.js'
 
 export default function (req: Request, _res: Response, next: NextFunction) {
   try {

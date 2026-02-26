@@ -29,6 +29,7 @@ const ReportConfigurator = observer(() => (
         }}
       />
     </Row>
+
     <Button
       variant="solid"
       color="primary"

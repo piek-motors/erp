@@ -1,17 +1,25 @@
 import { FactoryPage } from '@/components/factory_page'
 import { WebOnly } from '@/components/utilities/conditional-display'
-import { observer, routeMap, useEffect } from '@/lib'
+import { Label, Link, observer, routeMap, useEffect } from '@/lib'
 import type { RouteConfig } from '@/lib/types/global'
-import ReportConfigurator from './control'
+import ReportConfigurator from './configurator'
 import { AttendanceReportComponent } from './report'
 import { store } from './store'
+import { EmployeesPage } from '../employees/main'
 
 const Attendance = observer(() => {
   useEffect(() => {
     store.load()
   }, [])
   return (
-    <FactoryPage title={'Рабочее время'}>
+    <FactoryPage
+      title={'Рабочее время'}
+      header={
+        <Label>
+          <Link to="/hr/employees">Сотрудники</Link>
+        </Label>
+      }
+    >
       <WebOnly>
         <ReportConfigurator />
       </WebOnly>
@@ -23,6 +31,10 @@ const Attendance = observer(() => {
 export default [
   {
     element: <Attendance />,
-    path: routeMap.attendance,
+    path: routeMap.hr.attendance,
+  },
+  {
+    element: <EmployeesPage />,
+    path: routeMap.hr.employees,
   },
 ] as RouteConfig[]

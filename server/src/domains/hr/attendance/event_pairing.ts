@@ -1,6 +1,6 @@
 import { runHiddenMarkovModel } from 'rust'
 import { logger } from '#root/ioc/log.js'
-import { type DB } from '#root/sdk.js'
+import type { DB } from '#root/sdk.js'
 import { HrRepo } from './hr.repo.js'
 
 export class AttendanceEventPairing {

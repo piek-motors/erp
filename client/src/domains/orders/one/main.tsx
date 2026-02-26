@@ -2,6 +2,7 @@ import { observer } from 'mobx-react-lite'
 import { useEffect } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { useParams } from 'react-router'
+import { WebOnly } from '@/components/utilities/conditional-display'
 import { Loading } from '@/lib/index'
 import { routeMap } from '@/lib/routes'
 import type { RouteConfig } from '@/lib/types/global'
@@ -9,7 +10,6 @@ import { CreateOrder } from './create'
 import { PrintLayout } from './layouts/print'
 import { WebLayout } from './layouts/web'
 import { orderStore } from './order.store'
-import { WebOnly } from '@/components/utilities/conditional-display'
 
 const OrderDetail = observer(() => {
   const queryParams = useParams<{ id: string }>()

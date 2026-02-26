@@ -3,7 +3,11 @@ export const routeMap = {
   mentions: '/mentions',
   settings: '/settings',
   reclamation: '/reclamation',
-  attendance: '/attendance',
+
+  hr: {
+    attendance: '/attendance',
+    employees: '/hr/employees',
+  },
 
   order: {
     new: '/orders/new',

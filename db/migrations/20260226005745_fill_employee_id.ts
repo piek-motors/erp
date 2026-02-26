@@ -1,5 +1,5 @@
 import { sql } from 'kysely'
-import { type KDB } from '../schema.js'
+import type { KDB } from '../schema.js'
 
 export async function up(db: KDB): Promise<void> {
   // 1️⃣ Populate employee_id for events

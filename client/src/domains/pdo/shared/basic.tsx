@@ -11,10 +11,10 @@ import {
   NavTopBar,
   type Props as PageTitleProps,
 } from '@/components/nav_topbar'
+import { EnumSelect } from '@/components/select'
 import { ActionButton, DeleteIcon, P, Row } from '@/lib/index'
 import { rpc } from '@/lib/rpc/rpc.client'
 import { MobileNavModal } from '../root_layout'
-import { EnumSelect } from '@/components/select'
 
 export function UnitSelect(props: {
   value?: Unit

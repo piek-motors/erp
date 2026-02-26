@@ -36,7 +36,7 @@ const MENU_LINKS: MenuLink[] = [
   },
   { href: routeMap.reclamation, icon: UilWrench, name: 'Рекламации' },
   { href: routeMap.pdo.index, icon: UilCalculatorAlt, name: 'ПДО' },
-  { href: routeMap.attendance, icon: UilConstructor, name: 'Рабочее время' },
+  { href: routeMap.hr.attendance, icon: UilConstructor, name: 'Рабочее время' },
   {
     href: routeMap.mentions,
     icon: UilBell,

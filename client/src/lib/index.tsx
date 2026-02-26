@@ -18,7 +18,7 @@ import {
   Container,
   Divider,
   FormControl,
-  FormControlProps,
+  type FormControlProps,
   IconButton,
   type IconButtonProps,
   Input,

@@ -1,5 +1,5 @@
-import { DB, db } from '#root/sdk.js'
-import { Insertable } from 'kysely'
+import type { Insertable } from 'kysely'
+import { type DB, db } from '#root/sdk.js'
 
 export class HrRepo {
   async upsert_intervals(
