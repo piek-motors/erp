@@ -17,7 +17,7 @@ export const employees = router({
           AND ev.timestamp >= ${ONE_MONTH_AGO}
       )`,
       )
-      .orderBy('e.lastname')
+      .orderBy(['e.lastname', 'e.firstname'])
       .execute()
   }),
   //

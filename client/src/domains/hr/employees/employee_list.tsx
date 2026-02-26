@@ -53,11 +53,6 @@ const EmployeeRow = observer(
               if (e.key === 'Enter') store.saveJobTitle(employee.id)
               if (e.key === 'Escape') store.cancelEdit(employee.id)
             }}
-            width={250}
-            getOptionLabel={option =>
-              typeof option === 'string' ? option : option.label
-            }
-            createOptionLabel={inputValue => `+ ${inputValue}`}
           />
         </td>
         <td>

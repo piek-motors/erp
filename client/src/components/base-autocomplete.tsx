@@ -1,4 +1,10 @@
-import { Autocomplete, AutocompleteProps, Box } from '@mui/joy'
+import {
+  Autocomplete,
+  Box,
+  createFilterOptions,
+  type InputProps,
+} from '@mui/joy'
+import type { SxProps } from '@mui/joy/styles/types'
 import type { ReactNode } from 'react'
 import { Label } from '@/lib/index'
 
@@ -8,75 +14,107 @@ export interface BaseOption {
   inputValue?: string
 }
 
-interface BaseAutocompleteProps<T extends BaseOption>
-  extends Omit<
-    AutocompleteProps<T, boolean, boolean, boolean>,
-    'onChange' | 'renderInput'
-  > {
+interface BaseAutocompleteProps<T extends BaseOption> {
   label?: string
-  errorMessage?: ReactNode // renamed from error
+  placeholder?: string
+  sx?: SxProps
+  options: T[]
+  value: T | T[] | null
+  onChange: (value: T | null) => void
+  multiple?: boolean
+  freeSolo?: boolean
+  loading?: boolean
+  disabled?: boolean
+  error?: ReactNode
   width?: string | number
   createOptionLabel?: (inputValue: string) => string
-  onChange: (value: T | null) => void
+  getOptionLabel?: (option: T | string) => string
+  isOptionEqualToValue?: (option: T, value: T) => boolean
+  size?: InputProps['size']
+  variant?: InputProps['variant']
+  onBlur?: React.FocusEventHandler<HTMLDivElement>
+  onKeyDown?: React.KeyboardEventHandler<HTMLDivElement>
 }
 
 export function BaseAutocomplete<T extends BaseOption>({
   label,
-  errorMessage,
-  width = 'max-content',
-  createOptionLabel = inputValue => `+ ${inputValue}`,
+  placeholder,
+  variant,
+  sx,
+  options,
+  value,
   onChange,
+  multiple = false,
   freeSolo = false,
-  ...restProps
+  loading = false,
+  disabled = false,
+  error,
+  width = 'initial',
+  createOptionLabel = inputValue => `+ ${inputValue}`,
+  getOptionLabel = option =>
+    typeof option === 'string' ? option : option.label,
+  isOptionEqualToValue = (option, value) => option.value === value.value,
+  size,
+  onBlur,
+  onKeyDown,
 }: BaseAutocompleteProps<T>) {
-  const filter = (options: T[], params: any) => {
-    const filtered = options
-    if (!freeSolo) return filtered
-
-    const inputValue = params.inputValue
-    const isExisting = options.some(o => o.label === inputValue)
-    if (inputValue !== '' && !isExisting) {
-      filtered.push({
-        label: createOptionLabel(inputValue),
-        value: inputValue,
-        inputValue,
-      } as T)
-    }
-
-    return filtered
-  }
-
-  const handleChange: AutocompleteProps<
-    T,
-    boolean,
-    boolean,
-    boolean
-  >['onChange'] = (_, newValue) => {
-    if (freeSolo && typeof newValue === 'string') {
-      onChange({ label: newValue, value: newValue } as T)
-    } else if (
-      newValue &&
-      typeof newValue === 'object' &&
-      'inputValue' in newValue
-    ) {
-      onChange({
-        label: createOptionLabel(newValue.inputValue || ''),
-        value: newValue.inputValue,
-      } as T)
-    } else {
-      onChange(newValue as T)
-    }
-  }
+  const filter = createFilterOptions<T>()
 
   return (
     <Box width={width}>
-      {label && <Label label={label} />}
-      {errorMessage}
+      <Label label={label} />
+      {error}
       <Autocomplete
-        size="sm"
-        {...restProps}
-        filterOptions={filter}
-        onChange={handleChange}
+        variant={variant}
+        placeholder={placeholder}
+        size={size}
+        sx={sx}
+        multiple={multiple}
+        freeSolo={freeSolo}
+        loading={loading}
+        disabled={disabled}
+        options={options}
+        value={value}
+        onKeyDown={onKeyDown}
+        onBlur={onBlur}
+        onChange={(_, newValue) => {
+          if (freeSolo && typeof newValue === 'string') {
+            const newOption = { label: newValue, value: newValue } as T
+            onChange(newOption)
+          } else if (
+            newValue &&
+            typeof newValue === 'object' &&
+            'inputValue' in newValue
+          ) {
+            const newOption = {
+              label: createOptionLabel(newValue.inputValue || ''),
+              value: newValue.inputValue,
+            } as T
+            onChange(newOption)
+          } else {
+            onChange(newValue as T)
+          }
+        }}
+        getOptionLabel={getOptionLabel}
+        isOptionEqualToValue={isOptionEqualToValue}
+        filterOptions={(options, params) => {
+          if (!freeSolo) return filter(options, params)
+
+          const filtered = filter(options, params)
+          const { inputValue } = params
+
+          // Suggest creating a new value
+          const isExisting = options.some(option => inputValue === option.label)
+          if (inputValue !== '' && !isExisting) {
+            filtered.push({
+              label: createOptionLabel(inputValue),
+              value: inputValue,
+              inputValue,
+            } as T)
+          }
+
+          return filtered
+        }}
       />
     </Box>
   )
