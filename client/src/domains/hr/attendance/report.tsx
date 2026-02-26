@@ -34,7 +34,7 @@ export const AttendanceReportComponent = observer(
       {
         Header: 'Фамилия Имя',
         accessor: data => (
-          <Box p={0.3}>
+          <Stack p={0.3} width={'min-content'} gap={0.2}>
             <P
               sx={{ width: 'min-content', lineHeight: 1.1, fontSize: '.9rem' }}
               level="body-md"
@@ -47,7 +47,7 @@ export const AttendanceReportComponent = observer(
             <WebOnly>
               <Label xs>{data.card}</Label>
             </WebOnly>
-          </Box>
+          </Stack>
         ),
       },
       {
