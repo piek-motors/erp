@@ -4,9 +4,9 @@ import { observer } from 'mobx-react-lite'
 import { BaseAutocomplete } from '@/components/base-autocomplete'
 import { Label, P } from '@/lib'
 import {
+  type EmployeeStore,
   employeeStore,
   type JobTitleOption,
-  type EmployeeStore,
 } from './employee.store'
 
 interface EmployeeListProps {

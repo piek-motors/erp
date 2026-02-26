@@ -1,9 +1,9 @@
 import { Box, Container } from '@mui/joy'
+import { observer } from 'mobx-react-lite'
 import { useEffect } from 'react'
+import { NavTopBar } from '@/components/nav_topbar'
 import { employeeStore } from './employee.store'
 import { EmployeeList } from './employee_list'
-import { observer } from 'mobx-react-lite'
-import { NavTopBar } from '@/components/nav_topbar'
 
 export const EmployeesPage = observer(() => {
   useEffect(() => {

@@ -2,10 +2,10 @@ import { FactoryPage } from '@/components/factory_page'
 import { WebOnly } from '@/components/utilities/conditional-display'
 import { Label, Link, observer, routeMap, useEffect } from '@/lib'
 import type { RouteConfig } from '@/lib/types/global'
+import { EmployeesPage } from '../employees/main'
 import ReportConfigurator from './configurator'
 import { AttendanceReportComponent } from './report'
 import { store } from './store'
-import { EmployeesPage } from '../employees/main'
 
 const Attendance = observer(() => {
   useEffect(() => {

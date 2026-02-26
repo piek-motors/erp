@@ -28,7 +28,7 @@ tokenService.initCron()
 
 const authService = new AuthSevice(tokenService, userRepo)
 export const attachmentService = new AttachmentService(db)
-export const attendanceReportGenerator = new AttendanceReportGenerator(db)
+export const attendanceReportGenerator = new AttendanceReportGenerator()
 export const userController = new AuthController(authService)
 
 new JobsRunner([

@@ -1,7 +1,39 @@
 import type { Insertable } from 'kysely'
 import { type DB, db } from '#root/sdk.js'
 
+export interface Period {
+  month: number
+  year: number
+}
+
 export class HrRepo {
+  async get_report_data(period: Period) {
+    const startDate = new Date(
+      Date.UTC(Number(period.year), Number(period.month), 1, 0, 0, 0),
+    )
+    const endDate = new Date(
+      Date.UTC(Number(period.year), Number(period.month) + 1, 1, 0, 0, 0),
+    )
+
+    const [all_intervals, employees, all_absence_reasons] = await Promise.all([
+      db
+        .selectFrom('attendance.intervals')
+        .selectAll()
+        .where('ent', '>=', startDate)
+        .where('ent', '<', endDate)
+        .execute(),
+      db.selectFrom('attendance.employees').selectAll().execute(),
+      db
+        .selectFrom('attendance.employee_absences')
+        .selectAll()
+        .where('date', '>=', startDate.toISOString().split('T')[0])
+        .where('date', '<=', endDate.toISOString().split('T')[0])
+        .execute(),
+    ])
+
+    return { all_intervals, employees, all_absence_reasons }
+  }
+
   async upsert_intervals(
     intervals: DB.AttendanceIntervalTable[],
   ): Promise<number> {

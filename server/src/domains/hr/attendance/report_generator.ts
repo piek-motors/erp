@@ -1,12 +1,8 @@
-import type { DB, KDB, Selectable } from 'db'
+import type { DB, Selectable } from 'db'
 import type { AbsenceReason } from 'models'
 import { Hour, Minute } from '#root/lib/constants.js'
 import { timedeltaInSeconds } from '#root/lib/time.js'
-
-interface Period {
-  month: number
-  year: number
-}
+import { HrRepo, type Period } from './hr.repo.js'
 
 interface GeneratorOptions {
   period: Period
@@ -36,6 +32,7 @@ export interface Employee {
   total: number // total working time in seconds
   workDays: number
   totalIntervalsCount: number
+  job_title: string
   days: {
     [day: number]: Day
   }
@@ -48,31 +45,12 @@ export interface AttendanceReport {
 }
 
 export class AttendanceReportGenerator {
-  constructor(private readonly db: KDB) {}
+  private readonly repo = new HrRepo()
 
   async generateReport(options: GeneratorOptions): Promise<AttendanceReport> {
     const { period, showFullInfo } = options
-    const startDate = new Date(
-      Date.UTC(Number(period.year), Number(period.month), 1, 0, 0, 0),
-    )
-    const endDate = new Date(
-      Date.UTC(Number(period.year), Number(period.month) + 1, 1, 0, 0, 0),
-    )
-    const [all_intervals, employees, all_absences] = await Promise.all([
-      this.db
-        .selectFrom('attendance.intervals')
-        .selectAll()
-        .where('ent', '>=', startDate)
-        .where('ent', '<', endDate)
-        .execute(),
-      this.db.selectFrom('attendance.employees').selectAll().execute(),
-      this.db
-        .selectFrom('attendance.employee_absences')
-        .selectAll()
-        .where('date', '>=', startDate.toISOString().split('T')[0])
-        .where('date', '<=', endDate.toISOString().split('T')[0])
-        .execute(),
-    ])
+    const { all_intervals, employees, all_absence_reasons } =
+      await this.repo.get_report_data(period)
 
     const days = createDaysInMonthArray(period)
     const result: Employee[] = []
@@ -87,13 +65,13 @@ export class AttendanceReportGenerator {
       return acc
     }, new Map<string, typeof all_intervals>())
 
-    const absencesByUserId = all_absences.reduce((acc, absence) => {
+    const absencesByUserId = all_absence_reasons.reduce((acc, absence) => {
       if (!acc.has(absence.user_id)) {
         acc.set(absence.user_id, [])
       }
       acc.get(absence.user_id)?.push(absence)
       return acc
-    }, new Map<number, typeof all_absences>())
+    }, new Map<number, typeof all_absence_reasons>())
 
     for (const empl of employees) {
       const intervals = intervalsByCard.get(empl.card) || []
@@ -152,6 +130,7 @@ export class AttendanceReportGenerator {
       total: 0,
       workDays: 0,
       days: daysMap,
+      job_title: empl.job_title ?? '',
     }
 
     for (const interval of intervals) {
