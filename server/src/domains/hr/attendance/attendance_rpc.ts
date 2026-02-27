@@ -6,6 +6,7 @@ import { router } from '#root/lib/trpc/trpc.js'
 import { type DB, db, procedure, requireScope, Scope } from '#root/sdk.js'
 import { AttendanceEventPairing } from './event_pairing.js'
 import { HrRepo } from './hr.repo.js'
+import { createDateAsUTC } from '#root/lib/time.js'
 
 const manual_interval_update_dto = z.object({
   ent_event_id: z.number(),
@@ -130,7 +131,7 @@ export const attendance = router({
       const events: Array<Insertable<DB.AttendanceEventsTable>> =
         input.events.map(([card, ts]) => ({
           card,
-          timestamp: new Date(ts * 1000),
+          timestamp: createDateAsUTC(new Date(ts * 1000)),
         }))
       const eventsInsertedOrUpdatedRows = await repo.upsert_events(events)
 
