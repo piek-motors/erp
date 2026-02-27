@@ -104,7 +104,7 @@ mod tests {
 
   #[test]
   fn test_infer_work_intervals_from_dataset_file() {
-    let dataset_path = PathBuf::from("./dataset/2-2026_9224668.tsv");
+    let dataset_path = PathBuf::from("./dataset/2-2026_11016445.tsv");
     let labeled_events = crate::attendance_hmm::dataset::load_dataset(&dataset_path);
 
     let events: Vec<Event> = labeled_events

@@ -8,7 +8,7 @@ use strum::IntoEnumIterator;
 use super::{
   dataset::{self, split_dataset, Dataset},
   normalization::normalize_arr2,
-  observation::{events_to_observations, move_to_deltas, Observation},
+  observation::{events_to_observations, Observation},
   state::State,
   training_data::TrainingData,
 };
@@ -50,16 +50,28 @@ pub fn train_hmm(test_ratio: f32) -> Result<(), Box<dyn Error>> {
     let mut events = dataset::load_dataset(dataset_path);
     events.sort_by_key(|e| e.t);
 
-    let timestamps: Vec<_> = events.iter().map(|e| e.t).collect();
-    let deltas = move_to_deltas(&timestamps);
+    // Convert to (EmployeeEvent, State) tuples
+    let events_with_state: Vec<(super::observation::EmployeeEvent, State)> = events
+      .into_iter()
+      .map(|e| {
+        (
+          super::observation::EmployeeEvent { id: e.id, t: e.t },
+          e.state,
+        )
+      })
+      .collect();
+
+    // Apply suppress_bursts directly on tuples - preserves state alignment!
+    let events_deduped = super::observation::suppress_bursts(events_with_state);
+
+    let timestamps: Vec<_> = events_deduped.iter().map(|(e, _)| e.t).collect();
+    let deltas = super::observation::move_to_deltas(&timestamps);
 
     // Associate each delta with the state at the START of the interval
-    // delta[i] = timestamps[i+1] - timestamps[i]
-    // state[i] = state during that interval = state of event[i]
-    let states: Vec<State> = events
+    let states: Vec<State> = events_deduped
       .iter()
-      .take(events.len() - 1)
-      .map(|e| e.state)
+      .take(events_deduped.len() - 1)
+      .map(|(_, s)| *s)
       .collect();
 
     assert!(

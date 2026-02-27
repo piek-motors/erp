@@ -7,6 +7,8 @@ use serde::Deserialize;
 use strum::IntoEnumIterator;
 use strum_macros::EnumIter;
 
+use super::state::State;
+
 #[napi()]
 pub type EmployeeId = u16;
 
@@ -42,6 +44,18 @@ pub trait TimeSeries {
 impl TimeSeries for EmployeeEvent {
   fn timestamp(&self) -> i64 {
     self.t
+  }
+}
+
+impl<T: TimeSeries> TimeSeries for &T {
+  fn timestamp(&self) -> i64 {
+    (*self).timestamp()
+  }
+}
+
+impl TimeSeries for (EmployeeEvent, State) {
+  fn timestamp(&self) -> i64 {
+    self.0.t
   }
 }
 
@@ -93,7 +107,7 @@ pub fn group_events(events: &Vec<Event>) -> GroupedUserEvents {
 }
 
 /// Time window used to consider two events as duplicates.
-const DUPLICATION_WINDOW: i64 = Duration::minutes(30).num_seconds();
+pub const DUPLICATION_WINDOW: i64 = Duration::minutes(30).num_seconds();
 
 /// Removes near-duplicate events for a single user.
 ///
@@ -103,9 +117,9 @@ const DUPLICATION_WINDOW: i64 = Duration::minutes(30).num_seconds();
 /// # Semantics
 /// - The earliest event is kept
 /// - Subsequent events within `DUPLICATION_WINDOW` are dropped
-pub fn suppress_bursts(events: Vec<EmployeeEvent>) -> Vec<EmployeeEvent> {
+pub fn suppress_bursts<T: TimeSeries>(events: Vec<T>) -> Vec<T> {
   debug_assert!(
-    events.windows(2).all(|w| w[0].t <= w[1].t),
+    events.windows(2).all(|w| w[0].timestamp() <= w[1].timestamp()),
     "invalidate_duplicates expects events sorted by t"
   );
 
@@ -114,11 +128,11 @@ pub fn suppress_bursts(events: Vec<EmployeeEvent>) -> Vec<EmployeeEvent> {
 
   for event in events {
     match last_t {
-      Some(prev) if event.t - prev <= DUPLICATION_WINDOW => {
+      Some(prev) if event.timestamp() - prev <= DUPLICATION_WINDOW => {
         // duplicate → skip
       }
       _ => {
-        last_t = Some(event.t);
+        last_t = Some(event.timestamp());
         result.push(event);
       }
     }

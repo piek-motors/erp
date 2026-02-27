@@ -135,13 +135,13 @@ const ReportCell = observer(
             <>
               {interval.ent && (
                 <Time>
-                  {ArrowRight()}
+                  {/* {ArrowRight()} */}
                   {fmtDateToHoursAndMinutes(interval.ent)}
                 </Time>
               )}
               {interval.ext && (
                 <Time>
-                  {ArrowLeft()}
+                  {/* {ArrowLeft()} */}
                   {fmtDateToHoursAndMinutes(interval.ext)}
                 </Time>
               )}
@@ -183,13 +183,13 @@ const Time = (props: { children: React.ReactNode; sx?: BoxProps }) => (
   </Box>
 )
 
-const ArrowLeft = () => {
-  return <span>{'\u2190'}</span> // ←
-}
+// const ArrowLeft = () => {
+//   return <span>{'\u2190'}</span> // ←
+// }
 
-const ArrowRight = () => {
-  return <span>{'\u2192'}</span> // →
-}
+// const ArrowRight = () => {
+//   return <span>{'\u2192'}</span> // →
+// }
 
 const PrintPdfButton = observer(
   ({ printRef }: { printRef: React.RefObject<HTMLDivElement | null> }) => {
