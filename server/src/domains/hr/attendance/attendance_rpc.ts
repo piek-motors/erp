@@ -151,12 +151,7 @@ export const attendance = router({
       const hmm_input_events = hmm_input_events_raw
         .map(event => {
           const employee_id = card_employee_id_index.get(event.card)
-          if (!employee_id) {
-            console.log(
-              `employye id not found for card ${event.card} ${event.id}`,
-            )
-            return null
-          }
+          if (!employee_id) return null
           return {
             ...event,
             employee_id,
