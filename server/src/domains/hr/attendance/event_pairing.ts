@@ -1,8 +1,8 @@
+import type { Selectable } from 'kysely'
 import { runHiddenMarkovModel } from 'rust'
 import { logger } from '#root/ioc/log.js'
 import type { DB } from '#root/sdk.js'
 import { HrRepo } from './hr.repo.js'
-import { Selectable } from 'kysely'
 
 export class AttendanceEventPairing {
   private repository = new HrRepo()

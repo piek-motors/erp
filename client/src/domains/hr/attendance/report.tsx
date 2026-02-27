@@ -17,6 +17,7 @@ import { Hour } from '@/lib/constants'
 import { createDateAsUTC } from '@/lib/utils/date_fmt'
 import type { Employee } from '@/server/domains/hr/attendance/report_generator'
 import { AbsenceLabels } from './absence'
+import { EmployeeEventsModal, employee_model_vm } from './events_modal'
 import { type Report, store } from './store'
 import { Table } from './table'
 import {
@@ -84,6 +85,7 @@ export const AttendanceReportComponent = observer(
         }}
       >
         <PrintPdfButton printRef={printRef} />
+        <EmployeeEventsModal />
         <UpdateIntervalModal />
         <Label>Отчёт по рабочему времени за {report.month}</Label>
         <Label>Норма вычета времени: {report.timeRetention} мин</Label>
@@ -120,6 +122,9 @@ const ReportCell = observer(
         placement="top"
       >
         <Stack
+          onDoubleClick={() => {
+            employee_model_vm.open(props.employee, props.date)
+          }}
           sx={{
             fontSize: '0.86rem',
             lineHeight: 1.2,
