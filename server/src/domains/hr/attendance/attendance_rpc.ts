@@ -1,5 +1,5 @@
 import type { Insertable } from 'kysely'
-import { AbsenceReason } from 'models'
+import { AbsenceReason, EventOrigin } from 'models'
 import { z } from 'zod'
 import { attendanceReportGenerator } from '#root/ioc/index.js'
 import { createDateAsUTC } from '#root/lib/time.js'
@@ -42,7 +42,6 @@ export const attendance = router({
         month: z.number().min(0).max(11),
         year: z.number().min(2010),
         timeRetentionMinutes: z.number().min(0),
-        showFullInfo: z.boolean(),
       }),
     )
     .query(async ({ input }) =>
@@ -51,7 +50,6 @@ export const attendance = router({
           month: input.month,
           year: input.year,
         },
-        showFullInfo: input.showFullInfo,
         timeRetentionMinutes: input.timeRetentionMinutes,
       }),
     ),
@@ -161,6 +159,7 @@ export const attendance = router({
         .selectFrom('attendance.events')
         .selectAll()
         .where('timestamp', '>=', cutoffDate)
+        .where('origin', '=', EventOrigin.TimeTrackingStation)
         .orderBy('timestamp', 'asc')
         .execute()
 

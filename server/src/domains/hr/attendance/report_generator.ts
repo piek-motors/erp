@@ -6,7 +6,6 @@ import { HrRepo, type Period } from './hr.repo.js'
 
 interface GeneratorOptions {
   period: Period
-  showFullInfo: boolean
   timeRetentionMinutes: number
 }
 
@@ -48,7 +47,7 @@ export class AttendanceReportGenerator {
   private readonly repo = new HrRepo()
 
   async generateReport(options: GeneratorOptions): Promise<AttendanceReport> {
-    const { period, showFullInfo } = options
+    const { period } = options
     const { all_intervals, employees, all_absence_reasons } =
       await this.repo.get_report_data(period)
 
@@ -84,7 +83,6 @@ export class AttendanceReportGenerator {
           intervals,
           absencesByUserId.get(empl.id) || [],
           days,
-          showFullInfo,
           dailyTimeRetention,
         ),
       )
@@ -107,7 +105,6 @@ export class AttendanceReportGenerator {
     intervals: Selectable<DB.AttendanceIntervalTable>[],
     absences: Selectable<DB.AttendanceEmployeeAbsenceTable>[],
     days: number[],
-    showFullInfo: boolean,
     dailyTimeRetention: number,
   ): Employee {
     const daysMap = days.reduce(
@@ -144,11 +141,9 @@ export class AttendanceReportGenerator {
         i.dur = interval_dur
       }
 
-      if (showFullInfo) {
-        i.ent = interval.ent
-        i.ext = interval.ext
-        i.updated_manually = interval.updated_manually
-      }
+      i.ent = interval.ent
+      i.ext = interval.ext
+      i.updated_manually = interval.updated_manually
 
       const dayOfMonth = new Date(interval.ent).getDate()
       daysMap[dayOfMonth].intervals.push(i)

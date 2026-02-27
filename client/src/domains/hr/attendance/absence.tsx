@@ -63,7 +63,7 @@ export const AbsenceReasons = observer((props: { onClick: () => void }) => (
 ))
 
 export const AbsenceLabels = () => (
-  <Label>
+  <Label xs>
     Обозначения: O - отпуск, А - административный отпуск, Б - болеет, П -
     пропуск, К - командировка
   </Label>

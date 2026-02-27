@@ -1,4 +1,4 @@
-import { Modal, ModalClose, ModalDialog, Stack } from '@mui/joy'
+import { Divider, Modal, ModalClose, ModalDialog, Stack } from '@mui/joy'
 import { makeAutoObservable } from 'mobx'
 import { observer } from 'mobx-react-lite'
 import { Label, Loading, P, Row } from '@/lib'
@@ -63,7 +63,15 @@ export const EmployeeEventsModal = observer(() => {
         <ModalClose />
         <P>Детализация по событиям</P>
         <Label>{employee_model_vm.employee?.name}</Label>
-        <Label>{employee_model_vm.date?.toDateString()}</Label>
+        <Label>
+          {employee_model_vm.date?.toLocaleString('ru-RU', {
+            timeZone: 'UTC',
+            year: '2-digit',
+            month: 'short',
+            day: '2-digit',
+          })}
+        </Label>
+        <Divider />
         {employee_model_vm.loader.loading && <Loading />}
         <Stack pr={2}>
           {employee_model_vm.events.map(each => (
@@ -73,7 +81,6 @@ export const EmployeeEventsModal = observer(() => {
                 {' '}
                 {new Date(each.timestamp).toLocaleString('ru-RU', {
                   timeZone: 'UTC',
-                  day: '2-digit',
                   hour: '2-digit',
                   minute: '2-digit',
                   second: '2-digit',

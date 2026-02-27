@@ -9,6 +9,7 @@ import type {
 import type {
   AbsenceReason,
   Color,
+  EventOrigin,
   MaterialShape,
   OperationType,
   OrderPriority,
@@ -244,6 +245,7 @@ export namespace DB {
     id: GeneratedAlways<number>
     card: string
     timestamp: Date
+    origin: EventOrigin | null
   }
 
   export interface AttendanceIntervalTable {

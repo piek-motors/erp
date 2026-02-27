@@ -71,7 +71,7 @@ function _MonthSelect({ onSearch, store, onChange }: IReportConfiguratorProps) {
           store.setMonth(Number(v))
           onChange?.()
         }}
-        width="100px"
+        width="80px"
       />
       <Select
         placeholder="Год"
@@ -79,7 +79,7 @@ function _MonthSelect({ onSearch, store, onChange }: IReportConfiguratorProps) {
           name: e.toString(),
           value: e,
         }))}
-        width="100px"
+        width="80px"
         value={store.year}
         onChange={v => {
           store.setYear(Number(v))

@@ -25,8 +25,7 @@ import type {
   Employee,
   Interval,
 } from '@/server/domains/hr/attendance/report_generator'
-import { AbsenceReasons, absenceReasonState } from './absence'
-import { store } from './store'
+import { AbsenceReasons, absenceReasonState } from '../absence'
 
 export interface UpdateIntervalMetadata {
   employee: Employee
@@ -52,8 +51,8 @@ class State {
     this.intervalDate = meta?.date ?? null
 
     if (interval) {
-      this.ent = fmtDateToHoursAndMinutes(interval.ent)
-      this.ext = fmtDateToHoursAndMinutes(interval.ext)
+      this.ent = fmtHourMinute(interval.ent)
+      this.ext = fmtHourMinute(interval.ext)
     }
   }
 
@@ -113,7 +112,7 @@ class State {
       })
     }
 
-    store.load()
+    // store.load()
     this.close()
   }
 }
@@ -147,6 +146,7 @@ export const UpdateIntervalModal = observer(() => (
           sx={{ width: 100 }}
         />
         <IconButton
+          tabIndex={-1}
           sx={{ width: 'min-content' }}
           size="sm"
           variant="outlined"
@@ -214,13 +214,14 @@ export const UpdateIntervalButton = observer(
   },
 )
 
-export function fmtDateToHoursAndMinutes(d?: Date | null): string {
+export function fmtHourMinute(d?: Date | null): string {
   if (!d) return ''
-  return new Intl.DateTimeFormat('ru-RU', {
-    hour: '2-digit',
-    minute: '2-digit',
-    timeZone: 'UTC',
-  }).format(new Date(d))
+
+  const date = new Date(d)
+  const hours = date.getUTCHours()
+  const minutes = date.getUTCMinutes()
+
+  return `${hours}:${minutes.toString().padStart(2, '0')}`
 }
 
 function upTimeAndMinutesOnDate(d: Date, newTime: string): string {
