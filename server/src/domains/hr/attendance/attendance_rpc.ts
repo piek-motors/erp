@@ -31,6 +31,9 @@ const upload_data_dto = z.object({
         .number()
         .int()
         .nonnegative(), // ts
+      z
+        .int()
+        .nonnegative(), // origin
     ]),
   ),
 })
@@ -144,10 +147,12 @@ export const attendance = router({
           card: e[2],
         })),
       )
+      // TODO: VERIFY ORIGIN WITHIN ENUM VALUES
       const events: Array<Insertable<DB.AttendanceEventsTable>> =
-        input.events.map(([card, ts]) => ({
+        input.events.map(([card, ts, origin]) => ({
           card,
           timestamp: createDateAsUTC(new Date(ts * 1000)),
+          origin,
         }))
       const eventsInsertedOrUpdatedRows = await repo.upsert_events(events)
 
