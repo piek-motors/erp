@@ -3,7 +3,7 @@
   "version": "3.0.0",
   "private": true,
   "scripts": {
-    "fmt": "pnpm exec biome format --write",
+    "fmt": "biome format --write",
     "dev": "vite",
     "build": "vite build",
     "check": "tsc --noEmit",

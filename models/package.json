@@ -20,6 +20,7 @@
     }
   },
   "devDependencies": {
+    "@types/bun": "^1.2.0",
     "barrelsby": "^2.8.1",
     "typescript": "^5.8.2"
   },

@@ -1,13 +1,8 @@
-FROM node:23.9-alpine3.20 as base
+FROM oven/bun:1 AS base
 # Update
-RUN apk add --no-cache libc6-compat
-RUN apk update
-# install pnpm
-RUN wget -qO /bin/pnpm "https://github.com/pnpm/pnpm/releases/latest/download/pnpm-linuxstatic-x64" && chmod +x /bin/pnpm
-# configure pnpm
-ENV PNPM_HOME="/pnpm"
-ENV PATH="$PNPM_HOME:$PATH"
-RUN corepack enable
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
 
 FROM base as frontdeps
 COPY pnpm-workspace.yaml /app/pnpm-workspace.yaml
@@ -17,19 +12,15 @@ COPY ./client/package.json /app/client/package.json
 COPY ./client/pnpm-lock.yaml /app/client/pnpm-lock.yaml
 
 WORKDIR /app
-RUN --mount=type=cache,target=${PNPM_HOME} echo "PNPM contents before install: $(ls -la ${PNPM_HOME})"
-RUN --mount=type=cache,target=${PNPM_HOME} \
-  pnpm config set store-dir ${PNPM_HOME} && \
-  pnpm install --prefer-offline
-RUN --mount=type=cache,target=${PNPM_HOME} echo "PNPM contents after install: $(ls -la ${PNPM_HOME})"
+RUN bun install --frozen-lockfile
 
 FROM frontdeps as front
 ENV NODE_ENV=production
 COPY ./shared /app/shared
-RUN npm --prefix /app/shared run build
+RUN bun run --cwd /app/shared build
 
 COPY ./client /app/client
-RUN npm --prefix /app/client run build
+RUN bun run --cwd /app/client build
 
 FROM base as srvdeps
 WORKDIR /app/
@@ -39,16 +30,12 @@ COPY ./server/package.json server/package.json
 COPY ./server/pnpm-lock.yaml server/pnpm-lock.yaml
 
 WORKDIR /app
-RUN --mount=type=cache,target=${PNPM_HOME} echo "PNPM contents before install: $(ls -la ${PNPM_HOME})"
-RUN --mount=type=cache,target=${PNPM_HOME} \
-  pnpm config set store-dir ${PNPM_HOME} && \
-  pnpm install --prefer-offline
-RUN --mount=type=cache,target=${PNPM_HOME} echo "PNPM contents after install: $(ls -la ${PNPM_HOME})"
+RUN bun install --frozen-lockfile
 
-WORKDIR /app/server 
-RUN pnpm install
+WORKDIR /app/server
+RUN bun install
 WORKDIR /app/shared
-RUN pnpm install
+RUN bun install
 
 FROM base as production
 ENV NODE_ENV=production
@@ -59,8 +46,8 @@ COPY ./shared /app/shared
 COPY ./server  /app/server
 
 WORKDIR /app/shared
-RUN pnpm install
-RUN npm run build
+RUN bun install
+RUN bun run build
 
 WORKDIR /app/server
-CMD npm run migrate && npm run start
+CMD bun run migrate && bun run start

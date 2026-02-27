@@ -4,15 +4,15 @@
   "main": "dist/server.js",
   "type": "module",
   "scripts": {
-    "fmt": "pnpm exec biome format --write",
-    "lint": "pnpm exec biome lint --write",
-    "fix": "pnpm exec biome check --write",
-    "start": "tsx ./src/main.ts",
-    "dev": "tsx watch ./src/main.ts",
+    "fmt": "biome format --write",
+    "lint": "biome lint --write",
+    "fix": "biome check --write",
+    "start": "bun run ./src/main.ts",
+    "dev": "bun run --watch ./src/main.ts",
     "build": "tsc -p tsconfig.json",
     "check": "tsc -p tsconfig.json --noEmit",
-    "test": "tsx --test",
-    "deploy": "tsx ./deploy.ts"
+    "test": "bun test",
+    "deploy": "bun run ./deploy.ts"
   },
   "imports": {
     "#root/*": "./src/*"
@@ -36,20 +36,20 @@
     "moment": "^2.30.1",
     "multer": "^1.4.2",
     "multer-s3": "^2.9.0",
-    "node-fetch": "^3.3.2",
     "pino": "^9.7.0",
     "pino-pretty": "^13.0.0",
     "safe-wrapper": "^3.0.0",
     "zod": "^4.1.12"
   },
   "devDependencies": {
+    "@types/bun": "^1.2.0",
     "@types/cookie-parser": "^1.4.8",
     "@types/cors": "^2.8.18",
     "@types/express": "^5.0.2",
     "@types/jsonwebtoken": "^8.5.9",
-    "@types/node": "^22.18.9",
-    "@types/node-fetch": "^2.6.12",
-    "tsx": "^4.20.3",
     "typescript": "^5.9.3"
-  }
+  },
+  "trustedDependencies": [
+    "aws-sdk"
+  ]
 }

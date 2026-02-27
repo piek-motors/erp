@@ -11,15 +11,17 @@
     "typescript": "^5.9.3"
   },
   "scripts": {
-    "fmt": "pnpm exec biome format --write",
-    "lint": "pnpm exec biome lint --write",
-    "fix": "pnpm exec biome check --write",
+    "fmt": "biome format --write",
+    "lint": "biome lint --write",
+    "fix": "biome check --write",
     "build": "turbo run build",
     "dev": "turbo run dev",
     "check": "turbo run check",
     "clean": "turbo run clean && rm -rf node_modules",
     "deploy": "sh ./infra/deploy.sh",
-    "prepare": "husky"
+    "prepare": "husky",
+    "bun:install": "bun install",
+    "bun:dev": "bun run --watch server/src/main.ts"
   },
   "repository": {
     "type": "git",
@@ -31,5 +33,12 @@
     "url": "https://github.com/piek-motors/erp/issues"
   },
   "homepage": "https://github.com/piek-motors/erp#readme",
-  "description": ""
+  "description": "",
+  "workspaces": [
+    "client",
+    "db",
+    "models",
+    "server",
+    "rust"
+  ]
 }
