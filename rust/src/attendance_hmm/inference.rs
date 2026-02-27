@@ -60,11 +60,12 @@ pub fn infer_work_intervals(events: &Vec<Event>) -> Result<Vec<EmployeeShifts>, 
       states.len()
     );
 
-    // Associate each predicted state with the event at the START of the interval
-    // states[i] describes the interval from events[i] to events[i+1]
+    // Associate each predicted state with the event at the END of the interval
+    // states[i] describes the interval ending at events[i+1]
+    // This matches the relabeled datasets where state represents what happened BEFORE the event
     let merged_events: Vec<LabeledEvent> = events
       .iter()
-      .take(events.len() - 1)
+      .skip(1)  // skip first event (no previous event to calculate delta from)
       .zip(states.iter())
       .map(|(e, s)| LabeledEvent {
         id: e.id,

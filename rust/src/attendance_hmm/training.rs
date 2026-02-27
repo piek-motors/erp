@@ -67,10 +67,12 @@ pub fn train_hmm(test_ratio: f32) -> Result<(), Box<dyn Error>> {
     let timestamps: Vec<_> = events_deduped.iter().map(|(e, _)| e.t).collect();
     let deltas = super::observation::move_to_deltas(&timestamps);
 
-    // Associate each delta with the state at the START of the interval
+    // Associate each delta with the state at the END of the interval
+    // delta[i] = timestamps[i+1] - timestamps[i] (duration of interval)
+    // state[i+1] = state of event at end of interval (what happened: entry/exit)
     let states: Vec<State> = events_deduped
       .iter()
-      .take(events_deduped.len() - 1)
+      .skip(1)  // skip first event (no previous event to calculate delta from)
       .map(|(_, s)| *s)
       .collect();
 

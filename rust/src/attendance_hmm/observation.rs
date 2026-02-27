@@ -119,7 +119,9 @@ pub const DUPLICATION_WINDOW: i64 = Duration::minutes(30).num_seconds();
 /// - Subsequent events within `DUPLICATION_WINDOW` are dropped
 pub fn suppress_bursts<T: TimeSeries>(events: Vec<T>) -> Vec<T> {
   debug_assert!(
-    events.windows(2).all(|w| w[0].timestamp() <= w[1].timestamp()),
+    events
+      .windows(2)
+      .all(|w| w[0].timestamp() <= w[1].timestamp()),
     "invalidate_duplicates expects events sorted by t"
   );
 
@@ -187,15 +189,13 @@ pub fn move_to_deltas(timestamps: &[i64]) -> Vec<u32> {
 /// They represent *duration patterns* between events.
 #[derive(Debug, PartialEq, EnumIter)]
 pub enum Observation {
-  /// [0; 5m)
-  VeryShort,
   /// [5m; 1h)
   Short,
   /// [1h; 4h)
   Medium,
-  /// [4h; 12h)
+  /// [4h; 14h)
   Shift,
-  /// [12h; 24h)
+  /// [14h; 24h)
   Long,
   /// [24h; _)
   VeryLong,
@@ -218,10 +218,9 @@ const MINUTE: u32 = 60;
 /// Delta discretization to encounter observaiton bucket.
 fn delta_to_observation(delta_sec: u32) -> Observation {
   match delta_sec {
-    d if d < 5 * MINUTE => Observation::VeryShort,
     d if d < 60 * MINUTE => Observation::Short,
     d if d < 240 * MINUTE => Observation::Medium,
-    d if d < 720 * MINUTE => Observation::Shift,
+    d if d < 840 * MINUTE => Observation::Shift,
     d if d < 1440 * MINUTE => Observation::Long,
     _ => Observation::VeryLong,
   }
@@ -328,7 +327,6 @@ mod tests {
 
   #[test]
   fn test_delta_to_observation() {
-    assert_eq!(delta_to_observation(60), Observation::VeryShort);
     assert_eq!(delta_to_observation(5 * 60), Observation::Short);
     assert_eq!(delta_to_observation(60 * 60 - 1), Observation::Short);
     assert_eq!(delta_to_observation(60 * 60), Observation::Medium);
