@@ -8,9 +8,9 @@ import { endOfUTCMonth, startOfUTCMonth } from '../../../lib/time.js'
 const DELIMETER = '\t'
 
 const SELECT = {
-  name: 'Евгений',
-  lastname: 'Иванов',
-  start: startOfUTCMonth(new Date(2026, 1 - 1)),
+  name: 'Валерий',
+  lastname: 'Григорьев',
+  start: startOfUTCMonth(new Date(2026, 2 - 1)),
 }
 
 describe('hmm create dataset', () => {
@@ -34,6 +34,7 @@ describe('hmm create dataset', () => {
       .where('card', '=', card)
       .where('timestamp', '>', SELECT.start)
       .where('timestamp', '<', end_date)
+      .orderBy('timestamp')
       .execute()
     if (!events.length) throw Error('No events found, select not so old period')
 

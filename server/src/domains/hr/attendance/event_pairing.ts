@@ -27,7 +27,6 @@ export class AttendanceEventPairing {
 
     try {
       const modelResult = runHiddenMarkovModel(hmm_input)
-
       const intervals = await this.buildIntervals(modelResult)
 
       if (intervals.length === 0) {

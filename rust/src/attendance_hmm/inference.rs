@@ -60,9 +60,11 @@ pub fn infer_work_intervals(events: &Vec<Event>) -> Result<Vec<EmployeeShifts>, 
       states.len()
     );
 
+    // Associate each predicted state with the event at the START of the interval
+    // states[i] describes the interval from events[i] to events[i+1]
     let merged_events: Vec<LabeledEvent> = events
       .iter()
-      .skip(1)
+      .take(events.len() - 1)
       .zip(states.iter())
       .map(|(e, s)| LabeledEvent {
         id: e.id,
@@ -102,7 +104,7 @@ mod tests {
 
   #[test]
   fn test_infer_work_intervals_from_dataset_file() {
-    let dataset_path = PathBuf::from("./dataset/1-2026_8170321.tsv");
+    let dataset_path = PathBuf::from("./dataset/2-2026_9224668.tsv");
     let labeled_events = crate::attendance_hmm::dataset::load_dataset(&dataset_path);
 
     let events: Vec<Event> = labeled_events

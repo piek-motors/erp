@@ -53,7 +53,14 @@ pub fn train_hmm(test_ratio: f32) -> Result<(), Box<dyn Error>> {
     let timestamps: Vec<_> = events.iter().map(|e| e.t).collect();
     let deltas = move_to_deltas(&timestamps);
 
-    let states: Vec<State> = events.into_iter().map(|e| e.state).skip(1).collect();
+    // Associate each delta with the state at the START of the interval
+    // delta[i] = timestamps[i+1] - timestamps[i]
+    // state[i] = state during that interval = state of event[i]
+    let states: Vec<State> = events
+      .iter()
+      .take(events.len() - 1)
+      .map(|e| e.state)
+      .collect();
 
     assert!(
       !states.iter().all(|s| *s == State::Outside),

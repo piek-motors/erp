@@ -15,7 +15,7 @@ const CSV_FIEL_DELIMITER: &str = "\t";
 fn matrix_to_training_events(matrix: &Array2<String>) -> Vec<LabeledEvent> {
   let mut result = Vec::new();
 
-  for row_idx in 1..matrix.nrows() {
+  for row_idx in 0..matrix.nrows() {
     let t = matrix[[row_idx, 0]].clone();
     let state: usize = matrix[[row_idx, 1]]
       .parse()
