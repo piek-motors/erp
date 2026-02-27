@@ -4,12 +4,12 @@ import { WebOnly } from '@/components/utilities/conditional-display'
 import { Label, Loading, observer, P, Row, Sheet } from '@/lib'
 import { createDateAsUTC } from '@/lib/utils/date_fmt'
 import { AbsenceLabels } from '../absence'
-import { EmployeeEventsModal } from './modals/events_modal'
 import { type ColumnDef, Table } from '../table'
-import { UpdateIntervalModal } from './modals/update_interval_modal'
-import { vm } from './view_model'
 import { ReportCell } from './cell'
+import { EmployeeEventsModal } from './modals/events_modal'
+import { UpdateIntervalModal } from './modals/update_interval_modal'
 import { PrintPdfButton } from './print_btn'
+import { vm } from './view_model'
 
 export const AttendanceReportView = observer(() => {
   const printRef = useRef<HTMLDivElement>(null)

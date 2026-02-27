@@ -1,6 +1,6 @@
+import { makeAutoObservable, runInAction } from 'mobx'
 import { rpc } from '@/lib/rpc/rpc.client'
 import type { AttendanceReport } from '@/server/domains/hr/attendance/report_generator'
-import { makeAutoObservable, runInAction } from 'mobx'
 import { СonfiguratorVM } from '../configurator'
 
 export class Report {

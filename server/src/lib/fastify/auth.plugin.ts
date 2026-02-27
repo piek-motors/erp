@@ -1,4 +1,4 @@
-import type { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify'
+import type { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify'
 import { tokenService } from '#root/ioc/index.js'
 import { logger } from '#root/ioc/log.js'
 import { ApiError } from '#root/lib/api.error.js'

@@ -1,5 +1,5 @@
-import type { FastifyRequest, FastifyReply } from 'fastify'
 import { GetObjectCommand } from '@aws-sdk/client-s3'
+import type { FastifyReply, FastifyRequest } from 'fastify'
 import { config } from '#root/config/env.js'
 import { attachmentService } from '#root/ioc/index.js'
 import { logger } from '#root/ioc/log.js'

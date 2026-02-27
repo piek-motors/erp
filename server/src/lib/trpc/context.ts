@@ -1,5 +1,5 @@
 import { TRPCError } from '@trpc/server'
-import type { FastifyRequest, FastifyReply } from 'fastify'
+import type { FastifyReply, FastifyRequest } from 'fastify'
 import type { UserRole } from 'models'
 import { tokenService } from '#root/ioc/index.js'
 

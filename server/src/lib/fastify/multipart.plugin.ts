@@ -1,12 +1,12 @@
 import { randomUUID } from 'node:crypto'
-import type { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify'
 import {
   PutObjectCommand,
   type PutObjectCommandInput,
 } from '@aws-sdk/client-s3'
+import type { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify'
 import { config } from '#root/config/env.js'
-import { s3 } from '#root/ioc/s3.js'
 import { logger } from '#root/ioc/log.js'
+import { s3 } from '#root/ioc/s3.js'
 
 export async function multipartPlugin(fastify: FastifyInstance) {
   await fastify.register(import('@fastify/multipart'), {

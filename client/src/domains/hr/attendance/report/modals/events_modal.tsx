@@ -1,12 +1,12 @@
 import { Divider, Modal, ModalClose, ModalDialog, Stack, Table } from '@mui/joy'
 import { makeAutoObservable } from 'mobx'
 import { observer } from 'mobx-react-lite'
+import { type EventOrigin, UiEventOrigin } from 'models'
 import { Label, Loading, P } from '@/lib'
 import { rpc } from '@/lib/deps'
 import { LoadingController } from '@/lib/store/loading_controller'
 import type { Employee } from '@/server/domains/hr/attendance/report_generator'
-import { EventOrigin, UiEventOrigin } from 'models'
-import { RouterOutput } from '@/server/lib/trpc'
+import type { RouterOutput } from '@/server/lib/trpc'
 
 class EmployeeModalVM {
   readonly loader = new LoadingController()
@@ -71,6 +71,11 @@ export const EmployeeEventsModal = observer(() => {
               month: 'short',
               day: '2-digit',
             })}
+          </Label>
+          <Label xs>Белая карта {employee_model_vm.employee?.card}</Label>
+          <Label xs>
+            Черная карта{' '}
+            {employee_model_vm.employee?.access_card ?? 'не задана'}
           </Label>
         </Stack>
         <Divider />

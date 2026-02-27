@@ -1,5 +1,5 @@
-import type { CreateFastifyContextOptions } from '@trpc/server/adapters/fastify'
 import { TRPCError } from '@trpc/server'
+import type { CreateFastifyContextOptions } from '@trpc/server/adapters/fastify'
 import type { UserRole } from 'models'
 import { tokenService } from '#root/ioc/index.js'
 

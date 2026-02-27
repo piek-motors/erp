@@ -1,6 +1,6 @@
+import { observer } from 'mobx-react-lite'
 import { WebOnly } from '@/components/utilities/conditional-display'
 import { ButtonXxs } from '@/lib'
-import { observer } from 'mobx-react-lite'
 import { vm } from './view_model'
 
 export const PrintPdfButton = observer(
@@ -22,21 +22,78 @@ export const PrintPdfButton = observer(
       styleEl.textContent = `
     @page {
       size: A4 landscape;
-      margin: 0;
+      margin: 10mm;
     }
 
     html, body {
       margin: 0;
       padding: 0;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+      color-adjust: exact !important;
+    }
+
+    * {
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+      color-adjust: exact !important;
+      box-sizing: border-box;
     }
 
     table {
       page-break-inside: auto;
+      border-collapse: collapse;
+      width: 100%;
     }
 
     tr {
       page-break-inside: avoid;
       page-break-after: auto;
+    }
+
+    thead {
+      display: table-header-group;
+    }
+
+    tfoot {
+      display: table-footer-group;
+    }
+
+    /* Prevent page breaks inside bordered sections */
+    .border, [class*="border-"] {
+      page-break-inside: avoid;
+    }
+
+    /* Prevent page breaks inside table cells with borders */
+    td, th {
+      page-break-inside: avoid;
+      border: 1px solid #000 !important;
+    }
+
+    /* Force page break before new sections if needed */
+    .page-break-before {
+      page-break-before: always;
+    }
+
+    /* Allow page break after major sections */
+    .page-break-after {
+      page-break-after: always;
+    }
+
+    /* Prevent orphans and widows */
+    p, h1, h2, h3, h4, h5, h6 {
+      orphans: 3;
+      widows: 3;
+    }
+
+    /* Ensure table rows stay together */
+    tbody tr {
+      page-break-inside: avoid;
+    }
+
+    /* Add small margin to prevent border splitting */
+    tbody {
+      page-break-before: avoid;
     }
   `
 
