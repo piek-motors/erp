@@ -5,7 +5,7 @@ import { Label, Loading, P } from '@/lib'
 import { rpc } from '@/lib/deps'
 import { LoadingController } from '@/lib/store/loading_controller'
 import type { Employee } from '@/server/domains/hr/attendance/report_generator'
-import { EventOriginTranslation } from 'models'
+import { UiEventOrigin } from 'models'
 import { RouterOutput } from '@/server/lib/trpc'
 
 class EmployeeModalVM {
@@ -117,7 +117,7 @@ export const EmployeeEventsModal = observer(() => {
                     <td>
                       {event.origin != null ? (
                         <Label xs variant="soft" color="primary">
-                          {EventOriginTranslation[event.origin]}
+                          {UiEventOrigin[Number(event.origin)]}
                         </Label>
                       ) : (
                         <P level="body-sm" textColor="text.tertiary">

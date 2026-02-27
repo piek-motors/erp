@@ -2,18 +2,22 @@
   "name": "erp",
   "version": "1.0.0",
   "main": "ecosystem.config.js",
+  "packageManager": "pnpm@10.22.0",
   "devDependencies": {
     "@biomejs/biome": "2.3.11",
     "commander": "^13.1.0",
     "husky": "^9.1.7",
+    "turbo": "^2.8.12",
     "typescript": "^5.9.3"
   },
   "scripts": {
     "fmt": "pnpm exec biome format --write",
     "lint": "pnpm exec biome lint --write",
     "fix": "pnpm exec biome check --write",
-    "build": "pnpm run -r --filter=!./client/** build",
-    "check": "pnpm run -r check",
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "check": "turbo run check",
+    "clean": "turbo run clean && rm -rf node_modules",
     "deploy": "sh ./infra/deploy.sh",
     "prepare": "husky"
   },

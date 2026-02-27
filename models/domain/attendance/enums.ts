@@ -3,9 +3,9 @@ export enum EventOrigin {
   AccessControlPoint = 1, // контрольно-пропускной пункт
 }
 
-export enum EventOriginTranslation {
-  TimeTrackingStation = 'Таймформер', // станция учета времени
-  AccessControlPoint = 'КПП', // контрольно-пропускной пункт
+export const UiEventOrigin = {
+  [EventOrigin.AccessControlPoint]: 'КПП',
+  [EventOrigin.TimeTrackingStation]: 'Таймформер',
 }
 
 export enum AbsenceReason {
