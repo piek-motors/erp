@@ -2,16 +2,6 @@ import { sql } from 'kysely'
 import type { KDB } from '../schema.js'
 
 export async function up(db: KDB): Promise<void> {
-  // 1️⃣ Populate employee_id for events
-  await db
-    .updateTable('attendance.events as e')
-    .set({
-      employee_id: sql`empl.id`,
-    })
-    .from('attendance.employees as empl')
-    .whereRef('e.card', '=', 'empl.card')
-    .execute()
-
   // 2️⃣ Populate employee_id for intervals
   await db
     .updateTable('attendance.intervals as i')
@@ -20,12 +10,6 @@ export async function up(db: KDB): Promise<void> {
     })
     .from('attendance.employees as empl')
     .whereRef('i.card', '=', 'empl.card')
-    .execute()
-
-  // 3️⃣ Delete orphan events
-  await db
-    .deleteFrom('attendance.events')
-    .where('employee_id', 'is', null)
     .execute()
 
   // 4️⃣ Delete orphan intervals

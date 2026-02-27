@@ -23,7 +23,6 @@ const upload_data_dto = z.object({
   ),
   events: z.array(
     z.tuple([
-      z.number(), // id
       z
         .string()
         .nonempty(), // card
@@ -135,23 +134,49 @@ export const attendance = router({
       > = []
 
       for (const event of input.events) {
-        const employee_id = employees_card_index.get(event[1])
+        const card = event[0]
+        const employee_id = employees_card_index.get(card)
         if (!employee_id) continue
 
         events.push({
-          id: event[0],
-          card: event[1],
+          card,
           employee_id,
-          timestamp: new Date(event[2] * 1000),
+          timestamp: new Date(event[1] * 1000),
         })
       }
-
       const eventsInsertedOrUpdatedRows = await repo.upsert_events(events)
 
-      await new AttendanceEventPairing().run(events)
+      // run hmm
+      const cutoffDate = new Date()
+      cutoffDate.setMonth(cutoffDate.getMonth() - 1)
+
+      const hmm_input_events_raw = await db
+        .selectFrom('attendance.events')
+        .selectAll()
+        .where('timestamp', '>=', cutoffDate)
+        .orderBy('timestamp', 'asc')
+        .execute()
+
+      const card_employee_id_index = await repo.employees_card_index()
+
+      const hmm_input_events = hmm_input_events_raw
+        .map(event => {
+          const employee_id = card_employee_id_index.get(event.card)
+          if (!employee_id) return null
+          return {
+            ...event,
+            employee_id,
+          }
+        })
+        .filter((e): e is NonNullable<typeof e> => e !== null)
+
+      const intervals_upserts = await new AttendanceEventPairing().run(
+        hmm_input_events,
+      )
       return {
-        event_insertions: eventsInsertedOrUpdatedRows,
-        employee_updates: Number(employeesInsertedOrUpdatedRows),
+        event_inserts: eventsInsertedOrUpdatedRows,
+        employee_upserts: Number(employeesInsertedOrUpdatedRows),
+        intervals_upserts,
       }
     }),
 })

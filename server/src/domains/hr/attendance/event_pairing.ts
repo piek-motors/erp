@@ -2,13 +2,16 @@ import { runHiddenMarkovModel } from 'rust'
 import { logger } from '#root/ioc/log.js'
 import type { DB } from '#root/sdk.js'
 import { HrRepo } from './hr.repo.js'
+import { Selectable } from 'kysely'
 
 export class AttendanceEventPairing {
   private repository = new HrRepo()
 
   async run(
-    events: Array<DB.AttendanceEventsTable & { employee_id: number }>,
-  ): Promise<void> {
+    events: Array<
+      Selectable<DB.AttendanceEventsTable> & { employee_id: number }
+    >,
+  ) {
     if (events.length === 0) return
 
     const hmm_input = events.map(e => ({
@@ -30,9 +33,13 @@ export class AttendanceEventPairing {
         logger.info('No valid intervals to insert')
         return
       }
-      const numInsertedOrUpdatedRows =
+      const num_inserted_or_updated_rows =
         await this.repository.upsert_intervals(intervals)
-      logger.info(`Inserted or updated ${numInsertedOrUpdatedRows} intervals`)
+      logger.info(
+        `Inserted or updated ${num_inserted_or_updated_rows} intervals`,
+      )
+
+      return Number(num_inserted_or_updated_rows)
     } catch (error) {
       logger.error(error, 'Hidden Markov model failed')
     }

@@ -241,9 +241,8 @@ export namespace DB {
   }
 
   export interface AttendanceEventsTable {
-    id: number
+    id: GeneratedAlways<number>
     card: string
-    employee_id: number
     timestamp: Date
   }
 
