@@ -27,6 +27,7 @@ export class AttendanceEventPairing {
 
     try {
       const modelResult = runHiddenMarkovModel(hmm_input)
+
       const intervals = await this.buildIntervals(modelResult)
 
       if (intervals.length === 0) {
@@ -51,9 +52,13 @@ export class AttendanceEventPairing {
     const intervals: DB.AttendanceIntervalTable[] = []
     const employee_id_index =
       await this.repository.employees_employee_id_index()
+
     for (const employee of modelResult) {
       const card = employee_id_index.get(employee.employee_id)
-      if (!employee.employee_id || employee.employee_id === 0 || !card) continue
+      if (!card) {
+        console.error(`card not fount for employye ${employee.employee_id}`)
+        continue
+      }
 
       for (const shift of employee.shifts) {
         intervals.push({
