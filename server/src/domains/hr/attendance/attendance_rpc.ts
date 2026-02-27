@@ -129,21 +129,11 @@ export const attendance = router({
       )
       const employees_card_index = await repo.employees_card_index()
 
-      const events: Array<
-        Insertable<DB.AttendanceEventsTable> & { employee_id: number }
-      > = []
-
-      for (const event of input.events) {
-        const card = event[0]
-        const employee_id = employees_card_index.get(card)
-        if (!employee_id) continue
-
-        events.push({
+      const events: Array<Insertable<DB.AttendanceEventsTable>> =
+        input.events.map(([card, ts]) => ({
           card,
-          employee_id,
-          timestamp: new Date(event[1] * 1000),
-        })
-      }
+          timestamp: new Date(ts * 1000),
+        }))
       const eventsInsertedOrUpdatedRows = await repo.upsert_events(events)
 
       // run hmm
