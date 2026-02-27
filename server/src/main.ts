@@ -1,4 +1,5 @@
 import { existsSync } from 'node:fs'
+import { resolve } from 'node:path'
 import fastify from 'fastify'
 import { config } from '#root/config/env.js'
 import { trpcRouter } from '#root/domains/trpc-router.js'
@@ -7,7 +8,7 @@ import { errorHandlerPlugin } from '#root/lib/fastify/error-handler.plugin.js'
 import { logger } from './ioc/log.js'
 import './lib/trpc/index.js'
 
-const clientBuild = config.BUILD_PATH
+const clientBuild = resolve(config.BUILD_PATH)
 const clientBuildExists = existsSync(clientBuild)
 
 process.on('unhandledRejection', (reason, p) => {
