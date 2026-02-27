@@ -127,8 +127,6 @@ export const attendance = router({
           card: e[2],
         })),
       )
-      const employees_card_index = await repo.employees_card_index()
-
       const events: Array<Insertable<DB.AttendanceEventsTable>> =
         input.events.map(([card, ts]) => ({
           card,
