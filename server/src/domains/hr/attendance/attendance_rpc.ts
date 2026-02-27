@@ -136,7 +136,7 @@ export const attendance = router({
 
       // run hmm
       const cutoffDate = new Date()
-      cutoffDate.setMonth(cutoffDate.getMonth() - 1)
+      cutoffDate.setMonth(cutoffDate.getMonth() - 2)
 
       const hmm_input_events_raw = await db
         .selectFrom('attendance.events')
