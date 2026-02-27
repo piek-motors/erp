@@ -2,6 +2,7 @@ import * as trpcExpress from '@trpc/server/adapters/express'
 import cookieParser from 'cookie-parser'
 import cors from 'cors'
 import express from 'express'
+import { existsSync } from 'node:fs'
 import { config } from '#root/config/env.js'
 import { trpcRouter } from '#root/domains/trpc-router.js'
 import errorMiddleware from '#root/lib/middlewares/error.middleware.js'
@@ -11,6 +12,7 @@ import { logger } from './ioc/log.js'
 import './lib/trpc/index.js'
 
 const clientBuild = config.BUILD_PATH
+const clientBuildExists = existsSync(clientBuild)
 
 process.on('unhandledRejection', (reason, p) => {
   logger.error(
@@ -19,8 +21,7 @@ process.on('unhandledRejection', (reason, p) => {
   )
 })
 
-express()
-  .use(express.static(clientBuild))
+const app = express()
   .use(express.urlencoded({ extended: false }))
   .use(express.json({ limit: '1mb' }))
   .use(cookieParser())
@@ -30,6 +31,17 @@ express()
       origin: [config.CORS_CLIENT_URL],
     }),
   )
+
+// Serve static files only if build exists
+if (clientBuildExists) {
+  app.use(express.static(clientBuild))
+} else {
+  logger.warn(
+    `Client build not found at ${clientBuild}, skipping static file serving`,
+  )
+}
+
+app
   .use('/api', router)
   .use(
     '/trpc',
@@ -41,12 +53,16 @@ express()
   .use((err, req, res, next) => {
     errorMiddleware(err, req, res, next)
   })
-  .get('*', (_, response) => {
-    // All remaining requests return the React app, so it can handle routing.
+
+// Serve React app only if build exists
+if (clientBuildExists) {
+  app.get('*', (_, response) => {
     response.sendFile('index.html', { root: clientBuild })
   })
-  .listen(config.PORT, async () => {
-    logger.info(
-      `🛫 Express running in ${config.NODE_ENV} mode on port ${config.PORT}`,
-    )
-  })
+}
+
+app.listen(config.PORT, async () => {
+  logger.info(
+    `🛫 Express running in ${config.NODE_ENV} mode on port ${config.PORT}`,
+  )
+})

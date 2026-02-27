@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { DeleteObjectCommand } from '@aws-sdk/client-s3'
 import { attachmentService } from '#root/ioc/index.js'
 import { router } from '#root/lib/trpc/trpc.js'
 import { config, db, procedure, s3, TRPCError } from '#root/sdk.js'
@@ -18,8 +19,9 @@ export const delete_file = procedure
       .executeTakeFirstOrThrow()
 
     await s3
-      .deleteObject({ Bucket: config.S3_BUCKET, Key: input.key })
-      .promise()
+      .send(
+        new DeleteObjectCommand({ Bucket: config.S3_BUCKET, Key: input.key }),
+      )
       .catch(err => {
         throw new Error(`Could not delete file from S3: ${err.message}`)
       })

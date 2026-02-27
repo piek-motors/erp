@@ -1,10 +1,12 @@
-import AWS from 'aws-sdk'
+import { S3Client } from '@aws-sdk/client-s3'
 import { config } from '#root/config/env.js'
 
-export const s3 = new AWS.S3({
-  accessKeyId: config.S3_ACCESS_KEY_ID,
-  secretAccessKey: config.S3_SECRET_ACCESS_KEY,
+export const s3 = new S3Client({
+  region: 'auto',
   endpoint: config.S3_ENDPOINT,
-  s3ForcePathStyle: true,
-  signatureVersion: 'v4',
+  forcePathStyle: true,
+  credentials: {
+    accessKeyId: config.S3_ACCESS_KEY_ID,
+    secretAccessKey: config.S3_SECRET_ACCESS_KEY,
+  },
 })

@@ -28,7 +28,9 @@ const rawConfig = {
   S3_ACCESS_KEY_ID: env.S3_ACCESS_KEY_ID,
   S3_SECRET_ACCESS_KEY: env.S3_SECRET_ACCESS_KEY,
   S3_BUCKET: env.S3_BUCKET ?? 'factory-piek-test',
-  S3_ENDPOINT: env.S3_ENDPOINT ?? 's3.yandexcloud.net',
+  S3_ENDPOINT: env.S3_ENDPOINT?.startsWith('http')
+    ? env.S3_ENDPOINT
+    : `https://${env.S3_ENDPOINT ?? 's3.yandexcloud.net'}`,
 
   PG_CONN_STR: env.PG_CONN_STR,
 }

@@ -1,5 +1,4 @@
 import type { UserRole } from 'models'
-import { safe } from 'safe-wrapper'
 import { logger } from '#root/ioc/log.js'
 import { ApiError } from '#root/lib/api.error.js'
 import { Errcode } from '#root/lib/error-code.js'
@@ -42,8 +41,9 @@ export class AuthSevice {
   }
 
   verifyRefresh(refreshToken: string) {
-    const [error] = safe(() => this.tokenService.verifyRefresh(refreshToken))()
-    if (error) {
+    try {
+      this.tokenService.verifyRefresh(refreshToken)
+    } catch (error) {
       throw ApiError.Unauthorized(Errcode.INVALID_REFRESH_TOKEN)
     }
   }
