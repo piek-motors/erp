@@ -1,13 +1,9 @@
-import * as trpcExpress from '@trpc/server/adapters/express'
-import cookieParser from 'cookie-parser'
-import cors from 'cors'
-import express from 'express'
 import { existsSync } from 'node:fs'
+import fastify from 'fastify'
 import { config } from '#root/config/env.js'
 import { trpcRouter } from '#root/domains/trpc-router.js'
-import errorMiddleware from '#root/lib/middlewares/error.middleware.js'
-import { createContext } from '#root/lib/trpc/context.js'
-import { router } from '#root/routers/http-routes.js'
+import { httpRoutes } from '#root/routers/http-routes.js'
+import { errorHandlerPlugin } from '#root/lib/fastify/error-handler.plugin.js'
 import { logger } from './ioc/log.js'
 import './lib/trpc/index.js'
 
@@ -21,48 +17,72 @@ process.on('unhandledRejection', (reason, p) => {
   )
 })
 
-const app = express()
-  .use(express.urlencoded({ extended: false }))
-  .use(express.json({ limit: '1mb' }))
-  .use(cookieParser())
-  .use(
-    cors({
-      credentials: true,
-      origin: [config.CORS_CLIENT_URL],
-    }),
-  )
+const app = fastify({
+  logger: false,
+  routerOptions: {
+    ignoreTrailingSlash: true,
+  },
+})
+
+await app.register(import('@fastify/cors'), {
+  credentials: true,
+  origin: [config.CORS_CLIENT_URL],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'orderid', 'detailid'],
+  exposedHeaders: ['Content-Disposition'],
+})
+await app.register(import('@fastify/cookie'), {
+  secret: config.JWT_ACCESS_SECRET,
+})
+await app.register(import('@fastify/formbody'))
+await app.register(import('@fastify/multipart'), {
+  limits: {
+    files: 20,
+  },
+})
+await app.register(errorHandlerPlugin)
 
 // Serve static files only if build exists
 if (clientBuildExists) {
-  app.use(express.static(clientBuild))
+  await app.register(import('@fastify/static'), {
+    root: clientBuild,
+    wildcard: true,
+  })
 } else {
   logger.warn(
     `Client build not found at ${clientBuild}, skipping static file serving`,
   )
 }
 
-app
-  .use('/api', router)
-  .use(
-    '/trpc',
-    trpcExpress.createExpressMiddleware({
-      router: trpcRouter,
-      createContext,
-    }) as any,
-  )
-  .use((err, req, res, next) => {
-    errorMiddleware(err, req, res, next)
-  })
+// Register HTTP API routes
+await app.register(httpRoutes, { prefix: '/api' })
+
+// Register tRPC routes
+const { createContext } = await import('#root/lib/fastify/trpc-context.js')
+const { fastifyTRPCPlugin } = await import('@trpc/server/adapters/fastify')
+
+await app.register(fastifyTRPCPlugin, {
+  prefix: '/trpc',
+  trpcOptions: {
+    router: trpcRouter,
+    createContext,
+  },
+} as any)
 
 // Serve React app only if build exists
 if (clientBuildExists) {
-  app.get('*', (_, response) => {
-    response.sendFile('index.html', { root: clientBuild })
+  app.setNotFoundHandler((request, reply) => {
+    // For SPA routing, serve index.html for all non-API routes
+    if (!request.url.startsWith('/api') && !request.url.startsWith('/trpc')) {
+      reply.sendFile('index.html')
+    } else {
+      reply.status(404).send({ error: 'Not found' })
+    }
   })
 }
 
-app.listen(config.PORT, async () => {
-  logger.info(
-    `🛫 Express running in ${config.NODE_ENV} mode on port ${config.PORT}`,
-  )
-})
+await app.listen({ port: config.PORT, host: '0.0.0.0' })
+
+logger.info(
+  `🛫 Fastify running in ${config.NODE_ENV} mode on port ${config.PORT}`,
+)

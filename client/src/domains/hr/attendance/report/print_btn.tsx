@@ -45,7 +45,7 @@ export const PrintPdfButton = observer(
       const pageWidth = 1122 // A4 landscape @96dpi
       const scale = pageWidth / contentWidth
 
-      el.style.zoom = String(scale)
+      // el.style.zoom = String(scale)
 
       document.title = `Отчёт по рабочему времени за ${vm.report?.month.replace('.', '')}`
 

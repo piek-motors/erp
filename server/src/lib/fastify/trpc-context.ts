@@ -1,29 +1,26 @@
+import type { CreateFastifyContextOptions } from '@trpc/server/adapters/fastify'
 import { TRPCError } from '@trpc/server'
-import type { FastifyRequest, FastifyReply } from 'fastify'
 import type { UserRole } from 'models'
 import { tokenService } from '#root/ioc/index.js'
 
-export async function createContext({
-  request,
-  reply,
-}: {
-  request: FastifyRequest
-  reply: FastifyReply
-}) {
+export async function createContext({ req }: CreateFastifyContextOptions) {
   async function getUserFromHeader() {
-    if (request.headers.authorization) {
-      const token = request.headers.authorization.split(' ')[1]
+    if (req.headers.authorization) {
+      const token = req.headers.authorization.split(' ')[1]
       if (!token) {
-        throw new TRPCError({ code: 'UNAUTHORIZED' })
+        return null
       }
 
       return tokenService.verifyAccess(token)
     }
 
-    throw new TRPCError({ code: 'UNAUTHORIZED' })
+    return null
   }
 
   const user = await getUserFromHeader()
+  if (!user) {
+    return { user: null }
+  }
   return {
     user: new ContextUser(user.id, user.first_name, user.last_name, user.roles),
   }

@@ -1,31 +1,59 @@
-import { Router } from 'express'
-import { body } from 'express-validator'
+import type { FastifyInstance } from 'fastify'
 import {
   getBinaryFile,
   uploadBinaryFiles,
 } from '#root/domains/attachment/s3_controller.js'
 import { userController } from '#root/ioc/index.js'
 import { logger } from '#root/ioc/log.js'
-import { multerMiddleware } from '#root/lib/index.js'
+import { handleFileUpload } from '#root/lib/fastify/multipart.plugin.js'
 
-export const router: Router = Router()
-  .post('/login', body('email').isEmail(), (req, res, next) => {
-    userController.login(req as any, res).catch(err => {
-      logger.error(err, 'Login error')
-      next(err)
-    })
+export async function httpRoutes(fastify: FastifyInstance) {
+  fastify.post('/login', {
+    schema: {
+      body: {
+        type: 'object',
+        required: ['email', 'password'],
+        properties: {
+          email: { type: 'string', format: 'email' },
+          password: { type: 'string' },
+        },
+      },
+    },
+    handler: async (request, reply) => {
+      try {
+        return await userController.login(request as any, reply)
+      } catch (err) {
+        logger.error(err, 'Login error')
+        throw err
+      }
+    },
   })
-  .post('/logout', (req, res, next) => {
-    userController.logout(req, res).catch(err => {
+
+  fastify.post('/logout', async (request, reply) => {
+    try {
+      return await userController.logout(request, reply)
+    } catch (err) {
       logger.error(err, 'Logout error')
-      next(err)
-    })
+      throw err
+    }
   })
-  .get('/refresh', (req, res, next) => {
-    userController.refresh(req, res).catch(err => {
+
+  fastify.get('/refresh', async (request, reply) => {
+    try {
+      return await userController.refresh(request, reply)
+    } catch (err) {
       logger.error(err, 'Refresh error')
-      next(err)
-    })
+      throw err
+    }
   })
-  .put('/s3', multerMiddleware, uploadBinaryFiles)
-  .get('/s3/:key', getBinaryFile)
+
+  fastify.put('/s3', {
+    preHandler: async (request, reply) => {
+      const files = await handleFileUpload(request, reply)
+      ;(request as any).files = files
+    },
+    handler: uploadBinaryFiles,
+  })
+
+  fastify.get('/s3/:key', getBinaryFile)
+}
