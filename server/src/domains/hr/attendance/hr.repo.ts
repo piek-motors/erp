@@ -91,7 +91,7 @@ export class HrRepo {
   async upsert_employees(
     employees: Insertable<DB.AttendanceEmployeeTable>[],
   ): Promise<number> {
-    if (!employees) return 0
+    if (!employees.length) return 0
     const employees_insert_res = await db
       .insertInto('attendance.employees')
       .values(employees)
