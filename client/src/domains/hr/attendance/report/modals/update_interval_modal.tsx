@@ -25,7 +25,7 @@ import type {
   Employee,
   Interval,
 } from '@/server/domains/hr/attendance/report_generator'
-import { AbsenceReasons, absenceReasonState } from '../absence'
+import { AbsenceReasons, absenceReasonState } from '../../absence'
 
 export interface UpdateIntervalMetadata {
   employee: Employee

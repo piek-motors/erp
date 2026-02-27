@@ -8,6 +8,7 @@ export interface Employee {
   name: string
   jobTitle: string
   card: string
+  accessCard: string
 }
 
 export interface JobTitleOption {
@@ -20,6 +21,7 @@ export class EmployeeStore {
   employees: Employee[] = []
   jobTitles: JobTitleOption[] = []
   editedJobTitles: Map<number, string> = new Map()
+  editedAccessCards: Map<number, string> = new Map()
 
   constructor() {
     makeAutoObservable(this)
@@ -36,6 +38,7 @@ export class EmployeeStore {
       this.employees = data.map(e => ({
         id: e.id,
         card: e.card,
+        accessCard: e.access_card || '',
         name: `${e.lastname} ${e.firstname}`,
         jobTitle: e.job_title || '',
       }))
@@ -63,7 +66,7 @@ export class EmployeeStore {
     }
 
     // call API only if the value changed
-    await rpc.hr.employees.update_job_title.mutate({
+    await rpc.hr.employees.update_employee.mutate({
       id,
       job_title: editedTitle,
     })
@@ -76,8 +79,42 @@ export class EmployeeStore {
     notifier.ok(`Должность ${editedTitle} назначена ${employee.name}`)
   }
 
+  setEditedAccessCard(id: number, value: string) {
+    this.editedAccessCards.set(id, value)
+  }
+
+  getEditedAccessCard(id: number, original: string): string {
+    return this.editedAccessCards.get(id) ?? original
+  }
+
+  async saveAccessCard(id: number) {
+    const employee = this.employees.find(e => e.id === id)
+    if (!employee) return
+
+    const editedCard = this.editedAccessCards.get(id)?.trim()
+    if (!editedCard || editedCard === employee.accessCard) {
+      // nothing changed
+      this.editedAccessCards.delete(id)
+      return
+    }
+
+    // call API only if the value changed
+    await rpc.hr.employees.update_employee.mutate({
+      id,
+      access_card: editedCard,
+    })
+
+    runInAction(() => {
+      employee.accessCard = editedCard
+      this.editedAccessCards.delete(id)
+    })
+
+    notifier.ok(`Пропуск ${editedCard} назначен ${employee.name}`)
+  }
+
   cancelEdit(id: number) {
     this.editedJobTitles.delete(id)
+    this.editedAccessCards.delete(id)
   }
 }
 

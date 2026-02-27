@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { Sheet, Table } from '@mui/joy'
+import { Input, Sheet, Table } from '@mui/joy'
 import { observer } from 'mobx-react-lite'
 import { BaseAutocomplete } from '@/components/base-autocomplete'
 import { Label, P } from '@/lib'
@@ -24,10 +24,18 @@ const EmployeeRow = observer(
     index: number
     store: EmployeeStore
   }) => {
-    const currentValue = store.getEditedJobTitle(employee.id, employee.jobTitle)
-    const currentOption: JobTitleOption | null = currentValue
-      ? { label: currentValue, value: currentValue }
+    const currentJobTitle = store.getEditedJobTitle(
+      employee.id,
+      employee.jobTitle,
+    )
+    const currentJobTitleOption: JobTitleOption | null = currentJobTitle
+      ? { label: currentJobTitle, value: currentJobTitle }
       : null
+
+    const currentAccessCard = store.getEditedAccessCard(
+      employee.id,
+      employee.accessCard,
+    )
 
     return (
       <tr key={employee.id}>
@@ -43,7 +51,7 @@ const EmployeeRow = observer(
             size="sm"
             variant="plain"
             options={store.jobTitles}
-            value={currentOption}
+            value={currentJobTitleOption}
             sx={{ fontSize: '.8rem' }}
             onChange={newValue =>
               store.setEditedJobTitle(employee.id, newValue?.value ?? '')
@@ -57,6 +65,22 @@ const EmployeeRow = observer(
         </td>
         <td>
           <Label xs>{employee.card}</Label>
+        </td>
+        <td>
+          <Input
+            size="sm"
+            variant="plain"
+            value={currentAccessCard}
+            sx={{ fontSize: '.8rem' }}
+            onChange={e =>
+              store.setEditedAccessCard(employee.id, e.target.value)
+            }
+            onBlur={() => store.saveAccessCard(employee.id)}
+            onKeyDown={e => {
+              if (e.key === 'Enter') store.saveAccessCard(employee.id)
+              if (e.key === 'Escape') store.cancelEdit(employee.id)
+            }}
+          />
         </td>
       </tr>
     )
@@ -72,12 +96,13 @@ const EmployeeTable = observer(({ store }: { store: EmployeeStore }) => (
         <th>Имя</th>
         <th>Должность</th>
         <th>Номер белой карты</th>
+        <th>Номер черной карты</th>
       </tr>
     </thead>
     <tbody>
       {store.employees.length === 0 ? (
         <tr>
-          <td colSpan={4} style={{ textAlign: 'center' }}>
+          <td colSpan={5} style={{ textAlign: 'center' }}>
             <P level="body-sm" textColor="text.tertiary">
               'Список сотрудников пуст'
             </P>

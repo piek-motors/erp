@@ -17,3 +17,4 @@ client/build/tsconfig.tsbuildinfo
 client/build
 server/public
 .claude
+.turbo

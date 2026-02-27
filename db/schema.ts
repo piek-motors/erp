@@ -264,6 +264,7 @@ export namespace DB {
     firstname: string
     lastname: string
     card: string
+    access_card: string | null
     job_title: string | null
     created_at: GeneratedAlways<Date>
   }

@@ -4,12 +4,12 @@ import { PrintOnly } from '@/components/utilities/conditional-display'
 import { Box, observer, P, useState } from '@/lib'
 import { Hour } from '@/lib/constants'
 import type { Employee } from '@/server/domains/hr/attendance/report_generator'
-import { employee_model_vm } from '../modals/events_modal'
+import { employee_model_vm } from './modals/events_modal'
 import {
   fmtHourMinute,
   UpdateIntervalButton,
   type UpdateIntervalMetadata,
-} from '../modals/update_interval_modal'
+} from './modals/update_interval_modal'
 import { vm } from './view_model'
 
 export const ReportCell = observer(

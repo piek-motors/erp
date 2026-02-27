@@ -28,6 +28,7 @@ export interface Employee {
   id: number
   name: string
   card: string
+  access_card: string | null
   total: number // total working time in seconds
   workDays: number
   totalIntervalsCount: number
@@ -124,6 +125,7 @@ export class AttendanceReportGenerator {
       id: empl.id,
       name: removeCardNumber(`${empl.lastname} ${empl.firstname}`),
       card: empl.card,
+      access_card: empl.access_card ?? null,
       total: 0,
       workDays: 0,
       days: daysMap,

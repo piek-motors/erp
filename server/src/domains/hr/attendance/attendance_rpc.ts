@@ -64,16 +64,14 @@ export const attendance = router({
         date: z.string(),
       }),
     )
-    .query(({ input }) => {
-      console.log(input)
-
-      return db
+    .query(({ input }) =>
+      db
         .selectFrom('attendance.events')
-        .select(['id', 'timestamp'])
+        .select(['id', 'timestamp', 'origin'])
         .where('card', 'in', input.cards)
         .where(sql<any>`timestamp::date = ${input.date.slice(0, 10)}::date`)
-        .execute()
-    }),
+        .execute(),
+    ),
   //
   insert_interval: procedure
     .use(requireScope(Scope.hr))

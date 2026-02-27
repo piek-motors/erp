@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import type { DB } from 'db'
 import { db, procedure, requireScope, router, Scope, sql } from '#root/sdk.js'
 
 const ONE_MONTH_AGO = new Date()
@@ -13,7 +14,7 @@ export const employees = router({
         sql<boolean>`EXISTS (
         SELECT 1
         FROM attendance.events ev
-        WHERE ev.employee_id = e.id
+        WHERE ev.card = e.card
           AND ev.timestamp >= ${ONE_MONTH_AGO}
       )`,
       )
@@ -33,23 +34,32 @@ export const employees = router({
     return result.map(r => r.job_title as string)
   }),
   //
-  update_job_title: procedure
+  update_employee: procedure
     .use(requireScope(Scope.hr))
     .input(
       z.object({
         id: z.number(),
-        job_title: z.string(),
+        job_title: z.string().nullish(),
+        access_card: z.string().nullish(),
       }),
     )
     .mutation(async ({ input }) => {
+      const updateData: Partial<DB.AttendanceEmployeeTable> = {}
+      if (input.job_title != null) {
+        updateData.job_title = input.job_title
+      }
+      if (input.access_card != null) {
+        updateData.access_card = input.access_card
+      }
+
       const result = await db
         .updateTable('attendance.employees')
-        .set({ job_title: input.job_title })
+        .set(updateData)
         .where('id', '=', input.id)
         .executeTakeFirstOrThrow()
 
       if (result.numUpdatedRows === 0n) {
-        throw new Error('Failed to update job title: employee not found')
+        throw new Error('Failed to update employee: not found')
       }
 
       return { success: true }
