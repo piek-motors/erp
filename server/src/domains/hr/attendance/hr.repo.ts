@@ -82,7 +82,7 @@ export class HrRepo {
     const events_insert_res = await db
       .insertInto('attendance.events')
       .values(events)
-      .onConflict(oc => oc.column('id').doNothing())
+      .onConflict(oc => oc.columns(['card', 'timestamp']).doNothing())
       .executeTakeFirst()
 
     return Number(events_insert_res.numInsertedOrUpdatedRows ?? 0)
