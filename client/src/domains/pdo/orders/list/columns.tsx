@@ -106,11 +106,12 @@ const finishColumns = commonColumns.concat([
   },
   {
     Header: 'Финиш',
-    accessor: m => (
-      <P noWrap level="body-xs">
-        {m.finished_at}
-      </P>
-    ),
+    accessor: m =>
+      m.finished_at && (
+        <P noWrap level="body-xs">
+          {time.fmt_relative_or_calendar_date(m.finished_at)}
+        </P>
+      ),
   },
   {
     Header: 'Дельта',

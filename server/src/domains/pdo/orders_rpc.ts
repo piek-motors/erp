@@ -1,3 +1,4 @@
+import type { AnyRouter } from '@trpc/server'
 import type { Selectable } from 'kysely'
 import {
   fmt,
@@ -57,7 +58,7 @@ const base_query = db
     'd.workflow',
   ])
 
-export const orders = router({
+export const orders: AnyRouter = router({
   get: procedure
     .input(z.object({ id: z.number() }))
     .query(async ({ input, ctx }) => {
@@ -136,6 +137,7 @@ export const orders = router({
         duplicated: duplicated_order_id || null,
         ...dates_formatter(o),
         started_at: o.started_at?.valueOf() ?? null,
+        finished_at: null,
       } satisfies ListOrdersOutput
     })
 
@@ -229,7 +231,6 @@ const dates_formatter = (
   withYear?: boolean,
 ) => ({
   created_at: formatDate(order.created_at),
-  finished_at: formatDate(order.finished_at),
   time_delta:
     order.finished_at && order.started_at
       ? timedeltaInSeconds(order.finished_at, order.started_at)

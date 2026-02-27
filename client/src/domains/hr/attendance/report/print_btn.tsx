@@ -28,16 +28,15 @@ export const PrintPdfButton = observer(
     html, body {
       margin: 0;
       padding: 0;
-      -webkit-print-color-adjust: exact !important;
-      print-color-adjust: exact !important;
-      color-adjust: exact !important;
     }
 
     * {
-      -webkit-print-color-adjust: exact !important;
-      print-color-adjust: exact !important;
-      color-adjust: exact !important;
       box-sizing: border-box;
+      background: none !important;
+      background-color: transparent !important;
+      color: #000 !important;
+      box-shadow: none !important;
+      text-shadow: none !important;
     }
 
     table {
