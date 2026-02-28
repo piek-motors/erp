@@ -1,4 +1,3 @@
-import type { AnyRouter } from '@trpc/server'
 import type { Selectable } from 'kysely'
 import {
   fmt,
@@ -58,7 +57,7 @@ const base_query = db
     'd.workflow',
   ])
 
-export const orders: AnyRouter = router({
+export const orders = router({
   get: procedure
     .input(z.object({ id: z.number() }))
     .query(async ({ input, ctx }) => {
