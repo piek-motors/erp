@@ -4,7 +4,7 @@ import { PrintOnly } from '@/components/utilities/conditional-display'
 import { Box, observer, P, useState } from '@/lib'
 import { Hour } from '@/lib/constants'
 import type { Employee } from '@/server/domains/hr/attendance/report_generator'
-import { employee_model_vm } from './modals/events_modal'
+import { events_modal_vm } from './modals/events_modal'
 import {
   fmtHourMinute,
   UpdateIntervalButton,
@@ -36,7 +36,7 @@ export const ReportCell = observer(
       >
         <Stack
           onDoubleClick={() => {
-            employee_model_vm.open(props.employee, props.date)
+            events_modal_vm.open(props.employee, props.date)
           }}
           sx={{
             fontSize: '0.86rem',

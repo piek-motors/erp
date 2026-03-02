@@ -1,7 +1,7 @@
-import { Button } from '@mui/joy'
+import { Button, Tooltip } from '@mui/joy'
 import { makeAutoObservable } from 'mobx'
 import { observer } from 'mobx-react-lite'
-import { AbsenceReason } from 'models'
+import { AbsenceReason, UiAbsenceReason } from 'models'
 import { rpc } from '@/lib/deps'
 import { Label, Row } from '@/lib/index'
 
@@ -47,17 +47,19 @@ export const absenceReasonState = state
 export const AbsenceReasons = observer((props: { onClick: () => void }) => (
   <Row gap={0.5}>
     {Object.values(AbsenceReason).map(reason => (
-      <Button
-        variant="outlined"
-        color="neutral"
-        size="sm"
-        onClick={() => {
-          state.setReason(reason)
-          props.onClick()
-        }}
-      >
-        {reason}
-      </Button>
+      <Tooltip title={UiAbsenceReason[reason]} size="sm" placement="bottom">
+        <Button
+          variant="outlined"
+          color="neutral"
+          size="sm"
+          onClick={() => {
+            state.setReason(reason)
+            props.onClick()
+          }}
+        >
+          {reason}
+        </Button>
+      </Tooltip>
     ))}
   </Row>
 ))

@@ -13,19 +13,13 @@ import { observer } from 'mobx-react-lite'
 import type { AbsenceReason } from 'models'
 import { WebOnly } from '@/components/utilities/conditional-display'
 import { rpc } from '@/lib/deps'
-import {
-  InputLabled,
-  Label,
-  P,
-  Row,
-  SaveIconButton,
-  UseIcon,
-} from '@/lib/index'
+import { InputLabled, P, Row, SaveIconButton, UseIcon } from '@/lib/index'
 import type {
   Employee,
   Interval,
 } from '@/server/domains/hr/attendance/report_generator'
 import { AbsenceReasons, absenceReasonState } from '../../absence'
+import { EmployeeEvents } from './employee_events'
 
 export interface UpdateIntervalMetadata {
   employee: Employee
@@ -33,7 +27,7 @@ export interface UpdateIntervalMetadata {
   month: string
 }
 
-class State {
+class IntervalUpdateVM {
   constructor() {
     makeAutoObservable(this)
   }
@@ -112,32 +106,35 @@ class State {
       })
     }
 
-    // store.load()
     this.close()
   }
 }
 
-const state = new State()
-export const updateIntervalModalState = state
+const state = new IntervalUpdateVM()
+export const update_interval_modal_vm = state
 
 export const UpdateIntervalModal = observer(() => (
   <Modal open={!!state.intervalDate} onClose={() => state.close()}>
     <ModalDialog>
       <ModalClose />
-      <P>
-        {state.meta?.date.getDate()} {state.meta?.month}
-      </P>
-      <P>{state.meta?.employee.name}</P>
+
+      <EmployeeEvents
+        employee={state.meta?.employee!}
+        date={state.meta?.date!}
+      />
       <Divider />
+
       {!state.interval && (
         <>
           <Stack gap={1}>
-            <Label>Причина отсутствия</Label>
+            <P color="primary">Причина отсутствия</P>
             <AbsenceReasons onClick={() => state.close()} />
           </Stack>
           <Divider />
         </>
       )}
+
+      <P color="primary">Смена</P>
       <Row alignItems={'end'}>
         <InputLabled
           value={state.ent}
@@ -198,7 +195,7 @@ export const UpdateIntervalButton = observer(
               minHeight: 'min-content',
             }}
             onClick={() => {
-              updateIntervalModalState.open(meta, data.intervals.at(0))
+              update_interval_modal_vm.open(meta, data.intervals.at(0))
               absenceReasonState.open({
                 date: meta.date,
                 employeeId: meta.employee.id,

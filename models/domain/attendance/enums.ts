@@ -3,7 +3,7 @@ export enum EventOrigin {
   AccessControlPoint = 1, // контрольно-пропускной пункт
 }
 
-export const UiEventOrigin = {
+export const UiEventOrigin: Record<EventOrigin, string> = {
   [EventOrigin.AccessControlPoint]: 'КПП',
   [EventOrigin.TimeTrackingStation]: 'Таймформер',
 }
@@ -14,4 +14,12 @@ export enum AbsenceReason {
   Sick = 'Б',
   Absense = 'П',
   BussinesTrip = 'К',
+}
+
+export const UiAbsenceReason: Record<AbsenceReason, string> = {
+  [AbsenceReason.Vacation]: 'Отпуск',
+  [AbsenceReason.AdministrativeVacation]: 'Административный отпуск',
+  [AbsenceReason.Sick]: 'Болеет',
+  [AbsenceReason.Absense]: 'Пропуск',
+  [AbsenceReason.BussinesTrip]: 'Командировка',
 }
