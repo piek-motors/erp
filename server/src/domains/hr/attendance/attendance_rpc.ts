@@ -70,6 +70,7 @@ export const attendance = router({
         .select(['id', 'timestamp', 'origin'])
         .where('card', 'in', input.cards)
         .where(sql<any>`timestamp::date = ${input.date.slice(0, 10)}::date`)
+        .orderBy('timestamp', 'desc')
         .execute(),
     ),
   //
