@@ -20,6 +20,7 @@ import type {
 } from '@/server/domains/hr/attendance/report_generator'
 import { AbsenceReasons, absenceReasonState } from '../../absence'
 import { EmployeeEvents } from './employee_events'
+import { notifier } from '@/lib/store/notifier.store'
 
 export interface UpdateIntervalMetadata {
   employee: Employee
@@ -158,7 +159,16 @@ export const UpdateIntervalModal = observer(() => (
           sx={{ width: 100 }}
         />
       </Row>
-      <SaveIconButton onClick={() => state.save()} />
+      <SaveIconButton
+        onClick={() =>
+          state
+            .save()
+            .then(() =>
+              notifier.ok('Обновите страницу, чтобы увидеть изменения'),
+            )
+            .catch(e => notifier.err(e.toString()))
+        }
+      />
     </ModalDialog>
   </Modal>
 ))

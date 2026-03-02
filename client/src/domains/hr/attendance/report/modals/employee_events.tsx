@@ -1,5 +1,5 @@
 import { Stack, Table } from '@mui/joy'
-import { makeAutoObservable } from 'mobx'
+import { makeAutoObservable, runInAction } from 'mobx'
 import { observer } from 'mobx-react-lite'
 import { type EventOrigin, UiEventOrigin } from 'models'
 import { Label, Loading, P, Row, useEffect } from '@/lib'
@@ -45,7 +45,9 @@ class EmployeeEventVM {
       }),
     )
 
-    this.events = events
+    runInAction(() => {
+      this.events = events
+    })
   }
 }
 
