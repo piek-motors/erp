@@ -2,9 +2,9 @@ import type { Insertable } from 'kysely'
 import { AbsenceReason, EventOrigin } from 'models'
 import { z } from 'zod'
 import { attendanceReportGenerator } from '#root/ioc/index.js'
-import { createDateAsUTC } from '#root/lib/time.js'
+import { createDateAsUTC, getUtcDayBounds } from '#root/lib/time.js'
 import { router } from '#root/lib/trpc/trpc.js'
-import { type DB, db, procedure, requireScope, Scope, sql } from '#root/sdk.js'
+import { type DB, db, procedure, requireScope, Scope } from '#root/sdk.js'
 import { AttendanceEventPairing } from './event_pairing.js'
 import { HrRepo } from './hr.repo.js'
 
@@ -64,15 +64,17 @@ export const attendance = router({
         date: z.string(),
       }),
     )
-    .query(({ input }) =>
-      db
+    .query(({ input }) => {
+      const { startOfDayUTC, nextDayUTC } = getUtcDayBounds(input.date)
+      return db
         .selectFrom('attendance.events')
         .select(['id', 'timestamp', 'origin'])
         .where('card', 'in', input.cards)
-        .where(sql<any>`timestamp::date = ${input.date.slice(0, 10)}::date`)
+        .where('timestamp', '>=', startOfDayUTC)
+        .where('timestamp', '<', nextDayUTC)
         .orderBy('timestamp', 'asc')
-        .execute(),
-    ),
+        .execute()
+    }),
   //
   insert_interval: procedure
     .use(requireScope(Scope.hr))

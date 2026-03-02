@@ -157,3 +157,20 @@ export function startOfTheQuarter(date: Date): Date {
  */
 export const isoMonthToQuarter = (month: number) =>
   Math.floor((month - 1) / 3) + 1
+
+export function getUtcDayBounds(dateInput: string | Date): {
+  startOfDayUTC: Date
+  nextDayUTC: Date
+} {
+  const d =
+    typeof dateInput === 'string' ? new Date(dateInput) : new Date(dateInput)
+
+  const year = d.getUTCFullYear()
+  const month = d.getUTCMonth()
+  const day = d.getUTCDate()
+
+  const startOfDayUTC = new Date(Date.UTC(year, month, day, 0, 0, 0, 0))
+  const nextDayUTC = new Date(Date.UTC(year, month, day + 1, 0, 0, 0, 0))
+
+  return { startOfDayUTC, nextDayUTC }
+}
