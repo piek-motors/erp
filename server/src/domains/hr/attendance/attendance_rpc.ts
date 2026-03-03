@@ -16,11 +16,7 @@ const manual_interval_update_dto = z.object({
 
 const upload_data_dto = z.object({
   employees: z.array(
-    z.tuple([
-      z.string(), // firstname
-      z.string(), // lastname
-      z.string(), // card
-    ]),
+    z.string(), // card
   ),
   events: z.array(
     z.tuple([
@@ -142,10 +138,10 @@ export const attendance = router({
       const repo = new HrRepo()
 
       const employeesInsertedOrUpdatedRows = await repo.upsert_employees(
-        input.employees.map(e => ({
-          firstname: e[0],
-          lastname: e[1],
-          card: e[2],
+        input.employees.map(card => ({
+          firstname: 'Не задано',
+          lastname: '',
+          card,
         })),
       )
       // TODO: VERIFY ORIGIN WITHIN ENUM VALUES

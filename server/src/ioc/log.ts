@@ -7,6 +7,6 @@ export const logger = pino(
   pretty({
     colorize: true,
     ignore: ignoreScript.join(','),
-    translateTime: 'yy-mm-dd HH:MM',
+    translateTime: 'SYS:yy-mm-dd HH:MM',
   }),
 )
