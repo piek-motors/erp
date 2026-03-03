@@ -88,35 +88,18 @@ export class HrRepo {
     return Number(events_insert_res.numInsertedOrUpdatedRows ?? 0)
   }
 
-  async upsert_employees(
-    employees: Insertable<DB.AttendanceEmployeeTable>[],
-  ): Promise<number> {
-    if (!employees.length) return 0
+  async insert_employee_cards(cards: string[]): Promise<number> {
+    if (!cards.length) return 0
     const employees_insert_res = await db
       .insertInto('attendance.employees')
-      .values(employees)
-      .onConflict(oc =>
-        oc
-          .column('card')
-          .doUpdateSet({
-            firstname: eb => eb.ref('excluded.firstname'),
-            lastname: eb => eb.ref('excluded.lastname'),
-          })
-          .where(eb =>
-            eb.or([
-              eb(
-                'attendance.employees.firstname',
-                'is distinct from',
-                eb.ref('excluded.firstname'),
-              ),
-              eb(
-                'attendance.employees.lastname',
-                'is distinct from',
-                eb.ref('excluded.lastname'),
-              ),
-            ]),
-          ),
+      .values(
+        cards.map(card => ({
+          card,
+          firstname: '',
+          lastname: '',
+        })),
       )
+      .onConflict(oc => oc.column('card').doNothing())
       .executeTakeFirstOrThrow()
 
     return Number(employees_insert_res.numInsertedOrUpdatedRows ?? 0)

@@ -137,12 +137,8 @@ export const attendance = router({
     .mutation(async ({ input }) => {
       const repo = new HrRepo()
 
-      const employeesInsertedOrUpdatedRows = await repo.upsert_employees(
-        input.employees.map(card => ({
-          firstname: 'Не задано',
-          lastname: '',
-          card,
-        })),
+      const employeesInsertedOrUpdatedRows = await repo.insert_employee_cards(
+        input.employees,
       )
       // TODO: VERIFY ORIGIN WITHIN ENUM VALUES
       const events: Array<Insertable<DB.AttendanceEventsTable>> =
@@ -183,7 +179,7 @@ export const attendance = router({
       )
       return {
         event_inserts: eventsInsertedOrUpdatedRows,
-        employee_upserts: Number(employeesInsertedOrUpdatedRows),
+        employee_inserts: Number(employeesInsertedOrUpdatedRows),
         intervals_upserts,
       }
     }),
