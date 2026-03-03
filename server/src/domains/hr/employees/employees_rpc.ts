@@ -1,6 +1,7 @@
 import type { DB } from 'db'
 import { z } from 'zod'
 import { db, procedure, requireScope, router, Scope, sql } from '#root/sdk.js'
+import { logger } from '#root/ioc/log.js'
 
 const ONE_MONTH_AGO = new Date()
 ONE_MONTH_AGO.setMonth(ONE_MONTH_AGO.getMonth() - 1)
@@ -41,9 +42,17 @@ export const employees = router({
         id: z.number(),
         job_title: z.string().nullish(),
         access_card: z.string().nullish(),
+        firstname: z.string().nullish(),
+        lastname: z.string().nullish(),
       }),
     )
     .mutation(async ({ input }) => {
+      const prev = await db
+        .selectFrom('attendance.employees')
+        .selectAll()
+        .where('id', '=', input.id)
+        .executeTakeFirstOrThrow()
+
       const updateData: Partial<DB.AttendanceEmployeeTable> = {}
       if (input.job_title != null) {
         updateData.job_title = input.job_title
@@ -51,17 +60,24 @@ export const employees = router({
       if (input.access_card != null) {
         updateData.access_card = input.access_card
       }
+      if (input.firstname != null) {
+        updateData.firstname = input.firstname
+      }
+      if (input.lastname != null) {
+        updateData.lastname = input.lastname
+      }
 
       const result = await db
         .updateTable('attendance.employees')
         .set(updateData)
         .where('id', '=', input.id)
+        .returningAll()
         .executeTakeFirstOrThrow()
 
-      if (result.numUpdatedRows === 0n) {
-        throw new Error('Failed to update employee: not found')
-      }
-
+      logger.info(
+        { old: prev, new: result },
+        `employee ${input.id} has been updated`,
+      )
       return { success: true }
     }),
 })

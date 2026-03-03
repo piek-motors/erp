@@ -16,12 +16,14 @@ export interface JobTitleOption {
   value: string
 }
 
-export class EmployeeStore {
+export class EmployeeListVM {
   readonly loading = new LoadingController()
   employees: Employee[] = []
   jobTitles: JobTitleOption[] = []
   editedJobTitles: Map<number, string> = new Map()
   editedAccessCards: Map<number, string> = new Map()
+  editedFirstnames: Map<number, string> = new Map()
+  editedLastnames: Map<number, string> = new Map()
 
   constructor() {
     makeAutoObservable(this)
@@ -112,10 +114,66 @@ export class EmployeeStore {
     notifier.ok(`Пропуск ${editedCard} назначен ${employee.name}`)
   }
 
+  setEditedFirstname(id: number, value: string) {
+    this.editedFirstnames.set(id, value)
+  }
+
+  getEditedFirstname(id: number) {
+    return this.editedFirstnames.get(id)
+  }
+
+  setEditedLastname(id: number, value: string) {
+    this.editedLastnames.set(id, value)
+  }
+
+  getEditedLastname(id: number) {
+    return this.editedLastnames.get(id)
+  }
+
+  async saveName(id: number) {
+    const employee = this.employees.find(e => e.id === id)
+    if (!employee) return
+
+    const editedFirstname = this.editedFirstnames.get(id)?.trim()
+    const editedLastname = this.editedLastnames.get(id)?.trim()
+    const originalName = employee.name.split(' ')
+    const originalFirstname = originalName.slice(1).join(' ')
+    const originalLastname = originalName[0]
+
+    const firstnameChanged =
+      editedFirstname && editedFirstname !== originalFirstname
+    const lastnameChanged =
+      editedLastname && editedLastname !== originalLastname
+
+    if (!firstnameChanged && !lastnameChanged) {
+      // nothing changed
+      this.editedFirstnames.delete(id)
+      this.editedLastnames.delete(id)
+      return
+    }
+
+    // call API only if the value changed
+    await rpc.hr.employees.update_employee.mutate({
+      id,
+      firstname: editedFirstname || originalFirstname,
+      lastname: editedLastname || originalLastname,
+    })
+
+    runInAction(() => {
+      employee.name = `${editedLastname || originalLastname} ${editedFirstname || originalFirstname}`
+      this.editedFirstnames.delete(id)
+      this.editedLastnames.delete(id)
+    })
+
+    notifier.ok(`Сотрудник переименован: ${employee.name}`)
+  }
+
   cancelEdit(id: number) {
     this.editedJobTitles.delete(id)
     this.editedAccessCards.delete(id)
+    this.editedFirstnames.delete(id)
+    this.editedLastnames.delete(id)
   }
 }
 
-export const employeeStore = new EmployeeStore()
+export const employee_list_vm = new EmployeeListVM()

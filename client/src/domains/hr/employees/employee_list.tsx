@@ -1,17 +1,46 @@
 /** @jsxImportSource @emotion/react */
-import { Input, Sheet, Table } from '@mui/joy'
+import { Input, Table } from '@mui/joy'
 import { observer } from 'mobx-react-lite'
 import { BaseAutocomplete } from '@/components/base-autocomplete'
-import { Label, P } from '@/lib'
-import {
-  type EmployeeStore,
-  employeeStore,
-  type JobTitleOption,
-} from './employee.store'
+import { Label } from '@/lib'
+import { type EmployeeListVM, type JobTitleOption } from './employee.store'
 
-interface EmployeeListProps {
-  store?: typeof employeeStore
-}
+export const EmployeeTable = observer(
+  ({ store }: { store: EmployeeListVM }) => (
+    <Table stickyHeader size="sm">
+      <thead>
+        <tr>
+          <th style={{ width: 'min-content', paddingRight: 15 }}>№</th>
+          <th>Белая карта</th>
+          <th>Фамилия</th>
+          <th>Имя</th>
+          <th>Должность</th>
+          <th>Черная карта</th>
+        </tr>
+      </thead>
+      <tbody>
+        {store.employees.length === 0 ? (
+          <tr>
+            <td colSpan={6} style={{ textAlign: 'center' }}>
+              <Label level="body-sm" textColor="text.tertiary">
+                'Список сотрудников пуст'
+              </Label>
+            </td>
+          </tr>
+        ) : (
+          store.employees.map((employee, index) => (
+            <EmployeeRow
+              key={employee.id}
+              employee={employee}
+              index={index}
+              store={store}
+            />
+          ))
+        )}
+      </tbody>
+    </Table>
+  ),
+)
 
 /** Single Employee Row */
 const EmployeeRow = observer(
@@ -20,9 +49,9 @@ const EmployeeRow = observer(
     index,
     store,
   }: {
-    employee: EmployeeStore['employees'][0]
+    employee: EmployeeListVM['employees'][0]
     index: number
-    store: EmployeeStore
+    store: EmployeeListVM
   }) => {
     const currentJobTitle = store.getEditedJobTitle(
       employee.id,
@@ -32,18 +61,59 @@ const EmployeeRow = observer(
       ? { label: currentJobTitle, value: currentJobTitle }
       : null
 
-    const currentAccessCard = store.getEditedAccessCard(
+    const access_card = store.getEditedAccessCard(
       employee.id,
       employee.accessCard,
     )
 
+    const originalName = employee.name.split(' ')
+    const originalLastname = originalName[0]
+    const originalFirstname = originalName.slice(1).join(' ')
+
+    const lastname = store.getEditedLastname(employee.id) || originalLastname
+
+    const firstname = store.getEditedFirstname(employee.id) || originalFirstname
+
     return (
       <tr key={employee.id}>
         <td>
-          <Label xs>{index + 1}</Label>
+          <Label xs fontSize={'.7rem'}>
+            {index + 1}
+          </Label>
         </td>
         <td>
-          <P>{employee.name}</P>
+          <Label xs>{employee.card}</Label>
+        </td>
+
+        <td>
+          <Input
+            size="sm"
+            variant="plain"
+            value={lastname}
+            sx={{ fontSize: '.8rem' }}
+            onChange={e => store.setEditedLastname(employee.id, e.target.value)}
+            onBlur={() => store.saveName(employee.id)}
+            onKeyDown={e => {
+              if (e.key === 'Enter') store.saveName(employee.id)
+              if (e.key === 'Escape') store.cancelEdit(employee.id)
+            }}
+          />
+        </td>
+        <td>
+          <Input
+            size="sm"
+            variant="plain"
+            value={firstname}
+            sx={{ fontSize: '.8rem' }}
+            onChange={e =>
+              store.setEditedFirstname(employee.id, e.target.value)
+            }
+            onBlur={() => store.saveName(employee.id)}
+            onKeyDown={e => {
+              if (e.key === 'Enter') store.saveName(employee.id)
+              if (e.key === 'Escape') store.cancelEdit(employee.id)
+            }}
+          />
         </td>
         <td>
           <BaseAutocomplete
@@ -64,13 +134,10 @@ const EmployeeRow = observer(
           />
         </td>
         <td>
-          <Label xs>{employee.card}</Label>
-        </td>
-        <td>
           <Input
             size="sm"
             variant="plain"
-            value={currentAccessCard}
+            value={access_card}
             sx={{ fontSize: '.8rem' }}
             onChange={e =>
               store.setEditedAccessCard(employee.id, e.target.value)
@@ -86,49 +153,3 @@ const EmployeeRow = observer(
     )
   },
 )
-
-/** Employee Table */
-const EmployeeTable = observer(({ store }: { store: EmployeeStore }) => (
-  <Table stickyHeader hoverRow size="sm">
-    <thead>
-      <tr>
-        <th style={{ width: 'min-content', paddingRight: 15 }}>#</th>
-        <th>Имя</th>
-        <th>Должность</th>
-        <th>Номер белой карты</th>
-        <th>Номер черной карты</th>
-      </tr>
-    </thead>
-    <tbody>
-      {store.employees.length === 0 ? (
-        <tr>
-          <td colSpan={5} style={{ textAlign: 'center' }}>
-            <P level="body-sm" textColor="text.tertiary">
-              'Список сотрудников пуст'
-            </P>
-          </td>
-        </tr>
-      ) : (
-        store.employees.map((employee, index) => (
-          <EmployeeRow
-            key={employee.id}
-            employee={employee}
-            index={index}
-            store={store}
-          />
-        ))
-      )}
-    </tbody>
-  </Table>
-))
-
-/** Main Component */
-export const EmployeeList = observer((props: EmployeeListProps) => {
-  const store = props.store || employeeStore
-
-  return (
-    <Sheet sx={{ borderRadius: 5, p: 1 }}>
-      <EmployeeTable store={store} />
-    </Sheet>
-  )
-})
