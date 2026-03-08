@@ -1,7 +1,7 @@
 import type { DB } from 'db'
 import { z } from 'zod'
-import { db, procedure, requireScope, router, Scope, sql } from '#root/sdk.js'
 import { logger } from '#root/ioc/log.js'
+import { db, procedure, requireScope, router, Scope, sql } from '#root/sdk.js'
 
 const ONE_MONTH_AGO = new Date()
 ONE_MONTH_AGO.setMonth(ONE_MONTH_AGO.getMonth() - 1)

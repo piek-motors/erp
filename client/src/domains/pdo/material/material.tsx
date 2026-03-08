@@ -34,7 +34,7 @@ export const CreateMaterialPage = observer(() => {
     <Stack gap={1} p={1}>
       <MetalPageTitle t={'Добавить материал'} />
       <Stack gap={1}>
-        <MaterialForm showTabs m={material} />
+        <MaterialForm m={material} />
         <ActionButton
           onClick={() =>
             api.insert(material).then(id => {

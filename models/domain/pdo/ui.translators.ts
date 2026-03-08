@@ -1,6 +1,5 @@
 import {
   MaterialRequirement,
-  MaterialShape,
   OrderPriority,
   ProductionOrderStatus,
   SupplyReason,
@@ -29,19 +28,6 @@ export const UiSupplyReason = {
 export function uiSupplyReason(reason?: SupplyReason | null) {
   if (reason == null) return '-'
   return UiSupplyReason[reason]
-}
-
-export const UiMaterialShape = {
-  [MaterialShape.RoundBar]: 'Круг',
-  [MaterialShape.List]: 'Лист',
-  [MaterialShape.Pipe]: 'Труба',
-  [MaterialShape.SquareBar]: 'Квадрат',
-  [MaterialShape.HexagonBar]: 'Шестигранник',
-  [MaterialShape.Arbitrary]: 'Произвольный',
-}
-
-export function uiMaterialShape(shape: MaterialShape) {
-  return UiMaterialShape[shape]
 }
 
 export const UiUnit = {

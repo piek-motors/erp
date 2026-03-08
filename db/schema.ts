@@ -10,7 +10,6 @@ import type {
   AbsenceReason,
   Color,
   EventOrigin,
-  MaterialShape,
   OperationType,
   OrderPriority,
   OrderStatus,
@@ -98,8 +97,8 @@ export namespace DB {
     id: Generated<number>
     unit: Unit
     label: string // unique
-    shape: MaterialShape
-    shape_data: JSONColumnType<any, any, any>
+    // shape: MaterialShape
+    // shape_data: JSONColumnType<any, any, any>
     on_hand_balance: number
     linear_mass: number // kg/m
     alloy: string | null

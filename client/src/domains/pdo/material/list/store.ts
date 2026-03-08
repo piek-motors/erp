@@ -1,5 +1,4 @@
 import { makeAutoObservable, reaction } from 'mobx'
-import type { MaterialShape } from 'models'
 import { app_cache } from '@/domains/pdo/cache'
 import { LoadingController } from '@/lib/store/loading_controller'
 import { debounce } from '@/lib/utils/debounce'
@@ -10,7 +9,6 @@ export class MaterialListStore {
   readonly async = new LoadingController()
 
   search_query: string = ''
-  shape_filter: MaterialShape | null = null
   search_result: AppMaterial[] = []
 
   debouncedFilter: () => void
@@ -28,10 +26,6 @@ export class MaterialListStore {
     const norm_query = normalize(this.search_query)
     let items = app_cache.materials.materials
 
-    if (this.shape_filter != null) {
-      items = items.filter(m => m.shape === this.shape_filter)
-    }
-
     if (norm_query) {
       items = token_search(items, norm_query, search_config)
     }
@@ -42,11 +36,6 @@ export class MaterialListStore {
   set_search_query(q: string) {
     this.search_query = q
     this.debouncedFilter()
-  }
-
-  set_shape_filter(shape: MaterialShape | null) {
-    this.shape_filter = shape
-    this.filter()
   }
 
   clear() {

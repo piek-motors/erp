@@ -1,13 +1,6 @@
 import type { DB } from 'db'
 import { sql } from 'kysely'
-import {
-  MaterialConstructorMap,
-  MaterialShape,
-  MaterialShapeAbstractionLayer,
-  SupplyReason,
-  Unit,
-  WriteoffReason,
-} from 'models'
+import { SupplyReason, Unit, WriteoffReason } from 'models'
 import { z } from 'zod'
 import { Warehouse } from '#root/domains/pdo/services/warehouse_service.js'
 import { materials_stat_container } from '#root/ioc/index.js'
@@ -33,8 +26,7 @@ const DEFAULT_SHORTAGE_PREDICTION_HORIZON_DAYS = 60
 
 const payload = z.object({
   unit: z.enum(Unit),
-  shape: z.enum(MaterialShape),
-  shape_data: z.any(),
+  label: z.string().nonempty(),
   alloy: z.string().nullable(),
   shortage_prediction_horizon_days: z.number().nullable(),
 })
@@ -97,7 +89,6 @@ export const material = router({
           shortage_prediction_horizon_days:
             input.shortage_prediction_horizon_days ||
             DEFAULT_SHORTAGE_PREDICTION_HORIZON_DAYS,
-          label: derive_label(input),
           on_hand_balance: 0,
           linear_mass: 0,
         })
@@ -155,7 +146,6 @@ export const material = router({
           shortage_prediction_horizon_days:
             input.shortage_prediction_horizon_days ||
             DEFAULT_SHORTAGE_PREDICTION_HORIZON_DAYS,
-          label: derive_label(input),
         })
         .where('id', '=', input.id)
         .executeTakeFirstOrThrow()
@@ -212,15 +202,6 @@ export const material = router({
       .then(res => res.map(e => e.alloy)),
   ),
 })
-
-type UpdatePayload = z.infer<typeof payload>
-
-function derive_label(input: UpdatePayload) {
-  const materialConstructor = MaterialConstructorMap[input.shape]
-  const model = new materialConstructor(input.shape_data, '', input.alloy)
-  MaterialShapeAbstractionLayer.importShapeData(model, input.shape_data)
-  return model.deriveLabel()
-}
 
 export interface DeficitInfo {
   deficit: boolean

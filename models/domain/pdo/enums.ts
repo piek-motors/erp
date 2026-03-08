@@ -46,15 +46,6 @@ export enum SupplyReason {
   StockCorrection = 2,
 }
 
-export enum MaterialShape {
-  RoundBar = 0,
-  List = 1,
-  Pipe = 2,
-  SquareBar = 3,
-  HexagonBar = 4,
-  Arbitrary = 5,
-}
-
 export enum Unit {
   Kg = 0,
   M = 1,

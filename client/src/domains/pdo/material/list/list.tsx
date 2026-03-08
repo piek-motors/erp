@@ -1,17 +1,9 @@
 /** @jsxImportSource @emotion/react */
 
-import type { ToggleButtonGroupProps } from '@mui/joy'
-import { UiMaterialShape } from 'models'
 import { ScrollableWindow, Search } from '@/components/inputs'
 import { Table } from '@/components/table.impl'
 import { MobileNavModal, MobilePadding } from '@/domains/pdo/root_layout'
-import {
-  Button,
-  observer,
-  Stack,
-  ToggleButtonGroup,
-  useNavigate,
-} from '@/lib/index'
+import { observer, Stack, useNavigate } from '@/lib/index'
 import { openPage, routeMap } from '@/lib/routes'
 import type { AppMaterial } from '../../cache/material_cache'
 import { columns } from './columns'
@@ -46,7 +38,7 @@ export const MaterialListPage = observer((props: MaterialsTableProps) => (
       <MobilePadding desktop_too>
         <Stack gap={0.5}>
           <MobileNavModal t={'Материалы'} />
-          <ShapeFilter variant="soft" color="primary" />
+          {/* <ShapeFilter variant="soft" color="primary" /> */}
           <Search
             variant="soft"
             color="primary"
@@ -60,28 +52,28 @@ export const MaterialListPage = observer((props: MaterialsTableProps) => (
   />
 ))
 
-const ShapeFilter = observer((props?: ToggleButtonGroupProps) => {
-  const shapes = Object.entries(UiMaterialShape)
-  const value = materialListStore.shape_filter?.toString()
-  return (
-    <ToggleButtonGroup
-      size="sm"
-      value={value}
-      {...props}
-      sx={{ overflow: 'scroll' }}
-      onChange={(_, value) => {
-        if (value == null) {
-          materialListStore.set_shape_filter(null)
-        } else {
-          materialListStore.set_shape_filter(Number(value))
-        }
-      }}
-    >
-      {shapes.map(([index, name]) => (
-        <Button key={index} value={index}>
-          {name}
-        </Button>
-      ))}
-    </ToggleButtonGroup>
-  )
-})
+// const ShapeFilter = observer((props?: ToggleButtonGroupProps) => {
+//   const shapes = Object.entries(UiMaterialShape)
+//   const value = materialListStore.shape_filter?.toString()
+//   return (
+//     <ToggleButtonGroup
+//       size="sm"
+//       value={value}
+//       {...props}
+//       sx={{ overflow: 'scroll' }}
+//       onChange={(_, value) => {
+//         if (value == null) {
+//           materialListStore.set_shape_filter(null)
+//         } else {
+//           materialListStore.set_shape_filter(Number(value))
+//         }
+//       }}
+//     >
+//       {shapes.map(([index, name]) => (
+//         <Button key={index} value={index}>
+//           {name}
+//         </Button>
+//       ))}
+//     </ToggleButtonGroup>
+//   )
+// })

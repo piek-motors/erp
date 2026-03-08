@@ -3,7 +3,7 @@ import { Input, Table } from '@mui/joy'
 import { observer } from 'mobx-react-lite'
 import { BaseAutocomplete } from '@/components/base-autocomplete'
 import { Label } from '@/lib'
-import { type EmployeeListVM, type JobTitleOption } from './employee.store'
+import type { EmployeeListVM, JobTitleOption } from './employee.store'
 
 export const EmployeeTable = observer(
   ({ store }: { store: EmployeeListVM }) => (

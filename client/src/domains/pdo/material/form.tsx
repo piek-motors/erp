@@ -1,41 +1,18 @@
-import { MaterialShape, UiMaterialShape } from 'models'
 import { NumberInput } from '@/components/inputs/number_input'
-import { Tabs } from '@/components/tabs'
 import { AlloyAutocomplete, UnitSelect } from '@/domains/pdo/shared/basic'
-import { Box, Label, observer, Stack } from '@/lib/index'
-import { MaterialSpecificInput } from './shape/main'
+import { Box, Input, Label, observer, Stack } from '@/lib/index'
 import type { MaterialSt } from './state'
 
 export const MaterialForm = observer(
-  ({
-    showTabs,
-    m,
-    disabled,
-  }: {
-    showTabs?: boolean
-    m: MaterialSt
-    disabled?: boolean
-  }) => (
+  ({ m, disabled }: { m: MaterialSt; disabled?: boolean }) => (
     <Stack gap={0.5}>
-      {showTabs ? (
-        <Tabs
-          variant="plain"
-          sx={{ width: 'fit-content' }}
-          p={0}
-          tabs={Object.values(MaterialShape)
-            .filter(e => typeof e !== 'string')
-            .map(value => ({
-              label: UiMaterialShape[value],
-              value,
-              component: <MaterialSpecificInput m={m} disabled={disabled} />,
-            }))}
-          handleChange={value => {
-            m.set_shape(value as unknown as MaterialShape)
-          }}
-        />
-      ) : (
-        <MaterialSpecificInput m={m} disabled={disabled} />
-      )}
+      <Input
+        value={m.label}
+        onChange={e => {
+          m.set_label(e.target.value)
+        }}
+        disabled={disabled}
+      />
       <UnitSelect value={m.unit ?? undefined} onChange={v => m.set_unit(v)} />
       <AlloyAutocomplete
         on_change={alloy => {

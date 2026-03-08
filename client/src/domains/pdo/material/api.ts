@@ -3,7 +3,6 @@ import { rpc } from '@/lib/deps'
 import { LoadingController } from '@/lib/store/loading_controller'
 import type { RouterInput } from '@/server/lib/trpc'
 import { app_cache } from '../cache'
-import { map } from '../mappers'
 import { MaterialSt } from './state'
 
 export class MaterialApi {
@@ -23,7 +22,6 @@ export class MaterialApi {
       const m = new MaterialSt()
 
       runInAction(() => {
-        m.sync_state(map.material.from_dto(material))
         m.id = material.id
         m.label = material.label
         m.alloy = material.alloy || ''
@@ -72,8 +70,7 @@ export class MaterialApi {
   ): RouterInput['pdo']['material']['create'] {
     if (m.unit == null) throw new Error('Не выбрана единица учета остатков')
     return {
-      shape: m.shape,
-      shape_data: m.get_shape_state(m.shape).export(),
+      label: m.label,
       unit: m.unit,
       alloy: m.alloy || null,
       shortage_prediction_horizon_days: m.shortage_prediction_horizon_days,

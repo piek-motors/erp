@@ -14,13 +14,13 @@ import type { AbsenceReason } from 'models'
 import { WebOnly } from '@/components/utilities/conditional-display'
 import { rpc } from '@/lib/deps'
 import { InputLabled, P, Row, SaveIconButton, UseIcon } from '@/lib/index'
+import { notifier } from '@/lib/store/notifier.store'
 import type {
   Employee,
   Interval,
 } from '@/server/domains/hr/attendance/report_generator'
 import { AbsenceReasons, absenceReasonState } from '../../absence'
 import { EmployeeEvents } from './employee_events'
-import { notifier } from '@/lib/store/notifier.store'
 
 export interface UpdateIntervalMetadata {
   employee: Employee
