@@ -1,8 +1,9 @@
 import type { Column } from 'react-table'
 import { AdaptiveNumberFormatter } from '@/domains/pdo/shared/adaptive_number_formatter'
 import { Indicator, value_with_unit } from '@/domains/pdo/shared/basic'
-import { Label, P, Row } from '@/lib/index'
+import { Label, Row } from '@/lib/index'
 import type { AppMaterial } from '../../cache/material_cache'
+import { MaterialName } from '../name'
 
 const formatter = new AdaptiveNumberFormatter(0, 0, true)
 
@@ -16,7 +17,7 @@ export const columns: Column<AppMaterial>[] = [
     id: 'name',
     accessor: m => (
       <Row noWrap>
-        <P>{m.label}</P>
+        <MaterialName {...m} disableLink />
         {m.deficit.deficit && (
           <Indicator title="Дефицит" color="rgba(255, 7, 7, 0.8)" />
         )}

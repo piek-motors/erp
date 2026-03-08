@@ -37,9 +37,14 @@ export const CreateMaterialPage = observer(() => {
         <MaterialForm m={material} />
         <ActionButton
           onClick={() =>
-            api.insert(material).then(id => {
-              navigate(openPage(routeMap.pdo.material.edit, id))
-            })
+            api
+              .insert(material)
+              .then(id => {
+                navigate(openPage(routeMap.pdo.material.edit, id))
+              })
+              .catch(e => {
+                notifier.err(e.message)
+              })
           }
         />
       </Stack>

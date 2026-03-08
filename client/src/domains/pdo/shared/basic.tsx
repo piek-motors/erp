@@ -38,6 +38,7 @@ export function UnitSelect(props: {
 export function AlloyAutocomplete(props: {
   on_change: (alloy: string) => void
   value: string
+  disabled?: boolean
 }) {
   const { on_change: setAlloy, value: alloy } = props
   const [alloys, setAlloys] = useState<string[]>([])
@@ -57,7 +58,9 @@ export function AlloyAutocomplete(props: {
     <>
       <BaseAutocomplete
         label={'Сплав'}
+        width={'min-content'}
         options={options}
+        disabled={props.disabled}
         value={alloy ? { label: alloy, value: alloy } : null}
         onChange={newValue => {
           if (newValue && !Array.isArray(newValue)) {

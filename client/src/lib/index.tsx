@@ -340,12 +340,13 @@ export function MultilineInput(
   props: {
     label?: string
     formProps?: FormControlProps
+    width?: string
   } & TextareaProps,
 ) {
   return (
     <FormControl {...props.formProps}>
       <Label label={props.label} />
-      <Textarea {...props} />
+      <Textarea {...props} sx={{ width: props.width }} />
     </FormControl>
   )
 }

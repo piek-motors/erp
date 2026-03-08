@@ -36,7 +36,7 @@ const MaterialRequirementUi = observer(({ blank, order }: DetailBlankProps) => {
   const unit = uiUnit(material.unit)
   return (
     <>
-      <MaterialName id={material.id} label={material.label} />
+      <MaterialName {...material} />
       <InfoLabel
         label="Потребное кол."
         value={order.resp?.material_deduction}

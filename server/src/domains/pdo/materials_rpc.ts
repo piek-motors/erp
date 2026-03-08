@@ -89,6 +89,7 @@ export const material = router({
           shortage_prediction_horizon_days:
             input.shortage_prediction_horizon_days ||
             DEFAULT_SHORTAGE_PREDICTION_HORIZON_DAYS,
+          label: `${input.label} ${input.alloy}`,
           on_hand_balance: 0,
           linear_mass: 0,
         })
