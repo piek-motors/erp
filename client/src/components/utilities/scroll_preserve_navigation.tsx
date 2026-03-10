@@ -7,17 +7,19 @@ export const ScrollPreservNavigation = ({
   children,
   refreshTrigger,
   sx,
+  storageKey,
 }: {
   children: React.ReactNode
   refreshTrigger: any
   sx?: BoxProps['sx']
+  storageKey?: string
 }) => {
   const containerRef = useRef<any>(null)
   const scrollPosition = useRef(0)
   const location = useLocation()
 
-  // Create a unique key for this page
-  const storageKey = `scroll-position-${location.pathname}`
+  // Create a unique key for this page (or use provided storageKey)
+  const key = storageKey ?? `scroll-position-${location.pathname}`
 
   // Save scroll position before the re-render happens (for search/filter changes)
   useLayoutEffect(() => {
@@ -37,32 +39,15 @@ export const ScrollPreservNavigation = ({
   useEffect(() => {
     const handleBeforeUnload = () => {
       if (containerRef.current) {
-        sessionStorage.setItem(
-          storageKey,
-          containerRef.current.scrollTop.toString(),
-        )
+        sessionStorage.setItem(key, containerRef.current.scrollTop.toString())
       }
     }
 
     const saveScrollOnNavigation = () => {
       if (containerRef.current) {
-        sessionStorage.setItem(
-          storageKey,
-          containerRef.current.scrollTop.toString(),
-        )
+        sessionStorage.setItem(key, containerRef.current.scrollTop.toString())
       }
     }
-
-    // Save on scroll changes
-    const handleScroll = () => {
-      if (containerRef.current) {
-        sessionStorage.setItem(
-          storageKey,
-          containerRef.current.scrollTop.toString(),
-        )
-      }
-    }
-
     // Save on page unload
     window.addEventListener('beforeunload', handleBeforeUnload)
 
@@ -71,11 +56,11 @@ export const ScrollPreservNavigation = ({
       saveScrollOnNavigation()
       window.removeEventListener('beforeunload', handleBeforeUnload)
     }
-  }, [storageKey])
+  }, [key])
 
   // Restore scroll position from sessionStorage when component mounts (navigation back)
   useEffect(() => {
-    const savedPosition = sessionStorage.getItem(storageKey)
+    const savedPosition = sessionStorage.getItem(key)
     if (savedPosition && containerRef.current) {
       // Use requestAnimationFrame to ensure the content is rendered first
       requestAnimationFrame(() => {
@@ -84,7 +69,7 @@ export const ScrollPreservNavigation = ({
         }
       })
     }
-  }, [storageKey, location.pathname])
+  }, [key, location.pathname])
 
   // Save scroll position periodically while user is scrolling
   useEffect(() => {
@@ -92,7 +77,7 @@ export const ScrollPreservNavigation = ({
     if (!container) return
 
     const saveScrollPosition = () => {
-      sessionStorage.setItem(storageKey, container.scrollTop.toString())
+      sessionStorage.setItem(key, container.scrollTop.toString())
     }
 
     let scrollTimeout: NodeJS.Timeout
@@ -106,7 +91,7 @@ export const ScrollPreservNavigation = ({
       container.removeEventListener('scroll', handleScroll)
       clearTimeout(scrollTimeout)
     }
-  }, [storageKey])
+  }, [key])
 
   return (
     <Box sx={{ overflow: 'auto', flexGrow: 1, ...sx }} ref={containerRef}>

@@ -9,8 +9,38 @@ import { Box, Loading, observer, P, Row, Stack, useEffect } from '@/lib/index'
 import { MobileNavModal, MobilePadding } from '../root_layout'
 import { api } from './api'
 import { GroupActions, TargetGroupDetailList } from './detail_list'
-import { GroupSelectModal, SharedGroupList } from './group_list'
+import { GroupSelectModal, GroupList } from './group_list'
 import { UpdateGroupNameModal } from './group_name.modal'
+
+const DetailGroupsLayout = () => (
+  <Stack
+    direction={{
+      xs: 'column',
+      sm: 'row',
+    }}
+    sx={{
+      gap: 0.5,
+    }}
+  >
+    {/* Group list */}
+    <Box>
+      <MobileOnly>
+        <MobilePadding>
+          <Row>
+            <MobileNavModal />
+            <GroupSelectModal />
+          </Row>
+        </MobilePadding>
+      </MobileOnly>
+      <DesktopOnly>
+        <ScrollableWindow scroll={<GroupList />} storageKey="pdo-group-list" />
+      </DesktopOnly>
+    </Box>
+    {/* Group details */}
+    <Divider orientation="vertical" />
+    <DetailsPanel />
+  </Stack>
+)
 
 const DetailsPanel = observer(() => {
   if (api.targetGroupLoading.loading) return <Loading />
@@ -38,37 +68,7 @@ const DetailsPanel = observer(() => {
   )
 })
 
-const DetailGroupsLayout = observer(() => (
-  <Stack
-    direction={{
-      xs: 'column',
-      sm: 'row',
-    }}
-    sx={{
-      gap: 0.5,
-    }}
-  >
-    {/* Group list */}
-    <Box>
-      <MobileOnly>
-        <MobilePadding>
-          <Row>
-            <MobileNavModal />
-            <GroupSelectModal />
-          </Row>
-        </MobilePadding>
-      </MobileOnly>
-      <DesktopOnly>
-        <ScrollableWindow scroll={<SharedGroupList />} />
-      </DesktopOnly>
-    </Box>
-    {/* Group details */}
-    <Divider orientation="vertical" />
-    <DetailsPanel />
-  </Stack>
-))
-
-export const DetailGroupById = observer(() => {
+export const GroupById = observer(() => {
   const { id } = useParams<{ id: string }>()
   useEffect(() => {
     if (id) {
@@ -85,7 +85,7 @@ export const DetailGroupById = observer(() => {
   return <DetailGroupsLayout />
 })
 
-export const DetailGroupListPage = observer(() => {
+export const GroupListPage = observer(() => {
   useEffect(() => {
     api.listGroups()
     return () => {

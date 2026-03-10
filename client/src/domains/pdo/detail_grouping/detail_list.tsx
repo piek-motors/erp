@@ -50,14 +50,11 @@ export const TargetGroupDetailList = observer(() => {
         value={detailList.query}
         onChange={e => detailList.setQuery(e.target.value)}
       />
-      {/* <ColorSegmentationMenu /> */}
       <Box
         sx={{
           flex: 1,
+          pb: 2,
           overflow: 'auto',
-          // columnGap: 1
-          // display: 'grid',
-          // gridTemplateColumns: 'auto 6fr'
         }}
       >
         {api.store.targetGroupDetails?.map(detail => (

@@ -7,7 +7,7 @@ import { openPage, routeMap } from '@/lib/routes'
 import { api } from './api'
 import { CreateGroupModal } from './group_name.modal'
 
-export const SharedGroupList = observer(
+export const GroupList = observer(
   (props: { onLinkClick?: (open: boolean) => void }) => {
     if (api.store.groups.length === 0) {
       return (
@@ -64,7 +64,7 @@ export const GroupSelectModal = observer(() => {
       open={open}
       setOpen={v => setOpen(v)}
     >
-      <SharedGroupList onLinkClick={setOpen} />
+      <GroupList onLinkClick={setOpen} />
     </InModal>
   )
 })
