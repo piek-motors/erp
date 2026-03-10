@@ -4,6 +4,7 @@ import fastify from 'fastify'
 import { config } from '#root/config/env.js'
 import { trpcRouter } from '#root/domains/trpc-router.js'
 import { errorHandlerPlugin } from '#root/lib/fastify/error-handler.plugin.js'
+import { MAX_FILE_SIZE } from '#root/lib/fastify/multipart.plugin.js'
 import { httpRoutes } from '#root/routers/http-routes.js'
 import { logger } from './ioc/log.js'
 import './lib/trpc/index.js'
@@ -39,6 +40,7 @@ await app.register(import('@fastify/formbody'))
 await app.register(import('@fastify/multipart'), {
   limits: {
     files: 20,
+    fileSize: MAX_FILE_SIZE,
   },
 })
 await app.register(errorHandlerPlugin)
