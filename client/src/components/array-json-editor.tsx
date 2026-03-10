@@ -90,39 +90,33 @@ export const ArrayJsonEditor = observer((props: ArrayJsonEditorProps) => {
                         ref={dragProvided.innerRef}
                         {...dragProvided.draggableProps}
                         {...dragProvided.dragHandleProps}
-                        flexWrap={'nowrap'}
+                        noWrap
                       >
                         <Label>{index + 1}</Label>
-                        <Row
-                          sx={{ flexGrow: 1, flexShrink: 0, height: '100%' }}
-                          flexWrap={'nowrap'}
-                        >
-                          {keys.map((key, keyIdx) => (
-                            <Box
-                              key={key}
-                              sx={{
-                                width: props.width?.[keyIdx]
-                                  ? `${props.width?.[keyIdx]}%`
-                                  : undefined,
-                                display: 'flex',
-                                flexGrow: props.width?.[keyIdx] ? 0 : 1,
-                              }}
-                            >
-                              <Textarea
-                                variant="plain"
-                                size="sm"
-                                placeholder={
-                                  props.placeholders?.[keyIdx] ?? key
-                                }
-                                value={String((item as any)[key] || '')}
-                                onChange={e =>
-                                  updateItemProp(index, key, e.target.value)
-                                }
-                                sx={{ width: '100%', flexShrink: 1 }}
-                              />
-                            </Box>
-                          ))}
-                        </Row>
+
+                        {keys.map((key, keyIdx) => (
+                          <Box
+                            key={key}
+                            sx={{
+                              width: props.width?.[keyIdx]
+                                ? `${props.width?.[keyIdx]}%`
+                                : undefined,
+                              display: 'flex',
+                              flexGrow: props.width?.[keyIdx] ? 0 : 1,
+                            }}
+                          >
+                            <Textarea
+                              variant="plain"
+                              size="sm"
+                              placeholder={props.placeholders?.[keyIdx] ?? key}
+                              value={String((item as any)[key] || '')}
+                              onChange={e =>
+                                updateItemProp(index, key, e.target.value)
+                              }
+                              sx={{ width: '100%', flexShrink: 1 }}
+                            />
+                          </Box>
+                        ))}
                         <MinusIcon onClick={() => removeItem(index)} />
                       </Row>
                       {index !== items.length - 1 && (

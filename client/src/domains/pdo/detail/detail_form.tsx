@@ -186,6 +186,7 @@ const DetailGroupInput = observer(({ detail }: { detail: DetailSt }) => {
     <Stack>
       <Label>Группа детали. Для универсальных деталей оставьте пустым.</Label>
       <BaseAutocomplete
+        width={'fit-content'}
         variant="outlined"
         options={groupOptions}
         value={selectedGroup}
