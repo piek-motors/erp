@@ -1,5 +1,4 @@
 import type { SxProps } from '@mui/joy/styles/types'
-import { ScrollPreserv } from '@/components/utilities/scroll_preserve'
 import { ScrollPreservNavigation } from '@/components/utilities/scroll_preserve_navigation'
 import { Box, Stack } from '@/lib'
 
@@ -7,7 +6,6 @@ export const ScrollableWindow = (props: {
   scroll: React.ReactNode
   static?: React.ReactNode
   refreshTrigger?: any
-  preserveScrollAcrossNavigation?: boolean
   height?: string | number
   maxHeight?: string | number
   minHeight?: string | number
@@ -16,11 +14,8 @@ export const ScrollableWindow = (props: {
   containerSx?: SxProps
   scrollSx?: SxProps
   contentSx?: SxProps
+  storageKey?: string
 }) => {
-  const ScrollComponent =
-    props.preserveScrollAcrossNavigation !== false
-      ? ScrollPreservNavigation
-      : ScrollPreserv
   const overflowX = props.overflowX ?? 'auto'
   const overflowY = props.overflowY ?? 'auto'
 
@@ -59,7 +54,11 @@ export const ScrollableWindow = (props: {
   return (
     <Stack sx={{ ...outerSx, overflowX: 'auto', width: '100%' }}>
       {props.static}
-      <ScrollComponent refreshTrigger={props.refreshTrigger} sx={scrollSx}>
+      <ScrollPreservNavigation
+        refreshTrigger={props.refreshTrigger}
+        sx={scrollSx}
+        storageKey={props.storageKey}
+      >
         <Box
           sx={{
             width: '100%',
@@ -70,7 +69,7 @@ export const ScrollableWindow = (props: {
         >
           {props.scroll}
         </Box>
-      </ScrollComponent>
+      </ScrollPreservNavigation>
     </Stack>
   )
 }
