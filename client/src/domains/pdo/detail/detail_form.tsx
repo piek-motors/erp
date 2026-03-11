@@ -195,10 +195,10 @@ const DetailGroupInput = observer(({ detail }: { detail: DetailSt }) => {
           tags.map((item, index) => (
             <Chip
               size="sm"
-              variant="solid"
-              color="warning"
-              endDecorator={<UseIcon icon={UilX} small invert />}
-              sx={{ minWidth: 0, fontSize: '.7rem' }}
+              variant="plain"
+              color="primary"
+              endDecorator={<UseIcon icon={UilX} small />}
+              sx={{ minWidth: 0, fontSize: '.8rem' }}
               {...getTagProps({ index })}
             >
               {item.label}
