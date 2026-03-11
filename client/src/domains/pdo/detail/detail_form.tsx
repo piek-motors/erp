@@ -50,6 +50,7 @@ export const DetailForm = observer(
           }}
           value={detail.name}
         />
+        <DetailGroupInput detail={detail} />
 
         <Stack my={0.5}>
           <Label>Чертеж</Label>
@@ -75,7 +76,6 @@ export const DetailForm = observer(
           </Row>
         </Stack>
 
-        <DetailGroupInput detail={detail} />
         <Row alignItems={'end'}>
           <StockLocationInput detail={detail} />
           <DetailRecommendedBatchSizeInput detail={detail} />
@@ -184,7 +184,7 @@ const DetailGroupInput = observer(({ detail }: { detail: DetailSt }) => {
 
   return (
     <Stack>
-      <Label>Группа детали. Для универсальных деталей оставьте пустым.</Label>
+      <Label>Группа. Для универсальных деталей оставьте пустым.</Label>
       <BaseAutocomplete
         width={'fit-content'}
         variant="outlined"

@@ -28,7 +28,7 @@ const ErrDetailPartCodeUnique = new TRPCError({
 export type DetailWorkflow = DB.DetailWorkflow
 
 const DetailSchema = z.object({
-  name: z.string().min(5, 'Название должно быть не менее 5 символов'),
+  name: z.string().min(3, 'Название должно быть не менее 3 символов'),
   description: z.string().nullable(),
   drawing_number: z.string().nullable(),
   drawing_name: z.string().nullable(),

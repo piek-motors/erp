@@ -63,7 +63,7 @@ const GroupName = observer(
 
     return (
       <P color="primary" sx={{ fontSize: '0.8em', fontWeight: 500, ...sx }}>
-        {name.toUpperCase()}
+        {name}
       </P>
     )
   },
