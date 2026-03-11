@@ -3,7 +3,6 @@
 mod dataset;
 mod inference;
 mod intervaling;
-mod normalization;
 mod observation;
 mod state;
 mod training;

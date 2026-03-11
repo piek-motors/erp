@@ -5,9 +5,10 @@ use ndarray::{Array1, Array2};
 use serde::{Deserialize, Serialize};
 use strum::IntoEnumIterator;
 
+use crate::utils::normalization::normalize_arr2;
+
 use super::{
   dataset::{self, split_dataset, Dataset},
-  normalization::normalize_arr2,
   observation::{events_to_observations, Observation},
   state::State,
   training_data::TrainingData,
@@ -72,7 +73,7 @@ pub fn train_hmm(test_ratio: f32) -> Result<(), Box<dyn Error>> {
     // state[i+1] = state of event at end of interval (what happened: entry/exit)
     let states: Vec<State> = events_deduped
       .iter()
-      .skip(1)  // skip first event (no previous event to calculate delta from)
+      .skip(1) // skip first event (no previous event to calculate delta from)
       .map(|(_, s)| *s)
       .collect();
 

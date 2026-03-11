@@ -10,9 +10,12 @@
   In the result we megrate almost all logic to the rust and this will be more cohesive solution. 
   
   Steps to implement (Estimated 3 days): 
-    1. Mesure latency for hmm for current dataset. If it negligible, go forward.
-    2. Drop intervals table
-    3. Migrate HMM calling to the get rpc and move bussines logic to rust.
-    4. Fix interval correction rpcs
-    5. Fix frontend
+    - [x] Mesure latency for hmm for current dataset. If it negligible, go forward. Perf: 8ms on 4.7k events/ 2ms on 1k events/ 1 employee ~ 40 events month / 1000 employees = 40k ~ 80 ms (Negligible latency overhead)
+    
+    - [ ] Migrate HMM calling to the get rpc and move bussines logic to rust.
+    - [ ] Fix interval correction rpcs
+    - [ ] Fix frontend
+
+    - [ ] Think about a need for removing near-duplicate events for a single user. (Software surpress already exist)
+    - [ ] Drop intervals table
      
