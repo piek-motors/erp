@@ -1,7 +1,6 @@
 # Backlog
 
 - [ ] **PDO**: Аdd the ability to configure filters from the UI. Editing of materials must remain disabled.
-- [ ] **PDO**: Show detail group and detail id on the printed version of production order.
 - [ ] **Architecture**: migrate to a plugin-based architecture to improve domain isolation.
 - [ ] **HR**: Timeformers. 
   Move from interval precalculation, to the on-demand interval-formation in order: 
@@ -19,3 +18,4 @@
     - [ ] Think about a need for removing near-duplicate events for a single user. (Software surpress already exist)
     - [ ] Drop intervals table
      
+- [x] **PDO**: Show detail group and detail id on the printed version of production order.

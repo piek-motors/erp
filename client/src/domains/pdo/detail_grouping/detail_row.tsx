@@ -14,7 +14,6 @@ export function DetailRow({
 }: DetailRowProps & { isSelected: boolean }) {
   return (
     <>
-      {/* <ColorSegmentation detail={detail} /> */}
       <Row
         sx={{
           alignItems: 'center',
@@ -31,7 +30,9 @@ export function DetailRow({
         onClick={() => detail.group_id === null && onToggle(detail.id)}
       >
         <DetailName
-          sx={{ whiteSpace: 'wrap', width: 'auto', lineHeight: '1.2' }}
+          sx={{
+            name: { whiteSpace: 'wrap', width: 'auto', lineHeight: '1.2' },
+          }}
           detail={{
             id: detail.id,
             name: detail.name,

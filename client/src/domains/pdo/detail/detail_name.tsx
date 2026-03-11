@@ -16,24 +16,33 @@ interface Props {
   detail: Detail
   with_group_name?: boolean
   disable_link?: boolean
-  sx?: SxProps
+  with_id?: boolean
+  sx?: {
+    name?: SxProps
+    row?: SxProps
+    group?: SxProps
+  }
 }
 
 export const DetailName = observer(
-  ({
-    detail,
-    with_group_name: withGroupName,
-    disable_link: disableLink,
-    sx,
-  }: Props) => {
+  ({ detail, with_group_name, disable_link, with_id, sx }: Props) => {
     const content = (
-      <Row gap={1} rowGap={0} flexWrap="wrap">
-        <P sx={sx}>{capitalize(detail.name)}</P>
-        {withGroupName && <GroupName groupId={detail.group_id} />}
+      <Row gap={1} rowGap={0} sx={sx?.row}>
+        <P sx={sx?.name} lineHeight={1.2}>
+          {capitalize(detail.name)}
+        </P>
+        {with_group_name && (
+          <GroupName groupId={detail.group_id} sx={sx?.group} />
+        )}
+        {with_id && (
+          <P level="body-xs" fontSize={10}>
+            №{detail.id}
+          </P>
+        )}
       </Row>
     )
 
-    if (disableLink) return content
+    if (disable_link) return content
 
     return (
       <Box width="fit-content">
@@ -45,18 +54,17 @@ export const DetailName = observer(
   },
 )
 
-const GroupName = observer(({ groupId }: { groupId?: number | null }) => {
-  if (!groupId) return null
+const GroupName = observer(
+  ({ groupId, sx }: { groupId?: number | null; sx?: SxProps }) => {
+    if (!groupId) return null
 
-  const name = app_cache.groups.name_for(groupId)
-  if (!name) return null
+    const name = app_cache.groups.name_for(groupId)
+    if (!name) return null
 
-  return (
-    <P
-      color="primary"
-      sx={{ cursor: 'pointer', fontSize: '0.9em', fontWeight: 500 }}
-    >
-      {name.toLowerCase()}
-    </P>
-  )
-})
+    return (
+      <P color="primary" sx={{ fontSize: '0.7em', fontWeight: 500, ...sx }}>
+        {name.toUpperCase()}
+      </P>
+    )
+  },
+)

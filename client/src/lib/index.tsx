@@ -57,12 +57,12 @@ export {
 export const Btn = Button
 export const P = (props: TypographyProps) => <Typography {...props} />
 export const Label = (
-  props: TypographyProps & { label?: string; xs?: boolean },
+  props: TypographyProps & { label?: ReactNode; xs?: boolean },
 ) => {
   const level = props.xs ? 'body-xs' : 'body-sm'
   return (
     Boolean(props.label || props.children) && (
-      <Typography level={level} {...props}>
+      <Typography level={level} {...props} lineHeight={1.1}>
         {props.label || props.children}
       </Typography>
     )
@@ -81,12 +81,12 @@ export const InfoLabel = ({
 } & TypographyProps) => {
   if (value == null) return null
   return (
-    <Label {...rest} flexWrap={'nowrap'}>
-      {label}{' '}
-      <b>
+    <Row gap={1} noWrap>
+      <Label {...rest} label={label} fontSize={12} level="body-md" />
+      <Row gap={0.5} noWrap fontWeight={500} whiteSpace={'nowrap'}>
         {value} {suffix}
-      </b>
-    </Label>
+      </Row>
+    </Row>
   )
 }
 

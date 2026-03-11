@@ -61,7 +61,11 @@ const DetailProductionRouteTable = observer((props: Props) => (
             <SingleWorkflowTask
               task={workflow_task}
               idx={i}
-              textSlot={{ level: 'body-xs', fontWeight: 'normal' }}
+              textSlot={{
+                level: 'body-md',
+                fontSize: 13,
+                fontWeight: 'normal',
+              }}
             />
           </td>
           <td width={150} />

@@ -5,9 +5,9 @@ import { Box } from '@mui/joy'
 import { UiOrderPriority } from 'models'
 import type { ReactNode } from 'react'
 import type { DetailSt } from '@/domains/pdo/detail/detail.state'
-import { capitalize } from '@/domains/pdo/shared/basic'
 import { Label, observer, P, Row } from '@/lib/index'
 import { fmtDate } from '@/lib/utils/date_fmt'
+import { DetailName } from '../../detail/detail_name'
 import { DetailBlank } from '../detail_blank'
 import type { OrderSt } from '../order.state'
 import { tableStyles } from './shared'
@@ -20,7 +20,9 @@ type Props = {
 const emptySpace = <Box width={30} height={30} />
 
 const L = (props: { children: ReactNode }) => (
-  <Label level={'body-xs'}>{props.children}</Label>
+  <Label level={'body-xs'} fontSize={10} lineHeight={1}>
+    {props.children}
+  </Label>
 )
 
 export const TechPassportTable = observer(({ order, detail }: Props) => {
@@ -29,13 +31,13 @@ export const TechPassportTable = observer(({ order, detail }: Props) => {
     <>
       <Row my={0.5} justifyContent={'center'}>
         <Row>
-          <L>Технологический паспорт</L>
-          <P fontSize={16}>№ {order.id}</P>
+          <P fontSize={13}>Технологический паспорт</P>
+          <P fontSize={16}>№{order.id}</P>
         </Row>
         |
-        <L>
+        <P fontSize={13}>
           {order.priority != null && UiOrderPriority[order.priority]} приоритет
-        </L>
+        </P>
       </Row>
       <table css={css(tableStyles)} style={{ textAlign: 'center' }}>
         <tbody>
@@ -49,9 +51,13 @@ export const TechPassportTable = observer(({ order, detail }: Props) => {
               <P fontSize={15}>{detail.drawing_number}</P>
               <P fontSize={15}>{detail.drawing_name}</P>
             </td>
-            <td width={70}>Заказ № {emptySpace}</td>
             <td width={70}>
-              Кол. дет. в партии <P>{order.qty || ''}</P>
+              <L>Заказ №</L>
+              {emptySpace}
+            </td>
+            <td width={70}>
+              <L>Кол. дет. в партии</L>
+              <P>{order.qty || ''}</P>
             </td>
             <td width={50}>ОП</td>
             <td width={50}>Взрыв</td>
@@ -66,9 +72,19 @@ export const TechPassportTable = observer(({ order, detail }: Props) => {
           <tr>
             <td colSpan={3}>
               <L>Наим. детали</L>
-              <P fontWeight={500} fontSize={16}>
-                {capitalize(detail.name)}
-              </P>
+              <DetailName
+                detail={detail}
+                with_group_name
+                with_id
+                disable_link
+                sx={{
+                  row: {
+                    fontWeight: 500,
+                    fontSize: 16,
+                    justifyContent: 'center',
+                  },
+                }}
+              />
             </td>
 
             <td colSpan={6} style={{ padding: 0 }}>

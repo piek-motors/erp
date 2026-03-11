@@ -60,7 +60,7 @@ export const columns: Column<Operation>[] = [
       if (!data.detail_id || !data.material_id) return null
       return (
         <DetailName
-          sx={{ whiteSpace: 'wrap', width: 'auto' }}
+          sx={{ name: { whiteSpace: 'wrap', width: 'auto' } }}
           detail={{
             id: data.detail_id,
             name: data.detail_name!,
