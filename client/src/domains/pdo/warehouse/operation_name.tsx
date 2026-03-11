@@ -7,7 +7,7 @@ interface Props {
     operation_type: number
     material_label?: string | null
     detail_name?: string | null
-    detail_group_id?: number | null
+    detail_group_ids?: number[]
     material_id?: number | null
     detail_id?: number | null
   }
@@ -26,7 +26,7 @@ export const OperationName = observer((props: Props) => {
         detail={{
           id: op.detail_id,
           name: op.detail_name,
-          group_id: op.detail_group_id!,
+          group_ids: op.detail_group_ids,
         }}
         with_group_name
       />

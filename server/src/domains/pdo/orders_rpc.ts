@@ -11,6 +11,7 @@ import { formatDate, timedeltaInSeconds } from '#root/lib/time.js'
 import { router } from '#root/lib/trpc/trpc.js'
 import { type DB, db, procedure, TRPCError } from '#root/sdk.js'
 import { calc_material_deduction } from './services/order_service.js'
+import { create_detail_group_map } from './utils.js'
 
 export const FinishedOrderRetentionDays = 30
 
@@ -22,7 +23,7 @@ export interface ListOrdersOutput {
   detail_name: string
   qty: number
   output_qty: number | null
-  group_id: number | null
+  group_ids: number[]
   status: OrderStatus
   created_at: string | null
   started_at: number | null
@@ -51,11 +52,7 @@ const base_query = db
     'o.priority',
   ])
   .innerJoin('pdo.details as d', 'o.detail_id', 'd.id')
-  .select([
-    'd.name as detail_name',
-    'd.logical_group_id as group_id',
-    'd.workflow',
-  ])
+  .select(['d.name as detail_name', 'd.workflow'])
 
 export const orders = router({
   get: procedure
@@ -65,11 +62,7 @@ export const orders = router({
         .selectFrom('pdo.orders as m')
         .selectAll('m')
         .innerJoin('pdo.details as d', 'm.detail_id', 'd.id')
-        .select([
-          'd.name as detail_name',
-          'd.logical_group_id as group_id',
-          'blank',
-        ])
+        .select(['d.name as detail_name', 'blank'])
         .where('m.id', '=', input.id)
         .executeTakeFirst()
 
@@ -92,7 +85,7 @@ export const orders = router({
     }),
   //
   list: procedure.query(async () => {
-    const [orders, dict_operations] = await Promise.all([
+    const [orders, dict_operations, groupDetails] = await Promise.all([
       base_query
         .where('o.finished_at', 'is', null)
         .where('o.status', '!=', OrderStatus.Archived)
@@ -100,8 +93,12 @@ export const orders = router({
         .execute(),
 
       db.selectFrom('pdo.dict_operation_kinds').selectAll().execute(),
+      db
+        .selectFrom('pdo.detail_group_details')
+        .select(['detail_id', 'group_id'])
+        .execute(),
     ])
-
+    const detail_group_map = create_detail_group_map(groupDetails)
     const operationsMap: Record<number, string> = dict_operations.reduce(
       (acc, each) => {
         acc[each.id] = each.v
@@ -134,6 +131,7 @@ export const orders = router({
           (current_operation != null && operationsMap[current_operation[0]]) ||
           null,
         duplicated: duplicated_order_id || null,
+        group_ids: detail_group_map.get(o.detail_id) || [],
         ...dates_formatter(o),
         started_at: o.started_at?.valueOf() ?? null,
         finished_at: null,
@@ -145,13 +143,21 @@ export const orders = router({
   //,
   list_last_archived: procedure.query(async () => {
     const cutoffDate = new Date(Date.now() - FinishedOrderRetentionPeriod)
-    const finished = await base_query
-      .where('o.finished_at', '>=', cutoffDate)
-      .orderBy('o.finished_at', 'desc')
-      .execute()
+    const [finished, groupDetails] = await Promise.all([
+      base_query
+        .where('o.finished_at', '>=', cutoffDate)
+        .orderBy('o.finished_at', 'desc')
+        .execute(),
+      db
+        .selectFrom('pdo.detail_group_details')
+        .select(['detail_id', 'group_id'])
+        .execute(),
+    ])
+    const detail_group_map = create_detail_group_map(groupDetails)
     return matrixEncoder(
       finished.map(o => ({
         ...o,
+        group_ids: detail_group_map.get(o.detail_id) || [],
         ...dates_formatter(o),
       })),
     )
@@ -164,58 +170,69 @@ export const orders = router({
       // Check if term is a number (integer ID search)
       const isNumericId = /^\d+$/.test(normalizedTerm)
 
-      let query = db
-        .selectFrom('pdo.orders as o')
-        .select([
-          'o.id',
-          'o.detail_id',
-          'o.qty',
-          'o.output_qty',
-          'o.finished_at',
-          'o.created_at',
-          'o.started_at',
-        ])
-        .innerJoin('pdo.details as d', 'o.detail_id', 'd.id')
-        .select(['d.name as detail_name', 'd.logical_group_id as group_id'])
-        .innerJoin(
-          'pdo.detail_group',
-          'pdo.detail_group.id',
-          'd.logical_group_id',
-        )
-        .select('pdo.detail_group.name as group_name')
-        .where('o.status', '=', OrderStatus.Archived)
-        .where('o.finished_at', 'is not', null)
-        .orderBy('o.finished_at', 'desc')
+      const [orders, groupDetails] = await Promise.all([
+        (async () => {
+          let query = db
+            .selectFrom('pdo.orders as o')
+            .select([
+              'o.id',
+              'o.detail_id',
+              'o.qty',
+              'o.output_qty',
+              'o.finished_at',
+              'o.created_at',
+              'o.started_at',
+            ])
+            .innerJoin('pdo.details as d', 'o.detail_id', 'd.id')
+            .select(['d.name as detail_name'])
+            .leftJoin(
+              'pdo.detail_group_details as dgd',
+              'd.id',
+              'dgd.detail_id',
+            )
+            .leftJoin('pdo.detail_group as dg', 'dgd.group_id', 'dg.id')
+            .select(['dg.name as group_name'])
+            .where('o.status', '=', OrderStatus.Archived)
+            .where('o.finished_at', 'is not', null)
+            .orderBy('o.finished_at', 'desc')
 
-      if (isNumericId) {
-        // Search by exact order ID
-        const orderId = parseInt(normalizedTerm, 10)
-        query = query.where('o.id', '=', orderId)
-      } else {
-        // Token-based search: split by spaces AND hyphens
-        const tokens = normalizedTerm
-          .toLowerCase()
-          .split(/[\s-]+/)
-          .filter(t => t.length > 0)
+          if (isNumericId) {
+            // Search by exact order ID
+            const orderId = parseInt(normalizedTerm, 10)
+            query = query.where('o.id', '=', orderId)
+          } else {
+            // Token-based search: split by spaces AND hyphens
+            const tokens = normalizedTerm
+              .toLowerCase()
+              .split(/[\s-]+/)
+              .filter(t => t.length > 0)
 
-        if (tokens.length > 0) {
-          query = query.where(eb =>
-            eb.and(
-              tokens.map(token =>
-                eb.or([
-                  eb('d.name', 'ilike', `%${token}%`),
-                  eb('pdo.detail_group.name', 'ilike', `%${token}%`),
-                ]),
-              ),
-            ),
-          )
-        }
-      }
+            if (tokens.length > 0) {
+              query = query.where(eb =>
+                eb.and(
+                  tokens.map(token =>
+                    eb.or([
+                      eb('d.name', 'ilike', `%${token}%`),
+                      eb('dg.name', 'ilike', `%${token}%`),
+                    ]),
+                  ),
+                ),
+              )
+            }
+          }
 
-      const orders = await query.execute()
+          return await query.execute()
+        })(),
+        db
+          .selectFrom('pdo.detail_group_details')
+          .select(['detail_id', 'group_id'])
+          .execute(),
+      ])
+      const detail_group_map = create_detail_group_map(groupDetails)
       return matrixEncoder(
         orders.map(o => ({
           ...o,
+          group_ids: detail_group_map.get(o.detail_id) || [],
           ...dates_formatter(o, true),
         })),
       )

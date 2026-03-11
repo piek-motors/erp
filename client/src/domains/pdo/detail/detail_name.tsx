@@ -1,5 +1,6 @@
 /** @jsxImportSource @emotion/react */
 
+import { Tooltip } from '@mui/joy'
 import type { SxProps } from '@mui/joy/styles/types'
 import { app_cache } from '@/domains/pdo/cache'
 import { Box, Link, observer, P, Row } from '@/lib/index'
@@ -9,7 +10,7 @@ import { capitalize } from '../shared/basic'
 interface Detail {
   id: number
   name: string
-  group_id?: number | null
+  group_ids?: number[]
 }
 
 interface Props {
@@ -17,7 +18,7 @@ interface Props {
   with_group_name?: boolean
   disable_link?: boolean
   with_id?: boolean
-  sx?: {
+  slot_props?: {
     name?: SxProps
     row?: SxProps
     group?: SxProps
@@ -25,14 +26,14 @@ interface Props {
 }
 
 export const DetailName = observer(
-  ({ detail, with_group_name, disable_link, with_id, sx }: Props) => {
+  ({ detail, with_group_name, disable_link, with_id, slot_props }: Props) => {
     const content = (
-      <Row gap={1} rowGap={0} sx={sx?.row} alignItems={'baseline'}>
-        <P sx={sx?.name} lineHeight={1.2}>
+      <Row gap={1} rowGap={0} sx={slot_props?.row} alignItems={'baseline'}>
+        <P sx={slot_props?.name} lineHeight={1.2}>
           {capitalize(detail.name)}
         </P>
         {with_group_name && (
-          <GroupName groupId={detail.group_id} sx={sx?.group} />
+          <GroupName group_ids={detail.group_ids} sx={slot_props?.group} />
         )}
         {with_id && (
           <P level="body-xs" fontSize={10}>
@@ -55,16 +56,50 @@ export const DetailName = observer(
 )
 
 const GroupName = observer(
-  ({ groupId, sx }: { groupId?: number | null; sx?: SxProps }) => {
-    if (!groupId) return null
+  ({
+    group_id,
+    group_ids,
+    sx,
+  }: {
+    group_id?: number | null
+    group_ids?: number[]
+    sx?: SxProps
+  }) => {
+    const ids = group_ids ?? (group_id ? [group_id] : [])
+    if (!ids.length) return null
 
-    const name = app_cache.groups.name_for(groupId)
-    if (!name) return null
+    const names = app_cache.groups.names_for(ids)
+    if (!names.length) return null
 
-    return (
+    const display_names = names.length > 2 ? names.slice(0, 2) : names
+    const has_more = names.length > 2
+    const display_text = has_more
+      ? `${display_names.join(', ')}...`
+      : display_names.join(', ')
+
+    const groups_component = (
       <P color="primary" sx={{ fontSize: '0.8em', fontWeight: 500, ...sx }}>
-        {name}
+        {display_text}
       </P>
     )
+
+    if (has_more) {
+      return (
+        <Tooltip
+          size="sm"
+          title={
+            <Row>
+              {names.map(name => (
+                <div key={name}>{name}</div>
+              ))}
+            </Row>
+          }
+        >
+          {groups_component}
+        </Tooltip>
+      )
+    }
+
+    return groups_component
   },
 )

@@ -35,7 +35,7 @@ export class MaterialSt {
   details_made_from_this_material: {
     id: number
     name: string
-    group_id: number | null
+    group_ids: number[]
   }[] = []
 
   shortage_prediction_horizon_days: number | null = null

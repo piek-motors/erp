@@ -35,7 +35,6 @@ export class DetailSt {
       id: detail.id ?? 0,
       name: detail.name ?? '',
       drawing_number: detail.drawing_number ?? null,
-      logical_group_id: detail.logical_group_id ?? null,
       on_hand_balance: detail.on_hand_balance || 0,
       description: detail.description || '',
       drawing_name: detail.drawing_name ?? '',
@@ -60,9 +59,9 @@ export class DetailSt {
   set_description(d: string) {
     this.description = d ?? ''
   }
-  group_id: number | null = null
-  set_group_id(groupId: number | null) {
-    this.group_id = groupId
+  group_ids: number[] = []
+  set_group_ids(groupIds: number[]) {
+    this.group_ids = groupIds
   }
   drawing_name: string = ''
   set_drawing_name(name: string) {
@@ -92,11 +91,11 @@ export class DetailSt {
     makeAutoObservable(this)
   }
 
-  init(d: DetailResponse) {
+  init(d: DetailResponse, group_ids: number[] = []) {
     this.id = d.id!
     this.name = d.name!
     this.drawing_number = d.drawing_number!
-    this.group_id = d.logical_group_id
+    this.group_ids = group_ids
     this.description = d.description || ''
     this.warehouse.setStock(d.on_hand_balance)
     this.updated_at = d.updated_at ? new Date(d.updated_at) : null
@@ -120,10 +119,10 @@ export class DetailSt {
       description: this.description ?? '',
       name: this.name ?? '',
       drawing_number: this.drawing_number ?? null,
-      logical_group_id: this.group_id ?? null,
+      drawing_name: this.drawing_name ?? null,
+      group_ids: this.group_ids,
       recommended_batch_size: Number(this.recommended_batch_size) ?? null,
       workflow: this.workflow ? this.workflow.payload : null,
-      drawing_name: this.drawing_name ?? null,
       blank: this.blank.payload,
       stock_location: this.stock_location || null,
     }

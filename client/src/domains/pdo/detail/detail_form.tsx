@@ -1,7 +1,10 @@
 /** @jsxImportSource @emotion/react */
 
+import { UilX } from '@iconscout/react-unicons'
 import {
   AccordionGroup,
+  Autocomplete,
+  Chip,
   Divider,
   Grid,
   Stack,
@@ -12,10 +15,7 @@ import { observer } from 'mobx-react-lite'
 import type { ReactNode } from 'react'
 import { AccordionCard } from '@/components/accordion_card'
 import { ArrayJsonEditor } from '@/components/array-json-editor'
-import {
-  BaseAutocomplete,
-  type BaseOption,
-} from '@/components/base-autocomplete'
+import type { BaseOption } from '@/components/base-autocomplete'
 import { NumberInput } from '@/components/inputs/number_input'
 import { TextEditor } from '@/domains/orders/one/comments/text-editor'
 import { app_cache } from '@/domains/pdo/cache'
@@ -26,6 +26,7 @@ import {
   Label,
   MultilineInput,
   Row,
+  UseIcon,
 } from '@/lib/index'
 import type { Blank } from '@/server/domains/pdo/details_rpc'
 import { DetailAttachmentList } from './attachment/list'
@@ -39,49 +40,51 @@ import { WorkflowAccordion } from './workflow'
 export const DetailForm = observer(
   ({ detail, leftChildren }: DetailStProp & { leftChildren?: ReactNode }) => (
     <Grid container direction={{ xs: 'column', md: 'row' }} spacing={1}>
-      <Grid xs={12} md={7}>
-        <MultilineInput
-          sx={{ fontWeight: 500, width: '100%', boxShadow: 'none' }}
-          color="primary"
-          variant="outlined"
-          label="Название"
-          onChange={e => {
-            detail.setName(e.target.value)
-          }}
-          value={detail.name}
-        />
-        <DetailGroupInput detail={detail} />
+      <Grid xs={12} md={7} py={1}>
+        <Stack gap={0.5}>
+          <MultilineInput
+            sx={{ fontWeight: 500, width: '100%', boxShadow: 'none' }}
+            color="primary"
+            variant="outlined"
+            label="Название"
+            onChange={e => {
+              detail.setName(e.target.value)
+            }}
+            value={detail.name}
+          />
+          <DetailGroupInput detail={detail} />
 
-        <Stack my={0.5}>
-          <Label>Чертеж</Label>
-          <Row noWrap>
-            <MultilineInput
-              formProps={{ sx: { flexGrow: 1 } }}
-              placeholder="Название"
-              value={detail.drawing_name}
-              onChange={e => {
-                detail.set_drawing_name(e.target.value)
-              }}
-            />
-            <Input
-              placeholder="Номер"
-              onChange={v => {
-                detail.set_drawing_number(v)
-                if (v.startsWith('ВЗИС')) {
-                  alert('Впишите конструкторский номер без приставки "ВЗИС"')
-                }
-              }}
-              value={detail.drawing_number}
-            />
+          <Stack>
+            <Label>Чертеж</Label>
+            <Row noWrap>
+              <MultilineInput
+                formProps={{ sx: { flexGrow: 1 } }}
+                placeholder="Название"
+                value={detail.drawing_name}
+                onChange={e => {
+                  detail.set_drawing_name(e.target.value)
+                }}
+              />
+              <Input
+                placeholder="Номер"
+                onChange={v => {
+                  detail.set_drawing_number(v)
+                  if (v.startsWith('ВЗИС')) {
+                    alert('Впишите конструкторский номер без приставки "ВЗИС"')
+                  }
+                }}
+                value={detail.drawing_number}
+              />
+            </Row>
+          </Stack>
+
+          <Row alignItems={'end'}>
+            <StockLocationInput detail={detail} />
+            <DetailRecommendedBatchSizeInput detail={detail} />
           </Row>
+          <DetailDescriptionInput detail={detail} />
+          {leftChildren}
         </Stack>
-
-        <Row alignItems={'end'}>
-          <StockLocationInput detail={detail} />
-          <DetailRecommendedBatchSizeInput detail={detail} />
-        </Row>
-        <DetailDescriptionInput detail={detail} />
-        {leftChildren}
       </Grid>
       <Grid xs={12} md={5}>
         <DetailAccordionGroup d={detail} />
@@ -108,7 +111,7 @@ export const MaterialSelect = observer(
       })) || []
 
     return (
-      <BaseAutocomplete
+      <Autocomplete
         size={'sm'}
         options={options}
         placeholder="Выберите материал"
@@ -120,7 +123,7 @@ export const MaterialSelect = observer(
               }
             : null
         }
-        onChange={newValue => {
+        onChange={(_, newValue) => {
           if (newValue && !Array.isArray(newValue)) {
             onChange(newValue.value)
           }
@@ -128,9 +131,7 @@ export const MaterialSelect = observer(
         getOptionLabel={option =>
           typeof option === 'string' ? option : option.label
         }
-        isOptionEqualToValue={(option, value) =>
-          option.value.id === value.value.id
-        }
+        isOptionEqualToValue={(option, value) => option.value === value.value}
       />
     )
   },
@@ -174,25 +175,47 @@ const Input = (props: InputLabledProps) => (
 )
 
 const DetailGroupInput = observer(({ detail }: { detail: DetailSt }) => {
-  const groupOptions: BaseOption[] = app_cache.groups.ls().map(group => ({
+  const options: BaseOption[] = app_cache.groups.ls().map(group => ({
     label: group.name,
     value: group.id,
   }))
 
-  const selectedGroup =
-    groupOptions.find(option => option.value === detail.group_id) || null
+  const value = options.filter(option =>
+    detail.group_ids.includes(option.value),
+  )
 
   return (
     <Stack>
-      <Label>Группа. Для универсальных деталей оставьте пустым.</Label>
-      <BaseAutocomplete
-        width={'fit-content'}
+      <Label>Группы</Label>
+      <Autocomplete
+        multiple
+        sx={{ width: 'fit-content' }}
+        size="md"
+        renderTags={(tags, getTagProps) =>
+          tags.map((item, index) => (
+            <Chip
+              size="sm"
+              variant="solid"
+              color="warning"
+              endDecorator={<UseIcon icon={UilX} small invert />}
+              sx={{ minWidth: 0, fontSize: '.7rem' }}
+              {...getTagProps({ index })}
+            >
+              {item.label}
+            </Chip>
+          ))
+        }
         variant="outlined"
-        options={groupOptions}
-        value={selectedGroup}
-        onChange={group => {
-          detail.set_group_id(group?.value || null)
+        options={options}
+        value={value}
+        onChange={(_, groups) => {
+          const groupIds = groups?.map(g => g.value) || []
+          detail.set_group_ids(groupIds)
         }}
+        getOptionLabel={option =>
+          typeof option === 'string' ? option : option.label
+        }
+        isOptionEqualToValue={(option, value) => option.value === value.value}
       />
     </Stack>
   )

@@ -107,7 +107,11 @@ const search_config: CriteriaBasedSearchConfig<AppDetail, SearchCriteria> = {
         get: d => d.normalized_name,
       },
       {
-        get: d => (app_cache.groups.name_for(d.group_id) ?? '').toLowerCase(),
+        get: d =>
+          d.group_ids
+            .map(id => app_cache.groups.name_for(id) ?? '')
+            .join(' ')
+            .toLowerCase(),
       },
     ],
   },

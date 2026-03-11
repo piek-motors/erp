@@ -8,6 +8,7 @@ import { logger } from '#root/ioc/log.js'
 import { matrixEncoder } from '#root/lib/matrix_encoder.js'
 import { router } from '#root/lib/trpc/trpc.js'
 import { db, procedure, requireScope, Scope, z } from '#root/sdk.js'
+import { create_detail_group_map } from './utils.js'
 
 const Limit = 100
 
@@ -21,7 +22,7 @@ export type OperationListItem = {
   unit: Unit
   detail_id: number
   detail_name: string
-  detail_group_id: number
+  detail_group_ids: number[]
   material_id: number | number
   manufacturing_order_qty: number
 }
@@ -35,28 +36,42 @@ export const operations = router({
       }),
     )
     .query(async ({ input }) => {
-      const operations = await db
-        .selectFrom('pdo.operations as o')
-        .$if(!!input.materialId, qb =>
-          qb.where('o.material_id', '=', input.materialId as number),
-        )
-        .$if(!!input.detailId, qb =>
-          qb.where('o.detail_id', '=', input.detailId as number),
-        )
-        .selectAll(['o'])
-        .leftJoin('pdo.materials as m', 'o.material_id', 'm.id')
-        .leftJoin('pdo.details as d', 'o.detail_id', 'd.id')
-        .leftJoin('pdo.orders as ord', 'manufacturing_order_id', 'ord.id')
-        .select('d.name as detail_name')
-        .select('d.logical_group_id as detail_group_id')
-        .select('m.label as material_label')
-        .select('o.manufacturing_order_id as manufacturing_order_id')
-        .select('ord.qty as manufacturing_order_qty')
-        .select('m.unit as unit')
-        .orderBy('o.id', 'desc')
-        .limit(Limit)
-        .execute()
-      return matrixEncoder(operations)
+      const [operations, groupDetails] = await Promise.all([
+        db
+          .selectFrom('pdo.operations as o')
+          .$if(!!input.materialId, qb =>
+            qb.where('o.material_id', '=', input.materialId as number),
+          )
+          .$if(!!input.detailId, qb =>
+            qb.where('o.detail_id', '=', input.detailId as number),
+          )
+          .selectAll(['o'])
+          .leftJoin('pdo.materials as m', 'o.material_id', 'm.id')
+          .leftJoin('pdo.details as d', 'o.detail_id', 'd.id')
+          .leftJoin('pdo.orders as ord', 'manufacturing_order_id', 'ord.id')
+          .select('d.name as detail_name')
+          .select('m.label as material_label')
+          .select('o.manufacturing_order_id as manufacturing_order_id')
+          .select('ord.qty as manufacturing_order_qty')
+          .select('m.unit as unit')
+          .orderBy('o.id', 'desc')
+          .limit(Limit)
+          .execute(),
+        db
+          .selectFrom('pdo.detail_group_details')
+          .select(['detail_id', 'group_id'])
+          .execute(),
+      ])
+
+      const detail_group_map = create_detail_group_map(groupDetails)
+      const operations_with_groups = operations.map(o => ({
+        ...o,
+        detail_group_ids: o.detail_id
+          ? detail_group_map.get(o.detail_id) || []
+          : [],
+      }))
+
+      return matrixEncoder(operations_with_groups)
     }),
   //
   revert: procedure

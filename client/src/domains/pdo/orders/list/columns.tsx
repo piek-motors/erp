@@ -25,7 +25,7 @@ const commonColumns: Column<ListOrdersOutput>[] = [
           detail={{
             id: d.detail_id,
             name: d.detail_name,
-            group_id: d.group_id,
+            group_ids: d.group_ids,
           }}
           with_group_name
         />

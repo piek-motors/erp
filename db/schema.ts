@@ -118,7 +118,6 @@ export namespace DB {
     name: string
     unit: Unit // Defailt Unit.Countable
     description: string | null
-    logical_group_id: number | null // Index - hash
     drawing_number: string | null
     drawing_name: string | null
     on_hand_balance: number

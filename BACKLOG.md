@@ -17,5 +17,7 @@
 
     - [ ] Think about a need for removing near-duplicate events for a single user. (Software surpress already exist)
     - [ ] Drop intervals table
-     
+
+## Done
+- [x] **PDO**: Allow detail multiple group selection, it would be easier to undertand where this detail used and remove detail assigmnet in the groups. 
 - [x] **PDO**: Show detail group and detail id on the printed version of production order.

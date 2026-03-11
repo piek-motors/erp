@@ -8,7 +8,7 @@ import {
 import { Box, Loading, observer, P, Row, Stack, useEffect } from '@/lib/index'
 import { MobileNavModal, MobilePadding } from '../root_layout'
 import { api } from './api'
-import { GroupActions, TargetGroupDetailList } from './detail_list'
+import { TargetGroupDetailList } from './detail_list'
 import { GroupList, GroupSelectModal } from './group_list'
 import { UpdateGroupNameModal } from './group_name.modal'
 
@@ -56,10 +56,7 @@ const DetailsPanel = observer(() => {
       scroll={
         openedGroup && (
           <Stack p={1} gap={1}>
-            <Row>
-              <UpdateGroupNameModal />
-              <GroupActions />
-            </Row>
+            <UpdateGroupNameModal />
             <TargetGroupDetailList />
           </Stack>
         )

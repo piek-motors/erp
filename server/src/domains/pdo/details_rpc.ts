@@ -13,6 +13,7 @@ import {
   Scope,
   TRPCError,
 } from '#root/sdk.js'
+import { create_detail_group_map } from './utils.js'
 
 const isDetailPertCodeUniqueError = (e: Error) => {
   return e.message.includes(
@@ -32,7 +33,7 @@ const DetailSchema = z.object({
   description: z.string().nullable(),
   drawing_number: z.string().nullable(),
   drawing_name: z.string().nullable(),
-  logical_group_id: z.number().nullable(),
+  group_ids: z.array(z.number()).optional(),
   workflow: DetailWorkFlowSchema.nullable(),
   blank: BlankSchema.nullable(),
   stock_location: z.string().nullable(),
@@ -43,8 +44,15 @@ export interface ListDetailsOutput {
   id: number
   name: string
   drawing_number: string | null
-  group_id: number | null
+  group_ids: number[]
   on_hand_balance: number
+}
+
+export interface DetailWithGroups {
+  detail: Selectable<DB.DetailTable>
+  group_ids: number[]
+  attachments: any[]
+  last_manufacturing: { date: Date; qty: number } | null
 }
 
 export type SelectableDetail = Selectable<DB.DetailTable>
@@ -58,35 +66,41 @@ export const details = router({
       }),
     )
     .query(async ({ input }) => {
-      const [detail, attachments, lastManufacturing] = await Promise.all([
-        db
-          .selectFrom('pdo.details')
-          .where('id', '=', input.id)
-          .selectAll()
-          .executeTakeFirstOrThrow()
-          .catch(err => {
-            throw new TRPCError({
-              code: 'NOT_FOUND',
-              message: err.message,
-            })
-          }),
-        db
-          .selectFrom('pdo.detail_attachments')
-          .leftJoin('attachments', join =>
-            join.onRef('attachment_id', '=', 'id'),
-          )
-          .where('detail_id', '=', input.id)
-          .selectAll()
-          .execute(),
-        db
-          .selectFrom('pdo.orders')
-          .select(['finished_at', 'qty'])
-          .where('detail_id', '=', input.id)
-          .where('finished_at', 'is not', null)
-          .orderBy('finished_at', 'desc')
-          .limit(1)
-          .executeTakeFirst(),
-      ])
+      const [detail, attachments, lastManufacturing, groupDetails] =
+        await Promise.all([
+          db
+            .selectFrom('pdo.details')
+            .where('id', '=', input.id)
+            .selectAll()
+            .executeTakeFirstOrThrow()
+            .catch(err => {
+              throw new TRPCError({
+                code: 'NOT_FOUND',
+                message: err.message,
+              })
+            }),
+          db
+            .selectFrom('pdo.detail_attachments')
+            .leftJoin('attachments', join =>
+              join.onRef('attachment_id', '=', 'id'),
+            )
+            .where('detail_id', '=', input.id)
+            .selectAll()
+            .execute(),
+          db
+            .selectFrom('pdo.orders')
+            .select(['finished_at', 'qty'])
+            .where('detail_id', '=', input.id)
+            .where('finished_at', 'is not', null)
+            .orderBy('finished_at', 'desc')
+            .limit(1)
+            .executeTakeFirst(),
+          db
+            .selectFrom('pdo.detail_group_details')
+            .where('detail_id', '=', input.id)
+            .select('group_id')
+            .execute(),
+        ])
       return {
         detail,
         attachments,
@@ -96,44 +110,71 @@ export const details = router({
               qty: lastManufacturing.qty,
             }
           : null,
-      }
+        group_ids: groupDetails.map(d => d.group_id),
+      } as DetailWithGroups
     }),
   //
-  list: procedure.query(async () =>
-    db
-      .selectFrom('pdo.details as d')
-      .select([
-        'd.id',
-        'd.name',
-        'd.drawing_number',
-        'd.logical_group_id as group_id',
-        'd.on_hand_balance',
-      ])
-      .orderBy('d.id', 'desc')
-      .execute()
-      .then(rows => matrixEncoder<ListDetailsOutput>(rows)),
-  ),
+  list: procedure.query(async () => {
+    const [details, groupDetails] = await Promise.all([
+      db
+        .selectFrom('pdo.details as d')
+        .select(['d.id', 'd.name', 'd.drawing_number', 'd.on_hand_balance'])
+        .orderBy('d.id', 'desc')
+        .execute(),
+      db
+        .selectFrom('pdo.detail_group_details')
+        .select(['detail_id', 'group_id'])
+        .execute(),
+    ])
+
+    const detail_group_map = create_detail_group_map(groupDetails)
+
+    const rows_with_groups = details.map(d => ({
+      ...d,
+      group_ids: detail_group_map.get(d.id) || [],
+    }))
+
+    return matrixEncoder<ListDetailsOutput>(rows_with_groups)
+  }),
   //
   create: procedure
     .use(requireScope(Scope.pdo))
     .input(DetailSchema)
     .mutation(async ({ input }) => {
-      const detail = await db
-        .insertInto('pdo.details')
-        .values({
-          ...input,
-          on_hand_balance: 0,
-          updated_at: new Date(),
-          unit: Unit.Countable,
-        })
-        .returning('id')
-        .executeTakeFirstOrThrow()
-        .catch(e => {
-          if (isDetailPertCodeUniqueError(e)) {
-            throw ErrDetailPartCodeUnique
-          }
-          throw e
-        })
+      const detail = await db.transaction().execute(async trx => {
+        const { group_ids, ...detailData } = input
+        const result = await trx
+          .insertInto('pdo.details')
+          .values({
+            ...detailData,
+            on_hand_balance: 0,
+            updated_at: new Date(),
+            unit: Unit.Countable,
+          })
+          .returning('id')
+          .executeTakeFirstOrThrow()
+          .catch(e => {
+            if (isDetailPertCodeUniqueError(e)) {
+              throw ErrDetailPartCodeUnique
+            }
+            throw e
+          })
+
+        // Create group associations if group_ids is provided
+        if (group_ids && group_ids.length > 0) {
+          await trx
+            .insertInto('pdo.detail_group_details')
+            .values(
+              group_ids.map(group_id => ({
+                group_id,
+                detail_id: result.id,
+              })),
+            )
+            .execute()
+        }
+
+        return result
+      })
 
       return {
         id: detail.id,
@@ -149,13 +190,41 @@ export const details = router({
     )
     .mutation(async ({ input }) => {
       await db
-        .updateTable('pdo.details')
-        .set({
-          ...input,
-          updated_at: new Date(),
+        .transaction()
+        .execute(async trx => {
+          // Update detail base fields
+          const { group_ids, ...detailData } = input
+          await trx
+            .updateTable('pdo.details')
+            .set({
+              ...detailData,
+              updated_at: new Date(),
+            })
+            .where('id', '=', input.id)
+            .execute()
+
+          // Update group associations if group_ids is provided
+          if (group_ids !== undefined) {
+            // Delete existing associations
+            await trx
+              .deleteFrom('pdo.detail_group_details')
+              .where('detail_id', '=', input.id)
+              .execute()
+
+            // Insert new associations
+            if (group_ids.length > 0) {
+              await trx
+                .insertInto('pdo.detail_group_details')
+                .values(
+                  group_ids.map(group_id => ({
+                    group_id,
+                    detail_id: input.id,
+                  })),
+                )
+                .execute()
+            }
+          }
         })
-        .where('id', '=', input.id)
-        .execute()
         .catch(e => {
           if (isDetailPertCodeUniqueError(e)) {
             throw ErrDetailPartCodeUnique
@@ -233,14 +302,26 @@ export const details = router({
     ),
 })
 
-export const get_details_by_material_id = (material_id: number) => {
-  return db
-    .selectFrom('pdo.details')
-    .where(
-      sql<boolean>`(blank->'material'->>'material_id')::int = ${material_id}`,
-    )
-    .selectAll()
-    .execute()
+export const get_details_by_material_id = async (material_id: number) => {
+  const [details, groupDetails] = await Promise.all([
+    db
+      .selectFrom('pdo.details')
+      .where(
+        sql<boolean>`(blank->'material'->>'material_id')::int = ${material_id}`,
+      )
+      .selectAll()
+      .execute(),
+    db
+      .selectFrom('pdo.detail_group_details')
+      .select(['detail_id', 'group_id'])
+      .execute(),
+  ])
+
+  const detail_group_map = create_detail_group_map(groupDetails)
+  return details.map(d => ({
+    ...d,
+    group_ids: detail_group_map.get(d.id) || [],
+  }))
 }
 
 export const get_details_by_operation_id = async (

@@ -24,6 +24,12 @@ export class DetailGroupCache {
     return this.groups.find(g => g.id === id)?.name
   }
 
+  names_for(ids: number[]) {
+    return ids
+      .map(id => this.name_for(id))
+      .filter((name): name is string => !!name)
+  }
+
   async invalidate() {
     const groups = await rpc.pdo.detail_groups.list.query()
     runInAction(() => {

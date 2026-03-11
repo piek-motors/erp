@@ -24,20 +24,16 @@ export function DetailRow({
           '&:hover .detail-arrow': {
             opacity: 1,
           },
-          cursor: detail.group_id === null ? 'pointer' : 'default',
+          cursor: detail.group_ids.length === 0 ? 'pointer' : 'default',
         }}
         alignItems="center"
-        onClick={() => detail.group_id === null && onToggle(detail.id)}
+        onClick={() => detail.group_ids.length === 0 && onToggle(detail.id)}
       >
         <DetailName
-          sx={{
+          slot_props={{
             name: { whiteSpace: 'wrap', width: 'auto', lineHeight: '1.2' },
           }}
-          detail={{
-            id: detail.id,
-            name: detail.name,
-            group_id: detail.group_id || null,
-          }}
+          detail={detail}
         />
       </Row>
     </>

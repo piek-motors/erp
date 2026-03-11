@@ -76,7 +76,7 @@ export const TechPassportTable = observer(({ order, detail }: Props) => {
                 with_group_name
                 with_id
                 disable_link
-                sx={{
+                slot_props={{
                   row: {
                     fontWeight: 500,
                     fontSize: 17,

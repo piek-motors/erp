@@ -60,11 +60,11 @@ export const columns: Column<Operation>[] = [
       if (!data.detail_id || !data.material_id) return null
       return (
         <DetailName
-          sx={{ name: { whiteSpace: 'wrap', width: 'auto' } }}
+          slot_props={{ name: { whiteSpace: 'wrap', width: 'auto' } }}
           detail={{
             id: data.detail_id,
             name: data.detail_name!,
-            group_id: data.detail_group_id!,
+            group_ids: data.detail_group_ids!,
           }}
           with_group_name
         />

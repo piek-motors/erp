@@ -1,7 +1,6 @@
 import { makeAutoObservable } from 'mobx'
 import type { Color } from 'models'
 import { app_cache } from '@/domains/pdo/cache'
-import { ColorSegmentation } from './color_segmentation.store'
 
 class GroupNameState {
   constructor() {
@@ -27,7 +26,7 @@ export class Detail {
     readonly id: number,
     readonly name: string,
     readonly drawing_number: string | null,
-    readonly group_id: number | null,
+    readonly group_ids: number[] = [],
     public colors?: Color[],
   ) {
     makeAutoObservable(this)
@@ -89,7 +88,6 @@ export class DetailListStore {
 
 export class DetailGroupStore {
   readonly groupNameState = new GroupNameState()
-  readonly colorSegmentation = new ColorSegmentation()
   readonly detailList = new DetailListStore()
 
   openedGroup: GroupWithDetails | null = null
@@ -112,7 +110,6 @@ export class DetailGroupStore {
     this.openedGroup = group
     this.openedGroup?.details.sort((a, b) => a.name.localeCompare(b.name))
     this.groupNameState.setName(group?.group.name || '')
-    this.colorSegmentation.clear()
   }
 
   setSelectedDetailIds(ids: number[]) {

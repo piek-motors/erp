@@ -28,7 +28,7 @@ export class DetailGroupingApi {
       this.store.openGroup({
         group: resp.group,
         details: details.map(
-          d => new Detail(d.id, d.name, d.drawing_number, d.group_id, d.colors),
+          d => new Detail(d.id, d.name, d.drawing_number, d.group_ids),
         ),
       })
     })
@@ -53,28 +53,6 @@ export class DetailGroupingApi {
         await this.loadGroupWithDetails(id)
       }
       return updatedGroup
-    })
-  }
-
-  async addDetailsToGroup(groupId: number, detailIds: number[]) {
-    return this.groupsLoading.run(async () => {
-      await rpc.pdo.detail_groups.add_details.mutate({
-        group_id: groupId,
-        detail_ids: detailIds,
-      })
-      await this.loadGroupWithDetails(groupId)
-      this.store.clearSelection()
-    })
-  }
-
-  async removeDetailsFromGroup(group_id: number, detail_ids: number[]) {
-    return this.groupsLoading.run(async () => {
-      await rpc.pdo.detail_groups.exclude_details.mutate({
-        group_id,
-        detail_ids,
-      })
-      await this.loadGroupWithDetails(group_id)
-      this.store.clearSelection()
     })
   }
 }

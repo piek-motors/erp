@@ -20,7 +20,7 @@ export class DetailApi {
       const res = await rpc.pdo.details.get.query({ id: detailId })
 
       runInAction(() => {
-        detail.init(res.detail)
+        detail.init(res.detail, res.group_ids)
 
         if (res.last_manufacturing?.date) {
           detail.last_production = new LastProduction(
@@ -68,10 +68,10 @@ export class DetailApi {
       await rpc.pdo.details.update.mutate(detail.payload)
       app_cache.details.update({
         id: detail.id,
-        group_id: detail.group_id,
         name: detail.name,
         normalized_name: normalize(detail.name),
         drawing_number: detail.drawing_number,
+        group_ids: detail.group_ids,
         on_hand_balance: detail.warehouse.stock,
       })
       detail.set_updated_at(new Date())

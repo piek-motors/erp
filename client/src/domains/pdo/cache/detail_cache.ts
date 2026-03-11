@@ -42,10 +42,6 @@ export class DetailCache {
     return arr.toSorted()
   }
 
-  get universal_details() {
-    return this._details.filter(d => d.group_id == null)
-  }
-
   remove(id: number) {
     this._details = this._details.filter(d => d.id !== id)
   }

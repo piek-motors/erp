@@ -89,7 +89,7 @@ export class MaterialApi {
     return res.map(e => ({
       id: e.id,
       name: e.name,
-      group_id: e.logical_group_id,
+      group_ids: e.group_ids || [],
     }))
   }
 }

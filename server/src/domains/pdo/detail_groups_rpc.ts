@@ -1,15 +1,14 @@
-import { Color } from 'models'
 import { z } from 'zod'
 import { matrixEncoder } from '#root/lib/matrix_encoder.js'
 import { router } from '#root/lib/trpc/trpc.js'
 import { db, procedure, requireScope, Scope, TRPCError } from '#root/sdk.js'
+import { create_detail_group_map } from './utils.js'
 
 export interface DetailInTheGroup {
   id: number
   name: string
   drawing_number: string | null
-  group_id: number | null
-  colors: Color[]
+  group_ids: number[]
 }
 
 export const detail_groups = router({
@@ -20,53 +19,36 @@ export const detail_groups = router({
       }),
     )
     .query(async ({ input }) => {
-      const [group, details, directDetails, colorAnnotations] =
-        await Promise.all([
-          db
-            .selectFrom('pdo.detail_group')
-            .where('id', '=', input.groupId)
-            .select(['id', 'name'])
-            .executeTakeFirst(),
-          db
-            .selectFrom('pdo.detail_group_details as dgd')
-            .where('dgd.group_id', '=', input.groupId)
-            .leftJoin('pdo.details as d', 'd.id', 'dgd.detail_id')
-            .where('d.logical_group_id', 'is', null)
-            .select([
-              'd.id',
-              'd.name',
-              'd.drawing_number',
-              'd.logical_group_id',
-            ])
-            .orderBy('d.name', 'asc')
-            .execute(),
-          db
-            .selectFrom('pdo.details')
-            .select(['id', 'name', 'drawing_number', 'logical_group_id'])
-            .where('logical_group_id', '=', input.groupId)
-            .execute(),
-          db
-            .selectFrom('pdo.detail_group_color_annotations')
-            .where('group_id', '=', input.groupId)
-            .select(['detail_id', 'colors'])
-            .execute(),
-        ])
+      const [group, detailsInGroup, allGroupDetails] = await Promise.all([
+        db
+          .selectFrom('pdo.detail_group')
+          .where('id', '=', input.groupId)
+          .select(['id', 'name'])
+          .executeTakeFirst(),
+        db
+          .selectFrom('pdo.detail_group_details as dgd')
+          .where('dgd.group_id', '=', input.groupId)
+          .leftJoin('pdo.details as d', 'd.id', 'dgd.detail_id')
+          .select(['d.id', 'd.name', 'd.drawing_number'])
+          .orderBy('d.name', 'asc')
+          .execute(),
+        db
+          .selectFrom('pdo.detail_group_details')
+          .select(['detail_id', 'group_id'])
+          .execute(),
+      ])
       if (!group) {
         throw new TRPCError({
           code: 'NOT_FOUND',
           message: 'Detail group not found',
         })
       }
-      const detailsData: DetailInTheGroup[] = [
-        ...directDetails,
-        ...details,
-      ].map(d => ({
+      const detail_group_map = create_detail_group_map(allGroupDetails)
+      const detailsData: DetailInTheGroup[] = detailsInGroup.map(d => ({
         id: d.id as number,
         name: d.name as string,
         drawing_number: d.drawing_number as string | null,
-        group_id: d.logical_group_id as number | null,
-        colors: colorAnnotations.find(ca => ca.detail_id === d.id)
-          ?.colors as Color[],
+        group_ids: detail_group_map.get(d.id as number) || [],
       }))
       return {
         group,
@@ -160,113 +142,5 @@ export const detail_groups = router({
           message: 'Failed to update detail group',
         })
       }
-    }),
-  //
-  delete: procedure
-    .use(requireScope(Scope.pdo))
-    .input(
-      z.object({
-        id: z.number(),
-      }),
-    )
-    .mutation(async ({ input }) => {
-      await db.transaction().execute(async trx => {
-        await trx
-          .deleteFrom('pdo.detail_group_details')
-          .where('group_id', '=', input.id)
-          .execute()
-        await trx
-          .deleteFrom('pdo.detail_group')
-          .where('id', '=', input.id)
-          .execute()
-      })
-    }),
-  //
-  add_details: procedure
-    .use(requireScope(Scope.pdo))
-    .input(
-      z.object({
-        group_id: z.number(),
-        detail_ids: z
-          .array(z.number())
-          .min(1, 'At least one detail must be provided'),
-      }),
-    )
-    .mutation(async ({ input }) => {
-      // First check if the group exists
-      const group = await db
-        .selectFrom('pdo.detail_group')
-        .where('id', '=', input.group_id)
-        .selectAll()
-        .executeTakeFirst()
-
-      if (!group) {
-        throw new TRPCError({
-          code: 'NOT_FOUND',
-          message: 'Detail group not found',
-        })
-      }
-      // Check if all details exist
-      const details = await db
-        .selectFrom('pdo.details')
-        .where('id', 'in', input.detail_ids)
-        .select(['id'])
-        .execute()
-
-      if (details.length !== input.detail_ids.length) {
-        throw new TRPCError({
-          code: 'BAD_REQUEST',
-          message: 'One or more details not found',
-        })
-      }
-
-      const insertPromises = input.detail_ids.map(detailId =>
-        db
-          .insertInto('pdo.detail_group_details')
-          .values({
-            group_id: input.group_id,
-            detail_id: detailId,
-          })
-          .onConflict(oc => oc.columns(['group_id', 'detail_id']).doNothing())
-          .execute(),
-      )
-      await Promise.all(insertPromises)
-    }),
-  //
-  exclude_details: procedure
-    .use(requireScope(Scope.pdo))
-    .input(
-      z.object({
-        group_id: z.number(),
-        detail_ids: z
-          .array(z.number())
-          .min(1, 'At least one detail must be provided'),
-      }),
-    )
-    .mutation(async ({ input }) => {
-      await db
-        .deleteFrom('pdo.detail_group_details')
-        .where('group_id', '=', input.group_id)
-        .where('detail_id', 'in', input.detail_ids)
-        .execute()
-    }),
-  //
-  set_color_annotation: procedure
-    .use(requireScope(Scope.pdo))
-    .input(
-      z.object({
-        group_id: z.number(),
-        detail_id: z.number(),
-        colors: z.array(z.enum(Color)),
-      }),
-    )
-    .mutation(async ({ input }) => {
-      await db
-        .insertInto('pdo.detail_group_color_annotations')
-        .values(input)
-        .onConflict(oc =>
-          oc.columns(['group_id', 'detail_id']).doUpdateSet(input),
-        )
-        .execute()
     }),
 })

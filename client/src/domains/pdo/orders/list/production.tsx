@@ -55,7 +55,11 @@ const search_config: CriteriaBasedSearchConfig<
     fields: [{ get: o => o.current_operation || '', match: 'start_with' }],
   },
   [SearchCriteria.Group]: {
-    fields: [{ get: o => app_cache.groups.name_for(o.group_id) ?? '' }],
+    fields: [
+      {
+        get: o => app_cache.groups.names_for(o.group_ids).join(' '),
+      },
+    ],
   },
 }
 

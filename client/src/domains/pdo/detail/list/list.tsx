@@ -69,7 +69,7 @@ const columnList: Column<AppDetail>[] = [
         detail={{
           id: r.id || 0,
           name: r.name,
-          group_id: r.group_id || null,
+          group_ids: r.group_ids || [],
         }}
         disable_link
         with_group_name
