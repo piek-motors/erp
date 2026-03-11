@@ -27,7 +27,7 @@ interface Props {
 export const DetailName = observer(
   ({ detail, with_group_name, disable_link, with_id, sx }: Props) => {
     const content = (
-      <Row gap={1} rowGap={0} sx={sx?.row}>
+      <Row gap={1} rowGap={0} sx={sx?.row} alignItems={'baseline'}>
         <P sx={sx?.name} lineHeight={1.2}>
           {capitalize(detail.name)}
         </P>
@@ -62,7 +62,7 @@ const GroupName = observer(
     if (!name) return null
 
     return (
-      <P color="primary" sx={{ fontSize: '0.7em', fontWeight: 500, ...sx }}>
+      <P color="primary" sx={{ fontSize: '0.8em', fontWeight: 500, ...sx }}>
         {name.toUpperCase()}
       </P>
     )

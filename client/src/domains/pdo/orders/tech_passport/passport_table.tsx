@@ -62,7 +62,7 @@ export const TechPassportTable = observer(({ order, detail }: Props) => {
             <td width={50}>ОП</td>
             <td width={50}>Взрыв</td>
             <td>
-              <L>Дата запуска в производство</L>
+              <L>Запуск в пр-во</L>
               {order.resp.started_at && (
                 <P>{fmtDate(new Date(order.resp.started_at))}</P>
               )}
@@ -70,8 +70,7 @@ export const TechPassportTable = observer(({ order, detail }: Props) => {
           </tr>
 
           <tr>
-            <td colSpan={3}>
-              <L>Наим. детали</L>
+            <td colSpan={3} style={{ verticalAlign: 'inherit' }}>
               <DetailName
                 detail={detail}
                 with_group_name
@@ -80,7 +79,7 @@ export const TechPassportTable = observer(({ order, detail }: Props) => {
                 sx={{
                   row: {
                     fontWeight: 500,
-                    fontSize: 16,
+                    fontSize: 17,
                     justifyContent: 'center',
                   },
                 }}

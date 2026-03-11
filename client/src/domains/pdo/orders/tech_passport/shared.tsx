@@ -15,7 +15,7 @@ export const tableStyles = css({
   border,
   th: {
     border,
-    fontSize: 12,
+    fontSize: 11,
     fontWeight: 500,
     whiteSpace: 'normal',
     padding: '5px',
