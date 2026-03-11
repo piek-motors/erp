@@ -52,7 +52,6 @@ export async function handleFileUpload(
       }
     }
 
-    logger.info({ fileCount: files.length }, 'Files uploaded to S3')
     return files
   } catch (error) {
     logger.error(error, 'Error uploading to S3')

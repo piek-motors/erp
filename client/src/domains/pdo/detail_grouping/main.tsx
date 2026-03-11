@@ -9,7 +9,7 @@ import { Box, Loading, observer, P, Row, Stack, useEffect } from '@/lib/index'
 import { MobileNavModal, MobilePadding } from '../root_layout'
 import { api } from './api'
 import { GroupActions, TargetGroupDetailList } from './detail_list'
-import { GroupSelectModal, GroupList } from './group_list'
+import { GroupList, GroupSelectModal } from './group_list'
 import { UpdateGroupNameModal } from './group_name.modal'
 
 const DetailGroupsLayout = () => (

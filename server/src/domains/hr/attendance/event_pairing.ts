@@ -26,9 +26,10 @@ export class AttendanceEventPairing {
     logger.info(`Processing ${hmm_input.length} events`)
 
     try {
+      console.time('hmm')
       const modelResult = runHiddenMarkovModel(hmm_input)
+      console.timeEnd('HMM exec time')
       const intervals = await this.buildIntervals(modelResult)
-
       if (intervals.length === 0) {
         logger.info('No valid intervals to insert')
         return
