@@ -17,13 +17,14 @@ export const EmployeeTable = observer(
           <th>Имя</th>
           <th>Должность</th>
           <th>Черная карта</th>
+          <th>Дней с посл. события</th>
           <th></th>
         </tr>
       </thead>
       <tbody>
         {store.employees.length === 0 ? (
           <tr>
-            <td colSpan={6} style={{ textAlign: 'center' }}>
+            <td colSpan={7} style={{ textAlign: 'center' }}>
               <Label level="body-sm" textColor="text.tertiary">
                 Список сотрудников пуст
               </Label>
@@ -148,6 +149,11 @@ const EmployeeRow = observer(
               if (e.key === 'Escape') store.cancelEdit(employee.id)
             }}
           />
+        </td>
+        <td>
+          <Label xs fontSize={'.7rem'}>
+            {employee.daysSinceLastEvent ?? '—'}
+          </Label>
         </td>
         <td>
           <DeleteEmployeeDialog

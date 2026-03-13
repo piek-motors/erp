@@ -1,18 +1,34 @@
 import type { DB } from 'db'
 import { z } from 'zod'
 import { logger } from '#root/ioc/log.js'
+import { Day } from '#root/lib/constants.js'
 import { db, procedure, requireScope, router, Scope } from '#root/sdk.js'
 
 const ONE_MONTH_AGO = new Date()
 ONE_MONTH_AGO.setMonth(ONE_MONTH_AGO.getMonth() - 1)
 
+/** Calculate days since a given timestamp. */
+function daysSince(timestamp: Date): number {
+  return Math.floor((Date.now() - timestamp.getTime()) / Day)
+}
+
 export const employees = router({
   list: procedure.query(async () => {
-    return db
+    const rows = await db
       .selectFrom('attendance.employees as e')
-      .selectAll()
+      .leftJoin('attendance.events as ev', 'ev.card', 'e.card')
+      .selectAll('e')
+      .select(eb => [eb.fn.max('ev.timestamp').as('last_event_timestamp')])
+      .groupBy(['e.id'])
       .orderBy(['e.lastname', 'e.firstname'])
       .execute()
+
+    return rows.map(row => ({
+      ...row,
+      days_since_last_event: row.last_event_timestamp
+        ? daysSince(row.last_event_timestamp)
+        : null,
+    }))
   }),
   //
   get_job_titles: procedure.query(async () => {

@@ -9,6 +9,7 @@ export interface Employee {
   jobTitle: string
   card: string
   accessCard: string
+  daysSinceLastEvent: number | null
 }
 
 export interface JobTitleOption {
@@ -43,6 +44,7 @@ export class EmployeeListVM {
         accessCard: e.access_card || '',
         name: `${e.lastname} ${e.firstname}`,
         jobTitle: e.job_title || '',
+        daysSinceLastEvent: e.days_since_last_event ?? null,
       }))
       this.jobTitles = jobTitles.map(t => ({ label: t, value: t }))
     })
