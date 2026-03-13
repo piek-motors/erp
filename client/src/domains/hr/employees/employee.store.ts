@@ -5,11 +5,12 @@ import { notifier } from '@/lib/store/notifier.store'
 
 export interface Employee {
   id: number
-  name: string
-  jobTitle: string
+  first_name: string
+  last_name: string
+  job_title: string
   card: string
-  accessCard: string
-  daysSinceLastEvent: number | null
+  access_card: string
+  days_since_last_event: number | null
 }
 
 export interface JobTitleOption {
@@ -31,21 +32,40 @@ export class EmployeeListVM {
   }
 
   async load() {
-    const [data, jobTitles] = await this.loading.run(async () =>
+    const [employees, jobTitles] = await this.loading.run(async () =>
       Promise.all([
         rpc.hr.employees.list.query(),
         rpc.hr.employees.get_job_titles.query(),
       ]),
     )
     runInAction(() => {
-      this.employees = data.map(e => ({
-        id: e.id,
-        card: e.card,
-        accessCard: e.access_card || '',
-        name: `${e.lastname} ${e.firstname}`,
-        jobTitle: e.job_title || '',
-        daysSinceLastEvent: e.days_since_last_event ?? null,
-      }))
+      this.employees = employees
+        .map(
+          e =>
+            ({
+              id: e.id,
+              card: e.card,
+              access_card: e.access_card || '',
+              first_name: e.firstname ?? '',
+              last_name: e.lastname ?? '',
+              job_title: e.job_title || '',
+              days_since_last_event: e.days_since_last_event ?? null,
+            }) satisfies Employee,
+        )
+        .toSorted((a, b) => {
+          const aName = `${a.last_name} ${a.first_name}`.trim()
+          const bName = `${b.last_name} ${b.first_name}`.trim()
+
+          const aEmpty = !aName
+          const bEmpty = !bName
+
+          if (aEmpty && bEmpty) return 0
+          if (aEmpty) return 1
+          if (bEmpty) return -1
+
+          return aName.localeCompare(bName)
+        })
+
       this.jobTitles = jobTitles.map(t => ({ label: t, value: t }))
     })
   }
@@ -63,7 +83,7 @@ export class EmployeeListVM {
     if (!employee) return
 
     const editedTitle = this.editedJobTitles.get(id)?.trim()
-    if (!editedTitle || editedTitle === employee.jobTitle) {
+    if (!editedTitle || editedTitle === employee.job_title) {
       // nothing changed
       this.editedJobTitles.delete(id)
       return
@@ -76,11 +96,13 @@ export class EmployeeListVM {
     })
 
     runInAction(() => {
-      employee.jobTitle = editedTitle
+      employee.job_title = editedTitle
       this.editedJobTitles.delete(id)
     })
 
-    notifier.ok(`Должность ${editedTitle} назначена ${employee.name}`)
+    notifier.ok(
+      `Должность ${editedTitle} назначена ${employee.first_name} ${employee.last_name}`,
+    )
   }
 
   setEditedAccessCard(id: number, value: string) {
@@ -96,7 +118,7 @@ export class EmployeeListVM {
     if (!employee) return
 
     const editedCard = this.editedAccessCards.get(id)?.trim()
-    if (!editedCard || editedCard === employee.accessCard) {
+    if (!editedCard || editedCard === employee.access_card) {
       // nothing changed
       this.editedAccessCards.delete(id)
       return
@@ -109,11 +131,13 @@ export class EmployeeListVM {
     })
 
     runInAction(() => {
-      employee.accessCard = editedCard
+      employee.access_card = editedCard
       this.editedAccessCards.delete(id)
     })
 
-    notifier.ok(`Пропуск ${editedCard} назначен ${employee.name}`)
+    notifier.ok(
+      `Пропуск ${editedCard} назначен ${employee.first_name} ${employee.last_name}`,
+    )
   }
 
   setEditedFirstname(id: number, value: string) {
@@ -138,9 +162,8 @@ export class EmployeeListVM {
 
     const editedFirstname = this.editedFirstnames.get(id)?.trim()
     const editedLastname = this.editedLastnames.get(id)?.trim()
-    const originalName = employee.name.split(' ')
-    const originalFirstname = originalName.slice(1).join(' ')
-    const originalLastname = originalName[0]
+    const originalFirstname = employee.first_name
+    const originalLastname = employee.last_name
 
     const firstnameChanged =
       editedFirstname && editedFirstname !== originalFirstname
@@ -162,12 +185,15 @@ export class EmployeeListVM {
     })
 
     runInAction(() => {
-      employee.name = `${editedLastname || originalLastname} ${editedFirstname || originalFirstname}`
+      employee.last_name = editedLastname || originalLastname
+      employee.first_name = editedFirstname || originalFirstname
       this.editedFirstnames.delete(id)
       this.editedLastnames.delete(id)
     })
 
-    notifier.ok(`Сотрудник переименован: ${employee.name}`)
+    notifier.ok(
+      `Сотрудник переименован: ${employee.first_name} ${employee.last_name}`,
+    )
   }
 
   cancelEdit(id: number) {

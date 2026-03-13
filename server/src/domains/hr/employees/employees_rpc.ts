@@ -1,5 +1,4 @@
 import type { DB } from 'db'
-import { type OrderByDirection, sql } from 'kysely'
 import { z } from 'zod'
 import { logger } from '#root/ioc/log.js'
 import { Day } from '#root/lib/constants.js'
@@ -13,9 +12,6 @@ function daysSince(timestamp: Date): number {
   return Math.floor((Date.now() - timestamp.getTime()) / Day)
 }
 
-export const orderNullsLast = (direction: OrderByDirection) =>
-  sql`${sql.raw(direction)} nulls last`
-
 export const employees = router({
   list: procedure.query(async () => {
     const rows = await db
@@ -24,7 +20,6 @@ export const employees = router({
       .selectAll('e')
       .select(eb => [eb.fn.max('ev.timestamp').as('last_event_timestamp')])
       .groupBy(['e.id'])
-      .orderBy('lastname', orderNullsLast('asc'))
       .execute()
 
     return rows.map(row => ({

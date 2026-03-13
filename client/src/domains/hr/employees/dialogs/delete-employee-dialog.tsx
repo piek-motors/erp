@@ -14,7 +14,7 @@ export function DeleteEmployeeDialog({
   employee,
 }: IDeleteEmployeeDialogProps) {
   const title = ''
-  const body = `Удалить сотрудника ${employee.name} ${employee.jobTitle}`
+  const body = `Удалить сотрудника ${employee.first_name} ${employee.job_title}`
   return (
     <ConfirmDialog
       isDangerous

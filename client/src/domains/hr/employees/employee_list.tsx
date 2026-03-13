@@ -58,7 +58,7 @@ const EmployeeRow = observer(
   }) => {
     const currentJobTitle = store.getEditedJobTitle(
       employee.id,
-      employee.jobTitle,
+      employee.job_title,
     )
     const currentJobTitleOption: JobTitleOption | null = currentJobTitle
       ? { label: currentJobTitle, value: currentJobTitle }
@@ -66,14 +66,12 @@ const EmployeeRow = observer(
 
     const access_card = store.getEditedAccessCard(
       employee.id,
-      employee.accessCard,
+      employee.access_card,
     )
 
-    const originalName = employee.name.split(' ')
-    const originalLastname = originalName[0]
-    const originalFirstname = originalName.slice(1).join(' ')
-    const lastname = store.getEditedLastname(employee.id) || originalLastname
-    const firstname = store.getEditedFirstname(employee.id) || originalFirstname
+    const lastname = store.getEditedLastname(employee.id) || employee.last_name
+    const firstname =
+      store.getEditedFirstname(employee.id) || employee.first_name
 
     return (
       <tr key={employee.id}>
@@ -152,7 +150,7 @@ const EmployeeRow = observer(
         </td>
         <td>
           <Label xs fontSize={'.7rem'}>
-            {employee.daysSinceLastEvent ?? '—'}
+            {employee.days_since_last_event?.toString() ?? '—'}
           </Label>
         </td>
         <td>
