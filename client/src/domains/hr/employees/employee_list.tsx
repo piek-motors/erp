@@ -23,7 +23,7 @@ export const EmployeeTable = observer(
           <tr>
             <td colSpan={6} style={{ textAlign: 'center' }}>
               <Label level="body-sm" textColor="text.tertiary">
-                'Список сотрудников пуст'
+                Список сотрудников пуст
               </Label>
             </td>
           </tr>
@@ -69,9 +69,7 @@ const EmployeeRow = observer(
     const originalName = employee.name.split(' ')
     const originalLastname = originalName[0]
     const originalFirstname = originalName.slice(1).join(' ')
-
     const lastname = store.getEditedLastname(employee.id) || originalLastname
-
     const firstname = store.getEditedFirstname(employee.id) || originalFirstname
 
     return (

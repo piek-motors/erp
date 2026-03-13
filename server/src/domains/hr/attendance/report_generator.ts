@@ -75,9 +75,6 @@ export class AttendanceReportGenerator {
 
     for (const empl of employees) {
       const intervals = intervalsByCard.get(empl.card) || []
-      if (!intervals.length) {
-        continue
-      }
       result.push(
         this.processEmployee(
           empl,
