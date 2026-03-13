@@ -7,10 +7,9 @@ import {
 } from '@/components/utilities/conditional-display'
 import { Box, Loading, observer, P, Row, Stack, useEffect } from '@/lib/index'
 import { MobileNavModal, MobilePadding } from '../root_layout'
-import { api } from './api'
-import { TargetGroupDetailList } from './detail_list'
+import { api, store } from './api'
+import { DetailList } from './detail_list'
 import { GroupList, GroupSelectModal } from './group_list'
-import { UpdateGroupNameModal } from './group_name.modal'
 
 const DetailGroupsLayout = () => (
   <Stack
@@ -43,26 +42,14 @@ const DetailGroupsLayout = () => (
 )
 
 const DetailsPanel = observer(() => {
-  if (api.targetGroupLoading.loading) return <Loading />
-  const openedGroup = api.store.openedGroup
-  if (!openedGroup)
+  if (api.details_loading.loading) return <Loading />
+  if (!store.opened_group)
     return (
       <P level="body-sm" p={2}>
         Выберите группу
       </P>
     )
-  return (
-    <ScrollableWindow
-      scroll={
-        openedGroup && (
-          <Stack p={1} gap={1}>
-            <UpdateGroupNameModal />
-            <TargetGroupDetailList />
-          </Stack>
-        )
-      }
-    />
-  )
+  return <ScrollableWindow scroll={<DetailList />} />
 })
 
 export const GroupById = observer(() => {
@@ -71,11 +58,11 @@ export const GroupById = observer(() => {
     if (id) {
       const groupId = parseInt(id, 10)
       if (!isNaN(groupId)) {
-        api.loadGroupWithDetails(groupId)
+        api.load_group_with_details(groupId)
       }
     }
     return () => {
-      api.store.clear()
+      store.clear()
     }
   }, [id])
 
@@ -84,9 +71,9 @@ export const GroupById = observer(() => {
 
 export const GroupListPage = observer(() => {
   useEffect(() => {
-    api.listGroups()
+    api.list_groups()
     return () => {
-      api.store.clear()
+      store.clear()
     }
   }, [])
   return <DetailGroupsLayout />

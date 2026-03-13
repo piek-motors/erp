@@ -4,14 +4,10 @@ import type { Detail } from './group.store'
 
 interface DetailRowProps {
   detail: Detail
-  onToggle: (detailId: number) => void
+  onClick?: (detailId: number) => void
 }
 
-export function DetailRow({
-  detail,
-  onToggle,
-  isSelected,
-}: DetailRowProps & { isSelected: boolean }) {
+export function DetailRow({ detail, onClick: onToggle }: DetailRowProps) {
   return (
     <>
       <Row
@@ -20,14 +16,13 @@ export function DetailRow({
           display: 'flex',
           p: 0.5,
           mb: 0,
-          backgroundColor: isSelected ? '#e7b6be' : 'transparent',
           '&:hover .detail-arrow': {
             opacity: 1,
           },
           cursor: detail.group_ids.length === 0 ? 'pointer' : 'default',
         }}
         alignItems="center"
-        onClick={() => detail.group_ids.length === 0 && onToggle(detail.id)}
+        onClick={() => onToggle?.(detail.id)}
       >
         <DetailName
           slot_props={{

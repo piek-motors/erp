@@ -43,7 +43,7 @@ export function NetworkStatusMessage() {
     pointer-events: all;
   `
 
-  if (isNetworkAvailable) return <></>
+  if (isNetworkAvailable) return null
   return (
     <Box
       css={css`

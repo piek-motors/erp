@@ -15,7 +15,7 @@ export class Attachment {
       dm = 1,
       sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
       i = Math.floor(Math.log(this.size) / Math.log(k))
-    return parseFloat((this.size / k ** i).toFixed(dm)) + ' ' + sizes[i]
+    return `${parseFloat((this.size / k ** i).toFixed(dm))} ${sizes[i]}`
   }
 }
 

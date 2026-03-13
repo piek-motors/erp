@@ -8,8 +8,10 @@ import {
 } from 'models'
 import { logger } from '#root/ioc/log.js'
 import type { ContextUser } from '#root/lib/trpc/context.js'
-import { type IDB, TRPCError } from '#root/sdk.js'
+import { type IDB, RpcError, TRPCError } from '#root/sdk.js'
 import { Warehouse } from '../services/warehouse_service.js'
+import { DetailRepo } from '../storage/detail_repo.js'
+import { MaterialRepo } from '../storage/material_repo.js'
 
 type MaterialWriteoff = {
   material_id: number
@@ -64,12 +66,16 @@ export function calc_material_deduction(
 
 export class OrderService {
   private readonly warehouse: Warehouse
+  private readonly detail_repo: DetailRepo
+  private readonly material_repo: MaterialRepo
 
   constructor(
     private readonly trx: IDB,
     readonly user: ContextUser,
   ) {
     this.warehouse = new Warehouse(trx, user.id)
+    this.detail_repo = new DetailRepo(trx)
+    this.material_repo = new MaterialRepo(trx)
   }
 
   async createOrder(
@@ -110,7 +116,7 @@ export class OrderService {
   async startMaterialPreparationPhase(
     orderId: number,
   ): Promise<Selectable<DB.ProductionOrderTable>> {
-    const order = await this.getOrder(orderId)
+    const order = await this.order(orderId)
     if (order.status !== ProductionOrderStatus.Waiting) {
       throw new ErrForbiddenStatusTransition(
         `Manufacturing with id ${orderId} not waiting`,
@@ -132,12 +138,8 @@ export class OrderService {
     qty: number,
     force?: boolean,
   ): Promise<MaterialWriteoff> {
-    const order = await this.getOrder(order_id)
-    const detail = await this.trx
-      .selectFrom('pdo.details')
-      .where('id', '=', order.detail_id)
-      .select('blank')
-      .executeTakeFirstOrThrow()
+    const order = await this.order(order_id)
+    const detail = await this.detail_repo.blank_requirements(order.detail_id)
 
     if (!force) {
       await this.deduplicate_production_list(order.detail_id)
@@ -152,11 +154,7 @@ export class OrderService {
         detail.blank?.material,
         qty,
       )
-      const material = await this.trx
-        .selectFrom('pdo.materials')
-        .where('id', '=', material_id)
-        .selectAll()
-        .executeTakeFirstOrThrow()
+      const material = await this.material_repo.get_by_id_or_throw(material_id)
 
       writeoff = await this.subtractMaterials(
         {
@@ -199,7 +197,7 @@ export class OrderService {
   }
 
   async finishOrder(orderId: number): Promise<void> {
-    const manufacturing = await this.trx
+    const order = await this.trx
       .updateTable('pdo.orders')
       .set({
         finished_at: new Date(),
@@ -208,23 +206,17 @@ export class OrderService {
       .where('id', '=', orderId)
       .returningAll()
       .executeTakeFirst()
-    if (!manufacturing) {
-      throw new ErrManufacturingOrderNotFound(
-        `Manufacturing with id ${orderId} not found`,
+    if (!order)
+      throw new RpcError(
+        'NOT_FOUND',
+        `Production order ID = ${orderId} not found`,
       )
-    }
 
-    await this.trx
-      .updateTable('pdo.details')
-      .set(eb => ({
-        on_hand_balance: eb('on_hand_balance', '+', manufacturing.qty),
-      }))
-      .where('id', '=', manufacturing.detail_id)
-      .execute()
+    await this.detail_repo.increment_balance(order.detail_id, order.qty)
   }
 
   async deleteOrder(id: number): Promise<void> {
-    const order = await this.getOrder(id)
+    const order = await this.order(id)
     if (order.status === ProductionOrderStatus.Archived) {
       throw new TRPCError({
         code: 'BAD_REQUEST',
@@ -275,18 +267,19 @@ export class OrderService {
       }))
   }
 
-  private async getOrder(
-    orderId: number,
+  private async order(
+    order_id: number,
   ): Promise<Selectable<DB.ProductionOrderTable>> {
     const order = await this.trx
       .selectFrom('pdo.orders')
-      .where('id', '=', orderId)
+      .where('id', '=', order_id)
       .selectAll()
       .executeTakeFirst()
 
     if (!order) {
-      throw new ErrManufacturingOrderNotFound(
-        `Manufacturing with id ${orderId} not found`,
+      throw new RpcError(
+        'NOT_FOUND',
+        `Production order ID = ${order_id} not found`,
       )
     }
 
@@ -307,15 +300,6 @@ class ErrZeroCost extends TRPCError {
   constructor(message: string) {
     super({
       code: 'BAD_REQUEST',
-      message,
-    })
-  }
-}
-
-class ErrManufacturingOrderNotFound extends TRPCError {
-  constructor(message: string) {
-    super({
-      code: 'NOT_FOUND',
       message,
     })
   }

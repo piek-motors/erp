@@ -8,9 +8,12 @@ import { logger } from '#root/ioc/log.js'
 import { matrixEncoder } from '#root/lib/matrix_encoder.js'
 import { router } from '#root/lib/trpc/trpc.js'
 import { db, procedure, requireScope, Scope, z } from '#root/sdk.js'
-import { create_detail_group_map } from './utils.js'
+import { DetailRepo } from './storage/detail_repo.js'
+import { MaterialRepo } from './storage/material_repo.js'
 
 const Limit = 100
+const detail_repo = new DetailRepo(db)
+const material_repo = new MaterialRepo(db)
 
 export type OperationListItem = {
   id: number
@@ -36,7 +39,7 @@ export const operations = router({
       }),
     )
     .query(async ({ input }) => {
-      const [operations, groupDetails] = await Promise.all([
+      const [operations, detail_group_associations] = await Promise.all([
         db
           .selectFrom('pdo.operations as o')
           .$if(!!input.materialId, qb =>
@@ -57,17 +60,12 @@ export const operations = router({
           .orderBy('o.id', 'desc')
           .limit(Limit)
           .execute(),
-        db
-          .selectFrom('pdo.detail_group_details')
-          .select(['detail_id', 'group_id'])
-          .execute(),
+        detail_repo.detail_group_associations(),
       ])
-
-      const detail_group_map = create_detail_group_map(groupDetails)
       const operations_with_groups = operations.map(o => ({
         ...o,
         detail_group_ids: o.detail_id
-          ? detail_group_map.get(o.detail_id) || []
+          ? detail_group_associations.get(o.detail_id) || []
           : [],
       }))
 
@@ -76,11 +74,7 @@ export const operations = router({
   //
   revert: procedure
     .use(requireScope(Scope.pdo))
-    .input(
-      z.object({
-        id: z.number(),
-      }),
-    )
+    .input(z.object({ id: z.number() }))
     .mutation(async ({ input, ctx: { user } }) => {
       const operation = await db
         .selectFrom('pdo.operations')
@@ -119,13 +113,12 @@ export const operations = router({
       }
 
       const balance_change = update.is_supply ? -update.qty : update.qty
-      await db
-        .updateTable(update.table)
-        .set(eb => ({
-          on_hand_balance: eb('on_hand_balance', '+', balance_change),
-        }))
-        .where('id', '=', update.id)
-        .execute()
+
+      if (update.table === 'pdo.materials') {
+        await material_repo.increment_balance(update.id, balance_change)
+      } else {
+        await detail_repo.increment_balance(update.id, balance_change)
+      }
 
       await db.deleteFrom('pdo.operations').where('id', '=', input.id).execute()
       logger.info(operation, `Balance operation reverted by ${user.full_name}`)

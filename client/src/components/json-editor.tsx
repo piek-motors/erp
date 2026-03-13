@@ -22,7 +22,6 @@ export const JsonEditor = observer((props: JsonEditorProps) => {
     onChange,
     keyPlaceholder = 'Ключ',
     valuePlaceholder = 'Значение',
-    sx,
   } = props
 
   const jsonFields: JsonField[] = Object.entries(value || {}).map(

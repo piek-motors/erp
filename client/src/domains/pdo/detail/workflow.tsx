@@ -18,7 +18,7 @@ import {
   PlusIcon,
   Row,
 } from '@/lib/index'
-import type { DetailWorkflow } from '@/server/domains/pdo/details_rpc'
+import type { DetailWorkflow } from '@/server/domains/pdo/storage/detail_repo'
 import type { DictEntry } from '@/server/lib/create_dict_router'
 import type { DetailSt } from './detail.state'
 
@@ -191,7 +191,7 @@ export const WorkflowAccordion = observer(
                 color="neutral"
                 placeholder="Описание"
                 value={op.text ?? ''}
-                sx={{ width: '100%' }}
+                sx={{ width: '100%', pt: 0 }}
                 onChange={e => {
                   detail.workflow.update(idx, op.id, e.target.value)
                 }}

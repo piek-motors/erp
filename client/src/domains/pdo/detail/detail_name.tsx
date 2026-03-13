@@ -68,14 +68,16 @@ const GroupName = observer(
     const ids = group_ids ?? (group_id ? [group_id] : [])
     if (!ids.length) return null
 
-    const names = app_cache.groups.names_for(ids)
-    if (!names.length) return null
+    const paths = ids
+      .map(id => app_cache.groups.full_path_for(id))
+      .filter((path): path is string => !!path)
+    if (!paths.length) return null
 
-    const display_names = names.length > 2 ? names.slice(0, 2) : names
-    const has_more = names.length > 2
+    const display_paths = paths.length > 2 ? paths.slice(0, 2) : paths
+    const has_more = paths.length > 2
     const display_text = has_more
-      ? `${display_names.join(', ')}...`
-      : display_names.join(', ')
+      ? `${display_paths.join(', ')}...`
+      : display_paths.join(', ')
 
     const groups_component = (
       <P color="primary" sx={{ fontSize: '0.8em', fontWeight: 500, ...sx }}>
@@ -89,8 +91,8 @@ const GroupName = observer(
           size="sm"
           title={
             <Row>
-              {names.map(name => (
-                <div key={name}>{name}</div>
+              {paths.map(path => (
+                <div key={path}>{path}</div>
               ))}
             </Row>
           }

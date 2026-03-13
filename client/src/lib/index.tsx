@@ -245,13 +245,13 @@ export const IconButtonXxs = (props: IconButtonProps & { icon: Icon }) => {
   return (
     <IconButton
       size="sm"
+      {...props}
       sx={{
-        ...props.sx,
         minWidth: '24px',
         minHeight: '24px',
         fontSize: '0.875rem',
+        ...props.sx,
       }}
-      {...props}
     >
       <UseIcon icon={props.icon} small invert={invert} />
     </IconButton>
@@ -423,22 +423,24 @@ export const text = {
   orderCompleted: 'Заказ был выполнен',
 }
 
-const IconSettings = {
+const DefaultIconSettings = {
   opacity: 0.6,
   width: 22,
   fill: 'black',
-} as const
+}
 
 export function UseIcon(props: {
   icon: Icon
   small?: boolean
   invert?: boolean
+  settings?: typeof DefaultIconSettings
 }) {
-  const fillColor = props.invert ? 'white' : IconSettings.fill
+  const { settings = DefaultIconSettings } = props
+  const fillColor = props.invert ? 'white' : settings.fill
   return (
     <props.icon
-      width={props.small ? IconSettings.width / 1.5 : IconSettings.width}
-      opacity={IconSettings.opacity}
+      width={props.small ? settings.width / 1.5 : settings.width}
+      opacity={settings.opacity}
       fill={fillColor}
     />
   )

@@ -1,54 +1,43 @@
+/** Group list with hierarchical tree view. */
 import { UilBars } from '@iconscout/react-unicons'
 import { Button, Divider, Stack } from '@mui/joy'
-import { Link } from 'react-router'
 import { InModal } from '@/components/modal'
 import { observer, P, UseIcon, useState } from '@/lib/index'
-import { openPage, routeMap } from '@/lib/routes'
-import { api } from './api'
+import { store } from './api'
 import { CreateGroupModal } from './group_name.modal'
+import { TreeNode } from './tree_node'
 
-export const GroupList = observer(
-  (props: { onLinkClick?: (open: boolean) => void }) => {
-    if (api.store.groups.length === 0) {
-      return (
-        <P level="body-sm" color="neutral">
-          Нет созданных групп
-        </P>
-      )
-    }
+interface GroupListProps {
+  onLinkClick?: (open: boolean) => void
+}
+
+/** Main group list component displaying hierarchical tree structure. */
+export const GroupList = observer(({ onLinkClick }: GroupListProps) => {
+  const tree = store.group_tree
+
+  if (tree.length === 0) {
     return (
-      <Stack p={0.5} gap={0}>
-        {api.store.groups.map(group => {
-          const isSelected = api.store.openedGroup?.group.id === group.id
-          return (
-            <Link
-              onClick={e => {
-                props.onLinkClick?.(false)
-              }}
-              key={group.id}
-              to={openPage(routeMap.pdo.detailGroup, group.id)}
-              style={{ textDecoration: 'none' }}
-            >
-              <Button
-                size="sm"
-                variant={isSelected ? 'solid' : 'plain'}
-                color={'neutral'}
-                sx={{ textAlign: 'left', width: 'max-content' }}
-              >
-                {group.name}
-              </Button>
-            </Link>
-          )
-        })}
-        <Divider />
-        <CreateGroupModal />
-      </Stack>
+      <P level="body-sm" color="neutral">
+        Нет созданных групп
+      </P>
     )
-  },
-)
+  }
 
+  return (
+    <Stack p={0.5} gap={0}>
+      {tree.map(node => (
+        <TreeNode node={node} depth={0} onLinkClick={onLinkClick} />
+      ))}
+      <Divider />
+      <CreateGroupModal />
+    </Stack>
+  )
+})
+
+/** Modal wrapper for group list with navigation button. */
 export const GroupSelectModal = observer(() => {
   const [open, setOpen] = useState(false)
+
   return (
     <InModal
       openButton={
@@ -62,7 +51,7 @@ export const GroupSelectModal = observer(() => {
         </Button>
       }
       open={open}
-      setOpen={v => setOpen(v)}
+      setOpen={setOpen}
     >
       <GroupList onLinkClick={setOpen} />
     </InModal>

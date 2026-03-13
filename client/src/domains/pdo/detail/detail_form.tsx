@@ -1,10 +1,8 @@
 /** @jsxImportSource @emotion/react */
-
-import { UilX } from '@iconscout/react-unicons'
 import {
   AccordionGroup,
   Autocomplete,
-  Chip,
+  Box,
   Divider,
   Grid,
   Stack,
@@ -19,16 +17,17 @@ import type { BaseOption } from '@/components/base-autocomplete'
 import { NumberInput } from '@/components/inputs/number_input'
 import { TextEditor } from '@/domains/orders/one/comments/text-editor'
 import { app_cache } from '@/domains/pdo/cache'
+import { GroupTreeModal } from '@/domains/pdo/detail_grouping/group_tree_selector'
 import {
-  Box,
   InputLabled,
   type InputLabledProps,
   Label,
   MultilineInput,
+  P,
   Row,
-  UseIcon,
 } from '@/lib/index'
-import type { Blank } from '@/server/domains/pdo/details_rpc'
+import type { Blank } from '@/server/domains/pdo/storage/detail_repo'
+import { detail_groups_vm } from '../detail_grouping/api'
 import { DetailAttachmentList } from './attachment/list'
 import type { DetailSt, DetailStProp } from './detail.state'
 import {
@@ -37,6 +36,7 @@ import {
 } from './detail_blank'
 import { WorkflowAccordion } from './workflow'
 
+/** Main detail form component with two-column layout. */
 export const DetailForm = observer(
   ({ detail, leftChildren }: DetailStProp & { leftChildren?: ReactNode }) => (
     <Grid container direction={{ xs: 'column', md: 'row' }} spacing={1}>
@@ -47,13 +47,10 @@ export const DetailForm = observer(
             color="primary"
             variant="outlined"
             label="Название"
-            onChange={e => {
-              detail.setName(e.target.value)
-            }}
+            onChange={e => detail.setName(e.target.value)}
             value={detail.name}
           />
           <DetailGroupInput detail={detail} />
-
           <Stack>
             <Label>Чертеж</Label>
             <Row noWrap>
@@ -61,24 +58,20 @@ export const DetailForm = observer(
                 formProps={{ sx: { flexGrow: 1 } }}
                 placeholder="Название"
                 value={detail.drawing_name}
-                onChange={e => {
-                  detail.set_drawing_name(e.target.value)
-                }}
+                onChange={e => detail.set_drawing_name(e.target.value)}
               />
               <Input
                 placeholder="Номер"
                 onChange={v => {
                   detail.set_drawing_number(v)
-                  if (v.startsWith('ВЗИС')) {
+                  if (v.startsWith('ВЗИС'))
                     alert('Впишите конструкторский номер без приставки "ВЗИС"')
-                  }
                 }}
                 value={detail.drawing_number}
               />
             </Row>
           </Stack>
-
-          <Row alignItems={'end'}>
+          <Row alignItems="end">
             <StockLocationInput detail={detail} />
             <DetailRecommendedBatchSizeInput detail={detail} />
           </Row>
@@ -93,6 +86,7 @@ export const DetailForm = observer(
   ),
 )
 
+/** Accordion group containing detail attachments, blank attributes, and workflow. */
 export const DetailAccordionGroup = observer(({ d }: { d: DetailSt }) => (
   <AccordionGroup>
     <DetailAttachmentInput detail={d} />
@@ -101,18 +95,19 @@ export const DetailAccordionGroup = observer(({ d }: { d: DetailSt }) => (
   </AccordionGroup>
 ))
 
+/** Material selection autocomplete component. */
 export const MaterialSelect = observer(
   (props: { value?: number; index: number; onChange: (m: number) => void }) => {
     const { value: material, onChange } = props
     const options: BaseOption[] =
-      app_cache.materials.materials.map(material => ({
-        label: app_cache.materials.get(material.id)?.label || '',
-        value: material.id,
+      app_cache.materials.materials.map(m => ({
+        label: app_cache.materials.get(m.id)?.label || '',
+        value: m.id,
       })) || []
 
     return (
       <Autocomplete
-        size={'sm'}
+        size="sm"
         options={options}
         placeholder="Выберите материал"
         value={
@@ -124,9 +119,7 @@ export const MaterialSelect = observer(
             : null
         }
         onChange={(_, newValue) => {
-          if (newValue && !Array.isArray(newValue)) {
-            onChange(newValue.value)
-          }
+          if (newValue && !Array.isArray(newValue)) onChange(newValue.value)
         }}
         getOptionLabel={option =>
           typeof option === 'string' ? option : option.label
@@ -137,31 +130,30 @@ export const MaterialSelect = observer(
   },
 )
 
+/** Detail description rich text editor input. */
 const DetailDescriptionInput = observer(({ detail }: { detail: DetailSt }) => (
   <Box>
     <Label>Примечание</Label>
     <TextEditor
       defaultValue={detail.description}
-      onChange={content => {
-        detail.set_description(content)
-      }}
+      onChange={content => detail.set_description(content)}
     />
   </Box>
 ))
 
+/** Recommended batch size numeric input. */
 const DetailRecommendedBatchSizeInput = observer(
   ({ detail }: { detail: DetailSt }) => (
     <NumberInput
       size="md"
       label="Рекоменд. размер партии"
       value={detail.recommended_batch_size}
-      onChange={v => {
-        detail.set_recommended_batch_size(v)
-      }}
+      onChange={v => detail.set_recommended_batch_size(v)}
     />
   ),
 )
 
+/** Stock location text input. */
 const StockLocationInput = observer(({ detail }: { detail: DetailSt }) => (
   <Input
     label="Адрес на складе"
@@ -170,63 +162,39 @@ const StockLocationInput = observer(({ detail }: { detail: DetailSt }) => (
   />
 ))
 
+/** Labeled input wrapper with outlined variant. */
 const Input = (props: InputLabledProps) => (
   <InputLabled variant="outlined" color="neutral" {...props} />
 )
 
-const DetailGroupInput = observer(({ detail }: { detail: DetailSt }) => {
-  const options: BaseOption[] = app_cache.groups.ls().map(group => ({
-    label: group.name,
-    value: group.id,
-  }))
-
-  const value = options.filter(option =>
-    detail.group_ids.includes(option.value),
-  )
-
-  return (
-    <Stack>
-      <Label>Группы</Label>
-      <Autocomplete
-        multiple
-        sx={{ width: 'fit-content' }}
-        size="md"
-        renderTags={(tags, getTagProps) =>
-          tags.map((item, index) => (
-            <Chip
-              size="sm"
-              variant="plain"
-              color="primary"
-              endDecorator={<UseIcon icon={UilX} small />}
-              sx={{ minWidth: 0, fontSize: '.8rem' }}
-              {...getTagProps({ index })}
-            >
-              {item.label}
-            </Chip>
-          ))
-        }
-        variant="outlined"
-        options={options}
-        value={value}
-        onChange={(_, groups) => {
-          const groupIds = groups?.map(g => g.value) || []
-          detail.set_group_ids(groupIds)
-        }}
-        getOptionLabel={option =>
-          typeof option === 'string' ? option : option.label
-        }
-        isOptionEqualToValue={(option, value) => option.value === value.value}
+/** Group selection input using tree modal. */
+const DetailGroupInput = observer(({ detail }: { detail: DetailSt }) => (
+  <Stack>
+    <Label>Группы</Label>
+    <Row>
+      <GroupTreeModal
+        selected_ids={detail.group_ids}
+        on_change={ids => detail.set_group_ids(ids)}
       />
-    </Stack>
-  )
-})
+      <Row gap={2}>
+        {detail.group_ids.map(id => (
+          <P color="primary" level="body-xs">
+            {detail_groups_vm.group_name(id)}
+          </P>
+        ))}
+      </Row>
+    </Row>
+  </Stack>
+))
 
+/** Detail attachments accordion section. */
 const DetailAttachmentInput = observer(({ detail }: { detail: DetailSt }) => (
   <AccordionCard title="Файлы" defaultExpanded>
     <DetailAttachmentList detail={detail} />
   </AccordionCard>
 ))
 
+/** Blank attributes accordion section with material and detail requirements. */
 const BlankAttributesInput = observer(({ detail }: { detail: DetailSt }) => (
   <AccordionCard title="Заготовка" defaultExpanded>
     <MaterialRequirementInput detail={detail} />
@@ -244,6 +212,7 @@ const BlankAttributesInput = observer(({ detail }: { detail: DetailSt }) => (
   </AccordionCard>
 ))
 
+/** Blank attributes display component with configurable styling. */
 export const BlankAttributes = observer(
   (props: {
     attributes?: Blank['attributes'] | null
@@ -253,18 +222,13 @@ export const BlankAttributes = observer(
   }) => (
     <>
       {!!props.attributes?.length && props.attributes.length > 0 && (
-        <Row
-          flexWrap={'wrap'}
-          justifyContent={'left'}
-          {...props.rowProps}
-          gap={1}
-        >
+        <Row flexWrap="wrap" justifyContent="left" {...props.rowProps} gap={1}>
           {props.attributes?.map(({ key, value }) => (
             <Box
               pr={1}
               key={key + value}
               fontSize={props.fontSize}
-              whiteSpace={'nowrap'}
+              whiteSpace="nowrap"
               sx={{ lineHeight: 0.8 }}
             >
               {key}

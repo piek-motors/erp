@@ -34,11 +34,12 @@ const state = new EmployeeModalVM()
 export const events_modal_vm = state
 
 export const EmployeeEventsModal = observer(() => {
+  if (!state.employee || !state.date) return null
   return (
     <Modal open={state.is_open} onClose={() => state.close()}>
       <ModalDialog sx={{ minWidth: 600 }}>
         <ModalClose />
-        <EmployeeEvents employee={state.employee!} date={state.date!} />
+        <EmployeeEvents employee={state.employee} date={state.date} />
       </ModalDialog>
     </Modal>
   )

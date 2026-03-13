@@ -56,7 +56,7 @@ class State {
   get filtredOptions() {
     if (this.search) {
       return this.options.filter(e =>
-        e.v.toLocaleLowerCase().includes(this.search!.toLocaleLowerCase()),
+        e.v.toLocaleLowerCase().includes(this.search.toLocaleLowerCase()),
       )
     }
     return this.options

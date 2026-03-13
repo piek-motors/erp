@@ -82,11 +82,9 @@ export const AttachmentComponent = (props: {
                 />
 
                 {props.handleDelete && (
-                  <>
-                    <DeleteIcon
-                      onClick={() => props.handleDelete!(props.attachment)}
-                    />
-                  </>
+                  <DeleteIcon
+                    onClick={() => props.handleDelete?.(props.attachment)}
+                  />
                 )}
               </Row>
             </Menu>
