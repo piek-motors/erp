@@ -3,7 +3,7 @@ import { UilFolder, UilFolderOpen, UilListUl } from '@iconscout/react-unicons'
 import { Box, Button, Sheet } from '@mui/joy'
 import type { ReactNode } from 'react'
 import { Link } from 'react-router'
-import { observer, Row, UseIcon, useState } from '@/lib/index'
+import { observer, Row, UseIcon, useEffect, useState } from '@/lib/index'
 import { openPage, routeMap } from '@/lib/routes'
 import { store } from './api'
 import type { GroupTreeNode } from './group.store'
@@ -35,6 +35,19 @@ export const TreeNode = observer(
     const handleSelection = () => {
       on_selection_change?.(node.id)
     }
+
+    const check_if_children_selected = (nodes: GroupTreeNode[]) =>
+      nodes.some(
+        node =>
+          selected_ids.includes(node.id) ||
+          check_if_children_selected(node.children),
+      )
+
+    useEffect(() => {
+      if (check_if_children_selected(node.children)) {
+        setExpanded(true)
+      }
+    }, [])
 
     const SelectionControl = multiselect ? (
       <input
