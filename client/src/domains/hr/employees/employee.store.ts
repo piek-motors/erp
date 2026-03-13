@@ -174,6 +174,14 @@ export class EmployeeListVM {
     this.editedFirstnames.delete(id)
     this.editedLastnames.delete(id)
   }
+
+  async delete(id: number) {
+    await rpc.hr.employees.delete_employee.mutate({ id })
+    runInAction(() => {
+      this.employees = this.employees.filter(e => e.id !== id)
+    })
+    notifier.ok(`Сотрудник удален`)
+  }
 }
 
 export const employee_list_vm = new EmployeeListVM()

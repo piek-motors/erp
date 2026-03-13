@@ -2,12 +2,13 @@
 import { Input, Table } from '@mui/joy'
 import { observer } from 'mobx-react-lite'
 import { BaseAutocomplete } from '@/components/base-autocomplete'
-import { Label } from '@/lib'
+import { DeleteIcon, Label } from '@/lib'
+import { DeleteEmployeeDialog } from './dialogs/delete-employee-dialog'
 import type { EmployeeListVM, JobTitleOption } from './employee.store'
 
 export const EmployeeTable = observer(
   ({ store }: { store: EmployeeListVM }) => (
-    <Table stickyHeader size="sm">
+    <Table stickyHeader size="sm" sx={{}}>
       <thead>
         <tr>
           <th style={{ width: 'min-content', paddingRight: 15 }}>№</th>
@@ -16,6 +17,7 @@ export const EmployeeTable = observer(
           <th>Имя</th>
           <th>Должность</th>
           <th>Черная карта</th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
@@ -146,6 +148,14 @@ const EmployeeRow = observer(
               if (e.key === 'Escape') store.cancelEdit(employee.id)
             }}
           />
+        </td>
+        <td>
+          <DeleteEmployeeDialog
+            handler={() => store.delete(employee.id)}
+            employee={employee}
+          >
+            <DeleteIcon />
+          </DeleteEmployeeDialog>
         </td>
       </tr>
     )

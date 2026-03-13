@@ -80,4 +80,26 @@ export const employees = router({
       )
       return { success: true }
     }),
+  //
+  delete_employee: procedure
+    .use(requireScope(Scope.hr))
+    .input(z.object({ id: z.number() }))
+    .mutation(async ({ input }) => {
+      const employee = await db
+        .selectFrom('attendance.employees')
+        .selectAll()
+        .where('id', '=', input.id)
+        .executeTakeFirstOrThrow()
+
+      await db
+        .deleteFrom('attendance.employees')
+        .where('id', '=', input.id)
+        .execute()
+
+      logger.info(
+        { deleted: employee },
+        `employee ${input.id} has been deleted`,
+      )
+      return { success: true }
+    }),
 })
