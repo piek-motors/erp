@@ -1,7 +1,7 @@
 import type { DB } from 'db'
 import { z } from 'zod'
 import { logger } from '#root/ioc/log.js'
-import { db, procedure, requireScope, router, Scope, sql } from '#root/sdk.js'
+import { db, procedure, requireScope, router, Scope } from '#root/sdk.js'
 
 const ONE_MONTH_AGO = new Date()
 ONE_MONTH_AGO.setMonth(ONE_MONTH_AGO.getMonth() - 1)
@@ -11,14 +11,6 @@ export const employees = router({
     return db
       .selectFrom('attendance.employees as e')
       .selectAll()
-      .where(
-        sql<boolean>`EXISTS (
-        SELECT 1
-        FROM attendance.events ev
-        WHERE ev.card = e.card
-          AND ev.timestamp >= ${ONE_MONTH_AGO}
-      )`,
-      )
       .orderBy(['e.lastname', 'e.firstname'])
       .execute()
   }),
