@@ -92,7 +92,7 @@ export class AttendanceReportGenerator {
       0,
     )
     return {
-      employees: result,
+      employees: result.filter(e => e.name.trim().length !== 0),
       monthly_labor_hours: Math.floor(monthly_labor_seconds / 3600),
       days: days.filter(d => !weekdays.includes(d)),
     }
