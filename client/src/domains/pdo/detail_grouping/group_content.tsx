@@ -15,9 +15,14 @@ interface GroupSectionProps {
 }
 
 export const GroupContent = observer(() => {
-  const { detail_list, opened_group, create_subgroup_modal } = store
+  const {
+    group_content: detail_list,
+    group,
+    details,
+    create_subgroup_modal,
+  } = store
 
-  if (!opened_group)
+  if (!group)
     return (
       <P level="body-sm" color="neutral">
         Выберите группу
@@ -37,18 +42,18 @@ export const GroupContent = observer(() => {
       <Box sx={{ flex: 1, py: 1, overflow: 'auto' }}>
         <>
           {/* child group links */}
-          {app_cache.groups.get(opened_group.group.id)?.children.map(child => (
+          {app_cache.groups.get(group.id)?.children.map(child => (
             <GroupLink key={child.id} group={child} />
           ))}
 
           {/* Show details of current group */}
-          {opened_group.details.length === 0 && (
+          {details.length === 0 && (
             <P level="body-sm" color="neutral">
               В группе нет деталей
             </P>
           )}
 
-          {opened_group.details.map(detail => (
+          {details.map(detail => (
             <DetailRow key={detail.id} detail={detail} />
           ))}
         </>
@@ -59,13 +64,13 @@ export const GroupContent = observer(() => {
 })
 
 const CreateSubgroupButton = observer(() => {
-  const { opened_group } = store
-  if (!opened_group) return null
+  const { group } = store
+  if (!group) return null
   return (
     <IconButtonXxs
       variant="plain"
       color="primary"
-      onClick={() => store.create_subgroup_modal.open(opened_group.group.id)}
+      onClick={() => store.create_subgroup_modal.open(group.id)}
       className="subgroup-button"
       sx={{
         width: 'min-content',
@@ -77,7 +82,7 @@ const CreateSubgroupButton = observer(() => {
 })
 
 const ChangeNameModal = observer(() => {
-  if (!store.opened_group) return null
+  if (!store.group) return null
   return (
     <ChangeGroupNameModal
       openButton={
@@ -91,7 +96,7 @@ const ChangeNameModal = observer(() => {
             },
           }}
         >
-          {store.group_name(store.opened_group.group.id)}
+          {store.group_name(store.group.id)}
         </P>
       }
     />

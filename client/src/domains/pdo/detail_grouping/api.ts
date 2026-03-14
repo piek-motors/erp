@@ -5,7 +5,7 @@ import { rpc } from '@/lib/rpc/rpc.client'
 import { LoadingController } from '@/lib/store/loading_controller'
 import type { DetailInTheGroup } from '@/server/domains/pdo/storage/detail_group_repo'
 import { DetailSt } from '../detail/detail.state'
-import { DetailGroupStore } from './group.store'
+import { GroupExplorerVM } from './group.store'
 
 export class DetailGroupingApi {
   readonly groups_tree_loading = new LoadingController()
@@ -25,9 +25,9 @@ export class DetailGroupingApi {
     return this.details_loading.run(async () => {
       const resp = await rpc.pdo.detail_groups.get.query({ groupId })
       const details = matrixDecoder<DetailInTheGroup>(resp.details)
-      store.open_group({
-        group: resp.group,
-        details: details.map(d => {
+      store.open_group(
+        resp.group,
+        details.map(d => {
           const detail = new DetailSt()
           detail.id = d.id
           detail.name = d.name
@@ -35,7 +35,7 @@ export class DetailGroupingApi {
           detail.group_assigment.set_group_ids(d.group_ids)
           return detail
         }),
-      })
+      )
     })
   }
 
@@ -58,7 +58,7 @@ export class DetailGroupingApi {
         parent_id,
       })
       await app_cache.groups.invalidate()
-      if (store.opened_group?.group.id === id) {
+      if (store.group?.id === id) {
         await this.load_group_with_details(id)
       }
       return updatedGroup
@@ -66,6 +66,6 @@ export class DetailGroupingApi {
   }
 }
 
-export const store = new DetailGroupStore()
+export const store = new GroupExplorerVM()
 export const detail_groups_vm = store
 export const api = new DetailGroupingApi()

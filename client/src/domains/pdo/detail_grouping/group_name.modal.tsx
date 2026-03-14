@@ -229,12 +229,14 @@ export const CreateSubgroupModal = observer(() => {
 /** Modal for editing an existing group's name and parent. */
 export const ChangeGroupNameModal = observer(
   (props: { openButton: ReactNode }) => {
+    const { group } = store
+
     const handleSubmit = async (name: string, parent_id: number | null) => {
-      if (!store.opened_group) throw new Error('No group selected for update')
-      await api.update_group(store.opened_group.group.id, name, parent_id)
+      if (!group) throw new Error('No group selected for update')
+      await api.update_group(group.id, name, parent_id)
     }
 
-    const currentGroupId = store.opened_group?.group.id
+    const currentGroupId = group?.id
     const currentParentId = currentGroupId
       ? (store.groups.find(g => g.id === currentGroupId)?.parent_id ?? null)
       : null
@@ -244,7 +246,7 @@ export const ChangeGroupNameModal = observer(
         openButton={props.openButton}
         title="Изменить название группы"
         onSubmit={handleSubmit}
-        initialName={store.opened_group?.group.name || ''}
+        initialName={group?.name || ''}
         initialParentId={currentParentId}
       />
     )

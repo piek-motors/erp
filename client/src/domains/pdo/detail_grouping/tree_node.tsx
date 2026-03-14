@@ -19,12 +19,10 @@ export interface TreeNodeProps {
 export const TreeNode = observer(
   ({ node, depth, onLinkClick, multiselect }: TreeNodeProps) => {
     const selected_ids = multiselect?.group_ids ?? []
-    const on_selection_change = multiselect?.on_selection_change
 
     const [expanded, setExpanded] = useState(false)
-    const is_currently_opened = store.opened_group?.group.id === node.id
+    const is_currently_opened = store.group?.id === node.id
     const has_children = node.children.length > 0
-    const is_selected = selected_ids.includes(node.id)
     const handle_expand_toggle = () => setExpanded(!expanded)
 
     const check_if_children_selected = (nodes: GroupTreeNode[]) =>
@@ -43,9 +41,9 @@ export const TreeNode = observer(
     const SelectionControl = multiselect ? (
       <input
         type={'checkbox'}
-        checked={is_selected}
+        checked={selected_ids.includes(node.id)}
         onChange={() => {
-          on_selection_change?.(node.id)
+          multiselect?.on_selection_change?.(node.id)
         }}
         onClick={e => e.stopPropagation()}
       />

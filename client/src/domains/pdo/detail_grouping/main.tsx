@@ -23,20 +23,7 @@ const DetailGroupsLayout = () => (
   >
     {/* Group list */}
     <Box>
-      <MobileOnly>
-        <MobilePadding>
-          <Row>
-            <MobileNavModal />
-            <MobileGroupSelectModal
-              open_button={
-                <Button variant="solid" color="primary" size="sm">
-                  Группы
-                </Button>
-              }
-            />
-          </Row>
-        </MobilePadding>
-      </MobileOnly>
+      <MobileLayout />
       <DesktopOnly>
         <ScrollableWindow scroll={<GroupList />} storageKey="pdo-group-list" />
       </DesktopOnly>
@@ -47,9 +34,26 @@ const DetailGroupsLayout = () => (
   </Stack>
 )
 
+const MobileLayout = () => (
+  <MobileOnly>
+    <MobilePadding>
+      <Row>
+        <MobileNavModal />
+        <MobileGroupSelectModal
+          open_button={
+            <Button variant="solid" color="primary" size="sm">
+              Группы
+            </Button>
+          }
+        />
+      </Row>
+    </MobilePadding>
+  </MobileOnly>
+)
+
 const DetailsPanel = observer(() => {
   if (api.details_loading.loading) return <Loading />
-  if (!store.opened_group)
+  if (!store.group)
     return (
       <P level="body-sm" p={2}>
         Выберите группу

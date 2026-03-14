@@ -2,7 +2,7 @@ import { makeAutoObservable } from 'mobx'
 import { app_cache } from '@/domains/pdo/cache'
 import type { DetailSt } from '../detail/detail.state'
 
-class EditGroupModal {
+class EditGroupVM {
   constructor() {
     makeAutoObservable(this)
   }
@@ -18,7 +18,7 @@ class EditGroupModal {
   }
 }
 
-class CreateSubGroupModal {
+class CreateSubGroupVM {
   constructor() {
     makeAutoObservable(this)
   }
@@ -54,7 +54,7 @@ export interface GroupWithDetails {
   details: DetailSt[]
 }
 
-export class DetailListStore {
+export class GroupContentVM {
   query: string = ''
 
   constructor() {
@@ -100,12 +100,13 @@ export class DetailListStore {
   }
 }
 
-export class DetailGroupStore {
-  readonly edit_group_modal = new EditGroupModal()
-  readonly detail_list = new DetailListStore()
-  readonly create_subgroup_modal = new CreateSubGroupModal()
+export class GroupExplorerVM {
+  readonly edit_group_modal = new EditGroupVM()
+  readonly group_content = new GroupContentVM()
+  readonly create_subgroup_modal = new CreateSubGroupVM()
 
-  opened_group: GroupWithDetails | null = null
+  group: Group | null = null
+  details: DetailSt[] = []
 
   constructor() {
     makeAutoObservable(this)
@@ -119,14 +120,15 @@ export class DetailGroupStore {
     return app_cache.groups.list()
   }
 
-  open_group(group: GroupWithDetails | null) {
-    this.opened_group = group
-    // this.opened_group?.details.sort((a, b) => a.name.localeCompare(b.name))
-    this.edit_group_modal.set_name(group?.group.name || '')
+  open_group(group: Group | null, details: DetailSt[]) {
+    this.group = group
+    this.details = details
+    this.edit_group_modal.set_name(group?.name || '')
   }
 
   clear() {
-    this.opened_group = null
+    this.group = null
+    this.details = []
   }
 
   /** Gets the full path of group names for a specific group ID. */
