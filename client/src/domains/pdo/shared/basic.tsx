@@ -102,10 +102,10 @@ export const SaveAndDelete = (props: {
 
 export const MetalPageTitle = (props: PageTitleProps) => (
   <NavTopBar
+    spaceBetween
+    hideIcon
     {...props}
     mobileMenuButton={<MobileNavModal />}
-    hideIcon
-    spaceBetween
   />
 )
 
