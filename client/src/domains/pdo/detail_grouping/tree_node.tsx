@@ -5,36 +5,27 @@ import type { ReactNode } from 'react'
 import { Link } from 'react-router'
 import { observer, Row, UseIcon, useEffect, useState } from '@/lib/index'
 import { openPage, routeMap } from '@/lib/routes'
+import type { GroupAssigment } from '../detail/detail.state'
 import { store } from './api'
 import type { GroupTreeNode } from './group.store'
 
-interface TreeNodeProps {
+export interface TreeNodeProps {
   node: GroupTreeNode
   depth: number
-  onLinkClick?: (open: boolean) => void
-  multiselect?: {
-    /** Selected IDs for selection modes */
-    selected_ids?: number[]
-    /** Callback when selection changes */
-    on_selection_change?: (id: number) => void
-  }
+  onLinkClick?: (id: number) => void
+  multiselect?: GroupAssigment
 }
 
-/** Tree node with indentation and expand/collapse. */
 export const TreeNode = observer(
   ({ node, depth, onLinkClick, multiselect }: TreeNodeProps) => {
-    const selected_ids = multiselect?.selected_ids ?? []
+    const selected_ids = multiselect?.group_ids ?? []
     const on_selection_change = multiselect?.on_selection_change
 
     const [expanded, setExpanded] = useState(false)
-    const isSelected = store.opened_group?.group.id === node.id
+    const is_currently_opened = store.opened_group?.group.id === node.id
     const has_children = node.children.length > 0
     const is_selected = selected_ids.includes(node.id)
     const handle_expand_toggle = () => setExpanded(!expanded)
-
-    const handleSelection = () => {
-      on_selection_change?.(node.id)
-    }
 
     const check_if_children_selected = (nodes: GroupTreeNode[]) =>
       nodes.some(
@@ -53,19 +44,22 @@ export const TreeNode = observer(
       <input
         type={'checkbox'}
         checked={is_selected}
-        onChange={handleSelection}
+        onChange={() => {
+          on_selection_change?.(node.id)
+        }}
         onClick={e => e.stopPropagation()}
       />
     ) : null
 
-    const group_props = {
+    const group_props: GroupLinkProps = {
       node,
-      isSelected,
+      is_active: is_currently_opened,
       startDecorator: (
         <ExpandButton hasChildren={has_children} expanded={expanded} />
       ),
-      onClick: () => {
+      onClick: (id: number) => {
         handle_expand_toggle()
+        onLinkClick?.(id)
       },
     }
 
@@ -92,7 +86,7 @@ export const TreeNode = observer(
 
         {expanded && has_children && (
           <Sheet sx={{ ml: 2, position: 'relative' }}>
-            <VerticalLevelIndicator />
+            <LevelIndicator />
             {node.children.map(child => (
               <TreeNode
                 node={child}
@@ -132,22 +126,22 @@ const ExpandButton = observer(
 
 interface GroupLinkProps {
   node: GroupTreeNode
-  isSelected: boolean
-  onClick?: () => void
+  is_active: boolean
+  onClick?: (id: number) => void
   startDecorator?: ReactNode
 }
 
 const GroupLink = observer(
-  ({ node, isSelected, onClick, startDecorator }: GroupLinkProps) => (
+  ({ node, is_active, onClick, startDecorator }: GroupLinkProps) => (
     <Link
-      onClick={e => onClick?.()}
+      onClick={e => onClick?.(node.id)}
       key={node.id}
       to={openPage(routeMap.pdo.detailGroup, node.id)}
       style={{ textDecoration: 'none' }}
     >
       <Group
         startDecorator={startDecorator}
-        isSelected={isSelected}
+        is_active={is_active}
         node={node}
       />
     </Link>
@@ -155,12 +149,12 @@ const GroupLink = observer(
 )
 
 export const Group = observer(
-  ({ node, isSelected, startDecorator, onClick }: GroupLinkProps) => (
+  ({ node, is_active, startDecorator, onClick }: GroupLinkProps) => (
     <Button
-      onClick={e => onClick?.()}
+      onClick={e => onClick?.(node.id)}
       startDecorator={startDecorator}
-      variant={isSelected ? 'soft' : 'plain'}
-      color={isSelected ? 'primary' : 'neutral'}
+      variant={is_active ? 'soft' : 'plain'}
+      color={is_active ? 'primary' : 'neutral'}
       sx={{
         width: 'max-content',
         justifyContent: 'start',
@@ -179,7 +173,7 @@ export const Group = observer(
   ),
 )
 
-const VerticalLevelIndicator = observer(() => (
+const LevelIndicator = () => (
   <Box
     sx={{
       position: 'absolute',
@@ -189,4 +183,4 @@ const VerticalLevelIndicator = observer(() => (
       backgroundColor: '#9f9fba',
     }}
   />
-))
+)

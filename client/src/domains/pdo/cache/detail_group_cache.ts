@@ -16,6 +16,10 @@ export class DetailGroupCache {
     return nodes.flatMap(each => [each, ...this.flat_group_tree(each.children)])
   }
 
+  get(id: number) {
+    return this.flat_group_tree(this.group_tree).find(each => each.id === id)
+  }
+
   list() {
     return sort_rus(this.group_tree, a => a.name)
   }

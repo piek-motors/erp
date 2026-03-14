@@ -210,7 +210,7 @@ export const CreateSubgroupModal = observer(() => {
 
   if (!parent_id) return null
   return (
-    <InModal openButton={null as any} open={open} setOpen={setOpen}>
+    <InModal open={open} setOpen={setOpen}>
       <Stack gap={1} onKeyDown={handleKeyDown}>
         <P>Создать подгруппу в {detail_groups_vm.group_name(parent_id)}</P>
         <InputLabled
@@ -227,7 +227,7 @@ export const CreateSubgroupModal = observer(() => {
 })
 
 /** Modal for editing an existing group's name and parent. */
-export const UpdateGroupNameModal = observer(
+export const ChangeGroupNameModal = observer(
   (props: { openButton: ReactNode }) => {
     const handleSubmit = async (name: string, parent_id: number | null) => {
       if (!store.opened_group) throw new Error('No group selected for update')

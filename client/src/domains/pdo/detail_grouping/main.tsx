@@ -1,4 +1,4 @@
-import { Divider } from '@mui/joy'
+import { Button, Divider } from '@mui/joy'
 import { useParams } from 'react-router'
 import { ScrollableWindow } from '@/components/inputs'
 import {
@@ -8,8 +8,8 @@ import {
 import { Box, Loading, observer, P, Row, Stack, useEffect } from '@/lib/index'
 import { MobileNavModal, MobilePadding } from '../root_layout'
 import { api, store } from './api'
-import { DetailList } from './detail_list'
-import { GroupList, GroupSelectModal } from './group_list'
+import { GroupContent } from './group_content'
+import { GroupList, MobileGroupSelectModal } from './group_list'
 
 const DetailGroupsLayout = () => (
   <Stack
@@ -27,7 +27,13 @@ const DetailGroupsLayout = () => (
         <MobilePadding>
           <Row>
             <MobileNavModal />
-            <GroupSelectModal />
+            <MobileGroupSelectModal
+              open_button={
+                <Button variant="solid" color="primary" size="sm">
+                  Группы
+                </Button>
+              }
+            />
           </Row>
         </MobilePadding>
       </MobileOnly>
@@ -49,7 +55,7 @@ const DetailsPanel = observer(() => {
         Выберите группу
       </P>
     )
-  return <ScrollableWindow scroll={<DetailList />} />
+  return <ScrollableWindow scroll={<GroupContent />} />
 })
 
 export const GroupById = observer(() => {

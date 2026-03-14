@@ -23,9 +23,33 @@ export class LastProduction {
   ) {}
 }
 
+export class GroupAssigment {
+  constructor() {
+    makeAutoObservable(this)
+  }
+
+  group_ids: number[] = []
+  set_group_ids(groupIds: number[]) {
+    this.group_ids = groupIds
+  }
+
+  clear() {
+    this.group_ids = []
+  }
+
+  on_selection_change(id: number) {
+    if (this.group_ids.includes(id)) {
+      this.set_group_ids(this.group_ids.filter(gid => gid !== id))
+    } else {
+      this.set_group_ids([...this.group_ids, id])
+    }
+  }
+}
+
 export class DetailSt {
   readonly attachments = new AttachmentsStore()
   readonly warehouse = new DetailWarehouseStore()
+  readonly group_assigment = new GroupAssigment()
   /** metal blank */
   readonly blank = new DetailBlankSt()
   readonly workflow = new Workflow()
@@ -59,10 +83,6 @@ export class DetailSt {
   set_description(d: string) {
     this.description = d ?? ''
   }
-  group_ids: number[] = []
-  set_group_ids(groupIds: number[]) {
-    this.group_ids = groupIds
-  }
   drawing_name: string = ''
   set_drawing_name(name: string) {
     this.drawing_name = name
@@ -95,7 +115,7 @@ export class DetailSt {
     this.id = d.id!
     this.name = d.name!
     this.drawing_number = d.drawing_number!
-    this.group_ids = group_ids
+    this.group_assigment.group_ids = group_ids
     this.description = d.description || ''
     this.warehouse.setStock(d.on_hand_balance)
     this.updated_at = d.updated_at ? new Date(d.updated_at) : null
@@ -120,7 +140,7 @@ export class DetailSt {
       name: this.name ?? '',
       drawing_number: this.drawing_number ?? null,
       drawing_name: this.drawing_name ?? null,
-      group_ids: this.group_ids,
+      group_ids: this.group_assigment.group_ids,
       recommended_batch_size: Number(this.recommended_batch_size) ?? null,
       workflow: this.workflow ? this.workflow.payload : null,
       blank: this.blank.payload,

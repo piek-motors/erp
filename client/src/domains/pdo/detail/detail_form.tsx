@@ -1,4 +1,6 @@
 /** @jsxImportSource @emotion/react */
+
+import { UilBars } from '@iconscout/react-unicons'
 import {
   AccordionGroup,
   Autocomplete,
@@ -19,6 +21,7 @@ import { TextEditor } from '@/domains/orders/one/comments/text-editor'
 import { app_cache } from '@/domains/pdo/cache'
 import { GroupTreeModal } from '@/domains/pdo/detail_grouping/group_tree_selector'
 import {
+  IconButtonXxs,
   InputLabled,
   type InputLabledProps,
   Label,
@@ -173,11 +176,18 @@ const DetailGroupInput = observer(({ detail }: { detail: DetailSt }) => (
     <Label>Группы</Label>
     <Row>
       <GroupTreeModal
-        selected_ids={detail.group_ids}
-        on_change={ids => detail.set_group_ids(ids)}
+        group_assigment={detail.group_assigment}
+        open_button={
+          <IconButtonXxs
+            size="sm"
+            variant="outlined"
+            sx={{ width: 'fit-content', my: 0.5 }}
+            icon={UilBars}
+          />
+        }
       />
       <Row gap={2}>
-        {detail.group_ids.map(id => (
+        {detail.group_assigment.group_ids.map(id => (
           <P color="primary" level="body-xs">
             {detail_groups_vm.group_name(id)}
           </P>
