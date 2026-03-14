@@ -1,6 +1,7 @@
 import { observer } from 'mobx-react-lite'
 import { DetailName } from '@/domains/pdo/detail/detail_name'
 import { MaterialName } from '@/domains/pdo/material/name'
+import { GroupAssigment } from '../detail/detail.state'
 
 interface Props {
   operation: {
@@ -26,7 +27,7 @@ export const OperationName = observer((props: Props) => {
         detail={{
           id: op.detail_id,
           name: op.detail_name,
-          group_ids: op.detail_group_ids,
+          group_assigment: new GroupAssigment(op.detail_group_ids),
         }}
         with_group_name
       />

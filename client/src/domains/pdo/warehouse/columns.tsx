@@ -19,6 +19,7 @@ import {
   routeMap,
   UseIcon,
 } from '@/lib/index'
+import { GroupAssigment } from '../detail/detail.state'
 import { DetailName } from '../detail/detail_name'
 import { AdaptiveNumberFormatter } from '../shared/adaptive_number_formatter'
 import { value_with_unit } from '../shared/basic'
@@ -64,7 +65,7 @@ export const columns: Column<Operation>[] = [
           detail={{
             id: data.detail_id,
             name: data.detail_name!,
-            group_ids: data.detail_group_ids!,
+            group_assigment: new GroupAssigment(data.detail_group_ids!),
           }}
           with_group_name
         />

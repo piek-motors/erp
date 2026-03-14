@@ -24,11 +24,10 @@ export class LastProduction {
 }
 
 export class GroupAssigment {
-  constructor() {
+  constructor(public group_ids: number[] = []) {
     makeAutoObservable(this)
   }
 
-  group_ids: number[] = []
   set_group_ids(groupIds: number[]) {
     this.group_ids = groupIds
   }

@@ -1,6 +1,6 @@
 import { makeAutoObservable } from 'mobx'
-import type { Color } from 'models'
 import { app_cache } from '@/domains/pdo/cache'
+import type { DetailSt } from '../detail/detail.state'
 
 class EditGroupModal {
   constructor() {
@@ -49,25 +49,9 @@ export interface GroupTreeNode extends Group {
   depth: number
 }
 
-export class Detail {
-  constructor(
-    readonly id: number,
-    readonly name: string,
-    readonly drawing_number: string | null,
-    readonly group_ids: number[] = [],
-    public colors?: Color[],
-  ) {
-    makeAutoObservable(this)
-  }
-
-  setColors(colors: Color[]) {
-    this.colors = colors
-  }
-}
-
 export interface GroupWithDetails {
   group: Group
-  details: Detail[]
+  details: DetailSt[]
 }
 
 export class DetailListStore {
@@ -81,30 +65,32 @@ export class DetailListStore {
     this.query = q
   }
 
-  getFilteredAndSorted(details: Detail[]): Detail[] {
-    return this.sortDetails(this.filterDetailsByQuery(details))
+  get_filtered_and_sorted(details: DetailSt[]): DetailSt[] {
+    return this.sort_details(this.filter_details_by_query(details))
   }
 
-  private getQueryTokens(): string[] {
+  private get_query_tokens(): string[] {
     return this.query?.toLowerCase().split(/\s+/).filter(Boolean) ?? []
   }
 
-  private filterDetailsByQuery(details: Detail[]): Detail[] {
-    const tokens = this.getQueryTokens()
+  private filter_details_by_query(details: DetailSt[]): DetailSt[] {
+    const tokens = this.get_query_tokens()
 
     if (tokens.length === 0) {
       return details
     }
 
-    return details.filter(detail => this.matchesAllTokens(detail.name, tokens))
+    return details.filter(detail =>
+      this.matches_all_tokens(detail.name, tokens),
+    )
   }
 
-  private matchesAllTokens(text: string, tokens: string[]): boolean {
+  private matches_all_tokens(text: string, tokens: string[]): boolean {
     const value = text.toLowerCase()
     return tokens.every(token => value.includes(token))
   }
 
-  private sortDetails(details: Detail[]): Detail[] {
+  private sort_details(details: DetailSt[]): DetailSt[] {
     return details.slice().sort((a, b) =>
       a.name.localeCompare(b.name, 'ru', {
         numeric: true,

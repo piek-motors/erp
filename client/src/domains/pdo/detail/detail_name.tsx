@@ -6,11 +6,12 @@ import { app_cache } from '@/domains/pdo/cache'
 import { Box, Link, observer, P, Row } from '@/lib/index'
 import { openPage, routeMap } from '@/lib/routes'
 import { capitalize } from '../shared/basic'
+import type { GroupAssigment } from './detail.state'
 
 interface Detail {
   id: number
   name: string
-  group_ids?: number[]
+  group_assigment: GroupAssigment
 }
 
 interface Props {
@@ -33,7 +34,10 @@ export const DetailName = observer(
           {capitalize(detail.name)}
         </P>
         {with_group_name && (
-          <GroupName group_ids={detail.group_ids} sx={slot_props?.group} />
+          <GroupName
+            group_ids={detail.group_assigment.group_ids}
+            sx={slot_props?.group}
+          />
         )}
         {with_id && (
           <P level="body-xs" fontSize={10}>
@@ -56,16 +60,8 @@ export const DetailName = observer(
 )
 
 const GroupName = observer(
-  ({
-    group_id,
-    group_ids,
-    sx,
-  }: {
-    group_id?: number | null
-    group_ids?: number[]
-    sx?: SxProps
-  }) => {
-    const ids = group_ids ?? (group_id ? [group_id] : [])
+  ({ group_ids, sx }: { group_ids?: number[]; sx?: SxProps }) => {
+    const ids = group_ids ?? []
     if (!ids.length) return null
 
     const paths = ids

@@ -4,9 +4,10 @@ import { Search } from '@/components/inputs'
 import { IconButtonXxs, Link, observer, P, Row, UseIcon } from '@/lib/index'
 import { openPage, routeMap } from '@/lib/routes'
 import { app_cache } from '../cache'
+import type { DetailSt } from '../detail/detail.state'
 import { DetailName } from '../detail/detail_name'
 import { store } from './api'
-import type { Detail, GroupTreeNode } from './group.store'
+import type { GroupTreeNode } from './group.store'
 import { ChangeGroupNameModal, CreateSubgroupModal } from './group_name.modal'
 
 interface GroupSectionProps {
@@ -115,7 +116,7 @@ const GroupLink = observer(({ group }: GroupSectionProps) => (
 ))
 
 interface DetailRowProps {
-  detail: Detail
+  detail: DetailSt
   onClick?: (detailId: number) => void
 }
 
@@ -129,7 +130,8 @@ const DetailRow = ({ detail, onClick: onToggle }: DetailRowProps) => (
       '&:hover .detail-arrow': {
         opacity: 1,
       },
-      cursor: detail.group_ids.length === 0 ? 'pointer' : 'default',
+      cursor:
+        detail.group_assigment.group_ids.length === 0 ? 'pointer' : 'default',
     }}
     alignItems="center"
     onClick={() => onToggle?.(detail.id)}

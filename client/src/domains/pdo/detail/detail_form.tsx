@@ -188,9 +188,7 @@ const DetailGroupInput = observer(({ detail }: { detail: DetailSt }) => (
       />
       <Row gap={2}>
         {detail.group_assigment.group_ids.map(id => (
-          <P color="primary" level="body-xs">
-            {detail_groups_vm.group_name(id)}
-          </P>
+          <P color="primary">{detail_groups_vm.group_name(id)}</P>
         ))}
       </Row>
     </Row>

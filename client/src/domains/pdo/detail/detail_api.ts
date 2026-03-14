@@ -73,6 +73,7 @@ export class DetailApi {
         drawing_number: detail.drawing_number,
         group_ids: detail.group_assigment.group_ids,
         on_hand_balance: detail.warehouse.stock,
+        group_assigment: detail.group_assigment,
       })
       detail.set_updated_at(new Date())
       notifier.ok(`Деталь обновлена`)

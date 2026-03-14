@@ -4,7 +4,8 @@ import { matrixDecoder } from '@/lib/rpc/matrix_decoder'
 import { rpc } from '@/lib/rpc/rpc.client'
 import { LoadingController } from '@/lib/store/loading_controller'
 import type { DetailInTheGroup } from '@/server/domains/pdo/storage/detail_group_repo'
-import { Detail, DetailGroupStore } from './group.store'
+import { DetailSt } from '../detail/detail.state'
+import { DetailGroupStore } from './group.store'
 
 export class DetailGroupingApi {
   readonly groups_tree_loading = new LoadingController()
@@ -26,9 +27,14 @@ export class DetailGroupingApi {
       const details = matrixDecoder<DetailInTheGroup>(resp.details)
       store.open_group({
         group: resp.group,
-        details: details.map(
-          d => new Detail(d.id, d.name, d.drawing_number, d.group_ids),
-        ),
+        details: details.map(d => {
+          const detail = new DetailSt()
+          detail.id = d.id
+          detail.name = d.name
+          detail.drawing_number = d.drawing_number ?? ''
+          detail.group_assigment.set_group_ids(d.group_ids)
+          return detail
+        }),
       })
     })
   }
