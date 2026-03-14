@@ -3,47 +3,37 @@ import { UilFolder, UilFolderOpen, UilListUl } from '@iconscout/react-unicons'
 import { Box, Button, Sheet } from '@mui/joy'
 import type { ReactNode } from 'react'
 import { Link } from 'react-router'
-import { observer, Row, UseIcon, useEffect, useState } from '@/lib/index'
+import { observer, Row, UseIcon, useEffect } from '@/lib/index'
 import { openPage, routeMap } from '@/lib/routes'
 import type { GroupAssigment } from '../detail/detail.state'
-import { store } from './api'
-import type { GroupTreeNode } from './group.store'
+import { store } from './group.store'
+import type { Node } from './tree/node_vm'
 
 export interface TreeNodeProps {
-  node: GroupTreeNode
+  node: Node
   depth: number
-  onLinkClick?: (id: number) => void
-  multiselect?: GroupAssigment
+  onClick?: (id: number) => void
+  strategy: 'link' | 'btn'
+  group_assigment?: GroupAssigment
 }
 
 export const TreeNode = observer(
-  ({ node, depth, onLinkClick, multiselect }: TreeNodeProps) => {
-    const selected_ids = multiselect?.group_ids ?? []
-
-    const [expanded, setExpanded] = useState(false)
-    const is_currently_opened = store.group?.id === node.id
-    const has_children = node.children.length > 0
-    const handle_expand_toggle = () => setExpanded(!expanded)
-
-    const check_if_children_selected = (nodes: GroupTreeNode[]) =>
-      nodes.some(
-        node =>
-          selected_ids.includes(node.id) ||
-          check_if_children_selected(node.children),
-      )
+  ({ node, depth, onClick, group_assigment, strategy }: TreeNodeProps) => {
+    const selected_ids = group_assigment?.group_ids ?? []
 
     useEffect(() => {
-      if (check_if_children_selected(node.children)) {
-        setExpanded(true)
+      const active_node = store.group_content.group?.id
+      if (active_node) {
+        node.expand_up_to_node(active_node)
       }
     }, [])
 
-    const SelectionControl = multiselect ? (
+    const SelectionControl = group_assigment ? (
       <input
         type={'checkbox'}
         checked={selected_ids.includes(node.id)}
         onChange={() => {
-          multiselect?.on_selection_change?.(node.id)
+          group_assigment?.on_selection_change?.(node.id)
         }}
         onClick={e => e.stopPropagation()}
       />
@@ -51,13 +41,11 @@ export const TreeNode = observer(
 
     const group_props: GroupLinkProps = {
       node,
-      is_active: is_currently_opened,
-      startDecorator: (
-        <ExpandButton hasChildren={has_children} expanded={expanded} />
-      ),
-      onClick: (id: number) => {
-        handle_expand_toggle()
-        onLinkClick?.(id)
+      is_active: store.group_content.group?.id === node.id,
+      startDecorator: <ExpandButton node={node} />,
+      onClick: (node: Node) => {
+        onClick?.(node.id)
+        node.toggle_expanded()
       },
     }
 
@@ -72,25 +60,26 @@ export const TreeNode = observer(
             width: 'min-content',
           }}
         >
-          {SelectionControl ? (
+          {strategy === 'btn' ? (
             <>
               {SelectionControl}
-              <Group {...group_props} />
+              <GroupBtn {...group_props} />
             </>
           ) : (
             <GroupLink {...group_props} />
           )}
         </Row>
 
-        {expanded && has_children && (
+        {node.is_expanded(group_assigment?.group_ids) && (
           <Sheet sx={{ ml: 2, position: 'relative' }}>
             <LevelIndicator />
             {node.children.map(child => (
               <TreeNode
+                strategy={strategy}
                 node={child}
                 depth={depth + 1}
-                onLinkClick={onLinkClick}
-                multiselect={multiselect}
+                onClick={onClick}
+                group_assigment={group_assigment}
               />
             ))}
           </Sheet>
@@ -101,43 +90,41 @@ export const TreeNode = observer(
 )
 
 /** Expand/collapse button or empty spacer. */
-const ExpandButton = observer(
-  ({ hasChildren, expanded }: { hasChildren: boolean; expanded: boolean }) => {
-    const size = 20
+const ExpandButton = observer(({ node }: { node: Node }) => {
+  const size = 20
 
-    let icon = UilListUl
-    let opacity = 0.1
-    if (hasChildren) {
-      opacity = 1
-      icon = expanded ? UilFolderOpen : UilFolder
-    }
+  let icon = UilListUl
+  let opacity = 0.1
+  if (node.has_childrens()) {
+    opacity = 1
+    icon = node.is_expanded() ? UilFolderOpen : UilFolder
+  }
 
-    return (
-      <UseIcon
-        small
-        icon={icon}
-        settings={{ opacity, width: size, fill: 'black' }}
-      />
-    )
-  },
-)
+  return (
+    <UseIcon
+      small
+      icon={icon}
+      settings={{ opacity, width: size, fill: 'black' }}
+    />
+  )
+})
 
 interface GroupLinkProps {
-  node: GroupTreeNode
+  node: Node
   is_active: boolean
-  onClick?: (id: number) => void
+  onClick?: (node: Node) => void
   startDecorator?: ReactNode
 }
 
 const GroupLink = observer(
   ({ node, is_active, onClick, startDecorator }: GroupLinkProps) => (
     <Link
-      onClick={e => onClick?.(node.id)}
+      onClick={e => onClick?.(node)}
       key={node.id}
       to={openPage(routeMap.pdo.detailGroup, node.id)}
       style={{ textDecoration: 'none' }}
     >
-      <Group
+      <GroupBtn
         startDecorator={startDecorator}
         is_active={is_active}
         node={node}
@@ -146,10 +133,10 @@ const GroupLink = observer(
   ),
 )
 
-export const Group = observer(
+export const GroupBtn = observer(
   ({ node, is_active, startDecorator, onClick }: GroupLinkProps) => (
     <Button
-      onClick={e => onClick?.(node.id)}
+      onClick={e => onClick?.(node)}
       startDecorator={startDecorator}
       variant={is_active ? 'soft' : 'plain'}
       color={is_active ? 'primary' : 'neutral'}

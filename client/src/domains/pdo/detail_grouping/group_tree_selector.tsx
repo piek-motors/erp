@@ -3,9 +3,9 @@
 import type { ReactNode } from 'react'
 import { InModal } from '@/components/modal'
 import { ScrollableWindow } from '@/components/scrollable_window'
-import { Box, Button, observer, P, Stack, useState } from '@/lib/index'
+import { Box, observer, useState } from '@/lib/index'
+import { app_cache } from '../cache'
 import type { GroupAssigment } from '../detail/detail.state'
-import { store } from './api'
 import { TreeNode } from './tree_node'
 
 interface GroupTreeModalProps {
@@ -24,12 +24,13 @@ export const GroupTreeModal = observer(
           <InModal open={open} setOpen={setOpen} layout="fullscreen" size="sm">
             <ScrollableWindow
               scrollSx={{ width: 'max-content', alignSelf: 'center' }}
-              scroll={store.group_tree.map(node => (
+              scroll={app_cache.groups.tree.nodes.map(node => (
                 <TreeNode
+                  strategy="btn"
                   key={node.id}
                   node={node}
                   depth={0}
-                  multiselect={group_assigment}
+                  group_assigment={group_assigment}
                 />
               ))}
             />
@@ -38,64 +39,4 @@ export const GroupTreeModal = observer(
       </>
     )
   },
-)
-
-interface GroupTreeSelectorProps {
-  value: number | null
-  onChange: (value: number | null) => void
-}
-
-/** Tree selector modal for parent group selection. */
-const GroupTreeSelectorContent = observer(
-  ({ value, onChange }: GroupTreeSelectorProps) => {
-    const tree = store.group_tree
-
-    const handleClear = () => {
-      onChange(null)
-    }
-
-    return (
-      <Stack gap={1}>
-        <Stack
-          direction="row"
-          justifyContent="space-between"
-          alignItems="center"
-        >
-          <P level="body-sm">Выберите родительскую группу</P>
-          <Button
-            size="sm"
-            variant="plain"
-            color="neutral"
-            onClick={handleClear}
-          >
-            Без родителя
-          </Button>
-        </Stack>
-        <Box
-          sx={{
-            border: '1px solid var(--joy-palette-divider)',
-            borderRadius: 'md',
-            maxHeight: 300,
-            overflow: 'auto',
-          }}
-        >
-          {tree.length === 0 ? (
-            <P level="body-sm" color="neutral" p={2}>
-              Нет созданных групп
-            </P>
-          ) : (
-            tree.map(node => <TreeNode key={node.id} node={node} depth={0} />)
-          )}
-        </Box>
-      </Stack>
-    )
-  },
-)
-
-export const GroupTreeSelectorModal = observer(
-  (props: GroupTreeSelectorProps) => (
-    <InModal openButton={null as any} open={true} setOpen={() => {}}>
-      <GroupTreeSelectorContent {...props} />
-    </InModal>
-  ),
 )

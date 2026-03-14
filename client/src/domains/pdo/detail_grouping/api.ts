@@ -5,7 +5,7 @@ import { rpc } from '@/lib/rpc/rpc.client'
 import { LoadingController } from '@/lib/store/loading_controller'
 import type { DetailInTheGroup } from '@/server/domains/pdo/storage/detail_group_repo'
 import { DetailSt } from '../detail/detail.state'
-import { GroupExplorerVM } from './group.store'
+import { store } from './group.store'
 
 export class DetailGroupingApi {
   readonly groups_tree_loading = new LoadingController()
@@ -58,7 +58,7 @@ export class DetailGroupingApi {
         parent_id,
       })
       await app_cache.groups.invalidate()
-      if (store.group?.id === id) {
+      if (store.group_content.group?.id === id) {
         await this.load_group_with_details(id)
       }
       return updatedGroup
@@ -66,6 +66,4 @@ export class DetailGroupingApi {
   }
 }
 
-export const store = new GroupExplorerVM()
-export const detail_groups_vm = store
 export const api = new DetailGroupingApi()

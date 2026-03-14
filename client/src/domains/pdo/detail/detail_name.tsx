@@ -1,10 +1,9 @@
 /** @jsxImportSource @emotion/react */
 
-import { Tooltip } from '@mui/joy'
 import type { SxProps } from '@mui/joy/styles/types'
-import { app_cache } from '@/domains/pdo/cache'
 import { Box, Link, observer, P, Row } from '@/lib/index'
 import { openPage, routeMap } from '@/lib/routes'
+import { GroupNamesPreview } from '../detail_grouping/group_name_preview'
 import { capitalize } from '../shared/basic'
 import type { GroupAssigment } from './detail.state'
 
@@ -34,7 +33,7 @@ export const DetailName = observer(
           {capitalize(detail.name)}
         </P>
         {with_group_name && (
-          <GroupName
+          <GroupNamesPreview
             group_ids={detail.group_assigment.group_ids}
             sx={slot_props?.group}
           />
@@ -56,48 +55,5 @@ export const DetailName = observer(
         </Link>
       </Box>
     )
-  },
-)
-
-const GroupName = observer(
-  ({ group_ids, sx }: { group_ids?: number[]; sx?: SxProps }) => {
-    const ids = group_ids ?? []
-    if (!ids.length) return null
-
-    const paths = ids
-      .map(id => app_cache.groups.full_path_for(id))
-      .filter((path): path is string => !!path)
-    if (!paths.length) return null
-
-    const display_paths = paths.length > 2 ? paths.slice(0, 2) : paths
-    const has_more = paths.length > 2
-    const display_text = has_more
-      ? `${display_paths.join(', ')}...`
-      : display_paths.join(', ')
-
-    const groups_component = (
-      <P color="primary" sx={{ fontSize: '0.8em', fontWeight: 500, ...sx }}>
-        {display_text}
-      </P>
-    )
-
-    if (has_more) {
-      return (
-        <Tooltip
-          size="sm"
-          title={
-            <Row>
-              {paths.map(path => (
-                <div key={path}>{path}</div>
-              ))}
-            </Row>
-          }
-        >
-          {groups_component}
-        </Tooltip>
-      )
-    }
-
-    return groups_component
   },
 )

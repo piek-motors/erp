@@ -7,7 +7,6 @@ import {
 import { ScrollableWindow } from '@/components/inputs'
 import { SearchWithCriteria } from '@/components/inputs/search_input_with_criteria'
 import { Table } from '@/components/table.impl'
-import { app_cache } from '@/domains/pdo/cache'
 import { MobileNavModal, MobilePadding } from '@/domains/pdo/root_layout'
 import { observer, rpc } from '@/lib/deps'
 import {
@@ -28,6 +27,7 @@ import {
   token_search,
 } from '@/lib/utils/search'
 import type { ListOrdersOutput } from '@/server/domains/pdo/orders_rpc'
+import { app_cache } from '../../cache'
 import { ArchiveResults, ArchiveSearch } from './archive'
 import { getColumns } from './columns'
 
@@ -57,7 +57,7 @@ const search_config: CriteriaBasedSearchConfig<
   [SearchCriteria.Group]: {
     fields: [
       {
-        get: o => app_cache.groups.names_for(o.group_ids).join(' '),
+        get: o => app_cache.groups.tree.names_for(o.group_ids).join(' '),
       },
     ],
   },

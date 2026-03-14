@@ -1,9 +1,9 @@
 /** Group list with hierarchical tree view. */
-import { Divider, Stack } from '@mui/joy'
+import { Stack } from '@mui/joy'
 import type { ReactNode } from 'react'
 import { InModal } from '@/components/modal'
 import { observer, P, useState } from '@/lib/index'
-import { store } from './api'
+import { app_cache } from '../cache'
 import { CreateGroupModal } from './group_name.modal'
 import { TreeNode, type TreeNodeProps } from './tree_node'
 
@@ -22,29 +22,30 @@ export const MobileGroupSelectModal = observer(
 
 interface GroupListProps {
   onLinkClick?: (id: number) => void
-  multiselect?: TreeNodeProps['multiselect']
+  group_assigment?: TreeNodeProps['group_assigment']
 }
 
 /** Main group list component displaying hierarchical tree structure. */
 export const GroupList = observer(
-  ({ onLinkClick, multiselect }: GroupListProps) => {
+  ({ onLinkClick, group_assigment }: GroupListProps) => {
     return (
       <Stack p={0.5} gap={0}>
-        {store.group_tree.map(node => (
+        {app_cache.groups.tree.nodes.map(node => (
           <TreeNode
+            strategy="link"
             node={node}
             depth={0}
-            onLinkClick={onLinkClick}
-            multiselect={multiselect}
+            onClick={onLinkClick}
+            group_assigment={group_assigment}
           />
         ))}
 
-        {store.group_tree.length === 0 && (
+        {app_cache.groups.tree.nodes.length === 0 && (
           <P level="body-sm" color="neutral">
             Нет созданных групп
           </P>
         )}
-        <Divider />
+
         <CreateGroupModal />
       </Stack>
     )

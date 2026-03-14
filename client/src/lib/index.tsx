@@ -258,6 +258,16 @@ export const IconButtonXxs = (props: IconButtonProps & { icon: Icon }) => {
   )
 }
 
+export const MyIconButton = (props: IconButtonProps & { icon: Icon }) => {
+  const variant = props.variant ?? 'soft'
+  const invert = variant === 'solid'
+  return (
+    <IconButton size="sm" {...props}>
+      <UseIcon icon={props.icon} invert={invert} />
+    </IconButton>
+  )
+}
+
 export function DeleteIcon(props: {
   variant?: IconButtonProps['variant']
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void

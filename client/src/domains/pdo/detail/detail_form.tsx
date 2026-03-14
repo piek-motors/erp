@@ -30,7 +30,6 @@ import {
   Row,
 } from '@/lib/index'
 import type { Blank } from '@/server/domains/pdo/storage/detail_repo'
-import { detail_groups_vm } from '../detail_grouping/api'
 import { DetailAttachmentList } from './attachment/list'
 import type { DetailSt, DetailStProp } from './detail.state'
 import {
@@ -38,6 +37,7 @@ import {
   MaterialRequirementInput,
 } from './detail_blank'
 import { WorkflowAccordion } from './workflow'
+import { GroupVisualSeparator } from '../detail_grouping/group_name_preview'
 
 /** Main detail form component with two-column layout. */
 export const DetailForm = observer(
@@ -186,11 +186,11 @@ const DetailGroupInput = observer(({ detail }: { detail: DetailSt }) => (
           />
         }
       />
-      <Row gap={2}>
-        {detail.group_assigment.group_ids.map(id => (
-          <P color="primary">{detail_groups_vm.group_name(id)}</P>
-        ))}
-      </Row>
+      <P color="primary" lineHeight={1.3}>
+        {detail.group_assigment.group_ids
+          .map(id => app_cache.groups.tree.full_node_name(id))
+          .join(GroupVisualSeparator)}
+      </P>
     </Row>
   </Stack>
 ))

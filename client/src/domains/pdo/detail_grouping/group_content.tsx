@@ -1,27 +1,38 @@
-import { UilFolder, UilPlus } from '@iconscout/react-unicons'
+import { UilFolder } from '@iconscout/react-unicons'
 import { Box, Stack } from '@mui/joy'
-import { Search } from '@/components/inputs'
-import { IconButtonXxs, Link, observer, P, Row, UseIcon } from '@/lib/index'
+import { ScrollableWindow, Search } from '@/components/inputs'
+import { Link, Loading, observer, P, Row, UseIcon } from '@/lib/index'
 import { openPage, routeMap } from '@/lib/routes'
 import { app_cache } from '../cache'
 import type { DetailSt } from '../detail/detail.state'
 import { DetailName } from '../detail/detail_name'
-import { store } from './api'
+import { api } from './api'
 import type { GroupTreeNode } from './group.store'
-import { ChangeGroupNameModal, CreateSubgroupModal } from './group_name.modal'
+import { store } from './group.store'
+import {
+  ChangeGroupNameModal,
+  CreateGroupButton,
+  CreateSubgroupModal,
+} from './group_name.modal'
 
 interface GroupSectionProps {
   group: GroupTreeNode
 }
 
-export const GroupContent = observer(() => {
-  const {
-    group_content: detail_list,
-    group,
-    details,
-    create_subgroup_modal,
-  } = store
+export const GroupContentSection = observer(() => {
+  if (api.details_loading.loading) return <Loading />
+  if (!store.group_content.group)
+    return (
+      <P level="body-sm" p={2}>
+        Выберите группу
+      </P>
+    )
+  return <ScrollableWindow scroll={<GroupContent />} />
+})
 
+const GroupContent = observer(() => {
+  const { group_content, create_subgroup_modal } = store
+  const { group } = group_content
   if (!group)
     return (
       <P level="body-sm" color="neutral">
@@ -33,27 +44,30 @@ export const GroupContent = observer(() => {
     <Stack sx={{ flex: 1, p: 1 }} gap={1}>
       <Row>
         <ChangeNameModal />
-        <CreateSubgroupButton />
+        <CreateGroupButton
+          tooltip="Создать подгруппу"
+          onClick={() => store.create_subgroup_modal.open(group.id)}
+        />
       </Row>
       <Search
-        value={detail_list.query}
-        onChange={e => detail_list.set_query(e.target.value)}
+        value={group_content.query}
+        onChange={e => group_content.set_query(e.target.value)}
       />
       <Box sx={{ flex: 1, py: 1, overflow: 'auto' }}>
         <>
           {/* child group links */}
-          {app_cache.groups.get(group.id)?.children.map(child => (
+          {app_cache.groups.tree.node(group.id)?.children.map(child => (
             <GroupLink key={child.id} group={child} />
           ))}
 
           {/* Show details of current group */}
-          {details.length === 0 && (
+          {group_content.details.length === 0 && (
             <P level="body-sm" color="neutral">
               В группе нет деталей
             </P>
           )}
 
-          {details.map(detail => (
+          {group_content.details.map(detail => (
             <DetailRow key={detail.id} detail={detail} />
           ))}
         </>
@@ -63,26 +77,9 @@ export const GroupContent = observer(() => {
   )
 })
 
-const CreateSubgroupButton = observer(() => {
-  const { group } = store
-  if (!group) return null
-  return (
-    <IconButtonXxs
-      variant="plain"
-      color="primary"
-      onClick={() => store.create_subgroup_modal.open(group.id)}
-      className="subgroup-button"
-      sx={{
-        width: 'min-content',
-      }}
-      title="Создать подгруппу"
-      icon={UilPlus}
-    />
-  )
-})
-
 const ChangeNameModal = observer(() => {
-  if (!store.group) return null
+  const { group } = store.group_content
+  if (!group) return null
   return (
     <ChangeGroupNameModal
       openButton={
@@ -96,7 +93,7 @@ const ChangeNameModal = observer(() => {
             },
           }}
         >
-          {store.group_name(store.group.id)}
+          {app_cache.groups.tree.name_for(group.id)}
         </P>
       }
     />

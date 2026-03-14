@@ -1,77 +1,32 @@
 import { makeAutoObservable, runInAction } from 'mobx'
-import { sort_rus } from 'models'
 import { rpc } from '@/lib/rpc/rpc.client'
 import type { RouterOutput } from '@/server/lib/trpc'
+import { Node } from '../detail_grouping/tree/node_vm'
+import { Tree } from '../detail_grouping/tree/tree_vm'
 
 export type DetailGroupTreeNode =
   RouterOutput['pdo']['detail_groups']['list_tree'][number]
 
 export class DetailGroupCache {
-  private group_tree: DetailGroupTreeNode[] = []
+  readonly tree = new Tree()
   constructor() {
     makeAutoObservable(this)
   }
 
-  private flat_group_tree(nodes: DetailGroupTreeNode[]): DetailGroupTreeNode[] {
-    return nodes.flatMap(each => [each, ...this.flat_group_tree(each.children)])
-  }
-
-  get(id: number) {
-    return this.flat_group_tree(this.group_tree).find(each => each.id === id)
-  }
-
-  list() {
-    return sort_rus(this.group_tree, a => a.name)
-  }
-
-  get tree() {
-    return this.group_tree
-  }
-
-  get group_id_name_map() {
-    return this.flat_group_tree(this.group_tree).reduce(
-      (acc, each) => acc.set(each.id, each.name),
-      new Map<number, string>(),
+  private map_tree_node(raw: DetailGroupTreeNode): Node {
+    return new Node(
+      raw.id,
+      raw.name,
+      raw.parent_id,
+      raw.children.map(child => this.map_tree_node(child)),
+      raw.depth,
     )
   }
 
-  name_for(id: number) {
-    return this.group_id_name_map.get(id)
-  }
-
-  names_for(ids: number[]) {
-    return ids
-      .map(id => this.name_for(id))
-      .filter((name): name is string => !!name)
-  }
-
-  /** Gets the full hierarchical path for a group (e.g., "Parent > Child > Grandchild"). */
-  full_path_for(id: number): string | null {
-    const find_path = (
-      nodes: DetailGroupTreeNode[],
-      target_id: number,
-      path: string[] = [],
-    ): string[] | null => {
-      for (const node of nodes) {
-        const new_path = [...path, node.name]
-        if (node.id === target_id) return new_path
-        if (node.children.length > 0) {
-          const found = find_path(node.children, target_id, new_path)
-          if (found) return found
-        }
-      }
-      return null
-    }
-
-    const path = find_path(this.group_tree, id)
-    return path ? path.join('/') : null
-  }
-
   async invalidate() {
-    const groupTree = await rpc.pdo.detail_groups.list_tree.query()
+    const raw_tree = await rpc.pdo.detail_groups.list_tree.query()
     runInAction(() => {
-      this.group_tree = groupTree
+      this.tree.set_nodes(raw_tree.map(each => this.map_tree_node(each)))
     })
-    return groupTree
   }
 }

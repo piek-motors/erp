@@ -1,18 +1,19 @@
 /** Group creation and editing modals with parent selection tree. */
-import { UilFolder, UilPlusCircle } from '@iconscout/react-unicons'
-import { Button, Stack } from '@mui/joy'
+import { UilPlusCircle } from '@iconscout/react-unicons'
+import { type IconButtonProps, Stack } from '@mui/joy'
 import React, { type ReactNode, useEffect } from 'react'
 import { InModal } from '@/components/modal'
 import {
+  IconButtonXxs,
   InputLabled,
   Loading,
   observer,
   P,
-  UseIcon,
   useState,
 } from '@/lib/index'
-import { api, detail_groups_vm, store } from './api'
-import { GroupTreeSelectorModal } from './group_tree_selector'
+import { app_cache } from '../cache'
+import { api } from './api'
+import { detail_groups_vm, store } from './group.store'
 
 interface BaseGroupModalProps {
   openButton: ReactNode
@@ -30,7 +31,6 @@ const BaseGroupModal = observer((props: BaseGroupModalProps) => {
     props.initialParentId ?? null,
   )
   const [open, setOpen] = useState(false)
-  const [showTreeModal, setShowTreeModal] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const handleSubmit = async () => {
@@ -66,22 +66,6 @@ const BaseGroupModal = observer((props: BaseGroupModalProps) => {
     if (props.initialParentId !== undefined) setParentId(props.initialParentId)
   }, [props.initialParentId])
 
-  const getParentName = (id: number | null): string => {
-    if (!id) return 'Без родителя'
-    const findNode = (nodes: typeof store.group_tree): string | null => {
-      for (const node of nodes) {
-        if (node.id === id) return node.name
-        const found = findNode(node.children)
-        if (found) return found
-      }
-      return null
-    }
-    const fromTree = findNode(store.group_tree)
-    if (fromTree) return fromTree
-    const fromGroups = store.groups.find(g => g.id === id)?.name
-    return fromGroups || 'Без родителя'
-  }
-
   return (
     <InModal openButton={props.openButton} open={open} setOpen={setOpen}>
       <Stack gap={1} onKeyDown={handleKeyDown}>
@@ -92,54 +76,23 @@ const BaseGroupModal = observer((props: BaseGroupModalProps) => {
           placeholder="Название"
           autoFocus
         />
-        {props.showParentSelect !== false && (
-          <Stack gap={0.5}>
-            <P level="body-sm">Родительская группа</P>
-            <Stack direction="row" gap={1}>
-              <Button
-                variant="outlined"
-                color="neutral"
-                onClick={() => setShowTreeModal(true)}
-                sx={{ flex: 1, justifyContent: 'flex-start' }}
-              >
-                <UseIcon icon={UilFolder} small />
-                <P level="body-sm" sx={{ ml: 0.5 }}>
-                  {getParentName(parentId)}
-                </P>
-              </Button>
-
-              {parentId !== null && (
-                <Button
-                  variant="plain"
-                  color="neutral"
-                  onClick={() => setParentId(null)}
-                >
-                  ✕
-                </Button>
-              )}
-            </Stack>
-          </Stack>
-        )}
         {isSubmitting && <Loading />}
       </Stack>
-      {showTreeModal && (
-        <InModal
-          openButton={null as any}
-          open={showTreeModal}
-          setOpen={setShowTreeModal}
-        >
-          <GroupTreeSelectorModal
-            value={parentId}
-            onChange={val => {
-              setParentId(val)
-              setShowTreeModal(false)
-            }}
-          />
-        </InModal>
-      )}
     </InModal>
   )
 })
+
+export const CreateGroupButton = observer(
+  (props: { tooltip: string } & IconButtonProps) => (
+    <IconButtonXxs
+      {...props}
+      title={props.tooltip}
+      variant="soft"
+      color="primary"
+      icon={UilPlusCircle}
+    />
+  ),
+)
 
 /** Modal for creating a new root group. */
 export const CreateGroupModal = observer(() => {
@@ -149,17 +102,7 @@ export const CreateGroupModal = observer(() => {
 
   return (
     <BaseGroupModal
-      openButton={
-        <Button
-          sx={{ mt: 1 }}
-          size="sm"
-          variant="soft"
-          color="primary"
-          startDecorator={<UseIcon icon={UilPlusCircle} small />}
-        >
-          Создать
-        </Button>
-      }
+      openButton={<CreateGroupButton tooltip="Создать группу" />}
       title="Создать новую группу"
       onSubmit={handleSubmit}
       initialName=""
@@ -175,7 +118,8 @@ export const CreateSubgroupModal = observer(() => {
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const { create_subgroup_modal } = detail_groups_vm
-  const parent_id = create_subgroup_modal.parent_id
+  const parent_id = create_subgroup_modal.parent_id!
+  const parent_name = app_cache.groups.tree.name_for(parent_id)
 
   const handleSubmit = async () => {
     const trimmedName = name.trim()
@@ -183,7 +127,7 @@ export const CreateSubgroupModal = observer(() => {
 
     setIsSubmitting(true)
     try {
-      await api.create_group(trimmedName, create_subgroup_modal.parent_id)
+      await api.create_group(trimmedName, parent_id)
       setOpen(false)
       create_subgroup_modal.close()
     } catch (error) {
@@ -212,7 +156,7 @@ export const CreateSubgroupModal = observer(() => {
   return (
     <InModal open={open} setOpen={setOpen}>
       <Stack gap={1} onKeyDown={handleKeyDown}>
-        <P>Создать подгруппу в {detail_groups_vm.group_name(parent_id)}</P>
+        <P>Создать подгруппу в {parent_name}</P>
         <InputLabled
           size="sm"
           value={name}
@@ -229,7 +173,7 @@ export const CreateSubgroupModal = observer(() => {
 /** Modal for editing an existing group's name and parent. */
 export const ChangeGroupNameModal = observer(
   (props: { openButton: ReactNode }) => {
-    const { group } = store
+    const { group } = store.group_content
 
     const handleSubmit = async (name: string, parent_id: number | null) => {
       if (!group) throw new Error('No group selected for update')
@@ -238,7 +182,8 @@ export const ChangeGroupNameModal = observer(
 
     const currentGroupId = group?.id
     const currentParentId = currentGroupId
-      ? (store.groups.find(g => g.id === currentGroupId)?.parent_id ?? null)
+      ? (app_cache.groups.tree.nodes.find(g => g.id === currentGroupId)
+          ?.parent_id ?? null)
       : null
 
     return (
