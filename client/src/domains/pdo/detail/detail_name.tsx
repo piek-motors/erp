@@ -1,16 +1,16 @@
 /** @jsxImportSource @emotion/react */
 
-import { Tooltip } from '@mui/joy'
 import type { SxProps } from '@mui/joy/styles/types'
-import { app_cache } from '@/domains/pdo/cache'
-import { Box, Link, observer, P, Row } from '@/lib/index'
+import { Box, Link, observer, P, Row, Stack } from '@/lib/index'
 import { openPage, routeMap } from '@/lib/routes'
+import { GroupNamesPreview } from '../detail_grouping/group_name_preview'
 import { capitalize } from '../shared/basic'
+import type { GroupAssigment } from './detail.state'
 
 interface Detail {
   id: number
   name: string
-  group_ids?: number[]
+  group_assigment: GroupAssigment
 }
 
 interface Props {
@@ -18,6 +18,7 @@ interface Props {
   with_group_name?: boolean
   disable_link?: boolean
   with_id?: boolean
+  two_lines?: boolean
   slot_props?: {
     name?: SxProps
     row?: SxProps
@@ -26,25 +27,54 @@ interface Props {
 }
 
 export const DetailName = observer(
-  ({ detail, with_group_name, disable_link, with_id, slot_props }: Props) => {
-    const content = (
-      <Row gap={1} rowGap={0} sx={slot_props?.row} alignItems={'baseline'}>
-        <P sx={slot_props?.name} lineHeight={1.2}>
-          {capitalize(detail.name)}
-        </P>
-        {with_group_name && (
-          <GroupName group_ids={detail.group_ids} sx={slot_props?.group} />
-        )}
-        {with_id && (
-          <P level="body-xs" fontSize={10}>
-            №{detail.id}
-          </P>
-        )}
+  ({
+    detail,
+    with_group_name,
+    disable_link,
+    with_id,
+    two_lines,
+    slot_props,
+  }: Props) => {
+    const name = (
+      <P sx={slot_props?.name} lineHeight={1.2}>
+        {capitalize(detail.name)}
+      </P>
+    )
+
+    const id = with_id && (
+      <P level="body-xs" fontSize={10}>
+        №{detail.id}
+      </P>
+    )
+
+    const groups = with_group_name && (
+      <GroupNamesPreview
+        group_ids={detail.group_assigment.group_ids}
+        sx={slot_props?.group}
+      />
+    )
+
+    const content = two_lines ? (
+      <Stack
+        gap={0}
+        sx={slot_props?.row}
+        alignItems="center"
+        justifyContent={'center'}
+      >
+        <Row noWrap gap={0.5}>
+          {id}
+          {name}
+        </Row>
+        {groups}
+      </Stack>
+    ) : (
+      <Row gap={1} rowGap={0} sx={slot_props?.row} alignItems="baseline">
+        {name}
+        {groups}
       </Row>
     )
 
     if (disable_link) return content
-
     return (
       <Box width="fit-content">
         <Link to={openPage(routeMap.pdo.detail.edit, detail.id)}>
@@ -52,54 +82,5 @@ export const DetailName = observer(
         </Link>
       </Box>
     )
-  },
-)
-
-const GroupName = observer(
-  ({
-    group_id,
-    group_ids,
-    sx,
-  }: {
-    group_id?: number | null
-    group_ids?: number[]
-    sx?: SxProps
-  }) => {
-    const ids = group_ids ?? (group_id ? [group_id] : [])
-    if (!ids.length) return null
-
-    const names = app_cache.groups.names_for(ids)
-    if (!names.length) return null
-
-    const display_names = names.length > 2 ? names.slice(0, 2) : names
-    const has_more = names.length > 2
-    const display_text = has_more
-      ? `${display_names.join(', ')}...`
-      : display_names.join(', ')
-
-    const groups_component = (
-      <P color="primary" sx={{ fontSize: '0.8em', fontWeight: 500, ...sx }}>
-        {display_text}
-      </P>
-    )
-
-    if (has_more) {
-      return (
-        <Tooltip
-          size="sm"
-          title={
-            <Row>
-              {names.map(name => (
-                <div key={name}>{name}</div>
-              ))}
-            </Row>
-          }
-        >
-          {groups_component}
-        </Tooltip>
-      )
-    }
-
-    return groups_component
   },
 )

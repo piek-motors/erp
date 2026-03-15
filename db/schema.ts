@@ -70,6 +70,7 @@ export namespace DB {
   export interface DetailGroupTable {
     id: Generated<number>
     name: string
+    parent_id: number | null
   }
 
   export interface DetailGroupDetailsTable {

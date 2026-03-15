@@ -22,8 +22,8 @@ export const DetailsMadeOfMaterialModal = observer(
 
     if (m.details_made_from_this_material.length === 0)
       return (
-        <P color="danger" level="body-xs" width={'min-content'}>
-          Материал не используется
+        <P color="danger" level="body-xs" width={'fit-content'} lineHeight={1}>
+          Не используется
         </P>
       )
 

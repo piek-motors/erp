@@ -1,82 +1,99 @@
 import { makeAutoObservable } from 'mobx'
-import type { Color } from 'models'
-import { app_cache } from '@/domains/pdo/cache'
+import type { DetailSt } from '../detail/detail.state'
 
-class GroupNameState {
+class EditGroupVM {
   constructor() {
     makeAutoObservable(this)
   }
+
   name: string = ''
-  setName(name: string) {
+  set_name(name: string) {
     this.name = name
   }
-  modalOpen: boolean = false
-  setModalOpen(open: boolean) {
-    this.modalOpen = open
+
+  is_open: boolean = false
+  set_is_open(open: boolean) {
+    this.is_open = open
+  }
+}
+
+class CreateSubGroupVM {
+  constructor() {
+    makeAutoObservable(this)
+  }
+
+  parent_id: number | null = null
+
+  open(parent_id: number) {
+    this.parent_id = parent_id
+  }
+
+  get is_open() {
+    return !!this.parent_id
+  }
+
+  close() {
+    this.parent_id = null
   }
 }
 
 export interface Group {
   id: number
   name: string
+  parent_id?: number | null
 }
 
-export class Detail {
-  constructor(
-    readonly id: number,
-    readonly name: string,
-    readonly drawing_number: string | null,
-    readonly group_ids: number[] = [],
-    public colors?: Color[],
-  ) {
-    makeAutoObservable(this)
-  }
-
-  setColors(colors: Color[]) {
-    this.colors = colors
-  }
+export interface GroupTreeNode extends Group {
+  children: GroupTreeNode[]
+  depth: number
 }
 
 export interface GroupWithDetails {
   group: Group
-  details: Detail[]
+  details: DetailSt[]
 }
 
-export class DetailListStore {
+export class GroupContentVM {
+  // currently opened group
+  group: Group | null = null
+
+  details: DetailSt[] = []
   query: string = ''
 
   constructor() {
     makeAutoObservable(this)
   }
 
-  setQuery(q: string) {
+  set_query(q: string) {
     this.query = q
   }
 
-  getFilteredAndSorted(details: Detail[]): Detail[] {
-    return this.sortDetails(this.filterDetailsByQuery(details))
+  get_filtered_and_sorted(): DetailSt[] {
+    return this.sort_details(this.filter_details_by_query())
   }
 
-  private getQueryTokens(): string[] {
+  private get_query_tokens(): string[] {
     return this.query?.toLowerCase().split(/\s+/).filter(Boolean) ?? []
   }
 
-  private filterDetailsByQuery(details: Detail[]): Detail[] {
-    const tokens = this.getQueryTokens()
+  private filter_details_by_query(): DetailSt[] {
+    const tokens = this.get_query_tokens()
 
     if (tokens.length === 0) {
-      return details
+      return this.details
     }
 
-    return details.filter(detail => this.matchesAllTokens(detail.name, tokens))
+    return this.details.filter(detail =>
+      this.matches_all_tokens(detail.name, tokens),
+    )
   }
 
-  private matchesAllTokens(text: string, tokens: string[]): boolean {
+  private matches_all_tokens(text: string, tokens: string[]): boolean {
     const value = text.toLowerCase()
     return tokens.every(token => value.includes(token))
   }
 
-  private sortDetails(details: Detail[]): Detail[] {
+  private sort_details(details: DetailSt[]): DetailSt[] {
     return details.slice().sort((a, b) =>
       a.name.localeCompare(b.name, 'ru', {
         numeric: true,
@@ -84,50 +101,32 @@ export class DetailListStore {
       }),
     )
   }
+
+  reset() {
+    this.query = ''
+    this.details = []
+    this.group = null
+  }
 }
 
-export class DetailGroupStore {
-  readonly groupNameState = new GroupNameState()
-  readonly detailList = new DetailListStore()
-
-  openedGroup: GroupWithDetails | null = null
-  selectedDetailIds: number[] = []
+export class GroupExplorerVM {
+  readonly edit_group_modal = new EditGroupVM()
+  readonly create_subgroup_modal = new CreateSubGroupVM()
+  readonly group_content = new GroupContentVM()
 
   constructor() {
     makeAutoObservable(this)
   }
 
-  get groups() {
-    return app_cache.groups.ls()
-  }
-
-  get targetGroupDetails() {
-    const details = this.openedGroup?.details ?? []
-    return this.detailList.getFilteredAndSorted(details)
-  }
-
-  openGroup(group: GroupWithDetails | null) {
-    this.openedGroup = group
-    this.openedGroup?.details.sort((a, b) => a.name.localeCompare(b.name))
-    this.groupNameState.setName(group?.group.name || '')
-  }
-
-  setSelectedDetailIds(ids: number[]) {
-    this.selectedDetailIds = ids
-  }
-
-  toggleDetailSelection(detailId: number) {
-    this.selectedDetailIds = this.selectedDetailIds.includes(detailId)
-      ? this.selectedDetailIds.filter(id => id !== detailId)
-      : [...this.selectedDetailIds, detailId]
-  }
-
-  clearSelection() {
-    this.selectedDetailIds = []
+  open_group(group: Group | null, details: DetailSt[]) {
+    this.group_content.details = details
+    this.group_content.group = group
+    this.edit_group_modal.set_name(group?.name || '')
   }
 
   clear() {
-    this.openedGroup = null
-    this.selectedDetailIds = []
+    this.group_content.reset()
   }
 }
+export const store = new GroupExplorerVM()
+export const detail_groups_vm = store

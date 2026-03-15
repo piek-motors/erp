@@ -4,6 +4,7 @@ import { DetailName } from '@/domains/pdo/detail/detail_name'
 import { Label, P, Row } from '@/lib/index'
 import { fmtDate, time_delta_days } from '@/lib/utils/date_fmt'
 import type { ListOrdersOutput } from '@/server/domains/pdo/orders_rpc'
+import { GroupAssigment } from '../../detail/detail.state'
 import { Indicator } from '../../shared/basic'
 
 const commonColumns: Column<ListOrdersOutput>[] = [
@@ -25,7 +26,7 @@ const commonColumns: Column<ListOrdersOutput>[] = [
           detail={{
             id: d.detail_id,
             name: d.detail_name,
-            group_ids: d.group_ids,
+            group_assigment: new GroupAssigment(d.group_ids),
           }}
           with_group_name
         />

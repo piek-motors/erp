@@ -71,8 +71,9 @@ export class DetailApi {
         name: detail.name,
         normalized_name: normalize(detail.name),
         drawing_number: detail.drawing_number,
-        group_ids: detail.group_ids,
+        group_ids: detail.group_assigment.group_ids,
         on_hand_balance: detail.warehouse.stock,
+        group_assigment: detail.group_assigment,
       })
       detail.set_updated_at(new Date())
       notifier.ok(`Деталь обновлена`)

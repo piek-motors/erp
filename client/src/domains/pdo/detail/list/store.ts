@@ -19,8 +19,6 @@ export enum SearchCriteria {
   DrawingNumber = 'Чертеж',
 }
 
-type CriteriaMatcher = (details: AppDetail[], query: string) => AppDetail[]
-
 export class DetailListStore {
   readonly loader = new LoadingController()
   readonly searchStore: PaginatedSearchStore<AppDetail>
@@ -109,7 +107,7 @@ const search_config: CriteriaBasedSearchConfig<AppDetail, SearchCriteria> = {
       {
         get: d =>
           d.group_ids
-            .map(id => app_cache.groups.name_for(id) ?? '')
+            .map(id => app_cache.groups.tree.name_for(id) ?? '')
             .join(' ')
             .toLowerCase(),
       },

@@ -12,11 +12,11 @@ export interface DetailGroupDetailRow {
 export function create_detail_group_map(
   group_details: DetailGroupDetailRow[],
 ): Map<number, number[]> {
-  const detail_group_map = new Map<number, number[]>()
+  const detail_group_associations = new Map<number, number[]>()
   group_details.forEach(gd => {
-    const existing = detail_group_map.get(gd.detail_id) || []
-    detail_group_map.set(gd.detail_id, [...existing, gd.group_id])
+    const existing = detail_group_associations.get(gd.detail_id) || []
+    detail_group_associations.set(gd.detail_id, [...existing, gd.group_id])
   })
 
-  return detail_group_map
+  return detail_group_associations
 }

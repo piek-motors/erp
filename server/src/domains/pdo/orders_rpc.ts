@@ -11,10 +11,11 @@ import { formatDate, timedeltaInSeconds } from '#root/lib/time.js'
 import { router } from '#root/lib/trpc/trpc.js'
 import { type DB, db, procedure, TRPCError } from '#root/sdk.js'
 import { calc_material_deduction } from './services/order_service.js'
-import { create_detail_group_map } from './utils.js'
+import { DetailRepo } from './storage/detail_repo.js'
+
+const repo = new DetailRepo(db)
 
 export const FinishedOrderRetentionDays = 30
-
 export const FinishedOrderRetentionPeriod = FinishedOrderRetentionDays * Day
 
 export interface ListOrdersOutput {
@@ -57,7 +58,7 @@ const base_query = db
 export const orders = router({
   get: procedure
     .input(z.object({ id: z.number() }))
-    .query(async ({ input, ctx }) => {
+    .query(async ({ input }) => {
       const order = await db
         .selectFrom('pdo.orders as m')
         .selectAll('m')
@@ -85,20 +86,16 @@ export const orders = router({
     }),
   //
   list: procedure.query(async () => {
-    const [orders, dict_operations, groupDetails] = await Promise.all([
-      base_query
-        .where('o.finished_at', 'is', null)
-        .where('o.status', '!=', OrderStatus.Archived)
-        .orderBy('o.started_at', 'desc')
-        .execute(),
-
-      db.selectFrom('pdo.dict_operation_kinds').selectAll().execute(),
-      db
-        .selectFrom('pdo.detail_group_details')
-        .select(['detail_id', 'group_id'])
-        .execute(),
-    ])
-    const detail_group_map = create_detail_group_map(groupDetails)
+    const [orders, dict_operations, detail_group_associations] =
+      await Promise.all([
+        base_query
+          .where('o.finished_at', 'is', null)
+          .where('o.status', '!=', OrderStatus.Archived)
+          .orderBy('o.started_at', 'desc')
+          .execute(),
+        db.selectFrom('pdo.dict_operation_kinds').selectAll().execute(),
+        repo.detail_group_associations(),
+      ])
     const operationsMap: Record<number, string> = dict_operations.reduce(
       (acc, each) => {
         acc[each.id] = each.v
@@ -131,7 +128,7 @@ export const orders = router({
           (current_operation != null && operationsMap[current_operation[0]]) ||
           null,
         duplicated: duplicated_order_id || null,
-        group_ids: detail_group_map.get(o.detail_id) || [],
+        group_ids: detail_group_associations.get(o.detail_id) || [],
         ...dates_formatter(o),
         started_at: o.started_at?.valueOf() ?? null,
         finished_at: null,
@@ -140,24 +137,20 @@ export const orders = router({
 
     return matrixEncoder(result)
   }),
-  //,
+
   list_last_archived: procedure.query(async () => {
     const cutoffDate = new Date(Date.now() - FinishedOrderRetentionPeriod)
-    const [finished, groupDetails] = await Promise.all([
+    const [finished, detail_group_associations] = await Promise.all([
       base_query
         .where('o.finished_at', '>=', cutoffDate)
         .orderBy('o.finished_at', 'desc')
         .execute(),
-      db
-        .selectFrom('pdo.detail_group_details')
-        .select(['detail_id', 'group_id'])
-        .execute(),
+      repo.detail_group_associations(),
     ])
-    const detail_group_map = create_detail_group_map(groupDetails)
     return matrixEncoder(
       finished.map(o => ({
         ...o,
-        group_ids: detail_group_map.get(o.detail_id) || [],
+        group_ids: detail_group_associations.get(o.detail_id) || [],
         ...dates_formatter(o),
       })),
     )
@@ -170,7 +163,7 @@ export const orders = router({
       // Check if term is a number (integer ID search)
       const isNumericId = /^\d+$/.test(normalizedTerm)
 
-      const [orders, groupDetails] = await Promise.all([
+      const [orders, detail_group_associations] = await Promise.all([
         (async () => {
           let query = db
             .selectFrom('pdo.orders as o')
@@ -223,16 +216,12 @@ export const orders = router({
 
           return await query.execute()
         })(),
-        db
-          .selectFrom('pdo.detail_group_details')
-          .select(['detail_id', 'group_id'])
-          .execute(),
+        repo.detail_group_associations(),
       ])
-      const detail_group_map = create_detail_group_map(groupDetails)
       return matrixEncoder(
         orders.map(o => ({
           ...o,
-          group_ids: detail_group_map.get(o.detail_id) || [],
+          group_ids: detail_group_associations.get(o.detail_id) || [],
           ...dates_formatter(o, true),
         })),
       )

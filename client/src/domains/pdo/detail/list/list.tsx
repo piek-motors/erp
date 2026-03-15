@@ -19,7 +19,7 @@ import {
   useNavigate,
 } from '@/lib/index'
 import type { AppDetail } from '../../cache/detail_cache'
-import type { DetailSt } from '../detail.state'
+import { type DetailSt, GroupAssigment } from '../detail.state'
 import { DetailName } from '../detail_name'
 import { AlphabetIndex } from './alphabet_index'
 import { SearchCriteria, detailListStore as state } from './store'
@@ -69,7 +69,7 @@ const columnList: Column<AppDetail>[] = [
         detail={{
           id: r.id || 0,
           name: r.name,
-          group_ids: r.group_ids || [],
+          group_assigment: new GroupAssigment(r.group_ids),
         }}
         disable_link
         with_group_name

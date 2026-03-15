@@ -28,7 +28,7 @@ export function Tabs(props: TabProps) {
     <MuiTabs
       {...props}
       sx={{ borderRadius: 'sm', minWidth: 'fit-content', ...props.sx }}
-      onChange={(e, v) => {
+      onChange={(_, v) => {
         if (v == null) return
         if (props.handleChange) {
           props.handleChange(v)

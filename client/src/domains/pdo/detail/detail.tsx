@@ -1,4 +1,4 @@
-import { Box, Stack } from '@mui/joy'
+import { Stack } from '@mui/joy'
 import { MetalPageTitle, SaveAndDelete } from '@/domains/pdo/shared/basic'
 import {
   ActionButton,
@@ -59,6 +59,7 @@ export const DetailPage = observer(() => {
   return (
     <Stack sx={{ flex: 1 }}>
       <MetalPageTitle
+        spaceBetween={false}
         t={
           Boolean(detail.id) && (
             <P level="body-md" whiteSpace={'nowrap'}>
@@ -66,20 +67,17 @@ export const DetailPage = observer(() => {
             </P>
           )
         }
+        children={<Save detail={detail} />}
       />
-      <Row flexWrap={'wrap'} gap={1}>
+      <Row flexWrap={'wrap'} gap={1} py={0.5}>
         <DetailWarehouseModal detail={detail} />
         <CreateManufacturingOrder detailId={detail.id} />
       </Row>
       <DetailForm detail={detail} />
-
-      <Box pt={1}>
-        <Metadata
-          updated_at={detail.updated_at}
-          last_production={detail.last_production}
-        />
-        <Save detail={detail} />
-      </Box>
+      <Metadata
+        updated_at={detail.updated_at}
+        last_production={detail.last_production}
+      />
     </Stack>
   )
 })
@@ -88,7 +86,7 @@ const Save = ({ detail }: DetailStProp) => {
   const navigate = useNavigate()
   return (
     <SaveAndDelete
-      sx={{ py: 1 }}
+      sx={{ flexWrap: 'nowrap', gap: 1 }}
       itemName={`Деталь (${detail.id}) - ${detail.name}`}
       handleDelete={() =>
         api.delete(detail.id).then(() => {

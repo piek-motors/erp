@@ -1,8 +1,8 @@
 import type { DB } from 'db'
-import { sql } from 'kysely'
 import { SupplyReason, Unit, WriteoffReason } from 'models'
 import { z } from 'zod'
 import { Warehouse } from '#root/domains/pdo/services/warehouse_service.js'
+import { MaterialRepo } from '#root/domains/pdo/storage/material_repo.js'
 import { materials_stat_container } from '#root/ioc/index.js'
 import { logger } from '#root/ioc/log.js'
 import { isDuplicateKeyError } from '#root/lib/kysely.js'
@@ -14,13 +14,18 @@ import {
   RpcError,
   requireScope,
   Scope,
-  TRPCError,
 } from '#root/sdk.js'
-import { get_details_by_material_id } from './details_rpc.js'
+import { DetailRepo } from './storage/detail_repo.js'
 
-export type MaterialRes = DB.Material & {
-  deficit: DeficitInfo
+export type { MaterialWithDeficit as MaterialRes } from '#root/domains/pdo/storage/material_repo.js'
+
+export interface DeficitInfo {
+  deficit: boolean
+  days_until_stockout: number
 }
+
+const material_repo = new MaterialRepo(db)
+const detail_repo = new DetailRepo(db)
 
 const DEFAULT_SHORTAGE_PREDICTION_HORIZON_DAYS = 60
 
@@ -35,22 +40,14 @@ const update_payload = payload.extend({ id: z.number() })
 
 export const material = router({
   get: procedure.input(id_payload).query(async ({ input: { id } }) => {
-    const [material, detailCount] = await Promise.all([
-      db
-        .selectFrom('pdo.materials')
-        .selectAll()
-        .where('id', '=', id)
-        .executeTakeFirstOrThrow(),
-      db
-        .selectFrom('pdo.details')
-        .where(sql<boolean>`(blank->'material'->>'material_id')::int = ${id}`)
-        .select(eb => eb.fn.countAll().as('count'))
-        .executeTakeFirstOrThrow(),
+    const [material, details] = await Promise.all([
+      material_repo.get_by_id_or_throw(id),
+      detail_repo.filter_by_material_id(id),
     ])
     return {
       material,
       deficit: predict_deficit(material),
-      detailCount: Number(detailCount.count),
+      detailCount: details.length,
       writeoff_stat: {
         monthly: materials_stat_container.writeoffs.monthly?.get(id)?.entries,
         quarterly:
@@ -59,52 +56,37 @@ export const material = router({
     }
   }),
   //
-  list: procedure.query(() =>
-    db
-      .selectFrom('pdo.materials as m')
-      .selectAll()
-      .orderBy('m.label')
-      .execute()
-      .then(materials =>
-        matrixEncoder(
-          materials.map(
-            m =>
-              ({
-                ...m,
-                deficit: predict_deficit(m),
-              }) satisfies MaterialRes,
-          ),
-        ),
-      ),
-  ),
+  list: procedure.query(async () => {
+    const materials = await material_repo.list_materials()
+    return matrixEncoder(
+      materials.map(m => ({
+        ...m,
+        deficit: predict_deficit(m),
+      })),
+    )
+  }),
   //
   create: procedure
     .use(requireScope(Scope.pdo))
     .input(payload)
     .mutation(async ({ input }) => {
-      const material = await db
-        .insertInto('pdo.materials')
-        .values({
+      try {
+        return await material_repo.create({
           ...input,
           shortage_prediction_horizon_days:
             input.shortage_prediction_horizon_days ||
             DEFAULT_SHORTAGE_PREDICTION_HORIZON_DAYS,
           label: `${input.label} ${input.alloy ?? ''}`,
-          on_hand_balance: 0,
-          linear_mass: 0,
         })
-        .returningAll()
-        .executeTakeFirstOrThrow()
-        .catch(e => {
-          if (isDuplicateKeyError(e)) {
-            throw new TRPCError({
-              code: 'CONFLICT',
-              message: 'Материал с таким названием уже существует',
-            })
-          }
-          throw e
-        })
-      return material
+      } catch (e: any) {
+        if (isDuplicateKeyError(e)) {
+          throw new RpcError(
+            'CONFLICT',
+            'Материал с таким названием уже существует',
+          )
+        }
+        throw e
+      }
     }),
   //
   delete: procedure
@@ -113,7 +95,7 @@ export const material = router({
     .mutation(async ({ input: { id }, ctx: { user } }) => {
       await db.transaction().execute(async trx => {
         // Check if we have some relationships with details
-        const details = await get_details_by_material_id(id)
+        const details = await detail_repo.filter_by_material_id(id)
         if (details.length) {
           throw new RpcError(
             'FORBIDDEN',
@@ -125,31 +107,27 @@ export const material = router({
           .deleteFrom('pdo.operations')
           .where('material_id', '=', id)
           .execute()
+
         const { label } = await trx
           .deleteFrom('pdo.materials')
           .where('id', '=', id)
           .returning(['label'])
           .executeTakeFirstOrThrow()
+
         logger.info(`Material deleted: ${id} ${label} by ${user.first_name}`)
       })
-      return {
-        success: true,
-      }
+      return { success: true }
     }),
   update: procedure
     .use(requireScope(Scope.pdo))
     .input(update_payload)
     .mutation(async ({ input }) => {
-      await db
-        .updateTable('pdo.materials')
-        .set({
-          ...input,
-          shortage_prediction_horizon_days:
-            input.shortage_prediction_horizon_days ||
-            DEFAULT_SHORTAGE_PREDICTION_HORIZON_DAYS,
-        })
-        .where('id', '=', input.id)
-        .executeTakeFirstOrThrow()
+      await material_repo.update({
+        ...input,
+        shortage_prediction_horizon_days:
+          input.shortage_prediction_horizon_days ||
+          DEFAULT_SHORTAGE_PREDICTION_HORIZON_DAYS,
+      })
       return 'ok'
     }),
   //
@@ -195,19 +173,9 @@ export const material = router({
     }),
   //
   dict_distinct_alloys: procedure.query(async () =>
-    db
-      .selectFrom('pdo.materials')
-      .select('alloy')
-      .distinct()
-      .execute()
-      .then(res => res.map(e => e.alloy)),
+    material_repo.get_distinct_alloys(),
   ),
 })
-
-export interface DeficitInfo {
-  deficit: boolean
-  days_until_stockout: number
-}
 
 function predict_deficit(
   material: Pick<

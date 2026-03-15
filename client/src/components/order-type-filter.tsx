@@ -11,7 +11,7 @@ export const OrderTypeFilter = ({ value, onChange }: IOrderTypeFilterProps) => (
     <Select
       name="managerFilter"
       value={value as string}
-      onChange={(e, v) => onChange(v)}
+      onChange={(_, v) => onChange(v)}
       placeholder="Тип заказа"
     >
       <Option value={OrderStatus.Archived}>Заказы</Option>

@@ -9,7 +9,7 @@ export class СonfiguratorVM {
 
   timeRetention: number = 30
   setTimeRetention(timeRetention: string) {
-    this.timeRetention = parseInt(timeRetention)
+    this.timeRetention = parseInt(timeRetention, 10)
   }
 
   full_view: boolean = true

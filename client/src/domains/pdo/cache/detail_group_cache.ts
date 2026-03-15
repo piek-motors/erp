@@ -1,40 +1,32 @@
 import { makeAutoObservable, runInAction } from 'mobx'
 import { rpc } from '@/lib/rpc/rpc.client'
 import type { RouterOutput } from '@/server/lib/trpc'
+import { Node } from '../detail_grouping/tree/node_vm'
+import { Tree } from '../detail_grouping/tree/tree_vm'
 
-export type DetailGroup = RouterOutput['pdo']['detail_groups']['list'][number]
+export type DetailGroupTreeNode =
+  RouterOutput['pdo']['detail_groups']['list_tree'][number]
 
 export class DetailGroupCache {
-  private groups: DetailGroup[] = []
+  readonly tree = new Tree()
   constructor() {
     makeAutoObservable(this)
   }
 
-  ls() {
-    return this.groups.slice().sort((a, b) =>
-      a.name.localeCompare(b.name, 'ru', {
-        numeric: true,
-        sensitivity: 'base',
-      }),
+  private map_tree_node(raw: DetailGroupTreeNode): Node {
+    return new Node(
+      raw.id,
+      raw.name,
+      raw.parent_id,
+      raw.children.map(child => this.map_tree_node(child)),
+      raw.depth,
     )
   }
 
-  name_for(id?: number | null) {
-    if (!id) return null
-    return this.groups.find(g => g.id === id)?.name
-  }
-
-  names_for(ids: number[]) {
-    return ids
-      .map(id => this.name_for(id))
-      .filter((name): name is string => !!name)
-  }
-
   async invalidate() {
-    const groups = await rpc.pdo.detail_groups.list.query()
+    const raw_tree = await rpc.pdo.detail_groups.list_tree.query()
     runInAction(() => {
-      this.groups = groups
+      this.tree.set_nodes(raw_tree.map(each => this.map_tree_node(each)))
     })
-    return groups
   }
 }

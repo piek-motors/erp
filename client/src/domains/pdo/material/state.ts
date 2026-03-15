@@ -2,6 +2,7 @@ import type { Unit } from 'models'
 import { makeAutoObservable } from '@/lib/deps'
 import { LoadingController } from '@/lib/store/loading_controller'
 import type { DeficitInfo } from '@/server/domains/pdo/materials_rpc'
+import type { GroupAssigment } from '../detail/detail.state'
 import { MaterialWarehouseStore } from './warehouse/state'
 
 export class MaterialSt {
@@ -35,7 +36,7 @@ export class MaterialSt {
   details_made_from_this_material: {
     id: number
     name: string
-    group_ids: number[]
+    group_assigment: GroupAssigment
   }[] = []
 
   shortage_prediction_horizon_days: number | null = null

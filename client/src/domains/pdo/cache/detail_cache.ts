@@ -4,6 +4,7 @@ import { rpc } from '@/lib/rpc/rpc.client'
 import { LoadingController } from '@/lib/store/loading_controller'
 import { normalize } from '@/lib/utils/search'
 import type { ListDetailsOutput } from '@/server/domains/pdo/details_rpc'
+import { GroupAssigment } from '../detail/detail.state'
 
 const alphabet = 'АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ'.split('')
 
@@ -12,7 +13,10 @@ type Operation = {
   v: string
 }
 
-export type AppDetail = ListDetailsOutput & { normalized_name: string }
+export type AppDetail = ListDetailsOutput & {
+  normalized_name: string
+  group_assigment: GroupAssigment
+}
 
 export class DetailCache {
   readonly loader = new LoadingController()
@@ -85,6 +89,7 @@ export class DetailCache {
     return d.map(e => ({
       ...e,
       normalized_name: normalize(e.name),
+      group_assigment: new GroupAssigment(e.group_ids),
     }))
   }
 }

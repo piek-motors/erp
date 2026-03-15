@@ -3,54 +3,63 @@ import { app_cache } from '@/domains/pdo/cache'
 import { matrixDecoder } from '@/lib/rpc/matrix_decoder'
 import { rpc } from '@/lib/rpc/rpc.client'
 import { LoadingController } from '@/lib/store/loading_controller'
-import type { DetailInTheGroup } from '@/server/domains/pdo/detail_groups_rpc'
-import { Detail, DetailGroupStore } from './group.store'
+import type { DetailInTheGroup } from '@/server/domains/pdo/storage/detail_group_repo'
+import { DetailSt } from '../detail/detail.state'
+import { store } from './group.store'
 
 export class DetailGroupingApi {
-  readonly groupsLoading = new LoadingController()
-  readonly store = new DetailGroupStore()
-  readonly targetGroupLoading = new LoadingController()
+  readonly groups_tree_loading = new LoadingController()
+  readonly details_loading = new LoadingController()
 
   constructor() {
     makeAutoObservable(this)
   }
 
-  async listGroups() {
-    return this.groupsLoading.run(async () => {
+  async list_groups() {
+    return this.groups_tree_loading.run(async () => {
       await app_cache.groups.invalidate()
     })
   }
 
-  async loadGroupWithDetails(groupId: number) {
-    return this.targetGroupLoading.run(async () => {
+  async load_group_with_details(groupId: number) {
+    return this.details_loading.run(async () => {
       const resp = await rpc.pdo.detail_groups.get.query({ groupId })
       const details = matrixDecoder<DetailInTheGroup>(resp.details)
-      this.store.openGroup({
-        group: resp.group,
-        details: details.map(
-          d => new Detail(d.id, d.name, d.drawing_number, d.group_ids),
-        ),
-      })
+      store.open_group(
+        resp.group,
+        details.map(d => {
+          const detail = new DetailSt()
+          detail.id = d.id
+          detail.name = d.name
+          detail.drawing_number = d.drawing_number ?? ''
+          detail.group_assigment.set_group_ids(d.group_ids)
+          return detail
+        }),
+      )
     })
   }
 
-  async createGroup(name: string) {
-    return this.groupsLoading.run(async () => {
-      const newGroup = await rpc.pdo.detail_groups.create.mutate({ name })
+  async create_group(name: string, parent_id?: number | null) {
+    return this.groups_tree_loading.run(async () => {
+      const newGroup = await rpc.pdo.detail_groups.create.mutate({
+        name,
+        parent_id,
+      })
       await app_cache.groups.invalidate()
       return newGroup
     })
   }
 
-  async updateGroup(id: number, name: string) {
-    return this.groupsLoading.run(async () => {
+  async update_group(id: number, name: string, parent_id?: number | null) {
+    return this.groups_tree_loading.run(async () => {
       const updatedGroup = await rpc.pdo.detail_groups.update.mutate({
         id,
         name,
+        parent_id,
       })
       await app_cache.groups.invalidate()
-      if (this.store.openedGroup?.group.id === id) {
-        await this.loadGroupWithDetails(id)
+      if (store.group_content.group?.id === id) {
+        await this.load_group_with_details(id)
       }
       return updatedGroup
     })
