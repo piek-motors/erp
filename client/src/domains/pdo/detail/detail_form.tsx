@@ -11,7 +11,7 @@ import {
   type StackProps,
   type TypographySystem,
 } from '@mui/joy'
-import { observer } from 'mobx-react-lite'
+import { Observer, observer } from 'mobx-react-lite'
 import type { ReactNode } from 'react'
 import { AccordionCard } from '@/components/accordion_card'
 import { ArrayJsonEditor } from '@/components/array-json-editor'
@@ -197,7 +197,13 @@ const DetailGroupInput = observer(({ detail }: { detail: DetailSt }) => (
             </Box>
           }
           getKey={id => id}
-          render={id => app_cache.groups.tree.full_node_name(id)}
+          render={id => (
+            <Observer
+              render={() => (
+                <>{app_cache.groups.tree.full_node_name(id) ?? '-'}</>
+              )}
+            />
+          )}
         />
       </P>
     </Row>
