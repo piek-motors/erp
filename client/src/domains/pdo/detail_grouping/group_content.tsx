@@ -93,7 +93,7 @@ const ChangeNameModal = observer(() => {
             },
           }}
         >
-          {app_cache.groups.tree.name_for(group.id)}
+          {app_cache.groups.tree.full_node_name(group.id)}
         </P>
       }
     />
