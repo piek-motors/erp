@@ -123,10 +123,6 @@ export class GroupExplorerVM {
     this.group_content.group = group
     this.edit_group_modal.set_name(group?.name || '')
   }
-
-  clear() {
-    this.group_content.reset()
-  }
 }
 export const store = new GroupExplorerVM()
 export const detail_groups_vm = store

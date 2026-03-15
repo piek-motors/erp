@@ -12,7 +12,6 @@ function prepare_group_names(group_ids?: number[]) {
   if (!group_ids?.length) return null
 
   const tree = app_cache.groups.tree
-
   const visible: string[] = []
   const all: string[] = []
 

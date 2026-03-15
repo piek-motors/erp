@@ -58,9 +58,6 @@ export class DetailGroupingApi {
         parent_id,
       })
       await app_cache.groups.invalidate()
-      if (store.group_content.group?.id === id) {
-        await this.load_group_with_details(id)
-      }
       return updatedGroup
     })
   }

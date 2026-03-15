@@ -180,10 +180,8 @@ export const ChangeGroupNameModal = observer(
       await api.update_group(group.id, name, parent_id)
     }
 
-    const currentGroupId = group?.id
-    const currentParentId = currentGroupId
-      ? (app_cache.groups.tree.nodes.find(g => g.id === currentGroupId)
-          ?.parent_id ?? null)
+    const currentParentId = group?.id
+      ? (app_cache.groups.tree.node(group.id)?.parent_id ?? null)
       : null
 
     return (
