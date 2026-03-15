@@ -1,10 +1,12 @@
-import { Tooltip } from '@mui/joy'
+import { Box, Tooltip } from '@mui/joy'
 import type { SxProps } from '@mui/joy/styles/types'
 import { observer } from 'mobx-react-lite'
+import { Join } from '@/components/join'
 import { P } from '@/lib'
 import { app_cache } from '../cache'
 
 export const GroupVisualSeparator = ' | '
+const Limit = 3
 
 function prepare_group_names(group_ids?: number[]) {
   if (!group_ids?.length) return null
@@ -19,15 +21,15 @@ function prepare_group_names(group_ids?: number[]) {
     if (!path) continue
 
     all.push(path)
-    if (visible.length < 2) visible.push(path)
+    if (visible.length < Limit) visible.push(path)
   }
 
   if (!all.length) return null
 
   return {
     all,
-    text: visible.join(GroupVisualSeparator) + (all.length > 2 ? '...' : ''),
-    has_more: all.length > 2,
+    visible,
+    has_more: all.length > Limit,
   }
 }
 
@@ -38,7 +40,16 @@ export const GroupNamesPreview = observer(
 
     const content = (
       <P color="primary" sx={{ fontSize: '0.8em', fontWeight: 500, ...sx }}>
-        {data.text}
+        <Join
+          items={data.visible}
+          separator={
+            <Box color="black" display={'inline'}>
+              {GroupVisualSeparator}
+            </Box>
+          }
+          render={name => name}
+        />
+        {data.has_more && '...'}
       </P>
     )
 

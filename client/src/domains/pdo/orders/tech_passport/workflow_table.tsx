@@ -64,6 +64,7 @@ const DetailProductionRouteTable = observer((props: Props) => (
               textSlot={{
                 level: 'body-md',
                 fontSize: 13,
+                lineHeight: 1,
                 fontWeight: 'normal',
               }}
             />

@@ -17,6 +17,7 @@ import { AccordionCard } from '@/components/accordion_card'
 import { ArrayJsonEditor } from '@/components/array-json-editor'
 import type { BaseOption } from '@/components/base-autocomplete'
 import { NumberInput } from '@/components/inputs/number_input'
+import { Join } from '@/components/join'
 import { TextEditor } from '@/domains/orders/one/comments/text-editor'
 import { app_cache } from '@/domains/pdo/cache'
 import { GroupTreeModal } from '@/domains/pdo/detail_grouping/group_tree_selector'
@@ -30,6 +31,7 @@ import {
   Row,
 } from '@/lib/index'
 import type { Blank } from '@/server/domains/pdo/storage/detail_repo'
+import { GroupVisualSeparator } from '../detail_grouping/group_name_preview'
 import { DetailAttachmentList } from './attachment/list'
 import type { DetailSt, DetailStProp } from './detail.state'
 import {
@@ -37,7 +39,6 @@ import {
   MaterialRequirementInput,
 } from './detail_blank'
 import { WorkflowAccordion } from './workflow'
-import { GroupVisualSeparator } from '../detail_grouping/group_name_preview'
 
 /** Main detail form component with two-column layout. */
 export const DetailForm = observer(
@@ -186,10 +187,18 @@ const DetailGroupInput = observer(({ detail }: { detail: DetailSt }) => (
           />
         }
       />
+
       <P color="primary" lineHeight={1.3}>
-        {detail.group_assigment.group_ids
-          .map(id => app_cache.groups.tree.full_node_name(id))
-          .join(GroupVisualSeparator)}
+        <Join
+          items={detail.group_assigment.group_ids}
+          separator={
+            <Box component="span" color="black">
+              {GroupVisualSeparator}
+            </Box>
+          }
+          getKey={id => id}
+          render={id => app_cache.groups.tree.full_node_name(id)}
+        />
       </P>
     </Row>
   </Stack>

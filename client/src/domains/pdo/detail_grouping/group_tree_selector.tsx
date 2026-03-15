@@ -2,7 +2,6 @@
 
 import type { ReactNode } from 'react'
 import { InModal } from '@/components/modal'
-import { ScrollableWindow } from '@/components/scrollable_window'
 import { Box, observer, useState } from '@/lib/index'
 import { app_cache } from '../cache'
 import type { GroupAssigment } from '../detail/detail.state'
@@ -22,9 +21,12 @@ export const GroupTreeModal = observer(
         <Box onClick={() => setOpen(true)}>{open_button}</Box>
         {open && (
           <InModal open={open} setOpen={setOpen} layout="fullscreen" size="sm">
-            <ScrollableWindow
-              scrollSx={{ width: 'max-content', alignSelf: 'center' }}
-              scroll={app_cache.groups.tree.nodes.map(node => (
+            <Box
+              justifyContent={'center'}
+              alignItems={'center'}
+              margin={'0 auto'}
+            >
+              {app_cache.groups.tree.nodes.map(node => (
                 <TreeNode
                   strategy="btn"
                   key={node.id}
@@ -33,7 +35,7 @@ export const GroupTreeModal = observer(
                   group_assigment={group_assigment}
                 />
               ))}
-            />
+            </Box>
           </InModal>
         )}
       </>
