@@ -21,7 +21,7 @@ export class DetailGroupingApi {
     })
   }
 
-  async load_group_with_details(groupId: number) {
+  async load_details(groupId: number) {
     return this.details_loading.run(async () => {
       const resp = await rpc.pdo.detail_groups.get.query({ groupId })
       const details = matrixDecoder<DetailInTheGroup>(resp.details)

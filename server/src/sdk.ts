@@ -15,12 +15,10 @@ export { RolePermissionsConfig } from './config/role_permissions.js'
 export { Scope } from './lib/constants.js'
 export { requireScope } from './lib/rbac/require_scope.middleware.js'
 
-export class RpcError {
-  constructor(
-    code: TRPCError['code'],
-    message: TRPCError['message'],
-    cause?: TRPCError['cause'],
-  ) {
-    return new TRPCError({ code, cause, message })
-  }
+export function RpcError(
+  code: TRPCError['code'],
+  message: TRPCError['message'],
+  cause?: TRPCError['cause'],
+) {
+  return new TRPCError({ code, cause, message })
 }

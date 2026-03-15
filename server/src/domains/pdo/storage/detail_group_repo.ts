@@ -63,7 +63,7 @@ export class DetailGroupRepo {
     ])
 
     if (!group) {
-      throw new RpcError('NOT_FOUND', 'Detail group not found')
+      throw RpcError('NOT_FOUND', 'Detail group not found')
     }
 
     const detail_group_associations = await this.detail_group_associations()
@@ -144,7 +144,7 @@ export class DetailGroupRepo {
           .where('id', '=', input.parent_id)
           .executeTakeFirst()
         if (!parent) {
-          throw new RpcError('BAD_REQUEST', 'Parent group not found')
+          throw RpcError('BAD_REQUEST', 'Parent group not found')
         }
       }
 
@@ -160,10 +160,7 @@ export class DetailGroupRepo {
       return result
     } catch (error: any) {
       if (isDuplicateKeyError(error)) {
-        throw new RpcError(
-          'CONFLICT',
-          'Группа с таким названием уже существует',
-        )
+        throw RpcError('CONFLICT', 'Группа с таким названием уже существует')
       }
       throw error
     }
@@ -175,14 +172,14 @@ export class DetailGroupRepo {
     try {
       if (input.parent_id) {
         if (input.parent_id === input.id) {
-          throw new RpcError('BAD_REQUEST', 'A group cannot be its own parent')
+          throw RpcError('BAD_REQUEST', 'A group cannot be its own parent')
         }
         const is_descendant = await this.check_is_descendant(
           input.parent_id,
           input.id,
         )
         if (is_descendant) {
-          throw new RpcError('BAD_REQUEST', 'Cannot set a descendant as parent')
+          throw RpcError('BAD_REQUEST', 'Cannot set a descendant as parent')
         }
       }
 
@@ -197,15 +194,12 @@ export class DetailGroupRepo {
         .executeTakeFirst()
 
       if (!result) {
-        throw new RpcError('NOT_FOUND', 'Detail group not found')
+        throw RpcError('NOT_FOUND', 'Detail group not found')
       }
       return result
     } catch (error: any) {
       if (isDuplicateKeyError(error))
-        throw new RpcError(
-          'CONFLICT',
-          'Группа с таким названием уже существует',
-        )
+        throw RpcError('CONFLICT', 'Группа с таким названием уже существует')
 
       throw error
     }

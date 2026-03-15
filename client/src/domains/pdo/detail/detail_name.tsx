@@ -42,7 +42,7 @@ export const DetailName = observer(
     )
 
     const id = with_id && (
-      <P level="body-xs" fontSize={10}>
+      <P level="body-xs" fontSize={10} lineHeight={1}>
         №{detail.id}
       </P>
     )
@@ -61,10 +61,8 @@ export const DetailName = observer(
         alignItems="center"
         justifyContent={'center'}
       >
-        <Row noWrap gap={0.5}>
-          {id}
-          {name}
-        </Row>
+        {id}
+        {name}
         {groups}
       </Stack>
     ) : (

@@ -16,7 +16,7 @@ export const dict = router({
   operation_kinds: create_dict_router('pdo.dict_operation_kinds', async id => {
     const details = await detail_repo.filter_by_operation_id(id)
     if (details.length) {
-      throw new RpcError(
+      throw RpcError(
         'CONFLICT',
         `Некоторые детали ${details.map(e => e.id).join(' ')} зависят от этого значения`,
       )

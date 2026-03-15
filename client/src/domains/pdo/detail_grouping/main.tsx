@@ -1,32 +1,15 @@
 import { Button, Divider } from '@mui/joy'
-import { useParams } from 'react-router'
 import { ScrollableWindow } from '@/components/inputs'
 import {
   DesktopOnly,
   MobileOnly,
 } from '@/components/utilities/conditional-display'
-import { Box, observer, Row, Stack, useEffect } from '@/lib/index'
+import { Box, Row, Stack } from '@/lib/index'
 import { MobileNavModal, MobilePadding } from '../root_layout'
-import { api } from './api'
 import { GroupContentSection } from './group_content'
 import { GroupList, MobileGroupSelectModal } from './group_list'
 
-export const GroupListPage = observer(() => {
-  const { id } = useParams<{ id: string }>()
-
-  useEffect(() => {
-    if (id) {
-      const groupId = parseInt(id, 10)
-      if (!isNaN(groupId)) {
-        api.load_group_with_details(groupId)
-      }
-    }
-  }, [id])
-
-  return <DetailGroupsLayout />
-})
-
-const DetailGroupsLayout = () => (
+export const GroupListPage = () => (
   <Stack
     direction={{
       xs: 'column',

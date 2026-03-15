@@ -207,10 +207,7 @@ export class OrderService {
       .returningAll()
       .executeTakeFirst()
     if (!order)
-      throw new RpcError(
-        'NOT_FOUND',
-        `Production order ID = ${orderId} not found`,
-      )
+      throw RpcError('NOT_FOUND', `Production order ID = ${orderId} not found`)
 
     await this.detail_repo.increment_balance(order.detail_id, order.qty)
   }
@@ -277,10 +274,7 @@ export class OrderService {
       .executeTakeFirst()
 
     if (!order) {
-      throw new RpcError(
-        'NOT_FOUND',
-        `Production order ID = ${order_id} not found`,
-      )
+      throw RpcError('NOT_FOUND', `Production order ID = ${order_id} not found`)
     }
 
     return order

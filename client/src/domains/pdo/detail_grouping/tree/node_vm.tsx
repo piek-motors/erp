@@ -20,7 +20,9 @@ export class Node {
 
   expand_up_to_node(node_id: number) {
     const full_path = app_cache.groups.tree.full_path_for(node_id)
-    if (!full_path) return false
+    if (!full_path) {
+      return false
+    }
 
     if (full_path.some(node => node.id === this.id)) {
       this.expanded = true

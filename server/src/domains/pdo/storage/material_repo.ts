@@ -51,7 +51,7 @@ export class MaterialRepo {
       .where('id', '=', material_id)
       .executeTakeFirst()
     if (result == null) {
-      throw new RpcError('NOT_FOUND', `material ${material_id} not found`)
+      throw RpcError('NOT_FOUND', `material ${material_id} not found`)
     }
     return result?.unit
   }
@@ -71,7 +71,7 @@ export class MaterialRepo {
       .where('id', '=', material_id)
       .executeTakeFirst()
     if (result == null) {
-      throw new RpcError('NOT_FOUND', `material ${material_id} not found`)
+      throw RpcError('NOT_FOUND', `material ${material_id} not found`)
     }
     return result
   }

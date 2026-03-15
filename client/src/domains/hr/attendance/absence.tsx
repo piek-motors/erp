@@ -47,7 +47,12 @@ export const absenceReasonState = state
 export const AbsenceReasons = observer((props: { onClick: () => void }) => (
   <Row gap={0.5}>
     {Object.values(AbsenceReason).map(reason => (
-      <Tooltip title={UiAbsenceReason[reason]} size="sm" placement="bottom">
+      <Tooltip
+        title={UiAbsenceReason[reason]}
+        size="sm"
+        placement="bottom"
+        key={reason}
+      >
         <Button
           variant="outlined"
           color="neutral"

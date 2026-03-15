@@ -80,7 +80,7 @@ export const material = router({
         })
       } catch (e: any) {
         if (isDuplicateKeyError(e)) {
-          throw new RpcError(
+          throw RpcError(
             'CONFLICT',
             'Материал с таким названием уже существует',
           )
@@ -97,7 +97,7 @@ export const material = router({
         // Check if we have some relationships with details
         const details = await detail_repo.filter_by_material_id(id)
         if (details.length) {
-          throw new RpcError(
+          throw RpcError(
             'FORBIDDEN',
             `Нельзя удалить материал поскольку на него ссылаются ${details.length} деталей`,
           )

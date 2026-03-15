@@ -1,7 +1,16 @@
 import { UilFolder } from '@iconscout/react-unicons'
 import { Box, Stack } from '@mui/joy'
 import { ScrollableWindow, Search } from '@/components/inputs'
-import { Link, Loading, observer, P, Row, UseIcon } from '@/lib/index'
+import {
+  Link,
+  Loading,
+  observer,
+  P,
+  Row,
+  UseIcon,
+  useEffect,
+  useParams,
+} from '@/lib/index'
 import { openPage, routeMap } from '@/lib/routes'
 import { app_cache } from '../cache'
 import type { DetailSt } from '../detail/detail.state'
@@ -20,6 +29,17 @@ interface GroupSectionProps {
 }
 
 export const GroupContentSection = observer(() => {
+  const { id } = useParams<{ id: string }>()
+
+  useEffect(() => {
+    if (id) {
+      const groupId = parseInt(id, 10)
+      if (!isNaN(groupId)) {
+        api.load_details(groupId)
+      }
+    }
+  }, [id])
+
   if (api.details_loading.loading) return <Loading />
   if (!store.group_content.group)
     return (
@@ -27,6 +47,7 @@ export const GroupContentSection = observer(() => {
         Выберите группу
       </P>
     )
+
   return <ScrollableWindow scroll={<GroupContent />} />
 })
 
@@ -67,7 +88,7 @@ const GroupContent = observer(() => {
             </P>
           )}
 
-          {group_content.details.map(detail => (
+          {group_content.get_filtered_and_sorted().map(detail => (
             <DetailRow key={detail.id} detail={detail} />
           ))}
         </>

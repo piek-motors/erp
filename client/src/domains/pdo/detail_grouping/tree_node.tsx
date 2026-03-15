@@ -20,11 +20,12 @@ export interface TreeNodeProps {
 export const TreeNode = observer(
   ({ node, depth, onClick, group_assigment, strategy }: TreeNodeProps) => {
     const selected_ids = group_assigment?.group_ids ?? []
+    const group_id = store.group_content.group?.id
 
     useEffect(() => {
-      const active_node = store.group_content.group?.id
-      if (active_node) {
-        node.expand_up_to_node(active_node)
+      const active_node_id = group_id
+      if (active_node_id) {
+        node.expand_up_to_node(active_node_id)
       }
     }, [])
 
@@ -41,7 +42,7 @@ export const TreeNode = observer(
 
     const group_props: GroupLinkProps = {
       node,
-      is_active: store.group_content.group?.id === node.id,
+      is_active: group_id === node.id,
       startDecorator: <ExpandButton node={node} />,
       onClick: (node: Node) => {
         onClick?.(node.id)

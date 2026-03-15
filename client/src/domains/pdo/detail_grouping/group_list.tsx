@@ -32,6 +32,7 @@ export const GroupList = observer(
       <Stack p={0.5} gap={0}>
         {app_cache.groups.tree.nodes.map(node => (
           <TreeNode
+            key={node.id}
             strategy="link"
             node={node}
             depth={0}

@@ -64,7 +64,7 @@ export class DetailRepo {
         this.get_group_ids(id),
       ])
     if (!detail) {
-      throw new RpcError('NOT_FOUND', `Detail with id=${id} not found`)
+      throw RpcError('NOT_FOUND', `Detail with id=${id} not found`)
     }
     return {
       detail,
@@ -98,7 +98,7 @@ export class DetailRepo {
       .select(['id', 'blank'])
       .executeTakeFirstOrThrow()
       .catch(() => {
-        throw new RpcError('NOT_FOUND', `Detail ${id} not found`)
+        throw RpcError('NOT_FOUND', `Detail ${id} not found`)
       })
   }
 
