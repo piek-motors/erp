@@ -11,7 +11,10 @@ export const EmployeesPage = observer(() => {
   }, [])
 
   return (
-    <Box p={1}>
+    <Box
+      p={1}
+      sx={{ borderRadius: 5, p: 1, overflowX: 'auto', minWidth: '800px' }}
+    >
       <NavTopBar t="Сотрудники" />
       <Sheet sx={{ borderRadius: 5, p: 1 }}>
         <EmployeeTable store={employee_list_vm} />
