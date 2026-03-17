@@ -28,6 +28,8 @@ export const PrintPdfButton = observer(
     html, body {
       margin: 0;
       padding: 0;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
     }
 
     * {
@@ -37,62 +39,53 @@ export const PrintPdfButton = observer(
       color: #000 !important;
       box-shadow: none !important;
       text-shadow: none !important;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
     }
 
-    table {
-      page-break-inside: auto;
-      border-collapse: collapse;
-      width: 100%;
+    /* Table container */
+    .attendance-table {
+      display: grid !important;
+      width: 100% !important;
     }
 
-    tr {
-      page-break-inside: avoid;
-      page-break-after: auto;
+    /* Header cells */
+    .table-header-cell {
+      background: #fff !important;
+      border: .5px solid #000 !important;
+      page-break-after: avoid;
+      break-after: avoid;
     }
 
-    thead {
-      display: table-header-group;
+    /* Table cells */
+    .table-cell {
+      border: .5px solid #000 !important;
+      page-break-inside: avoid !important;
+      break-inside: avoid !important;
     }
 
-    tfoot {
-      display: table-footer-group;
+    /* Cell content - prevents splitting */
+    .table-cell-content {
+      page-break-inside: avoid !important;
+      break-inside: avoid !important;
+    }
+
+    /* Sticky column (first column) */
+    .table-cell[style*="left: 0"] {
+      position: static !important;
+      background: #fff !important;
     }
 
     /* Prevent page breaks inside bordered sections */
     .border, [class*="border-"] {
       page-break-inside: avoid;
-    }
-
-    /* Prevent page breaks inside table cells with borders */
-    td, th {
-      page-break-inside: avoid;
-      border: 1px solid #000 !important;
-    }
-
-    /* Force page break before new sections if needed */
-    .page-break-before {
-      page-break-before: always;
-    }
-
-    /* Allow page break after major sections */
-    .page-break-after {
-      page-break-after: always;
+      break-inside: avoid;
     }
 
     /* Prevent orphans and widows */
     p, h1, h2, h3, h4, h5, h6 {
       orphans: 3;
       widows: 3;
-    }
-
-    /* Ensure table rows stay together */
-    tbody tr {
-      page-break-inside: avoid;
-    }
-
-    /* Add small margin to prevent border splitting */
-    tbody {
-      page-break-before: avoid;
     }
   `
 

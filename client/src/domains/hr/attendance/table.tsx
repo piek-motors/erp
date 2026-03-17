@@ -42,6 +42,7 @@ export const Table = memo(function Table({ columns, data }: ITableProps) {
       }}
     >
       <div
+        className="attendance-table"
         css={css`
           display: grid;
           margin: 0 auto;
@@ -57,6 +58,7 @@ export const Table = memo(function Table({ columns, data }: ITableProps) {
         {columns.map((column, index) => (
           <div
             key={column.id}
+            className="table-header-cell"
             css={css`
               padding: ${CELL_PADDING};
               font-weight: 600;
@@ -78,7 +80,7 @@ export const Table = memo(function Table({ columns, data }: ITableProps) {
 
         {/* Data Rows */}
         {data.map((employee, rowIndex) => (
-          <TableRow
+          <GridTableRow
             key={employee.id ?? rowIndex}
             employee={employee}
             columns={columns}
@@ -90,7 +92,7 @@ export const Table = memo(function Table({ columns, data }: ITableProps) {
   )
 })
 
-const TableRow = memo(function TableRow({
+const GridTableRow = memo(function GridTableRow({
   employee,
   columns,
   rowIndex,
@@ -104,6 +106,7 @@ const TableRow = memo(function TableRow({
       {columns.map((column, cellIndex) => (
         <div
           key={`${employee.id ?? rowIndex}-${column.id}`}
+          className="table-cell"
           css={css`
             border: .5px solid ${BORDER_COLOR};
             border-collapse: collapse;
@@ -114,9 +117,10 @@ const TableRow = memo(function TableRow({
           `}
         >
           <div
+            className="table-cell-content"
             css={css`
-          height: inherit;
-          `}
+              height: inherit;
+            `}
           >
             {column.renderCell(employee)}
           </div>
