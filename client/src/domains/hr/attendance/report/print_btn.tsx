@@ -22,7 +22,7 @@ export const PrintPdfButton = observer(
       styleEl.textContent = `
     @page {
       size: A4 landscape;
-      margin: 10mm;
+      margin: 5mm 0mm 0mm 0mm;  
     }
 
     html, body {
