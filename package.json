@@ -16,6 +16,7 @@
     "fix": "biome check --write",
     "build": "turbo run build",
     "dev": "turbo run dev",
+    "start": "npm --prefix server run start",
     "check": "turbo run check",
     "clean": "turbo run clean && rm -rf node_modules",
     "deploy": "sh ./infra/deploy.sh",
