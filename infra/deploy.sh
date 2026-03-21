@@ -10,7 +10,7 @@ ssh "$TARGET" <<EOF
   git pull
 
   BUN_BIN="$HOME/.bun/bin/bun"
-  export PATH="\$HOME/.bun/bin:\$HOME/.local/share/pnpm:\$HOME/.nvm/versions/node/v23.9.0/bin:\$PATH"
+  export PATH="$HOME/.bun/bin:$HOME/.local/share/pnpm:$HOME/.nvm/versions/node/v23.9.0/bin:$PATH"
 
   bun install --frozen-lockfile
   bun run build
