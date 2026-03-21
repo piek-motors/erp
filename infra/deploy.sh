@@ -1,4 +1,5 @@
 #!/bin/bash
+BUN_BIN="$HOME/.bun/bin/bun"
 TARGET="piek-office" # SSH target target
 REMOTE_DIR="/home/fin/apps/erp" # Remote directory to deploy
 PM2_PROCESS_NAME="erp" # PM2 process name
@@ -30,7 +31,7 @@ ssh "$TARGET" <<EOF
     npx pm2 restart "$PM2_PROCESS_NAME"
   else
     echo "Process not found. Starting..."
-    npx pm2 start bun --name "erp" -- run "start"
+    npx pm2 start "$BUN_BIN" --name "$PM2_PROCESS_NAME" -- run "start"
   fi
   echo "Deployment complete. Showing logs (Ctrl+C to exit)..."
   npx pm2 logs "$PM2_PROCESS_NAME"
