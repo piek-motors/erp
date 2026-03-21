@@ -94,7 +94,7 @@ export const DetailForm = observer(
 export const DetailAccordionGroup = observer(({ d }: { d: DetailSt }) => (
   <AccordionGroup>
     <DetailAttachmentInput detail={d} />
-    <BlankAttributesInput detail={d} />
+    <BlankInput detail={d} />
     <WorkflowAccordion detail={d} />
   </AccordionGroup>
 ))
@@ -218,7 +218,7 @@ const DetailAttachmentInput = observer(({ detail }: { detail: DetailSt }) => (
 ))
 
 /** Blank attributes accordion section with material and detail requirements. */
-const BlankAttributesInput = observer(({ detail }: { detail: DetailSt }) => (
+const BlankInput = observer(({ detail }: { detail: DetailSt }) => (
   <AccordionCard title="Заготовка" defaultExpanded>
     <MaterialRequirementInput detail={detail} />
     <Divider sx={{ my: 0.5 }} />

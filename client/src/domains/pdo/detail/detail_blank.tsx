@@ -194,16 +194,22 @@ const BatchMaterialRequirement = observer((props: DetailStProp) => {
 
 const CountableMaterialRequirement = observer((props: DetailStProp) => {
   const type = MaterialRequirement.Countable
-  const { material_requirement: materialCost } = props.detail.blank
-  if (materialCost?.data?.type != type) return
+  const { material_requirement } = props.detail.blank
+
+  if (
+    material_requirement?.data?.type != type ||
+    !material_requirement.material
+  ) {
+    return
+  }
 
   return (
     <NumberInput
       label="Кол-во"
-      unit={uiUnit(Unit.Countable)}
-      value={materialCost.data.count ?? null}
+      unit={uiUnit(material_requirement.material.unit)}
+      value={material_requirement.data.count ?? null}
       onChange={count => {
-        materialCost.set_data({
+        material_requirement.set_data({
           type,
           count,
         })
