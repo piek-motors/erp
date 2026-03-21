@@ -1,5 +1,4 @@
 #!/bin/bash
-BUN_BIN="$HOME/.bun/bin/bun"
 TARGET="piek-office" # SSH target target
 REMOTE_DIR="/home/fin/apps/erp" # Remote directory to deploy
 PM2_PROCESS_NAME="erp" # PM2 process name
@@ -10,6 +9,7 @@ ssh "$TARGET" <<EOF
   echo "Pulling latest code..."
   git pull
 
+  BUN_BIN="$HOME/.bun/bin/bun"
   export PATH="\$HOME/.bun/bin:\$HOME/.local/share/pnpm:\$HOME/.nvm/versions/node/v23.9.0/bin:\$PATH"
 
   bun install --frozen-lockfile
