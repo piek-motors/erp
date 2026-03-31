@@ -1,5 +1,5 @@
 import type { DB } from 'db'
-import { SupplyReason, Unit, WriteoffReason } from 'models'
+import { fmt, SupplyReason, Unit, WriteoffReason } from 'models'
 import { z } from 'zod'
 import { Warehouse } from '#root/domains/pdo/services/warehouse_service.js'
 import { MaterialRepo } from '#root/domains/pdo/storage/material_repo.js'
@@ -76,7 +76,7 @@ export const material = router({
           shortage_prediction_horizon_days:
             input.shortage_prediction_horizon_days ||
             DEFAULT_SHORTAGE_PREDICTION_HORIZON_DAYS,
-          label: `${input.label} ${input.alloy ?? ''}`,
+          label: `${fmt.capitalize(input.label)} ${input.alloy ?? ''}`,
         })
       } catch (e: any) {
         if (isDuplicateKeyError(e)) {

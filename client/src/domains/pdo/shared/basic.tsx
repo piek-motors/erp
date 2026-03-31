@@ -109,11 +109,6 @@ export const MetalPageTitle = (props: PageTitleProps) => (
   />
 )
 
-export function capitalize(text: string) {
-  if (!text) return ''
-  return text[0].toUpperCase() + text.slice(1)
-}
-
 export const value_with_unit = (
   value: string | number | null,
   unit: Unit | null,

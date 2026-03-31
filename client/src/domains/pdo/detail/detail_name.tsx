@@ -4,8 +4,8 @@ import type { SxProps } from '@mui/joy/styles/types'
 import { Box, Link, observer, P, Row, Stack } from '@/lib/index'
 import { openPage, routeMap } from '@/lib/routes'
 import { GroupNamesPreview } from '../detail_grouping/group_name_preview'
-import { capitalize } from '../shared/basic'
 import type { GroupAssigment } from './detail.state'
+import { fmt } from 'models'
 
 interface Detail {
   id: number
@@ -37,7 +37,7 @@ export const DetailName = observer(
   }: Props) => {
     const name = (
       <P sx={slot_props?.name} lineHeight={1.2}>
-        {capitalize(detail.name)}
+        {fmt.capitalize(detail.name)}
       </P>
     )
 

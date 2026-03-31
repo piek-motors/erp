@@ -10,7 +10,6 @@ import type {
 } from '../detail/detail_blank.store'
 import { BlankAttributes } from '../detail/detail_form'
 import { MaterialName } from '../material/name'
-import { capitalize } from '../shared/basic'
 import type { OrderSt } from './order.state'
 import { ReactNode } from 'react'
 
@@ -69,7 +68,7 @@ const DetailsRequirementUi = observer(
           return (
             <Row key={each.detailId} gap={1}>
               <Label>
-                {capitalize(each.detail?.name ?? '')} - {qty}
+                {fmt.capitalize(each.detail?.name ?? '')} - {qty}
               </Label>
             </Row>
           )

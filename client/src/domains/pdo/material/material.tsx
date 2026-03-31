@@ -1,6 +1,6 @@
 import { Card } from '@mui/joy'
 import { fmt } from 'models'
-import { capitalize, MetalPageTitle } from '@/domains/pdo/shared/basic'
+import { MetalPageTitle } from '@/domains/pdo/shared/basic'
 import {
   ActionButton,
   Box,
@@ -82,7 +82,7 @@ export const MaterialUpdatePage = observer(() => {
               fontWeight={700}
               level="body-lg"
             >
-              {capitalize(m.label)}
+              {fmt.capitalize(m.label)}
             </P>
           </Box>
         }
