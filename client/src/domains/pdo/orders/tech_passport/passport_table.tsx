@@ -64,7 +64,7 @@ export const TechPassportTable = observer(({ order, detail }: Props) => {
             <td>
               <L>Запуск в пр-во</L>
               {order.resp.started_at && (
-                <P>{fmtDate(new Date(order.resp.started_at))}</P>
+                <P noWrap>{fmtDate(new Date(order.resp.started_at))}</P>
               )}
             </td>
           </tr>

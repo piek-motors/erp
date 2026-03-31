@@ -1,8 +1,8 @@
-import { Box, Divider, Stack } from '@mui/joy'
+import { Box, Divider, Stack, TypographyProps } from '@mui/joy'
 import { observer } from 'mobx-react-lite'
 import { fmt, MaterialRequirement, ProductionOrderStatus, uiUnit } from 'models'
 import { WebOnly } from '@/components/utilities/conditional-display'
-import { InfoLabel, Label, Row } from '@/lib/index'
+import { Label, Row } from '@/lib/index'
 import { app_cache } from '../cache'
 import type {
   DetailBlankSt,
@@ -12,6 +12,7 @@ import { BlankAttributes } from '../detail/detail_form'
 import { MaterialName } from '../material/name'
 import { capitalize } from '../shared/basic'
 import type { OrderSt } from './order.state'
+import { ReactNode } from 'react'
 
 interface DetailBlankProps {
   blank: DetailBlankSt
@@ -188,3 +189,30 @@ export const CalcMaterialRemainings = observer(
     )
   },
 )
+
+export const InfoLabel = ({
+  label,
+  value,
+  suffix,
+  ...rest
+}: {
+  label: ReactNode
+  value?: ReactNode
+  suffix?: ReactNode
+} & TypographyProps) => {
+  if (value == null) return null
+  return (
+    <Row gap={1} noWrap>
+      <Label {...rest} label={label} fontSize={13} noWrap level="body-md" />
+      <Row
+        gap={0.5}
+        noWrap
+        fontWeight={500}
+        fontSize={14}
+        whiteSpace={'nowrap'}
+      >
+        {value} {suffix}
+      </Row>
+    </Row>
+  )
+}

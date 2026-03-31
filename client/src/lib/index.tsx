@@ -69,27 +69,6 @@ export const Label = (
   )
 }
 
-export const InfoLabel = ({
-  label,
-  value,
-  suffix,
-  ...rest
-}: {
-  label: ReactNode
-  value?: ReactNode
-  suffix?: ReactNode
-} & TypographyProps) => {
-  if (value == null) return null
-  return (
-    <Row gap={1} noWrap>
-      <Label {...rest} label={label} fontSize={12} level="body-md" />
-      <Row gap={0.5} noWrap fontWeight={500} whiteSpace={'nowrap'}>
-        {value} {suffix}
-      </Row>
-    </Row>
-  )
-}
-
 export type InputLabledProps = {
   label?: string
   value?: string | number | null

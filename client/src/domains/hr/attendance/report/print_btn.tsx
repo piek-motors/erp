@@ -90,12 +90,6 @@ export const PrintPdfButton = observer(
   `
 
       el.style.transformOrigin = 'initial'
-      const contentWidth = el.scrollWidth
-      const pageWidth = 1122 // A4 landscape @96dpi
-      const scale = pageWidth / contentWidth
-
-      // el.style.zoom = String(scale)
-
       document.title = `Отчёт по рабочему времени за ${vm.report?.month.replace('.', '')}`
 
       setTimeout(() => {
