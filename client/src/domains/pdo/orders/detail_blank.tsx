@@ -1,6 +1,7 @@
-import { Box, Divider, Stack, TypographyProps } from '@mui/joy'
+import { Box, Divider, Stack, type TypographyProps } from '@mui/joy'
 import { observer } from 'mobx-react-lite'
 import { fmt, MaterialRequirement, ProductionOrderStatus, uiUnit } from 'models'
+import type { ReactNode } from 'react'
 import { WebOnly } from '@/components/utilities/conditional-display'
 import { Label, Row } from '@/lib/index'
 import { app_cache } from '../cache'
@@ -11,7 +12,6 @@ import type {
 import { BlankAttributes } from '../detail/detail_form'
 import { MaterialName } from '../material/name'
 import type { OrderSt } from './order.state'
-import { ReactNode } from 'react'
 
 interface DetailBlankProps {
   blank: DetailBlankSt

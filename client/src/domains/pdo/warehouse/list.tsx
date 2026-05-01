@@ -5,7 +5,7 @@ import { useEffect } from 'react'
 import { ScrollableWindow } from '@/components/scrollable_window'
 import { Table } from '@/components/table.impl'
 import { MetalPageTitle } from '@/domains/pdo/shared/basic'
-import { Label } from '@/lib/index'
+import { Button, Label, ToggleButtonGroup } from '@/lib/index'
 import { matrixDecoder } from '@/lib/rpc/matrix_decoder'
 import { rpc } from '@/lib/rpc/rpc.client'
 import { LoadingController } from '@/lib/store/loading_controller'
@@ -17,6 +17,11 @@ import { columns } from './columns'
 
 export type Operation = OperationListItem
 
+enum TypeFilter {
+  Materials = '0',
+  Details = '1',
+}
+
 class OperationsSt {
   readonly loader = new LoadingController()
   operations: Operation[] = []
@@ -26,12 +31,19 @@ class OperationsSt {
   setOperations(operations: Operation[]) {
     this.operations = operations
   }
+
+  typeFilter = TypeFilter.Materials
+  setTypeFilter(v: TypeFilter) {
+    this.typeFilter = v
+  }
+
   async load(materialId?: number, detailId?: number) {
     this.setOperations([])
     this.loader.run(async () => {
       const operationsRaw = await rpc.pdo.operations.list.query({
         materialId,
         detailId,
+        type_filter: Number(this.typeFilter),
       })
       const operations = matrixDecoder<Operation>(operationsRaw)
       this.setOperations(operations)
@@ -39,7 +51,7 @@ class OperationsSt {
   }
 
   async revert(operation: Operation) {
-    let object_title
+    let object_title: string | undefined
     if (operation.material_id) {
       object_title = app_cache.materials.get(operation.material_id)?.label
     }
@@ -57,7 +69,7 @@ class OperationsSt {
   }
 
   get no_data() {
-    return !this.loader.loading && this.operations.length == 0
+    return !this.loader.loading && this.operations.length === 0
   }
 }
 
@@ -76,13 +88,26 @@ export const OperationsTable = observer((props: Props) => {
 
   useEffect(() => {
     store.load(materialId, detailId)
-  }, [materialId, detailId])
+  }, [materialId, detailId, store.typeFilter])
 
   return (
     <ScrollableWindow
       scroll={
         <>
           {store.no_data && <Label px={1}>Нет информации</Label>}
+          <ToggleButtonGroup
+            sx={{ p: 1 }}
+            size="sm"
+            variant="soft"
+            color="primary"
+            value={store.typeFilter}
+            onChange={(_, v) => {
+              if (v) store.setTypeFilter(v)
+            }}
+          >
+            <Button value={TypeFilter.Materials}>Материалы</Button>
+            <Button value={TypeFilter.Details}>Детали</Button>
+          </ToggleButtonGroup>
           <Table
             sx={{ cursor: 'initial' }}
             columns={columns}

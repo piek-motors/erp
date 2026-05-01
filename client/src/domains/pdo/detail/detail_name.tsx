@@ -1,11 +1,11 @@
 /** @jsxImportSource @emotion/react */
 
 import type { SxProps } from '@mui/joy/styles/types'
+import { fmt } from 'models'
 import { Box, Link, observer, P, Row, Stack } from '@/lib/index'
 import { openPage, routeMap } from '@/lib/routes'
 import { GroupNamesPreview } from '../detail_grouping/group_name_preview'
 import type { GroupAssigment } from './detail.state'
-import { fmt } from 'models'
 
 interface Detail {
   id: number
