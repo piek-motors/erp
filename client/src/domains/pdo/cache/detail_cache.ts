@@ -1,4 +1,4 @@
-import { makeAutoObservable, runInAction } from 'mobx'
+import { makeAutoObservable, runInAction, observable } from 'mobx'
 import { matrixDecoder } from '@/lib/rpc/matrix_decoder'
 import { rpc } from '@/lib/rpc/rpc.client'
 import { LoadingController } from '@/lib/store/loading_controller'
@@ -8,66 +8,70 @@ import { GroupAssigment } from '../detail/detail.state'
 
 const alphabet = 'АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ'.split('')
 
-type Operation = {
-  id: number
-  v: string
-}
-
 export type AppDetail = ListDetailsOutput & {
   normalized_name: string
   group_assigment: GroupAssigment
 }
 
+type ProcessingOperation = {
+  id: number
+  v: string
+}
+
 export class DetailCache {
   readonly loader = new LoadingController()
-  private _details: AppDetail[] = []
+
+  // Using Maps for O(1) lookups
+  private _detailsMap = observable.map<number, AppDetail>()
+  private _operationsMap = observable.map<number, string>()
 
   constructor() {
     makeAutoObservable(this)
   }
 
+  // O(1) Access
   get(id: number): AppDetail | undefined {
-    return this._details.find(detail => detail.id === id)
+    return this._detailsMap.get(id)
   }
 
-  get details() {
-    return this._details
+  // Computed array for lists/tables
+  get details(): AppDetail[] {
+    return Array.from(this._detailsMap.values())
   }
 
   get first_letter_index(): string[] {
     const index = new Set<string>()
-    for (const detail of this._details) {
+    // Iterating over the map values
+    for (const detail of this._detailsMap.values()) {
       const firstLetter = detail.name.charAt(0).toUpperCase()
-      index.add(firstLetter)
+      if (alphabet.includes(firstLetter)) {
+        index.add(firstLetter)
+      }
     }
-    const arr = Array.from(index).filter(
-      letter => letter && alphabet.includes(letter),
-    )
-    return arr.toSorted()
+    return Array.from(index).sort()
   }
 
   remove(id: number) {
-    this._details = this._details.filter(d => d.id !== id)
+    this._detailsMap.delete(id)
   }
 
   update(detail: AppDetail) {
-    this._details = this._details.map(d => (d.id === detail.id ? detail : d))
+    this._detailsMap.set(detail.id, detail)
   }
 
   count() {
-    return this._details.length
-  }
-
-  dict_processing_operaions: Operation[] = []
-  set_dict_processing_operations(v: Operation[]) {
-    this.dict_processing_operaions = v
+    return this._detailsMap.size
   }
 
   get_operation_label(id: number) {
-    return (
-      this.dict_processing_operaions.find(each => each.id === id)?.v ??
-      'No value in the dict'
-    )
+    return this._operationsMap.get(id) ?? 'No value in the dict'
+  }
+
+  set_dict_processing_operations(operations_dict: ProcessingOperation[]) {
+    this._operationsMap.clear()
+    operations_dict.forEach(op => {
+      this._operationsMap.set(op.id, op.v)
+    })
   }
 
   async invalidate() {
@@ -76,11 +80,17 @@ export class DetailCache {
         rpc.pdo.details.list.query(),
         rpc.pdo.dict.operation_kinds.ls.query(),
       ])
+
       const details = matrixDecoder<ListDetailsOutput>(details_encoded)
+      const normalized = this.normalize_names(details)
 
       runInAction(() => {
-        this._details = this.normalize_names(details)
-        this.dict_processing_operaions = operations_dict
+        this._detailsMap.clear()
+        normalized.forEach(d => {
+          this._detailsMap.set(d.id, d)
+        })
+
+        this.set_dict_processing_operations(operations_dict)
       })
     })
   }

@@ -5,7 +5,7 @@ import { useEffect } from 'react'
 import { ScrollableWindow } from '@/components/scrollable_window'
 import { Table } from '@/components/table.impl'
 import { MetalPageTitle } from '@/domains/pdo/shared/basic'
-import { Button, Label, ToggleButtonGroup } from '@/lib/index'
+import { Button, Label, Loading, ToggleButtonGroup } from '@/lib/index'
 import { matrixDecoder } from '@/lib/rpc/matrix_decoder'
 import { rpc } from '@/lib/rpc/rpc.client'
 import { LoadingController } from '@/lib/store/loading_controller'
@@ -13,7 +13,7 @@ import { notifier } from '@/lib/store/notifier.store'
 import type { OperationListItem } from '@/server/domains/pdo/operations_rpc'
 import { app_cache } from '../cache'
 import { MobileNavModal, MobilePadding } from '../root_layout'
-import { columns } from './columns'
+import { detail_columns, material_columns } from './columns'
 
 export type Operation = OperationListItem
 
@@ -38,7 +38,6 @@ class OperationsSt {
   }
 
   async load(materialId?: number, detailId?: number) {
-    this.setOperations([])
     this.loader.run(async () => {
       const operationsRaw = await rpc.pdo.operations.list.query({
         materialId,
@@ -71,6 +70,12 @@ class OperationsSt {
   get no_data() {
     return !this.loader.loading && this.operations.length === 0
   }
+
+  get columns() {
+    return this.typeFilter === TypeFilter.Materials
+      ? material_columns
+      : detail_columns
+  }
 }
 
 export const operations_st = new OperationsSt()
@@ -88,7 +93,7 @@ export const OperationsTable = observer((props: Props) => {
 
   useEffect(() => {
     store.load(materialId, detailId)
-  }, [materialId, detailId, store.typeFilter])
+  }, [materialId, detailId])
 
   return (
     <ScrollableWindow
@@ -108,9 +113,11 @@ export const OperationsTable = observer((props: Props) => {
             <Button value={TypeFilter.Materials}>Материалы</Button>
             <Button value={TypeFilter.Details}>Детали</Button>
           </ToggleButtonGroup>
+
+          {store.loader.loading && <Loading />}
           <Table
             sx={{ cursor: 'initial' }}
-            columns={columns}
+            columns={store.columns}
             data={store.operations}
             rowStyleCb={op => {
               const type = Number(op.original.operation_type)

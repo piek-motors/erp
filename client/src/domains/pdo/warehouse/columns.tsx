@@ -25,25 +25,71 @@ import { DetailName } from '../detail/detail_name'
 import { AdaptiveNumberFormatter } from '../shared/adaptive_number_formatter'
 import { value_with_unit } from '../shared/basic'
 import { type Operation, operations_st } from './list'
-import { OperationName } from './operation_name'
 import { app_cache } from '../cache'
+import { MaterialName } from '../material/name'
 
 const formatter = new AdaptiveNumberFormatter(2)
 const ShowRevertButtonWithinDays = 7
 
-export const columns: Column<Operation>[] = [
-  {
-    Header: 'Дата',
-    accessor: data => (
-      <Label level="body-xs" whiteSpace={'nowrap'}>
-        {time.fmt_relative_or_calendar_date(data.timestamp)}
-      </Label>
-    ),
+const date_col = {
+  Header: 'Дата',
+  accessor: data => (
+    <Label level="body-xs" whiteSpace={'nowrap'}>
+      {time.fmt_relative_or_calendar_date(data.timestamp)}
+    </Label>
+  ),
+}
+
+const revert_col = {
+  Header: 'Откат',
+  accessor: op => {
+    const cutoffDate = new Date(Date.now() - ShowRevertButtonWithinDays * Day)
+    if (new Date(op.timestamp) < cutoffDate) return null
+    return (
+      <IconButton
+        size="sm"
+        variant="solid"
+        color="danger"
+        sx={{
+          '--IconButton-size': '20px',
+          opacity: 0.05,
+          '&:hover': {
+            opacity: 1,
+          },
+        }}
+        onClick={() => operations_st.revert(op)}
+      >
+        <UseIcon icon={UilHistory} small invert />
+      </IconButton>
+    )
   },
+}
+
+const op_type_col = {
+  Header: 'Тип операции',
+  accessor: data => {
+    const isSupply = Number(data.operation_type) === OperationType.Supply
+    const op = isSupply
+      ? uiSupplyReason(data?.reason as SupplyReason)
+      : uiWriteoffReason(data?.reason as WriteoffReason)
+    return <Label xs>{op}</Label>
+  },
+}
+
+export const material_columns: Column<Operation>[] = [
+  date_col,
   {
-    Header: `Объект`,
+    Header: `Материал`,
     id: 'name',
-    accessor: data => <OperationName operation={data} />,
+    accessor: data => (
+      <Observer
+        render={() => {
+          const material = app_cache.materials.get(data.material_id)
+          if (!material) return <>not found</>
+          return <MaterialName label={material.label} id={data.material_id} />
+        }}
+      />
+    ),
   },
   {
     Header: 'Кол-во',
@@ -60,17 +106,11 @@ export const columns: Column<Operation>[] = [
   {
     Header: 'Деталь',
     accessor: data => {
-      if (
-        !data.detail_id ||
-        (!data.material_id && !data.material_id) ||
-        data.detail_id
-      )
-        return null
       return (
         <Observer
           render={() => {
             const detail = app_cache.details.get(data.detail_id)
-            if (!detail) return <>no</>
+            if (!detail) return null
             return (
               <DetailName
                 slot_props={{ name: { whiteSpace: 'wrap', width: 'auto' } }}
@@ -110,38 +150,38 @@ export const columns: Column<Operation>[] = [
         </Link>
       ),
   },
+  op_type_col,
+  revert_col,
+]
+
+export const detail_columns: Column<Operation>[] = [
+  date_col,
   {
-    Header: 'Тип операции',
-    accessor: data => {
-      const isSupply = Number(data.operation_type) === OperationType.Supply
-      const op = isSupply
-        ? uiSupplyReason(data?.reason as SupplyReason)
-        : uiWriteoffReason(data?.reason as WriteoffReason)
-      return <Label xs>{op}</Label>
-    },
+    Header: `Деталь`,
+    id: 'name',
+    accessor: data => (
+      <DetailName
+        detail={{
+          id: data.detail_id,
+          name: data.detail_name,
+          group_assigment: new GroupAssigment(data.detail_group_ids),
+        }}
+        with_group_name
+      />
+    ),
   },
   {
-    Header: 'Откат',
-    accessor: op => {
-      const cutoffDate = new Date(Date.now() - ShowRevertButtonWithinDays * Day)
-      if (new Date(op.timestamp) < cutoffDate) return null
+    Header: 'Кол-во',
+    accessor: data => {
+      const sign = data.operation_type === OperationType.Supply ? '+' : '-'
       return (
-        <IconButton
-          size="sm"
-          variant="solid"
-          color="danger"
-          sx={{
-            '--IconButton-size': '20px',
-            opacity: 0.05,
-            '&:hover': {
-              opacity: 1,
-            },
-          }}
-          onClick={() => operations_st.revert(op)}
-        >
-          <UseIcon icon={UilHistory} small invert />
-        </IconButton>
+        <Row flexWrap={'nowrap'} gap={0.3}>
+          <Label>{sign}</Label>{' '}
+          {value_with_unit(formatter.format(data.qty), data.unit)}
+        </Row>
       )
     },
   },
+  op_type_col,
+  revert_col,
 ]

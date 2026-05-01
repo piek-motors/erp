@@ -58,14 +58,14 @@ export const operations = router({
       switch (input.type_filter) {
         case TypeFilter.Materials: {
           filter_query = filter_query
-            .leftJoin('pdo.materials as m', 'o.material_id', 'm.id')
+            .innerJoin('pdo.materials as m', 'o.material_id', 'm.id')
             .select('m.label as material_label')
             .select('m.unit as unit')
           break
         }
         case TypeFilter.Details: {
           filter_query = filter_query
-            .leftJoin('pdo.details as d', 'o.detail_id', 'd.id')
+            .innerJoin('pdo.details as d', 'o.detail_id', 'd.id')
             .select('d.name as detail_name')
           break
         }
