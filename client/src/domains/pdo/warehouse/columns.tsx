@@ -18,6 +18,7 @@ import {
   Row,
   routeMap,
   UseIcon,
+  Observer,
 } from '@/lib/index'
 import { GroupAssigment } from '../detail/detail.state'
 import { DetailName } from '../detail/detail_name'
@@ -25,6 +26,7 @@ import { AdaptiveNumberFormatter } from '../shared/adaptive_number_formatter'
 import { value_with_unit } from '../shared/basic'
 import { type Operation, operations_st } from './list'
 import { OperationName } from './operation_name'
+import { app_cache } from '../cache'
 
 const formatter = new AdaptiveNumberFormatter(2)
 const ShowRevertButtonWithinDays = 7
@@ -46,7 +48,7 @@ export const columns: Column<Operation>[] = [
   {
     Header: 'Кол-во',
     accessor: data => {
-      const sign = data.operation_type == OperationType.Supply ? '+' : '-'
+      const sign = data.operation_type === OperationType.Supply ? '+' : '-'
       return (
         <Row flexWrap={'nowrap'} gap={0.3}>
           <Label>{sign}</Label>{' '}
@@ -58,16 +60,29 @@ export const columns: Column<Operation>[] = [
   {
     Header: 'Деталь',
     accessor: data => {
-      if (!data.detail_id || !data.material_id) return null
+      if (
+        !data.detail_id ||
+        (!data.material_id && !data.material_id) ||
+        data.detail_id
+      )
+        return null
       return (
-        <DetailName
-          slot_props={{ name: { whiteSpace: 'wrap', width: 'auto' } }}
-          detail={{
-            id: data.detail_id,
-            name: data.detail_name!,
-            group_assigment: new GroupAssigment(data.detail_group_ids!),
+        <Observer
+          render={() => {
+            const detail = app_cache.details.get(data.detail_id)
+            if (!detail) return <>no</>
+            return (
+              <DetailName
+                slot_props={{ name: { whiteSpace: 'wrap', width: 'auto' } }}
+                detail={{
+                  id: data.detail_id,
+                  name: detail.name,
+                  group_assigment: new GroupAssigment(detail.group_ids),
+                }}
+                with_group_name
+              />
+            )
           }}
-          with_group_name
         />
       )
     },
