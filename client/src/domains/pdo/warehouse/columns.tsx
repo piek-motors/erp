@@ -18,14 +18,12 @@ import {
   Row,
   routeMap,
   UseIcon,
-  Observer,
 } from '@/lib/index'
 import { GroupAssigment } from '../detail/detail.state'
 import { DetailName } from '../detail/detail_name'
 import { AdaptiveNumberFormatter } from '../shared/adaptive_number_formatter'
 import { value_with_unit } from '../shared/basic'
 import { type Operation, operations_st } from './list'
-import { app_cache } from '../cache'
 import { MaterialName } from '../material/name'
 
 const formatter = new AdaptiveNumberFormatter(2)
@@ -82,13 +80,7 @@ export const material_columns: Column<Operation>[] = [
     Header: `Материал`,
     id: 'name',
     accessor: data => (
-      <Observer
-        render={() => {
-          const material = app_cache.materials.get(data.material_id)
-          if (!material) return <>not found</>
-          return <MaterialName label={material.label} id={data.material_id} />
-        }}
-      />
+      <MaterialName label={data.material_label} id={data.material_id} />
     ),
   },
   {
@@ -107,22 +99,14 @@ export const material_columns: Column<Operation>[] = [
     Header: 'Деталь',
     accessor: data => {
       return (
-        <Observer
-          render={() => {
-            const detail = app_cache.details.get(data.detail_id)
-            if (!detail) return null
-            return (
-              <DetailName
-                slot_props={{ name: { whiteSpace: 'wrap', width: 'auto' } }}
-                detail={{
-                  id: data.detail_id,
-                  name: detail.name,
-                  group_assigment: new GroupAssigment(detail.group_ids),
-                }}
-                with_group_name
-              />
-            )
+        <DetailName
+          slot_props={{ name: { whiteSpace: 'wrap', width: 'auto' } }}
+          detail={{
+            id: data.detail_id,
+            name: data.detail_name,
+            group_assigment: new GroupAssigment(data.detail_group_ids),
           }}
+          with_group_name
         />
       )
     },

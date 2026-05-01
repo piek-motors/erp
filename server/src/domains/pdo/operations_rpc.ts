@@ -27,6 +27,7 @@ export type OperationListItem = {
   detail_name: string
   detail_group_ids: number[]
   material_id: number | number
+  material_label: string
   manufacturing_order_qty: number
 }
 
@@ -59,8 +60,7 @@ export const operations = router({
         case TypeFilter.Materials: {
           filter_query = filter_query
             .innerJoin('pdo.materials as m', 'o.material_id', 'm.id')
-            .select('m.label as material_label')
-            .select('m.unit as unit')
+            .select(['m.label as material_label', 'm.unit as unit'])
           break
         }
         case TypeFilter.Details: {
