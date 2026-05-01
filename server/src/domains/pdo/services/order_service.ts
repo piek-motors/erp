@@ -208,8 +208,6 @@ export class OrderService {
       .executeTakeFirst()
     if (!order)
       throw RpcError('NOT_FOUND', `Production order ID = ${orderId} not found`)
-
-    await this.detail_repo.increment_balance(order.detail_id, order.qty)
   }
 
   async deleteOrder(id: number): Promise<void> {
