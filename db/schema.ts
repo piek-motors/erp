@@ -10,6 +10,7 @@ import type {
   AbsenceReason,
   Color,
   EventOrigin,
+  OperationSubject,
   OperationType,
   OrderPriority,
   OrderStatus,
@@ -168,6 +169,7 @@ export namespace DB {
     id: GeneratedAlways<number>
     operation_type: OperationType
     reason: SupplyReason | WriteoffReason
+    subject: OperationSubject
     user_id: number
     material_id: number | null
     material_unit: Unit | null

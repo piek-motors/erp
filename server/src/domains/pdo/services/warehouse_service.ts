@@ -1,4 +1,9 @@
-import { OperationType, type SupplyReason, type WriteoffReason } from 'models'
+import {
+  OperationSubject,
+  OperationType,
+  type SupplyReason,
+  type WriteoffReason,
+} from 'models'
 import { type IDB, TRPCError } from '#root/sdk.js'
 import { DetailRepo } from '../storage/detail_repo.js'
 import { MaterialRepo } from '../storage/material_repo.js'
@@ -23,6 +28,7 @@ export class Warehouse {
         .insertInto('pdo.operations')
         .values({
           operation_type: OperationType.Supply,
+          subject: OperationSubject.Material,
           user_id: this.userId,
           material_id,
           material_unit: unit,
@@ -59,6 +65,7 @@ export class Warehouse {
         .insertInto('pdo.operations')
         .values({
           operation_type: OperationType.Writeoff,
+          subject: OperationSubject.Material,
           user_id: this.userId,
           material_id,
           material_unit: material.unit,
@@ -84,6 +91,7 @@ export class Warehouse {
         .insertInto('pdo.operations')
         .values({
           operation_type: OperationType.Supply,
+          subject: OperationSubject.Detail,
           user_id: this.userId,
           detail_id: id,
           qty,
@@ -113,6 +121,7 @@ export class Warehouse {
         .insertInto('pdo.operations')
         .values({
           operation_type: OperationType.Writeoff,
+          subject: OperationSubject.Detail,
           user_id: this.userId,
           detail_id: id,
           qty,

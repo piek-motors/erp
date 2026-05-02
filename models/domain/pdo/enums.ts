@@ -93,3 +93,8 @@ export enum OrderPriority {
   Normal = 1,
   High = 2,
 }
+
+export enum OperationSubject {
+  Material = 0,
+  Detail = 1,
+}
