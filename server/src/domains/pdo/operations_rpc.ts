@@ -1,4 +1,5 @@
 import {
+  OperationSubject,
   OperationType,
   type SupplyReason,
   type Unit,
@@ -31,51 +32,37 @@ export type OperationListItem = {
   manufacturing_order_qty: number
 }
 
-export enum TypeFilter {
-  Materials = 0,
-  Details = 1,
-}
-
 export const operations = router({
   list: procedure
     .input(
       z.object({
         materialId: z.number().optional(),
         detailId: z.number().optional(),
-        type_filter: z.enum(TypeFilter),
+        subject: z.enum(OperationSubject),
       }),
     )
     .query(async ({ input }) => {
-      let filter_query = db
-        .selectFrom('pdo.operations as o')
-        .$if(!!input.materialId, qb =>
-          qb.where('o.material_id', '=', input.materialId as number),
-        )
-        .$if(!!input.detailId, qb =>
-          qb.where('o.detail_id', '=', input.detailId as number),
-        )
-        .selectAll(['o'])
-
-      switch (input.type_filter) {
-        case TypeFilter.Materials: {
-          filter_query = filter_query
-            .innerJoin('pdo.materials as m', 'o.material_id', 'm.id')
-            .select(['m.label as material_label', 'm.unit as unit'])
-          break
-        }
-        case TypeFilter.Details: {
-          filter_query = filter_query
-            .innerJoin('pdo.details as d', 'o.detail_id', 'd.id')
-            .select('d.name as detail_name')
-          break
-        }
-      }
-
       const [operations, detail_group_associations] = await Promise.all([
-        filter_query
+        db
+          .selectFrom('pdo.operations as o')
+          .$if(!!input.materialId, qb =>
+            qb.where('o.material_id', '=', input.materialId as number),
+          )
+          .$if(!!input.detailId, qb =>
+            qb.where('o.detail_id', '=', input.detailId as number),
+          )
+          .selectAll(['o'])
+
+          .leftJoin('pdo.materials as m', 'o.material_id', 'm.id')
+          .select(['m.label as material_label', 'm.unit as unit'])
+
+          .leftJoin('pdo.details as d', 'o.detail_id', 'd.id')
+          .select('d.name as detail_name')
+
           .leftJoin('pdo.orders as ord', 'manufacturing_order_id', 'ord.id')
           .select('o.manufacturing_order_id as manufacturing_order_id')
           .select('ord.qty as manufacturing_order_qty')
+          .where('subject', '=', input.subject)
           .orderBy('o.id', 'desc')
           .limit(Limit)
           .execute(),

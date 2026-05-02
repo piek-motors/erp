@@ -1,6 +1,6 @@
 import { makeAutoObservable } from 'mobx'
 import { observer } from 'mobx-react-lite'
-import { OperationType, uiUnit } from 'models'
+import { OperationSubject, OperationType, uiUnit } from 'models'
 import { useEffect } from 'react'
 import { ScrollableWindow } from '@/components/scrollable_window'
 import { Table } from '@/components/table.impl'
@@ -17,11 +17,6 @@ import { detail_columns, material_columns } from './columns'
 
 export type Operation = OperationListItem
 
-enum TypeFilter {
-  Materials = '0',
-  Details = '1',
-}
-
 class OperationsSt {
   readonly loader = new LoadingController()
   operations: Operation[] = []
@@ -32,9 +27,10 @@ class OperationsSt {
     this.operations = operations
   }
 
-  typeFilter = TypeFilter.Materials
-  setTypeFilter(v: TypeFilter) {
-    this.typeFilter = v
+  subject = OperationSubject.Material
+  setSubject(v: OperationSubject) {
+    this.subject = v
+    this.load()
   }
 
   async load(materialId?: number, detailId?: number) {
@@ -42,7 +38,7 @@ class OperationsSt {
       const operationsRaw = await rpc.pdo.operations.list.query({
         materialId,
         detailId,
-        type_filter: Number(this.typeFilter),
+        subject: this.subject,
       })
       const operations = matrixDecoder<Operation>(operationsRaw)
       this.setOperations(operations)
@@ -72,7 +68,7 @@ class OperationsSt {
   }
 
   get columns() {
-    return this.typeFilter === TypeFilter.Materials
+    return this.subject === OperationSubject.Material
       ? material_columns
       : detail_columns
   }
@@ -105,13 +101,15 @@ export const OperationsTable = observer((props: Props) => {
             size="sm"
             variant="soft"
             color="primary"
-            value={store.typeFilter}
+            value={store.subject.toString()}
             onChange={(_, v) => {
-              if (v) store.setTypeFilter(v)
+              if (v != null) store.setSubject(Number(v))
             }}
           >
-            <Button value={TypeFilter.Materials}>Материалы</Button>
-            <Button value={TypeFilter.Details}>Детали</Button>
+            <Button value={OperationSubject.Material.toString()}>
+              Материалы
+            </Button>
+            <Button value={OperationSubject.Detail.toString()}>Детали</Button>
           </ToggleButtonGroup>
 
           {store.loader.loading && <Loading />}
