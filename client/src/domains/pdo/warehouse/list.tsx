@@ -95,7 +95,6 @@ export const OperationsTable = observer((props: Props) => {
     <ScrollableWindow
       scroll={
         <>
-          {store.no_data && <Label px={1}>Нет информации</Label>}
           <ToggleButtonGroup
             sx={{ p: 1 }}
             size="sm"
@@ -113,6 +112,8 @@ export const OperationsTable = observer((props: Props) => {
           </ToggleButtonGroup>
 
           {store.loader.loading && <Loading />}
+          {store.no_data && <Label px={1}>Нет информации</Label>}
+
           <Table
             sx={{ cursor: 'initial' }}
             columns={store.columns}
