@@ -11,7 +11,7 @@
     "start": "tsx ./src/main.ts",
     "dev": "tsx --watch ./src/main.ts",
     "build": "tsx",
-    "deploy": "tsx ./deploy.ts"
+    "deploy": "tsx ./src/deploy.ts"
   },
   "imports": {
     "#root/*": "./src/*"

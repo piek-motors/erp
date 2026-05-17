@@ -1,7 +1,5 @@
 {
   "name": "erp",
-  "version": "1.0.0",
-  "main": "ecosystem.config.js",
   "packageManager": "pnpm@10.22.0",
   "devDependencies": {
     "@biomejs/biome": "2.3.11",
@@ -19,22 +17,11 @@
     "start": "npm --prefix server run start",
     "check": "turbo run check",
     "clean": "turbo run clean && rm -rf node_modules",
-    "deploy": "sh ./infra/deploy.sh",
+    "deploy": "pnpm --prefix server run deploy",
     "prepare": "husky",
     "bun:install": "bun install",
     "bun:dev": "bun run --watch server/src/main.ts"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/piek-motors/erp.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/piek-motors/erp/issues"
-  },
-  "homepage": "https://github.com/piek-motors/erp#readme",
-  "description": "",
   "workspaces": [
     "client",
     "db",
