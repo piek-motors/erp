@@ -1,4 +1,4 @@
-import { lazy } from 'react'
+import { MentionList } from '@/domains/mentions'
 import orders from '@/domains/orders/main'
 import order_detail from '@/domains/orders/one/main'
 import reclamations from '@/domains/orders/reclamation/ui'
@@ -7,8 +7,6 @@ import { routeMap } from '@/lib/routes'
 import Attendance from './domains/hr/main'
 import type { RouteConfig } from './lib/types/global'
 import { IndexPage } from './nav_menu.page'
-
-const MentionList = lazy(() => import('@/domains/mentions'))
 
 export const protectedRoutes: RouteConfig[] = [
   ...orders,

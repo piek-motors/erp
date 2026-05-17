@@ -191,7 +191,7 @@ const OrderSearch = observer(() => {
   )
 })
 
-const ProductionOrderList = observer(() => {
+export const ProductionOrderList = observer(() => {
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -259,5 +259,3 @@ const TAB_LABELS = [
   { value: OrderStatus.Production, label: 'Производство' },
   { value: OrderStatus.Archived, label: 'Архив' },
 ]
-
-export default ProductionOrderList

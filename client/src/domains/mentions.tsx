@@ -81,7 +81,7 @@ function MentionComponent({ data }: { data: Mention }) {
   )
 }
 
-const MentionList = observer(() => {
+export const MentionList = observer(() => {
   const [notifications, setNotifications] = useState<{
     unseen: Mention[]
     seen: Mention[]
@@ -151,5 +151,3 @@ function SectionTitle({ title }: { title: string }) {
     </P>
   )
 }
-
-export default MentionList

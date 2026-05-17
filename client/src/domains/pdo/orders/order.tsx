@@ -49,7 +49,7 @@ const deletionAllowed = [
   OrderStatus.Production,
 ]
 
-const OrderUpdatePage = observer(() => {
+export const OrderUpdatePage = observer(() => {
   const { id } = useParams<{ id: string }>()
 
   const [detail, setDetail] = useState<DetailSt | null>(null)
@@ -132,8 +132,6 @@ const OrderUpdatePage = observer(() => {
     </Stack>
   )
 })
-
-export default OrderUpdatePage
 
 const OrderStatusChip = ({ status }: { status: OrderStatus }) => {
   let color: ChipProps['color'] = 'neutral'

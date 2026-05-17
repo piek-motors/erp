@@ -9,7 +9,7 @@ import { MobileNavModal, MobilePadding } from '../root_layout'
 import { GroupContentSection } from './group_content'
 import { GroupList, MobileGroupSelectModal } from './group_list'
 
-const GroupListPage = () => (
+export const GroupListPage = () => (
   <Stack
     direction={{
       xs: 'column',
@@ -31,8 +31,6 @@ const GroupListPage = () => (
     <GroupContentSection />
   </Stack>
 )
-
-export default GroupListPage
 
 const MobileLayout = () => (
   <MobileOnly>
