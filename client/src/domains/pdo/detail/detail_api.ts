@@ -6,7 +6,7 @@ import { notifier } from '@/lib/store/notifier.store'
 import { normalize } from '@/lib/utils/search'
 import { app_cache } from '../cache'
 import { DetailSt, LastProduction } from './detail.state'
-import { detailListStore } from './list/store'
+import { detail_list_vm } from './list/detail_list_vm'
 
 export class DetailApi {
   readonly loader = new LoadingController()
@@ -48,7 +48,7 @@ export class DetailApi {
   async delete(id: number) {
     await rpc.pdo.details.delete.mutate({ id })
     app_cache.details.remove(id)
-    detailListStore.searchStore.search()
+    detail_list_vm.searchStore.search()
   }
 
   async create_production_order(id: number) {

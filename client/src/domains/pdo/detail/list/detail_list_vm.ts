@@ -6,20 +6,11 @@ import {
 import { app_cache } from '@/domains/pdo/cache'
 import { LoadingController } from '@/lib/store/loading_controller'
 import { debounce } from '@/lib/utils/debounce'
-import {
-  type CriteriaBasedSearchConfig,
-  normalize,
-  token_search,
-} from '@/lib/utils/search'
+import { normalize, token_search } from '@/lib/utils/search'
 import type { AppDetail } from '../../cache/detail_cache'
+import { SearchCriteria, search_config } from './search_config'
 
-export enum SearchCriteria {
-  Id = '№',
-  Name = 'Наим.',
-  DrawingNumber = 'Чертеж',
-}
-
-export class DetailListStore {
+export class DetailListVM {
   readonly loader = new LoadingController()
   readonly searchStore: PaginatedSearchStore<AppDetail>
 
@@ -98,37 +89,4 @@ export class DetailListStore {
   }
 }
 
-const search_config: CriteriaBasedSearchConfig<AppDetail, SearchCriteria> = {
-  [SearchCriteria.Name]: {
-    fields: [
-      {
-        get: d => d.normalized_name,
-      },
-      {
-        get: d =>
-          d.group_ids
-            .map(id => app_cache.groups.tree.name_for(id) ?? '')
-            .join(' ')
-            .toLowerCase(),
-      },
-    ],
-  },
-  [SearchCriteria.Id]: {
-    fields: [
-      {
-        get: d => d.id.toString(),
-        match: 'exact',
-      },
-    ],
-  },
-  [SearchCriteria.DrawingNumber]: {
-    fields: [
-      {
-        get: d => d.drawing_number ?? '',
-        match: 'includes',
-      },
-    ],
-  },
-}
-
-export const detailListStore = new DetailListStore()
+export const detail_list_vm = new DetailListVM()

@@ -22,7 +22,8 @@ import type { AppDetail } from '../../cache/detail_cache'
 import { type DetailSt, GroupAssigment } from '../detail.state'
 import { DetailName } from '../detail_name'
 import { AlphabetIndex } from './alphabet_index'
-import { SearchCriteria, detailListStore as state } from './store'
+import { detail_list_vm as state } from './detail_list_vm'
+import { SearchCriteria } from './search_config'
 
 export const DetailsListPage = () => (
   <ScrollableWindow

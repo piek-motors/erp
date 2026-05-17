@@ -32,6 +32,10 @@ export class Tree {
     return this.cache.get_full_name(id)
   }
 
+  full_node_names(ids: number[]) {
+    return ids.map(id => this.full_node_name(id))
+  }
+
   name_for(id: number) {
     return this.cache.get_node(id)?.name
   }

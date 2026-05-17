@@ -67,8 +67,10 @@ export const DetailPage = observer(() => {
             </P>
           )
         }
-        children={<Save detail={detail} />}
-      />
+      >
+        <Save detail={detail} />
+      </MetalPageTitle>
+
       <Row flexWrap={'wrap'} gap={1} py={0.5}>
         <DetailWarehouseModal detail={detail} />
         <CreateManufacturingOrder detailId={detail.id} />

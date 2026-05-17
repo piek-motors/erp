@@ -1,5 +1,4 @@
 # Backlog
-- [ ] **PDO**: Fix bug with broken search by group name in the order list. Probably group name retriving is broken after migration to hierarchical grpoup strcucture. Same problem on group list
 - [ ] **PDO**: Аdd the ability to configure filters from the UI. Editing of materials must remain disabled.
 - [ ] **Architecture**: migrate to a plugin-based architecture to improve domain isolation.
 - [ ] **HR**: Timeformers. 
@@ -22,3 +21,4 @@
 - [x] **PDO**: Allow detail multiple group selection, it would be easier to undertand where this detail used and remove detail assigmnet in the groups. 
 - [x] **PDO**: Show detail group and detail id on the printed version of production order.
 - [x] PDO: fix sign reflection of the supply - balance change operation
+- [x] **PDO**: Fix bug with broken search by group name in the order list. Probably group name retriving is broken after migration to hierarchical grpoup strcucture. Same problem on group list
