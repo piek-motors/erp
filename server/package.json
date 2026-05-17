@@ -8,9 +8,7 @@
     "lint": "biome lint --write",
     "fix": "biome check --write",
     "check": "tsc -p tsconfig.json --noEmit",
-    "prestart": "npm run check",
     "start": "tsx ./src/main.ts",
-    "predev": "npm run check",
     "dev": "tsx --watch ./src/main.ts",
     "build": "tsx",
     "deploy": "tsx ./deploy.ts"
