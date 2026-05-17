@@ -32,7 +32,7 @@ const MaterialList = observer((props: MaterialsTableProps) => {
   )
 })
 
-export const MaterialListPage = observer((props: MaterialsTableProps) => (
+const MaterialListPage = observer((props: MaterialsTableProps) => (
   <ScrollableWindow
     static={
       <MobilePadding desktop_too>
@@ -50,3 +50,5 @@ export const MaterialListPage = observer((props: MaterialsTableProps) => (
     scroll={<MaterialList {...props} />}
   />
 ))
+
+export default MaterialListPage

@@ -1,4 +1,4 @@
-import { makeAutoObservable, runInAction, observable } from 'mobx'
+import { makeAutoObservable, observable, runInAction } from 'mobx'
 import { matrixDecoder } from '@/lib/rpc/matrix_decoder'
 import { rpc } from '@/lib/rpc/rpc.client'
 import { normalize } from '@/lib/utils/search'

@@ -21,10 +21,10 @@ import {
 } from '@/lib/index'
 import { GroupAssigment } from '../detail/detail.state'
 import { DetailName } from '../detail/detail_name'
+import { MaterialName } from '../material/name'
 import { AdaptiveNumberFormatter } from '../shared/adaptive_number_formatter'
 import { value_with_unit } from '../shared/basic'
 import { type Operation, operations_st } from './list'
-import { MaterialName } from '../material/name'
 
 const formatter = new AdaptiveNumberFormatter(2)
 const ShowRevertButtonWithinDays = 7

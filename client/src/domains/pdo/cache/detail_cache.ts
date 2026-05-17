@@ -1,4 +1,4 @@
-import { makeAutoObservable, runInAction, observable } from 'mobx'
+import { makeAutoObservable, observable, runInAction } from 'mobx'
 import { matrixDecoder } from '@/lib/rpc/matrix_decoder'
 import { rpc } from '@/lib/rpc/rpc.client'
 import { LoadingController } from '@/lib/store/loading_controller'
@@ -21,7 +21,6 @@ type ProcessingOperation = {
 export class DetailCache {
   readonly loader = new LoadingController()
 
-  // Using Maps for O(1) lookups
   private _detailsMap = observable.map<number, AppDetail>()
   private _operationsMap = observable.map<number, string>()
 

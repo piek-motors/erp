@@ -1,14 +1,16 @@
+import { lazy } from 'react'
 import { routeMap } from '@/lib/routes'
 import type { RouteConfig } from '@/lib/types/global'
 import { CreateDetailPage, DetailPage } from './detail/detail'
 import { DetailsListPage } from './detail/list/list'
 import { GroupListPage } from './detail_grouping/main'
-import { MaterialListPage } from './material/list/list'
 import { CreateMaterialPage, MaterialUpdatePage } from './material/material'
-import { ProductionOrderList } from './orders/list/production'
 import { OrderUpdatePage } from './orders/order'
 import { MetalFlowRootLayout, MobilePadding } from './root_layout'
 import { OperationsPage } from './warehouse/list'
+
+const MaterialListPage = lazy(() => import('./material/list/list'))
+const ProductionOrderList = lazy(() => import('./orders/list/production'))
 
 const { pdo: metalflow } = routeMap
 

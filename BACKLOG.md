@@ -1,5 +1,6 @@
 # Backlog
-
+- [ ] **PDO**: Fix bug with broken search by group name in the order list. Probably group name retriving is broken after migration to hierarchical grpoup strcucture. Same problem on group list
+- [ ] PDO: fix sign reflection of the supply - balance change operation
 - [ ] **PDO**: Аdd the ability to configure filters from the UI. Editing of materials must remain disabled.
 - [ ] **Architecture**: migrate to a plugin-based architecture to improve domain isolation.
 - [ ] **HR**: Timeformers. 

@@ -7,7 +7,7 @@ import { BrowserRouter } from 'react-router'
 import { NetworkStatusMessage } from './components/network-status-hint'
 import { NotifierOverlay } from './components/notifier'
 import { AppRouter } from './lib/routers/Router'
-import theme from './theme'
+import theme from './lib/theme'
 
 const App = observer(() => {
   return (

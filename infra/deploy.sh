@@ -1,6 +1,6 @@
 #!/bin/bash
 
-TARGET="piek-office"               # SSH target
+TARGET="piek"               # SSH target
 REMOTE_DIR="/home/fin/apps/erp"    # Remote directory
 PM2_PROCESS_NAME="erp"             # PM2 process name
 
