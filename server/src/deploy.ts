@@ -30,12 +30,9 @@ const remoteScript = `
   echo "📥 Installing server dependencies..."
   pnpm install --frozen-lockfile
 
-  echo "🏗️  Building server..."
+  echo "🏗️  Building..."
+  pnpm run check
   pnpm run build
-
-  echo "🏗️  Building client..."
-  cd "${CONFIG.REMOTE_DIR}/client"
-  pnpm run build:release
 
   echo "🗄️  Running migrations..."
   cd "${CONFIG.REMOTE_DIR}/db"
