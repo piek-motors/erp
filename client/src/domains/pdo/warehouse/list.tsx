@@ -134,7 +134,7 @@ export const OperationsTable = observer((props: Props) => {
   )
 })
 
-export const OperationsPage = () => (
+export default () => (
   <>
     <MobilePadding>
       <MobileNavModal t={'Журнал'} />

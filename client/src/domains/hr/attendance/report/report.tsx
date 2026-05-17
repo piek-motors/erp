@@ -11,7 +11,7 @@ import { UpdateIntervalModal } from './modals/update_interval_modal'
 import { PrintPdfButton } from './print_btn'
 import { vm } from './view_model'
 
-export const AttendanceReportView = observer(() => {
+const AttendanceReportView = observer(() => {
   const printRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -117,3 +117,5 @@ export const AttendanceReportView = observer(() => {
     </Stack>
   )
 })
+
+export default AttendanceReportView

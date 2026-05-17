@@ -2,87 +2,77 @@ import { lazy } from 'react'
 import { routeMap } from '@/lib/routes'
 import type { RouteConfig } from '@/lib/types/global'
 import { CreateDetailPage, DetailPage } from './detail/detail'
-import { DetailsListPage } from './detail/list/list'
-import { GroupListPage } from './detail_grouping/main'
 import { CreateMaterialPage, MaterialUpdatePage } from './material/material'
-import { OrderUpdatePage } from './orders/order'
 import { MetalFlowRootLayout, MobilePadding } from './root_layout'
-import { OperationsPage } from './warehouse/list'
 
+const DetailsListPage = lazy(() => import('./detail/list/list'))
+const GroupListPage = lazy(() => import('./detail_grouping/main'))
+const OrderUpdatePage = lazy(() => import('./orders/order'))
+const OperationsPage = lazy(() => import('./warehouse/list'))
 const MaterialListPage = lazy(() => import('./material/list/list'))
 const ProductionOrderList = lazy(() => import('./orders/list/production'))
 
 const { pdo: metalflow } = routeMap
 
-function wrapEachRoute(route: RouteConfig) {
-  return {
-    ...route,
-    element: <MetalFlowRootLayout>{route.element}</MetalFlowRootLayout>,
-  }
-}
+export default {
+  element: <MetalFlowRootLayout />,
+  children: [
+    {
+      element: <ProductionOrderList />,
+      path: metalflow.index,
+    },
+    {
+      element: <MaterialListPage />,
+      path: metalflow.materials,
+    },
+    {
+      element: <CreateMaterialPage />,
+      path: metalflow.material.new,
+    },
+    {
+      element: (
+        <MobilePadding desktop_too>
+          <MaterialUpdatePage />
+        </MobilePadding>
+      ),
+      path: metalflow.material.edit,
+    },
 
-const innerRoutes = [
-  {
-    element: <ProductionOrderList />,
-    path: metalflow.index,
-  },
-  {
-    element: <MaterialListPage />,
-    path: metalflow.materials,
-  },
-  {
-    element: <CreateMaterialPage />,
-    path: metalflow.material.new,
-  },
-  {
-    element: (
-      <MobilePadding desktop_too>
-        <MaterialUpdatePage />
-      </MobilePadding>
-    ),
-    path: metalflow.material.edit,
-  },
-
-  {
-    element: <DetailsListPage />,
-    path: metalflow.details,
-  },
-  {
-    element: <CreateDetailPage />,
-    path: metalflow.detail.new,
-  },
-  {
-    element: (
-      <MobilePadding desktop_too>
-        <DetailPage />
-      </MobilePadding>
-    ),
-    path: metalflow.detail.edit,
-  },
-  {
-    element: <GroupListPage />,
-    path: metalflow.detailGroups,
-  },
-  {
-    element: <GroupListPage />,
-    path: metalflow.detailGroup,
-  },
-  {
-    element: <OperationsPage />,
-    path: metalflow.operations,
-  },
-  {
-    element: (
-      <MobilePadding desktop_too>
-        <OrderUpdatePage />
-      </MobilePadding>
-    ),
-    path: metalflow.order.edit,
-  },
-] as RouteConfig[]
-
-export default innerRoutes.map(wrapEachRoute)
-
-export function getComponentByCurrentPath(path: string) {
-  return innerRoutes.find(r => r.path === path)?.element || <></>
-}
+    {
+      element: <DetailsListPage />,
+      path: metalflow.details,
+    },
+    {
+      element: <CreateDetailPage />,
+      path: metalflow.detail.new,
+    },
+    {
+      element: (
+        <MobilePadding desktop_too>
+          <DetailPage />
+        </MobilePadding>
+      ),
+      path: metalflow.detail.edit,
+    },
+    {
+      element: <GroupListPage />,
+      path: metalflow.detailGroups,
+    },
+    {
+      element: <GroupListPage />,
+      path: metalflow.detailGroup,
+    },
+    {
+      element: <OperationsPage />,
+      path: metalflow.operations,
+    },
+    {
+      element: (
+        <MobilePadding desktop_too>
+          <OrderUpdatePage />
+        </MobilePadding>
+      ),
+      path: metalflow.order.edit,
+    },
+  ],
+} as RouteConfig

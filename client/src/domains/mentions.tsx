@@ -72,6 +72,7 @@ function MentionComponent({ data }: { data: Mention }) {
         </Box>
         <Box p={0.1}>
           <CommentContentWrapper
+            // biome-ignore lint/security/noDangerouslySetInnerHtml: its okay
             dangerouslySetInnerHTML={{ __html: data.text }}
           ></CommentContentWrapper>
         </Box>
@@ -80,7 +81,7 @@ function MentionComponent({ data }: { data: Mention }) {
   )
 }
 
-export const MentionList = observer(() => {
+const MentionList = observer(() => {
   const [notifications, setNotifications] = useState<{
     unseen: Mention[]
     seen: Mention[]
@@ -125,8 +126,8 @@ export const MentionList = observer(() => {
               />
             </Box>
             {!loading &&
-              notifications?.unseen.map((e, index) => (
-                <MentionComponent key={index} data={e} />
+              notifications?.unseen.map(mention => (
+                <MentionComponent key={mention.id} data={mention} />
               ))}
           </Stack>
         ) : null}
@@ -134,8 +135,8 @@ export const MentionList = observer(() => {
         <Stack gap={1}>
           <SectionTitle title="Просмотренные" />
           {!loading &&
-            notifications?.seen.map((mention, index) => (
-              <MentionComponent data={mention} key={index} />
+            notifications?.seen.map(mention => (
+              <MentionComponent data={mention} key={mention.id} />
             ))}
         </Stack>
       </Stack>
@@ -150,3 +151,5 @@ function SectionTitle({ title }: { title: string }) {
     </P>
   )
 }
+
+export default MentionList

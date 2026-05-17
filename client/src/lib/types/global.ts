@@ -8,6 +8,7 @@ export type ServerErrorResponse = {
 }
 
 export interface RouteConfig {
-  path: string
+  path?: string
   element: JSX.Element
+  children?: RouteConfig[]
 }

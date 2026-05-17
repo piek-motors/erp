@@ -10,7 +10,6 @@ import { Search } from '@/components/inputs'
 import { OrderTypeFilter } from '@/components/order-type-filter'
 import { type TabConfig, Tabs } from '@/components/tabs'
 import { useFilter } from '@/hooks'
-import type { SxProperty } from '@/lib/constants'
 import { AddResourceButton, Label } from '@/lib/index'
 import { routeMap } from '@/lib/routes'
 import type { RouteConfig } from '@/lib/types/global'
@@ -143,9 +142,10 @@ const Archive = observer(() => {
   const keyword = () => {
     if (!store.searchTerm) return ''
     if (store.searchTerm === '/all') return '%%'
-    else return '%' + store.searchTerm + '%'
+    else return `%${store.searchTerm}%`
   }
   const [orders, setOrders] = useState<UnpackedOrder[]>([])
+
   useEffect(() => {
     if (!store.orderStatusId) {
       return
@@ -184,7 +184,30 @@ const Archive = observer(() => {
   )
 })
 
-const { orders } = routeMap
+const Wrapper = observer(() => {
+  const navigate = useNavigate()
+  const currentTab = useLocation().pathname
+  function insertNewOrder() {
+    navigate(`/orders/new`)
+  }
+
+  return (
+    <FactoryPage
+      title={'Заказы'}
+      header={<AddResourceButton onClick={() => insertNewOrder()} />}
+    >
+      <Tabs
+        p={0.5}
+        tabs={tabs}
+        value={currentTab}
+        handleChange={(v: number) => {
+          const url = tabs[v].value as any
+          navigate(url)
+        }}
+      />
+    </FactoryPage>
+  )
+})
 
 const tabs: TabConfig = [
   {
@@ -214,64 +237,11 @@ const tabs: TabConfig = [
   },
 ]
 
-const Wrapper = observer(
-  (props: { children: React.ReactNode; sx?: SxProperty }) => {
-    const navigate = useNavigate()
-    const currentTab = useLocation().pathname
-    function insertNewOrder() {
-      navigate(`/orders/new`)
-    }
-
-    return (
-      <FactoryPage
-        title={'Заказы'}
-        header={<AddResourceButton onClick={() => insertNewOrder()} />}
-      >
-        <Tabs
-          p={0.5}
-          tabs={tabs}
-          value={currentTab}
-          handleChange={(v: number) => {
-            const url = tabs[v].value as any
-            navigate(url)
-          }}
-        />
-      </FactoryPage>
-    )
-  },
-)
-
-const exportRoutes = (
-  [
-    {
-      path: orders.preOrders,
-      title: 'Предзаказы',
-      element: <RegistrationList />,
-    },
-    {
-      path: orders.priorityList,
-      title: 'Очередность',
-      element: <PriorityList />,
-    },
-    {
-      path: orders.recentlyPaid,
-      title: 'Новые',
-      element: <NewOrderList />,
-    },
-    {
-      path: orders.report,
-      title: 'Отчет',
-      element: <RequestReportPage />,
-    },
-    {
-      path: orders.archiveSearch,
-      title: 'Архив',
-      element: <Archive />,
-    },
-  ] as const
-).map(({ path, element }) => ({
-  path,
-  element: <Wrapper>{element}</Wrapper>,
-})) as RouteConfig[]
+const exportRoutes = tabs
+  .map(tab => ({ path: tab.value, title: tab.label, element: tab.component }))
+  .map(({ path }) => ({
+    path,
+    element: <Wrapper />,
+  })) as RouteConfig[]
 
 export default exportRoutes

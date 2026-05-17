@@ -24,7 +24,7 @@ import { DetailName } from '../detail_name'
 import { AlphabetIndex } from './alphabet_index'
 import { SearchCriteria, detailListStore as state } from './store'
 
-export const DetailsListPage = () => (
+const DetailsListPage = () => (
   <ScrollableWindow
     static={
       <MobilePadding desktop_too>
@@ -43,6 +43,7 @@ export const DetailsListPage = () => (
     }
   />
 )
+export default DetailsListPage
 
 const Search = observer(() => (
   <SearchWithCriteria

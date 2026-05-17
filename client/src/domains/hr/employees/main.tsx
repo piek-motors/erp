@@ -5,7 +5,7 @@ import { NavTopBar } from '@/components/nav_topbar'
 import { employee_list_vm } from './employee.store'
 import { EmployeeTable } from './employee_list'
 
-export const EmployeesPage = observer(() => {
+const EmployeesPage = observer(() => {
   useEffect(() => {
     employee_list_vm.load()
   }, [])
@@ -22,3 +22,5 @@ export const EmployeesPage = observer(() => {
     </Box>
   )
 })
+
+export default EmployeesPage

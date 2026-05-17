@@ -99,10 +99,10 @@ export const OrdersTable = observer(
     columns?: Column<UnpackedOrder>[]
   }) => {
     const navigate = useNavigate()
-    const handleRowClick = (order: UnpackedOrder) => {
-      navigate(openOrderDetailPage(order.id))
-    }
-    const memoizedColumns = useMemo(() => props.columns || columns, [])
+    const memoizedColumns = useMemo(
+      () => props.columns || columns,
+      [props.columns],
+    )
     const rowStyleCb = row => {
       return {
         background: getBackgroundColor(row.original),
@@ -113,7 +113,9 @@ export const OrdersTable = observer(
         rowStyleCb={props.enableRowStyling ? rowStyleCb : undefined}
         columns={memoizedColumns}
         data={props.data}
-        onRowClick={handleRowClick}
+        onRowClick={(order: UnpackedOrder) => {
+          navigate(openOrderDetailPage(order.id))
+        }}
       />
     )
   },

@@ -9,6 +9,7 @@ import {
   Stack,
 } from '@mui/joy'
 import { type ReactNode, useEffect, useState } from 'react'
+import { Outlet } from 'react-router'
 import {
   DesktopOnly,
   MobileOnly,
@@ -69,7 +70,7 @@ export const MobilePadding = (props: {
   </Box>
 )
 
-export function MetalFlowRootLayout(props: { children?: React.ReactNode }) {
+export function MetalFlowRootLayout() {
   useEffect(() => {
     app_cache.init()
   }, [])
@@ -108,7 +109,7 @@ export function MetalFlowRootLayout(props: { children?: React.ReactNode }) {
           overflowY: 'auto',
         }}
       >
-        <Stack sx={{ minHeight: '100%' }}>{props.children}</Stack>
+        <Stack sx={{ minHeight: '100%' }}>{<Outlet />}</Stack>
       </Sheet>
     </Box>
   )
