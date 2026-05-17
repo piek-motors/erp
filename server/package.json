@@ -7,12 +7,13 @@
     "fmt": "biome format --write",
     "lint": "biome lint --write",
     "fix": "biome check --write",
-    "start": "bun run ./src/main.ts",
-    "dev": "bun run --watch ./src/main.ts",
-    "build": "tsc -p tsconfig.json",
     "check": "tsc -p tsconfig.json --noEmit",
-    "test": "bun test",
-    "deploy": "bun run ./deploy.ts"
+    "prestart": "npm run check",
+    "start": "tsx ./src/main.ts",
+    "predev": "npm run check",
+    "dev": "tsx --watch ./src/main.ts",
+    "build": "tsx",
+    "deploy": "tsx ./deploy.ts"
   },
   "imports": {
     "#root/*": "./src/*"
@@ -38,11 +39,11 @@
     "pino": "^9.7.0",
     "pino-pretty": "^13.0.0",
     "rust": "workspace:*",
+    "tsx": "^4.22.1",
     "zod": "^4.1.12"
   },
   "devDependencies": {
-    "@types/bun": "^1.2.0",
-    "typescript": "^5.9.3"
+    "typescript": "^6.0.3"
   },
   "trustedDependencies": [
     "aws-sdk"

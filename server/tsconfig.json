@@ -1,15 +1,14 @@
 {
   "compilerOptions": {
-    "target": "es2024",
-    "module": "ESNext",
-    "moduleResolution": "bundler",
+    "target": "esnext",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
     "incremental": true,
     "composite": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "baseUrl": ".",
     "paths": {
-      "#root/*": ["src/*"]
+      "#root/*": ["./src/*"]
     },
     "sourceMap": true,
     "outDir": "./dist",

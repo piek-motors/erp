@@ -1,4 +1,5 @@
 import moment from 'moment'
+// @ts-ignore
 import 'moment/locale/ru'
 moment.locale('ru')
 

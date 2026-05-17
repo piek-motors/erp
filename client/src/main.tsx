@@ -1,4 +1,6 @@
 import { DictManagerModal } from '@/components/dict_manager'
+// biome-ignore lint/suspicious/noTsIgnore: ist okay
+// @ts-ignore
 import '@fontsource/inter'
 import { CssBaseline, ThemeProvider } from '@mui/joy'
 import { observer } from 'mobx-react-lite'
