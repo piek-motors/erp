@@ -1,6 +1,6 @@
 import { makeAutoObservable } from 'mobx'
 
-export class WarehouseModalsState {
+export class InventoryLogModalVM {
   constructor() {
     makeAutoObservable(this)
   }
@@ -14,4 +14,4 @@ export class WarehouseModalsState {
   }
 }
 
-export const modalState = new WarehouseModalsState()
+export const inventory_log_modal = new InventoryLogModalVM()

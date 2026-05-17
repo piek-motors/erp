@@ -29,31 +29,31 @@ export type Updateable<T> = KyselyUpdateable<T>
 
 export namespace DB {
   export interface Schema {
-    ['users']: UserTable
-    ['attachments']: AttachmentTable
-    ['refresh_tokens']: RefreshTokenTable
+    users: UserTable
+    attachments: AttachmentTable
+    refresh_tokens: RefreshTokenTable
 
-    ['orders.orders']: OrderTable
-    ['orders.comments']: OrderCommentsTable
-    ['orders.order_attachments']: OrderAttachmentTable
-    ['orders.order_payments']: OrderPaymentsTable
-    ['orders.order_items']: OrderItemsTable
-    ['orders.notifications']: NotificationTable
+    'orders.orders': OrderTable
+    'orders.comments': OrderCommentsTable
+    'orders.order_attachments': OrderAttachmentTable
+    'orders.order_payments': OrderPaymentsTable
+    'orders.order_items': OrderItemsTable
+    'orders.notifications': NotificationTable
 
-    ['attendance.events']: AttendanceEventsTable
-    ['attendance.intervals']: AttendanceIntervalTable
-    ['attendance.employees']: AttendanceEmployeeTable
-    ['attendance.employee_absences']: AttendanceEmployeeAbsenceTable
+    'attendance.events': AttendanceEventsTable
+    'attendance.intervals': AttendanceIntervalTable
+    'attendance.employees': AttendanceEmployeeTable
+    'attendance.employee_absences': AttendanceEmployeeAbsenceTable
 
-    ['pdo.dict_operation_kinds']: Dict<string>
-    ['pdo.materials']: MaterialTable
-    ['pdo.details']: DetailTable
-    ['pdo.detail_attachments']: DetailAttachmentTable
-    ['pdo.operations']: OperationsTable
-    ['pdo.orders']: ProductionOrderTable
-    ['pdo.detail_group']: DetailGroupTable
-    ['pdo.detail_group_details']: DetailGroupDetailsTable
-    ['pdo.detail_group_color_annotations']: DetailGroupColorAnnotationsTable
+    'pdo.dict_operation_kinds': Dict<string>
+    'pdo.materials': MaterialTable
+    'pdo.details': DetailTable
+    'pdo.detail_attachments': DetailAttachmentTable
+    'pdo.operations': OperationsTable
+    'pdo.orders': ProductionOrderTable
+    'pdo.detail_group': DetailGroupTable
+    'pdo.detail_group_details': DetailGroupDetailsTable
+    'pdo.detail_group_color_annotations': DetailGroupColorAnnotationsTable
   }
 
   export interface Dict<V> {

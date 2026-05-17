@@ -24,7 +24,8 @@ import { DetailName } from '../detail/detail_name'
 import { MaterialName } from '../material/name'
 import { AdaptiveNumberFormatter } from '../shared/adaptive_number_formatter'
 import { value_with_unit } from '../shared/basic'
-import { type Operation, operations_st } from './list'
+import type { InventoryLogRecord } from './inventory_log'
+import { inventory_log_vm } from './inventory_log_vm'
 
 const formatter = new AdaptiveNumberFormatter(2)
 const ShowRevertButtonWithinDays = 7
@@ -55,7 +56,7 @@ const revert_col = {
             opacity: 1,
           },
         }}
-        onClick={() => operations_st.revert(op)}
+        onClick={() => inventory_log_vm.revert(op)}
       >
         <UseIcon icon={UilHistory} small invert />
       </IconButton>
@@ -74,7 +75,7 @@ const op_type_col = {
   },
 }
 
-export const material_columns: Column<Operation>[] = [
+export const material_columns: Column<InventoryLogRecord>[] = [
   date_col,
   {
     Header: `Материал`,
@@ -138,7 +139,7 @@ export const material_columns: Column<Operation>[] = [
   revert_col,
 ]
 
-export const detail_columns: Column<Operation>[] = [
+export const detail_columns: Column<InventoryLogRecord>[] = [
   date_col,
   {
     Header: `Деталь`,

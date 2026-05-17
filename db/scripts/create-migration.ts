@@ -29,7 +29,8 @@ if (!fs.existsSync(migrationsDir)) {
 
 const filePath = path.join(migrationsDir, fileName)
 
-const template = `import { type KDB } from '../schema'
+const template = `import type { KDB } from '../schema.js'
+
 export async function up(db: KDB): Promise<void> {
 }
 

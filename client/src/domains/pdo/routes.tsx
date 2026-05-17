@@ -8,7 +8,7 @@ import { CreateMaterialPage, MaterialUpdatePage } from './material/material'
 import { ProductionOrderList } from './orders/list/production'
 import { OrderUpdatePage } from './orders/order'
 import { MetalFlowRootLayout, MobilePadding } from './root_layout'
-import { OperationsPage } from './warehouse/list'
+import { InventoryLogPage } from './warehouse/inventory_log'
 
 const { pdo: metalflow } = routeMap
 
@@ -61,7 +61,7 @@ export default {
       path: metalflow.detailGroup,
     },
     {
-      element: <OperationsPage />,
+      element: <InventoryLogPage />,
       path: metalflow.operations,
     },
     {

@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite'
 import { type ReactNode, useCallback, useState } from 'react'
 import { InModal } from '@/components/modal'
 import { useEscapeClose } from '../../../hooks/use-escape-close'
-import { OperationsTable, OperationsTitle } from './list'
+import { InventoryLog, InventoryLogTitle } from './inventory_log'
 
 type OperationModalProps = {
   children: React.ReactNode
@@ -52,8 +52,8 @@ export const OperationsListModal = observer(
         }
       >
         <>
-          <OperationsTitle />
-          <OperationsTable
+          <InventoryLogTitle />
+          <InventoryLog
             materialId={props.materialId}
             detailId={props.detailId}
           />

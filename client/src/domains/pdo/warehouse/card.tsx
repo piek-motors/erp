@@ -2,7 +2,7 @@ import { Box, Card, type CardProps, Stack } from '@mui/joy'
 import type { ReactNode } from 'react'
 import { Btn, observer, P, Row } from '@/lib/index'
 import { OperationModal } from './modals'
-import { modalState } from './modals.store'
+import { inventory_log_modal } from './modals_vm'
 
 interface Props {
   children: ReactNode
@@ -56,9 +56,9 @@ export const WarehouseCard = observer((props: Props) => (
           {supply_text}
         </Btn>
       }
-      open={modalState.supply}
+      open={inventory_log_modal.supply}
       setOpen={o => {
-        modalState.setSupply(o)
+        inventory_log_modal.setSupply(o)
       }}
     >
       <P color="success" fontWeight={600}>
@@ -75,8 +75,8 @@ export const WarehouseCard = observer((props: Props) => (
           {writeoff_text}
         </Btn>
       }
-      open={modalState.writeoff}
-      setOpen={o => modalState.setWriteoff(o)}
+      open={inventory_log_modal.writeoff}
+      setOpen={o => inventory_log_modal.setWriteoff(o)}
     >
       <P color="warning" fontWeight={600}>
         {writeoff_text}

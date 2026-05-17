@@ -13,7 +13,7 @@ import {
   WriteoffCompletedText,
 } from '@/domains/pdo/warehouse/card'
 import { OperationsListModal } from '@/domains/pdo/warehouse/modals'
-import { modalState } from '@/domains/pdo/warehouse/modals.store'
+import { inventory_log_modal } from '@/domains/pdo/warehouse/modals_vm'
 import { ActionButton, Box, Label, observer, P, Row } from '@/lib/index'
 import { notifier } from '@/lib/store/notifier.store'
 import type { DetailSt, DetailStProp } from '../detail.state'
@@ -86,7 +86,7 @@ export const DetailWarehouseModal = observer(({ detail }: DetailStProp) => (
               notifier.ok(WriteoffCompletedText)
             })
             .finally(() => {
-              modalState.setWriteoff(false)
+              inventory_log_modal.setWriteoff(false)
             })
         }
       />
@@ -112,7 +112,7 @@ export const DetailWarehouseModal = observer(({ detail }: DetailStProp) => (
               notifier.ok(SupplyCompletedText)
             })
             .finally(() => {
-              modalState.setSupply(false)
+              inventory_log_modal.setSupply(false)
             })
         }
       />
