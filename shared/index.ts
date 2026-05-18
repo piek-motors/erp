@@ -1,4 +1,4 @@
-export * from './domain/attendance/enums.js'
+export * from './domain/hr/enums.js'
 export * from './domain/orders/enums.js'
 export * from './domain/orders/order.js'
 export * from './domain/orders/ui.translators.js'
