@@ -1,6 +1,6 @@
 import { Command } from 'commander'
-import type { KDB } from 'schema/index.js'
 import { connect } from '../connect.js'
+import type { KDB } from '../schema/index.js'
 
 const prog = new Command()
   .requiredOption('--old <name>', 'Old operation name to replace')

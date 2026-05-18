@@ -1,6 +1,6 @@
 import { Kysely, PostgresDialect } from 'kysely'
 import pg from 'pg'
-import type { Database } from 'schema/index.js'
+import type { Database } from './schema/index.js'
 
 export function connect(connectionString: string) {
   console.log('Connecting to database...')

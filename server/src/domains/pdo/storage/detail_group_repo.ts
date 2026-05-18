@@ -1,5 +1,5 @@
-import type { DB } from 'db'
 import { z } from 'zod'
+import type { DB } from '#root/db/index.js'
 import { isDuplicateKeyError } from '#root/lib/kysely.js'
 import { type IDB, RpcError } from '#root/sdk.js'
 

@@ -3,7 +3,6 @@ import type { db } from '#root/ioc/db.js'
 export type IDB = typeof db
 
 export { TRPCError } from '@trpc/server'
-export type { DB } from 'db'
 export { type Kysely, sql } from 'kysely'
 export { z } from 'zod'
 export { config } from '#root/config/env.js'
@@ -12,6 +11,7 @@ export { s3 } from '#root/ioc/s3.js'
 export { matrixEncoder } from '#root/lib/matrix_encoder.js'
 export { procedure, router } from '#root/lib/trpc/trpc.js'
 export { RolePermissionsConfig } from './config/role_permissions.js'
+export type { DB } from './db/index.js'
 export { Scope } from './lib/constants.js'
 export { requireScope } from './lib/rbac/require_scope.middleware.js'
 

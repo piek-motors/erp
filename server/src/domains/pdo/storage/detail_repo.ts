@@ -1,7 +1,7 @@
-import { BlankSchema, type DB, DetailWorkFlowSchema } from 'db'
 import { sql } from 'kysely'
 import { Unit } from 'models'
 import { z } from 'zod'
+import { BlankSchema, type DB, DetailWorkFlowSchema } from '#root/db/index.js'
 import { type IDB, RpcError } from '#root/sdk.js'
 import { create_detail_group_map, type DetailGroupDetailRow } from '../utils.js'
 

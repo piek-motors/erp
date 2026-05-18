@@ -7,7 +7,6 @@
     "composite": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "rootDir": "./src",
     "paths": {
       "#root/*": ["./src/*"]
     },
@@ -23,9 +22,6 @@
   "references": [
     {
       "path": "../models"
-    },
-    {
-      "path": "../db"
     }
   ],
   "exclude": ["./dist/**/*", "node_modules"],

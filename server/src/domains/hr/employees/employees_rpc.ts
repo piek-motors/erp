@@ -1,5 +1,6 @@
-import type { DB } from 'db'
+import type { Updateable } from 'kysely'
 import { z } from 'zod'
+import type { DB } from '#root/db/index.js'
 import { logger } from '#root/ioc/log.js'
 import { Day } from '#root/lib/constants.js'
 import { db, procedure, requireScope, router, Scope } from '#root/sdk.js'
@@ -60,7 +61,7 @@ export const employees = router({
         .where('id', '=', input.id)
         .executeTakeFirstOrThrow()
 
-      const updateData: Partial<DB.Hr.EmployeeTable> = {}
+      const updateData: Partial<Updateable<DB.Hr.EmployeeTable>> = {}
       if (input.job_title != null) {
         updateData.job_title = input.job_title
       }

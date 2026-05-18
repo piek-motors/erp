@@ -1,5 +1,5 @@
-import type { DB } from 'db'
 import { OrderStatus, UserRole } from 'models'
+import type { DB } from '#root/db/index.js'
 import { attachmentService } from '#root/ioc/index.js'
 import { logger } from '#root/ioc/log.js'
 import { type Matrix, matrixEncoder } from '#root/lib/matrix_encoder.js'
@@ -155,6 +155,7 @@ export const orders = router({
         .updateTable('orders.orders')
         .set({
           ...input,
+          id: undefined,
           shipping_date: fromMs(input.shipping_date),
           acceptance_date: fromMs(input.acceptance_date),
           actual_shipping_date: fromMs(input.actual_shipping_date),

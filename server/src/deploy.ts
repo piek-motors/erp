@@ -34,12 +34,12 @@ const remoteScript = `
   pnpm run check
   pnpm run build
 
-  echo "🗄️  Running migrations..."
-  cd "${CONFIG.REMOTE_DIR}/db"
-  pnpm run migrate
-
   echo "📂 Updating server public directory..."
   cd "${CONFIG.REMOTE_DIR}/server"
+
+  echo "🗄️  Running migrations..."
+  pnpm run migrate
+
   rm -rf public
   cp -r ../client/build public
 

@@ -1,6 +1,6 @@
-import type { DB } from 'db'
 import { fmt, SupplyReason, Unit, WriteoffReason } from 'models'
 import { z } from 'zod'
+import type { DB } from '#root/db/index.js'
 import { Warehouse } from '#root/domains/pdo/services/warehouse_service.js'
 import { MaterialRepo } from '#root/domains/pdo/storage/material_repo.js'
 import { materials_stat_container } from '#root/ioc/index.js'

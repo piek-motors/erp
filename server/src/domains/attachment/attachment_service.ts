@@ -1,7 +1,7 @@
-import type { DB } from 'db'
 import { ApiError } from '#root/lib/api.error.js'
 import { Errcode } from '#root/lib/error-code.js'
 import type { IDB } from '#root/sdk.js'
+import type { DB } from '../../db/index.js'
 
 export interface Attachment {
   key: string

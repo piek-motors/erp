@@ -49,7 +49,6 @@
     "mobx-react": "^9.2.1",
     "mobx-react-lite": "^4.1.1",
     "server": "workspace:*",
-    "db": "workspace:*",
     "models": "workspace:*",
     "moment": "^2.30.1",
     "react": "^19.2.0",

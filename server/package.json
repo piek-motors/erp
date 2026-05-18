@@ -25,9 +25,9 @@
     "@fastify/multipart": "^9.4.0",
     "@fastify/static": "^9.0.0",
     "@trpc/server": "^11.4.2",
-    "db": "workspace:*",
     "decimal.js": "^10.6.0",
     "fastify": "^5.7.4",
+    "pg": "^8.14.1",
     "http-errors": "~2.0.0",
     "http-status-codes": "^2.3.0",
     "jsonwebtoken": "^8.5.1",
@@ -40,7 +40,9 @@
     "tsx": "^4.22.1",
     "zod": "^4.1.12"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "@types/pg": "^8.11.11"
+  },
   "trustedDependencies": [
     "aws-sdk"
   ]

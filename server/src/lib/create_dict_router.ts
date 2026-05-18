@@ -1,6 +1,6 @@
-import type { DB, Selectable } from 'db'
 import { logger } from '#root/ioc/log.js'
 import { db, procedure, router, z } from '#root/sdk.js'
+import type { DB, Selectable } from '../db/index.js'
 
 export type DictEntry = Selectable<DB.Dict<string>>
 
@@ -29,6 +29,7 @@ export const create_dict_router = <TE extends keyof DB.Database & string>(
         await delete_check?.(id)
         await db
           .deleteFrom(table)
+          // @ts-expect-error fd
           .where('id' as any, '=', id)
           .execute()
         logger.info(`Dictionary value ${id} deleted by ${user.full_name}`)

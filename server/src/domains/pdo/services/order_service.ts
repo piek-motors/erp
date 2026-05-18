@@ -1,10 +1,10 @@
-import type { DB } from 'db'
 import {
   MaterialRequirement,
   OrderPriority,
   ProductionOrderStatus,
   WriteoffReason,
 } from 'models'
+import type { DB } from '#root/db/index.js'
 import { logger } from '#root/ioc/log.js'
 import type { ContextUser } from '#root/lib/trpc/context.js'
 import { type IDB, RpcError, TRPCError } from '#root/sdk.js'

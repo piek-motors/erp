@@ -1,4 +1,4 @@
-import type { DB } from 'db'
+import type { DB } from '#root/db/index.js'
 import { db, procedure, requireScope, router, Scope, z } from '#root/sdk.js'
 
 export type Payment = DB.Order.Payment

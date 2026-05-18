@@ -1,5 +1,5 @@
-import type { DB } from 'db'
 import type { AbsenceReason } from 'models'
+import type { DB } from '#root/db/index.js'
 import { Hour, Minute } from '#root/lib/constants.js'
 import { timedeltaInSeconds } from '#root/lib/time.js'
 import { HrRepo, type Period } from './hr.repo.js'
