@@ -7,7 +7,7 @@ node_modules
 *.tar.gz
 *.LICENSE.txt
 *.js.map
-*.sql
+infra/**/*.sql
 .early.coverage
 .vscode
 *.env

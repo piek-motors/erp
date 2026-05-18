@@ -1,7 +1,0 @@
-import type { KDB } from '../schema/index.js'
-
-export async function up(db: KDB): Promise<void> {
-  // await recalculateMaterialLabels(db)
-}
-
-export async function down(db: KDB): Promise<void> {}
