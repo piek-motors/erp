@@ -35,7 +35,7 @@ export class HrRepo {
   }
 
   async upsert_intervals(
-    intervals: DB.AttendanceIntervalTable[],
+    intervals: DB.Hr.AttendanceIntervalTable[],
   ): Promise<number> {
     const res = await db
       .insertInto('attendance.intervals')
@@ -77,7 +77,7 @@ export class HrRepo {
   }
 
   async upsert_events(
-    events: Insertable<DB.AttendanceEventsTable>[],
+    events: Insertable<DB.Hr.AttendanceEventsTable>[],
   ): Promise<number> {
     const events_insert_res = await db
       .insertInto('attendance.events')

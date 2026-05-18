@@ -3,7 +3,7 @@ import type { Selectable } from 'kysely'
 import type { Unit } from 'models'
 import { type IDB, RpcError } from '#root/sdk.js'
 
-export type SelectableMaterial = Selectable<DB.MaterialTable>
+export type SelectableMaterial = Selectable<DB.Pdo.MaterialTable>
 
 export interface MaterialWithDeficit extends SelectableMaterial {
   deficit: DeficitInfo

@@ -4,7 +4,7 @@ import { db, procedure, router, z } from '#root/sdk.js'
 
 export type DictEntry = Selectable<DB.Dict<string>>
 
-export const create_dict_router = <TE extends keyof DB.Schema & string>(
+export const create_dict_router = <TE extends keyof DB.Database & string>(
   table: TE,
   delete_check?: (id: number) => Promise<void>,
 ) =>

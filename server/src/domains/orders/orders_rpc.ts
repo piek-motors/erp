@@ -20,9 +20,9 @@ import { mentions } from './mentions_rpc.js'
 import { payments } from './payments_rpc.js'
 import { positions } from './positions_rpc.js'
 
-export type OrderPosition = Selectable<DB.OrderItemsTable>
+export type OrderPosition = Selectable<DB.Order.OrderItemsTable>
 
-export type ClientOrder = Selectable<DB.OrderTable> & {
+export type ClientOrder = Selectable<DB.Order.OrderTable> & {
   positions: Matrix<OrderPosition>
   manager?: {
     id: number
@@ -30,9 +30,9 @@ export type ClientOrder = Selectable<DB.OrderTable> & {
     last_name: string
   }
   total_paid?: number
-  payments?: Omit<Selectable<DB.OrderPaymentsTable>, 'order_id'>[]
+  payments?: Omit<Selectable<DB.Order.OrderPaymentsTable>, 'order_id'>[]
   comments?: OrderComment[]
-  attachments?: Selectable<DB.AttachmentTable>[]
+  attachments?: Selectable<DB.Public.AttachmentTable>[]
 }
 
 const insertOrderSchema = z.object({
@@ -281,7 +281,7 @@ export const orders = router({
 })
 
 async function enrichOrders(
-  orders: Selectable<DB.OrderTable>[],
+  orders: Selectable<DB.Order.OrderTable>[],
 ): Promise<ClientOrder[]> {
   if (orders.length === 0) {
     return []

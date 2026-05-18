@@ -1,10 +1,10 @@
 import { Kysely, PostgresDialect } from 'kysely'
 import pg from 'pg'
-import type { DB } from './schema.js'
+import type { Database } from 'schema/schema.js'
 
 export function connect(connectionString: string) {
   console.log('Connecting to database...')
-  return new Kysely<DB.Schema>({
+  return new Kysely<Database>({
     dialect: new PostgresDialect({
       pool: new pg.Pool({
         connectionString,

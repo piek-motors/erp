@@ -1,4 +1,4 @@
-import type { KDB } from '../schema.js'
+import type { KDB } from '../schema/index.js'
 
 export async function up(db: KDB): Promise<void> {
   await db.schema.dropTable('pdo.materials_quarterly_spending').execute()

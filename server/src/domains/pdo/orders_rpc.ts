@@ -230,7 +230,7 @@ export const orders = router({
 
 const dates_formatter = (
   order: Pick<
-    Selectable<DB.ProductionOrderTable>,
+    Selectable<DB.Pdo.ProductionOrderTable>,
     'created_at' | 'started_at' | 'finished_at'
   >,
   withYear?: boolean,

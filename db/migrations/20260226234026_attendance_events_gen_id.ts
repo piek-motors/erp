@@ -1,5 +1,5 @@
 import { sql } from 'kysely' // or whatever SQL helper you use
-import type { KDB } from '../schema.js'
+import type { KDB } from '../schema/index.js'
 
 export async function up(db: KDB): Promise<void> {
   // 1. Remove duplicates (keep lowest id)

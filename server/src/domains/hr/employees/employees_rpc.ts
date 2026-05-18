@@ -60,7 +60,7 @@ export const employees = router({
         .where('id', '=', input.id)
         .executeTakeFirstOrThrow()
 
-      const updateData: Partial<DB.AttendanceEmployeeTable> = {}
+      const updateData: Partial<DB.Hr.AttendanceEmployeeTable> = {}
       if (input.job_title != null) {
         updateData.job_title = input.job_title
       }

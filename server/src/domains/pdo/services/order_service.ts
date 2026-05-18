@@ -28,7 +28,7 @@ type MaterialWriteoff = {
  * @returns The total amount of raw material to decrease (in units of material accounting)
  */
 export function calc_material_deduction(
-  requirement: DB.DetailBlank['material'],
+  requirement: DB.Pdo.DetailBlank['material'],
   quantity_to_produce: number,
 ): number {
   if (!requirement) return 0
@@ -80,7 +80,7 @@ export class OrderService {
 
   async createOrder(
     detail_id: number,
-  ): Promise<Selectable<DB.ProductionOrderTable>> {
+  ): Promise<Selectable<DB.Pdo.ProductionOrderTable>> {
     // deduplication check:  if order created some already
     const existingOrder = await this.trx
       .selectFrom('pdo.orders')
@@ -115,7 +115,7 @@ export class OrderService {
 
   async startMaterialPreparationPhase(
     orderId: number,
-  ): Promise<Selectable<DB.ProductionOrderTable>> {
+  ): Promise<Selectable<DB.Pdo.ProductionOrderTable>> {
     const order = await this.order(orderId)
     if (order.status !== ProductionOrderStatus.Waiting) {
       throw new ErrForbiddenStatusTransition(
@@ -230,7 +230,7 @@ export class OrderService {
       stock: number
       label: string
     },
-    order: Selectable<DB.ProductionOrderTable>,
+    order: Selectable<DB.Pdo.ProductionOrderTable>,
   ): Promise<MaterialWriteoff> {
     const { material_id, label, material_deduction } = material
 
@@ -264,7 +264,7 @@ export class OrderService {
 
   private async order(
     order_id: number,
-  ): Promise<Selectable<DB.ProductionOrderTable>> {
+  ): Promise<Selectable<DB.Pdo.ProductionOrderTable>> {
     const order = await this.trx
       .selectFrom('pdo.orders')
       .where('id', '=', order_id)

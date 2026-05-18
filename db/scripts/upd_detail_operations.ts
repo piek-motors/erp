@@ -1,5 +1,5 @@
 import { Command } from 'commander'
-import type { KDB } from 'schema.js'
+import type { KDB } from 'schema/index.js'
 import { connect } from '../connect.js'
 
 const prog = new Command()

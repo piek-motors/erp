@@ -5,9 +5,9 @@ import { z } from 'zod'
 import { type IDB, RpcError } from '#root/sdk.js'
 import { create_detail_group_map, type DetailGroupDetailRow } from '../utils.js'
 
-export type SelectableDetail = Selectable<DB.DetailTable>
-export type Blank = DB.DetailBlank
-export type DetailWorkflow = DB.DetailWorkflow
+export type SelectableDetail = Selectable<DB.Pdo.DetailTable>
+export type Blank = DB.Pdo.DetailBlank
+export type DetailWorkflow = DB.Pdo.DetailWorkflow
 
 export interface DetailAttachment {
   detail_id: number
@@ -20,7 +20,7 @@ export interface DetailAttachment {
 }
 
 export interface DetailWithGroups {
-  detail: Selectable<DB.DetailTable>
+  detail: Selectable<DB.Pdo.DetailTable>
   group_ids: number[]
   attachments: DetailAttachment[]
   last_manufacturing: { date: Date; qty: number } | null

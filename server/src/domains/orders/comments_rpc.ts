@@ -7,7 +7,7 @@ import {
   z,
 } from '#root/sdk.js'
 
-export type OrderComment = Selectable<DB.OrderCommentsTable> & {
+export type OrderComment = Selectable<DB.Order.OrderCommentsTable> & {
   first_name: string
   last_name: string
   user_id: number

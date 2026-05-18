@@ -14,7 +14,7 @@ export class AttachmentService {
 
   insertAttachmentMetadata(
     files: Attachment[],
-  ): Promise<Selectable<DB.AttachmentTable>[]> {
+  ): Promise<Selectable<DB.Public.AttachmentTable>[]> {
     if (files.length === 0) {
       throw Error('No files to insert')
     }
@@ -33,7 +33,7 @@ export class AttachmentService {
   }
 
   async linkAttachmentsToOrder(
-    attachments: Selectable<DB.AttachmentTable>[],
+    attachments: Selectable<DB.Public.AttachmentTable>[],
     orderId: number,
   ): Promise<void> {
     await this.db
@@ -48,7 +48,7 @@ export class AttachmentService {
   }
 
   async linkAttachmentsToDetail(
-    attachments: Selectable<DB.AttachmentTable>[],
+    attachments: Selectable<DB.Public.AttachmentTable>[],
     detailId: number,
   ): Promise<void> {
     await this.db
@@ -66,7 +66,7 @@ export class AttachmentService {
     files: Attachment[],
     orderId?: number,
     detailId?: number,
-  ): Promise<Selectable<DB.AttachmentTable>[]> {
+  ): Promise<Selectable<DB.Public.AttachmentTable>[]> {
     if (!orderId && !detailId) {
       throw ApiError.BadRequest(Errcode.MISSING_ORDERID_HEADER)
     }
@@ -79,7 +79,7 @@ export class AttachmentService {
     return attachments
   }
 
-  get(key: string): Promise<Selectable<DB.AttachmentTable> | undefined> {
+  get(key: string): Promise<Selectable<DB.Public.AttachmentTable> | undefined> {
     return this.db
       .selectFrom('attachments')
       .selectAll()
@@ -89,7 +89,7 @@ export class AttachmentService {
 
   getOrderAttachments(
     orderId: number,
-  ): Promise<Selectable<DB.AttachmentTable>[]> {
+  ): Promise<Selectable<DB.Public.AttachmentTable>[]> {
     return this.db
       .selectFrom('orders.order_attachments as oa')
       .innerJoin('attachments as a', 'oa.attachment_id', 'a.id')
@@ -100,7 +100,7 @@ export class AttachmentService {
 
   getDetailAttachments(
     detailId: number,
-  ): Promise<Selectable<DB.AttachmentTable>[]> {
+  ): Promise<Selectable<DB.Public.AttachmentTable>[]> {
     return this.db
       .selectFrom('pdo.detail_attachments as da')
       .innerJoin('attachments as a', 'da.attachment_id', 'a.id')

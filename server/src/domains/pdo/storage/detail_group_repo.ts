@@ -39,7 +39,7 @@ export class DetailGroupRepo {
 
   async get_by_id(
     id: number,
-  ): Promise<Selectable<DB.DetailGroupTable> | undefined> {
+  ): Promise<Selectable<DB.Pdo.DetailGroupTable> | undefined> {
     return await this.db
       .selectFrom('pdo.detail_group')
       .where('id', '=', id)
@@ -48,7 +48,7 @@ export class DetailGroupRepo {
   }
 
   async get_group_with_details(groupId: number): Promise<{
-    group: Selectable<DB.DetailGroupTable>
+    group: Selectable<DB.Pdo.DetailGroupTable>
     details: DetailInTheGroup[]
   }> {
     const [group, detailsInGroup] = await Promise.all([
@@ -80,7 +80,7 @@ export class DetailGroupRepo {
     }
   }
 
-  async list_groups(): Promise<Selectable<DB.DetailGroupTable>[]> {
+  async list_groups(): Promise<Selectable<DB.Pdo.DetailGroupTable>[]> {
     return this.db
       .selectFrom('pdo.detail_group')
       .selectAll()
@@ -135,7 +135,7 @@ export class DetailGroupRepo {
 
   async create(
     input: CreateGroupInput,
-  ): Promise<Selectable<DB.DetailGroupTable>> {
+  ): Promise<Selectable<DB.Pdo.DetailGroupTable>> {
     try {
       if (input.parent_id) {
         const parent = await this.db
@@ -168,7 +168,7 @@ export class DetailGroupRepo {
 
   async update(
     input: UpdateGroupInput,
-  ): Promise<Selectable<DB.DetailGroupTable>> {
+  ): Promise<Selectable<DB.Pdo.DetailGroupTable>> {
     try {
       if (input.parent_id) {
         if (input.parent_id === input.id) {

@@ -1,6 +1,6 @@
 import { sql } from 'kysely'
 import { Unit } from 'models'
-import type { KDB } from '../schema.js'
+import type { KDB } from '../schema/index.js'
 
 export async function up(db: KDB): Promise<void> {
   await sql`

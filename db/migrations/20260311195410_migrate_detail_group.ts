@@ -1,5 +1,5 @@
 import { sql } from 'kysely'
-import type { KDB } from '../schema.js'
+import type { KDB } from '../schema/index.js'
 
 export async function up(db: KDB): Promise<void> {
   // Migrate existing logical_group_id values to detail_group_details table
