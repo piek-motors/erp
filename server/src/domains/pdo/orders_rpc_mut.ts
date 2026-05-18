@@ -36,9 +36,8 @@ export const orders_mut = router({
           .where('id', '=', id)
           .executeTakeFirstOrThrow()
 
-        const update: Partial<
-          Pick<DB.Pdo.ProductionOrderTable, 'qty' | 'output_qty'>
-        > = {}
+        const update: Partial<Pick<DB.Pdo.OrderTable, 'qty' | 'output_qty'>> =
+          {}
 
         if (OrderStatus.Production === status) {
           update.output_qty = qty

@@ -141,7 +141,7 @@ export const attendance = router({
         input.employees,
       )
       // TODO: VERIFY ORIGIN WITHIN ENUM VALUES
-      const events: Array<Insertable<DB.Hr.AttendanceEventsTable>> =
+      const events: Array<Insertable<DB.Hr.AccessControlLogTable>> =
         input.events.map(([card, ts, origin]) => ({
           card,
           timestamp: createDateAsUTC(new Date(ts * 1000)),

@@ -5,7 +5,6 @@ import type {
   Selectable as KyselySelectable,
 } from 'kysely'
 import type {
-  Color,
   OperationSubject,
   OperationType,
   OrderPriority,
@@ -31,12 +30,6 @@ export interface DetailGroupTable {
 export interface DetailGroupDetailsTable {
   group_id: number
   detail_id: number
-}
-
-export interface DetailGroupColorAnnotationsTable {
-  group_id: number
-  detail_id: number
-  colors: Color[]
 }
 
 export interface MaterialTable {
@@ -86,7 +79,7 @@ interface MetarialWiteoffData {
   }>
 }
 
-export interface ProductionOrderTable {
+export interface OrderTable {
   id: GeneratedAlways<number>
   status: ProductionOrderStatus
   detail_id: number
@@ -109,7 +102,7 @@ export interface ManufacturingData {
   processing_route: DetailWorkflow
 }
 
-export interface OperationsTable {
+export interface InventoryLogTable {
   id: GeneratedAlways<number>
   operation_type: OperationType
   reason: SupplyReason | WriteoffReason

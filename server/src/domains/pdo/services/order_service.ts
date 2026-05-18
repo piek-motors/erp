@@ -78,9 +78,7 @@ export class OrderService {
     this.material_repo = new MaterialRepo(trx)
   }
 
-  async createOrder(
-    detail_id: number,
-  ): Promise<Selectable<DB.Pdo.ProductionOrderTable>> {
+  async createOrder(detail_id: number): Promise<Selectable<DB.Pdo.OrderTable>> {
     // deduplication check:  if order created some already
     const existingOrder = await this.trx
       .selectFrom('pdo.orders')
@@ -115,7 +113,7 @@ export class OrderService {
 
   async startMaterialPreparationPhase(
     orderId: number,
-  ): Promise<Selectable<DB.Pdo.ProductionOrderTable>> {
+  ): Promise<Selectable<DB.Pdo.OrderTable>> {
     const order = await this.order(orderId)
     if (order.status !== ProductionOrderStatus.Waiting) {
       throw new ErrForbiddenStatusTransition(
@@ -230,7 +228,7 @@ export class OrderService {
       stock: number
       label: string
     },
-    order: Selectable<DB.Pdo.ProductionOrderTable>,
+    order: Selectable<DB.Pdo.OrderTable>,
   ): Promise<MaterialWriteoff> {
     const { material_id, label, material_deduction } = material
 
@@ -264,7 +262,7 @@ export class OrderService {
 
   private async order(
     order_id: number,
-  ): Promise<Selectable<DB.Pdo.ProductionOrderTable>> {
+  ): Promise<Selectable<DB.Pdo.OrderTable>> {
     const order = await this.trx
       .selectFrom('pdo.orders')
       .where('id', '=', order_id)

@@ -1,35 +1,5 @@
-import type { Generated, GeneratedAlways, JSONColumnType } from 'kysely'
-import type {
-  OperationSubject,
-  OperationType,
-  OrderStatus,
-  SupplyReason,
-  Unit,
-  WriteoffReason,
-} from 'models'
-
-export interface OperationsTable {
-  id: GeneratedAlways<number>
-  operation_type: OperationType
-  reason: SupplyReason | WriteoffReason
-  subject: OperationSubject
-  user_id: number
-  material_id: number | null
-  material_unit: Unit | null
-  detail_id: number | null
-  // string on read
-  qty: number // numeric in db
-  data: JSONColumnType<any, any, any> | null
-  timestamp: Generated<Date>
-  manufacturing_order_id: number | null
-}
-
-export interface OrderPaymentsTable {
-  id: GeneratedAlways<number>
-  amount: number
-  order_id: number
-  date: Date
-}
+import type { GeneratedAlways } from 'kysely'
+import type { OrderStatus } from 'models'
 
 export interface OrderTable {
   id: GeneratedAlways<number>
@@ -67,15 +37,22 @@ export interface NotificationTable {
   seen: boolean
 }
 
-export interface OrderAttachmentTable {
+export interface AttachmentTable {
   order_id: number
   attachment_id: number
 }
 
-export interface OrderCommentsTable {
+export interface CommentsTable {
   id: GeneratedAlways<number>
   order_id: number
   user_id: number
   text: string
   created_at: GeneratedAlways<Date>
+}
+
+export interface PaymentTable {
+  id: GeneratedAlways<number>
+  amount: number
+  order_id: number
+  date: Date
 }

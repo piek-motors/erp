@@ -30,7 +30,7 @@ export type ClientOrder = Selectable<DB.Order.OrderTable> & {
     last_name: string
   }
   total_paid?: number
-  payments?: Omit<Selectable<DB.Order.OrderPaymentsTable>, 'order_id'>[]
+  payments?: Omit<Selectable<DB.Order.PaymentTable>, 'order_id'>[]
   comments?: OrderComment[]
   attachments?: Selectable<DB.Public.AttachmentTable>[]
 }

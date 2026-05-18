@@ -9,7 +9,7 @@ export class AttendanceEventPairing {
 
   async run(
     events: Array<
-      Selectable<DB.Hr.AttendanceEventsTable> & { employee_id: number }
+      Selectable<DB.Hr.AccessControlLogTable> & { employee_id: number }
     >,
   ) {
     if (events.length === 0) return
@@ -48,8 +48,8 @@ export class AttendanceEventPairing {
 
   private async buildIntervals(
     modelResult: ReturnType<typeof runHiddenMarkovModel>,
-  ): Promise<DB.Hr.AttendanceIntervalTable[]> {
-    const intervals: DB.Hr.AttendanceIntervalTable[] = []
+  ): Promise<DB.Hr.WorkIntervalTable[]> {
+    const intervals: DB.Hr.WorkIntervalTable[] = []
     const employee_id_index =
       await this.repository.employees_employee_id_index()
 

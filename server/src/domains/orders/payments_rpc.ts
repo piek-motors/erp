@@ -9,7 +9,7 @@ import {
   z,
 } from '#root/sdk.js'
 
-export type Payment = Selectable<DB.Order.OrderPaymentsTable>
+export type Payment = Selectable<DB.Order.PaymentTable>
 
 export const payments = router({
   insert: procedure

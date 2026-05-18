@@ -1,14 +1,14 @@
 import type { GeneratedAlways } from 'kysely'
 import type { AbsenceReason, EventOrigin } from 'models'
 
-export interface AttendanceEventsTable {
+export interface AccessControlLogTable {
   id: GeneratedAlways<number>
   card: string
   timestamp: Date
   origin: EventOrigin | null
 }
 
-export interface AttendanceIntervalTable {
+export interface WorkIntervalTable {
   ent: Date
   ext: Date | null
   card: string
@@ -19,7 +19,7 @@ export interface AttendanceIntervalTable {
   updated_manually: boolean | null
 }
 
-export interface AttendanceEmployeeTable {
+export interface EmployeeTable {
   id: GeneratedAlways<number>
   firstname: string
   lastname: string
@@ -29,7 +29,7 @@ export interface AttendanceEmployeeTable {
   created_at: GeneratedAlways<Date>
 }
 
-export interface AttendanceEmployeeAbsenceTable {
+export interface EmployeeAbsenceTable {
   user_id: number
   date: string
   reason: AbsenceReason

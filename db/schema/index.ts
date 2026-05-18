@@ -1,5 +1,52 @@
-import type { Insertable, Selectable, Updateable } from 'kysely'
-import type { KDB } from './schema.js'
+import type {
+  GeneratedAlways,
+  Insertable,
+  Kysely,
+  Selectable,
+  Updateable,
+} from 'kysely'
+export type { Selectable, Updateable, Insertable }
 
-export * as DB from './schema.js'
-export type { KDB, Selectable, Updateable, Insertable }
+import * as Hr from './hr.js'
+import * as Order from './orders.js'
+import * as Pdo from './pdo.js'
+import * as Public from './public.js'
+
+export type KDB = Kysely<Database>
+
+export { Pdo, Hr, Order, Public }
+
+export interface Database {
+  users: Public.UserTable
+  attachments: Public.AttachmentTable
+  refresh_tokens: Public.RefreshTokenTable
+
+  'orders.orders': Order.OrderTable
+  'orders.comments': Order.CommentsTable
+  'orders.order_attachments': Order.AttachmentTable
+  'orders.order_payments': Order.PaymentTable
+  'orders.order_items': Order.OrderItemsTable
+  'orders.notifications': Order.NotificationTable
+
+  'attendance.events': Hr.AccessControlLogTable
+  'attendance.intervals': Hr.WorkIntervalTable
+  'attendance.employees': Hr.EmployeeTable
+  'attendance.employee_absences': Hr.EmployeeAbsenceTable
+
+  'pdo.dict_operation_kinds': Dict<string>
+  'pdo.materials': Pdo.MaterialTable
+  'pdo.details': Pdo.DetailTable
+  'pdo.detail_attachments': Pdo.DetailAttachmentTable
+  'pdo.operations': Pdo.InventoryLogTable // rename
+  'pdo.orders': Pdo.OrderTable
+  'pdo.detail_group': Pdo.DetailGroupTable
+  'pdo.detail_group_details': Pdo.DetailGroupDetailsTable
+  // 'pdo.detail_group_color_annotations': Pdo.DetailGroupColorAnnotationsTable // #drop
+}
+
+export interface Dict<V> {
+  id: GeneratedAlways<number>
+  v: V
+}
+
+export * as DB from './index.js'

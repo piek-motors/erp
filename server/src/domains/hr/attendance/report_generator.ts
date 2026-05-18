@@ -99,9 +99,9 @@ export class AttendanceReportGenerator {
   }
 
   private processEmployee(
-    empl: Selectable<DB.Hr.AttendanceEmployeeTable>,
-    intervals: Selectable<DB.Hr.AttendanceIntervalTable>[],
-    absences: Selectable<DB.Hr.AttendanceEmployeeAbsenceTable>[],
+    empl: Selectable<DB.Hr.EmployeeTable>,
+    intervals: Selectable<DB.Hr.WorkIntervalTable>[],
+    absences: Selectable<DB.Hr.EmployeeAbsenceTable>[],
     days: number[],
     dailyTimeRetention: number,
   ): Employee {
