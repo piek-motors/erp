@@ -1,4 +1,4 @@
-import type { DB, Selectable } from 'db'
+import type { DB } from 'db'
 import type { AbsenceReason } from 'models'
 import { Hour, Minute } from '#root/lib/constants.js'
 import { timedeltaInSeconds } from '#root/lib/time.js'
@@ -99,9 +99,9 @@ export class AttendanceReportGenerator {
   }
 
   private processEmployee(
-    empl: Selectable<DB.Hr.EmployeeTable>,
-    intervals: Selectable<DB.Hr.WorkIntervalTable>[],
-    absences: Selectable<DB.Hr.EmployeeAbsenceTable>[],
+    empl: DB.Hr.Employee,
+    intervals: DB.Hr.WorkInterval[],
+    absences: DB.Hr.EmployeeAbsence[],
     days: number[],
     dailyTimeRetention: number,
   ): Employee {

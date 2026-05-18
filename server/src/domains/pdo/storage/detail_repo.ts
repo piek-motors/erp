@@ -1,13 +1,13 @@
 import { BlankSchema, type DB, DetailWorkFlowSchema } from 'db'
-import { type Selectable, sql } from 'kysely'
+import { sql } from 'kysely'
 import { Unit } from 'models'
 import { z } from 'zod'
 import { type IDB, RpcError } from '#root/sdk.js'
 import { create_detail_group_map, type DetailGroupDetailRow } from '../utils.js'
 
-export type SelectableDetail = Selectable<DB.Pdo.DetailTable>
 export type Blank = DB.Pdo.DetailBlank
 export type DetailWorkflow = DB.Pdo.DetailWorkflow
+export type Detail = DB.Pdo.Detail
 
 export interface DetailAttachment {
   detail_id: number
@@ -20,7 +20,7 @@ export interface DetailAttachment {
 }
 
 export interface DetailWithGroups {
-  detail: Selectable<DB.Pdo.DetailTable>
+  detail: DB.Pdo.Detail
   group_ids: number[]
   attachments: DetailAttachment[]
   last_manufacturing: { date: Date; qty: number } | null
@@ -77,7 +77,7 @@ export class DetailRepo {
   /**
    * Get raw detail by ID
    */
-  async get_by_id(id: number): Promise<SelectableDetail | undefined> {
+  async get_by_id(id: number): Promise<DB.Pdo.Detail | undefined> {
     return await this.db
       .selectFrom('pdo.details')
       .where('id', '=', id)
@@ -338,7 +338,7 @@ export class DetailRepo {
       .limit(1)
       .executeTakeFirst()
 
-    return lastManufacturing && lastManufacturing.finished_at
+    return lastManufacturing?.finished_at
       ? {
           date: lastManufacturing.finished_at,
           qty: lastManufacturing.qty,

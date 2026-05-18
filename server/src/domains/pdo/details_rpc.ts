@@ -15,11 +15,11 @@ import {
 
 export type {
   Blank,
+  Detail,
   DetailAttachment,
   DetailWithGroups,
   DetailWorkflow,
   ListDetailsOutput,
-  SelectableDetail,
 } from '#root/domains/pdo/storage/detail_repo.js'
 
 const repo = new DetailRepo(db)

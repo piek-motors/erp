@@ -1,5 +1,4 @@
 import type { DB } from 'db'
-import type { Selectable } from 'kysely'
 import { OrderStatus, UserRole } from 'models'
 import { attachmentService } from '#root/ioc/index.js'
 import { logger } from '#root/ioc/log.js'
@@ -20,9 +19,9 @@ import { mentions } from './mentions_rpc.js'
 import { payments } from './payments_rpc.js'
 import { positions } from './positions_rpc.js'
 
-export type OrderPosition = Selectable<DB.Order.OrderItemsTable>
+export type OrderPosition = DB.Order.OrderItem
 
-export type ClientOrder = Selectable<DB.Order.OrderTable> & {
+export type ClientOrder = DB.Order.Order & {
   positions: Matrix<OrderPosition>
   manager?: {
     id: number
@@ -30,9 +29,9 @@ export type ClientOrder = Selectable<DB.Order.OrderTable> & {
     last_name: string
   }
   total_paid?: number
-  payments?: Omit<Selectable<DB.Order.PaymentTable>, 'order_id'>[]
+  payments?: Omit<DB.Order.Payment, 'order_id'>[]
   comments?: OrderComment[]
-  attachments?: Selectable<DB.Public.AttachmentTable>[]
+  attachments?: DB.Public.Attachment[]
 }
 
 const insertOrderSchema = z.object({
@@ -280,9 +279,7 @@ export const orders = router({
   }),
 })
 
-async function enrichOrders(
-  orders: Selectable<DB.Order.OrderTable>[],
-): Promise<ClientOrder[]> {
+async function enrichOrders(orders: DB.Order.Order[]): Promise<ClientOrder[]> {
   if (orders.length === 0) {
     return []
   }

@@ -1,11 +1,7 @@
-import type { DB } from 'db'
-import type { Selectable } from 'kysely'
 import type { Unit } from 'models'
-import { type IDB, RpcError } from '#root/sdk.js'
+import { type DB, type IDB, RpcError } from '#root/sdk.js'
 
-export type SelectableMaterial = Selectable<DB.Pdo.MaterialTable>
-
-export interface MaterialWithDeficit extends SelectableMaterial {
+export interface MaterialWithDeficit extends DB.Pdo.Material {
   deficit: DeficitInfo
 }
 
@@ -28,7 +24,7 @@ export interface UpdateMaterialInput extends CreateMaterialInput {
 export class MaterialRepo {
   constructor(private readonly db: IDB) {}
 
-  async get_by_id(id: number): Promise<SelectableMaterial | undefined> {
+  async get_by_id(id: number): Promise<DB.Pdo.Material | undefined> {
     return await this.db
       .selectFrom('pdo.materials')
       .selectAll()
@@ -36,7 +32,7 @@ export class MaterialRepo {
       .executeTakeFirst()
   }
 
-  async get_by_id_or_throw(id: number): Promise<SelectableMaterial> {
+  async get_by_id_or_throw(id: number): Promise<DB.Pdo.Material> {
     return await this.db
       .selectFrom('pdo.materials')
       .selectAll()
@@ -76,7 +72,7 @@ export class MaterialRepo {
     return result
   }
 
-  async list_materials(): Promise<SelectableMaterial[]> {
+  async list_materials(): Promise<DB.Pdo.Material[]> {
     return await this.db
       .selectFrom('pdo.materials as m')
       .selectAll()
@@ -84,7 +80,7 @@ export class MaterialRepo {
       .execute()
   }
 
-  async create(input: CreateMaterialInput): Promise<SelectableMaterial> {
+  async create(input: CreateMaterialInput): Promise<DB.Pdo.Material> {
     return await this.db
       .insertInto('pdo.materials')
       .values({
@@ -100,7 +96,7 @@ export class MaterialRepo {
       .executeTakeFirstOrThrow()
   }
 
-  async update(input: UpdateMaterialInput): Promise<SelectableMaterial> {
+  async update(input: UpdateMaterialInput): Promise<DB.Pdo.Material> {
     return await this.db
       .updateTable('pdo.materials')
       .set({

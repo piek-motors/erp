@@ -1,4 +1,4 @@
-import type { Generated, GeneratedAlways } from 'kysely'
+import type { Generated, GeneratedAlways, Selectable } from 'kysely'
 import type { UserRole } from 'models'
 
 export interface UserTable {
@@ -18,6 +18,7 @@ export interface AttachmentTable {
   size: number
   uploaded_at: Date
 }
+export type Attachment = Selectable<AttachmentTable>
 
 export interface RefreshTokenTable {
   id: Generated<number>

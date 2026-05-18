@@ -1,7 +1,7 @@
 import { makeAutoObservable } from 'mobx'
 import { Unit } from 'models'
 import { AttachmentsStore } from '@/components/attachments/store'
-import type { SelectableDetail } from '@/server/domains/pdo/details_rpc'
+import type { Detail } from '@/server/domains/pdo/details_rpc'
 import type { RouterInput, RouterOutput } from '@/server/lib/trpc'
 import { DetailBlankSt } from './detail_blank.store'
 import { DetailWarehouseStore } from './warehouse/store'
@@ -53,7 +53,7 @@ export class DetailSt {
   readonly blank = new DetailBlankSt()
   readonly workflow = new Workflow()
 
-  static fromDto(detail: Partial<SelectableDetail>): DetailSt {
+  static fromDto(detail: Partial<Detail>): DetailSt {
     return new DetailSt().init({
       id: detail.id ?? 0,
       name: detail.name ?? '',

@@ -3,7 +3,7 @@ import type { db } from '#root/ioc/db.js'
 export type IDB = typeof db
 
 export { TRPCError } from '@trpc/server'
-export type { DB, Selectable } from 'db'
+export type { DB } from 'db'
 export { type Kysely, sql } from 'kysely'
 export { z } from 'zod'
 export { config } from '#root/config/env.js'

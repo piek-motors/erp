@@ -1,5 +1,4 @@
 import type { DB } from 'db'
-import type { Selectable } from 'kysely'
 import {
   MaterialRequirement,
   OrderPriority,
@@ -78,7 +77,7 @@ export class OrderService {
     this.material_repo = new MaterialRepo(trx)
   }
 
-  async createOrder(detail_id: number): Promise<Selectable<DB.Pdo.OrderTable>> {
+  async createOrder(detail_id: number): Promise<DB.Pdo.Order> {
     // deduplication check:  if order created some already
     const existingOrder = await this.trx
       .selectFrom('pdo.orders')
@@ -111,9 +110,7 @@ export class OrderService {
       .executeTakeFirstOrThrow()
   }
 
-  async startMaterialPreparationPhase(
-    orderId: number,
-  ): Promise<Selectable<DB.Pdo.OrderTable>> {
+  async startMaterialPreparationPhase(orderId: number): Promise<DB.Pdo.Order> {
     const order = await this.order(orderId)
     if (order.status !== ProductionOrderStatus.Waiting) {
       throw new ErrForbiddenStatusTransition(
@@ -228,7 +225,7 @@ export class OrderService {
       stock: number
       label: string
     },
-    order: Selectable<DB.Pdo.OrderTable>,
+    order: DB.Pdo.Order,
   ): Promise<MaterialWriteoff> {
     const { material_id, label, material_deduction } = material
 
@@ -260,9 +257,7 @@ export class OrderService {
       }))
   }
 
-  private async order(
-    order_id: number,
-  ): Promise<Selectable<DB.Pdo.OrderTable>> {
+  private async order(order_id: number): Promise<DB.Pdo.Order> {
     const order = await this.trx
       .selectFrom('pdo.orders')
       .where('id', '=', order_id)

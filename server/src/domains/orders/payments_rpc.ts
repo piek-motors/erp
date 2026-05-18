@@ -1,15 +1,7 @@
-import {
-  type DB,
-  db,
-  procedure,
-  requireScope,
-  router,
-  Scope,
-  type Selectable,
-  z,
-} from '#root/sdk.js'
+import type { DB } from 'db'
+import { db, procedure, requireScope, router, Scope, z } from '#root/sdk.js'
 
-export type Payment = Selectable<DB.Order.PaymentTable>
+export type Payment = DB.Order.Payment
 
 export const payments = router({
   insert: procedure

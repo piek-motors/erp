@@ -1,4 +1,3 @@
-import type { Selectable } from 'kysely'
 import {
   fmt,
   type OrderPriority,
@@ -229,13 +228,10 @@ export const orders = router({
 })
 
 const dates_formatter = (
-  order: Pick<
-    Selectable<DB.Pdo.OrderTable>,
-    'created_at' | 'started_at' | 'finished_at'
-  >,
-  withYear?: boolean,
+  order: Pick<DB.Pdo.Order, 'created_at' | 'started_at' | 'finished_at'>,
+  year?: boolean,
 ) => ({
-  created_at: formatDate(order.created_at),
+  created_at: formatDate(order.created_at, year),
   time_delta:
     order.finished_at && order.started_at
       ? timedeltaInSeconds(order.finished_at, order.started_at)

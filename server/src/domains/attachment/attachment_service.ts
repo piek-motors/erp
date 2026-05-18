@@ -1,4 +1,4 @@
-import type { DB, Selectable } from 'db'
+import type { DB } from 'db'
 import { ApiError } from '#root/lib/api.error.js'
 import { Errcode } from '#root/lib/error-code.js'
 import type { IDB } from '#root/sdk.js'
@@ -14,7 +14,7 @@ export class AttachmentService {
 
   insertAttachmentMetadata(
     files: Attachment[],
-  ): Promise<Selectable<DB.Public.AttachmentTable>[]> {
+  ): Promise<DB.Public.Attachment[]> {
     if (files.length === 0) {
       throw Error('No files to insert')
     }
@@ -33,7 +33,7 @@ export class AttachmentService {
   }
 
   async linkAttachmentsToOrder(
-    attachments: Selectable<DB.Public.AttachmentTable>[],
+    attachments: DB.Public.Attachment[],
     orderId: number,
   ): Promise<void> {
     await this.db
@@ -48,7 +48,7 @@ export class AttachmentService {
   }
 
   async linkAttachmentsToDetail(
-    attachments: Selectable<DB.Public.AttachmentTable>[],
+    attachments: DB.Public.Attachment[],
     detailId: number,
   ): Promise<void> {
     await this.db
@@ -66,7 +66,7 @@ export class AttachmentService {
     files: Attachment[],
     orderId?: number,
     detailId?: number,
-  ): Promise<Selectable<DB.Public.AttachmentTable>[]> {
+  ): Promise<DB.Public.Attachment[]> {
     if (!orderId && !detailId) {
       throw ApiError.BadRequest(Errcode.MISSING_ORDERID_HEADER)
     }
@@ -79,7 +79,7 @@ export class AttachmentService {
     return attachments
   }
 
-  get(key: string): Promise<Selectable<DB.Public.AttachmentTable> | undefined> {
+  get(key: string): Promise<DB.Public.Attachment | undefined> {
     return this.db
       .selectFrom('attachments')
       .selectAll()
@@ -87,9 +87,7 @@ export class AttachmentService {
       .executeTakeFirst()
   }
 
-  getOrderAttachments(
-    orderId: number,
-  ): Promise<Selectable<DB.Public.AttachmentTable>[]> {
+  getOrderAttachments(orderId: number): Promise<DB.Public.Attachment[]> {
     return this.db
       .selectFrom('orders.order_attachments as oa')
       .innerJoin('attachments as a', 'oa.attachment_id', 'a.id')
@@ -98,9 +96,7 @@ export class AttachmentService {
       .execute()
   }
 
-  getDetailAttachments(
-    detailId: number,
-  ): Promise<Selectable<DB.Public.AttachmentTable>[]> {
+  getDetailAttachments(detailId: number): Promise<DB.Public.Attachment[]> {
     return this.db
       .selectFrom('pdo.detail_attachments as da')
       .innerJoin('attachments as a', 'da.attachment_id', 'a.id')

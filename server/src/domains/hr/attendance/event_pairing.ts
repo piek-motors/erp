@@ -1,4 +1,3 @@
-import type { Selectable } from 'kysely'
 import { runHiddenMarkovModel } from 'rust'
 import { logger } from '#root/ioc/log.js'
 import type { DB } from '#root/sdk.js'
@@ -7,11 +6,7 @@ import { HrRepo } from './hr.repo.js'
 export class AttendanceEventPairing {
   private repository = new HrRepo()
 
-  async run(
-    events: Array<
-      Selectable<DB.Hr.AccessControlLogTable> & { employee_id: number }
-    >,
-  ) {
+  async run(events: Array<DB.Hr.AccessControlLog & { employee_id: number }>) {
     if (events.length === 0) return
 
     const hmm_input = events.map(e => ({

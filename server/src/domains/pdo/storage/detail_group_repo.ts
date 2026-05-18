@@ -1,5 +1,4 @@
 import type { DB } from 'db'
-import type { Selectable } from 'kysely'
 import { z } from 'zod'
 import { isDuplicateKeyError } from '#root/lib/kysely.js'
 import { type IDB, RpcError } from '#root/sdk.js'
@@ -37,9 +36,7 @@ export type UpdateGroupInput = z.infer<typeof UpdateGroupSchema>
 export class DetailGroupRepo {
   constructor(private readonly db: IDB) {}
 
-  async get_by_id(
-    id: number,
-  ): Promise<Selectable<DB.Pdo.DetailGroupTable> | undefined> {
+  async get_by_id(id: number): Promise<DB.Pdo.DetailGroup | undefined> {
     return await this.db
       .selectFrom('pdo.detail_group')
       .where('id', '=', id)
@@ -48,7 +45,7 @@ export class DetailGroupRepo {
   }
 
   async get_group_with_details(groupId: number): Promise<{
-    group: Selectable<DB.Pdo.DetailGroupTable>
+    group: DB.Pdo.DetailGroup
     details: DetailInTheGroup[]
   }> {
     const [group, detailsInGroup] = await Promise.all([
@@ -80,7 +77,7 @@ export class DetailGroupRepo {
     }
   }
 
-  async list_groups(): Promise<Selectable<DB.Pdo.DetailGroupTable>[]> {
+  async list_groups(): Promise<DB.Pdo.DetailGroup[]> {
     return this.db
       .selectFrom('pdo.detail_group')
       .selectAll()
@@ -133,9 +130,7 @@ export class DetailGroupRepo {
     return rootGroups
   }
 
-  async create(
-    input: CreateGroupInput,
-  ): Promise<Selectable<DB.Pdo.DetailGroupTable>> {
+  async create(input: CreateGroupInput): Promise<DB.Pdo.DetailGroup> {
     try {
       if (input.parent_id) {
         const parent = await this.db
@@ -166,9 +161,7 @@ export class DetailGroupRepo {
     }
   }
 
-  async update(
-    input: UpdateGroupInput,
-  ): Promise<Selectable<DB.Pdo.DetailGroupTable>> {
+  async update(input: UpdateGroupInput): Promise<DB.Pdo.DetailGroup> {
     try {
       if (input.parent_id) {
         if (input.parent_id === input.id) {

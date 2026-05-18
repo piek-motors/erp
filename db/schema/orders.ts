@@ -1,4 +1,4 @@
-import type { GeneratedAlways } from 'kysely'
+import type { GeneratedAlways, Selectable } from 'kysely'
 import type { OrderStatus } from 'models'
 
 export interface OrderTable {
@@ -19,8 +19,9 @@ export interface OrderTable {
   is_reclamation: boolean
   need_attention: string | null
 }
+export type Order = Selectable<OrderTable>
 
-export interface OrderItemsTable {
+export interface OrderItemTable {
   id: GeneratedAlways<number>
   order_id: number
   name: string
@@ -28,6 +29,7 @@ export interface OrderItemsTable {
   assembler_name: string | null
   description: string | null
 }
+export type OrderItem = Selectable<OrderItemTable>
 
 export interface NotificationTable {
   id: GeneratedAlways<number>
@@ -36,19 +38,22 @@ export interface NotificationTable {
   user_id: number
   seen: boolean
 }
+export type Notification = Selectable<NotificationTable>
 
 export interface AttachmentTable {
   order_id: number
   attachment_id: number
 }
+export type Attachment = Selectable<AttachmentTable>
 
-export interface CommentsTable {
+export interface CommentTable {
   id: GeneratedAlways<number>
   order_id: number
   user_id: number
   text: string
   created_at: GeneratedAlways<Date>
 }
+export type Comment = Selectable<CommentTable>
 
 export interface PaymentTable {
   id: GeneratedAlways<number>
@@ -56,3 +61,4 @@ export interface PaymentTable {
   order_id: number
   date: Date
 }
+export type Payment = Selectable<PaymentTable>

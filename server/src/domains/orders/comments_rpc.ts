@@ -1,13 +1,6 @@
-import {
-  type DB,
-  db,
-  procedure,
-  router,
-  type Selectable,
-  z,
-} from '#root/sdk.js'
+import { type DB, db, procedure, router, z } from '#root/sdk.js'
 
-export type OrderComment = Selectable<DB.Order.CommentsTable> & {
+export type OrderComment = DB.Order.Comment & {
   first_name: string
   last_name: string
   user_id: number

@@ -13,7 +13,6 @@ import * as Pdo from './pdo.js'
 import * as Public from './public.js'
 
 export type KDB = Kysely<Database>
-
 export { Pdo, Hr, Order, Public }
 
 export interface Database {
@@ -22,10 +21,10 @@ export interface Database {
   refresh_tokens: Public.RefreshTokenTable
 
   'orders.orders': Order.OrderTable
-  'orders.comments': Order.CommentsTable
+  'orders.comments': Order.CommentTable
   'orders.order_attachments': Order.AttachmentTable
   'orders.order_payments': Order.PaymentTable
-  'orders.order_items': Order.OrderItemsTable
+  'orders.order_items': Order.OrderItemTable
   'orders.notifications': Order.NotificationTable
 
   'attendance.events': Hr.AccessControlLogTable

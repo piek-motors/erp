@@ -1,4 +1,4 @@
-import type { DB, Selectable } from 'db'
+import type { DB } from 'db'
 import { fmt, SupplyReason, Unit, WriteoffReason } from 'models'
 import { z } from 'zod'
 import { Warehouse } from '#root/domains/pdo/services/warehouse_service.js'
@@ -179,7 +179,7 @@ export const material = router({
 
 function predict_deficit(
   material: Pick<
-    Selectable<DB.Pdo.Material>,
+    DB.Pdo.Material,
     'id' | 'on_hand_balance' | 'shortage_prediction_horizon_days'
   >,
 ): DeficitInfo {

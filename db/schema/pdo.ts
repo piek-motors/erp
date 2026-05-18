@@ -2,7 +2,7 @@ import type {
   Generated,
   GeneratedAlways,
   JSONColumnType,
-  Selectable as KyselySelectable,
+  Selectable,
 } from 'kysely'
 import type {
   OperationSubject,
@@ -26,11 +26,13 @@ export interface DetailGroupTable {
   name: string
   parent_id: number | null
 }
+export type DetailGroup = Selectable<DetailGroupTable>
 
 export interface DetailGroupDetailsTable {
   group_id: number
   detail_id: number
 }
+export type DetailGroupDetails = Selectable<DetailGroupDetailsTable>
 
 export interface MaterialTable {
   id: Generated<number>
@@ -47,7 +49,7 @@ export interface MaterialTable {
    */
   shortage_prediction_horizon_days: number
 }
-export type Material = KyselySelectable<MaterialTable>
+export type Material = Selectable<MaterialTable>
 
 export type DetailBlank = z.infer<typeof BlankSchema>
 export type DetailWorkflow = z.infer<typeof DetailWorkFlowSchema>
@@ -70,6 +72,7 @@ export interface DetailTable {
   > | null
   blank: JSONColumnType<DetailBlank, DetailBlank, DetailBlank> | null
 }
+export type Detail = Selectable<DetailTable>
 
 interface MetarialWiteoffData {
   writeoffs: Array<{
@@ -97,6 +100,7 @@ export interface OrderTable {
   >
   priority: OrderPriority
 }
+export type Order = Selectable<OrderTable>
 
 export interface ManufacturingData {
   processing_route: DetailWorkflow
@@ -117,6 +121,7 @@ export interface InventoryLogTable {
   timestamp: Generated<Date>
   manufacturing_order_id: number | null
 }
+export type InventoryLog = Selectable<InventoryLogTable>
 
 export interface DetailAttachmentTable {
   detail_id: number
