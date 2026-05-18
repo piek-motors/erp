@@ -27,8 +27,8 @@ export const OrderMetadata = observer(() => {
         chipProps={{
           color: 'primary',
         }}
-        if={!!orderStatus(orderStore.order!)}
-        text={orderStatus(orderStore.order!) || ''}
+        if={!!orderStatus(orderStore.order)}
+        text={orderStatus(orderStore.order) || ''}
       />
       <Chip
         chipProps={{
