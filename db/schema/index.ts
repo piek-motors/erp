@@ -1,12 +1,5 @@
-import type {
-  Kysely,
-  Selectable as KyselySelectable,
-  Updateable as KyselyUpdateable,
-} from 'kysely'
-import type { Database } from './schema.js'
-
-export type KDB = Kysely<Database>
-export type Selectable<T> = KyselySelectable<T>
-export type Updateable<T> = KyselyUpdateable<T>
+import type { Insertable, Selectable, Updateable } from 'kysely'
+import type { KDB } from './schema.js'
 
 export * as DB from './schema.js'
+export type { KDB, Selectable, Updateable, Insertable }

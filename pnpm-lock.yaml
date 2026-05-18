@@ -86,9 +86,9 @@ importers:
       axios:
         specifier: ^1.9.0
         version: 1.9.0
-      class-transformer:
-        specifier: ^0.5.1
-        version: 0.5.1
+      db:
+        specifier: workspace:*
+        version: link:../db
       env-cmd:
         specifier: ^11.0.0
         version: 11.0.0
@@ -128,6 +128,9 @@ importers:
       react-table:
         specifier: ^7.8.0
         version: 7.8.0(react@19.2.0)
+      server:
+        specifier: workspace:*
+        version: link:../server
       tippy.js:
         specifier: ^6.3.7
         version: 6.3.7
@@ -3186,9 +3189,6 @@ packages:
 
   ci-parallel-vars@1.0.1:
     resolution: {integrity: sha512-uvzpYrpmidaoxvIQHM+rKSrigjOe9feHYbw4uOI2gdfe1C3xIlxO+kVXq83WQWNniTf8bAxVpy+cQeFQsMERKg==}
-
-  class-transformer@0.5.1:
-    resolution: {integrity: sha512-SQa1Ws6hUbfC98vKGxZH3KFY0Y1lm5Zm0SY8XX9zbK7FJCyVEac3ATW0RIpwzW+oOfmHE5PMPufDG9hCfoEOMw==}
 
   cli-cursor@5.0.0:
     resolution: {integrity: sha512-aCj4O5wKyszjMmDT4tZj93kxyydN/K5zPWSCe6/0AV/AA1pqe5ZBIw0a2ZfPQV7lL5/yb5HsUreJ6UFAF1tEQw==}
@@ -8409,8 +8409,6 @@ snapshots:
   ci-info@4.3.0: {}
 
   ci-parallel-vars@1.0.1: {}
-
-  class-transformer@0.5.1: {}
 
   cli-cursor@5.0.0:
     dependencies:

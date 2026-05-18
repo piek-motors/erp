@@ -1,6 +1,7 @@
 import { OrderStatus } from 'models'
+import type { UnpackedOrder } from './api'
 
-export function orderStatus<T extends { status: OrderStatus }>(order: T) {
+export function orderStatus(order: UnpackedOrder) {
   // add a note to the title if this is a pre-order
   if (order.status === OrderStatus.PreOrder) return ' Предзаказ'
   if (order.status === OrderStatus.Archived) return ' В архиве'
