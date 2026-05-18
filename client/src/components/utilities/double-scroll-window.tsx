@@ -43,7 +43,6 @@ export function DoubleScrollWindow(props: Props) {
     minWidth: 0,
     width: '100%',
     scrollbarGutter: 'stable both-edges',
-    overscrollBehavior: 'contain',
     WebkitOverflowScrolling: 'touch',
   }
   const direction = isVertical

@@ -93,11 +93,7 @@ export function MetalFlowRootLayout() {
             title={title}
             p={0.5}
             sx={{
-              backgroundColor: 'lightgrey',
-              position: 'sticky',
-              top: 0,
-              height: '100vh',
-              flexShrink: 0,
+              borderRight: '1px solid #ddd',
             }}
           />
         </WebOnly>
@@ -109,7 +105,9 @@ export function MetalFlowRootLayout() {
           overflowY: 'auto',
         }}
       >
-        <Stack sx={{ minHeight: '100%' }}>{<Outlet />}</Stack>
+        <Stack>
+          <Outlet />
+        </Stack>
       </Sheet>
     </Box>
   )
