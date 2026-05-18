@@ -2,7 +2,8 @@ import type { Insertable } from 'kysely'
 import { AbsenceReason, EventOrigin } from 'shared'
 import { z } from 'zod'
 import { attendanceReportGenerator } from '#root/ioc/index.js'
-import { convertDateToUTC, getUtcDayBounds } from '#root/lib/time.js'
+import { Hour } from '#root/lib/constants.js'
+import { getUtcDayBounds } from '#root/lib/time.js'
 import { router } from '#root/lib/trpc/trpc.js'
 import { type DB, db, procedure, requireScope, Scope } from '#root/sdk.js'
 import { AttendanceEventPairing } from './event_pairing.js'
@@ -142,11 +143,17 @@ export const attendance = router({
       )
       // TODO: VERIFY ORIGIN WITHIN ENUM VALUES
       const events: Array<Insertable<DB.Hr.AccessControlLogTable>> =
-        input.events.map(([card, ts, origin]) => ({
-          card,
-          timestamp: convertDateToUTC(new Date(ts * 1000)),
-          origin,
-        }))
+        input.events.map(([card, ts, origin]) => {
+          // / 1. Create the base date from the UNIX timestamp
+          const utcDate = new Date(ts * 1000)
+          // 2. Artificially add 3 hours to match Moscow Time (UTC+3)
+          const moscowOffsetMs = 3 * Hour
+          return {
+            card,
+            timestamp: new Date(utcDate.getTime() + moscowOffsetMs),
+            origin,
+          }
+        })
       const eventsInsertedOrUpdatedRows = await repo.upsert_events(events)
 
       // run hmm
