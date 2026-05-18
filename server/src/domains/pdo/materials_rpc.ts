@@ -104,7 +104,7 @@ export const material = router({
         }
 
         await trx
-          .deleteFrom('pdo.operations')
+          .deleteFrom('pdo.inventory_log')
           .where('material_id', '=', id)
           .execute()
 

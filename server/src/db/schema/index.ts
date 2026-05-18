@@ -36,11 +36,10 @@ export interface Database {
   'pdo.materials': Pdo.MaterialTable
   'pdo.details': Pdo.DetailTable
   'pdo.detail_attachments': Pdo.DetailAttachmentTable
-  'pdo.operations': Pdo.InventoryLogTable // rename
+  'pdo.inventory_log': Pdo.InventoryLogTable
   'pdo.orders': Pdo.OrderTable
   'pdo.detail_group': Pdo.DetailGroupTable
   'pdo.detail_group_details': Pdo.DetailGroupDetailsTable
-  // 'pdo.detail_group_color_annotations': Pdo.DetailGroupColorAnnotationsTable // #drop
 }
 
 export interface Dict<V> {

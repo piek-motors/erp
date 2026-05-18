@@ -44,7 +44,7 @@ export const operations = router({
     .query(async ({ input }) => {
       const [operations, detail_group_associations] = await Promise.all([
         db
-          .selectFrom('pdo.operations as o')
+          .selectFrom('pdo.inventory_log as o')
           .$if(!!input.materialId, qb =>
             qb.where('o.material_id', '=', input.materialId as number),
           )
@@ -83,7 +83,7 @@ export const operations = router({
     .input(z.object({ id: z.number() }))
     .mutation(async ({ input, ctx: { user } }) => {
       const operation = await db
-        .selectFrom('pdo.operations')
+        .selectFrom('pdo.inventory_log')
         .where('id', '=', input.id)
         .selectAll()
         .executeTakeFirstOrThrow()
@@ -126,7 +126,10 @@ export const operations = router({
         await detail_repo.increment_balance(update.id, balance_change)
       }
 
-      await db.deleteFrom('pdo.operations').where('id', '=', input.id).execute()
+      await db
+        .deleteFrom('pdo.inventory_log')
+        .where('id', '=', input.id)
+        .execute()
       logger.info(operation, `Balance operation reverted by ${user.full_name}`)
       return {
         message: `Операция изменения баланса отменена, баланс скорректирован на ${balance_change}`,

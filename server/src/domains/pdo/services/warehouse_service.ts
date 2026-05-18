@@ -25,7 +25,7 @@ export class Warehouse {
 
     const [operation, on_hand_balance] = await Promise.all([
       this.trx
-        .insertInto('pdo.operations')
+        .insertInto('pdo.inventory_log')
         .values({
           operation_type: OperationType.Supply,
           subject: OperationSubject.Material,
@@ -62,7 +62,7 @@ export class Warehouse {
 
     const [operation, on_hand_balance] = await Promise.all([
       this.trx
-        .insertInto('pdo.operations')
+        .insertInto('pdo.inventory_log')
         .values({
           operation_type: OperationType.Writeoff,
           subject: OperationSubject.Material,
@@ -88,7 +88,7 @@ export class Warehouse {
   async supplyDetails(id: number, qty: number, reason: SupplyReason) {
     const [operation, on_hand_balance] = await Promise.all([
       this.trx
-        .insertInto('pdo.operations')
+        .insertInto('pdo.inventory_log')
         .values({
           operation_type: OperationType.Supply,
           subject: OperationSubject.Detail,
@@ -118,7 +118,7 @@ export class Warehouse {
     const [new_balance, operation] = await Promise.all([
       this.detail_repo.decrement_balance(id, qty),
       this.trx
-        .insertInto('pdo.operations')
+        .insertInto('pdo.inventory_log')
         .values({
           operation_type: OperationType.Writeoff,
           subject: OperationSubject.Detail,

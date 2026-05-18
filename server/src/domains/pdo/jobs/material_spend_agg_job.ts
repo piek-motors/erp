@@ -33,7 +33,7 @@ export class MaterialSpendAggJob implements Job {
     const period_start = startOfUTCMonth(addUTCMonths(period_end, -nMonths))
 
     const operations = await db
-      .selectFrom('pdo.operations as op')
+      .selectFrom('pdo.inventory_log as op')
       .selectAll()
       .where('material_id', 'is not', null)
       .where('op.timestamp', '>', period_start)
