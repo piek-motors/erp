@@ -1,5 +1,5 @@
 import type { GeneratedAlways, Selectable } from 'kysely'
-import type { OrderStatus } from 'models'
+import type { OrderStatus } from 'shared'
 
 export interface OrderTable {
   id: GeneratedAlways<number>

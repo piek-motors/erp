@@ -1,4 +1,4 @@
-import { ProductionOrderStatus } from 'models'
+import { ProductionOrderStatus } from 'shared'
 import { logger } from '#root/ioc/log.js'
 import { Day } from '#root/lib/constants.js'
 import type { Job } from '#root/lib/jobs_runner.js'

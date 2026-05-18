@@ -1,4 +1,4 @@
-import { OrderPriority, ProductionOrderStatus as Status, time } from 'models'
+import { OrderPriority, ProductionOrderStatus as Status, time } from 'shared'
 import type { Column } from 'react-table'
 import { DetailName } from '@/domains/pdo/detail/detail_name'
 import { Label, P, Row } from '@/lib/index'

@@ -2,7 +2,7 @@ import {
   fmt,
   type OrderPriority,
   ProductionOrderStatus as OrderStatus,
-} from 'models'
+} from 'shared'
 import z from 'zod'
 import { Day } from '#root/lib/constants.js'
 import { matrixEncoder } from '#root/lib/matrix_encoder.js'

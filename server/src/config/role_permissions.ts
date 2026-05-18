@@ -1,4 +1,4 @@
-import { UserRole } from 'models'
+import { UserRole } from 'shared'
 
 export const RolePermissionsConfig: Record<UserRole, string[]> = {
   [UserRole.Admin]: ['*'],

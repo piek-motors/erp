@@ -1,4 +1,4 @@
-import type { UserRole } from 'models'
+import type { UserRole } from 'shared'
 import { logger } from '#root/ioc/log.js'
 import { ApiError } from '#root/lib/api.error.js'
 import { Errcode } from '#root/lib/error-code.js'

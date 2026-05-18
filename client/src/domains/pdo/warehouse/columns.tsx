@@ -7,7 +7,7 @@ import {
   uiSupplyReason,
   uiWriteoffReason,
   type WriteoffReason,
-} from 'models'
+} from 'shared'
 import type { Column } from 'react-table'
 import { Day } from '@/lib/constants'
 import {

@@ -1,5 +1,5 @@
 import { makeAutoObservable, reaction, runInAction } from 'mobx'
-import { sort_rus } from 'models'
+import { sort_rus } from 'shared'
 import { debounceMs } from '@/lib/constants'
 
 export interface SearchableItem {

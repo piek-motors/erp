@@ -1,6 +1,6 @@
 import { TRPCError } from '@trpc/server'
 import type { FastifyReply, FastifyRequest } from 'fastify'
-import type { UserRole } from 'models'
+import type { UserRole } from 'shared'
 import { tokenService } from '#root/ioc/index.js'
 
 export async function createContext({

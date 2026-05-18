@@ -1,4 +1,4 @@
-import type { Unit } from 'models'
+import type { Unit } from 'shared'
 import { type DB, type IDB, RpcError } from '#root/sdk.js'
 
 export interface MaterialWithDeficit extends DB.Pdo.Material {

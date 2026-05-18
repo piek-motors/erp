@@ -1,6 +1,6 @@
 import { action, makeAutoObservable, reaction, runInAction } from 'mobx'
 import { observer } from 'mobx-react-lite'
-import { ProductionOrderStatus as OrderStatus } from 'models'
+import { ProductionOrderStatus as OrderStatus } from 'shared'
 import { useEffect } from 'react'
 import { Search } from '@/components/inputs'
 import { Table } from '@/components/table.impl'

@@ -4,7 +4,7 @@ import {
   UiMaterialRequirement,
   Unit,
   uiUnit,
-} from 'models'
+} from 'shared'
 import { NumberInput } from '@/components/inputs/number_input'
 import { EnumSelect } from '@/components/select'
 import { app_cache } from '@/domains/pdo/cache'

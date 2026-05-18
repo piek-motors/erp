@@ -1,5 +1,5 @@
 import { makeAutoObservable } from 'mobx'
-import { fmt, OrderStatus } from 'models'
+import { fmt, OrderStatus } from 'shared'
 import moment from 'moment'
 import {
   type Layout,

@@ -1,5 +1,5 @@
 import { Box, Divider, Stack } from '@mui/joy'
-import { SupplyReason, uiUnit, WriteoffReason } from 'models'
+import { SupplyReason, uiUnit, WriteoffReason } from 'shared'
 import { QtyInputWithUnit } from '@/components/inputs'
 import { AdaptiveNumberFormatter } from '@/domains/pdo/shared/adaptive_number_formatter'
 import { value_with_unit } from '@/domains/pdo/shared/basic'

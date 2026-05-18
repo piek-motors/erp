@@ -1,4 +1,4 @@
-import { MaterialRequirement } from 'models'
+import { MaterialRequirement } from 'shared'
 import z from 'zod'
 
 const SingleMaterialRequirement = z.object({

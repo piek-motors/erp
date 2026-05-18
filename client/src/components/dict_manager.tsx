@@ -8,7 +8,7 @@ import {
 } from '@mui/joy'
 import { makeAutoObservable } from 'mobx'
 import { observer } from 'mobx-react-lite'
-import { sort_rus } from 'models'
+import { sort_rus } from 'shared'
 import { DeleteIcon, Loading, P, PlusIcon, Row } from '@/lib/index'
 import { LoadingController } from '@/lib/store/loading_controller'
 import { notifier } from '@/lib/store/notifier.store'

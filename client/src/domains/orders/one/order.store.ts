@@ -1,5 +1,5 @@
 import { makeAutoObservable, runInAction } from 'mobx'
-import { OrderItem, OrderStatus, Payment } from 'models'
+import { OrderItem, OrderStatus, Payment } from 'shared'
 import { Attachment, AttachmentsStore } from '@/components/attachments/store'
 import type { UnpackedOrder } from '@/domains/orders/api'
 import { rpc } from '@/lib/rpc/rpc.client'

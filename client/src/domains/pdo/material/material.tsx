@@ -1,5 +1,5 @@
 import { Card } from '@mui/joy'
-import { fmt } from 'models'
+import { fmt } from 'shared'
 import { MetalPageTitle } from '@/domains/pdo/shared/basic'
 import {
   ActionButton,

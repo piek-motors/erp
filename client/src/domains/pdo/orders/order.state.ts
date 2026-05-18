@@ -1,5 +1,5 @@
 import { makeAutoObservable } from 'mobx'
-import { OrderPriority } from 'models'
+import { OrderPriority } from 'shared'
 import { rpc } from '@/lib/deps'
 import { time_delta_days } from '@/lib/utils/date_fmt'
 import type { RouterOutput } from '@/server/lib/trpc'

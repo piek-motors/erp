@@ -1,6 +1,6 @@
 import { Box, Tooltip, type TooltipProps } from '@mui/joy'
 import type { SxProps } from '@mui/joy/styles/types'
-import { UiUnit, Unit, uiUnit } from 'models'
+import { UiUnit, Unit, uiUnit } from 'shared'
 import { useEffect, useState } from 'react'
 import {
   BaseAutocomplete,

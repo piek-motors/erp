@@ -1,6 +1,5 @@
-import { TRPCError } from '@trpc/server'
 import type { CreateFastifyContextOptions } from '@trpc/server/adapters/fastify'
-import type { UserRole } from 'models'
+import type { UserRole } from 'shared'
 import { tokenService } from '#root/ioc/index.js'
 
 export async function createContext({ req }: CreateFastifyContextOptions) {

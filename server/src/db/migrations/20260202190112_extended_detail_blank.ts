@@ -1,5 +1,5 @@
 import { sql } from 'kysely'
-import { MaterialRequirement } from 'models'
+import { MaterialRequirement } from 'shared'
 import type { KDB } from '../schema/index.js'
 
 type MaterialId = number

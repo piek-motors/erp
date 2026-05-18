@@ -3,7 +3,7 @@ import {
   OrderPriority,
   ProductionOrderStatus,
   WriteoffReason,
-} from 'models'
+} from 'shared'
 import type { DB } from '#root/db/index.js'
 import { logger } from '#root/ioc/log.js'
 import type { ContextUser } from '#root/lib/trpc/context.js'

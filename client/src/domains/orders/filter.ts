@@ -1,4 +1,4 @@
-import type { OrderStatus } from 'models'
+import type { OrderStatus } from 'shared'
 import keywordComparator from '../../lib/utils/comparators'
 import type { UnpackedOrder } from './api'
 

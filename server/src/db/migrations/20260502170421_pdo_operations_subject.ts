@@ -1,4 +1,4 @@
-import { OperationSubject } from 'models'
+import { OperationSubject } from 'shared'
 import type { KDB } from '../schema/index.js'
 
 export async function up(db: KDB): Promise<void> {

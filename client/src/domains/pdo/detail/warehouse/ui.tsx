@@ -1,5 +1,5 @@
 import { Divider } from '@mui/joy'
-import { SupplyReason, Unit, WriteoffReason } from 'models'
+import { SupplyReason, Unit, WriteoffReason } from 'shared'
 import { NumberInput } from '@/components/inputs/number_input'
 import { AdaptiveNumberFormatter } from '@/domains/pdo/shared/adaptive_number_formatter'
 import { value_with_unit } from '@/domains/pdo/shared/basic'

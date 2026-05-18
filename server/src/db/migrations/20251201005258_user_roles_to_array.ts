@@ -1,5 +1,5 @@
 import { sql } from 'kysely'
-import { UserRole } from 'models'
+import { UserRole } from 'shared'
 import type { KDB } from '../schema/index.js'
 
 const transationMap: Record<string, UserRole> = {

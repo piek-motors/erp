@@ -1,4 +1,4 @@
-import { fmt, SupplyReason, Unit, WriteoffReason } from 'models'
+import { fmt, SupplyReason, Unit, WriteoffReason } from 'shared'
 import { z } from 'zod'
 import type { DB } from '#root/db/index.js'
 import { Warehouse } from '#root/domains/pdo/services/warehouse_service.js'

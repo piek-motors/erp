@@ -1,4 +1,4 @@
-import { OrderStatus } from 'models'
+import { OrderStatus } from 'shared'
 import type { UnpackedOrder } from './api'
 
 export function orderStatus(order: UnpackedOrder) {

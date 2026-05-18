@@ -1,4 +1,4 @@
-import { OrderStatus } from 'models'
+import { OrderStatus } from 'shared'
 import moment from 'moment'
 import { useEffect, useState } from 'react'
 import { useFilter } from '@/hooks'

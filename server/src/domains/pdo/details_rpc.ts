@@ -1,4 +1,4 @@
-import { SupplyReason, Unit, WriteoffReason } from 'models'
+import { SupplyReason, Unit, WriteoffReason } from 'shared'
 import { z } from 'zod'
 import { Warehouse } from '#root/domains/pdo/services/warehouse_service.js'
 import { DetailRepo } from '#root/domains/pdo/storage/detail_repo.js'

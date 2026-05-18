@@ -2,7 +2,7 @@ import { Tab, TabList, TabPanel, Tabs } from '@mui/joy'
 import {
   ProductionOrderStatus as OrderStatus,
   ProductionOrderStatus,
-} from 'models'
+} from 'shared'
 import { ScrollableWindow } from '@/components/inputs'
 import { SearchWithCriteria } from '@/components/inputs/search_input_with_criteria'
 import { Table } from '@/components/table.impl'

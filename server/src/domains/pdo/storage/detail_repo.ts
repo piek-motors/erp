@@ -1,5 +1,5 @@
 import { sql } from 'kysely'
-import { Unit } from 'models'
+import { Unit } from 'shared'
 import { z } from 'zod'
 import { BlankSchema, type DB, DetailWorkFlowSchema } from '#root/db/index.js'
 import { type IDB, RpcError } from '#root/sdk.js'

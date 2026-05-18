@@ -1,5 +1,5 @@
 packages:
   - client
-  - models
+  - shared
   - server
   - rust

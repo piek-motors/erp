@@ -1,4 +1,4 @@
-import { OrderPriority, ProductionOrderStatus as OrderStatus } from 'models'
+import { OrderPriority, ProductionOrderStatus as OrderStatus } from 'shared'
 import z from 'zod'
 import { Day, Scope } from '#root/lib/constants.js'
 import { router } from '#root/lib/trpc/trpc.js'

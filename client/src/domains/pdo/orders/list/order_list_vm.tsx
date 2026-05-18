@@ -1,5 +1,5 @@
 import { action, makeAutoObservable, runInAction } from 'mobx'
-import { ProductionOrderStatus as OrderStatus } from 'models'
+import { ProductionOrderStatus as OrderStatus } from 'shared'
 import { rpc } from '@/lib/deps'
 import { matrixDecoder } from '@/lib/rpc/matrix_decoder'
 import { LoadingController } from '@/lib/store/loading_controller'

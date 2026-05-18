@@ -1,5 +1,5 @@
 import { makeAutoObservable } from 'mobx'
-import { OperationSubject, uiUnit } from 'models'
+import { OperationSubject, uiUnit } from 'shared'
 import { rpc } from '@/lib/deps'
 import { matrixDecoder } from '@/lib/rpc/matrix_decoder'
 import { LoadingController } from '@/lib/store/loading_controller'

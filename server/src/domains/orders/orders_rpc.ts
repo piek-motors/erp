@@ -1,4 +1,4 @@
-import { OrderStatus, UserRole } from 'models'
+import { OrderStatus, UserRole } from 'shared'
 import type { DB } from '#root/db/index.js'
 import { attachmentService } from '#root/ioc/index.js'
 import { logger } from '#root/ioc/log.js'

@@ -2,7 +2,7 @@
 
 import { Sheet } from '@mui/joy'
 import { observer } from 'mobx-react-lite'
-import { OrderStatus } from 'models'
+import { OrderStatus } from 'shared'
 import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router'
 import { FactoryPage } from '@/components/factory_page'

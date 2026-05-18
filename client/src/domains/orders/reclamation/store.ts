@@ -1,5 +1,5 @@
 import { makeAutoObservable } from 'mobx'
-import { OrderStatus } from 'models'
+import { OrderStatus } from 'shared'
 import { matrixDecoder } from '@/lib/rpc/matrix_decoder'
 import { rpc } from '@/lib/rpc/rpc.client'
 import type {

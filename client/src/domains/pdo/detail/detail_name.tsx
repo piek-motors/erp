@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 
 import type { SxProps } from '@mui/joy/styles/types'
-import { fmt } from 'models'
+import { fmt } from 'shared'
 import { Box, Link, observer, P, Row, Stack } from '@/lib/index'
 import { openPage, routeMap } from '@/lib/routes'
 import { GroupNamesPreview } from '../detail_grouping/group_name_preview'

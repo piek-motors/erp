@@ -1,4 +1,4 @@
-import { fmt } from 'models'
+import { fmt } from 'shared'
 import { useCallback, useMemo } from 'react'
 import { InputLabled } from '@/lib/index'
 

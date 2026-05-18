@@ -1,5 +1,5 @@
 import type { GeneratedAlways, Selectable } from 'kysely'
-import type { AbsenceReason, EventOrigin } from 'models'
+import type { AbsenceReason, EventOrigin } from 'shared'
 
 export interface AccessControlLogTable {
   id: GeneratedAlways<number>

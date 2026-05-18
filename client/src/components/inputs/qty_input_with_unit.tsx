@@ -1,5 +1,5 @@
 import type { InputProps } from '@mui/joy'
-import { type Unit, uiUnit } from 'models'
+import { type Unit, uiUnit } from 'shared'
 import { InputLabled, Label } from '@/lib/index'
 
 export const QtyInputWithUnit = (props: {

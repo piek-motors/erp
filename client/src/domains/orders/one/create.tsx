@@ -1,6 +1,6 @@
 import { Box } from '@mui/joy'
 import { observer } from 'mobx-react-lite'
-import { OrderStatus } from 'models'
+import { OrderStatus } from 'shared'
 import { useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router'
 import { NavTopBar } from '@/components/nav_topbar'

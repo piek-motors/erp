@@ -1,4 +1,4 @@
-import { WriteoffReason } from 'models'
+import { WriteoffReason } from 'shared'
 import { makeAutoObservable, rpc } from '@/lib/deps'
 
 export class MaterialWriteoffSt {

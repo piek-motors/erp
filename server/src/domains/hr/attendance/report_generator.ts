@@ -1,4 +1,4 @@
-import type { AbsenceReason } from 'models'
+import type { AbsenceReason } from 'shared'
 import type { DB } from '#root/db/index.js'
 import { Hour, Minute } from '#root/lib/constants.js'
 import { timedeltaInSeconds } from '#root/lib/time.js'

@@ -1,5 +1,5 @@
 import { makeAutoObservable } from 'mobx'
-import { MaterialRequirement } from 'models'
+import { MaterialRequirement } from 'shared'
 import { app_cache } from '@/domains/pdo/cache'
 import type { Blank } from '@/server/domains/pdo/storage/detail_repo'
 

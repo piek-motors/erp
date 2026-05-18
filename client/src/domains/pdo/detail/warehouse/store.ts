@@ -1,5 +1,5 @@
 import { makeAutoObservable } from 'mobx'
-import { SupplyReason, WriteoffReason } from 'models'
+import { SupplyReason, WriteoffReason } from 'shared'
 import { rpc } from '@/lib/rpc/rpc.client'
 
 class Supply {

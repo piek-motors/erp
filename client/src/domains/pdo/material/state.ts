@@ -1,4 +1,4 @@
-import type { Unit } from 'models'
+import type { Unit } from 'shared'
 import { makeAutoObservable } from '@/lib/deps'
 import { LoadingController } from '@/lib/store/loading_controller'
 import type { DeficitInfo } from '@/server/domains/pdo/materials_rpc'

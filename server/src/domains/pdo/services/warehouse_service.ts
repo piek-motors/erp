@@ -3,7 +3,7 @@ import {
   OperationType,
   type SupplyReason,
   type WriteoffReason,
-} from 'models'
+} from 'shared'
 import { type IDB, TRPCError } from '#root/sdk.js'
 import { DetailRepo } from '../storage/detail_repo.js'
 import { MaterialRepo } from '../storage/material_repo.js'

@@ -1,4 +1,4 @@
-import { OperationType, WriteoffReason } from 'models'
+import { OperationType, WriteoffReason } from 'shared'
 import type { MaterialStatDataContainer } from '#root/ioc/index.js'
 import { logger } from '#root/ioc/log.js'
 import { Day } from '#root/lib/constants.js'

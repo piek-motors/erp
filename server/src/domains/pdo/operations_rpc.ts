@@ -4,7 +4,7 @@ import {
   type SupplyReason,
   type Unit,
   type WriteoffReason,
-} from 'models'
+} from 'shared'
 import { logger } from '#root/ioc/log.js'
 import { matrixEncoder } from '#root/lib/matrix_encoder.js'
 import { router } from '#root/lib/trpc/trpc.js'

@@ -1,5 +1,5 @@
 import type { Insertable } from 'kysely'
-import { AbsenceReason, EventOrigin } from 'models'
+import { AbsenceReason, EventOrigin } from 'shared'
 import { z } from 'zod'
 import { attendanceReportGenerator } from '#root/ioc/index.js'
 import { createDateAsUTC, getUtcDayBounds } from '#root/lib/time.js'

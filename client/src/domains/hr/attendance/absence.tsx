@@ -1,7 +1,7 @@
 import { Button, Tooltip } from '@mui/joy'
 import { makeAutoObservable } from 'mobx'
 import { observer } from 'mobx-react-lite'
-import { AbsenceReason, UiAbsenceReason } from 'models'
+import { AbsenceReason, UiAbsenceReason } from 'shared'
 import { rpc } from '@/lib/deps'
 import { Label, Row } from '@/lib/index'
 

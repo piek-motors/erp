@@ -1,5 +1,5 @@
 import { makeAutoObservable } from 'mobx'
-import { Unit } from 'models'
+import { Unit } from 'shared'
 import { AttachmentsStore } from '@/components/attachments/store'
 import type { Detail } from '@/server/domains/pdo/details_rpc'
 import type { RouterInput, RouterOutput } from '@/server/lib/trpc'

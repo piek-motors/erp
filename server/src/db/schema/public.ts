@@ -1,5 +1,5 @@
 import type { Generated, GeneratedAlways, Selectable } from 'kysely'
-import type { UserRole } from 'models'
+import type { UserRole } from 'shared'
 
 export interface UserTable {
   id: GeneratedAlways<number>

@@ -1,5 +1,5 @@
 import { makeAutoObservable } from 'mobx'
-import { Payment } from 'models'
+import { Payment } from 'shared'
 import moment from 'moment'
 import type { UnpackedOrder } from '@/domains/orders/api'
 import { rpc } from '@/lib/deps'

@@ -4,7 +4,7 @@ import {
   ProductionOrderStatus as OrderStatus,
   UiOrderPriority,
   uiManufacturingOrderStatus,
-} from 'models'
+} from 'shared'
 import { AttachmentComponent } from '@/components/attachments/attachment'
 import { NumberInput } from '@/components/inputs/number_input'
 import { InModal } from '@/components/modal'

@@ -1,7 +1,7 @@
 import * as icons from '@iconscout/react-unicons'
 import { IconButton, Tooltip } from '@mui/joy'
 import { observer } from 'mobx-react-lite'
-import { OrderStatus } from 'models'
+import { OrderStatus } from 'shared'
 import type React from 'react'
 import { useNavigate } from 'react-router'
 import { Row, text, UseIcon } from '@/lib/index'

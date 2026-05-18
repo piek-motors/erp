@@ -2,7 +2,7 @@
 
 import { css } from '@emotion/react'
 import { Box } from '@mui/joy'
-import { UiOrderPriority } from 'models'
+import { UiOrderPriority } from 'shared'
 import type { ReactNode } from 'react'
 import type { DetailSt } from '@/domains/pdo/detail/detail.state'
 import { Label, observer, P, Row } from '@/lib/index'

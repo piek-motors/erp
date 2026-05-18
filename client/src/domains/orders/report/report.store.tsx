@@ -1,5 +1,5 @@
 import { makeAutoObservable } from 'mobx'
-import { OrderStatus } from 'models'
+import { OrderStatus } from 'shared'
 import moment from 'moment'
 import { MonthSelectStore } from '@/components/inputs/month-select'
 import { matrixDecoder } from '@/lib/rpc/matrix_decoder'

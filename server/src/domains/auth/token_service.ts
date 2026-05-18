@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken'
-import type { UserRole } from 'models'
+import type { UserRole } from 'shared'
 import type { TokenRepository } from '#root/domains/auth/repositories/token_repo.js'
 import { Day } from '#root/lib/constants.js'
 import { config } from '#root/sdk.js'

@@ -1,6 +1,6 @@
 import axios from 'axios'
 import { makeAutoObservable } from 'mobx'
-import type { UserRole } from 'models'
+import type { UserRole } from 'shared'
 import { API_URL } from '@/lib/axios'
 import { AuthService } from '../services/auth.service'
 

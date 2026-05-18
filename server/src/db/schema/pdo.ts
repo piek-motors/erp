@@ -12,7 +12,7 @@ import type {
   SupplyReason,
   Unit,
   WriteoffReason,
-} from 'models'
+} from 'shared'
 import type z from 'zod'
 import type { BlankSchema, DetailWorkFlowSchema } from '../validators/index.js'
 

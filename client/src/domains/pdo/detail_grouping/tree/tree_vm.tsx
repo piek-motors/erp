@@ -1,5 +1,5 @@
 import { makeAutoObservable } from 'mobx'
-import { sort_rus } from 'models'
+import { sort_rus } from 'shared'
 import type { Node } from './node_vm'
 import { TreeCache } from './tree_cache_vm'
 

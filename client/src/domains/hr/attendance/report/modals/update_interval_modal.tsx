@@ -10,7 +10,7 @@ import {
 } from '@mui/joy'
 import { makeAutoObservable } from 'mobx'
 import { observer } from 'mobx-react-lite'
-import type { AbsenceReason } from 'models'
+import type { AbsenceReason } from 'shared'
 import { WebOnly } from '@/components/utilities/conditional-display'
 import { rpc } from '@/lib/deps'
 import { InputLabled, P, Row, SaveIconButton, UseIcon } from '@/lib/index'

@@ -7,7 +7,7 @@ import {
   uiSupplyReason,
   uiWriteoffReason,
   type WriteoffReason,
-} from 'models'
+} from 'shared'
 import { Label } from '@/lib/index'
 
 interface WriteoffReasonSelectProps {

@@ -1,7 +1,7 @@
 import { Stack, Table } from '@mui/joy'
 import { makeAutoObservable, runInAction } from 'mobx'
 import { observer } from 'mobx-react-lite'
-import { type EventOrigin, UiEventOrigin } from 'models'
+import { type EventOrigin, UiEventOrigin } from 'shared'
 import { Label, Loading, P, Row, useEffect } from '@/lib'
 import { rpc } from '@/lib/deps'
 import { LoadingController } from '@/lib/store/loading_controller'
