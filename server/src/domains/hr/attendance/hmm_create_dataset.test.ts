@@ -19,7 +19,7 @@ describe('hmm create dataset', () => {
     console.log('start', SELECT.start, 'end_date', end_date)
 
     const empl = await db
-      .selectFrom('attendance.employees')
+      .selectFrom('hr.employees')
       .selectAll()
       .where('firstname', 'ilike', `%${SELECT.name}%`)
       .where('lastname', 'ilike', `%${SELECT.lastname}%`)
@@ -29,7 +29,7 @@ describe('hmm create dataset', () => {
     const { card } = empl
 
     const events = await db
-      .selectFrom('attendance.events')
+      .selectFrom('hr.events')
       .selectAll()
       .where('card', '=', card)
       .where('timestamp', '>', SELECT.start)

@@ -1,7 +1,7 @@
 import { Box, Divider, Stack, type TypographyProps } from '@mui/joy'
 import { observer } from 'mobx-react-lite'
-import { fmt, MaterialRequirement, ProductionOrderStatus, uiUnit } from 'shared'
 import type { ReactNode } from 'react'
+import { fmt, MaterialRequirement, ProductionOrderStatus, uiUnit } from 'shared'
 import { WebOnly } from '@/components/utilities/conditional-display'
 import { Label, Row } from '@/lib/index'
 import { app_cache } from '../cache'

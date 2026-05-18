@@ -16,8 +16,8 @@ function daysSince(timestamp: Date): number {
 export const employees = router({
   list: procedure.query(async () => {
     const rows = await db
-      .selectFrom('attendance.employees as e')
-      .leftJoin('attendance.events as ev', 'ev.card', 'e.card')
+      .selectFrom('hr.employees as e')
+      .leftJoin('hr.events as ev', 'ev.card', 'e.card')
       .selectAll('e')
       .select(eb => [eb.fn.max('ev.timestamp').as('last_event_timestamp')])
       .groupBy(['e.id'])
@@ -33,7 +33,7 @@ export const employees = router({
   //
   get_job_titles: procedure.query(async () => {
     const result = await db
-      .selectFrom('attendance.employees')
+      .selectFrom('hr.employees')
       .select('job_title')
       .where('job_title', 'is not', null)
       .where('job_title', '!=', '')
@@ -56,7 +56,7 @@ export const employees = router({
     )
     .mutation(async ({ input }) => {
       const prev = await db
-        .selectFrom('attendance.employees')
+        .selectFrom('hr.employees')
         .selectAll()
         .where('id', '=', input.id)
         .executeTakeFirstOrThrow()
@@ -76,7 +76,7 @@ export const employees = router({
       }
 
       const result = await db
-        .updateTable('attendance.employees')
+        .updateTable('hr.employees')
         .set(updateData)
         .where('id', '=', input.id)
         .returningAll()
@@ -94,15 +94,12 @@ export const employees = router({
     .input(z.object({ id: z.number() }))
     .mutation(async ({ input }) => {
       const employee = await db
-        .selectFrom('attendance.employees')
+        .selectFrom('hr.employees')
         .selectAll()
         .where('id', '=', input.id)
         .executeTakeFirstOrThrow()
 
-      await db
-        .deleteFrom('attendance.employees')
-        .where('id', '=', input.id)
-        .execute()
+      await db.deleteFrom('hr.employees').where('id', '=', input.id).execute()
 
       logger.info(
         { deleted: employee },

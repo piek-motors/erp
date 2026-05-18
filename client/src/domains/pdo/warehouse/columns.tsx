@@ -1,5 +1,6 @@
 import { UilHistory } from '@iconscout/react-unicons'
 import { IconButton } from '@mui/joy'
+import type { Column } from 'react-table'
 import {
   OperationType,
   type SupplyReason,
@@ -8,7 +9,6 @@ import {
   uiWriteoffReason,
   type WriteoffReason,
 } from 'shared'
-import type { Column } from 'react-table'
 import { Day } from '@/lib/constants'
 import {
   Button,

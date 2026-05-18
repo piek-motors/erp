@@ -27,10 +27,10 @@ export interface Database {
   'orders.order_items': Order.OrderItemTable
   'orders.notifications': Order.NotificationTable
 
-  'attendance.events': Hr.AccessControlLogTable
-  'attendance.intervals': Hr.WorkIntervalTable
-  'attendance.employees': Hr.EmployeeTable
-  'attendance.employee_absences': Hr.EmployeeAbsenceTable
+  'hr.events': Hr.AccessControlLogTable
+  'hr.intervals': Hr.WorkIntervalTable
+  'hr.employees': Hr.EmployeeTable
+  'hr.employee_absences': Hr.EmployeeAbsenceTable
 
   'pdo.dict_operation_kinds': Dict<string>
   'pdo.materials': Pdo.MaterialTable

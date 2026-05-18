@@ -2,14 +2,14 @@ import type { KDB } from '../schema/index.js'
 
 export async function up(db: KDB): Promise<void> {
   await db.schema
-    .alterTable('attendance.intervals')
+    .alterTable('hr.intervals')
     .addColumn('updated_manually', 'boolean')
     .execute()
 }
 
 export async function down(db: KDB): Promise<void> {
   await db.schema
-    .alterTable('attendance.intervals')
+    .alterTable('hr.intervals')
     .dropColumn('updated_manually')
     .execute()
 }

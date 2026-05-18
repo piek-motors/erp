@@ -2,9 +2,9 @@
 
 import { Sheet } from '@mui/joy'
 import { observer } from 'mobx-react-lite'
-import { OrderStatus } from 'shared'
 import { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router'
+import { OrderStatus } from 'shared'
 import { FactoryPage } from '@/components/factory_page'
 import { Search } from '@/components/inputs'
 import { OrderTypeFilter } from '@/components/order-type-filter'

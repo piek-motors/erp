@@ -4,28 +4,25 @@ import type { KDB } from '../schema/index.js'
 export async function up(db: KDB): Promise<void> {
   // 2️⃣ Populate employee_id for intervals
   await db
-    .updateTable('attendance.intervals as i')
+    .updateTable('hr.intervals as i')
     .set({
       employee_id: sql`empl.id`,
     })
-    .from('attendance.employees as empl')
+    .from('hr.employees as empl')
     .whereRef('i.card', '=', 'empl.card')
     .execute()
 
   // 4️⃣ Delete orphan intervals
-  await db
-    .deleteFrom('attendance.intervals')
-    .where('employee_id', 'is', null)
-    .execute()
+  await db.deleteFrom('hr.intervals').where('employee_id', 'is', null).execute()
 
   // 5️⃣ Make columns NOT NULL
   await db.schema
-    .alterTable('attendance.events')
+    .alterTable('hr.events')
     .alterColumn('employee_id', col => col.setNotNull())
     .execute()
 
   await db.schema
-    .alterTable('attendance.intervals')
+    .alterTable('hr.intervals')
     .alterColumn('employee_id', col => col.setNotNull())
     .execute()
 

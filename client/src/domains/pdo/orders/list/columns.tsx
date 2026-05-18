@@ -1,5 +1,5 @@
-import { OrderPriority, ProductionOrderStatus as Status, time } from 'shared'
 import type { Column } from 'react-table'
+import { OrderPriority, ProductionOrderStatus as Status, time } from 'shared'
 import { DetailName } from '@/domains/pdo/detail/detail_name'
 import { Label, P, Row } from '@/lib/index'
 import { fmtDate, time_delta_days } from '@/lib/utils/date_fmt'

@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react-lite'
-import { OperationSubject, OperationType } from 'shared'
 import { useEffect } from 'react'
+import { OperationSubject, OperationType } from 'shared'
 import { ScrollableWindow } from '@/components/scrollable_window'
 import { Table } from '@/components/table.impl'
 import { MetalPageTitle } from '@/domains/pdo/shared/basic'

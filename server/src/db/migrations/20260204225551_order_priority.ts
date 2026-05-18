@@ -2,7 +2,7 @@ import type { KDB } from '../schema/index.js'
 
 export async function up(db: KDB): Promise<void> {
   await db.schema
-    .alterTable('attendance.employees')
+    .alterTable('hr.employees')
     .addColumn('job_title', 'text')
     .execute()
   await db.schema
@@ -12,9 +12,6 @@ export async function up(db: KDB): Promise<void> {
 }
 
 export async function down(db: KDB): Promise<void> {
-  await db.schema
-    .alterTable('attendance.employees')
-    .dropColumn('job_title')
-    .execute()
+  await db.schema.alterTable('hr.employees').dropColumn('job_title').execute()
   await db.schema.alterTable('pdo.orders').dropColumn('priority').execute()
 }

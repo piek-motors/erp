@@ -1,6 +1,6 @@
 import { makeAutoObservable } from 'mobx'
-import { OrderStatus } from 'shared'
 import type { ChangeEvent } from 'react'
+import { OrderStatus } from 'shared'
 
 export class OrderListPageStore {
   managerId: number = 0

@@ -63,7 +63,7 @@ export const attendance = router({
     .query(({ input }) => {
       const { startOfDayUTC, nextDayUTC } = getUtcDayBounds(input.date)
       return db
-        .selectFrom('attendance.events')
+        .selectFrom('hr.events')
         .select(['id', 'timestamp', 'origin'])
         .where('card', 'in', input.cards)
         .where('timestamp', '>=', startOfDayUTC)
@@ -82,7 +82,7 @@ export const attendance = router({
     )
     .mutation(async ({ input }) => {
       return db
-        .insertInto('attendance.intervals')
+        .insertInto('hr.intervals')
         .values({
           employee_id: input.employee_id,
           card: input.card,
@@ -100,7 +100,7 @@ export const attendance = router({
     .input(manual_interval_update_dto)
     .mutation(async ({ input }) => {
       const interval = await db
-        .updateTable('attendance.intervals')
+        .updateTable('hr.intervals')
         .set({
           ent: new Date(input.ent),
           ext: new Date(input.ext),
@@ -125,7 +125,7 @@ export const attendance = router({
     )
     .mutation(async ({ input }) => {
       await db
-        .insertInto('attendance.employee_absences')
+        .insertInto('hr.employee_absences')
         .values(input)
         .onConflict(b => b.columns(['user_id', 'date']).doUpdateSet(input))
         .execute()
@@ -154,7 +154,7 @@ export const attendance = router({
       cutoffDate.setMonth(cutoffDate.getMonth() - 2)
 
       const hmm_input_events_raw = await db
-        .selectFrom('attendance.events')
+        .selectFrom('hr.events')
         .selectAll()
         .where('timestamp', '>=', cutoffDate)
         .where('origin', '=', EventOrigin.TimeTrackingStation)

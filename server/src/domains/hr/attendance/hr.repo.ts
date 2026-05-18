@@ -17,14 +17,14 @@ export class HrRepo {
 
     const [all_intervals, employees, all_absence_reasons] = await Promise.all([
       db
-        .selectFrom('attendance.intervals')
+        .selectFrom('hr.intervals')
         .selectAll()
         .where('ent', '>=', startDate)
         .where('ent', '<', endDate)
         .execute(),
-      db.selectFrom('attendance.employees').selectAll().execute(),
+      db.selectFrom('hr.employees').selectAll().execute(),
       db
-        .selectFrom('attendance.employee_absences')
+        .selectFrom('hr.employee_absences')
         .selectAll()
         .where('date', '>=', startDate.toISOString().split('T')[0])
         .where('date', '<=', endDate.toISOString().split('T')[0])
@@ -38,7 +38,7 @@ export class HrRepo {
     intervals: DB.Hr.WorkIntervalTable[],
   ): Promise<number> {
     const res = await db
-      .insertInto('attendance.intervals')
+      .insertInto('hr.intervals')
       .values(intervals)
       .onConflict(oc =>
         oc
@@ -52,19 +52,19 @@ export class HrRepo {
           .where(eb =>
             eb.and([
               // 1. The existing row was not yet linked to an external source
-              eb('attendance.intervals.ext', 'is', null),
+              eb('hr.intervals.ext', 'is', null),
               // 2. The existing row was not manually edited by a user (protect manual changes)
-              eb('attendance.intervals.updated_manually', 'is', null),
+              eb('hr.intervals.updated_manually', 'is', null),
               // 3. At least one incoming value is actually different from what's stored
               //    (skip the update if nothing would change — NULL-safe comparison)
               eb.or([
                 eb(
-                  'attendance.intervals.ext',
+                  'hr.intervals.ext',
                   'is distinct from',
                   eb.ref('excluded.ext'),
                 ),
                 eb(
-                  'attendance.intervals.ext_event_id',
+                  'hr.intervals.ext_event_id',
                   'is distinct from',
                   eb.ref('excluded.ext_event_id'),
                 ),
@@ -80,7 +80,7 @@ export class HrRepo {
     events: Insertable<DB.Hr.AccessControlLogTable>[],
   ): Promise<number> {
     const events_insert_res = await db
-      .insertInto('attendance.events')
+      .insertInto('hr.events')
       .values(events)
       .onConflict(oc => oc.columns(['card', 'timestamp']).doNothing())
       .executeTakeFirst()
@@ -91,7 +91,7 @@ export class HrRepo {
   async insert_employee_cards(cards: string[]): Promise<number> {
     if (!cards.length) return 0
     const employees_insert_res = await db
-      .insertInto('attendance.employees')
+      .insertInto('hr.employees')
       .values(
         cards.map(card => ({
           card,
@@ -107,7 +107,7 @@ export class HrRepo {
 
   async employees_card_index() {
     const employees = await db
-      .selectFrom('attendance.employees')
+      .selectFrom('hr.employees')
       .select(['id', 'card'])
       .execute()
     return employees.reduce(
@@ -118,7 +118,7 @@ export class HrRepo {
 
   async employees_employee_id_index() {
     const employees = await db
-      .selectFrom('attendance.employees')
+      .selectFrom('hr.employees')
       .select(['id', 'card'])
       .execute()
     return employees.reduce(
