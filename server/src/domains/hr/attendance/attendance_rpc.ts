@@ -2,7 +2,7 @@ import type { Insertable } from 'kysely'
 import { AbsenceReason, EventOrigin } from 'shared'
 import { z } from 'zod'
 import { attendanceReportGenerator } from '#root/ioc/index.js'
-import { getUtcDayBounds } from '#root/lib/time.js'
+import { convertDateToUTC, getUtcDayBounds } from '#root/lib/time.js'
 import { router } from '#root/lib/trpc/trpc.js'
 import { type DB, db, procedure, requireScope, Scope } from '#root/sdk.js'
 import { AttendanceEventPairing } from './event_pairing.js'
@@ -144,7 +144,7 @@ export const attendance = router({
       const events: Array<Insertable<DB.Hr.AccessControlLogTable>> =
         input.events.map(([card, ts, origin]) => ({
           card,
-          timestamp: new Date(ts * 1000),
+          timestamp: convertDateToUTC(new Date(ts * 1000)),
           origin,
         }))
       const eventsInsertedOrUpdatedRows = await repo.upsert_events(events)
