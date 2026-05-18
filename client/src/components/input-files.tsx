@@ -25,7 +25,7 @@ export function InputFiles(
         tabIndex={-1}
         size="sm"
         variant="soft"
-        color="neutral"
+        color="primary"
         startDecorator={
           <SvgIcon>
             <svg
@@ -44,7 +44,6 @@ export function InputFiles(
           </SvgIcon>
         }
       >
-        Прикрепить
         <VisuallyHiddenInput
           type="file"
           onChange={e => {
