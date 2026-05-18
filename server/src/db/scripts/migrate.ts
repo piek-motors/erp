@@ -21,6 +21,7 @@ if (!connectionString) {
 
 const downgrade = revert === 'true' || revert === true
 const db = connect(connectionString)
+const migrationFolder = path.join(import.meta.dirname, '../migrations')
 
 async function migrateToLatest() {
   const migrator = new Migrator({
@@ -28,7 +29,7 @@ async function migrateToLatest() {
     provider: new FileMigrationProvider({
       fs,
       path,
-      migrationFolder: path.join(import.meta.dirname, '../migrations'),
+      migrationFolder,
     }),
   })
 

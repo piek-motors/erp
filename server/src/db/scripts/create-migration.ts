@@ -1,12 +1,13 @@
 #!/usr/bin/env ts-node
-import * as fs from 'fs'
-import * as path from 'path'
+import * as fs from 'node:fs'
+import * as path from 'node:path'
 
 const timestamp = new Date()
   .toISOString()
   .replace(/[-:]/g, '')
   .split('.')[0]
   .replace('T', '')
+
 const migrationName = process.argv[2]
 
 if (!migrationName) {
@@ -20,7 +21,7 @@ const formattedName = migrationName
   .replace(/_+/g, '_')
 
 const fileName = `${timestamp}_${formattedName}.ts`
-const migrationsDir = './migrations'
+const migrationsDir = './src/db/migrations'
 
 // Create migrations directory if it doesn't exist
 if (!fs.existsSync(migrationsDir)) {
@@ -29,7 +30,7 @@ if (!fs.existsSync(migrationsDir)) {
 
 const filePath = path.join(migrationsDir, fileName)
 
-const template = `import type { KDB } from '../schema.js'
+const template = `import type { KDB } from '../../db/index.js';
 
 export async function up(db: KDB): Promise<void> {
 }
