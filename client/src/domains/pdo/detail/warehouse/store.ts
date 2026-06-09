@@ -1,12 +1,12 @@
 import { makeAutoObservable } from 'mobx'
-import { SupplyReason, WriteoffReason } from 'shared'
+import type { SupplyReason, WriteoffReason } from 'shared'
 import { rpc } from '@/lib/rpc/rpc.client'
 
 class Supply {
   constructor() {
     makeAutoObservable(this)
   }
-  reason: SupplyReason = SupplyReason.Purchase
+  reason: SupplyReason | null = null
   setReason(reason: SupplyReason) {
     this.reason = reason
   }
@@ -16,7 +16,7 @@ class Writeoff {
   constructor() {
     makeAutoObservable(this)
   }
-  reason: WriteoffReason = WriteoffReason.ProductionUse
+  reason: WriteoffReason | null = null
   setReason(reason: WriteoffReason) {
     this.reason = reason
   }
@@ -29,24 +29,28 @@ export class DetailWarehouseStore {
     makeAutoObservable(this)
   }
   qty: number | null = null
-  setQty(qty: number) {
+  setQty(qty: number | null) {
     this.qty = qty
   }
+
   stock = 0
   setStock(stock: number) {
     this.stock = stock
   }
   clear() {
-    this.qty = 0
+    this.qty = null
   }
 
   async insertSupply(detailId: number) {
     if (!this.qty) throw Error('Кол-во не задано')
 
+    const { reason } = this.supply
+    if (reason == null) throw Error('Не задана причина')
+
     const res = await rpc.pdo.details.supply.mutate({
       detailId,
       qty: this.qty,
-      reason: this.supply.reason,
+      reason,
     })
     this.clear()
     this.setStock(res.stock)
@@ -55,10 +59,13 @@ export class DetailWarehouseStore {
   async insertWriteoff(detailId: number) {
     if (!this.qty) throw Error('Кол-во не задано')
 
+    const { reason } = this.writeoff
+    if (reason == null) throw Error('Не задана причина')
+
     const stock = await rpc.pdo.details.writeoff.mutate({
       detailId,
       qty: this.qty,
-      reason: this.writeoff.reason,
+      reason,
     })
     this.clear()
     this.setStock(stock)

@@ -45,7 +45,7 @@ const CreateWarehouseDetailOperation = observer(
           type="number"
           sx={{ width: '100px' }}
           value={detail.warehouse.qty}
-          onChange={val => detail.warehouse.setQty(Number(val))}
+          onChange={val => detail.warehouse.setQty(val)}
         />
         {props.reasonComponent}
         <Box pt={2}>
@@ -68,8 +68,8 @@ const SupplyContent = observer(({ detail }: DetailStProp) => (
     reasonComponent={
       <SupplyReasonSelect
         reasons={[
-          SupplyReason.Purchase,
           SupplyReason.ProductionOutput,
+          SupplyReason.Purchase,
           SupplyReason.StockCorrection,
         ]}
         reason={detail.warehouse.supply.reason}
@@ -81,6 +81,9 @@ const SupplyContent = observer(({ detail }: DetailStProp) => (
         .insertSupply(detail.id)
         .then(() => {
           notifier.ok(SupplyCompletedText)
+        })
+        .catch(e => {
+          notifier.err(e)
         })
         .finally(() => {
           inventory_log_modal.setSupply(false)
@@ -109,6 +112,9 @@ const WriteoffContent = observer(({ detail }: DetailStProp) => (
         .insertWriteoff(detail.id)
         .then(() => {
           notifier.ok(WriteoffCompletedText)
+        })
+        .catch(e => {
+          notifier.err(e)
         })
         .finally(() => {
           inventory_log_modal.setWriteoff(false)

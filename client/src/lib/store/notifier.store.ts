@@ -46,8 +46,16 @@ class NotifierStore {
     this.notify('warning', msg, timeout_sec || 5)
   }
 
-  err(msg: string, timeout_sec?: number) {
-    this.notify('danger', msg, timeout_sec || 10)
+  err(msg: string | Error, timeout_sec?: number) {
+    let message = ''
+    if (typeof msg === 'string') {
+      message = msg
+    }
+    if (msg instanceof Error) {
+      message = msg.message
+    }
+
+    this.notify('danger', message, timeout_sec || 10)
   }
 }
 export const notifier = new NotifierStore()

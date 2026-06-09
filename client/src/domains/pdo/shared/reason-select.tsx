@@ -1,70 +1,68 @@
 import { Button, Stack, ToggleButtonGroup } from '@mui/joy'
 import { observer } from 'mobx-react-lite'
+import { useEffect } from 'react'
 import {
   type SupplyReason,
-  UiSupplyReason,
-  UiWriteoffReason,
   uiSupplyReason,
   uiWriteoffReason,
   type WriteoffReason,
 } from 'shared'
 import { Label } from '@/lib/index'
 
-interface WriteoffReasonSelectProps {
-  reasons: WriteoffReason[]
-  reason: WriteoffReason
-  setReason: (reason: WriteoffReason) => void
+interface Props<T> {
+  reasons: T[]
+  reason: T | null
+  setReason: (reason: T) => void
 }
+export const WriteoffReasonSelect = observer((props: Props<WriteoffReason>) => {
+  useEffect(() => {
+    if (props.reason == null) props.setReason(props.reasons[0])
+  }, [])
 
-export const WriteoffReasonSelect = observer(
-  (props: WriteoffReasonSelectProps) => (
+  const effective = props.reason ?? props.reasons[0]
+  return (
     <ReasonSelect
       label={'Причина'}
-      enum={props.reasons.reduce(
-        (acc, reason) => ({ ...acc, [reason]: reason }),
-        {},
-      )}
-      translationEnum={UiWriteoffReason}
+      options={props.reasons.map(r => ({
+        label: uiWriteoffReason(r),
+        value: r.toString(),
+      }))}
       value={{
-        label: uiWriteoffReason(props.reason),
-        value: props.reason?.toString() || '0',
+        label: uiWriteoffReason(effective),
+        value: effective.toString(),
       }}
-      onChange={newValue => props.setReason(Number(newValue || 0))}
+      onChange={newValue => props.setReason(Number(newValue))}
     />
-  ),
-)
+  )
+})
 
-interface Props {
-  reasons: SupplyReason[]
-  reason: SupplyReason
-  setReason: (reason: SupplyReason) => void
-}
+export const SupplyReasonSelect = observer((props: Props<SupplyReason>) => {
+  useEffect(() => {
+    if (props.reason == null) props.setReason(props.reasons[0])
+  }, [])
 
-export const SupplyReasonSelect = observer((props: Props) => (
-  <ReasonSelect
-    label={'Причина'}
-    enum={props.reasons.reduce(
-      (acc, reason) => ({ ...acc, [reason]: reason }),
-      {},
-    )}
-    translationEnum={UiSupplyReason}
-    value={{
-      label: uiSupplyReason(props.reason),
-      value: props.reason?.toString() || '0',
-    }}
-    onChange={newValue => props.setReason(Number(newValue || 0))}
-  />
-))
+  const effective = props.reason ?? props.reasons[0]
+  return (
+    <ReasonSelect
+      label={'Причина'}
+      options={props.reasons.map(r => ({
+        label: uiSupplyReason(r),
+        value: r.toString(),
+      }))}
+      value={{ label: uiSupplyReason(effective), value: effective.toString() }}
+      onChange={newValue => props.setReason(Number(newValue))}
+    />
+  )
+})
 
 interface ReasonOption {
   label: string
   value: string
 }
 
-interface ReasonSelectProps {
+export interface ReasonSelectProps {
   label: string
-  enum: object
-  translationEnum: object
+  options: ReasonOption[]
   value: ReasonOption
   onChange: (value: string | null) => void
 }
@@ -80,15 +78,11 @@ const ReasonSelect = observer((props: ReasonSelectProps) => (
       onChange={(_, v) => props.onChange(v)}
       sx={{ flexWrap: 'wrap', rowGap: 0.5 }}
     >
-      {Object.entries(props.enum)
-        .filter(([k, v]) => !Number.isNaN(Number(k)))
-        .map(([k, v]) => ({
-          label: props.translationEnum[k],
-          value: k,
-        }))
-        .map(option => (
-          <Button value={option.value}>{option.label}</Button>
-        ))}
+      {props.options.map(option => (
+        <Button key={option.value} value={option.value}>
+          {option.label}
+        </Button>
+      ))}
     </ToggleButtonGroup>
   </Stack>
 ))

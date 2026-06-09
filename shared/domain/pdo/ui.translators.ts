@@ -21,7 +21,7 @@ export function uiWriteoffReason(reason?: WriteoffReason | null) {
 
 export const UiSupplyReason = {
   [SupplyReason.Purchase]: 'Покупка',
-  [SupplyReason.ProductionOutput]: 'Собств. производство',
+  [SupplyReason.ProductionOutput]: 'Производство',
   [SupplyReason.StockCorrection]: 'Коррект.',
 }
 
