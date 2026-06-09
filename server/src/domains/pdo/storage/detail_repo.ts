@@ -44,6 +44,7 @@ const DetailSchema = z.object({
   blank: BlankSchema.nullable(),
   stock_location: z.string().nullable(),
   recommended_batch_size: z.number().nullable(),
+  safe_stock_leftover: z.number().nullable(),
 })
 
 export type CreateDetailInput = z.infer<typeof DetailSchema>

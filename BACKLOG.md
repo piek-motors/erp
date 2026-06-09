@@ -1,4 +1,6 @@
 # Backlog
+- [ ] Подумайте о разделении страниц для менеджера склада и диспетчера. 
+- [ ] Напиши инструкцию для менеджера склада. 
 - [ ] **PDO**: Аdd the ability to configure filters from the UI. Editing of materials must remain disabled.
 - [ ] **Architecture**: migrate to a plugin-based architecture to improve domain isolation.
 - [ ] **HR**: Timeformers. 
@@ -18,6 +20,8 @@
     - [ ] Drop intervals table
 
 ## Done
+- [x] Show detail on hand balance in the detail group list. 
+- [x] Добавь на детальную страницу новый столбец для указания требуемого квартального объема. 
 - [x] **PDO**: Allow detail multiple group selection, it would be easier to undertand where this detail used and remove detail assigmnet in the groups. 
 - [x] **PDO**: Show detail group and detail id on the printed version of production order.
 - [x] PDO: fix sign reflection of the supply - balance change operation

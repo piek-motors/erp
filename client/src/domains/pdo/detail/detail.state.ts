@@ -63,6 +63,7 @@ export class DetailSt {
       drawing_name: detail.drawing_name ?? '',
       updated_at: detail.updated_at?.toString() ?? '',
       recommended_batch_size: detail.recommended_batch_size ?? null,
+      safe_stock_leftover: detail.safe_stock_leftover ?? null,
       workflow: detail.workflow ?? null,
       blank: detail.blank ?? null,
       unit: detail.unit ?? Unit.Countable,
@@ -106,6 +107,11 @@ export class DetailSt {
     this.recommended_batch_size = size
   }
 
+  safe_stock_leftover: number | null = null
+  set_safe_stock_leftover(v: number | null) {
+    this.safe_stock_leftover = v
+  }
+
   constructor() {
     makeAutoObservable(this)
   }
@@ -128,6 +134,7 @@ export class DetailSt {
       this.blank.init(d.blank)
     }
     this.recommended_batch_size = d.recommended_batch_size ?? null
+    this.safe_stock_leftover = d.safe_stock_leftover ?? null
     this.stock_location = d.stock_location
     return this
   }
@@ -141,6 +148,7 @@ export class DetailSt {
       drawing_name: this.drawing_name ?? null,
       group_ids: this.group_assigment.group_ids,
       recommended_batch_size: Number(this.recommended_batch_size) ?? null,
+      safe_stock_leftover: this.safe_stock_leftover,
       workflow: this.workflow ? this.workflow.payload : null,
       blank: this.blank.payload,
       stock_location: this.stock_location || null,

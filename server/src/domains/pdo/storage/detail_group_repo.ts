@@ -19,6 +19,7 @@ export interface DetailInTheGroup {
   name: string
   drawing_number: string | null
   group_ids: number[]
+  on_hand_balance: number
 }
 
 const CreateGroupSchema = z.object({
@@ -54,7 +55,7 @@ export class DetailGroupRepo {
         .selectFrom('pdo.detail_group_details as dgd')
         .where('dgd.group_id', '=', groupId)
         .leftJoin('pdo.details as d', 'd.id', 'dgd.detail_id')
-        .select(['d.id', 'd.name', 'd.drawing_number'])
+        .select(['d.id', 'd.name', 'd.drawing_number', 'd.on_hand_balance'])
         .orderBy('d.name', 'asc')
         .execute(),
     ])
@@ -68,6 +69,7 @@ export class DetailGroupRepo {
       id: d.id as number,
       name: d.name as string,
       drawing_number: d.drawing_number as string | null,
+      on_hand_balance: (d.on_hand_balance as number) ?? 0,
       group_ids: detail_group_associations.get(d.id as number) || [],
     }))
 

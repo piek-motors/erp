@@ -74,24 +74,22 @@ const GroupContent = observer(() => {
         value={group_content.query}
         onChange={e => group_content.set_query(e.target.value)}
       />
-      <Box sx={{ flex: 1, py: 1, overflow: 'auto' }}>
-        <>
-          {/* child group links */}
-          {app_cache.groups.tree.node(group.id)?.children.map(child => (
-            <GroupLink key={child.id} group={child} />
-          ))}
+      <Box sx={{ flex: 1, py: 1, overflow: 'auto', width: 'fit-content' }}>
+        {/* child group links */}
+        {app_cache.groups.tree.node(group.id)?.children.map(child => (
+          <GroupLink key={child.id} group={child} />
+        ))}
 
-          {/* Show details of current group */}
-          {group_content.details.length === 0 && (
-            <P level="body-sm" color="neutral">
-              В группе нет деталей
-            </P>
-          )}
+        {/* Show details of current group */}
+        {group_content.details.length === 0 && (
+          <P level="body-sm" color="neutral">
+            В группе нет деталей
+          </P>
+        )}
 
-          {group_content.get_filtered_and_sorted().map(detail => (
-            <DetailRow key={detail.id} detail={detail} />
-          ))}
-        </>
+        {group_content.get_filtered_and_sorted().map(detail => (
+          <DetailRow key={detail.id} detail={detail} />
+        ))}
       </Box>
       {create_subgroup_modal.is_open && <CreateSubgroupModal />}
     </Stack>
@@ -149,14 +147,18 @@ const DetailRow = ({ detail, onClick: onToggle }: DetailRowProps) => (
       alignItems: 'center',
       display: 'flex',
       p: 0.5,
+      px: 2,
       mb: 0,
-      '&:hover .detail-arrow': {
+      borderRadius: 20,
+      '&:hover': {
         opacity: 1,
+        background: '#add8e655',
       },
       cursor:
         detail.group_assigment.group_ids.length === 0 ? 'pointer' : 'default',
     }}
     alignItems="center"
+    justifyContent="space-between"
     onClick={() => onToggle?.(detail.id)}
   >
     <DetailName
@@ -165,5 +167,14 @@ const DetailRow = ({ detail, onClick: onToggle }: DetailRowProps) => (
       }}
       detail={detail}
     />
+    {detail.warehouse.stock > 0 && (
+      <P
+        level="body-md"
+        color="primary"
+        sx={{ whiteSpace: 'nowrap', ml: 1, fontWeight: 500 }}
+      >
+        {detail.warehouse.stock}
+      </P>
+    )}
   </Row>
 )

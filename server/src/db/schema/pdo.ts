@@ -65,6 +65,7 @@ export interface DetailTable {
   stock_location: string | null
   updated_at: Date
   recommended_batch_size: number | null
+  safe_stock_leftover: number | null
   workflow: JSONColumnType<
     DetailWorkflow,
     DetailWorkflow,

@@ -49,7 +49,7 @@ export const DetailForm = observer(
           <MultilineInput
             sx={{ fontWeight: 500, width: '100%', boxShadow: 'none' }}
             color="primary"
-            variant="outlined"
+            variant="plain"
             label="Название"
             onChange={e => detail.setName(e.target.value)}
             value={detail.name}
@@ -78,6 +78,7 @@ export const DetailForm = observer(
           <Row alignItems="end">
             <StockLocationInput detail={detail} />
             <DetailRecommendedBatchSizeInput detail={detail} />
+            <DetailQuarterlyStockInput detail={detail} />
           </Row>
           <DetailDescriptionInput detail={detail} />
           {leftChildren}
@@ -153,6 +154,18 @@ const DetailRecommendedBatchSizeInput = observer(
       label="Рекоменд. размер партии"
       value={detail.recommended_batch_size}
       onChange={v => detail.set_recommended_batch_size(v)}
+    />
+  ),
+)
+
+/** Quarterly stock requirement numeric input. */
+const DetailQuarterlyStockInput = observer(
+  ({ detail }: { detail: DetailSt }) => (
+    <NumberInput
+      size="md"
+      label="Квартальный запас"
+      value={detail.safe_stock_leftover}
+      onChange={v => detail.set_safe_stock_leftover(v)}
     />
   ),
 )

@@ -33,6 +33,7 @@ export class DetailGroupingApi {
           detail.name = d.name
           detail.drawing_number = d.drawing_number ?? ''
           detail.group_assigment.set_group_ids(d.group_ids)
+          detail.warehouse.setStock(d.on_hand_balance)
           return detail
         }),
       )

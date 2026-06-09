@@ -34,6 +34,7 @@ const DetailInputSchema = z.object({
   blank: z.any().nullable(),
   stock_location: z.string().nullable(),
   recommended_batch_size: z.number().nullable(),
+  safe_stock_leftover: z.number().nullable(),
 })
 
 const isDetailPartCodeUniqueError = (e: Error) => {
