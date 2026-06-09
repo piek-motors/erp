@@ -6,7 +6,6 @@ import {
   Autocomplete,
   Box,
   Divider,
-  Grid,
   Stack,
   type StackProps,
   type TypographySystem,
@@ -18,6 +17,7 @@ import { ArrayJsonEditor } from '@/components/array-json-editor'
 import type { BaseOption } from '@/components/base-autocomplete'
 import { NumberInput } from '@/components/inputs/number_input'
 import { Join } from '@/components/join'
+import { ResizableColumns } from '@/components/resizable_columns'
 import { TextEditor } from '@/domains/orders/one/comments/text-editor'
 import { app_cache } from '@/domains/pdo/cache'
 import { GroupTreeModal } from '@/domains/pdo/detail_grouping/group_tree_selector'
@@ -38,14 +38,17 @@ import {
   DetailRequirementInput,
   MaterialRequirementInput,
 } from './detail_blank'
+import { DetailWarehouseButtons } from './warehouse/ui'
 import { WorkflowAccordion } from './workflow'
 
-/** Main detail form component with two-column layout. */
+/** Main detail form component with resizable two-column layout. */
 export const DetailForm = observer(
   ({ detail, leftChildren }: DetailStProp & { leftChildren?: ReactNode }) => (
-    <Grid container direction={{ xs: 'column', md: 'row' }} spacing={1}>
-      <Grid xs={12} md={7} py={1}>
-        <Stack gap={0.5}>
+    <ResizableColumns
+      storageKey="detail_form_left_pct"
+      defaultLeftPct={58}
+      left={
+        <Stack gap={0.5} py={1}>
           <MultilineInput
             sx={{ fontWeight: 500, width: '100%', boxShadow: 'none' }}
             color="primary"
@@ -57,7 +60,7 @@ export const DetailForm = observer(
           <DetailGroupInput detail={detail} />
           <Stack>
             <Label>Чертеж</Label>
-            <Row noWrap>
+            <Row>
               <MultilineInput
                 formProps={{ sx: { flexGrow: 1 } }}
                 placeholder="Название"
@@ -76,24 +79,21 @@ export const DetailForm = observer(
             </Row>
           </Stack>
           <Row alignItems="end">
-            <StockLocationInput detail={detail} />
             <DetailRecommendedBatchSizeInput detail={detail} />
-            <DetailQuarterlyStockInput detail={detail} />
           </Row>
           <DetailDescriptionInput detail={detail} />
           {leftChildren}
         </Stack>
-      </Grid>
-      <Grid xs={12} md={5}>
-        <DetailAccordionGroup d={detail} />
-      </Grid>
-    </Grid>
+      }
+      right={<DetailAccordionGroup d={detail} />}
+    />
   ),
 )
 
-/** Accordion group containing detail attachments, blank attributes, and workflow. */
+/** Accordion group containing detail attachments, blank attributes, workflow, and warehouse. */
 export const DetailAccordionGroup = observer(({ d }: { d: DetailSt }) => (
   <AccordionGroup>
+    <WarehouseAccordion detail={d} />
     <DetailAttachmentInput detail={d} />
     <BlankInput detail={d} />
     <WorkflowAccordion detail={d} />
@@ -157,27 +157,6 @@ const DetailRecommendedBatchSizeInput = observer(
     />
   ),
 )
-
-/** Quarterly stock requirement numeric input. */
-const DetailQuarterlyStockInput = observer(
-  ({ detail }: { detail: DetailSt }) => (
-    <NumberInput
-      size="md"
-      label="Квартальный запас"
-      value={detail.safe_stock_leftover}
-      onChange={v => detail.set_safe_stock_leftover(v)}
-    />
-  ),
-)
-
-/** Stock location text input. */
-const StockLocationInput = observer(({ detail }: { detail: DetailSt }) => (
-  <Input
-    label="Адрес на складе"
-    value={detail.stock_location}
-    onChange={v => detail.set_stock_location(v)}
-  />
-))
 
 /** Labeled input wrapper with outlined variant. */
 const Input = (props: InputLabledProps) => (
@@ -245,6 +224,29 @@ const BlankInput = observer(({ detail }: { detail: DetailSt }) => (
       placeholders={['Название', 'Значение']}
       width={[70, 30]}
     />
+  </AccordionCard>
+))
+
+/** Warehouse accordion with stock, operations, quarterly stock, and address. */
+const WarehouseAccordion = observer(({ detail }: { detail: DetailSt }) => (
+  <AccordionCard title="Склад" defaultExpanded>
+    <Stack gap={1.5}>
+      <DetailWarehouseButtons detail={detail} />
+      <Row>
+        <Input
+          size="sm"
+          label="Адрес"
+          value={detail.stock_location}
+          onChange={v => detail.set_stock_location(v)}
+        />
+        <NumberInput
+          size="sm"
+          label="Квартальный запас"
+          value={detail.safe_stock_leftover}
+          onChange={v => detail.set_safe_stock_leftover(v)}
+        />
+      </Row>
+    </Stack>
   </AccordionCard>
 ))
 

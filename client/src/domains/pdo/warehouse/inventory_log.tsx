@@ -10,7 +10,7 @@ import { MobileNavModal, MobilePadding } from '../root_layout'
 import { inventory_log_vm } from './inventory_log_vm'
 
 export type InventoryLogRecord = OperationListItem
-export const InventoryLogTitle = () => <MetalPageTitle t={'Журнал остатков'} />
+export const InventoryLogTitle = () => <MetalPageTitle t={'Журнал движения'} />
 
 interface Props {
   materialId?: number
@@ -20,6 +20,7 @@ interface Props {
 export const InventoryLog = observer((props: Props) => {
   const { materialId, detailId } = props
   const store = inventory_log_vm
+  const single_subject_log = materialId || detailId
 
   useEffect(() => {
     store.load(materialId, detailId)
@@ -29,21 +30,23 @@ export const InventoryLog = observer((props: Props) => {
     <ScrollableWindow
       scroll={
         <>
-          <ToggleButtonGroup
-            sx={{ p: 1 }}
-            size="sm"
-            variant="soft"
-            color="primary"
-            value={store.subject.toString()}
-            onChange={(_, v) => {
-              if (v != null) store.setSubject(Number(v))
-            }}
-          >
-            <Button value={OperationSubject.Material.toString()}>
-              Материалы
-            </Button>
-            <Button value={OperationSubject.Detail.toString()}>Детали</Button>
-          </ToggleButtonGroup>
+          {!single_subject_log && (
+            <ToggleButtonGroup
+              sx={{ p: 1 }}
+              size="sm"
+              variant="soft"
+              color="primary"
+              value={store.subject.toString()}
+              onChange={(_, v) => {
+                if (v != null) store.setSubject(Number(v))
+              }}
+            >
+              <Button value={OperationSubject.Material.toString()}>
+                Материалы
+              </Button>
+              <Button value={OperationSubject.Detail.toString()}>Детали</Button>
+            </ToggleButtonGroup>
+          )}
 
           {store.loader.loading && <Loading />}
           {store.no_data && <Label px={1}>Нет информации</Label>}

@@ -25,6 +25,9 @@ class InventoryLogVM {
   }
 
   async load(materialId?: number, detailId?: number) {
+    if (materialId) this.subject = OperationSubject.Material
+    if (detailId) this.subject = OperationSubject.Detail
+
     this.loader.run(async () => {
       const operationsRaw = await rpc.pdo.operations.list.query({
         materialId,

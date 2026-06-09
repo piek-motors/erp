@@ -34,7 +34,7 @@ export const CreateManufacturingOrder = observer(
         label="В производство"
         onClick={handleSubmit}
         props={{
-          variant: 'solid',
+          variant: 'soft',
           color: 'success',
         }}
       />

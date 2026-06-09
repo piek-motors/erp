@@ -22,7 +22,6 @@ import {
 } from './detail.state'
 import { api } from './detail_api'
 import { DetailForm } from './detail_form'
-import { DetailWarehouseModal } from './warehouse/ui'
 
 export const CreateDetailPage = observer(() => {
   const [detail] = useState(() => new DetailSt())
@@ -68,13 +67,13 @@ export const DetailPage = observer(() => {
           )
         }
       >
-        <Save detail={detail} />
+        <Row>
+          <CreateManufacturingOrder detailId={detail.id} />
+          <Save detail={detail} />
+        </Row>
       </MetalPageTitle>
 
-      <Row flexWrap={'wrap'} gap={1} py={0.5}>
-        <DetailWarehouseModal detail={detail} />
-        <CreateManufacturingOrder detailId={detail.id} />
-      </Row>
+      <Row flexWrap={'wrap'} gap={1} py={0.5}></Row>
       <DetailForm detail={detail} />
       <Metadata
         updated_at={detail.updated_at}

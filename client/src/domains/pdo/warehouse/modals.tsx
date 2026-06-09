@@ -46,18 +46,13 @@ export const OperationsListModal = observer(
           setOpen(open)
         }}
         openButton={
-          <Button fullWidth variant="outlined" color="neutral" size="md">
+          <Button variant="soft" color="neutral" size="sm">
             Журнал
           </Button>
         }
       >
-        <>
-          <InventoryLogTitle />
-          <InventoryLog
-            materialId={props.materialId}
-            detailId={props.detailId}
-          />
-        </>
+        <InventoryLogTitle />
+        <InventoryLog materialId={props.materialId} detailId={props.detailId} />
       </InModal>
     )
   },
