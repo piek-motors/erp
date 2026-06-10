@@ -7,8 +7,8 @@ export function timedeltaInSeconds(time1: string | Date, time2: string | Date) {
   return Math.abs(duration.asSeconds())
 }
 
-export function fromMs(date?: number | null): Date | null {
-  if (!date) return null
+export function fromMs(date?: number | null): Date | undefined {
+  if (!date) return undefined
   return new Date(date)
 }
 
