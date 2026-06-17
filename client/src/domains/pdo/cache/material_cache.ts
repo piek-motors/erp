@@ -3,6 +3,7 @@ import { matrixDecoder } from '@/lib/rpc/matrix_decoder'
 import { rpc } from '@/lib/rpc/rpc.client'
 import { normalize } from '@/lib/utils/search'
 import type { MaterialRes } from '@/server/domains/pdo/materials_rpc'
+import { sort_rus } from 'shared'
 
 export type AppMaterial = MaterialRes & {
   // field to execute search on it
@@ -45,6 +46,10 @@ export class MaterialCache {
    */
   get materials(): AppMaterial[] {
     return Array.from(this._materialsMap.values())
+  }
+
+  get materials_sorted(): AppMaterial[] {
+    return sort_rus(this.materials, v => v.label)
   }
 
   delete(id: number) {

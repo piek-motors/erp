@@ -24,7 +24,7 @@ export class MaterialListStore {
 
   private filter() {
     const norm_query = normalize(this.search_query)
-    let items = app_cache.materials.materials
+    let items = app_cache.materials.materials_sorted
 
     if (norm_query) {
       items = token_search(items, norm_query, search_config)
