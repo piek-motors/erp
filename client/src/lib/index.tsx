@@ -335,7 +335,7 @@ export function MultilineInput(
   return (
     <FormControl {...props.formProps}>
       <Label label={props.label} />
-      <Textarea {...props} sx={{ width: props.width }} />
+      <Textarea {...props} sx={{ width: props.width, ...props.sx }} />
     </FormControl>
   )
 }

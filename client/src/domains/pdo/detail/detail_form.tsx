@@ -11,13 +11,11 @@ import {
   type TypographySystem,
 } from '@mui/joy'
 import { Observer, observer } from 'mobx-react-lite'
-import type { ReactNode } from 'react'
 import { AccordionCard } from '@/components/accordion_card'
 import { ArrayJsonEditor } from '@/components/array-json-editor'
 import type { BaseOption } from '@/components/base-autocomplete'
 import { NumberInput } from '@/components/inputs/number_input'
 import { Join } from '@/components/join'
-import { ResizableColumns } from '@/components/resizable_columns'
 import { TextEditor } from '@/domains/orders/one/comments/text-editor'
 import { app_cache } from '@/domains/pdo/cache'
 import { GroupTreeModal } from '@/domains/pdo/detail_grouping/group_tree_selector'
@@ -41,59 +39,68 @@ import {
 import { DetailWarehouseButtons } from './warehouse/ui'
 import { WorkflowAccordion } from './workflow'
 
-/** Main detail form component with resizable two-column layout. */
-export const DetailForm = observer(
-  ({ detail, leftChildren }: DetailStProp & { leftChildren?: ReactNode }) => (
-    <ResizableColumns
-      storageKey="detail_form_left_pct"
-      defaultLeftPct={58}
-      left={
-        <Stack gap={0.5} py={1}>
-          <MultilineInput
-            sx={{ fontWeight: 500, width: '100%', boxShadow: 'none' }}
-            color="primary"
-            variant="plain"
-            label="Название"
-            onChange={e => detail.setName(e.target.value)}
-            value={detail.name}
-          />
-          <DetailGroupInput detail={detail} />
-          <Stack>
-            <Label>Чертеж</Label>
-            <Row>
-              <MultilineInput
-                formProps={{ sx: { flexGrow: 1 } }}
-                placeholder="Название"
-                value={detail.drawing_name}
-                onChange={e => detail.set_drawing_name(e.target.value)}
-              />
-              <Input
-                placeholder="Номер"
-                onChange={v => {
-                  detail.set_drawing_number(v)
-                  if (v.startsWith('ВЗИС'))
-                    alert('Впишите конструкторский номер без приставки "ВЗИС"')
-                }}
-                value={detail.drawing_number}
-              />
-            </Row>
-          </Stack>
-          <Row alignItems="end">
-            <DetailRecommendedBatchSizeInput detail={detail} />
-          </Row>
-          <DetailDescriptionInput detail={detail} />
-          {leftChildren}
-        </Stack>
-      }
-      right={<DetailAccordionGroup d={detail} />}
-    />
-  ),
-)
+export const DetailForm = observer(({ detail }: DetailStProp) => (
+  <Stack gap={0.5} p={1} pt={0}>
+    <Row>
+      <DetailNameInput detail={detail} />
+      <DetailGroupInput detail={detail} />
+    </Row>
+    <DetailAccordionGroup d={detail} />
+  </Stack>
+))
+
+const DetailNameInput = observer(({ detail }: DetailStProp) => (
+  <Stack
+    sx={{
+      flex: '0 1 max-content',
+      maxWidth: '100%',
+      minWidth: 0,
+    }}
+  >
+    <Label>Название</Label>
+    <Box
+      data-value={detail.name || ' '}
+      sx={{
+        color: 'primary.plainColor',
+        display: 'grid',
+        fontWeight: 500,
+        overflowWrap: 'anywhere',
+        typography: 'body-lg',
+        whiteSpace: 'pre-wrap',
+        '&::after': {
+          content: 'attr(data-value) " "',
+          gridArea: '1 / 1',
+          visibility: 'hidden',
+        },
+      }}
+    >
+      <Box
+        component="textarea"
+        rows={1}
+        onChange={e => detail.setName(e.target.value)}
+        value={detail.name}
+        sx={{
+          background: 'transparent',
+          border: 0,
+          font: 'inherit',
+          gridArea: '1 / 1',
+          minWidth: 0,
+          outline: 0,
+          overflow: 'hidden',
+          padding: 0,
+          resize: 'none',
+          width: '100%',
+        }}
+      />
+    </Box>
+  </Stack>
+))
 
 /** Accordion group containing detail attachments, blank attributes, workflow, and warehouse. */
 export const DetailAccordionGroup = observer(({ d }: { d: DetailSt }) => (
   <AccordionGroup>
     <WarehouseAccordion detail={d} />
+    <PlanningDispatchAccordion detail={d} />
     <DetailAttachmentInput detail={d} />
     <BlankInput detail={d} />
     <WorkflowAccordion detail={d} />
@@ -133,6 +140,40 @@ export const MaterialSelect = observer(
       />
     )
   },
+)
+
+/** Accordion with planning and dispatching information. */
+const PlanningDispatchAccordion = observer(
+  ({ detail }: { detail: DetailSt }) => (
+    <AccordionCard title="Чертеж и примечание" defaultExpanded>
+      <Stack gap={1}>
+        <Stack>
+          <Label>Чертеж</Label>
+          <Row>
+            <MultilineInput
+              formProps={{ sx: { flexGrow: 1 } }}
+              placeholder="Название"
+              value={detail.drawing_name}
+              onChange={e => detail.set_drawing_name(e.target.value)}
+            />
+            <Input
+              placeholder="Номер"
+              onChange={v => {
+                detail.set_drawing_number(v)
+                if (v.startsWith('ВЗИС'))
+                  alert('Впишите конструкторский номер без приставки "ВЗИС"')
+              }}
+              value={detail.drawing_number}
+            />
+          </Row>
+        </Stack>
+        <Row alignItems="end">
+          <DetailRecommendedBatchSizeInput detail={detail} />
+        </Row>
+        <DetailDescriptionInput detail={detail} />
+      </Stack>
+    </AccordionCard>
+  ),
 )
 
 /** Detail description rich text editor input. */
