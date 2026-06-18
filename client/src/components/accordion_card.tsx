@@ -1,18 +1,24 @@
+import type { Icon } from '@iconscout/react-unicons'
 import { Accordion, AccordionDetails, AccordionSummary } from '@mui/joy'
 import type React from 'react'
 import { useEffect, useState } from 'react'
+import { UseIcon } from '@/lib'
 
 export interface AccordionCardProps {
   title: React.ReactNode
   children: React.ReactNode
   defaultExpanded?: boolean
   expanded?: boolean
+  icon?: Icon
+  iconNode?: React.ReactNode
   width?: string | number
 }
 
 export const AccordionCard: React.FC<AccordionCardProps> = ({
   title,
   children,
+  icon: Icon,
+  iconNode,
   width,
   defaultExpanded,
   expanded: expandedProp,
@@ -39,9 +45,21 @@ export const AccordionCard: React.FC<AccordionCardProps> = ({
       expanded={expanded}
       onChange={(_, isExpanded) => setExpanded(isExpanded)}
     >
-      <AccordionSummary>{title}</AccordionSummary>
+      <AccordionSummary variant="soft">
+        <span
+          style={{
+            alignItems: 'center',
+            display: 'inline-flex',
+            gap: 6,
+          }}
+        >
+          {Icon && <UseIcon icon={Icon} small />}
+          {iconNode}
+          <span>{title}</span>
+        </span>
+      </AccordionSummary>
       <AccordionDetails
-        slotProps={{ content: { sx: { overflow: 'auto', width } } }}
+        slotProps={{ content: { sx: { overflow: 'auto', width, p: 1 } } }}
       >
         {children}
       </AccordionDetails>

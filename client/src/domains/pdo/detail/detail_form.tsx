@@ -1,6 +1,11 @@
 /** @jsxImportSource @emotion/react */
 
-import { UilBars } from '@iconscout/react-unicons'
+import {
+  UilBars,
+  UilFileEditAlt,
+  UilPaperclip,
+  UilReceiptAlt,
+} from '@iconscout/react-unicons'
 import {
   AccordionGroup,
   Autocomplete,
@@ -145,7 +150,11 @@ export const MaterialSelect = observer(
 /** Accordion with planning and dispatching information. */
 const PlanningDispatchAccordion = observer(
   ({ detail }: { detail: DetailSt }) => (
-    <AccordionCard title="Чертеж и примечание" defaultExpanded>
+    <AccordionCard
+      title="Чертеж и примечание"
+      icon={UilFileEditAlt}
+      defaultExpanded
+    >
       <Stack gap={1}>
         <Stack>
           <Label>Чертеж</Label>
@@ -245,14 +254,14 @@ const DetailGroupInput = observer(({ detail }: { detail: DetailSt }) => (
 
 /** Detail attachments accordion section. */
 const DetailAttachmentInput = observer(({ detail }: { detail: DetailSt }) => (
-  <AccordionCard title="Файлы" defaultExpanded>
+  <AccordionCard title="Файлы" icon={UilPaperclip} defaultExpanded>
     <DetailAttachmentList detail={detail} />
   </AccordionCard>
 ))
 
 /** Blank attributes accordion section with material and detail requirements. */
 const BlankInput = observer(({ detail }: { detail: DetailSt }) => (
-  <AccordionCard title="Заготовка" defaultExpanded>
+  <AccordionCard title="Заготовка" icon={UilReceiptAlt} defaultExpanded>
     <MaterialRequirementInput detail={detail} />
     <Divider sx={{ my: 0.5 }} />
     <DetailRequirementInput detail={detail} />
@@ -270,7 +279,18 @@ const BlankInput = observer(({ detail }: { detail: DetailSt }) => (
 
 /** Warehouse accordion with stock, operations, quarterly stock, and address. */
 const WarehouseAccordion = observer(({ detail }: { detail: DetailSt }) => (
-  <AccordionCard title="Склад" defaultExpanded>
+  <AccordionCard
+    title="Склад"
+    iconNode={
+      <img
+        src="/icons/warehouse.svg"
+        width={15}
+        height={15}
+        style={{ opacity: 0.5 }}
+      />
+    }
+    defaultExpanded
+  >
     <Stack gap={1.5}>
       <DetailWarehouseButtons detail={detail} />
       <Row>
