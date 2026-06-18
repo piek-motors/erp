@@ -155,17 +155,19 @@ const PlanningDispatchAccordion = observer(
       icon={UilFileEditAlt}
       defaultExpanded
     >
-      <Stack gap={1}>
+      <Stack gap={0.5}>
         <Stack>
           <Label>Чертеж</Label>
           <Row>
             <MultilineInput
+              size="sm"
               formProps={{ sx: { flexGrow: 1 } }}
               placeholder="Название"
               value={detail.drawing_name}
               onChange={e => detail.set_drawing_name(e.target.value)}
             />
             <Input
+              size="sm"
               placeholder="Номер"
               onChange={v => {
                 detail.set_drawing_number(v)
@@ -200,7 +202,7 @@ const DetailDescriptionInput = observer(({ detail }: { detail: DetailSt }) => (
 const DetailRecommendedBatchSizeInput = observer(
   ({ detail }: { detail: DetailSt }) => (
     <NumberInput
-      size="md"
+      size="sm"
       label="Рекоменд. размер партии"
       value={detail.recommended_batch_size}
       onChange={v => detail.set_recommended_batch_size(v)}

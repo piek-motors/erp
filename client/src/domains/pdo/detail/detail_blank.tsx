@@ -65,8 +65,10 @@ export const MaterialRequirementInput = observer(
                   detail.blank.update_material_requirement(material_id)
                 }}
               />
-              <MaterialRequirementTypeSelect detail={detail} />
-              <MaterialRequirementSelector detail={detail} />
+              <Row>
+                <MaterialRequirementTypeSelect detail={detail} />
+                <MaterialRequirementSelector detail={detail} />
+              </Row>
             </Stack>
           </CostRow>
         )}
@@ -231,6 +233,7 @@ export const DetailRequirementInput = observer(
           Укажите детали, которые используются в заготовке данной детали, и их
           количество
         </Label>
+
         {detail.blank.details_requirement.map((cost, index) => {
           const detail_req = app_cache.details.get(cost.detailId)
           if (app_cache.details.loader.loading)
@@ -291,8 +294,8 @@ const Base = (props: BaseProps) => (
       {!props.hideAddButton && (
         <PlusIcon
           onClick={() => props.handleAdd()}
-          variant="outlined"
-          color="neutral"
+          variant="soft"
+          color="primary"
         />
       )}
     </Box>

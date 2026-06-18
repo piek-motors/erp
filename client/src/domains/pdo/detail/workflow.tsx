@@ -201,12 +201,11 @@ export const WorkflowAccordion = observer(
             return (
               <HoverReveal
                 key={op.id}
-                gap={1}
+                gap={5}
                 alignSelf="start"
                 justifyContent={'start'}
-                alignItems={'start'}
+                alignItems={'center'}
                 flexDirection={'row'}
-                sx={{ width: '-webkit-fill-available' }}
                 hiddenComp={
                   <Row alignItems={'center'} gap={1}>
                     {/* Toggle comment button */}
