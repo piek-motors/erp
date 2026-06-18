@@ -42,11 +42,11 @@ const detailColumns: Column<DetailSt>[] = [
   },
   {
     Header: 'Остаток',
-    accessor: detail => detail.warehouse.stock ?? '',
+    accessor: detail => detail.warehouse.stock || '',
   },
   {
     Header: 'Нормативный запас',
-    accessor: detail => detail.safe_stock_leftover ?? '',
+    accessor: detail => detail.safe_stock_leftover || '',
   },
   {
     Header: 'Дефицит',
