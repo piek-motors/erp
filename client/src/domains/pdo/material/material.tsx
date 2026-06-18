@@ -153,19 +153,15 @@ function AverageDailyConsumption({
   return (
     <Card size="sm" variant="soft" sx={{ width: 'fit-content' }}>
       <Stack gap={0.5}>
-        <Label>Среднесуточное потребление</Label>
+        <Label level="body-xs">Среднесуточное потребление</Label>
         <Row gap={0.5} alignItems="baseline">
-          <P fontWeight={700}>
+          <P fontWeight={500}>
             {dailyConsumptionFormatter.format(
               deficitInfo.daily_consumption_rate,
             ) ?? '0'}
           </P>
           <P level="body-sm">{uiUnit(m.unit)} / день</P>
         </Row>
-        <P level="body-xs" color="neutral">
-          Средний расход по истории списаний, используется для прогноза
-          дефицита.
-        </P>
       </Stack>
     </Card>
   )

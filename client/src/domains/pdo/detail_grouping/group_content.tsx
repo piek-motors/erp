@@ -64,7 +64,7 @@ export const GroupContentSection = observer(() => {
   useEffect(() => {
     if (id) {
       const groupId = parseInt(id, 10)
-      if (!isNaN(groupId)) {
+      if (!Number.isNaN(groupId)) {
         api.load_details(groupId)
       }
     }
@@ -118,7 +118,6 @@ const GroupContent = observer(() => {
         )}
 
         <Table
-          small
           columns={detailColumns}
           data={group_content.get_filtered_and_sorted()}
           sx={{
