@@ -241,7 +241,7 @@ const WarehouseAccordion = observer(({ detail }: { detail: DetailSt }) => (
         />
         <NumberInput
           size="sm"
-          label="Квартальный запас"
+          label="Нормативный запас"
           value={detail.safe_stock_leftover}
           onChange={v => detail.set_safe_stock_leftover(v)}
         />

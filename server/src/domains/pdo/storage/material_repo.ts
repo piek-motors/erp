@@ -15,6 +15,7 @@ export interface CreateMaterialInput {
   label: string
   alloy: string | null
   shortage_prediction_horizon_days: number | null
+  safe_stock_leftover: number | null
 }
 
 export interface UpdateMaterialInput extends CreateMaterialInput {
@@ -89,6 +90,7 @@ export class MaterialRepo {
         alloy: input.alloy,
         shortage_prediction_horizon_days:
           input.shortage_prediction_horizon_days ?? 60,
+        safe_stock_leftover: input.safe_stock_leftover,
         on_hand_balance: 0,
         linear_mass: 0,
       })
@@ -105,6 +107,7 @@ export class MaterialRepo {
         alloy: input.alloy,
         shortage_prediction_horizon_days:
           input.shortage_prediction_horizon_days ?? 60,
+        safe_stock_leftover: input.safe_stock_leftover,
       })
       .where('id', '=', input.id)
       .returningAll()

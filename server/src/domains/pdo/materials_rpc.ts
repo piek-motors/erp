@@ -34,6 +34,7 @@ const payload = z.object({
   label: z.string().nonempty(),
   alloy: z.string().nullable(),
   shortage_prediction_horizon_days: z.number().nullable(),
+  safe_stock_leftover: z.number().nullable(),
 })
 const id_payload = z.object({ id: z.number() })
 const update_payload = payload.extend({ id: z.number() })

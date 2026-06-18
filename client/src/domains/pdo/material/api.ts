@@ -38,6 +38,7 @@ export class MaterialApi {
         }
         m.shortage_prediction_horizon_days =
           material.shortage_prediction_horizon_days
+        m.safe_stock_leftover = material.safe_stock_leftover
         m.warehouse.on_hand_balance = material.on_hand_balance
         m.deficit_info = res.deficit
       })
@@ -78,6 +79,7 @@ export class MaterialApi {
       unit: m.unit,
       alloy: m.alloy || null,
       shortage_prediction_horizon_days: m.shortage_prediction_horizon_days,
+      safe_stock_leftover: m.safe_stock_leftover,
     }
   }
 

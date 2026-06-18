@@ -23,6 +23,12 @@ export const MaterialForm = observer(
         value={m.alloy}
       />
       <UnitSelect value={m.unit ?? undefined} onChange={v => m.set_unit(v)} />
+      <NumberInput
+        size="sm"
+        label="Нормативный запас"
+        value={m.safe_stock_leftover}
+        onChange={v => m.set_safe_stock_leftover(v)}
+      />
       <Box>
         <Stack>
           <Label>Сигнал о дефиците за N дней</Label>

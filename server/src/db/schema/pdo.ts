@@ -48,6 +48,7 @@ export interface MaterialTable {
    * calculated from historical consumption rate and extrapolated into the future.
    */
   shortage_prediction_horizon_days: number
+  safe_stock_leftover: number | null
 }
 export type Material = Selectable<MaterialTable>
 

@@ -44,6 +44,11 @@ export class MaterialSt {
     this.shortage_prediction_horizon_days = v
   }
 
+  safe_stock_leftover: number | null = null
+  set_safe_stock_leftover(v: number | null) {
+    this.safe_stock_leftover = v
+  }
+
   writeoff_stat: {
     monthly?: [string, number][]
     quarterly?: [string, number][]
