@@ -1,5 +1,6 @@
 import { Card } from '@mui/joy'
-import { fmt } from 'shared'
+import { fmt, uiUnit } from 'shared'
+import { AdaptiveNumberFormatter } from '@/domains/pdo/shared/adaptive_number_formatter'
 import { MetalPageTitle } from '@/domains/pdo/shared/basic'
 import {
   ActionButton,
@@ -93,7 +94,12 @@ export const MaterialUpdatePage = observer(() => {
             <MaterialWarehouseCard m={m} />
             <DetailsMadeOfMaterialModal m={m} />
           </Row>
-          {m.deficit_info && <DeficitLabel deficitInfo={m.deficit_info} />}
+          {m.deficit_info && (
+            <>
+              <DeficitLabel deficitInfo={m.deficit_info} />
+              <AverageDailyConsumption m={m} deficitInfo={m.deficit_info} />
+            </>
+          )}
           <Row flexWrap={'wrap'} alignItems={'start'}>
             <MaterialQuntifiedExpenses m={m} />
             <Card size="md">
@@ -133,4 +139,34 @@ function DeficitLabel({ deficitInfo }: { deficitInfo: DeficitInfo }) {
   }
 
   return <Label color={deficit ? 'danger' : 'success'}>{getText()}</Label>
+}
+
+const dailyConsumptionFormatter = new AdaptiveNumberFormatter(2, 5)
+
+function AverageDailyConsumption({
+  m,
+  deficitInfo,
+}: {
+  m: MaterialSt
+  deficitInfo: DeficitInfo
+}) {
+  return (
+    <Card size="sm" variant="soft" sx={{ width: 'fit-content' }}>
+      <Stack gap={0.5}>
+        <Label>Среднесуточное потребление</Label>
+        <Row gap={0.5} alignItems="baseline">
+          <P fontWeight={700}>
+            {dailyConsumptionFormatter.format(
+              deficitInfo.daily_consumption_rate,
+            ) ?? '0'}
+          </P>
+          <P level="body-sm">{uiUnit(m.unit)} / день</P>
+        </Row>
+        <P level="body-xs" color="neutral">
+          Средний расход по истории списаний, используется для прогноза
+          дефицита.
+        </P>
+      </Stack>
+    </Card>
+  )
 }
