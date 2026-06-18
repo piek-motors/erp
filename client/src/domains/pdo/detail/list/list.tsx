@@ -21,6 +21,7 @@ import {
 import type { AppDetail } from '../../cache/detail_cache'
 import { type DetailSt, GroupAssigment } from '../detail.state'
 import { DetailName } from '../detail_name'
+import { DetailStockDelta } from '../detail_stock_delta'
 import { AlphabetIndex } from './alphabet_index'
 import { detail_list_vm as state } from './detail_list_vm'
 import { SearchCriteria } from './search_config'
@@ -83,6 +84,14 @@ const columnList: Column<AppDetail>[] = [
       if (!r.on_hand_balance) return ''
       return r.on_hand_balance
     },
+  },
+  {
+    Header: 'Нормативный запас',
+    accessor: r => r.safe_stock_leftover ?? '',
+  },
+  {
+    Header: 'Дефицит',
+    accessor: r => <DetailStockDelta detail={r} />,
   },
 ]
 

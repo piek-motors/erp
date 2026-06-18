@@ -1,6 +1,8 @@
 import { UilFolder } from '@iconscout/react-unicons'
 import { Box, Stack } from '@mui/joy'
+import type { Column } from 'react-table'
 import { ScrollableWindow, Search } from '@/components/inputs'
+import { Table } from '@/components/table.impl'
 import {
   Link,
   Loading,
@@ -15,6 +17,7 @@ import { openPage, routeMap } from '@/lib/routes'
 import { app_cache } from '../cache'
 import type { DetailSt } from '../detail/detail.state'
 import { DetailName } from '../detail/detail_name'
+import { DetailStockDelta } from '../detail/detail_stock_delta'
 import { api } from './api'
 import type { GroupTreeNode } from './group.store'
 import { store } from './group.store'
@@ -23,6 +26,33 @@ import {
   CreateGroupButton,
   CreateSubgroupModal,
 } from './group_name.modal'
+
+const detailColumns: Column<DetailSt>[] = [
+  {
+    Header: 'Название',
+    id: 'name',
+    accessor: detail => (
+      <DetailName
+        slot_props={{
+          name: { whiteSpace: 'wrap', width: 'auto', lineHeight: '1.2' },
+        }}
+        detail={detail}
+      />
+    ),
+  },
+  {
+    Header: 'Остаток',
+    accessor: detail => detail.warehouse.stock,
+  },
+  {
+    Header: 'Нормативный запас',
+    accessor: detail => detail.safe_stock_leftover ?? '',
+  },
+  {
+    Header: 'Дефицит',
+    accessor: detail => <DetailStockDelta detail={detail} />,
+  },
+]
 
 interface GroupSectionProps {
   group: GroupTreeNode
@@ -74,7 +104,7 @@ const GroupContent = observer(() => {
         value={group_content.query}
         onChange={e => group_content.set_query(e.target.value)}
       />
-      <Box sx={{ flex: 1, py: 1, overflow: 'auto', width: 'fit-content' }}>
+      <Box sx={{ flex: 1, py: 1, overflow: 'auto', width: '100%' }}>
         {/* child group links */}
         {app_cache.groups.tree.node(group.id)?.children.map(child => (
           <GroupLink key={child.id} group={child} />
@@ -87,9 +117,17 @@ const GroupContent = observer(() => {
           </P>
         )}
 
-        {group_content.get_filtered_and_sorted().map(detail => (
-          <DetailRow key={detail.id} detail={detail} />
-        ))}
+        <Table
+          small
+          columns={detailColumns}
+          data={group_content.get_filtered_and_sorted()}
+          sx={{
+            width: '100%',
+            '& tbody tr:hover': {
+              backgroundColor: 'rgba(0, 0, 0, 0.04)',
+            },
+          }}
+        />
       </Box>
       {create_subgroup_modal.is_open && <CreateSubgroupModal />}
     </Stack>
@@ -135,46 +173,3 @@ const GroupLink = observer(({ group }: GroupSectionProps) => (
     </Link>
   </Row>
 ))
-
-interface DetailRowProps {
-  detail: DetailSt
-  onClick?: (detailId: number) => void
-}
-
-const DetailRow = ({ detail, onClick: onToggle }: DetailRowProps) => (
-  <Row
-    sx={{
-      alignItems: 'center',
-      display: 'flex',
-      p: 0.5,
-      px: 2,
-      mb: 0,
-      borderRadius: 20,
-      '&:hover': {
-        opacity: 1,
-        background: '#add8e655',
-      },
-      cursor:
-        detail.group_assigment.group_ids.length === 0 ? 'pointer' : 'default',
-    }}
-    alignItems="center"
-    justifyContent="space-between"
-    onClick={() => onToggle?.(detail.id)}
-  >
-    <DetailName
-      slot_props={{
-        name: { whiteSpace: 'wrap', width: 'auto', lineHeight: '1.2' },
-      }}
-      detail={detail}
-    />
-    {detail.warehouse.stock > 0 && (
-      <P
-        level="body-md"
-        color="primary"
-        sx={{ whiteSpace: 'nowrap', ml: 1, fontWeight: 500 }}
-      >
-        {detail.warehouse.stock}
-      </P>
-    )}
-  </Row>
-)

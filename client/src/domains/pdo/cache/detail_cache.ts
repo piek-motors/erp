@@ -11,6 +11,7 @@ const alphabet = 'АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭ
 export type AppDetail = ListDetailsOutput & {
   normalized_name: string
   group_assigment: GroupAssigment
+  safe_stock_leftover: number | null
 }
 
 type ProcessingOperation = {
@@ -99,6 +100,9 @@ export class DetailCache {
       ...e,
       normalized_name: normalize(e.name),
       group_assigment: new GroupAssigment(e.group_ids),
+      safe_stock_leftover:
+        (e as ListDetailsOutput & { safe_stock_leftover?: number | null })
+          .safe_stock_leftover ?? null,
     }))
   }
 }

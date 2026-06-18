@@ -32,6 +32,7 @@ export interface ListDetailsOutput {
   drawing_number: string | null
   group_ids: number[]
   on_hand_balance: number
+  safe_stock_leftover: number | null
 }
 
 const DetailSchema = z.object({
@@ -110,7 +111,13 @@ export class DetailRepo {
     const [details, detail_group_associations] = await Promise.all([
       this.db
         .selectFrom('pdo.details as d')
-        .select(['d.id', 'd.name', 'd.drawing_number', 'd.on_hand_balance'])
+        .select([
+          'd.id',
+          'd.name',
+          'd.drawing_number',
+          'd.on_hand_balance',
+          'd.safe_stock_leftover',
+        ])
         .orderBy('d.id', 'desc')
         .execute(),
       this.detail_group_associations(),

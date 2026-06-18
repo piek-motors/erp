@@ -1,9 +1,9 @@
 import { makeAutoObservable, observable, runInAction } from 'mobx'
+import { sort_rus } from 'shared'
 import { matrixDecoder } from '@/lib/rpc/matrix_decoder'
 import { rpc } from '@/lib/rpc/rpc.client'
 import { normalize } from '@/lib/utils/search'
 import type { MaterialRes } from '@/server/domains/pdo/materials_rpc'
-import { sort_rus } from 'shared'
 
 export type AppMaterial = MaterialRes & {
   // field to execute search on it

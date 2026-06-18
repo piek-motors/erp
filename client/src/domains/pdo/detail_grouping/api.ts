@@ -7,6 +7,10 @@ import type { DetailInTheGroup } from '@/server/domains/pdo/storage/detail_group
 import { DetailSt } from '../detail/detail.state'
 import { store } from './group.store'
 
+type DetailInTheGroupWithStock = DetailInTheGroup & {
+  safe_stock_leftover?: number | null
+}
+
 export class DetailGroupingApi {
   readonly groups_tree_loading = new LoadingController()
   readonly details_loading = new LoadingController()
@@ -24,7 +28,7 @@ export class DetailGroupingApi {
   async load_details(groupId: number) {
     return this.details_loading.run(async () => {
       const resp = await rpc.pdo.detail_groups.get.query({ groupId })
-      const details = matrixDecoder<DetailInTheGroup>(resp.details)
+      const details = matrixDecoder<DetailInTheGroupWithStock>(resp.details)
       store.open_group(
         resp.group,
         details.map(d => {
@@ -34,6 +38,7 @@ export class DetailGroupingApi {
           detail.drawing_number = d.drawing_number ?? ''
           detail.group_assigment.set_group_ids(d.group_ids)
           detail.warehouse.setStock(d.on_hand_balance)
+          detail.safe_stock_leftover = d.safe_stock_leftover ?? null
           return detail
         }),
       )
