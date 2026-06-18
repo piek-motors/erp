@@ -86,7 +86,7 @@ const columnList: Column<AppDetail>[] = [
     },
   },
   {
-    Header: 'Нормативный запас',
+    Header: 'Норм. запас',
     accessor: r => r.safe_stock_leftover ?? '',
   },
   {

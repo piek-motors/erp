@@ -29,7 +29,7 @@ export const columns: Column<AppMaterial>[] = [
     accessor: m => value_with_unit(formatter.format(m.on_hand_balance), m.unit),
   },
   {
-    Header: 'Нормативный запас',
+    Header: 'Норм. запас',
     accessor: m =>
       m.safe_stock_leftover == null
         ? null
