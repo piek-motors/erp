@@ -8,6 +8,7 @@ export interface MaterialWithDeficit extends DB.Pdo.Material {
 export interface DeficitInfo {
   deficit: boolean
   daily_consumption_rate: number
+  monthly_consumption_rate: number
   days_until_stockout: number
 }
 

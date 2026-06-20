@@ -97,7 +97,7 @@ export const MaterialUpdatePage = observer(() => {
           {m.deficit_info && (
             <>
               <DeficitLabel deficitInfo={m.deficit_info} />
-              <AverageDailyConsumption m={m} deficitInfo={m.deficit_info} />
+              <AverageMonthlyConsumption m={m} deficitInfo={m.deficit_info} />
             </>
           )}
           <Row flexWrap={'wrap'} alignItems={'start'}>
@@ -141,9 +141,9 @@ function DeficitLabel({ deficitInfo }: { deficitInfo: DeficitInfo }) {
   return <Label color={deficit ? 'danger' : 'success'}>{getText()}</Label>
 }
 
-const dailyConsumptionFormatter = new AdaptiveNumberFormatter(2, 5)
+const monthlyConsumptionFormatter = new AdaptiveNumberFormatter(1, 2)
 
-function AverageDailyConsumption({
+function AverageMonthlyConsumption({
   m,
   deficitInfo,
 }: {
@@ -151,18 +151,16 @@ function AverageDailyConsumption({
   deficitInfo: DeficitInfo
 }) {
   return (
-    <Card size="sm" variant="soft" sx={{ width: 'fit-content' }}>
-      <Stack gap={0.5}>
-        <Label level="body-xs">Среднесуточное потребление</Label>
-        <Row gap={0.5} alignItems="baseline">
-          <P fontWeight={500}>
-            {dailyConsumptionFormatter.format(
-              deficitInfo.daily_consumption_rate,
-            ) ?? '0'}
-          </P>
-          <P level="body-sm">{uiUnit(m.unit)} / день</P>
-        </Row>
-      </Stack>
-    </Card>
+    <Row>
+      <Label level="body-sm">Среднемесячное потребление –</Label>
+      <Row gap={0.5} alignItems="baseline">
+        <P fontWeight={500} level="body-sm" color="primary">
+          {monthlyConsumptionFormatter.format(
+            deficitInfo.monthly_consumption_rate,
+          ) ?? '0'}
+        </P>
+        <P level="body-xs">{uiUnit(m.unit)} / месяц</P>
+      </Row>
+    </Row>
   )
 }

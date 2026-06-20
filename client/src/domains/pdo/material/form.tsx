@@ -13,7 +13,6 @@ export const MaterialForm = observer(
           m.set_label(e.target.value)
         }}
         width={'fit-content'}
-        disabled={disabled}
       />
       <AlloyAutocomplete
         disabled={disabled}

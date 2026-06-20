@@ -22,6 +22,7 @@ export type { MaterialWithDeficit as MaterialRes } from '#root/domains/pdo/stora
 export interface DeficitInfo {
   deficit: boolean
   daily_consumption_rate: number
+  monthly_consumption_rate: number
   days_until_stockout: number
 }
 
@@ -191,6 +192,7 @@ function predict_deficit(
     return {
       deficit: false,
       daily_consumption_rate: 0,
+      monthly_consumption_rate: 0,
       days_until_stockout: Infinity,
     }
   }
@@ -204,6 +206,7 @@ function predict_deficit(
     return {
       deficit: false,
       daily_consumption_rate: 0,
+      monthly_consumption_rate: 0,
       days_until_stockout: Infinity,
     }
   }
@@ -214,12 +217,14 @@ function predict_deficit(
 
   // Calculate average daily consumption rate
   const dailyConsumptionRate = total_consumption / totalDays
+  const monthlyConsumptionRate = total_consumption / (nonZeroQuarters * 3)
 
   // Already in deficit
   if (material.on_hand_balance <= 0) {
     return {
       deficit: true,
       daily_consumption_rate: dailyConsumptionRate,
+      monthly_consumption_rate: monthlyConsumptionRate,
       days_until_stockout: 0,
     }
   }
@@ -234,6 +239,7 @@ function predict_deficit(
   return {
     deficit: in_deficit,
     daily_consumption_rate: dailyConsumptionRate,
+    monthly_consumption_rate: monthlyConsumptionRate,
     days_until_stockout: daysUntilStockout,
   }
 }
