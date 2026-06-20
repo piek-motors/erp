@@ -80,9 +80,8 @@ export const material_columns: Column<InventoryLogRecord>[] = [
   {
     Header: `Материал`,
     id: 'name',
-    accessor: data => (
-      <MaterialName label={data.material_label} id={data.material_id} />
-    ),
+    accessor: data =>
+      data.material && <MaterialName material={data.material} />,
   },
   {
     Header: 'Кол-во',

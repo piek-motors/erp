@@ -18,7 +18,6 @@ import {
 import { Observer, observer } from 'mobx-react-lite'
 import { AccordionCard } from '@/components/accordion_card'
 import { ArrayJsonEditor } from '@/components/array-json-editor'
-import type { BaseOption } from '@/components/base-autocomplete'
 import { NumberInput } from '@/components/inputs/number_input'
 import { Join } from '@/components/join'
 import { TextEditor } from '@/domains/orders/one/comments/text-editor'
@@ -35,6 +34,7 @@ import {
 } from '@/lib/index'
 import type { Blank } from '@/server/domains/pdo/storage/detail_repo'
 import { GroupVisualSeparator } from '../detail_grouping/group_name_preview'
+import { MaterialName } from '../material/name'
 import { DetailAttachmentList } from './attachment/list'
 import type { DetailSt, DetailStProp } from './detail.state'
 import {
@@ -116,25 +116,19 @@ export const DetailAccordionGroup = observer(({ d }: { d: DetailSt }) => (
 export const MaterialSelect = observer(
   (props: { value?: number; index: number; onChange: (m: number) => void }) => {
     const { value: material, onChange } = props
-    const options: BaseOption[] =
-      app_cache.materials.materials.map(m => ({
-        label: app_cache.materials.get(m.id)?.label || '',
-        value: m.id,
-      })) || []
+    const options = app_cache.materials.materials_sorted.map(material => ({
+      label: [material.label, material.alloy].filter(Boolean).join(' '),
+      value: material.id,
+      material,
+    }))
+    const value = options.find(option => option.value === material) ?? null
 
     return (
       <Autocomplete
         size="sm"
         options={options}
         placeholder="Выберите материал"
-        value={
-          material
-            ? {
-                label: app_cache.materials.label_for(material) || '',
-                value: material,
-              }
-            : null
-        }
+        value={value}
         onChange={(_, newValue) => {
           if (newValue && !Array.isArray(newValue)) onChange(newValue.value)
         }}
@@ -142,6 +136,19 @@ export const MaterialSelect = observer(
           typeof option === 'string' ? option : option.label
         }
         isOptionEqualToValue={(option, value) => option.value === value.value}
+        renderOption={(props, option) => (
+          <Box
+            component="li"
+            {...props}
+            sx={{ px: 1, py: 0.5, cursor: 'pointer' }}
+          >
+            <MaterialName
+              material={option.material}
+              disableLink
+              slotProps={{ level: 'body-sm', sx: { color: 'black' } }}
+            />
+          </Box>
+        )}
       />
     )
   },

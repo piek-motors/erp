@@ -1,3 +1,4 @@
+import { jsonObjectFrom } from 'kysely/helpers/postgres'
 import {
   OperationSubject,
   OperationType,
@@ -8,7 +9,7 @@ import {
 import { logger } from '#root/ioc/log.js'
 import { matrixEncoder } from '#root/lib/matrix_encoder.js'
 import { router } from '#root/lib/trpc/trpc.js'
-import { db, procedure, requireScope, Scope, z } from '#root/sdk.js'
+import { type DB, db, procedure, requireScope, Scope, z } from '#root/sdk.js'
 import { DetailRepo } from './storage/detail_repo.js'
 import { MaterialRepo } from './storage/material_repo.js'
 
@@ -28,7 +29,7 @@ export type OperationListItem = {
   detail_name: string
   detail_group_ids: number[]
   material_id: number | number
-  material_label: string
+  material: DB.Pdo.Material | null
   manufacturing_order_qty: number
 }
 
@@ -52,12 +53,17 @@ export const operations = router({
             qb.where('o.detail_id', '=', input.detailId as number),
           )
           .selectAll(['o'])
-
-          .leftJoin('pdo.materials as m', 'o.material_id', 'm.id')
-          .select(['m.label as material_label', 'm.unit as unit'])
+          .select(eb =>
+            jsonObjectFrom(
+              eb
+                .selectFrom('pdo.materials as m')
+                .selectAll('m')
+                .whereRef('m.id', '=', 'o.material_id'),
+            ).as('material'),
+          )
 
           .leftJoin('pdo.details as d', 'o.detail_id', 'd.id')
-          .select('d.name as detail_name')
+          .select(['d.name as detail_name', 'd.unit as detail_unit'])
 
           .leftJoin('pdo.orders as ord', 'manufacturing_order_id', 'ord.id')
           .select('o.manufacturing_order_id as manufacturing_order_id')
@@ -68,12 +74,16 @@ export const operations = router({
           .execute(),
         detail_repo.detail_group_associations(),
       ])
-      const operations_with_groups = operations.map(o => ({
-        ...o,
-        detail_group_ids: o.detail_id
-          ? detail_group_associations.get(o.detail_id) || []
-          : [],
-      }))
+      const operations_with_groups = operations.map(
+        ({ detail_unit, material, ...operation }) => ({
+          ...operation,
+          material,
+          unit: material?.unit ?? detail_unit,
+          detail_group_ids: operation.detail_id
+            ? detail_group_associations.get(operation.detail_id) || []
+            : [],
+        }),
+      )
 
       return matrixEncoder(operations_with_groups)
     }),

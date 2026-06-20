@@ -17,7 +17,7 @@ export const columns: Column<AppMaterial>[] = [
     id: 'name',
     accessor: m => (
       <Row noWrap>
-        <MaterialName {...m} disableLink />
+        <MaterialName material={m} disableLink />
         {m.deficit.deficit && (
           <Indicator title="Дефицит" color="rgba(255, 7, 7, 0.8)" />
         )}

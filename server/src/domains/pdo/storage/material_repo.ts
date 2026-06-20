@@ -1,4 +1,6 @@
 import type { Unit } from 'shared'
+import { logger } from '#root/ioc/log.js'
+import { changed_fields } from '#root/lib/changed_fields.js'
 import { type DB, type IDB, RpcError } from '#root/sdk.js'
 
 export interface MaterialWithDeficit extends DB.Pdo.Material {
@@ -101,7 +103,8 @@ export class MaterialRepo {
   }
 
   async update(input: UpdateMaterialInput): Promise<DB.Pdo.Material> {
-    return await this.db
+    const existing = await this.get_by_id_or_throw(input.id)
+    const updated = await this.db
       .updateTable('pdo.materials')
       .set({
         unit: input.unit,
@@ -114,6 +117,12 @@ export class MaterialRepo {
       .where('id', '=', input.id)
       .returningAll()
       .executeTakeFirstOrThrow()
+
+    logger.info(
+      changed_fields(existing, updated),
+      `material updated id=${input.id}`,
+    )
+    return updated
   }
 
   async delete(id: number): Promise<void> {

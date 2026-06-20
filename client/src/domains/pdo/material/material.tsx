@@ -24,6 +24,7 @@ import { SaveAndDelete } from '../shared/basic'
 import { api } from './api'
 import { DetailsMadeOfMaterialModal } from './details_made_of_that_material'
 import { MaterialForm } from './form'
+import { MaterialName } from './name'
 import { MaterialQuntifiedExpenses } from './quantified_expenses'
 import { MaterialSt } from './state'
 import { MaterialWarehouseCard } from './warehouse'
@@ -77,14 +78,16 @@ export const MaterialUpdatePage = observer(() => {
             <P level="body-sm" whiteSpace={'nowrap'}>
               Материал №{m.id}
             </P>
-            <P
-              whiteSpace={'nowrap'}
-              color="primary"
-              fontWeight={700}
-              level="body-lg"
-            >
-              {fmt.capitalize(m.label)}
-            </P>
+            <MaterialName
+              disableLink
+              material={m}
+              slotProps={{
+                whiteSpace: 'nowrap',
+                color: 'primary',
+                fontWeight: 700,
+                level: 'body-lg',
+              }}
+            />
           </Box>
         }
       />

@@ -1,17 +1,30 @@
+import type { TypographyProps } from '@mui/joy'
 import { observer } from 'mobx-react-lite'
+import { fmt } from 'shared'
 import { Link, P } from '@/lib/index'
 import { openPage, routeMap } from '@/lib/routes'
 
-type Props = {
+interface Material {
   label: string
-  id?: number
+  alloy: string | null
+  id?: number | null
+}
+
+type Props = {
+  material: Material
   disableLink?: boolean
+  slotProps?: TypographyProps
 }
 
 export const MaterialName = observer((props: Props) => {
-  const { label, id, disableLink } = props
+  const { disableLink, material } = props
+  const { label, id, alloy } = material
 
-  const content = <P>{label}</P>
+  const content = (
+    <P {...props.slotProps}>
+      {fmt.capitalize(label)} {alloy ?? ''}
+    </P>
+  )
 
   if (disableLink || !id) {
     return content
