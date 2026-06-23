@@ -15,11 +15,6 @@ interface Props<T> {
   setReason: (reason: T) => void
 }
 export const WriteoffReasonSelect = observer((props: Props<WriteoffReason>) => {
-  useEffect(() => {
-    if (props.reason == null) props.setReason(props.reasons[0])
-  }, [])
-
-  const effective = props.reason ?? props.reasons[0]
   return (
     <ReasonSelect
       label={'Основание'}
@@ -27,10 +22,14 @@ export const WriteoffReasonSelect = observer((props: Props<WriteoffReason>) => {
         label: uiWriteoffReason(r),
         value: r.toString(),
       }))}
-      value={{
-        label: uiWriteoffReason(effective),
-        value: effective.toString(),
-      }}
+      value={
+        props.reason
+          ? {
+              label: uiWriteoffReason(props.reason),
+              value: props.reason.toString(),
+            }
+          : null
+      }
       onChange={newValue => props.setReason(Number(newValue))}
     />
   )
@@ -63,7 +62,7 @@ interface ReasonOption {
 export interface ReasonSelectProps {
   label: string
   options: ReasonOption[]
-  value: ReasonOption
+  value: ReasonOption | null
   onChange: (value: string | null) => void
 }
 
@@ -74,7 +73,7 @@ const ReasonSelect = observer((props: ReasonSelectProps) => (
       size="sm"
       color="primary"
       variant="soft"
-      value={props.value.value}
+      value={props.value?.value}
       onChange={(_, v) => props.onChange(v)}
       sx={{ flexWrap: 'wrap', rowGap: 0.5 }}
     >
