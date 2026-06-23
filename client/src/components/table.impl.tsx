@@ -36,12 +36,12 @@ export function Table<T extends object>(props: Props<T>) {
       sx={props.sx}
     >
       <thead>
-        {headerGroups.map((headerGroup, i) => (
-          <tr {...headerGroup.getHeaderGroupProps()} key={i}>
-            {headerGroup.headers.map((column, i) => {
+        {headerGroups.map(headerGroup => (
+          <tr {...headerGroup.getHeaderGroupProps()} key={headerGroup.id}>
+            {headerGroup.headers.map(column => {
               return (
-                <th key={i} style={{ height: 'min-content' }}>
-                  <P fontSize={12}>{column.render('Header')}</P>
+                <th key={column.id} style={{ height: 'min-content' }}>
+                  <P fontSize={11}>{column.render('Header')}</P>
                 </th>
               )
             })}
@@ -77,7 +77,7 @@ export function Table<T extends object>(props: Props<T>) {
                   if (props.onDoubleRowClick)
                     props.onDoubleRowClick(row.original)
                 }}
-                key={i}
+                key={row.id}
               >
                 {row.cells.map((cell, i) => {
                   return (

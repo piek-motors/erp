@@ -40,7 +40,7 @@ const date_col = {
 }
 
 const revert_col = {
-  Header: 'Откат',
+  Header: 'Отмена',
   accessor: op => {
     const cutoffDate = new Date(Date.now() - ShowRevertButtonWithinDays * Day)
     if (new Date(op.timestamp) < cutoffDate) return null
@@ -75,6 +75,19 @@ const op_type_col = {
   },
 }
 
+const balance_change_col = {
+  Header: 'Изм. остатка',
+  accessor: data => {
+    const sign = data.operation_type === OperationType.Supply ? '+' : '-'
+    return (
+      <Row flexWrap={'nowrap'} gap={0.3}>
+        <Label>{sign}</Label>{' '}
+        {value_with_unit(formatter.format(data.qty), data.unit)}
+      </Row>
+    )
+  },
+}
+
 export const material_columns: Column<InventoryLogRecord>[] = [
   date_col,
   {
@@ -83,18 +96,7 @@ export const material_columns: Column<InventoryLogRecord>[] = [
     accessor: data =>
       data.material && <MaterialName material={data.material} />,
   },
-  {
-    Header: 'Кол-во',
-    accessor: data => {
-      const sign = data.operation_type === OperationType.Supply ? '+' : '-'
-      return (
-        <Row flexWrap={'nowrap'} gap={0.3}>
-          <Label>{sign}</Label>{' '}
-          {value_with_unit(formatter.format(data.qty), data.unit)}
-        </Row>
-      )
-    },
-  },
+  balance_change_col,
   {
     Header: 'Деталь',
     accessor: data => {
@@ -123,6 +125,7 @@ export const material_columns: Column<InventoryLogRecord>[] = [
             size="sm"
             color="neutral"
             sx={{
+              minHeight: '15px',
               fontSize: '0.7rem',
               whiteSpace: 'nowrap',
               p: 0.5,
@@ -154,18 +157,7 @@ export const detail_columns: Column<InventoryLogRecord>[] = [
       />
     ),
   },
-  {
-    Header: 'Кол-во',
-    accessor: data => {
-      const sign = data.operation_type === OperationType.Supply ? '+' : '-'
-      return (
-        <Row flexWrap={'nowrap'} gap={0.3}>
-          <Label>{sign}</Label>{' '}
-          {value_with_unit(formatter.format(data.qty), data.unit)}
-        </Row>
-      )
-    },
-  },
+  balance_change_col,
   op_type_col,
   revert_col,
 ]
