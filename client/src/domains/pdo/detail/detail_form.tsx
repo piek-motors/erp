@@ -302,7 +302,7 @@ const WarehouseAccordion = observer(({ detail }: { detail: DetailSt }) => (
   >
     <Stack gap={1.5}>
       <DetailWarehouseButtons detail={detail} />
-      <Row>
+      <Row alignItems={'baseline'}>
         <Stack gap={0.5}>
           <Input
             size="sm"
@@ -318,7 +318,7 @@ const WarehouseAccordion = observer(({ detail }: { detail: DetailSt }) => (
             </P>
           )}
           <P level="body-xs" color="neutral">
-            Склад – ряд - секция - полка - ячейка
+            Склад (А/Б/В) – ряд – секция – ярус – место
           </P>
         </Stack>
         <NumberInput
