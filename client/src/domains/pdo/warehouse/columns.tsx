@@ -65,7 +65,7 @@ const revert_col = {
 }
 
 const op_type_col = {
-  Header: 'Тип операции',
+  Header: 'Основание',
   accessor: data => {
     const isSupply = Number(data.operation_type) === OperationType.Supply
     const op = isSupply

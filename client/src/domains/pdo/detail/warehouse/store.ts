@@ -45,7 +45,7 @@ export class DetailWarehouseStore {
     if (!this.qty) throw Error('Кол-во не задано')
 
     const { reason } = this.supply
-    if (reason == null) throw Error('Не задана причина')
+    if (reason == null) throw Error('Не задано основание поставки')
 
     const res = await rpc.pdo.details.supply.mutate({
       detailId,
@@ -60,7 +60,7 @@ export class DetailWarehouseStore {
     if (!this.qty) throw Error('Кол-во не задано')
 
     const { reason } = this.writeoff
-    if (reason == null) throw Error('Не задана причина')
+    if (reason == null) throw Error('Не задано основание списания')
 
     const stock = await rpc.pdo.details.writeoff.mutate({
       detailId,

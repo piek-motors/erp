@@ -22,7 +22,7 @@ export const WriteoffReasonSelect = observer((props: Props<WriteoffReason>) => {
   const effective = props.reason ?? props.reasons[0]
   return (
     <ReasonSelect
-      label={'Причина'}
+      label={'Основание'}
       options={props.reasons.map(r => ({
         label: uiWriteoffReason(r),
         value: r.toString(),
@@ -44,7 +44,7 @@ export const SupplyReasonSelect = observer((props: Props<SupplyReason>) => {
   const effective = props.reason ?? props.reasons[0]
   return (
     <ReasonSelect
-      label={'Причина'}
+      label={'Основание'}
       options={props.reasons.map(r => ({
         label: uiSupplyReason(r),
         value: r.toString(),

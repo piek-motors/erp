@@ -1,5 +1,5 @@
 import { makeAutoObservable } from 'mobx'
-import { SupplyReason } from 'shared'
+import type { SupplyReason } from 'shared'
 import { rpc } from '@/lib/rpc/rpc.client'
 
 export class MaterialSupplySt {
@@ -7,7 +7,7 @@ export class MaterialSupplySt {
   setLength(length: string) {
     this.length = length
   }
-  reason: SupplyReason = SupplyReason.Purchase
+  reason: SupplyReason | null = null
   setReason(reason: SupplyReason) {
     this.reason = reason
   }
@@ -23,7 +23,7 @@ export class MaterialSupplySt {
 
   async insertSupply(materialId?: number): Promise<number> {
     if (!materialId) throw Error('Материал не выбран')
-    if (this.reason == null) throw Error('Причина не указана')
+    if (this.reason == null) throw Error('Не указано основание')
 
     const length = this.length
     if (!length) throw Error('Длина не указана')

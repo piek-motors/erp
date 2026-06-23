@@ -1,4 +1,4 @@
-import { WriteoffReason } from 'shared'
+import type { WriteoffReason } from 'shared'
 import { makeAutoObservable, rpc } from '@/lib/deps'
 
 export class MaterialWriteoffSt {
@@ -6,7 +6,7 @@ export class MaterialWriteoffSt {
   setLength(length: string) {
     this.length = length
   }
-  reason: WriteoffReason = WriteoffReason.ProductionUse
+  reason: WriteoffReason | null = null
   setReason(reason: WriteoffReason) {
     this.reason = reason
   }
@@ -29,6 +29,7 @@ export class MaterialWriteoffSt {
     if (!materialId) {
       throw new Error('Material ID is not set')
     }
+    if (this.reason == null) throw Error('Не задано основание')
     const stock = await rpc.pdo.material.writeoff.mutate({
       material_id: materialId,
       lengthMeters: Number(this.length),
