@@ -58,12 +58,20 @@ export class DetailApi {
   }
 
   async insert(detail: DetailSt) {
+    if (!detail.validate_stock_location()) {
+      notifier.err('Неверный формат адреса склада')
+      return null
+    }
     const res = await rpc.pdo.details.create.mutate(detail.payload)
     await app_cache.details.invalidate()
     return res.id
   }
 
   async update(detail: DetailSt) {
+    if (!detail.validate_stock_location()) {
+      notifier.err('Неверный формат адреса склада')
+      return null
+    }
     try {
       await rpc.pdo.details.update.mutate(detail.payload)
       app_cache.details.update({

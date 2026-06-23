@@ -303,12 +303,24 @@ const WarehouseAccordion = observer(({ detail }: { detail: DetailSt }) => (
     <Stack gap={1.5}>
       <DetailWarehouseButtons detail={detail} />
       <Row>
-        <Input
-          size="sm"
-          label="Адрес"
-          value={detail.stock_location}
-          onChange={v => detail.set_stock_location(v)}
-        />
+        <Stack gap={0.5}>
+          <Input
+            size="sm"
+            label="Адрес"
+            placeholder="А-1-2-2-4"
+            value={detail.stock_location}
+            error={detail.show_stock_location_error}
+            onChange={v => detail.set_stock_location(v)}
+          />
+          {detail.show_stock_location_error && (
+            <P level="body-xs" color="danger">
+              Неверный формат адреса
+            </P>
+          )}
+          <P level="body-xs" color="neutral">
+            Склад – ряд - секция - полка - ячейка
+          </P>
+        </Stack>
         <NumberInput
           size="sm"
           label="Нормативный запас"

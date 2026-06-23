@@ -80,6 +80,7 @@ export type InputLabledProps = {
 
 export const InputLabled = (props: InputLabledProps) => (
   <FormControl
+    error={props.error}
     sx={{
       width: props.width || props.fullWidth ? '-webkit-fill-available' : 'auto',
       minWidth: props.minWidth,

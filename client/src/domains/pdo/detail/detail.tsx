@@ -33,7 +33,9 @@ export const CreateDetailPage = observer(() => {
       <ActionButton
         onClick={() =>
           api.insert(detail).then(id => {
-            navigate(openPage(routeMap.pdo.detail.edit, id))
+            if (id != null) {
+              navigate(openPage(routeMap.pdo.detail.edit, id))
+            }
           })
         }
       />
@@ -83,7 +85,7 @@ export const DetailPage = observer(() => {
   )
 })
 
-const Save = ({ detail }: DetailStProp) => {
+const Save = observer(({ detail }: DetailStProp) => {
   const navigate = useNavigate()
   return (
     <SaveAndDelete
@@ -97,7 +99,7 @@ const Save = ({ detail }: DetailStProp) => {
       handleSave={() => api.update(detail)}
     />
   )
-}
+})
 
 function Metadata(props: {
   updated_at: Date | null

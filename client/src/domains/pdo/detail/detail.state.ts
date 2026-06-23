@@ -92,8 +92,20 @@ export class DetailSt {
     this.drawing_number = drawingNumber
   }
   stock_location: string | null = null
+  show_stock_location_error = false
   set_stock_location(v: string) {
     this.stock_location = v
+    this.show_stock_location_error = false
+  }
+  get has_valid_stock_location() {
+    return (
+      !this.stock_location ||
+      /^А-[1-9]\d*-[1-9]\d*(?:-[1-9]\d*){0,2}$/.test(this.stock_location)
+    )
+  }
+  validate_stock_location() {
+    this.show_stock_location_error = !this.has_valid_stock_location
+    return this.has_valid_stock_location
   }
   updated_at: Date | null = null
   set_updated_at(date: Date | null) {
