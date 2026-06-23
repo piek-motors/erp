@@ -1,87 +1,38 @@
 import { Button, Stack, ToggleButtonGroup } from '@mui/joy'
 import { observer } from 'mobx-react-lite'
-import { useEffect } from 'react'
-import {
-  type SupplyReason,
-  uiSupplyReason,
-  uiWriteoffReason,
-  type WriteoffReason,
-} from 'shared'
+import type { SupplyReason, WriteoffReason } from 'shared'
 import { Label } from '@/lib/index'
 
-interface Props<T> {
+type Reason = SupplyReason | WriteoffReason
+
+export interface ReasonSelectProps<T extends Reason> {
   reasons: T[]
   reason: T | null
   setReason: (reason: T) => void
-}
-export const WriteoffReasonSelect = observer((props: Props<WriteoffReason>) => {
-  return (
-    <ReasonSelect
-      label={'Основание'}
-      options={props.reasons.map(r => ({
-        label: uiWriteoffReason(r),
-        value: r.toString(),
-      }))}
-      value={
-        props.reason
-          ? {
-              label: uiWriteoffReason(props.reason),
-              value: props.reason.toString(),
-            }
-          : null
-      }
-      onChange={newValue => props.setReason(Number(newValue))}
-    />
-  )
-})
-
-export const SupplyReasonSelect = observer((props: Props<SupplyReason>) => {
-  useEffect(() => {
-    if (props.reason == null) props.setReason(props.reasons[0])
-  }, [])
-
-  const effective = props.reason ?? props.reasons[0]
-  return (
-    <ReasonSelect
-      label={'Основание'}
-      options={props.reasons.map(r => ({
-        label: uiSupplyReason(r),
-        value: r.toString(),
-      }))}
-      value={{ label: uiSupplyReason(effective), value: effective.toString() }}
-      onChange={newValue => props.setReason(Number(newValue))}
-    />
-  )
-})
-
-interface ReasonOption {
-  label: string
-  value: string
+  getReasonLabel: (reason: T) => string
 }
 
-export interface ReasonSelectProps {
-  label: string
-  options: ReasonOption[]
-  value: ReasonOption | null
-  onChange: (value: string | null) => void
-}
-
-const ReasonSelect = observer((props: ReasonSelectProps) => (
-  <Stack py={0.5}>
-    <Label label={props.label} />
-    <ToggleButtonGroup
-      size="sm"
-      color="primary"
-      variant="soft"
-      value={props.value?.value}
-      onChange={(_, v) => props.onChange(v)}
-      sx={{ flexWrap: 'wrap', rowGap: 0.5 }}
-    >
-      {props.options.map(option => (
-        <Button key={option.value} value={option.value}>
-          {option.label}
-        </Button>
-      ))}
-    </ToggleButtonGroup>
-  </Stack>
-))
+export const ReasonSelect = observer(
+  <T extends Reason>(props: ReasonSelectProps<T>) => {
+    const { getReasonLabel, reason, reasons, setReason } = props
+    return (
+      <Stack py={0.5}>
+        <Label label={'Основание'} />
+        <ToggleButtonGroup
+          size="sm"
+          color="primary"
+          variant="soft"
+          value={reason?.toString()}
+          onChange={(_, value) => setReason(Number(value) as T)}
+          sx={{ flexWrap: 'wrap', rowGap: 0.5 }}
+        >
+          {reasons.map(reason => (
+            <Button key={reason} value={reason.toString()}>
+              {getReasonLabel(reason)}
+            </Button>
+          ))}
+        </ToggleButtonGroup>
+      </Stack>
+    )
+  },
+)

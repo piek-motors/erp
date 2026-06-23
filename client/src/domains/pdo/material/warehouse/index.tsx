@@ -1,12 +1,15 @@
 import { Box, Divider, Stack } from '@mui/joy'
-import { SupplyReason, uiUnit, WriteoffReason } from 'shared'
+import {
+  SupplyReason,
+  uiSupplyReason,
+  uiUnit,
+  uiWriteoffReason,
+  WriteoffReason,
+} from 'shared'
 import { QtyInputWithUnit } from '@/components/inputs'
 import { AdaptiveNumberFormatter } from '@/domains/pdo/shared/adaptive_number_formatter'
 import { value_with_unit } from '@/domains/pdo/shared/basic'
-import {
-  SupplyReasonSelect,
-  WriteoffReasonSelect,
-} from '@/domains/pdo/shared/reason-select'
+import { ReasonSelect } from '@/domains/pdo/shared/reason-select'
 import {
   SupplyCompletedText,
   WarehouseCard,
@@ -74,10 +77,11 @@ export const MaterialWarehouseCard = observer(({ m }: { m: MaterialSt }) => {
           lengthValue={m.warehouse.supply.length}
           lengthSetValue={value => m.warehouse.supply.setLength(value)}
           reasonComponent={
-            <SupplyReasonSelect
+            <ReasonSelect
               reasons={[SupplyReason.Purchase, SupplyReason.StockCorrection]}
               reason={m.warehouse.supply.reason}
               setReason={reason => m.warehouse.supply.setReason(reason)}
+              getReasonLabel={uiSupplyReason}
             />
           }
           submitDisabled={m.warehouse.supply.disabled()}
@@ -100,7 +104,7 @@ export const MaterialWarehouseCard = observer(({ m }: { m: MaterialSt }) => {
           lengthValue={m.warehouse.writeoff.length}
           lengthSetValue={value => m.warehouse.writeoff.setLength(value)}
           reasonComponent={
-            <WriteoffReasonSelect
+            <ReasonSelect
               reasons={[
                 WriteoffReason.ProductionUse,
                 WriteoffReason.StockCorrection,
@@ -108,6 +112,7 @@ export const MaterialWarehouseCard = observer(({ m }: { m: MaterialSt }) => {
               ]}
               reason={m.warehouse.writeoff.reason}
               setReason={reason => m.warehouse.writeoff.setReason(reason)}
+              getReasonLabel={uiWriteoffReason}
             />
           }
           submitDisabled={m.warehouse.writeoff.disabled()}

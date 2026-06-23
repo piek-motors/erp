@@ -1,12 +1,15 @@
 import { Stack } from '@mui/joy'
-import { SupplyReason, Unit, WriteoffReason } from 'shared'
+import {
+  SupplyReason,
+  Unit,
+  uiSupplyReason,
+  uiWriteoffReason,
+  WriteoffReason,
+} from 'shared'
 import { NumberInput } from '@/components/inputs/number_input'
 import { AdaptiveNumberFormatter } from '@/domains/pdo/shared/adaptive_number_formatter'
 import { value_with_unit } from '@/domains/pdo/shared/basic'
-import {
-  SupplyReasonSelect,
-  WriteoffReasonSelect,
-} from '@/domains/pdo/shared/reason-select'
+import { ReasonSelect } from '@/domains/pdo/shared/reason-select'
 import {
   SupplyCompletedText,
   WriteoffCompletedText,
@@ -26,6 +29,7 @@ const CreateWarehouseDetailOperation = observer(
   (props: {
     detail: DetailSt
     reasonComponent: React.ReactNode
+    submitDisabled: boolean
     onSubmit: () => Promise<unknown>
   }) => {
     const { detail } = props
@@ -51,7 +55,7 @@ const CreateWarehouseDetailOperation = observer(
         <Box pt={2}>
           <ActionButton
             onClick={() => props.onSubmit()}
-            disabled={!detail.warehouse.qty}
+            disabled={!detail.warehouse.qty || props.submitDisabled}
           />
         </Box>
       </>
@@ -66,7 +70,7 @@ const SupplyContent = observer(({ detail }: DetailStProp) => (
   <CreateWarehouseDetailOperation
     detail={detail}
     reasonComponent={
-      <SupplyReasonSelect
+      <ReasonSelect
         reasons={[
           SupplyReason.ProductionOutput,
           SupplyReason.Purchase,
@@ -74,8 +78,10 @@ const SupplyContent = observer(({ detail }: DetailStProp) => (
         ]}
         reason={detail.warehouse.supply.reason}
         setReason={reason => detail.warehouse.supply.setReason(reason)}
+        getReasonLabel={uiSupplyReason}
       />
     }
+    submitDisabled={detail.warehouse.supply.reason == null}
     onSubmit={() =>
       detail.warehouse
         .insertSupply(detail.id)
@@ -96,7 +102,7 @@ const WriteoffContent = observer(({ detail }: DetailStProp) => (
   <CreateWarehouseDetailOperation
     detail={detail}
     reasonComponent={
-      <WriteoffReasonSelect
+      <ReasonSelect
         reasons={[
           WriteoffReason.ProductionUse,
           WriteoffReason.StockCorrection,
@@ -105,8 +111,10 @@ const WriteoffContent = observer(({ detail }: DetailStProp) => (
         ]}
         reason={detail.warehouse.writeoff.reason}
         setReason={reason => detail.warehouse.writeoff.setReason(reason)}
+        getReasonLabel={uiWriteoffReason}
       />
     }
+    submitDisabled={detail.warehouse.writeoff.reason == null}
     onSubmit={() =>
       detail.warehouse
         .insertWriteoff(detail.id)
