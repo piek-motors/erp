@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react-lite'
 import { useEffect } from 'react'
-import { OperationSubject, OperationType } from 'shared'
+import { OperationSubject } from 'shared'
 import { ScrollableWindow } from '@/components/scrollable_window'
 import { Table } from '@/components/table.impl'
 import { MetalPageTitle } from '@/domains/pdo/shared/basic'
@@ -55,15 +55,6 @@ export const InventoryLog = observer((props: Props) => {
             sx={{ cursor: 'initial' }}
             columns={store.columns}
             data={store.operations}
-            rowStyleCb={op => {
-              const type = Number(op.original.operation_type)
-              if (type === OperationType.Supply) {
-                return {
-                  backgroundColor: '#c6e7c3b9',
-                }
-              }
-              return {}
-            }}
           />
         </>
       }

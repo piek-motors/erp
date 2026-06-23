@@ -1,13 +1,13 @@
 import { UilHistory } from '@iconscout/react-unicons'
-import { IconButton } from '@mui/joy'
+import { Chip, IconButton } from '@mui/joy'
 import type { Column } from 'react-table'
 import {
   OperationType,
-  type SupplyReason,
+  SupplyReason,
   time,
   uiSupplyReason,
   uiWriteoffReason,
-  type WriteoffReason,
+  WriteoffReason,
 } from 'shared'
 import { Day } from '@/lib/constants'
 import {
@@ -29,6 +29,40 @@ import { inventory_log_vm } from './inventory_log_vm'
 
 const formatter = new AdaptiveNumberFormatter(2)
 const ShowRevertButtonWithinDays = 7
+
+const reason_chip_colors: Record<
+  string,
+  { backgroundColor: string; color: string }
+> = {
+  [`${OperationType.Supply}:${SupplyReason.Purchase}`]: {
+    backgroundColor: '#d8f3dc',
+    color: '#155d27',
+  },
+  [`${OperationType.Supply}:${SupplyReason.ProductionOutput}`]: {
+    backgroundColor: '#dbeafe',
+    color: '#1e40af',
+  },
+  [`${OperationType.Supply}:${SupplyReason.StockCorrection}`]: {
+    backgroundColor: '#ede9fe',
+    color: '#5b21b6',
+  },
+  [`${OperationType.Writeoff}:${WriteoffReason.ProductionUse}`]: {
+    backgroundColor: '#ffedd5',
+    color: '#9a3412',
+  },
+  [`${OperationType.Writeoff}:${WriteoffReason.DefectLoss}`]: {
+    backgroundColor: '#fee2e2',
+    color: '#b91c1c',
+  },
+  [`${OperationType.Writeoff}:${WriteoffReason.StockCorrection}`]: {
+    backgroundColor: '#cffafe',
+    color: '#155e75',
+  },
+  [`${OperationType.Writeoff}:${WriteoffReason.Sale}`]: {
+    backgroundColor: '#fce7f3',
+    color: '#9d174d',
+  },
+}
 
 const date_col = {
   Header: 'Дата',
@@ -71,17 +105,35 @@ const op_type_col = {
     const op = isSupply
       ? uiSupplyReason(data?.reason as SupplyReason)
       : uiWriteoffReason(data?.reason as WriteoffReason)
-    return <Label xs>{op}</Label>
+    const reason_color =
+      reason_chip_colors[
+        `${isSupply ? OperationType.Supply : OperationType.Writeoff}:${data.reason}`
+      ]
+    return (
+      <Chip size="sm" variant="soft" color="neutral" sx={reason_color}>
+        {op}
+      </Chip>
+    )
   },
 }
 
 const balance_change_col = {
   Header: 'Изм. остатка',
   accessor: data => {
-    const sign = data.operation_type === OperationType.Supply ? '+' : '-'
+    const is_supply = data.operation_type === OperationType.Supply
+    const sign = is_supply ? '+' : '-'
     return (
-      <Row flexWrap={'nowrap'} gap={0.3}>
-        <Label>{sign}</Label>{' '}
+      <Row
+        flexWrap={'nowrap'}
+        gap={0.3}
+        sx={{
+          background: is_supply ? '#c4dcc289' : '#e9b4b179',
+          borderRadius: 20,
+          width: 'fit-content',
+          px: 0.8,
+        }}
+      >
+        <Label sx={{ fontWeight: 300 }}>{sign}</Label>
         {value_with_unit(formatter.format(data.qty), data.unit)}
       </Row>
     )
