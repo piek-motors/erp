@@ -1,6 +1,7 @@
 import type { Column } from 'react-table'
 import { AdaptiveNumberFormatter } from '@/domains/pdo/shared/adaptive_number_formatter'
 import { Indicator, value_with_unit } from '@/domains/pdo/shared/basic'
+import { StockDelta } from '@/domains/pdo/shared/stock_delta'
 import { Label, Row } from '@/lib/index'
 import type { AppMaterial } from '../../cache/material_cache'
 import { MaterialName } from '../name'
@@ -34,5 +35,16 @@ export const columns: Column<AppMaterial>[] = [
       m.safe_stock_leftover == null
         ? null
         : value_with_unit(formatter.format(m.safe_stock_leftover), m.unit),
+  },
+  {
+    Header: 'Дефицит',
+    accessor: m => (
+      <StockDelta
+        stock={m.on_hand_balance}
+        safeStockLeftover={m.safe_stock_leftover}
+        unit={m.unit}
+        formatValue={value => formatter.format(value)}
+      />
+    ),
   },
 ]
