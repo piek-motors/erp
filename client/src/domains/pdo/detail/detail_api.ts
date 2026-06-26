@@ -3,6 +3,7 @@ import { Attachment } from '@/components/attachments/store'
 import { rpc } from '@/lib/rpc/rpc.client'
 import { LoadingController } from '@/lib/store/loading_controller'
 import { notifier } from '@/lib/store/notifier.store'
+import { to_date_or_null } from '@/lib/utils/date_fmt'
 import { normalize } from '@/lib/utils/search'
 import { app_cache } from '../cache'
 import { DetailSt, LastProduction } from './detail.state'
@@ -28,6 +29,12 @@ export class DetailApi {
             res.last_manufacturing.qty,
           )
         }
+        detail.current_manufacturing = res.current_manufacturing
+          ? {
+              ...res.current_manufacturing,
+              started_at: to_date_or_null(res.current_manufacturing.started_at),
+            }
+          : null
 
         detail.attachments.setFiles(
           res.attachments.map(

@@ -16,6 +16,14 @@ export type BlankSpec = {
 
 export type DetailStProp = { detail: DetailSt }
 
+export function calculate_detail_deficit(
+  safe_stock_leftover: number | null,
+  stock: number,
+): number | null {
+  if (safe_stock_leftover == null) return null
+  return safe_stock_leftover - stock
+}
+
 export class LastProduction {
   constructor(
     readonly date: Date,
@@ -113,6 +121,11 @@ export class DetailSt {
   }
 
   last_production: LastProduction | null = null
+  current_manufacturing: {
+    id: number
+    qty: number
+    started_at: Date | null
+  } | null = null
 
   recommended_batch_size: number | null = null
   set_recommended_batch_size(size: number | null) {
@@ -122,6 +135,12 @@ export class DetailSt {
   safe_stock_leftover: number | null = null
   set_safe_stock_leftover(v: number | null) {
     this.safe_stock_leftover = v
+  }
+  get deficit(): number | null {
+    return calculate_detail_deficit(
+      this.safe_stock_leftover,
+      this.warehouse.stock,
+    )
   }
 
   constructor() {

@@ -1,7 +1,13 @@
 import { Stack } from '@mui/joy'
-import { MetalPageTitle, SaveAndDelete } from '@/domains/pdo/shared/basic'
+import { fmt } from 'shared'
+import {
+  Indicator,
+  MetalPageTitle,
+  SaveAndDelete,
+} from '@/domains/pdo/shared/basic'
 import {
   ActionButton,
+  Link,
   Loading,
   observer,
   openPage,
@@ -22,6 +28,7 @@ import {
 } from './detail.state'
 import { api } from './detail_api'
 import { DetailForm } from './detail_form'
+import { DetailDeficitIndicator } from './detail_stock_delta'
 
 export const CreateDetailPage = observer(() => {
   const [detail] = useState(() => new DetailSt())
@@ -76,7 +83,17 @@ export const DetailPage = observer(() => {
       </MetalPageTitle>
 
       <Row flexWrap={'wrap'} gap={1} py={0.5}></Row>
-      <DetailForm detail={detail} />
+      <DetailForm
+        detail={detail}
+        afterName={
+          <Stack>
+            <DetailDeficitIndicator deficit={detail.deficit} />
+            {detail.current_manufacturing && (
+              <DetailProductionIndicator order={detail.current_manufacturing} />
+            )}
+          </Stack>
+        }
+      />
       <Metadata
         updated_at={detail.updated_at}
         last_production={detail.last_production}
@@ -84,6 +101,35 @@ export const DetailPage = observer(() => {
     </Stack>
   )
 })
+
+const DetailProductionIndicator = ({
+  order,
+}: {
+  order: {
+    id: number
+    qty: number
+    started_at: Date | null
+  }
+}) => {
+  const daysInProduction = order.started_at
+    ? fmt.day_count(
+        (Date.now() - order.started_at.getTime()) / (1000 * 60 * 60 * 24),
+      )
+    : null
+
+  return (
+    <Row gap={0.75} flexWrap="nowrap">
+      <Indicator title="В производстве" color="orange" />
+      <P level="body-xs">
+        В производстве {order.qty} шт. —{' '}
+        <Link to={openPage(routeMap.pdo.order.edit, order.id)}>
+          заказ № {order.id}
+        </Link>
+        {daysInProduction && `, уже ${daysInProduction}`}
+      </P>
+    </Row>
+  )
+}
 
 const Save = observer(({ detail }: DetailStProp) => {
   const navigate = useNavigate()

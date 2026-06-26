@@ -19,9 +19,13 @@ import {
   useNavigate,
 } from '@/lib/index'
 import type { AppDetail } from '../../cache/detail_cache'
-import { type DetailSt, GroupAssigment } from '../detail.state'
+import {
+  calculate_detail_deficit,
+  type DetailSt,
+  GroupAssigment,
+} from '../detail.state'
 import { DetailName } from '../detail_name'
-import { DetailStockDelta } from '../detail_stock_delta'
+import { DetailDeficitIndicator } from '../detail_stock_delta'
 import { AlphabetIndex } from './alphabet_index'
 import { detail_list_vm as state } from './detail_list_vm'
 import { SearchCriteria } from './search_config'
@@ -91,7 +95,14 @@ const columnList: Column<AppDetail>[] = [
   },
   {
     Header: 'Дефицит',
-    accessor: r => <DetailStockDelta detail={r} />,
+    accessor: r => (
+      <DetailDeficitIndicator
+        deficit={calculate_detail_deficit(
+          r.safe_stock_leftover,
+          r.on_hand_balance,
+        )}
+      />
+    ),
   },
 ]
 

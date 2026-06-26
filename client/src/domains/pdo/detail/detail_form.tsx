@@ -16,6 +16,7 @@ import {
   type TypographySystem,
 } from '@mui/joy'
 import { Observer, observer } from 'mobx-react-lite'
+import type { ReactNode } from 'react'
 import { AccordionCard } from '@/components/accordion_card'
 import { ArrayJsonEditor } from '@/components/array-json-editor'
 import { NumberInput } from '@/components/inputs/number_input'
@@ -44,15 +45,18 @@ import {
 import { DetailWarehouseButtons } from './warehouse/ui'
 import { WorkflowAccordion } from './workflow'
 
-export const DetailForm = observer(({ detail }: DetailStProp) => (
-  <Stack gap={0.5} p={1} pt={0}>
-    <Row>
-      <DetailNameInput detail={detail} />
-      <DetailGroupInput detail={detail} />
-    </Row>
-    <DetailAccordionGroup d={detail} />
-  </Stack>
-))
+export const DetailForm = observer(
+  ({ detail, afterName }: DetailStProp & { afterName?: ReactNode }) => (
+    <Stack gap={0.5} p={1} pt={0}>
+      <Row>
+        <DetailNameInput detail={detail} />
+        <DetailGroupInput detail={detail} />
+      </Row>
+      {afterName}
+      <DetailAccordionGroup d={detail} />
+    </Stack>
+  ),
+)
 
 const DetailNameInput = observer(({ detail }: DetailStProp) => (
   <Stack

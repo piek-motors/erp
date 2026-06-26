@@ -1,5 +1,5 @@
 import { sql } from 'kysely'
-import { Unit } from 'shared'
+import { ProductionOrderStatus, Unit } from 'shared'
 import { z } from 'zod'
 import { BlankSchema, type DB, DetailWorkFlowSchema } from '#root/db/index.js'
 import { type IDB, RpcError } from '#root/sdk.js'
@@ -24,6 +24,11 @@ export interface DetailWithGroups {
   group_ids: number[]
   attachments: DetailAttachment[]
   last_manufacturing: { date: Date; qty: number } | null
+  current_manufacturing: {
+    id: number
+    qty: number
+    started_at: Date | null
+  } | null
 }
 
 export interface ListDetailsOutput {
@@ -58,13 +63,19 @@ export class DetailRepo {
    * Get detail by ID with all related data (groups, attachments, last manufacturing)
    */
   async get_detail_full(id: number): Promise<DetailWithGroups> {
-    const [detail, attachments, lastManufacturing, groupDetails] =
-      await Promise.all([
-        this.get_by_id(id),
-        this.get_attachments(id),
-        this.get_last_manufacturing(id),
-        this.get_group_ids(id),
-      ])
+    const [
+      detail,
+      attachments,
+      lastManufacturing,
+      currentManufacturing,
+      groupDetails,
+    ] = await Promise.all([
+      this.get_by_id(id),
+      this.get_attachments(id),
+      this.get_last_manufacturing(id),
+      this.get_current_manufacturing(id),
+      this.get_group_ids(id),
+    ])
     if (!detail) {
       throw RpcError('NOT_FOUND', `Detail with id=${id} not found`)
     }
@@ -72,6 +83,7 @@ export class DetailRepo {
       detail,
       attachments,
       last_manufacturing: lastManufacturing,
+      current_manufacturing: currentManufacturing,
       group_ids: groupDetails.map(d => d.group_id),
     }
   }
@@ -352,6 +364,20 @@ export class DetailRepo {
           qty: lastManufacturing.qty,
         }
       : null
+  }
+
+  async get_current_manufacturing(
+    detail_id: number,
+  ): Promise<{ id: number; qty: number; started_at: Date | null } | null> {
+    const order = await this.db
+      .selectFrom('pdo.orders')
+      .select(['id', 'qty', 'started_at'])
+      .where('detail_id', '=', detail_id)
+      .where('status', '=', ProductionOrderStatus.Production)
+      .orderBy('started_at', 'desc')
+      .executeTakeFirst()
+
+    return order ?? null
   }
 
   /**

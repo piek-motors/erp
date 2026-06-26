@@ -3,6 +3,14 @@ import moment from 'moment'
 import 'moment/locale/ru'
 moment.locale('ru')
 
+export function to_date_or_null(
+  value?: Date | string | number | null,
+): Date | null {
+  if (value == null) return null
+  const date = new Date(value)
+  return Number.isNaN(date.getTime()) ? null : date
+}
+
 export function time_delta_days(t?: string | null | number) {
   if (!t) return null
 
