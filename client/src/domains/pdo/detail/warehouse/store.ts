@@ -1,6 +1,7 @@
 import { makeAutoObservable } from 'mobx'
 import type { SupplyReason, WriteoffReason } from 'shared'
 import { rpc } from '@/lib/rpc/rpc.client'
+import { app_cache } from '../../cache'
 
 class Supply {
   constructor() {
@@ -47,15 +48,15 @@ export class DetailWarehouseStore {
     const { reason } = this.supply
     if (reason == null) throw Error('Не задано основание поставки')
 
-    const res = await rpc.pdo.details.supply.mutate({
+    const { stock } = await rpc.pdo.details.supply.mutate({
       detailId,
       qty: this.qty,
       reason,
     })
-    this.clear()
-    this.setStock(res.stock)
-    return res.stock
+    this.update_stock(detailId, stock)
+    return stock
   }
+
   async insertWriteoff(detailId: number) {
     if (!this.qty) throw Error('Кол-во не задано')
 
@@ -67,8 +68,13 @@ export class DetailWarehouseStore {
       qty: this.qty,
       reason,
     })
+    this.update_stock(detailId, stock)
+    return stock
+  }
+
+  private update_stock(detailId: number, stock: number) {
     this.clear()
     this.setStock(stock)
-    return stock
+    app_cache.details.update_on_hande_balance(detailId, stock)
   }
 }

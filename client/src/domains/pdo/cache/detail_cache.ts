@@ -59,6 +59,13 @@ export class DetailCache {
     this._detailsMap.set(detail.id, detail)
   }
 
+  update_on_hande_balance(detail_id: number, on_hande_balance: number) {
+    const detail = this.get(detail_id)
+    if (detail) {
+      detail.on_hand_balance = on_hande_balance
+    }
+  }
+
   count() {
     return this._detailsMap.size
   }
