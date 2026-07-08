@@ -19,13 +19,9 @@ import {
   useNavigate,
 } from '@/lib/index'
 import type { AppDetail } from '../../cache/detail_cache'
-import {
-  calculate_detail_deficit,
-  type DetailSt,
-  GroupAssigment,
-} from '../detail.state'
+import { type DetailSt, GroupAssigment } from '../detail.state'
 import { DetailName } from '../detail_name'
-import { DetailDeficitIndicator } from '../detail_stock_delta'
+import { DetailStockDelta } from '../detail_stock_delta'
 import { AlphabetIndex } from './alphabet_index'
 import { detail_list_vm as state } from './detail_list_vm'
 import { SearchCriteria } from './search_config'
@@ -84,25 +80,15 @@ const columnList: Column<AppDetail>[] = [
   },
   {
     Header: 'Остаток',
-    accessor: r => {
-      if (!r.on_hand_balance) return ''
-      return r.on_hand_balance
-    },
+    accessor: r => r.on_hand_balance || '',
   },
   {
     Header: 'Норм. запас',
-    accessor: r => r.safe_stock_leftover ?? '',
+    accessor: r => r.safe_stock_leftover || '',
   },
   {
     Header: 'Дефицит',
-    accessor: r => (
-      <DetailDeficitIndicator
-        deficit={calculate_detail_deficit(
-          r.safe_stock_leftover,
-          r.on_hand_balance,
-        )}
-      />
-    ),
+    accessor: r => <DetailStockDelta detail={r} />,
   },
 ]
 
@@ -111,7 +97,6 @@ interface DetailsTableProps {
   highlight?: (row: AppDetail) => boolean
   highlightColor?: string
   sx?: SxProps
-  excludeDetailById?: number
 }
 
 const DetailList = observer((props: DetailsTableProps) => {
@@ -120,9 +105,7 @@ const DetailList = observer((props: DetailsTableProps) => {
     <Table
       sx={props.sx}
       columns={columnList}
-      data={state.displayed_results.filter(
-        e => e.id != props.excludeDetailById,
-      )}
+      data={state.displayed_results}
       rowStyleCb={row => {
         if (props.highlight) {
           return props.highlight(row.original)
@@ -158,7 +141,6 @@ export const DetailSelectModal = observer((props: DetailSelectModalProps) => (
         <Box p={1} mb={3}>
           <Search />
           <DetailsList
-            excludeDetailById={props.excludeDetailById}
             onRowClick={v => {
               props.onRowClick(v)
               props.setOpen(false)

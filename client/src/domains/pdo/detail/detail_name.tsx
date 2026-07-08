@@ -36,7 +36,13 @@ export const DetailName = observer(
     slot_props,
   }: Props) => {
     const name = (
-      <P sx={slot_props?.name} lineHeight={1.2}>
+      <P
+        sx={{
+          ...slot_props?.name,
+          minWidth: '200px',
+        }}
+        lineHeight={1.2}
+      >
         {fmt.capitalize(detail.name)}
       </P>
     )
