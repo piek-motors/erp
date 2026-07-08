@@ -38,6 +38,7 @@ export interface ListDetailsOutput {
   group_ids: number[]
   on_hand_balance: number
   safe_stock_leftover: number | null
+  stock_location: string | null
 }
 
 const DetailSchema = z.object({
@@ -129,6 +130,7 @@ export class DetailRepo {
           'd.drawing_number',
           'd.on_hand_balance',
           'd.safe_stock_leftover',
+          'd.stock_location',
         ])
         .orderBy('d.id', 'desc')
         .execute(),

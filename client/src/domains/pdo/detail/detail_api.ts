@@ -90,6 +90,7 @@ export class DetailApi {
         on_hand_balance: detail.warehouse.stock,
         safe_stock_leftover: detail.safe_stock_leftover,
         group_assigment: detail.group_assigment,
+        stock_location: detail.stock_location,
       })
       detail.set_updated_at(new Date())
       notifier.ok(`Деталь обновлена`)

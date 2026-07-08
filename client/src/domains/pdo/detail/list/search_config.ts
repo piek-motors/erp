@@ -6,6 +6,7 @@ export enum SearchCriteria {
   Id = '№',
   Name = 'Наим.',
   DrawingNumber = 'Чертеж',
+  Address = 'Адрес',
 }
 
 export const search_config: CriteriaBasedSearchConfig<
@@ -35,6 +36,14 @@ export const search_config: CriteriaBasedSearchConfig<
       {
         get: d => d.drawing_number ?? '',
         match: 'includes',
+      },
+    ],
+  },
+  [SearchCriteria.Address]: {
+    fields: [
+      {
+        get: d => d.stock_location ?? '',
+        match: 'start_with',
       },
     ],
   },
