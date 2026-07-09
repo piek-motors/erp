@@ -12,6 +12,7 @@ import {
   UseIcon,
   useEffect,
   useParams,
+  Label,
 } from '@/lib/index'
 import { openPage, routeMap } from '@/lib/routes'
 import { app_cache } from '../cache'
@@ -28,6 +29,10 @@ import {
 } from './group_name.modal'
 
 const detailColumns: Column<DetailSt>[] = [
+  {
+    Header: '№',
+    accessor: d => <Label xs>{d.id}</Label>,
+  },
   {
     Header: 'Название',
     id: 'name',

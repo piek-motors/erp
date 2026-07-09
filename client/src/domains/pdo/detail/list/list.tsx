@@ -69,7 +69,7 @@ const columnList: Column<AppDetail>[] = [
     accessor: r => (
       <DetailName
         detail={{
-          id: r.id || 0,
+          id: r.id,
           name: r.name,
           group_assigment: new GroupAssigment(r.group_ids),
         }}
