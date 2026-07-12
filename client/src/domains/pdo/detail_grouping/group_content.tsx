@@ -1,7 +1,9 @@
 import { UilFolder } from '@iconscout/react-unicons'
 import { Box, Stack } from '@mui/joy'
+import { palette } from '@mui/system'
 import type { Column } from 'react-table'
 import { ScrollableWindow } from '@/components/inputs'
+import { NumberInput } from '@/components/inputs/number_input'
 import { Table } from '@/components/table.impl'
 import {
   Label,
@@ -16,6 +18,7 @@ import {
   useState,
 } from '@/lib/index'
 import { openPage, routeMap } from '@/lib/routes'
+import theme from '@/lib/theme'
 import { app_cache } from '../cache'
 import type { DetailSt } from '../detail/detail.state'
 import { DetailName } from '../detail/detail_name'
@@ -29,7 +32,6 @@ import {
   CreateGroupButton,
   CreateSubgroupModal,
 } from './group_name.modal'
-import { NumberInput } from '@/components/inputs/number_input'
 
 const detailColumns: Column<DetailSt>[] = [
   {
@@ -142,9 +144,11 @@ const GroupContent = observer(() => {
       />
       <Box sx={{ flex: 1, py: 1, overflow: 'auto', width: '100%' }}>
         {/* child group links */}
-        {app_cache.groups.tree.node(group.id)?.children.map(child => (
-          <GroupLink key={child.id} group={child} />
-        ))}
+        <Stack>
+          {app_cache.groups.tree.node(group.id)?.children.map(child => (
+            <GroupLink key={child.id} group={child} />
+          ))}
+        </Stack>
 
         {/* Show details of current group */}
         {group_content.details.length === 0 && (
@@ -193,17 +197,27 @@ const ChangeNameModal = observer(() => {
 })
 
 const GroupLink = observer(({ group }: GroupSectionProps) => (
-  <Row gap={0.5} sx={{ '&:hover .subgroup-button': { opacity: 1 } }}>
+  <Row
+    sx={theme => ({
+      width: 'fit-content',
+      px: 1,
+      py: 0.3,
+      borderRadius: 3,
+      '&:hover': { background: theme.vars.palette.primary[100] },
+    })}
+  >
     <Link to={openPage(routeMap.pdo.detailGroup, group.id)}>
       <Row
-        gap={0.5}
+        gap={1}
         sx={{
           cursor: 'pointer',
           '&:hover': { textDecoration: 'underline' },
         }}
       >
-        <UseIcon icon={UilFolder} small />
-        <P>{group.name}</P>
+        <UseIcon icon={UilFolder} />
+        <P level="body-lg" fontWeight={600}>
+          {group.name}
+        </P>
       </Row>
     </Link>
   </Row>
