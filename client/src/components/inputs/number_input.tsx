@@ -20,7 +20,7 @@ export function NumberInput(
   const [error, setError] = useState<boolean>(false)
   return (
     <InputWithUnit
-      sx={{ width: props.width ? `${props.width}px` : '100px' }}
+      sx={{ width: props.width ? `${props.width}px` : '100px', ...props.sx }}
       {...props}
       type="number"
       size={props.size ?? 'sm'}

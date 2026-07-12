@@ -1,5 +1,7 @@
-import { makeAutoObservable } from 'mobx'
+import { makeAutoObservable, toJS } from 'mobx'
+import { normalize, token_search } from '@/lib/utils/search'
 import type { DetailSt } from '../detail/detail.state'
+import { SearchCriteria, search_config } from '../detail/list/search_config'
 
 class EditGroupVM {
   constructor() {
@@ -53,12 +55,53 @@ export interface GroupWithDetails {
   details: DetailSt[]
 }
 
+class QuantityListItem {
+  constructor(
+    public id: number,
+    public qty: number,
+  ) {
+    makeAutoObservable(this)
+  }
+
+  set_qty(n: number) {
+    this.qty = n
+  }
+}
+
+class QuantityList {
+  items: QuantityListItem[] = []
+
+  set(id: number, qty: number) {
+    const item = this.get(id)
+    if (item) {
+      item.set_qty(qty)
+      return
+    }
+
+    this.items.push(new QuantityListItem(id, qty))
+  }
+
+  get(id: number): QuantityListItem | undefined {
+    return this.items.find(e => e.id === id)
+  }
+
+  clear() {
+    this.items = []
+  }
+
+  constructor() {
+    makeAutoObservable(this)
+  }
+}
+
 export class GroupContentVM {
+  qty_list: QuantityList = new QuantityList()
   // currently opened group
   group: Group | null = null
 
   details: DetailSt[] = []
   query: string = ''
+  search_criteria = SearchCriteria.Name
 
   constructor() {
     makeAutoObservable(this)
@@ -68,29 +111,25 @@ export class GroupContentVM {
     this.query = q
   }
 
+  set_search_criteria(c: SearchCriteria) {
+    this.search_criteria = c
+  }
+
   get_filtered_and_sorted(): DetailSt[] {
     return this.sort_details(this.filter_details_by_query())
   }
 
-  private get_query_tokens(): string[] {
-    return this.query?.toLowerCase().split(/\s+/).filter(Boolean) ?? []
-  }
-
   private filter_details_by_query(): DetailSt[] {
-    const tokens = this.get_query_tokens()
-
-    if (tokens.length === 0) {
+    if (!this.query) {
       return this.details
     }
 
-    return this.details.filter(detail =>
-      this.matches_all_tokens(detail.name, tokens),
+    const n_query = normalize(this.query)
+    return token_search(
+      this.details,
+      n_query,
+      search_config[this.search_criteria],
     )
-  }
-
-  private matches_all_tokens(text: string, tokens: string[]): boolean {
-    const value = text.toLowerCase()
-    return tokens.every(token => value.includes(token))
   }
 
   private sort_details(details: DetailSt[]): DetailSt[] {
@@ -104,6 +143,7 @@ export class GroupContentVM {
 
   reset() {
     this.query = ''
+    this.search_criteria = SearchCriteria.Name
     this.details = []
     this.group = null
   }

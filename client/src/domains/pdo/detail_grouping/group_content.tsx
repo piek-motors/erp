@@ -1,9 +1,10 @@
 import { UilFolder } from '@iconscout/react-unicons'
 import { Box, Stack } from '@mui/joy'
 import type { Column } from 'react-table'
-import { ScrollableWindow, Search } from '@/components/inputs'
+import { ScrollableWindow } from '@/components/inputs'
 import { Table } from '@/components/table.impl'
 import {
+  Label,
   Link,
   Loading,
   observer,
@@ -12,13 +13,14 @@ import {
   UseIcon,
   useEffect,
   useParams,
-  Label,
+  useState,
 } from '@/lib/index'
 import { openPage, routeMap } from '@/lib/routes'
 import { app_cache } from '../cache'
 import type { DetailSt } from '../detail/detail.state'
 import { DetailName } from '../detail/detail_name'
 import { DetailStockDelta } from '../detail/detail_stock_delta'
+import { DetailSearch } from '../detail/list/detail_search'
 import { api } from './api'
 import type { GroupTreeNode } from './group.store'
 import { store } from './group.store'
@@ -27,6 +29,7 @@ import {
   CreateGroupButton,
   CreateSubgroupModal,
 } from './group_name.modal'
+import { NumberInput } from '@/components/inputs/number_input'
 
 const detailColumns: Column<DetailSt>[] = [
   {
@@ -38,12 +41,17 @@ const detailColumns: Column<DetailSt>[] = [
     id: 'name',
     accessor: detail => (
       <DetailName
+        disable_link_tab_focus
         slot_props={{
           name: { whiteSpace: 'wrap', width: 'auto', lineHeight: '1.2' },
         }}
         detail={detail}
       />
     ),
+  },
+  {
+    Header: 'Требование, шт.',
+    accessor: detail => <GroupQtyInput detail={detail} />,
   },
   {
     Header: 'Остаток',
@@ -58,6 +66,27 @@ const detailColumns: Column<DetailSt>[] = [
     accessor: detail => <DetailStockDelta detail={detail} />,
   },
 ]
+
+const GroupQtyInput = observer(({ detail }: { detail: DetailSt }) => {
+  const [focused, setFocused] = useState(false)
+
+  return (
+    <NumberInput
+      sx={{ fontWeight: 600, width: '60px' }}
+      variant={focused ? 'soft' : 'plain'}
+      color="danger"
+      onFocus={e => {
+        setFocused(true)
+        e.target.select()
+      }}
+      onBlur={() => setFocused(false)}
+      onChange={e => {
+        store.group_content.qty_list.set(detail.id, e ?? 0)
+      }}
+      value={store.group_content.qty_list.get(detail.id)?.qty ?? null}
+    />
+  )
+})
 
 interface GroupSectionProps {
   group: GroupTreeNode
@@ -105,9 +134,11 @@ const GroupContent = observer(() => {
           onClick={() => store.create_subgroup_modal.open(group.id)}
         />
       </Row>
-      <Search
-        value={group_content.query}
-        onChange={e => group_content.set_query(e.target.value)}
+      <DetailSearch
+        criteria={group_content.search_criteria}
+        onCriteriaChange={c => group_content.set_search_criteria(c)}
+        query={group_content.query}
+        onQueryChange={v => group_content.set_query(v)}
       />
       <Box sx={{ flex: 1, py: 1, overflow: 'auto', width: '100%' }}>
         {/* child group links */}

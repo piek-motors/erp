@@ -21,6 +21,7 @@ export interface DetailInTheGroup {
   group_ids: number[]
   on_hand_balance: number
   safe_stock_leftover: number | null
+  stock_location: string | null
 }
 
 const CreateGroupSchema = z.object({
@@ -55,14 +56,8 @@ export class DetailGroupRepo {
       this.db
         .selectFrom('pdo.detail_group_details as dgd')
         .where('dgd.group_id', '=', groupId)
-        .leftJoin('pdo.details as d', 'd.id', 'dgd.detail_id')
-        .select([
-          'd.id',
-          'd.name',
-          'd.drawing_number',
-          'd.on_hand_balance',
-          'd.safe_stock_leftover',
-        ])
+        .innerJoin('pdo.details as d', 'd.id', 'dgd.detail_id')
+        .selectAll()
         .orderBy('d.name', 'asc')
         .execute(),
     ])
@@ -73,12 +68,13 @@ export class DetailGroupRepo {
 
     const detail_group_associations = await this.detail_group_associations()
     const detailsData: DetailInTheGroup[] = detailsInGroup.map(d => ({
-      id: d.id as number,
-      name: d.name as string,
-      drawing_number: d.drawing_number as string | null,
-      on_hand_balance: (d.on_hand_balance as number) ?? 0,
-      safe_stock_leftover: (d.safe_stock_leftover as number | null) ?? null,
-      group_ids: detail_group_associations.get(d.id as number) || [],
+      id: d.id,
+      name: d.name,
+      drawing_number: d.drawing_number,
+      on_hand_balance: d.on_hand_balance ?? 0,
+      safe_stock_leftover: d.safe_stock_leftover ?? null,
+      group_ids: detail_group_associations.get(d.id) || [],
+      stock_location: d.stock_location,
     }))
 
     return {

@@ -1,6 +1,17 @@
 import type { CriteriaBasedSearchConfig } from '@/lib/utils/search'
+import { normalize } from '@/lib/utils/search'
 import { app_cache } from '../../cache'
-import type { AppDetail } from '../../cache/detail_cache'
+import type { GroupAssigment } from '../detail.state'
+
+export interface DetailSearchEntity {
+  id: number
+  name: string
+  normalized_name?: string
+  drawing_number?: string | null
+  stock_location?: string | null
+  group_ids?: number[]
+  group_assigment?: GroupAssigment
+}
 
 export enum SearchCriteria {
   Id = '№',
@@ -10,16 +21,19 @@ export enum SearchCriteria {
 }
 
 export const search_config: CriteriaBasedSearchConfig<
-  AppDetail,
+  DetailSearchEntity,
   SearchCriteria
 > = {
   [SearchCriteria.Name]: {
     fields: [
       {
-        get: d => d.normalized_name,
+        get: d => d.normalized_name ?? normalize(d.name),
       },
       {
-        get: d => app_cache.groups.tree.full_node_names(d.group_ids).join(' '),
+        get: d =>
+          app_cache.groups.tree
+            .full_node_names(d.group_ids ?? d.group_assigment?.group_ids ?? [])
+            .join(' '),
       },
     ],
   },

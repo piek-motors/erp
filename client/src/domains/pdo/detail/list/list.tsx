@@ -2,7 +2,6 @@ import { Divider } from '@mui/joy'
 import type { SxProps } from '@mui/joy/styles/types'
 import type { Column } from 'react-table'
 import { ScrollableWindow } from '@/components/inputs'
-import { SearchWithCriteria } from '@/components/inputs/search_input_with_criteria'
 import { InModal } from '@/components/modal'
 import { SearchResults } from '@/components/search-paginated'
 import { Table } from '@/components/table.impl'
@@ -24,7 +23,7 @@ import { DetailName } from '../detail_name'
 import { DetailStockDelta } from '../detail_stock_delta'
 import { AlphabetIndex } from './alphabet_index'
 import { detail_list_vm as state } from './detail_list_vm'
-import { SearchCriteria } from './search_config'
+import { DetailSearch } from './detail_search'
 
 export const DetailsListPage = () => (
   <ScrollableWindow
@@ -32,7 +31,7 @@ export const DetailsListPage = () => (
       <MobilePadding desktop_too>
         <Stack gap={0.5}>
           <MobileNavModal t={'Детали'} />
-          <Search />
+          <DetailSearch />
         </Stack>
       </MobilePadding>
     }
@@ -45,18 +44,6 @@ export const DetailsListPage = () => (
     }
   />
 )
-
-const Search = observer(() => (
-  <SearchWithCriteria
-    variant="soft"
-    color="primary"
-    criteriaOptions={SearchCriteria}
-    criteria={state.search_criteria}
-    onCriteriaChange={c => state.set_search_criteria(c)}
-    query={state.query ?? ''}
-    onQueryChange={v => state.set_query(v)}
-  />
-))
 
 const columnList: Column<AppDetail>[] = [
   {
@@ -139,7 +126,7 @@ export const DetailSelectModal = observer((props: DetailSelectModalProps) => (
       refreshTrigger={false}
       scroll={
         <Box p={1} mb={3}>
-          <Search />
+          <DetailSearch />
           <DetailsList
             onRowClick={v => {
               props.onRowClick(v)

@@ -39,6 +39,7 @@ export class DetailGroupingApi {
           detail.group_assigment.set_group_ids(d.group_ids)
           detail.warehouse.setStock(d.on_hand_balance)
           detail.safe_stock_leftover = d.safe_stock_leftover ?? null
+          detail.stock_location = d.stock_location
           return detail
         }),
       )

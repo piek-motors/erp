@@ -154,7 +154,11 @@ export function RowWithDividers({
   )
 }
 
-export function Link(props: { to: string; children: React.ReactNode }) {
+export function Link(props: {
+  to: string
+  children: React.ReactNode
+  tabIndex?: number
+}) {
   const style = css`
     text-decoration: none;
     color: inherit;
@@ -166,6 +170,7 @@ export function Link(props: { to: string; children: React.ReactNode }) {
     <ReactLink
       to={props.to}
       css={style}
+      tabIndex={props.tabIndex}
       onClick={e => {
         e.stopPropagation()
       }}

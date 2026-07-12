@@ -19,6 +19,7 @@ interface Props {
   disable_link?: boolean
   with_id?: boolean
   two_lines?: boolean
+  disable_link_tab_focus?: boolean
   slot_props?: {
     name?: SxProps
     row?: SxProps
@@ -33,6 +34,7 @@ export const DetailName = observer(
     disable_link,
     with_id,
     two_lines,
+    disable_link_tab_focus,
     slot_props,
   }: Props) => {
     const name = (
@@ -81,7 +83,10 @@ export const DetailName = observer(
     if (disable_link) return content
     return (
       <Box width="fit-content">
-        <Link to={openPage(routeMap.pdo.detail.edit, detail.id)}>
+        <Link
+          to={openPage(routeMap.pdo.detail.edit, detail.id)}
+          tabIndex={disable_link_tab_focus ? -1 : undefined}
+        >
           {content}
         </Link>
       </Box>
