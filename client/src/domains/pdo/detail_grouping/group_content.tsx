@@ -169,21 +169,27 @@ const GroupContent = observer(() => {
           }}
         />
       </Box>
-      {store.group_content.qty_list.has_something() && (
-        <Button
-          sx={{ width: 'fit-content', ml: 'auto' }}
-          variant="solid"
-          color="primary"
-          onClick={() => {
-            group_content.qty_list.clear()
-            notifier.ok('Требование создано')
-          }}
-        >
-          Создать требование
-        </Button>
-      )}
+      <CreateRequirementButton />
       {create_subgroup_modal.is_open && <CreateSubgroupModal />}
     </Stack>
+  )
+})
+
+const CreateRequirementButton = observer(() => {
+  if (!store.group_content.qty_list.has_something()) return null
+
+  return (
+    <Button
+      sx={{ width: 'fit-content', ml: 'auto' }}
+      variant="solid"
+      color="primary"
+      onClick={() => {
+        store.group_content.qty_list.clear()
+        notifier.ok('Требование создано')
+      }}
+    >
+      Создать требование
+    </Button>
   )
 })
 
