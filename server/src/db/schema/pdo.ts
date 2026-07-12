@@ -129,3 +129,20 @@ export interface DetailAttachmentTable {
   detail_id: number
   attachment_id: number
 }
+
+export interface DetailClaimRequestTable {
+  id: Generated<number>
+  order_id: string
+  product_name: string
+  product_qty: number
+  created_at: Generated<Date>
+  fulfilled_at: Date | null
+}
+export type DetailClaimRequest = Selectable<DetailClaimRequestTable>
+
+export interface DetailClaimRequestDetailTable {
+  request_id: number
+  detail_id: number
+  qty: number
+}
+export type DetailClaimRequestDetail = Selectable<DetailClaimRequestDetailTable>

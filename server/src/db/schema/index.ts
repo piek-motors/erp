@@ -40,6 +40,8 @@ export interface Database {
   'pdo.orders': Pdo.OrderTable
   'pdo.detail_group': Pdo.DetailGroupTable
   'pdo.detail_group_details': Pdo.DetailGroupDetailsTable
+  'pdo.detail_claim_request': Pdo.DetailClaimRequestTable
+  'pdo.detail_claim_request_detail': Pdo.DetailClaimRequestDetailTable
 }
 
 export interface Dict<V> {

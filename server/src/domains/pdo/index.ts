@@ -2,6 +2,7 @@ import { router } from '#root/lib/trpc/trpc.js'
 import { db, RpcError } from '#root/sdk.js'
 import { create_dict_router } from '../../lib/create_dict_router.js'
 import { delete_file } from '../attachment/attachment_rpc.js'
+import { detail_claim_requests } from './detail_claim_request_rpc.js'
 import { detail_groups } from './detail_groups_rpc.js'
 import { details } from './details_rpc.js'
 import { material } from './materials_rpc.js'
@@ -28,6 +29,7 @@ export const pdo = router({
   dict,
   material,
   details,
+  detail_claim_requests,
   detail_groups,
   operations,
   orders,
