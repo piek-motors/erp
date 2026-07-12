@@ -1,5 +1,5 @@
 import { UilFolder } from '@iconscout/react-unicons'
-import { Box, Stack } from '@mui/joy'
+import { Box, Button, Stack } from '@mui/joy'
 import { palette } from '@mui/system'
 import type { Column } from 'react-table'
 import { ScrollableWindow } from '@/components/inputs'
@@ -18,6 +18,7 @@ import {
   useState,
 } from '@/lib/index'
 import { openPage, routeMap } from '@/lib/routes'
+import { notifier } from '@/lib/store/notifier.store'
 import theme from '@/lib/theme'
 import { app_cache } from '../cache'
 import type { DetailSt } from '../detail/detail.state'
@@ -82,8 +83,8 @@ const GroupQtyInput = observer(({ detail }: { detail: DetailSt }) => {
         e.target.select()
       }}
       onBlur={() => setFocused(false)}
-      onChange={e => {
-        store.group_content.qty_list.set(detail.id, e ?? 0)
+      onChange={value => {
+        store.group_content.qty_list.set(detail.id, value ?? null)
       }}
       value={store.group_content.qty_list.get(detail.id)?.qty ?? null}
     />
@@ -168,6 +169,19 @@ const GroupContent = observer(() => {
           }}
         />
       </Box>
+      {store.group_content.qty_list.has_something() && (
+        <Button
+          sx={{ width: 'fit-content', ml: 'auto' }}
+          variant="solid"
+          color="primary"
+          onClick={() => {
+            group_content.qty_list.clear()
+            notifier.ok('Требование создано')
+          }}
+        >
+          Создать требование
+        </Button>
+      )}
       {create_subgroup_modal.is_open && <CreateSubgroupModal />}
     </Stack>
   )

@@ -58,12 +58,12 @@ export interface GroupWithDetails {
 class QuantityListItem {
   constructor(
     public id: number,
-    public qty: number,
+    public qty: number | null = null,
   ) {
     makeAutoObservable(this)
   }
 
-  set_qty(n: number) {
+  set_qty(n: number | null) {
     this.qty = n
   }
 }
@@ -71,7 +71,7 @@ class QuantityListItem {
 class QuantityList {
   items: QuantityListItem[] = []
 
-  set(id: number, qty: number) {
+  set(id: number, qty: number | null) {
     const item = this.get(id)
     if (item) {
       item.set_qty(qty)
@@ -91,6 +91,10 @@ class QuantityList {
 
   constructor() {
     makeAutoObservable(this)
+  }
+
+  has_something() {
+    return this.items.length !== 0 && this.items.some(e => e.qty !== 0)
   }
 }
 
