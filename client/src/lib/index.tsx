@@ -515,16 +515,30 @@ export const TooltipIconButton = (props: {
   tooltip?: string
   variant?: IconButtonProps['variant']
   color?: IconButtonProps['color']
+  size?: IconButtonProps['size'] | 'xxs'
   onClick: () => void
 }) => (
   <Tooltip title={props.tooltip}>
     <IconButton
-      size="sm"
+      size={props.size === 'xxs' ? 'sm' : (props.size ?? 'sm')}
       variant={props.variant}
       color={props.color}
       onClick={props.onClick}
+      sx={
+        props.size === 'xxs'
+          ? {
+              minWidth: '24px',
+              minHeight: '24px',
+              fontSize: '0.875rem',
+            }
+          : undefined
+      }
     >
-      <UseIcon icon={props.icon} invert={props.variant === 'solid'} />
+      <UseIcon
+        icon={props.icon}
+        small={props.size === 'xxs'}
+        invert={props.variant === 'solid'}
+      />
     </IconButton>
   </Tooltip>
 )

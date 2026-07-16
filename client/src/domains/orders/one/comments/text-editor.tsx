@@ -90,6 +90,7 @@ export const TextEditor = (props: {
           <Row>
             <TooltipIconButton
               icon={FormatBoldRounded}
+              size="xxs"
               variant={editor.isActive('bold') ? 'soft' : 'outlined'}
               color={editor.isActive('bold') ? 'primary' : 'neutral'}
               onClick={() => {
@@ -99,6 +100,7 @@ export const TextEditor = (props: {
             />
             <TooltipIconButton
               icon={FormatColorFillRounded}
+              size="xxs"
               variant={editor.isActive('highlight') ? 'soft' : 'outlined'}
               color={editor.isActive('highlight') ? 'primary' : 'neutral'}
               onClick={() => {
