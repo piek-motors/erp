@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 
 import { css } from '@emotion/react'
-import { UilPlusCircle } from '@iconscout/react-unicons'
+import { type Icon, UilPlusCircle } from '@iconscout/react-unicons'
 import {
   Box,
   Button,
@@ -10,13 +10,16 @@ import {
   Stack,
   type StackProps,
 } from '@mui/joy'
-import { Link, useLocation } from 'react-router'
+import type { ReactNode } from 'react'
+import { Link as RouterLink, useLocation } from 'react-router'
 import { NavTopBar } from '@/components/nav_topbar'
 import { UseIcon } from '@/lib'
 
 export type Link = {
   name?: string
   href: string
+  icon?: Icon
+  iconNode?: ReactNode
   childres?: Link[]
   endBlock?: Link[]
 }
@@ -44,7 +47,13 @@ const RenderAction = (props: { action: Link; size: ButtonProps['size'] }) => {
       sx={{ cursor: 'pointer' }}
       justifyContent={'space-between'}
     >
-      <MenuButton href={action.href} name={action.name} size={size} />
+      <MenuButton
+        href={action.href}
+        name={action.name}
+        icon={action.icon}
+        iconNode={action.iconNode}
+        size={size}
+      />
       <Box alignItems={'center'}>
         {action.endBlock?.length && (
           <Stack>
@@ -61,38 +70,46 @@ const RenderAction = (props: { action: Link; size: ButtonProps['size'] }) => {
 function MenuButton(props: {
   href: string
   name?: string
+  icon?: Icon
+  iconNode?: ReactNode
   size: ButtonProps['size']
 }) {
   const location = useLocation()
   const isActive = location.pathname === props.href
   return (
-    <Link to={props.href} key={props.href} css={css`width: 100%;`}>
+    <RouterLink to={props.href} key={props.href} css={css`width: 100%;`}>
       <Button
         sx={{
           textAlign: 'left',
           lineHeight: 1,
           width: '100%',
           justifyContent: 'start',
+          '&:hover svg': {
+            opacity: 1,
+          },
         }}
         variant={isActive ? 'soft' : 'plain'}
         color={'neutral'}
         size={'sm'}
+        startDecorator={
+          props.iconNode ?? (props.icon && <UseIcon icon={props.icon} small />)
+        }
       >
         {props.name}
       </Button>
-    </Link>
+    </RouterLink>
   )
 }
 
 const LinkableIcon = (props: { href: string; small?: boolean }) => (
   <Box key={props.href}>
-    <Link to={props.href} key={props.href}>
+    <RouterLink to={props.href} key={props.href}>
       <IconButton
         size="sm"
         variant={props.href === useLocation().pathname ? 'soft' : 'plain'}
       >
         <UseIcon icon={UilPlusCircle} small />
       </IconButton>
-    </Link>
+    </RouterLink>
   </Box>
 )

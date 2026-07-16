@@ -20,10 +20,8 @@ import type { DetailSt } from '../detail/detail.state'
 import { DetailName } from '../detail/detail_name'
 import { DetailStockDelta } from '../detail/detail_stock_delta'
 import { DetailSearch } from '../detail/list/detail_search'
-import {
-  type DetailRequestFormDetail,
-  DetailRequestFormModal,
-} from '../detail_requests/form'
+import { DetailRequestFormModal } from '../detail_requests/form'
+import type { DetailRequestFormDetail } from '../detail_requests/form.store'
 import { api } from './api'
 import type { GroupTreeNode } from './group.store'
 import { store } from './group.store'
@@ -75,9 +73,10 @@ const GroupQtyInput = observer(({ detail }: { detail: DetailSt }) => {
 
   return (
     <NumberInput
-      sx={{ fontWeight: 600, width: '60px' }}
-      variant={focused ? 'soft' : 'plain'}
-      color="danger"
+      size="sm"
+      sx={{ fontWeight: 600, width: '40px' }}
+      variant={focused ? 'outlined' : 'plain'}
+      color="primary"
       onFocus={e => {
         setFocused(true)
         e.target.select()

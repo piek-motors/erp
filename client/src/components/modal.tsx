@@ -17,6 +17,9 @@ export function InModal(props: {
   layout?: 'fullscreen' | 'center'
   size?: ModalDialogProps['size']
   width?: string
+  slotProps?: {
+    dialog?: ModalDialogProps
+  }
 }) {
   // Use provided layout or default to responsive behavior
   const mobileLayout = props.layout || 'fullscreen'
@@ -45,6 +48,7 @@ export function InModal(props: {
             pr: 6,
             overflowY: 'auto',
           }}
+          {...props.slotProps?.dialog}
         >
           <ModalClose variant="solid" color="neutral" />
           <Stack>{props.children}</Stack>
