@@ -1,8 +1,7 @@
-import type { Icon } from '@iconscout/react-unicons'
 import { Accordion, AccordionDetails, AccordionSummary } from '@mui/joy'
 import type React from 'react'
 import { useEffect, useState } from 'react'
-import { UseIcon } from '@/lib'
+import { type Icon, UseIcon } from '@/lib'
 
 export interface AccordionCardProps {
   title: React.ReactNode

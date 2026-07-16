@@ -1,5 +1,5 @@
 /** Group creation and editing modals with parent selection tree. */
-import { UilPlusCircle } from '@iconscout/react-unicons'
+import { AddCircleRounded } from '@mui/icons-material'
 import { type IconButtonProps, Stack } from '@mui/joy'
 import React, { type ReactNode, useEffect } from 'react'
 import { InModal } from '@/components/modal'
@@ -89,7 +89,7 @@ export const CreateGroupButton = observer(
       title={props.tooltip}
       variant="soft"
       color="primary"
-      icon={UilPlusCircle}
+      icon={AddCircleRounded}
     />
   ),
 )

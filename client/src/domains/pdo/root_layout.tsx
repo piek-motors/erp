@@ -1,4 +1,4 @@
-import { UilBars } from '@iconscout/react-unicons'
+import { MenuRounded } from '@mui/icons-material'
 import {
   Box,
   IconButton,
@@ -33,7 +33,7 @@ export const MobileNavModal = (props: { t?: string }) => {
           onClick={() => setOpen(true)}
           size="md"
         >
-          <UseIcon icon={UilBars} />
+          <UseIcon icon={MenuRounded} />
         </IconButton>
         <P level="body-sm" fontWeight={500}>
           {props.t}

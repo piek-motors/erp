@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 
 import { css } from '@emotion/react'
-import { UilLink } from '@iconscout/react-unicons'
+import { LinkRounded } from '@mui/icons-material'
 import { P, Row, type RowProps } from '@/lib/index'
 import { ExtraSmallIconButton } from './buttons'
 
@@ -44,7 +44,7 @@ interface Props {
 
 export const WithHiddenLinkButton = (props: Props) => (
   <HoverReveal
-    hiddenComp={<ExtraSmallIconButton link={props.linkTo} icon={UilLink} />}
+    hiddenComp={<ExtraSmallIconButton link={props.linkTo} icon={LinkRounded} />}
   >
     <P sx={{ whiteSpace: 'nowrap' }}>{props.children}</P>
   </HoverReveal>

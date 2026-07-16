@@ -1,5 +1,9 @@
 /** Tree node components for hierarchical group display. */
-import { UilFolder, UilFolderOpen, UilListUl } from '@iconscout/react-unicons'
+import {
+  FolderOpenRounded,
+  FolderRounded,
+  FormatListBulletedRounded,
+} from '@mui/icons-material'
 import { Box, Button, Sheet } from '@mui/joy'
 import type { ReactNode } from 'react'
 import { Link } from 'react-router'
@@ -100,7 +104,7 @@ const ExpandButton = observer(({ node }: { node: Node }) => {
   return (
     <UseIcon
       small
-      icon={UilListUl}
+      icon={FormatListBulletedRounded}
       settings={{ opacity: 0.3, width: size, fill: 'black' }}
     />
   )
@@ -109,7 +113,7 @@ const ExpandButton = observer(({ node }: { node: Node }) => {
 export const ExpandDirIcon = observer(
   ({ is_expanded }: { is_expanded?: boolean }) => {
     const size = 20
-    const icon = is_expanded ? UilFolderOpen : UilFolder
+    const icon = is_expanded ? FolderOpenRounded : FolderRounded
     return (
       <UseIcon
         small

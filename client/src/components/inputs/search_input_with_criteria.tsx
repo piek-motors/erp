@@ -1,4 +1,4 @@
-import { UilSearch } from '@iconscout/react-unicons'
+import { SearchRounded } from '@mui/icons-material'
 import { Input, Option, Select } from '@mui/joy'
 import type { ColorPaletteProp, VariantProp } from '@mui/joy/styles/types'
 import { Row, UseIcon } from '@/lib'
@@ -66,7 +66,7 @@ export function SearchWithCriteria<E extends EnumLike>(
         value={query}
         onChange={e => onQueryChange(e.target.value)}
         placeholder={criteria}
-        startDecorator={<UseIcon icon={UilSearch} small />}
+        startDecorator={<UseIcon icon={SearchRounded} small />}
         sx={{
           width,
           maxWidth,

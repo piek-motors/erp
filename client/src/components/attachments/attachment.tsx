@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 
 import { css } from '@emotion/react'
-import { UilEllipsisV, UilPen } from '@iconscout/react-unicons'
+import { EditRounded, MoreVertRounded } from '@mui/icons-material'
 import { Dropdown, Menu, MenuButton, Stack } from '@mui/joy'
 import { WebOnly } from '@/components/utilities/conditional-display'
 import {
@@ -69,7 +69,7 @@ export const AttachmentComponent = (props: {
         {editable && editMode === false && (
           <Dropdown>
             <MenuButton variant="plain" size="sm">
-              <UseIcon icon={UilEllipsisV} small />
+              <UseIcon icon={MoreVertRounded} small />
             </MenuButton>
             <Menu size="sm" sx={{ gap: 1, p: 0.5 }}>
               <Row>
@@ -78,7 +78,7 @@ export const AttachmentComponent = (props: {
                   onClick={() => {
                     setEditMode(true)
                   }}
-                  icon={UilPen}
+                  icon={EditRounded}
                 />
 
                 {props.handleDelete && (

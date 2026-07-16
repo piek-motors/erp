@@ -1,7 +1,7 @@
-import { type Icon, UilArrowLeft } from '@iconscout/react-unicons'
+import { ArrowBackRounded } from '@mui/icons-material'
 import { IconButton, type IconButtonProps } from '@mui/joy'
 import { Link } from 'react-router'
-import { UseIcon } from '@/lib/index'
+import { type Icon, UseIcon } from '@/lib/index'
 
 export const ExtraSmallIconButton = (props: {
   icon: Icon
@@ -44,7 +44,7 @@ export const BackIconButton = (props: {
       onClick={props.onClick}
       {...props.buttonProps}
     >
-      <UseIcon icon={UilArrowLeft} />
+      <UseIcon icon={ArrowBackRounded} />
     </IconButton>
   )
 

@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 
-import { UilEye, UilEyeSlash } from '@iconscout/react-unicons'
+import { VisibilityOffRounded, VisibilityRounded } from '@mui/icons-material'
 import { Box, Button, IconButton, Input, Stack } from '@mui/joy'
 import axios from 'axios'
 import { useState } from 'react'
@@ -58,7 +58,9 @@ export const LoginForm = observer(() => {
               color="neutral"
               onClick={() => setShowPassword(!showPassword)}
             >
-              <UseIcon icon={showPassword ? UilEyeSlash : UilEye} />
+              <UseIcon
+                icon={showPassword ? VisibilityOffRounded : VisibilityRounded}
+              />
             </IconButton>
           }
         />

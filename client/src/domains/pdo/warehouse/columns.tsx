@@ -1,4 +1,4 @@
-import { UilHistory } from '@iconscout/react-unicons'
+import { HistoryRounded } from '@mui/icons-material'
 import { Chip, IconButton } from '@mui/joy'
 import type { Column } from 'react-table'
 import {
@@ -92,7 +92,7 @@ const revert_col = {
         }}
         onClick={() => inventory_log_vm.revert(op)}
       >
-        <UseIcon icon={UilHistory} small invert />
+        <UseIcon icon={HistoryRounded} small invert />
       </IconButton>
     )
   },

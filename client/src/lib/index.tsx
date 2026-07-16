@@ -1,14 +1,14 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react'
 import {
-  type Icon,
-  UilLink,
-  UilMinus,
-  UilPen,
-  UilPlusCircle,
-  UilSave,
-  UilTrashAlt,
-} from '@iconscout/react-unicons'
+  AddCircleRounded,
+  DeleteRounded,
+  EditRounded,
+  LinkRounded,
+  RemoveRounded,
+  SaveRounded,
+  type SvgIconComponent,
+} from '@mui/icons-material'
 import {
   Box,
   Button,
@@ -55,6 +55,7 @@ export {
   ToggleButtonGroup,
 }
 export const Btn = Button
+export type Icon = SvgIconComponent
 export const P = (props: TypographyProps) => <Typography {...props} />
 export const Label = (
   props: TypographyProps & { label?: ReactNode; xs?: boolean },
@@ -262,14 +263,14 @@ export function DeleteIcon(props: {
       variant={props.variant ?? 'soft'}
       color="danger"
       onClick={props.onClick}
-      icon={UilTrashAlt}
+      icon={DeleteRounded}
     />
   )
 }
 
 export const UpdateResourceButton = (props: { onClick: () => void }) => (
   <IconButton variant="soft" color="primary" onClick={props.onClick} size="sm">
-    <UseIcon icon={UilPen} />
+    <UseIcon icon={EditRounded} />
   </IconButton>
 )
 
@@ -306,7 +307,7 @@ export const MinusIcon = (props: IconButtonProps) => {
       variant={variant}
       color="danger"
       {...props}
-      icon={UilMinus}
+      icon={RemoveRounded}
     />
   )
 }
@@ -319,7 +320,7 @@ export const PlusIcon = (props: IconButtonProps & { invert?: boolean }) => (
     size="sm"
     sx={{ width: 'min-content', ...props.sx }}
   >
-    <UseIcon icon={UilPlusCircle} invert={props.invert} />
+    <UseIcon icon={AddCircleRounded} invert={props.invert} />
   </IconButton>
 )
 
@@ -362,7 +363,7 @@ export function TakeLookHint(props: { text: string; link: string }) {
       variant="solid"
       sx={{ width: 'fit-content' }}
       color="neutral"
-      startDecorator={<UseIcon icon={UilLink} invert small />}
+      startDecorator={<UseIcon icon={LinkRounded} invert small />}
     >
       {props.text}
     </Btn>
@@ -421,7 +422,7 @@ export const text = {
 const DefaultIconSettings = {
   opacity: 0.6,
   width: 22,
-  fill: 'black',
+  fill: 'text.secondary',
 }
 
 export function UseIcon(props: {
@@ -434,9 +435,11 @@ export function UseIcon(props: {
   const fillColor = props.invert ? 'white' : settings.fill
   return (
     <props.icon
-      width={props.small ? settings.width / 1.5 : settings.width}
-      opacity={settings.opacity}
-      fill={fillColor}
+      sx={{
+        color: fillColor,
+        fontSize: props.small ? settings.width / 1.5 : settings.width,
+        opacity: settings.opacity,
+      }}
     />
   )
 }
@@ -463,7 +466,7 @@ export const SaveIconButton = (props: IconButtonProps) => (
       sx={{ width: 'min-content', ...props.sx }}
     >
       <UseIcon
-        icon={UilSave}
+        icon={SaveRounded}
         invert={props.variant === 'solid' || !props.variant}
       />
     </IconButton>

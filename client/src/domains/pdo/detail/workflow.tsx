@@ -1,6 +1,6 @@
 /** @jsxImportSource @emotion/react */
 
-import { UilProcess, UilSubject } from '@iconscout/react-unicons'
+import { AccountTreeRounded, SubjectRounded } from '@mui/icons-material'
 import { Input, Stack, type TypographyProps } from '@mui/joy'
 import { observer } from 'mobx-react-lite'
 import { useState } from 'react'
@@ -129,7 +129,7 @@ export const WorkflowAccordion = observer(
     }
 
     return (
-      <AccordionCard title="Маршрут" icon={UilProcess} defaultExpanded>
+      <AccordionCard title="Маршрут" icon={AccountTreeRounded} defaultExpanded>
         <Stack gap={1}>
           {detail.workflow.tasks.map((op, idx) => {
             const show_comment = showComment[op.id] ?? Boolean(op.text)
@@ -218,7 +218,7 @@ export const WorkflowAccordion = observer(
                         variant="solid"
                         color="primary"
                         size="sm"
-                        icon={UilSubject}
+                        icon={SubjectRounded}
                       />
                     )}
                     <MinusIcon onClick={() => detail.workflow.remove(idx)} />

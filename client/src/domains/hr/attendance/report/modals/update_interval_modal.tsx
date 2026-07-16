@@ -1,4 +1,4 @@
-import { UilExchange } from '@iconscout/react-unicons'
+import { SwapHorizRounded } from '@mui/icons-material'
 import {
   Button,
   Divider,
@@ -150,7 +150,7 @@ export const UpdateIntervalModal = observer(() => (
           variant="outlined"
           onClick={() => state.swapEntAndExt()}
         >
-          <UseIcon icon={UilExchange} />
+          <UseIcon icon={SwapHorizRounded} />
         </IconButton>
         <InputLabled
           value={state.ext}

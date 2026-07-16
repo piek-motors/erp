@@ -1,15 +1,25 @@
 import {
-  type Icon,
-  UilBell,
-  UilCalculatorAlt,
-  UilConstructor,
-  UilListOl,
-  UilWrench,
-} from '@iconscout/react-unicons'
-import { Badge, Box, Button, Divider, Stack, Typography } from '@mui/joy'
+  BuildRounded,
+  CalculateRounded,
+  DarkModeRounded,
+  EngineeringRounded,
+  FormatListNumberedRounded,
+  LightModeRounded,
+  NotificationsRounded,
+} from '@mui/icons-material'
+import {
+  Badge,
+  Box,
+  Button,
+  Divider,
+  Stack,
+  Switch,
+  Typography,
+} from '@mui/joy'
+import { useColorScheme } from '@mui/joy/styles'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
-import { observer, P, Row, UseIcon } from '@/lib/index'
+import { type Icon, observer, P, Row, UseIcon } from '@/lib/index'
 import { routeMap } from '@/lib/routes'
 import { rpc } from '@/lib/rpc/rpc.client'
 import { authStore } from '@/lib/store/auth.store'
@@ -31,15 +41,19 @@ interface MenuCardProps {
 const MENU_LINKS: MenuLink[] = [
   {
     href: routeMap.orders.priorityList,
-    icon: UilListOl,
+    icon: FormatListNumberedRounded,
     name: 'Заказы & Очередность',
   },
-  { href: routeMap.reclamation, icon: UilWrench, name: 'Рекламации' },
-  { href: routeMap.pdo.index, icon: UilCalculatorAlt, name: 'ПДО' },
-  { href: routeMap.hr.attendance, icon: UilConstructor, name: 'Рабочее время' },
+  { href: routeMap.reclamation, icon: BuildRounded, name: 'Рекламации' },
+  { href: routeMap.pdo.index, icon: CalculateRounded, name: 'ПДО' },
+  {
+    href: routeMap.hr.attendance,
+    icon: EngineeringRounded,
+    name: 'Рабочее время',
+  },
   {
     href: routeMap.mentions,
-    icon: UilBell,
+    icon: NotificationsRounded,
     name: 'Упоминания',
     badgeKey: 'mentions',
   },
@@ -66,7 +80,6 @@ function useMentionsCount() {
   return count
 }
 
-// Animated background component
 const AnimatedBackground = () => {
   return (
     <Box
@@ -78,7 +91,10 @@ const AnimatedBackground = () => {
         bottom: 0,
         zIndex: 0,
         overflow: 'hidden',
-        background: 'linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%)',
+        background: theme =>
+          theme.palette.mode === 'dark'
+            ? 'linear-gradient(135deg, #0f172a 0%, #111827 52%, #1f2937 100%)'
+            : 'linear-gradient(135deg, #f5f7fa 0%, #e9ecef 100%)',
         '&::before': {
           content: '""',
           position: 'absolute',
@@ -86,11 +102,18 @@ const AnimatedBackground = () => {
           left: '-50%',
           width: '200%',
           height: '200%',
-          background: `
-          radial-gradient(circle at 20% 50%, rgba(200, 210, 230, 0.15) 0%, transparent 50%),
-          radial-gradient(circle at 80% 80%, rgba(220, 230, 240, 0.2) 0%, transparent 50%),
-          radial-gradient(circle at 40% 20%, rgba(210, 220, 235, 0.15) 0%, transparent 50%)
-          `,
+          background: theme =>
+            theme.palette.mode === 'dark'
+              ? `
+                radial-gradient(circle at 20% 50%, rgba(80, 100, 140, 0.18) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(50, 70, 110, 0.24) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(90, 115, 150, 0.16) 0%, transparent 50%)
+              `
+              : `
+                radial-gradient(circle at 20% 50%, rgba(200, 210, 230, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(220, 230, 240, 0.2) 0%, transparent 50%),
+                radial-gradient(circle at 40% 20%, rgba(210, 220, 235, 0.15) 0%, transparent 50%)
+              `,
           animation: 'rotate 40s linear infinite',
         },
         '&::after': {
@@ -105,8 +128,8 @@ const AnimatedBackground = () => {
               45deg,
               transparent,
               transparent 80px,
-              rgba(100, 120, 150, 0.02) 80px,
-              rgba(100, 120, 150, 0.02) 160px
+              var(--joy-palette-neutral-plainHoverBg) 80px,
+              var(--joy-palette-neutral-plainHoverBg) 160px
             )
           `,
         },
@@ -126,8 +149,10 @@ const AnimatedBackground = () => {
           position: 'absolute',
           width: 350,
           height: 350,
-          border: '1px solid rgba(100, 120, 150, 0.08)',
+          border: '1px solid',
+          borderColor: 'neutral.outlinedBorder',
           borderRadius: '50%',
+          opacity: 0.5,
           top: '8%',
           left: '10%',
           animation: 'float 25s ease-in-out infinite',
@@ -143,8 +168,10 @@ const AnimatedBackground = () => {
           position: 'absolute',
           width: 250,
           height: 250,
-          border: '1px solid rgba(100, 120, 150, 0.06)',
+          border: '1px solid',
+          borderColor: 'neutral.outlinedBorder',
           borderRadius: '30px',
+          opacity: 0.42,
           bottom: '12%',
           right: '12%',
           animation: 'float2 18s ease-in-out infinite',
@@ -159,8 +186,9 @@ const AnimatedBackground = () => {
           position: 'absolute',
           width: 180,
           height: 180,
-          background: 'rgba(100, 120, 150, 0.03)',
+          bgcolor: 'neutral.softBg',
           borderRadius: '50%',
+          opacity: 0.45,
           top: '55%',
           left: '75%',
           animation: 'pulse 10s ease-in-out infinite',
@@ -175,8 +203,10 @@ const AnimatedBackground = () => {
           position: 'absolute',
           width: 200,
           height: 200,
-          border: '1px solid rgba(100, 120, 150, 0.05)',
+          border: '1px solid',
+          borderColor: 'neutral.outlinedBorder',
           borderRadius: '50%',
+          opacity: 0.38,
           top: '70%',
           left: '5%',
           animation: 'float3 22s ease-in-out infinite',
@@ -198,8 +228,8 @@ const MenuCard = ({ icon, name, count, onClick }: MenuCardProps) => {
       sx={{
         position: 'relative',
         border: '1px solid',
-        borderColor: 'rgba(100, 120, 150, 0.15)',
-        bgcolor: 'rgba(255, 255, 255, 0.7)',
+        borderColor: 'neutral.outlinedBorder',
+        bgcolor: 'background.popup',
         backdropFilter: 'blur(10px)',
         borderRadius: 3,
         p: 3,
@@ -210,20 +240,20 @@ const MenuCard = ({ icon, name, count, onClick }: MenuCardProps) => {
         cursor: 'pointer',
         transition: 'all 0.3s ease',
         '&:hover': {
-          bgcolor: 'rgba(255, 255, 255, 0.9)',
-          borderColor: 'rgba(100, 120, 150, 0.25)',
-          boxShadow: '0 8px 24px rgba(100, 120, 150, 0.12)',
+          bgcolor: 'background.surface',
+          borderColor: 'neutral.outlinedHoverBorder',
+          boxShadow: 'md',
         },
       }}
     >
-      <Box sx={{ fontSize: 36, mb: 1.5, color: '#4a5568' }}>
+      <Box sx={{ fontSize: 36, mb: 1.5, color: 'text.secondary' }}>
         <UseIcon icon={icon} />
       </Box>
       <Typography
         level="body-md"
         textAlign="center"
         fontWeight={600}
-        sx={{ color: '#2d3748' }}
+        sx={{ color: 'text.primary' }}
       >
         {name}
       </Typography>
@@ -235,6 +265,28 @@ const MenuCard = ({ icon, name, count, onClick }: MenuCardProps) => {
         />
       )}
     </Box>
+  )
+}
+
+const ThemeModeSwitch = () => {
+  const { mode, systemMode, setMode } = useColorScheme()
+  const effectiveMode = mode === 'system' ? systemMode : mode
+  const isDark = effectiveMode === 'dark'
+
+  return (
+    <Switch
+      checked={isDark}
+      color={isDark ? 'primary' : 'neutral'}
+      startDecorator={<UseIcon icon={LightModeRounded} small />}
+      endDecorator={<UseIcon icon={DarkModeRounded} small />}
+      slotProps={{
+        input: {
+          'aria-label': 'Переключить ночную тему',
+        },
+      }}
+      sx={{ alignSelf: 'center' }}
+      onChange={event => setMode(event.target.checked ? 'dark' : 'light')}
+    />
   )
 }
 
@@ -290,6 +342,7 @@ export const IndexPage = observer(() => {
         >
           PIEK ERP
         </P>
+        <ThemeModeSwitch />
 
         {/* Menu grid */}
         <Box

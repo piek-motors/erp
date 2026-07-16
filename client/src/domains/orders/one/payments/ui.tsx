@@ -2,7 +2,7 @@
 
 import { css } from '@emotion/react'
 import type { JSX } from '@emotion/react/jsx-runtime'
-import { UilPlusCircle } from '@iconscout/react-unicons'
+import { AddCircleRounded } from '@mui/icons-material'
 import { Box, Button, Dropdown, Menu, MenuButton, Stack, Table } from '@mui/joy'
 import { observer } from 'mobx-react-lite'
 import { useState } from 'react'
@@ -156,7 +156,7 @@ const NewPaymentInput = observer((props: NewPaymentInputProps) => {
         size="sm"
         disabled={os.payments.loading}
       >
-        <UseIcon icon={UilPlusCircle} />
+        <UseIcon icon={AddCircleRounded} />
       </MenuButton>
       <Menu
         open={open}

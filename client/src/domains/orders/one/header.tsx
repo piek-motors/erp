@@ -1,10 +1,19 @@
-import * as icons from '@iconscout/react-unicons'
+import {
+  AccessTimeRounded,
+  AddRounded,
+  DeleteRounded,
+  ErrorOutlineRounded,
+  FactCheckRounded,
+  LocalShippingRounded,
+  LockOpenRounded,
+  LockRounded,
+} from '@mui/icons-material'
 import { IconButton, Tooltip } from '@mui/joy'
 import { observer } from 'mobx-react-lite'
 import type React from 'react'
 import { useNavigate } from 'react-router'
 import { OrderStatus } from 'shared'
-import { Row, text, UseIcon } from '@/lib/index'
+import { type Icon, Row, text, UseIcon } from '@/lib/index'
 import { DeleteOrderDialog } from './dialogs/delete-order-dialog'
 import { TransferOrderDialog } from './dialogs/transfer-order.dialog'
 import { orderStore } from './order.store'
@@ -12,7 +21,7 @@ import { orderStore } from './order.store'
 export type ActionButton = {
   tip: string
   handler?: () => void
-  icon: icons.Icon
+  icon: Icon
   hidden?: boolean
   dialog?: React.ElementType
   dialogHandler?: () => void
@@ -57,12 +66,12 @@ const SwitchOrderStatusBtn = observer(() => {
     {
       tip: text.orderRequiresSpectialAttention,
       handler: () => orderStore.updateNeedAttention(),
-      icon: icons.UilExclamationTriangle,
+      icon: ErrorOutlineRounded,
     },
     {
       tip: text.orderReadyForDispatch,
       handler: () => orderStore.updateAwaitingDispatch(),
-      icon: icons.UilClockThree,
+      icon: AccessTimeRounded,
       hidden: ![
         OrderStatus.InProduction,
         OrderStatus.ReclamationInProduction,
@@ -82,14 +91,14 @@ export const OrderActions = observer(() => {
     {
       tip: text.moveToPriority,
       handler: () => orderStore.moveToPriority(),
-      icon: icons.UilFileCheck,
+      icon: FactCheckRounded,
       hidden: ![OrderStatus.PreOrder].includes(status),
     },
     {
       dialog: TransferOrderDialog,
       dialogHandler: () => orderStore.moveToArchive(OrderStatus.Archived),
       tip: text.orderCompleted,
-      icon: icons.UilTruck,
+      icon: LocalShippingRounded,
       hidden: ![OrderStatus.InProduction].includes(status),
     },
     {
@@ -97,7 +106,7 @@ export const OrderActions = observer(() => {
       dialogHandler: () =>
         orderStore.moveToArchive(OrderStatus.ReclamationArchived),
       tip: text.orderCompleted,
-      icon: icons.UilTruck,
+      icon: LocalShippingRounded,
       hidden: ![OrderStatus.ReclamationInProduction].includes(status),
     },
     {
@@ -107,7 +116,7 @@ export const OrderActions = observer(() => {
         navigate(-1)
       },
       tip: text.delete,
-      icon: icons.UilTrashAlt,
+      icon: DeleteRounded,
       hidden: ![
         OrderStatus.PreOrder,
         OrderStatus.InProduction,
@@ -121,7 +130,7 @@ export const OrderActions = observer(() => {
       handler: () => {
         orderStore.positions.openDialog()
       },
-      icon: icons.UilPlus,
+      icon: AddRounded,
       hidden: [OrderStatus.Archived, OrderStatus.ReclamationArchived].includes(
         status,
       ),
@@ -131,7 +140,7 @@ export const OrderActions = observer(() => {
       handler: () => {
         orderStore.switchEditMode()
       },
-      icon: orderStore.editMode ? icons.UilUnlock : icons.UilLock,
+      icon: orderStore.editMode ? LockOpenRounded : LockRounded,
     },
   ]
 

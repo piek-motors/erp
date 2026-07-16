@@ -1,4 +1,4 @@
-import { UilSearch } from '@iconscout/react-unicons'
+import { SearchRounded } from '@mui/icons-material'
 import { Input, type InputProps } from '@mui/joy'
 import type React from 'react'
 import { Row, UseIcon } from '@/lib'
@@ -27,7 +27,7 @@ export function Search(props: ISearchInputWithFiltersProps & InputProps) {
           ...props.sx,
           boxShadow: 'none',
         }}
-        startDecorator={<UseIcon icon={UilSearch} small {...props} />}
+        startDecorator={<UseIcon icon={SearchRounded} small {...props} />}
         {...props}
       />
       {props.children}

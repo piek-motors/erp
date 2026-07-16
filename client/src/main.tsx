@@ -2,7 +2,8 @@ import { DictManagerModal } from '@/components/dict_manager'
 // biome-ignore lint/suspicious/noTsIgnore: ist okay
 // @ts-ignore
 import '@fontsource/inter'
-import { CssBaseline, ThemeProvider } from '@mui/joy'
+import { CssBaseline } from '@mui/joy'
+import { CssVarsProvider } from '@mui/joy/styles'
 import { observer } from 'mobx-react-lite'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router'
@@ -28,9 +29,13 @@ const root = createRoot(container) // createRoot(container!) if you use TypeScri
 
 root.render(
   <BrowserRouter>
-    <ThemeProvider theme={theme}>
+    <CssVarsProvider
+      theme={theme}
+      defaultMode="system"
+      modeStorageKey="piek-erp-color-scheme"
+    >
       <CssBaseline />
       <App />
-    </ThemeProvider>
+    </CssVarsProvider>
   </BrowserRouter>,
 )

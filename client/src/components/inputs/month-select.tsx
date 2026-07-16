@@ -1,4 +1,4 @@
-import { UilSearch } from '@iconscout/react-unicons'
+import { SearchRounded } from '@mui/icons-material'
 import { IconButton } from '@mui/joy'
 import { makeAutoObservable } from 'mobx'
 import { observer } from 'mobx-react-lite'
@@ -95,7 +95,7 @@ function _MonthSelect({ onSearch, store, onChange }: IReportConfiguratorProps) {
             onSearch(store.month, store.year)
           }}
         >
-          <UseIcon icon={UilSearch} />
+          <UseIcon icon={SearchRounded} />
         </IconButton>
       )}
     </Row>

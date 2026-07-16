@@ -1,11 +1,11 @@
 /** @jsxImportSource @emotion/react */
 
 import {
-  UilBars,
-  UilFileEditAlt,
-  UilPaperclip,
-  UilReceiptAlt,
-} from '@iconscout/react-unicons'
+  AttachFileRounded,
+  DescriptionRounded,
+  MenuRounded,
+  ReceiptRounded,
+} from '@mui/icons-material'
 import {
   AccordionGroup,
   Autocomplete,
@@ -163,7 +163,7 @@ const PlanningDispatchAccordion = observer(
   ({ detail }: { detail: DetailSt }) => (
     <AccordionCard
       title="Чертеж и примечание"
-      icon={UilFileEditAlt}
+      icon={DescriptionRounded}
       defaultExpanded
     >
       <Stack gap={0.5}>
@@ -238,7 +238,7 @@ const DetailGroupInput = observer(({ detail }: { detail: DetailSt }) => (
             size="sm"
             variant="outlined"
             sx={{ width: 'fit-content', my: 0.5 }}
-            icon={UilBars}
+            icon={MenuRounded}
           />
         }
       />
@@ -267,14 +267,14 @@ const DetailGroupInput = observer(({ detail }: { detail: DetailSt }) => (
 
 /** Detail attachments accordion section. */
 const DetailAttachmentInput = observer(({ detail }: { detail: DetailSt }) => (
-  <AccordionCard title="Файлы" icon={UilPaperclip} defaultExpanded>
+  <AccordionCard title="Файлы" icon={AttachFileRounded} defaultExpanded>
     <DetailAttachmentList detail={detail} />
   </AccordionCard>
 ))
 
 /** Blank attributes accordion section with material and detail requirements. */
 const BlankInput = observer(({ detail }: { detail: DetailSt }) => (
-  <AccordionCard title="Заготовка" icon={UilReceiptAlt} defaultExpanded>
+  <AccordionCard title="Заготовка" icon={ReceiptRounded} defaultExpanded>
     <MaterialRequirementInput detail={detail} />
     <Divider sx={{ my: 0.5 }} />
     <DetailRequirementInput detail={detail} />

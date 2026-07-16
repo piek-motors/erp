@@ -1,7 +1,11 @@
 /** @jsxImportSource @emotion/react */
 
 import { css } from '@emotion/react'
-import { UilBold, UilMessage, UilPaintTool } from '@iconscout/react-unicons'
+import {
+  FormatBoldRounded,
+  FormatColorFillRounded,
+  MessageRounded,
+} from '@mui/icons-material'
 import { Box, Button, Sheet, type SheetProps, Stack } from '@mui/joy'
 import type { PaddingProps } from '@mui/system'
 import Highlight from '@tiptap/extension-highlight'
@@ -85,7 +89,7 @@ export const TextEditor = (props: {
         {editable && (
           <Row>
             <TooltipIconButton
-              icon={UilBold}
+              icon={FormatBoldRounded}
               variant={editor.isActive('bold') ? 'soft' : 'outlined'}
               color={editor.isActive('bold') ? 'primary' : 'neutral'}
               onClick={() => {
@@ -94,7 +98,7 @@ export const TextEditor = (props: {
               }}
             />
             <TooltipIconButton
-              icon={UilPaintTool}
+              icon={FormatColorFillRounded}
               variant={editor.isActive('highlight') ? 'soft' : 'outlined'}
               color={editor.isActive('highlight') ? 'primary' : 'neutral'}
               onClick={() => {
@@ -140,7 +144,7 @@ function PublishButton(props: {
         color="neutral"
         variant="soft"
         size="sm"
-        startDecorator={<UseIcon icon={UilMessage} small />}
+        startDecorator={<UseIcon icon={MessageRounded} small />}
         onClick={() => {
           const content = editor?.getHTML()
           if (!content) return

@@ -1,4 +1,4 @@
-import { UilHome } from '@iconscout/react-unicons'
+import { HomeRounded } from '@mui/icons-material'
 import { Box, IconButton, Stack } from '@mui/joy'
 import type React from 'react'
 import type { ReactNode } from 'react'
@@ -47,7 +47,7 @@ export function NavTopBar(props: Props) {
         <MobileOnly>
           <Link to={props.goToHomeUrl}>
             <IconButton variant="soft" size="md">
-              <UseIcon icon={UilHome} />
+              <UseIcon icon={HomeRounded} />
             </IconButton>
           </Link>
         </MobileOnly>

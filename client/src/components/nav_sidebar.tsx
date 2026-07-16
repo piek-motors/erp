@@ -1,7 +1,7 @@
 /** @jsxImportSource @emotion/react */
 
 import { css } from '@emotion/react'
-import { type Icon, UilPlusCircle } from '@iconscout/react-unicons'
+import { AddCircleRounded } from '@mui/icons-material'
 import {
   Box,
   Button,
@@ -13,7 +13,7 @@ import {
 import type { ReactNode } from 'react'
 import { Link as RouterLink, useLocation } from 'react-router'
 import { NavTopBar } from '@/components/nav_topbar'
-import { UseIcon } from '@/lib'
+import { type Icon, UseIcon } from '@/lib'
 
 export type Link = {
   name?: string
@@ -108,7 +108,7 @@ const LinkableIcon = (props: { href: string; small?: boolean }) => (
         size="sm"
         variant={props.href === useLocation().pathname ? 'soft' : 'plain'}
       >
-        <UseIcon icon={UilPlusCircle} small />
+        <UseIcon icon={AddCircleRounded} small />
       </IconButton>
     </RouterLink>
   </Box>

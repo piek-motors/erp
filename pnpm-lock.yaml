@@ -41,9 +41,6 @@ importers:
       '@fontsource/inter':
         specifier: ^5.2.5
         version: 5.2.5
-      '@iconscout/react-unicons':
-        specifier: ^2.2.4
-        version: 2.2.4(react@19.2.0)
       '@mui/icons-material':
         specifier: ^7.3.7
         version: 7.3.7(@mui/material@7.3.11(@emotion/react@11.14.0(@types/react@19.2.2)(react@19.2.0))(@emotion/styled@11.14.0(@emotion/react@11.14.0(@types/react@19.2.2)(react@19.2.0))(@types/react@19.2.2)(react@19.2.0))(@types/react@19.2.2)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(@types/react@19.2.2)(react@19.2.0)
@@ -1255,11 +1252,6 @@ packages:
 
   '@fontsource/inter@5.2.5':
     resolution: {integrity: sha512-kbsPKj0S4p44JdYRFiW78Td8Ge2sBVxi/PIBwmih+RpSXUdvS9nbs1HIiuUSPtRMi14CqLEZ/fbk7dj7vni1Sg==}
-
-  '@iconscout/react-unicons@2.2.4':
-    resolution: {integrity: sha512-lAgPSustUauaGF1u/dsrCePdfVt8pV8Wr13c5pqw5GBALZ9AZL4acwDwzNvDutgj5QPu0UBoTe/hLKhL/Sz3gQ==}
-    peerDependencies:
-      react: '>=15.0.0 <17.0.0'
 
   '@inquirer/ansi@2.0.3':
     resolution: {integrity: sha512-g44zhR3NIKVs0zUesa4iMzExmZpLUdTLRMCStqX3GE5NT6VkPcxQGJ+uC8tDgBUC/vB1rUhUd55cOf++4NZcmw==}
@@ -6399,10 +6391,6 @@ snapshots:
   '@floating-ui/utils@0.2.9': {}
 
   '@fontsource/inter@5.2.5': {}
-
-  '@iconscout/react-unicons@2.2.4(react@19.2.0)':
-    dependencies:
-      react: 19.2.0
 
   '@inquirer/ansi@2.0.3': {}
 
