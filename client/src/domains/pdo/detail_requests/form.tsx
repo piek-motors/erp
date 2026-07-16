@@ -5,6 +5,8 @@ import { NumberInput } from '@/components/inputs/number_input'
 import { InModal } from '@/components/modal'
 import {
   ActionButton,
+  AutoWidthInputLabled,
+  ButtonXxs,
   DeleteIcon,
   InputLabled,
   Label,
@@ -29,6 +31,21 @@ export interface DetailRequestFormModalProps {
   request?: DetailClaimRequestFull
   onSaved?(): Promise<void> | void
 }
+
+export const NewDetailRequestButton = (props: {
+  disabled?: boolean
+  onClick(): void
+}) => (
+  <ButtonXxs
+    size="sm"
+    variant="soft"
+    sx={{ fontSize: '.8rem' }}
+    disabled={props.disabled}
+    onClick={props.onClick}
+  >
+    Новое требование
+  </ButtonXxs>
+)
 
 export const DetailRequestFormModal = observer(
   (props: DetailRequestFormModalProps) => {
@@ -103,11 +120,12 @@ const DetailRequestProductFields = observer(
         onChange={value => store.setOrderId(value)}
         sx={{ width: 80 }}
       />
-      <InputLabled
+      <AutoWidthInputLabled
         label="Название изделия"
         value={store.productName}
         onChange={value => store.setProductName(value)}
         minWidth={260}
+        maxWidth="100%"
       />
       <NumberInput
         label="Кол-во изделий"

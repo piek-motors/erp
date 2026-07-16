@@ -1,4 +1,5 @@
-import { Button, Chip, Divider } from '@mui/joy'
+import { EditRounded } from '@mui/icons-material'
+import { Chip, Divider } from '@mui/joy'
 import { observer } from 'mobx-react-lite'
 import { useEffect } from 'react'
 import { BackIconButton } from '@/components/buttons'
@@ -6,6 +7,8 @@ import { DeleteConfirmDialog } from '@/components/delete_confirm_dialog'
 import { Table } from '@/components/table.impl'
 import {
   ActionButton,
+  DeleteIcon,
+  IconButtonXxs,
   Label,
   Loading,
   P,
@@ -37,14 +40,14 @@ export const DetailRequestDetails = observer(
         ) : (
           <Stack gap={1.5} p={0}>
             <DetailRequestHeader request={request} />
-            <DetailRequestMeta request={request} />
+            <DetailRequestMeta store={store} />
+
             <Table
               small
               columns={detailRequestDetailColumns}
               data={request.details}
               sx={{ minWidth: 620 }}
             />
-            <DetailRequestActions store={store} request={request} />
           </Stack>
         )}
         {request && (
@@ -96,19 +99,23 @@ const DetailRequestStatus = ({
     </Chip>
   )
 
-const DetailRequestMeta = ({
-  request,
-}: {
-  request: DetailClaimRequestFull
-}) => (
-  <Row>
-    <Label label="Заказ" />
-    <P>{request.request.order_id}</P>
-    <Divider orientation="vertical" />
-    <Label label="Изделие" />
-    <P>{request.request.product_name}</P>
-    <Label color="neutral">{request.request.product_qty} шт.</Label>
-  </Row>
+const DetailRequestMeta = observer(
+  ({ store }: { store: DetailRequestListStore }) => {
+    const request = store.selectedRequest
+    if (!request) return
+    return (
+      <Row>
+        <Label label="Заказ" />
+        <P>{request.request.order_id}</P>
+        <Divider orientation="vertical" />
+        <Label label="Изделие" />
+        <P>{request.request.product_name}</P>
+        <Label color="neutral">{request.request.product_qty} шт.</Label>
+
+        <DetailRequestActions store={store} request={request} />
+      </Row>
+    )
+  },
 )
 
 const DetailRequestActions = observer(
@@ -120,32 +127,29 @@ const DetailRequestActions = observer(
     request: DetailClaimRequestFull
   }) => {
     const navigate = useNavigate()
-
+    if (request.request.fulfilled_at) return
     return (
       <Row justifyContent="space-between">
         <span />
         <Row justifyContent="flex-end">
-          <Button
-            variant="soft"
-            color="neutral"
-            onClick={() => store.setEditOpen(true)}
-          >
-            Изменить
-          </Button>
           {!request.request.fulfilled_at && (
             <ActionButton
-              label="Выполнить"
-              props={{ color: 'success' }}
+              label="Выполнен"
+              props={{ color: 'success', variant: 'soft' }}
               onClick={() => store.fulfillSelected()}
             />
           )}
+          <IconButtonXxs
+            title="Изменить"
+            aria-label="Изменить"
+            variant="soft"
+            color="neutral"
+            onClick={() => store.setEditOpen(true)}
+            icon={EditRounded}
+          />
           <DeleteConfirmDialog
             title={`Требование №${request.request.id}`}
-            button={
-              <Button variant="soft" color="danger">
-                Удалить
-              </Button>
-            }
+            button={<DeleteIcon />}
             handleDelete={async () => {
               await store.deleteSelected()
               navigate(routeMap.pdo.detailRequests)

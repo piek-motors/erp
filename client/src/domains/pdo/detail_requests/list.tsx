@@ -15,7 +15,7 @@ export const DetailRequestListPage = observer(() => {
 
   return (
     <ScrollableWindow
-      static={<DetailRequestListHeader />}
+      static={<DetailRequestListHeader store={store} />}
       scroll={<DetailRequestList store={store} />}
     />
   )

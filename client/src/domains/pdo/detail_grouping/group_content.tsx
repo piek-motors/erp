@@ -1,4 +1,4 @@
-import { Box, Option, Select, Stack } from '@mui/joy'
+import { Box, Divider, Option, Select, Stack } from '@mui/joy'
 import type { Column } from 'react-table'
 import { ScrollableWindow } from '@/components/inputs'
 import { NumberInput } from '@/components/inputs/number_input'
@@ -19,7 +19,10 @@ import type { DetailSt } from '../detail/detail.state'
 import { DetailName } from '../detail/detail_name'
 import { DetailStockDelta } from '../detail/detail_stock_delta'
 import { DetailSearch } from '../detail/list/detail_search'
-import { DetailRequestFormModal } from '../detail_requests/form'
+import {
+  DetailRequestFormModal,
+  NewDetailRequestButton,
+} from '../detail_requests/form'
 import { api } from './api'
 import { store } from './group.store'
 import {
@@ -184,8 +187,6 @@ const RequirementActionBar = (props: { children: React.ReactNode }) => (
       justifyContent: 'flex-end',
       py: 1,
       px: 1,
-      backgroundColor: 'background.body',
-      borderTop: '1px solid',
       borderColor: 'divider',
     }}
   >
@@ -200,61 +201,55 @@ const AddToRequirementAction = observer(() => {
     add_to_requirement.load_open_requests()
   }, [add_to_requirement])
 
-  if (!store.group_content.qty_list.has_something()) return null
   if (!add_to_requirement.requests_loaded) return null
-
-  if (!add_to_requirement.has_open_requests) {
-    return (
-      <>
-        <RequirementActionBar>
-          <PlusIcon
-            size="sm"
-            variant="solid"
-            color="primary"
-            invert
-            title="Создать требование"
+  return (
+    <RequirementActionBar>
+      <Stack gap={0.5}>
+        <Label level="body-xs" textAlign={'center'}>
+          Добавить в требование
+        </Label>
+        <Row rowGap={2}>
+          <Row>
+            <Select
+              size="sm"
+              variant="soft"
+              color="primary"
+              value={add_to_requirement.selected_request_id}
+              onChange={(_, value) =>
+                add_to_requirement.set_selected_request_id(value)
+              }
+              placeholder="Открытое требование"
+              disabled={add_to_requirement.requests.length === 0}
+              sx={{ minWidth: 260 }}
+            >
+              {add_to_requirement.requests.map(request => (
+                <Option key={request.id} value={request.id}>
+                  №{request.id} {request.order_id} - {request.product_name}
+                </Option>
+              ))}
+            </Select>
+            {add_to_requirement.selected_request_id && (
+              <PlusIcon
+                title="Добавить в требование"
+                disabled={add_to_requirement.loading}
+                onClick={() => add_to_requirement.add_to_selected_request()}
+              />
+            )}
+          </Row>
+          <Divider orientation="vertical" />
+          <NewDetailRequestButton
             disabled={add_to_requirement.loading}
             onClick={() => add_to_requirement.set_create_open(true)}
           />
-        </RequirementActionBar>
-        <DetailRequestFormModal
-          open={add_to_requirement.create_open}
-          setOpen={open => add_to_requirement.set_create_open(open)}
-          initialDetails={add_to_requirement.initial_details}
-          initialProductName={add_to_requirement.initial_product_name}
-          onSaved={() => add_to_requirement.after_create_saved()}
-        />
-      </>
-    )
-  }
-
-  return (
-    <RequirementActionBar>
-      <Row gap={0.5}>
-        <Select
-          size="sm"
-          value={add_to_requirement.selected_request_id}
-          onChange={(_, value) =>
-            add_to_requirement.set_selected_request_id(value)
-          }
-          placeholder="Открытое требование"
-          disabled={add_to_requirement.requests.length === 0}
-          sx={{ minWidth: 260 }}
-        >
-          {add_to_requirement.requests.map(request => (
-            <Option key={request.id} value={request.id}>
-              №{request.id} {request.order_id} - {request.product_name}
-            </Option>
-          ))}
-        </Select>
-        {add_to_requirement.selected_request_id && (
-          <PlusIcon
-            title="Добавить в требование"
-            disabled={add_to_requirement.loading}
-            onClick={() => add_to_requirement.add_to_selected_request()}
+          <DetailRequestFormModal
+            open={add_to_requirement.create_open}
+            setOpen={open => add_to_requirement.set_create_open(open)}
+            initialDetails={add_to_requirement.initial_details}
+            initialProductName={add_to_requirement.initial_product_name}
+            onSaved={() => add_to_requirement.after_create_saved()}
           />
-        )}
-      </Row>
+        </Row>
+      </Stack>
     </RequirementActionBar>
   )
 })
@@ -281,28 +276,3 @@ const ChangeNameModal = observer(() => {
     />
   )
 })
-
-// const GroupLink = observer(({ group }: GroupSectionProps) => (
-//   <Row
-//     sx={theme => ({
-//       width: 'fit-content',
-//       px: 1,
-//       py: 0.3,
-//       borderRadius: 3,
-//       '&:hover': { background: theme.vars.palette.primary[100] },
-//     })}
-//   >
-//     <Link to={openPage(routeMap.pdo.detailGroup, group.id)}>
-//       <Row
-//         gap={1}
-//         sx={{
-//           cursor: 'pointer',
-//           '&:hover': { textDecoration: 'underline' },
-//         }}
-//       >
-//         <ExpandDirIcon is_expanded={false} />
-//         <P fontWeight={500}>{group.name}</P>
-//       </Row>
-//     </Link>
-//   </Row>
-// ))

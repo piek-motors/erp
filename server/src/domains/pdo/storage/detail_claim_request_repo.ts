@@ -120,10 +120,14 @@ export class DetailClaimRequestRepo {
         .returning('id')
         .executeTakeFirstOrThrow()
 
-      await trx
-        .insertInto('pdo.detail_claim_request_detail')
-        .values(details.map(detail => ({ ...detail, request_id: request.id })))
-        .execute()
+      if (details.length > 0) {
+        await trx
+          .insertInto('pdo.detail_claim_request_detail')
+          .values(
+            details.map(detail => ({ ...detail, request_id: request.id })),
+          )
+          .execute()
+      }
 
       return { id: request.id }
     })
@@ -147,10 +151,12 @@ export class DetailClaimRequestRepo {
         .where('request_id', '=', id)
         .execute()
 
-      await trx
-        .insertInto('pdo.detail_claim_request_detail')
-        .values(details.map(detail => ({ ...detail, request_id: id })))
-        .execute()
+      if (details.length > 0) {
+        await trx
+          .insertInto('pdo.detail_claim_request_detail')
+          .values(details.map(detail => ({ ...detail, request_id: id })))
+          .execute()
+      }
 
       return { id }
     })

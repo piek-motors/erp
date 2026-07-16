@@ -102,6 +102,43 @@ export const InputLabled = (props: InputLabledProps) => (
   </FormControl>
 )
 
+export type AutoWidthInputLabledProps = InputLabledProps & {
+  minChars?: number
+  maxWidth?: string | number
+}
+
+export const AutoWidthInputLabled = (props: AutoWidthInputLabledProps) => {
+  const { minChars = 8, maxWidth = '100%', ...inputProps } = props
+  const value = inputProps.value?.toString() || ''
+  const label = inputProps.label || ''
+  const width = `${Math.max(minChars, value.length + 1, label.length)}ch`
+
+  return (
+    <FormControl
+      error={inputProps.error}
+      sx={{
+        width,
+        minWidth: inputProps.minWidth,
+        maxWidth,
+      }}
+    >
+      <Label label={inputProps.label} />
+      <Row>
+        <Input
+          {...inputProps}
+          value={value}
+          autoComplete="off"
+          sx={{ width: '100%', ...inputProps.sx }}
+          onChange={e => {
+            const nextValue = e.target.value ?? ''
+            inputProps.onChange?.(nextValue)
+          }}
+        />
+      </Row>
+    </FormControl>
+  )
+}
+
 export function InputWithUnit(
   props: InputProps & { unit?: string; label?: string },
 ) {

@@ -16,7 +16,6 @@ const RequestInputSchema = z.object({
   product_qty: z.number().gt(0),
   details: z
     .array(RequestDetailSchema)
-    .nonempty()
     .refine(
       details => new Set(details.map(d => d.detail_id)).size === details.length,
       'Детали в заявке не должны повторяться',

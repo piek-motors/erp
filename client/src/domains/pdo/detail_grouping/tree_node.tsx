@@ -105,7 +105,7 @@ const ExpandButton = observer(({ node }: { node: Node }) => {
     <UseIcon
       small
       icon={FormatListBulletedRounded}
-      settings={{ opacity: 0.3, width: size, fill: 'black' }}
+      settings={{ opacity: 0.5, width: size, fill: 'text.tertiary' }}
     />
   )
 })
@@ -118,7 +118,7 @@ export const ExpandDirIcon = observer(
       <UseIcon
         small
         icon={icon}
-        settings={{ opacity: 1, width: size, fill: 'blue' }}
+        settings={{ opacity: 1, width: size, fill: 'primary.500' }}
       />
     )
   },

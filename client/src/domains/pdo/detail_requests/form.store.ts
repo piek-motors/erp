@@ -99,8 +99,7 @@ export class DetailRequestFormStore {
       !!this.orderId.trim() &&
       !!this.productName.trim() &&
       this.productQty != null &&
-      this.productQty > 0 &&
-      this.details.some(detail => detail.hasPositiveQty)
+      this.productQty > 0
     )
   }
 

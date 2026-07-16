@@ -12,7 +12,7 @@ export const detailRequestColumns: Column<DetailClaimRequestListItem>[] = [
     accessor: request => <Label xs>{request.id}</Label>,
   },
   {
-    Header: 'Заказ',
+    Header: 'ID заказа',
     accessor: request => <P level="body-sm">{request.order_id}</P>,
   },
   {
@@ -81,7 +81,7 @@ export const detailRequestDetailColumns: Column<DetailClaimRequestDetailItem>[] 
       accessor: detail => <P level="body-sm">{detail.qty}</P>,
     },
     {
-      Header: 'Остаток',
+      Header: 'На складе',
       accessor: detail => (
         <P level="body-sm">{detail.on_hand_balance || '—'}</P>
       ),
