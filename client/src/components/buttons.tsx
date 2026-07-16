@@ -2,6 +2,7 @@ import { ArrowBackRounded } from '@mui/icons-material'
 import { IconButton, type IconButtonProps } from '@mui/joy'
 import { Link } from 'react-router'
 import { type Icon, UseIcon } from '@/lib/index'
+import { WebOnly } from './utilities/conditional-display'
 
 export const ExtraSmallIconButton = (props: {
   icon: Icon
@@ -48,5 +49,7 @@ export const BackIconButton = (props: {
     </IconButton>
   )
 
-  return props.link ? <Link to={props.link}>{btn}</Link> : btn
+  return (
+    <WebOnly>{props.link ? <Link to={props.link}>{btn}</Link> : btn}</WebOnly>
+  )
 }

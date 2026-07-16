@@ -140,7 +140,7 @@ const DetailRequestActions = observer(
         <Row justifyContent="flex-end">
           {!isSentToWarehouse && (
             <ActionButton
-              label="Передать в сборку"
+              label="Передать на склад"
               props={{ color: 'primary', variant: 'soft' }}
               onClick={() => store.sendSelectedToWarehouse()}
             />
