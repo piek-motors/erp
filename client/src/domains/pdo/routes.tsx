@@ -3,7 +3,10 @@ import type { RouteConfig } from '@/lib/types/global'
 import { CreateDetailPage, DetailPage } from './detail/detail'
 import { DetailsListPage } from './detail/list/list'
 import { GroupListPage } from './detail_grouping/main'
-import { DetailRequestListPage } from './detail_requests/list'
+import {
+  DetailRequestDetailsPage,
+  DetailRequestListPage,
+} from './detail_requests/list'
 import { MaterialListPage } from './material/list/list'
 import { CreateMaterialPage, MaterialUpdatePage } from './material/material'
 import { ProductionOrderList } from './orders/list/production'
@@ -64,6 +67,14 @@ export default {
     {
       element: <DetailRequestListPage />,
       path: metalflow.detailRequests,
+    },
+    {
+      element: (
+        <MobilePadding desktop_too>
+          <DetailRequestDetailsPage />
+        </MobilePadding>
+      ),
+      path: metalflow.detailRequest,
     },
     {
       element: <InventoryLogPage />,

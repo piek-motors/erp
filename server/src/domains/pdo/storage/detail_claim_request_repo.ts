@@ -33,6 +33,7 @@ export interface DetailClaimRequestDetailItem {
   drawing_number: string | null
   qty: number
   on_hand_balance: number
+  stock_location: string | null
 }
 
 export interface DetailClaimRequestFull {
@@ -101,6 +102,7 @@ export class DetailClaimRequestRepo {
         'd.name as detail_name',
         'd.drawing_number',
         'd.on_hand_balance',
+        'd.stock_location',
       ])
       .where('rd.request_id', '=', id)
       .orderBy('d.name')

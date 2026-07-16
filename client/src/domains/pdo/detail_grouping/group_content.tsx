@@ -1,16 +1,15 @@
-import { Box, Button, Stack } from '@mui/joy'
+import { Box, Option, Select, Stack } from '@mui/joy'
 import type { Column } from 'react-table'
 import { ScrollableWindow } from '@/components/inputs'
 import { NumberInput } from '@/components/inputs/number_input'
 import { Table } from '@/components/table.impl'
 import {
   Label,
-  Link,
   Loading,
   observer,
   P,
+  PlusIcon,
   Row,
-  UseIcon,
   useEffect,
   useParams,
   useState,
@@ -21,9 +20,7 @@ import { DetailName } from '../detail/detail_name'
 import { DetailStockDelta } from '../detail/detail_stock_delta'
 import { DetailSearch } from '../detail/list/detail_search'
 import { DetailRequestFormModal } from '../detail_requests/form'
-import type { DetailRequestFormDetail } from '../detail_requests/form.store'
 import { api } from './api'
-import type { GroupTreeNode } from './group.store'
 import { store } from './group.store'
 import {
   ChangeGroupNameModal,
@@ -74,7 +71,7 @@ const GroupQtyInput = observer(({ detail }: { detail: DetailSt }) => {
   return (
     <NumberInput
       size="sm"
-      sx={{ fontWeight: 600, width: '40px' }}
+      sx={{ fontWeight: 600, width: '40px', minHeight: 20 }}
       variant={focused ? 'outlined' : 'plain'}
       color="primary"
       onFocus={e => {
@@ -89,10 +86,6 @@ const GroupQtyInput = observer(({ detail }: { detail: DetailSt }) => {
     />
   )
 })
-
-interface GroupSectionProps {
-  group: GroupTreeNode
-}
 
 export const GroupContentSection = observer(() => {
   const { id } = useParams<{ id: string }>()
@@ -164,6 +157,7 @@ const GroupContent = observer(() => {
         )}
 
         <Table
+          small
           columns={detailColumns}
           data={group_content.get_filtered_and_sorted()}
           sx={{
@@ -174,58 +168,94 @@ const GroupContent = observer(() => {
           }}
         />
       </Box>
-      <CreateRequirementButton />
+      <AddToRequirementAction />
       {create_subgroup_modal.is_open && <CreateSubgroupModal />}
     </Stack>
   )
 })
 
-const CreateRequirementButton = observer(() => {
-  const [open, setOpen] = useState(false)
+const RequirementActionBar = (props: { children: React.ReactNode }) => (
+  <Box
+    sx={{
+      position: 'sticky',
+      bottom: 0,
+      zIndex: 2,
+      display: 'flex',
+      justifyContent: 'flex-end',
+      py: 1,
+      px: 1,
+      backgroundColor: 'background.body',
+      borderTop: '1px solid',
+      borderColor: 'divider',
+    }}
+  >
+    {props.children}
+  </Box>
+)
+
+const AddToRequirementAction = observer(() => {
+  const { add_to_requirement } = store.group_content
+
+  useEffect(() => {
+    add_to_requirement.load_open_requests()
+  }, [add_to_requirement])
 
   if (!store.group_content.qty_list.has_something()) return null
+  if (!add_to_requirement.requests_loaded) return null
 
-  const details = store.group_content.qty_list.items.reduce<
-    DetailRequestFormDetail[]
-  >((acc, item) => {
-    if (!item.qty || item.qty <= 0) return acc
-
-    const detail = store.group_content.details.find(d => d.id === item.id)
-    if (!detail) return acc
-
-    acc.push({
-      detail_id: detail.id,
-      detail_name: detail.name,
-      drawing_number: detail.drawing_number ?? undefined,
-      qty: item.qty,
-    })
-    return acc
-  }, [])
+  if (!add_to_requirement.has_open_requests) {
+    return (
+      <>
+        <RequirementActionBar>
+          <PlusIcon
+            size="sm"
+            variant="solid"
+            color="primary"
+            invert
+            title="Создать требование"
+            disabled={add_to_requirement.loading}
+            onClick={() => add_to_requirement.set_create_open(true)}
+          />
+        </RequirementActionBar>
+        <DetailRequestFormModal
+          open={add_to_requirement.create_open}
+          setOpen={open => add_to_requirement.set_create_open(open)}
+          initialDetails={add_to_requirement.initial_details}
+          initialProductName={add_to_requirement.initial_product_name}
+          onSaved={() => add_to_requirement.after_create_saved()}
+        />
+      </>
+    )
+  }
 
   return (
-    <>
-      <Button
-        sx={{ width: 'fit-content', ml: 'auto' }}
-        variant="solid"
-        color="primary"
-        onClick={() => setOpen(true)}
-      >
-        Создать требование
-      </Button>
-      <DetailRequestFormModal
-        open={open}
-        setOpen={setOpen}
-        initialDetails={details}
-        initialProductName={
-          store.group_content.group
-            ? (app_cache.groups.tree.full_node_name(
-                store.group_content.group.id,
-              ) ?? '')
-            : ''
-        }
-        onSaved={() => store.group_content.qty_list.clear()}
-      />
-    </>
+    <RequirementActionBar>
+      <Row gap={0.5}>
+        <Select
+          size="sm"
+          value={add_to_requirement.selected_request_id}
+          onChange={(_, value) =>
+            add_to_requirement.set_selected_request_id(value)
+          }
+          placeholder="Открытое требование"
+          disabled={add_to_requirement.requests.length === 0}
+          sx={{ minWidth: 260 }}
+        >
+          {add_to_requirement.requests.map(request => (
+            <Option key={request.id} value={request.id}>
+              №{request.id} {request.order_id} - {request.product_name}
+            </Option>
+          ))}
+        </Select>
+        {add_to_requirement.selected_request_id && (
+          <PlusIcon
+            title="Добавить в требование"
+            disabled={add_to_requirement.loading}
+            onClick={() => add_to_requirement.add_to_selected_request()}
+          />
+        )}
+      </Row>
+    </RequirementActionBar>
   )
 })
 

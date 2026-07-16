@@ -39,6 +39,7 @@ export const routeMap = {
     detailGroups: '/metalflow/details/groups',
     detailGroup: '/metalflow/details/groups/:id',
     detailRequests: '/metalflow/detail-requests',
+    detailRequest: '/metalflow/detail-requests/:id',
 
     operations: '/metalflow/operations',
     order: {

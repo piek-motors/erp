@@ -1,7 +1,19 @@
 import { makeAutoObservable } from 'mobx'
+import { notifier } from '@/lib/store/notifier.store'
 import { normalize, token_search } from '@/lib/utils/search'
+import { app_cache } from '../cache'
 import type { DetailSt } from '../detail/detail.state'
 import { SearchCriteria, search_config } from '../detail/list/search_config'
+import {
+  type DetailClaimRequestListItem,
+  detail_request_api,
+} from '../detail_requests/api'
+import type { DetailRequestFormDetail } from '../detail_requests/form.store'
+
+interface DetailRequestQty {
+  detail_id: number
+  qty: number
+}
 
 class EditGroupVM {
   constructor() {
@@ -101,8 +113,141 @@ class QuantityList {
   }
 }
 
+class AddToRequirementVM {
+  requests: DetailClaimRequestListItem[] = []
+  selected_request_id: number | null = null
+  create_open = false
+  requests_loaded = false
+
+  constructor(private readonly group_content: GroupContentVM) {
+    makeAutoObservable(this)
+  }
+
+  async load_open_requests() {
+    const requests = (await detail_request_api.list()).filter(
+      request => !request.fulfilled_at,
+    )
+
+    this.set_requests(requests)
+    this.requests_loaded = true
+  }
+
+  set_selected_request_id(id: number | null) {
+    this.selected_request_id = id
+  }
+
+  set_create_open(open: boolean) {
+    this.create_open = open
+  }
+
+  get can_add() {
+    return !!this.selected_request_id && this.selected_details.length > 0
+  }
+
+  get has_open_requests() {
+    return this.requests.length > 0
+  }
+
+  get loading() {
+    return detail_request_api.loader.loading
+  }
+
+  get initial_product_name() {
+    return this.group_content.group
+      ? (app_cache.groups.tree.full_node_name(this.group_content.group.id) ??
+          '')
+      : ''
+  }
+
+  get initial_details(): DetailRequestFormDetail[] {
+    return this.group_content.qty_list.items.reduce<DetailRequestFormDetail[]>(
+      (acc, item) => {
+        if (!item.qty || item.qty <= 0) return acc
+
+        const detail = this.group_content.details.find(d => d.id === item.id)
+        if (!detail) return acc
+
+        acc.push({
+          detail_id: detail.id,
+          detail_name: detail.name,
+          drawing_number: detail.drawing_number ?? undefined,
+          qty: item.qty,
+        })
+        return acc
+      },
+      [],
+    )
+  }
+
+  get selected_details(): DetailRequestQty[] {
+    return this.group_content.qty_list.items.reduce<DetailRequestQty[]>(
+      (acc, item) => {
+        if (!item.qty || item.qty <= 0) return acc
+
+        const detail = this.group_content.details.find(d => d.id === item.id)
+        if (!detail) return acc
+
+        acc.push({
+          detail_id: detail.id,
+          qty: item.qty,
+        })
+        return acc
+      },
+      [],
+    )
+  }
+
+  async add_to_selected_request() {
+    if (!this.selected_request_id || !this.can_add) return
+
+    const request = await detail_request_api.get(this.selected_request_id)
+    const detailQtyById = new Map<number, number>()
+
+    request.details.forEach(detail => {
+      detailQtyById.set(detail.detail_id, detail.qty)
+    })
+
+    this.selected_details.forEach(detail => {
+      detailQtyById.set(
+        detail.detail_id,
+        (detailQtyById.get(detail.detail_id) ?? 0) + detail.qty,
+      )
+    })
+
+    await detail_request_api.update({
+      id: request.request.id,
+      order_id: request.request.order_id,
+      product_name: request.request.product_name,
+      product_qty: request.request.product_qty,
+      details: Array.from(detailQtyById, ([detail_id, qty]) => ({
+        detail_id,
+        qty,
+      })),
+    })
+
+    notifier.ok('Детали добавлены в требование')
+    this.group_content.qty_list.clear()
+    await this.load_open_requests()
+  }
+
+  async after_create_saved() {
+    this.group_content.qty_list.clear()
+    await this.load_open_requests()
+  }
+
+  private set_requests(requests: DetailClaimRequestListItem[]) {
+    this.requests = requests
+    this.selected_request_id =
+      this.selected_request_id &&
+      requests.some(request => request.id === this.selected_request_id)
+        ? this.selected_request_id
+        : null
+  }
+}
+
 export class GroupContentVM {
   qty_list: QuantityList = new QuantityList()
+  readonly add_to_requirement = new AddToRequirementVM(this)
   // currently opened group
   group: Group | null = null
 

@@ -1,4 +1,4 @@
-import type { Icon } from '@iconscout/react-unicons'
+import { type Icon, UilArrowLeft } from '@iconscout/react-unicons'
 import { IconButton, type IconButtonProps } from '@mui/joy'
 import { Link } from 'react-router'
 import { UseIcon } from '@/lib/index'
@@ -27,4 +27,26 @@ export const ExtraSmallIconButton = (props: {
   ) : (
     btn
   )
+}
+
+export const BackIconButton = (props: {
+  link?: string
+  onClick?: IconButtonProps['onClick']
+  buttonProps?: IconButtonProps
+}) => {
+  const btn = (
+    <IconButton
+      aria-label="Назад"
+      title="Назад"
+      variant="soft"
+      color="primary"
+      size="sm"
+      onClick={props.onClick}
+      {...props.buttonProps}
+    >
+      <UseIcon icon={UilArrowLeft} />
+    </IconButton>
+  )
+
+  return props.link ? <Link to={props.link}>{btn}</Link> : btn
 }
