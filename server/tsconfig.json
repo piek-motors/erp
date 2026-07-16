@@ -10,6 +10,7 @@
     "paths": {
       "#root/*": ["./src/*"]
     },
+    "rootDir": "./src",
     "sourceMap": true,
     "outDir": "./dist",
     "esModuleInterop": true,

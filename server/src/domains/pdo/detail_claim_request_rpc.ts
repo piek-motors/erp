@@ -42,7 +42,7 @@ export const detail_claim_requests = router({
   fulfill: procedure
     .use(requireScope(Scope.pdo))
     .input(z.object({ id: z.number() }))
-    .mutation(async ({ input: { id } }) => repo.fulfill(id)),
+    .mutation(async ({ input: { id }, ctx }) => repo.fulfill(id, ctx.user.id)),
 
   delete: procedure
     .use(requireScope(Scope.pdo))

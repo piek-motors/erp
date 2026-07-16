@@ -195,13 +195,14 @@ const RequirementActionBar = (props: { children: React.ReactNode }) => (
 )
 
 const AddToRequirementAction = observer(() => {
-  const { add_to_requirement } = store.group_content
+  const { add_to_requirement, qty_list } = store.group_content
 
   useEffect(() => {
     add_to_requirement.load_open_requests()
   }, [add_to_requirement])
 
   if (!add_to_requirement.requests_loaded) return null
+  if (!qty_list.has_something()) return null
   return (
     <RequirementActionBar>
       <Stack gap={0.5}>

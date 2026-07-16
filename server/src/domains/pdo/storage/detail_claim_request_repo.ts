@@ -1,3 +1,5 @@
+import { WriteoffReason } from 'shared'
+import { Warehouse } from '#root/domains/pdo/services/warehouse_service.js'
 import { type DB, type IDB, RpcError } from '#root/sdk.js'
 
 export interface DetailClaimRequestDetailInput {
@@ -39,6 +41,11 @@ export interface DetailClaimRequestDetailItem {
 export interface DetailClaimRequestFull {
   request: DB.Pdo.DetailClaimRequest
   details: DetailClaimRequestDetailItem[]
+}
+
+export interface FulfillDetailClaimRequestResult {
+  request: DB.Pdo.DetailClaimRequest
+  writtenOffQty: number
 }
 
 export class DetailClaimRequestRepo {
@@ -162,19 +169,53 @@ export class DetailClaimRequestRepo {
     })
   }
 
-  async fulfill(id: number): Promise<DB.Pdo.DetailClaimRequest> {
-    const request = await this.db
-      .updateTable('pdo.detail_claim_request')
-      .set({ fulfilled_at: new Date() })
-      .where('id', '=', id)
-      .returningAll()
-      .executeTakeFirst()
+  async fulfill(
+    id: number,
+    userId: number,
+  ): Promise<FulfillDetailClaimRequestResult> {
+    return this.db.transaction().execute(async trx => {
+      const request = await trx
+        .updateTable('pdo.detail_claim_request')
+        .set({ fulfilled_at: new Date() })
+        .where('id', '=', id)
+        .where('fulfilled_at', 'is', null)
+        .returningAll()
+        .executeTakeFirst()
 
-    if (!request) {
-      throw RpcError('NOT_FOUND', `Detail claim request ${id} not found`)
-    }
+      if (!request) {
+        const existing = await trx
+          .selectFrom('pdo.detail_claim_request')
+          .select(['id', 'fulfilled_at'])
+          .where('id', '=', id)
+          .executeTakeFirst()
 
-    return request
+        if (!existing) {
+          throw RpcError('NOT_FOUND', `Detail claim request ${id} not found`)
+        }
+
+        throw RpcError('BAD_REQUEST', `Detail claim request ${id} is fulfilled`)
+      }
+
+      const details = await trx
+        .selectFrom('pdo.detail_claim_request_detail')
+        .select(['detail_id', 'qty'])
+        .where('request_id', '=', id)
+        .execute()
+
+      const warehouse = new Warehouse(trx, userId)
+      let writtenOffQty = 0
+
+      for (const detail of details) {
+        await warehouse.writeoffDetails(
+          detail.detail_id,
+          detail.qty,
+          WriteoffReason.ProductionUse,
+        )
+        writtenOffQty += detail.qty
+      }
+
+      return { request, writtenOffQty }
+    })
   }
 
   async delete(id: number): Promise<{ success: true }> {

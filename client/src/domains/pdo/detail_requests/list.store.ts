@@ -43,8 +43,10 @@ export class DetailRequestListStore {
   async fulfillSelected() {
     if (!this.selectedRequest) return
 
-    await detail_request_api.fulfill(this.selectedRequest.request.id)
-    notifier.ok('Требование выполнено')
+    const { writtenOffQty } = await detail_request_api.fulfill(
+      this.selectedRequest.request.id,
+    )
+    notifier.ok(`Требование выполнено. Списано деталей: ${writtenOffQty}`)
     await this.loadSelected()
     await this.reload()
   }

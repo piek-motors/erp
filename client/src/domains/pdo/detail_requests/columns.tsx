@@ -12,6 +12,19 @@ export const detailRequestColumns: Column<DetailClaimRequestListItem>[] = [
     accessor: request => <Label xs>{request.id}</Label>,
   },
   {
+    Header: 'Статус',
+    accessor: request =>
+      request.fulfilled_at ? (
+        <Chip size="sm" color="success" variant="soft">
+          Выполнено
+        </Chip>
+      ) : (
+        <Chip size="sm" color="warning" variant="soft">
+          Открыто
+        </Chip>
+      ),
+  },
+  {
     Header: 'ID заказа',
     accessor: request => <P level="body-sm">{request.order_id}</P>,
   },
@@ -27,29 +40,12 @@ export const detailRequestColumns: Column<DetailClaimRequestListItem>[] = [
     ),
   },
   {
-    Header: 'Требуется дет.',
-    accessor: request => <P level="body-sm">{request.detail_count}</P>,
-  },
-  {
     Header: 'Создано',
     accessor: request => (
       <P noWrap level="body-xs">
         {fmtDate(request.created_at)}
       </P>
     ),
-  },
-  {
-    Header: 'Статус',
-    accessor: request =>
-      request.fulfilled_at ? (
-        <Chip size="sm" color="success" variant="soft">
-          Выполнено
-        </Chip>
-      ) : (
-        <Chip size="sm" color="warning" variant="soft">
-          Открыто
-        </Chip>
-      ),
   },
 ]
 

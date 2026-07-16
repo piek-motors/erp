@@ -237,6 +237,11 @@ class AddToRequirementVM {
 
   private set_requests(requests: DetailClaimRequestListItem[]) {
     this.requests = requests
+    if (requests.length === 1) {
+      this.selected_request_id = requests[0].id
+      return
+    }
+
     this.selected_request_id =
       this.selected_request_id &&
       requests.some(request => request.id === this.selected_request_id)

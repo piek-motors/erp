@@ -30,6 +30,10 @@ export interface DetailClaimRequestFull {
   details: DetailClaimRequestDetailItem[]
 }
 
+interface FulfillDetailClaimRequestResult {
+  writtenOffQty: number
+}
+
 export class DetailRequestApi {
   readonly loader = new LoadingController()
 
@@ -63,10 +67,11 @@ export class DetailRequestApi {
     )
   }
 
-  async fulfill(id: number) {
-    return this.loader.run(async () =>
-      rpc.pdo.detail_claim_requests.fulfill.mutate({ id }),
-    )
+  async fulfill(id: number): Promise<FulfillDetailClaimRequestResult> {
+    return this.loader.run(async () => {
+      const result = await rpc.pdo.detail_claim_requests.fulfill.mutate({ id })
+      return result as unknown as FulfillDetailClaimRequestResult
+    })
   }
 
   async delete(id: number) {

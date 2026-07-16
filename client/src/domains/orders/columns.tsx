@@ -10,6 +10,13 @@ import { openOrderDetailPage } from '@/lib/routes'
 import type { UnpackedOrder } from './api'
 import { getBackgroundColor } from './utils'
 
+const orderListPositionSeparatorSx = {
+  '& > *:not(:last-child)': {
+    borderBottom: '1px dashed rgba(0, 0, 0, 0.18)',
+    pb: 0.5,
+  },
+}
+
 export const columns: Column<UnpackedOrder>[] = [
   {
     Header: 'ID',
@@ -26,7 +33,7 @@ export const columns: Column<UnpackedOrder>[] = [
         )
       else {
         return (
-          <Stack gap={1}>
+          <Stack gap={1} sx={orderListPositionSeparatorSx}>
             {order.positions.map(item => (
               <div key={item.id}>
                 <Pre>{item.name?.trim()}</Pre>
@@ -40,9 +47,11 @@ export const columns: Column<UnpackedOrder>[] = [
   {
     Header: 'Кол.',
     accessor: order => (
-      <Stack gap={1}>
+      <Stack gap={1} sx={orderListPositionSeparatorSx}>
         {order.positions.map(item => (
-          <Pre key={item.id}>{item.quantity}</Pre>
+          <div key={item.id}>
+            <Pre>{item.quantity}</Pre>
+          </div>
         ))}
       </Stack>
     ),
