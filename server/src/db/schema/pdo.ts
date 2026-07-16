@@ -136,6 +136,7 @@ export interface DetailClaimRequestTable {
   product_name: string
   product_qty: number
   created_at: Generated<Date>
+  sent_to_warehouse_at: Date | null
   fulfilled_at: Date | null
 }
 export type DetailClaimRequest = Selectable<DetailClaimRequestTable>

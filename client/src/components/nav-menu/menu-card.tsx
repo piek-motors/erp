@@ -16,11 +16,9 @@ export const MenuCard = ({ icon, name, count, onClick }: MenuCardProps) => {
       onClick={onClick}
       sx={{
         position: 'relative',
-        border: '1px solid',
-        borderColor: 'neutral.outlinedBorder',
         bgcolor: 'background.popup',
         backdropFilter: 'blur(10px)',
-        borderRadius: 3,
+        borderRadius: 30,
         p: 3,
         display: 'flex',
         flexDirection: 'column',

@@ -14,6 +14,7 @@ export interface DetailClaimRequestListItem {
   product_name: string
   product_qty: number
   created_at: string
+  sent_to_warehouse_at: string | null
   fulfilled_at: string | null
   detail_count: number
 }
@@ -25,6 +26,7 @@ export interface DetailClaimRequestFull {
     product_name: string
     product_qty: number
     created_at: string
+    sent_to_warehouse_at: string | null
     fulfilled_at: string | null
   }
   details: DetailClaimRequestDetailItem[]
@@ -64,6 +66,12 @@ export class DetailRequestApi {
   async update(input: UpdateDetailClaimRequestInput) {
     return this.loader.run(async () =>
       rpc.pdo.detail_claim_requests.update.mutate(input),
+    )
+  }
+
+  async sendToWarehouse(id: number) {
+    return this.loader.run(async () =>
+      rpc.pdo.detail_claim_requests.send_to_warehouse.mutate({ id }),
     )
   }
 

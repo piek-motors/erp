@@ -16,7 +16,11 @@ export const detailRequestColumns: Column<DetailClaimRequestListItem>[] = [
     accessor: request =>
       request.fulfilled_at ? (
         <Chip size="sm" color="success" variant="soft">
-          Выполнено
+          Исполнено
+        </Chip>
+      ) : request.sent_to_warehouse_at ? (
+        <Chip size="sm" color="primary" variant="soft">
+          В сборке
         </Chip>
       ) : (
         <Chip size="sm" color="warning" variant="soft">

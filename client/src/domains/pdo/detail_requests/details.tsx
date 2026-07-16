@@ -91,7 +91,11 @@ const DetailRequestStatus = ({
 }) =>
   request.request.fulfilled_at ? (
     <Chip size="sm" color="success" variant="soft">
-      Выполнено {fmtDate(request.request.fulfilled_at)}
+      Исполнено {fmtDate(request.request.fulfilled_at)}
+    </Chip>
+  ) : request.request.sent_to_warehouse_at ? (
+    <Chip size="sm" color="primary" variant="soft">
+      В сборке {fmtDate(request.request.sent_to_warehouse_at)}
     </Chip>
   ) : (
     <Chip size="sm" color="warning" variant="soft">
@@ -128,13 +132,22 @@ const DetailRequestActions = observer(
   }) => {
     const navigate = useNavigate()
     if (request.request.fulfilled_at) return
+    const isSentToWarehouse = !!request.request.sent_to_warehouse_at
+
     return (
       <Row justifyContent="space-between">
         <span />
         <Row justifyContent="flex-end">
-          {!request.request.fulfilled_at && (
+          {!isSentToWarehouse && (
             <ActionButton
-              label="Выполнен"
+              label="Передать в сборку"
+              props={{ color: 'primary', variant: 'soft' }}
+              onClick={() => store.sendSelectedToWarehouse()}
+            />
+          )}
+          {isSentToWarehouse && (
+            <ActionButton
+              label="Исполнен"
               props={{ color: 'success', variant: 'soft' }}
               onClick={() => store.fulfillSelected()}
             />

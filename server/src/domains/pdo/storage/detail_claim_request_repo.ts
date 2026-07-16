@@ -25,6 +25,7 @@ export interface DetailClaimRequestListItem {
   product_name: string
   product_qty: number
   created_at: Date
+  sent_to_warehouse_at: Date | null
   fulfilled_at: Date | null
   detail_count: number
 }
@@ -68,6 +69,7 @@ export class DetailClaimRequestRepo {
         'r.product_name',
         'r.product_qty',
         'r.created_at',
+        'r.sent_to_warehouse_at',
         'r.fulfilled_at',
         eb.fn.count<number>('rd.detail_id').as('detail_count'),
       ])
@@ -78,6 +80,7 @@ export class DetailClaimRequestRepo {
         'r.product_name',
         'r.product_qty',
         'r.created_at',
+        'r.sent_to_warehouse_at',
         'r.fulfilled_at',
       ])
       .orderBy('r.created_at', 'desc')
@@ -167,6 +170,37 @@ export class DetailClaimRequestRepo {
 
       return { id }
     })
+  }
+
+  async sendToWarehouse(id: number): Promise<DB.Pdo.DetailClaimRequest> {
+    const request = await this.db
+      .updateTable('pdo.detail_claim_request')
+      .set({ sent_to_warehouse_at: new Date() })
+      .where('id', '=', id)
+      .where('sent_to_warehouse_at', 'is', null)
+      .where('fulfilled_at', 'is', null)
+      .returningAll()
+      .executeTakeFirst()
+
+    if (request) return request
+
+    const existing = await this.db
+      .selectFrom('pdo.detail_claim_request')
+      .select(['id', 'sent_to_warehouse_at', 'fulfilled_at'])
+      .where('id', '=', id)
+      .executeTakeFirst()
+    if (!existing) {
+      throw RpcError('NOT_FOUND', `Detail claim request ${id} not found`)
+    }
+
+    if (existing.fulfilled_at) {
+      throw RpcError('BAD_REQUEST', `Detail claim request ${id} is fulfilled`)
+    }
+
+    throw RpcError(
+      'BAD_REQUEST',
+      `Detail claim request ${id} is already sent to warehouse`,
+    )
   }
 
   async fulfill(

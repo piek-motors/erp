@@ -116,7 +116,6 @@ class QuantityList {
 class AddToRequirementVM {
   requests: DetailClaimRequestListItem[] = []
   selected_request_id: number | null = null
-  create_open = false
   requests_loaded = false
 
   constructor(private readonly group_content: GroupContentVM) {
@@ -125,7 +124,7 @@ class AddToRequirementVM {
 
   async load_open_requests() {
     const requests = (await detail_request_api.list()).filter(
-      request => !request.fulfilled_at,
+      request => !request.fulfilled_at && !request.sent_to_warehouse_at,
     )
 
     this.set_requests(requests)
@@ -134,10 +133,6 @@ class AddToRequirementVM {
 
   set_selected_request_id(id: number | null) {
     this.selected_request_id = id
-  }
-
-  set_create_open(open: boolean) {
-    this.create_open = open
   }
 
   get can_add() {

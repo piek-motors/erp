@@ -39,6 +39,11 @@ export const detail_claim_requests = router({
     .input(RequestInputSchema.extend({ id: z.number() }))
     .mutation(async ({ input }) => repo.update(input)),
 
+  send_to_warehouse: procedure
+    .use(requireScope(Scope.pdo))
+    .input(z.object({ id: z.number() }))
+    .mutation(async ({ input: { id } }) => repo.sendToWarehouse(id)),
+
   fulfill: procedure
     .use(requireScope(Scope.pdo))
     .input(z.object({ id: z.number() }))

@@ -46,7 +46,16 @@ export class DetailRequestListStore {
     const { writtenOffQty } = await detail_request_api.fulfill(
       this.selectedRequest.request.id,
     )
-    notifier.ok(`Требование выполнено. Списано деталей: ${writtenOffQty}`)
+    notifier.ok(`Требование исполнено. Списано деталей: ${writtenOffQty}`)
+    await this.loadSelected()
+    await this.reload()
+  }
+
+  async sendSelectedToWarehouse() {
+    if (!this.selectedRequest) return
+
+    await detail_request_api.sendToWarehouse(this.selectedRequest.request.id)
+    notifier.ok('Требование передано в сборку')
     await this.loadSelected()
     await this.reload()
   }

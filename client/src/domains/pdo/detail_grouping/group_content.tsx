@@ -19,10 +19,7 @@ import type { DetailSt } from '../detail/detail.state'
 import { DetailName } from '../detail/detail_name'
 import { DetailStockDelta } from '../detail/detail_stock_delta'
 import { DetailSearch } from '../detail/list/detail_search'
-import {
-  DetailRequestFormModal,
-  NewDetailRequestButton,
-} from '../detail_requests/form'
+import { CreateDetailRequestButton } from '../detail_requests/create_button'
 import { api } from './api'
 import { store } from './group.store'
 import {
@@ -238,13 +235,8 @@ const AddToRequirementAction = observer(() => {
             )}
           </Row>
           <Divider orientation="vertical" />
-          <NewDetailRequestButton
+          <CreateDetailRequestButton
             disabled={add_to_requirement.loading}
-            onClick={() => add_to_requirement.set_create_open(true)}
-          />
-          <DetailRequestFormModal
-            open={add_to_requirement.create_open}
-            setOpen={open => add_to_requirement.set_create_open(open)}
             initialDetails={add_to_requirement.initial_details}
             initialProductName={add_to_requirement.initial_product_name}
             onSaved={() => add_to_requirement.after_create_saved()}
