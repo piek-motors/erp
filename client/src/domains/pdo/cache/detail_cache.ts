@@ -4,13 +4,13 @@ import { rpc } from '@/lib/rpc/rpc.client'
 import { LoadingController } from '@/lib/store/loading_controller'
 import { normalize } from '@/lib/utils/search'
 import type { ListDetailsOutput } from '@/server/domains/pdo/details_rpc'
-import { GroupAssigment } from '../detail/detail.state'
+import { DetailGroupAssigment } from '../detail/detail.state'
 
 const alphabet = 'АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ'.split('')
 
 export type AppDetail = ListDetailsOutput & {
   normalized_name: string
-  group_assigment: GroupAssigment
+  group_assigment: DetailGroupAssigment
   safe_stock_leftover: number | null
 }
 
@@ -106,7 +106,7 @@ export class DetailCache {
     return d.map(e => ({
       ...e,
       normalized_name: normalize(e.name),
-      group_assigment: new GroupAssigment(e.group_ids),
+      group_assigment: new DetailGroupAssigment(e.group_ids),
       safe_stock_leftover:
         (e as ListDetailsOutput & { safe_stock_leftover?: number | null })
           .safe_stock_leftover ?? null,

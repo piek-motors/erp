@@ -31,7 +31,7 @@ export class LastProduction {
   ) {}
 }
 
-export class GroupAssigment {
+export class DetailGroupAssigment {
   constructor(public group_ids: number[] = []) {
     makeAutoObservable(this)
   }
@@ -56,7 +56,7 @@ export class GroupAssigment {
 export class DetailSt {
   readonly attachments = new AttachmentsStore()
   readonly warehouse = new DetailWarehouseStore()
-  readonly group_assigment = new GroupAssigment()
+  readonly group_assigment = new DetailGroupAssigment()
   /** metal blank */
   readonly blank = new DetailBlankSt()
   readonly workflow = new Workflow()

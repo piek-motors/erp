@@ -9,7 +9,7 @@ import type { ReactNode } from 'react'
 import { Link } from 'react-router'
 import { observer, Row, UseIcon, useEffect } from '@/lib/index'
 import { openPage, routeMap } from '@/lib/routes'
-import type { GroupAssigment } from '../detail/detail.state'
+import type { DetailGroupAssigment } from '../detail/detail.state'
 import { store } from './group.store'
 import type { Node } from './tree/node_vm'
 
@@ -18,7 +18,7 @@ export interface TreeNodeProps {
   depth: number
   onClick?: (id: number) => void
   strategy: 'link' | 'btn'
-  group_assigment?: GroupAssigment
+  group_assigment?: DetailGroupAssigment
 }
 
 export const TreeNode = observer(

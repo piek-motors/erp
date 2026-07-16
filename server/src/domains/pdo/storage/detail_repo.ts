@@ -142,6 +142,36 @@ export class DetailRepo {
     }))
   }
 
+  async list_details_by_ids(
+    detail_ids: number[],
+  ): Promise<ListDetailsOutput[]> {
+    if (detail_ids.length === 0) {
+      return []
+    }
+
+    const [details, detail_group_associations] = await Promise.all([
+      this.db
+        .selectFrom('pdo.details as d')
+        .select([
+          'd.id',
+          'd.name',
+          'd.drawing_number',
+          'd.on_hand_balance',
+          'd.safe_stock_leftover',
+          'd.stock_location',
+        ])
+        .where('d.id', 'in', detail_ids)
+        .orderBy('d.name')
+        .execute(),
+      this.detail_group_associations_by_detail_ids(detail_ids),
+    ])
+
+    return details.map(d => ({
+      ...d,
+      group_ids: detail_group_associations.get(d.id) || [],
+    }))
+  }
+
   /**
    * Create new detail
    */
@@ -321,10 +351,30 @@ export class DetailRepo {
       .execute()
   }
 
+  async get_group_details_by_detail_ids(
+    detail_ids: number[],
+  ): Promise<DetailGroupDetailRow[]> {
+    if (detail_ids.length === 0) {
+      return []
+    }
+
+    return await this.db
+      .selectFrom('pdo.detail_group_details')
+      .select(['detail_id', 'group_id'])
+      .where('detail_id', 'in', detail_ids)
+      .execute()
+  }
+
   async detail_group_associations() {
     const associations = await this.get_all_group_details()
     return create_detail_group_map(associations)
   }
+
+  async detail_group_associations_by_detail_ids(detail_ids: number[]) {
+    const associations = await this.get_group_details_by_detail_ids(detail_ids)
+    return create_detail_group_map(associations)
+  }
+
   /**
    * Get attachments for a detail
    */

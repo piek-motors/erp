@@ -1,7 +1,7 @@
 import type { CriteriaBasedSearchConfig } from '@/lib/utils/search'
 import { normalize } from '@/lib/utils/search'
 import { app_cache } from '../../cache'
-import type { GroupAssigment } from '../detail.state'
+import type { DetailGroupAssigment } from '../detail.state'
 
 export interface DetailSearchEntity {
   id: number
@@ -10,7 +10,7 @@ export interface DetailSearchEntity {
   drawing_number?: string | null
   stock_location?: string | null
   group_ids?: number[]
-  group_assigment?: GroupAssigment
+  group_assigment?: DetailGroupAssigment
 }
 
 export enum SearchCriteria {

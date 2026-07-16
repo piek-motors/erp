@@ -5,12 +5,12 @@ import { fmt } from 'shared'
 import { Box, Link, observer, P, Row, Stack } from '@/lib/index'
 import { openPage, routeMap } from '@/lib/routes'
 import { GroupNamesPreview } from '../detail_grouping/group_name_preview'
-import type { GroupAssigment } from './detail.state'
+import type { DetailGroupAssigment } from './detail.state'
 
 interface Detail {
   id: number
   name: string
-  group_assigment: GroupAssigment
+  group_assigment: DetailGroupAssigment
 }
 
 interface Props {
@@ -41,7 +41,6 @@ export const DetailName = observer(
       <P
         sx={{
           ...slot_props?.name,
-          minWidth: '200px',
         }}
         lineHeight={1.2}
       >

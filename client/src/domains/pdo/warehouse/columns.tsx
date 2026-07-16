@@ -19,7 +19,7 @@ import {
   routeMap,
   UseIcon,
 } from '@/lib/index'
-import { GroupAssigment } from '../detail/detail.state'
+import { DetailGroupAssigment } from '../detail/detail.state'
 import { DetailName } from '../detail/detail_name'
 import { MaterialName } from '../material/name'
 import { AdaptiveNumberFormatter } from '../shared/adaptive_number_formatter'
@@ -158,7 +158,7 @@ export const material_columns: Column<InventoryLogRecord>[] = [
           detail={{
             id: data.detail_id,
             name: data.detail_name,
-            group_assigment: new GroupAssigment(data.detail_group_ids),
+            group_assigment: new DetailGroupAssigment(data.detail_group_ids),
           }}
           with_group_name
         />
@@ -203,7 +203,7 @@ export const detail_columns: Column<InventoryLogRecord>[] = [
         detail={{
           id: data.detail_id,
           name: data.detail_name,
-          group_assigment: new GroupAssigment(data.detail_group_ids),
+          group_assigment: new DetailGroupAssigment(data.detail_group_ids),
         }}
         with_group_name
       />

@@ -4,11 +4,11 @@ import type { ReactNode } from 'react'
 import { InModal } from '@/components/modal'
 import { Box, observer, useState } from '@/lib/index'
 import { app_cache } from '../cache'
-import type { GroupAssigment } from '../detail/detail.state'
+import type { DetailGroupAssigment } from '../detail/detail.state'
 import { TreeNode } from './tree_node'
 
 interface GroupTreeModalProps {
-  group_assigment: GroupAssigment
+  group_assigment: DetailGroupAssigment
   open_button: ReactNode
 }
 

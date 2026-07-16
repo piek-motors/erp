@@ -1,6 +1,7 @@
 import { WriteoffReason } from 'shared'
 import { Warehouse } from '#root/domains/pdo/services/warehouse_service.js'
 import { type DB, type IDB, RpcError } from '#root/sdk.js'
+import { DetailRepo } from './detail_repo.js'
 
 export interface DetailClaimRequestDetailInput {
   detail_id: number
@@ -34,6 +35,7 @@ export interface DetailClaimRequestDetailItem {
   detail_id: number
   detail_name: string
   drawing_number: string | null
+  group_ids: number[]
   qty: number
   on_hand_balance: number
   stock_location: string | null
@@ -50,7 +52,11 @@ export interface FulfillDetailClaimRequestResult {
 }
 
 export class DetailClaimRequestRepo {
-  constructor(private readonly db: IDB) {}
+  private readonly detail_repo: DetailRepo
+
+  constructor(private readonly db: IDB) {
+    this.detail_repo = new DetailRepo(db)
+  }
 
   async list(): Promise<DetailClaimRequestListItem[]> {
     const createdAfter = new Date()
@@ -103,22 +109,31 @@ export class DetailClaimRequestRepo {
       throw RpcError('NOT_FOUND', `Detail claim request ${id} not found`)
     }
 
-    const details = await this.db
-      .selectFrom('pdo.detail_claim_request_detail as rd')
-      .innerJoin('pdo.details as d', 'rd.detail_id', 'd.id')
-      .select([
-        'rd.detail_id',
-        'rd.qty',
-        'd.name as detail_name',
-        'd.drawing_number',
-        'd.on_hand_balance',
-        'd.stock_location',
-      ])
-      .where('rd.request_id', '=', id)
-      .orderBy('d.name')
+    const requestDetails = await this.db
+      .selectFrom('pdo.detail_claim_request_detail')
+      .select(['detail_id', 'qty'])
+      .where('request_id', '=', id)
       .execute()
 
-    return { request, details }
+    const qtyByDetailId = new Map(
+      requestDetails.map(detail => [detail.detail_id, detail.qty]),
+    )
+    const details = await this.detail_repo.list_details_by_ids(
+      requestDetails.map(detail => detail.detail_id),
+    )
+
+    return {
+      request,
+      details: details.map(detail => ({
+        detail_id: detail.id,
+        detail_name: detail.name,
+        drawing_number: detail.drawing_number,
+        group_ids: detail.group_ids,
+        qty: qtyByDetailId.get(detail.id) || 0,
+        on_hand_balance: detail.on_hand_balance,
+        stock_location: detail.stock_location,
+      })),
+    }
   }
 
   async create(input: CreateDetailClaimRequestInput): Promise<{ id: number }> {

@@ -1,9 +1,10 @@
 import { Chip } from '@mui/joy'
 import type { Column } from 'react-table'
-import { Label, Link, P, Row, Stack } from '@/lib/index'
-import { openPage, routeMap } from '@/lib/routes'
+import { Label, P, Row, Stack } from '@/lib/index'
 import { fmtDate } from '@/lib/utils/date_fmt'
 import type { DetailClaimRequestDetailItem } from '@/server/domains/pdo/storage/detail_claim_request_repo'
+import { DetailGroupAssigment } from '../detail/detail.state'
+import { DetailName } from '../detail/detail_name'
 import type { DetailClaimRequestListItem } from './api'
 
 export const detailRequestColumns: Column<DetailClaimRequestListItem>[] = [
@@ -62,12 +63,15 @@ export const detailRequestDetailColumns: Column<DetailClaimRequestDetailItem>[] 
     {
       Header: 'Деталь',
       accessor: detail => (
-        <Stack gap={0}>
-          <Link to={openPage(routeMap.pdo.detail.edit, detail.detail_id)}>
-            <P level="body-md" lineHeight={1.15}>
-              {detail.detail_name}
-            </P>
-          </Link>
+        <Stack gap={0} fontSize={'1rem'}>
+          <DetailName
+            detail={{
+              id: detail.detail_id,
+              name: detail.detail_name,
+              group_assigment: new DetailGroupAssigment(detail.group_ids),
+            }}
+            with_group_name
+          />
           {detail.drawing_number && (
             <P level="body-xs" color="neutral">
               {detail.drawing_number}

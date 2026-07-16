@@ -3,7 +3,7 @@ import { rpc } from '@/lib/deps'
 import { LoadingController } from '@/lib/store/loading_controller'
 import type { RouterInput } from '@/server/lib/trpc'
 import { app_cache } from '../cache'
-import { GroupAssigment } from '../detail/detail.state'
+import { DetailGroupAssigment } from '../detail/detail.state'
 import { MaterialSt } from './state'
 
 export class MaterialApi {
@@ -30,7 +30,7 @@ export class MaterialApi {
         m.details_count = Number(detailCount)
         m.details_made_from_this_material = details.map(e => ({
           ...e,
-          group_assigment: new GroupAssigment(e.group_ids),
+          group_assigment: new DetailGroupAssigment(e.group_ids),
         }))
         m.writeoff_stat = {
           monthly: writeoff_stat.monthly,
