@@ -38,6 +38,7 @@ export const routeMap = {
     },
     detailGroups: '/metalflow/details/groups',
     detailGroup: '/metalflow/details/groups/:id',
+    detailRequests: '/metalflow/detail-requests',
 
     operations: '/metalflow/operations',
     order: {

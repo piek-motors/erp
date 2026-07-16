@@ -1,6 +1,4 @@
-import { UilFolder } from '@iconscout/react-unicons'
 import { Box, Button, Stack } from '@mui/joy'
-import { palette } from '@mui/system'
 import type { Column } from 'react-table'
 import { ScrollableWindow } from '@/components/inputs'
 import { NumberInput } from '@/components/inputs/number_input'
@@ -17,14 +15,15 @@ import {
   useParams,
   useState,
 } from '@/lib/index'
-import { openPage, routeMap } from '@/lib/routes'
-import { notifier } from '@/lib/store/notifier.store'
-import theme from '@/lib/theme'
 import { app_cache } from '../cache'
 import type { DetailSt } from '../detail/detail.state'
 import { DetailName } from '../detail/detail_name'
 import { DetailStockDelta } from '../detail/detail_stock_delta'
 import { DetailSearch } from '../detail/list/detail_search'
+import {
+  type DetailRequestFormDetail,
+  DetailRequestFormModal,
+} from '../detail_requests/form'
 import { api } from './api'
 import type { GroupTreeNode } from './group.store'
 import { store } from './group.store'
@@ -33,6 +32,7 @@ import {
   CreateGroupButton,
   CreateSubgroupModal,
 } from './group_name.modal'
+import { ExpandDirIcon, GroupLink } from './tree_node'
 
 const detailColumns: Column<DetailSt>[] = [
   {
@@ -147,7 +147,13 @@ const GroupContent = observer(() => {
         {/* child group links */}
         <Stack>
           {app_cache.groups.tree.node(group.id)?.children.map(child => (
-            <GroupLink key={child.id} group={child} />
+            <GroupLink
+              key={child.id}
+              title={child.name}
+              is_active={false}
+              group_id={child.id}
+              startDecorator={<ExpandDirIcon />}
+            />
           ))}
         </Stack>
 
@@ -176,20 +182,51 @@ const GroupContent = observer(() => {
 })
 
 const CreateRequirementButton = observer(() => {
+  const [open, setOpen] = useState(false)
+
   if (!store.group_content.qty_list.has_something()) return null
 
+  const details = store.group_content.qty_list.items.reduce<
+    DetailRequestFormDetail[]
+  >((acc, item) => {
+    if (!item.qty || item.qty <= 0) return acc
+
+    const detail = store.group_content.details.find(d => d.id === item.id)
+    if (!detail) return acc
+
+    acc.push({
+      detail_id: detail.id,
+      detail_name: detail.name,
+      drawing_number: detail.drawing_number ?? undefined,
+      qty: item.qty,
+    })
+    return acc
+  }, [])
+
   return (
-    <Button
-      sx={{ width: 'fit-content', ml: 'auto' }}
-      variant="solid"
-      color="primary"
-      onClick={() => {
-        store.group_content.qty_list.clear()
-        notifier.ok('Требование создано')
-      }}
-    >
-      Создать требование
-    </Button>
+    <>
+      <Button
+        sx={{ width: 'fit-content', ml: 'auto' }}
+        variant="solid"
+        color="primary"
+        onClick={() => setOpen(true)}
+      >
+        Создать требование
+      </Button>
+      <DetailRequestFormModal
+        open={open}
+        setOpen={setOpen}
+        initialDetails={details}
+        initialProductName={
+          store.group_content.group
+            ? (app_cache.groups.tree.full_node_name(
+                store.group_content.group.id,
+              ) ?? '')
+            : ''
+        }
+        onSaved={() => store.group_content.qty_list.clear()}
+      />
+    </>
   )
 })
 
@@ -216,29 +253,27 @@ const ChangeNameModal = observer(() => {
   )
 })
 
-const GroupLink = observer(({ group }: GroupSectionProps) => (
-  <Row
-    sx={theme => ({
-      width: 'fit-content',
-      px: 1,
-      py: 0.3,
-      borderRadius: 3,
-      '&:hover': { background: theme.vars.palette.primary[100] },
-    })}
-  >
-    <Link to={openPage(routeMap.pdo.detailGroup, group.id)}>
-      <Row
-        gap={1}
-        sx={{
-          cursor: 'pointer',
-          '&:hover': { textDecoration: 'underline' },
-        }}
-      >
-        <UseIcon icon={UilFolder} />
-        <P level="body-lg" fontWeight={600}>
-          {group.name}
-        </P>
-      </Row>
-    </Link>
-  </Row>
-))
+// const GroupLink = observer(({ group }: GroupSectionProps) => (
+//   <Row
+//     sx={theme => ({
+//       width: 'fit-content',
+//       px: 1,
+//       py: 0.3,
+//       borderRadius: 3,
+//       '&:hover': { background: theme.vars.palette.primary[100] },
+//     })}
+//   >
+//     <Link to={openPage(routeMap.pdo.detailGroup, group.id)}>
+//       <Row
+//         gap={1}
+//         sx={{
+//           cursor: 'pointer',
+//           '&:hover': { textDecoration: 'underline' },
+//         }}
+//       >
+//         <ExpandDirIcon is_expanded={false} />
+//         <P fontWeight={500}>{group.name}</P>
+//       </Row>
+//     </Link>
+//   </Row>
+// ))

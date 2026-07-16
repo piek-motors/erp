@@ -1,4 +1,4 @@
-import { makeAutoObservable, toJS } from 'mobx'
+import { makeAutoObservable } from 'mobx'
 import { normalize, token_search } from '@/lib/utils/search'
 import type { DetailSt } from '../detail/detail.state'
 import { SearchCriteria, search_config } from '../detail/list/search_config'
@@ -94,7 +94,10 @@ class QuantityList {
   }
 
   has_something() {
-    return this.items.length !== 0 && this.items.some(e => e.qty !== 0)
+    return (
+      this.items.length !== 0 &&
+      this.items.some(e => e.qty != null && e.qty > 0)
+    )
   }
 }
 

@@ -11,6 +11,10 @@ export const nav_links: Link[] = [
     href: routeMap.pdo.detailGroups,
   },
   {
+    name: 'Требования',
+    href: routeMap.pdo.detailRequests,
+  },
+  {
     name: 'Детали',
     href: routeMap.pdo.details,
     endBlock: [

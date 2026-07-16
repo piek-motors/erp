@@ -41,10 +41,10 @@ export const TreeNode = observer(
     ) : null
 
     const group_props: GroupLinkProps = {
-      node,
+      title: node.name,
       is_active: group_id === node.id,
       startDecorator: <ExpandButton node={node} />,
-      onClick: (node: Node) => {
+      onClick: () => {
         onClick?.(node.id)
         node.toggle_expanded()
       },
@@ -67,7 +67,7 @@ export const TreeNode = observer(
               <GroupBtn {...group_props} />
             </>
           ) : (
-            <GroupLink {...group_props} />
+            <GroupLink {...group_props} group_id={node.id} />
           )}
         </Row>
 
@@ -76,6 +76,7 @@ export const TreeNode = observer(
             <LevelIndicator />
             {node.children.map(child => (
               <TreeNode
+                key={child.id}
                 strategy={strategy}
                 node={child}
                 depth={depth + 1}
@@ -93,51 +94,66 @@ export const TreeNode = observer(
 /** Expand/collapse button or empty spacer. */
 const ExpandButton = observer(({ node }: { node: Node }) => {
   const size = 20
-
-  let icon = UilListUl
-  let opacity = 0.1
   if (node.has_childrens()) {
-    opacity = 1
-    icon = node.is_expanded() ? UilFolderOpen : UilFolder
+    return <ExpandDirIcon is_expanded={node.is_expanded()} />
   }
-
   return (
     <UseIcon
       small
-      icon={icon}
-      settings={{ opacity, width: size, fill: 'black' }}
+      icon={UilListUl}
+      settings={{ opacity: 0.3, width: size, fill: 'black' }}
     />
   )
 })
 
+export const ExpandDirIcon = observer(
+  ({ is_expanded }: { is_expanded?: boolean }) => {
+    const size = 20
+    const icon = is_expanded ? UilFolderOpen : UilFolder
+    return (
+      <UseIcon
+        small
+        icon={icon}
+        settings={{ opacity: 1, width: size, fill: 'blue' }}
+      />
+    )
+  },
+)
+
 interface GroupLinkProps {
-  node: Node
+  title: string
   is_active: boolean
-  onClick?: (node: Node) => void
+  onClick?: () => void
   startDecorator?: ReactNode
 }
 
-const GroupLink = observer(
-  ({ node, is_active, onClick, startDecorator }: GroupLinkProps) => (
+export const GroupLink = observer(
+  ({
+    title,
+    is_active,
+    onClick,
+    startDecorator,
+    group_id,
+  }: GroupLinkProps & { group_id: number }) => (
     <Link
-      onClick={e => onClick?.(node)}
-      key={node.id}
-      to={openPage(routeMap.pdo.detailGroup, node.id)}
+      onClick={e => onClick?.()}
+      key={title}
+      to={openPage(routeMap.pdo.detailGroup, group_id)}
       style={{ textDecoration: 'none' }}
     >
       <GroupBtn
         startDecorator={startDecorator}
         is_active={is_active}
-        node={node}
+        title={title}
       />
     </Link>
   ),
 )
 
 export const GroupBtn = observer(
-  ({ node, is_active, startDecorator, onClick }: GroupLinkProps) => (
+  ({ title, is_active, startDecorator, onClick }: GroupLinkProps) => (
     <Button
-      onClick={e => onClick?.(node)}
+      onClick={_ => onClick?.()}
       startDecorator={startDecorator}
       variant={is_active ? 'soft' : 'plain'}
       color={is_active ? 'primary' : 'neutral'}
@@ -154,7 +170,7 @@ export const GroupBtn = observer(
         '&:hover': {},
       }}
     >
-      {node.name}
+      {title}
     </Button>
   ),
 )

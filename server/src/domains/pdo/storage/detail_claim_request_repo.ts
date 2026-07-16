@@ -44,6 +44,9 @@ export class DetailClaimRequestRepo {
   constructor(private readonly db: IDB) {}
 
   async list(): Promise<DetailClaimRequestListItem[]> {
+    const createdAfter = new Date()
+    createdAfter.setDate(createdAfter.getDate() - 30)
+
     const rows = await this.db
       .selectFrom('pdo.detail_claim_request as r')
       .leftJoin(
@@ -60,6 +63,7 @@ export class DetailClaimRequestRepo {
         'r.fulfilled_at',
         eb.fn.count<number>('rd.detail_id').as('detail_count'),
       ])
+      .where('r.created_at', '>=', createdAfter)
       .groupBy([
         'r.id',
         'r.order_id',

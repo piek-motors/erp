@@ -26,29 +26,26 @@ interface GroupListProps {
 }
 
 /** Main group list component displaying hierarchical tree structure. */
-export const GroupList = observer(
-  ({ onLinkClick, group_assigment }: GroupListProps) => {
-    return (
-      <Stack p={0.5} gap={0}>
-        {app_cache.groups.tree.nodes.map(node => (
-          <TreeNode
-            key={node.id}
-            strategy="link"
-            node={node}
-            depth={0}
-            onClick={onLinkClick}
-            group_assigment={group_assigment}
-          />
-        ))}
+export const GroupList = observer(({ onLinkClick }: GroupListProps) => {
+  return (
+    <Stack p={0.5} gap={0}>
+      {app_cache.groups.tree.nodes.map(node => (
+        <TreeNode
+          key={node.id}
+          strategy="link"
+          node={node}
+          depth={0}
+          onClick={onLinkClick}
+        />
+      ))}
 
-        {app_cache.groups.tree.nodes.length === 0 && (
-          <P level="body-sm" color="neutral">
-            Нет созданных групп
-          </P>
-        )}
+      {app_cache.groups.tree.nodes.length === 0 && (
+        <P level="body-sm" color="neutral">
+          Нет созданных групп
+        </P>
+      )}
 
-        <CreateGroupModal />
-      </Stack>
-    )
-  },
-)
+      <CreateGroupModal />
+    </Stack>
+  )
+})
