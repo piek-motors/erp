@@ -17,12 +17,12 @@ brew install restic
 ### 2. Access Backup Snapshots
 ```bash
 cd infra
-env $(cat restic.env) restic snapshots
+env $(cat restic_erp.env) restic snapshots
 ```
 
 ### 3. Restore Backup
 ```bash
-env $(cat restic.env) restic restore <snapshot-id> --target ./restored
+env $(cat restic_erp.env) restic restore <snapshot-id> --target ./restored
 ```
 
 ### 4. Import Database
@@ -36,4 +36,4 @@ createuser -U postgres --superuser --pwprompt hasura
 ```
 
 ### Remove ols snapshots 
-env $(cat restic.env) restic forget --keep-within 3m --group-by '' 
+env $(cat restic.env) restic forget --keep-within 3m --group-by ''

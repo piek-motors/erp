@@ -109,8 +109,8 @@ const DetailRequestMeta = observer(
         <P>{request.request.order_id}</P>
         <Divider orientation="vertical" />
         <Label label="Изделие" />
-        <P>{request.request.product_name}</P>
-        <Label color="neutral">{request.request.product_qty} шт.</Label>
+        <P fontWeight={600}>{request.request.product_name.trim()}</P>
+        <Label fontWeight={600}> –– {request.request.product_qty} шт.</Label>
 
         <DetailRequestActions store={store} request={request} />
       </Row>

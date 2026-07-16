@@ -24,6 +24,11 @@ export const nav_links: Link[] = [
     name: 'Требования',
     href: routeMap.pdo.detailRequests,
     iconNode: <WarehouseIcon sx={icon_sx} />,
+    endBlock: [
+      {
+        href: routeMap.pdo.detailRequestNew,
+      },
+    ],
   },
   {
     name: 'Детали',

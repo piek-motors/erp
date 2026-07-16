@@ -1,8 +1,10 @@
 import { observer } from 'mobx-react-lite'
 import { useEffect, useState } from 'react'
 import { ScrollableWindow } from '@/components/inputs'
-import { useParams } from '@/lib/index'
+import { useNavigate, useParams } from '@/lib/index'
+import { routeMap } from '@/lib/routes'
 import { DetailRequestDetails } from './details'
+import { DetailRequestFormModal } from './form'
 import { DetailRequestListStore } from './list.store'
 import { DetailRequestList, DetailRequestListHeader } from './list_content'
 
@@ -15,7 +17,7 @@ export const DetailRequestListPage = observer(() => {
 
   return (
     <ScrollableWindow
-      static={<DetailRequestListHeader store={store} />}
+      static={<DetailRequestListHeader />}
       scroll={<DetailRequestList store={store} />}
     />
   )
@@ -38,4 +40,11 @@ export const DetailRequestDetailsPage = observer(() => {
   }, [id])
 
   return <DetailRequestDetails store={store} />
+})
+
+export const DetailRequestCreatePage = observer(() => {
+  const navigate = useNavigate()
+  const close = () => navigate(routeMap.pdo.detailRequests)
+
+  return <DetailRequestFormModal open setOpen={close} onSaved={close} />
 })

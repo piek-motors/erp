@@ -4,6 +4,7 @@ import { CreateDetailPage, DetailPage } from './detail/detail'
 import { DetailsListPage } from './detail/list/list'
 import { GroupListPage } from './detail_grouping/main'
 import {
+  DetailRequestCreatePage,
   DetailRequestDetailsPage,
   DetailRequestListPage,
 } from './detail_requests/list'
@@ -67,6 +68,14 @@ export default {
     {
       element: <DetailRequestListPage />,
       path: metalflow.detailRequests,
+    },
+    {
+      element: (
+        <MobilePadding desktop_too>
+          <DetailRequestCreatePage />
+        </MobilePadding>
+      ),
+      path: metalflow.detailRequestNew,
     },
     {
       element: (
