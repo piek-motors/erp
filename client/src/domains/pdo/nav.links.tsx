@@ -4,6 +4,10 @@ import PrecisionManufacturingIcon from '@mui/icons-material/PrecisionManufacturi
 import RawOnIcon from '@mui/icons-material/RawOn'
 import WarehouseIcon from '@mui/icons-material/WarehouseRounded'
 import WorkspacesIcon from '@mui/icons-material/WorkspacesRounded'
+import {
+  CreateDetailRequestIcon,
+  createDetailRequestTooltip,
+} from '@/domains/pdo/detail_requests/create_button'
 import { routeMap } from '@/lib/routes'
 import type { Link } from '../../components/nav_sidebar'
 
@@ -27,6 +31,8 @@ export const nav_links: Link[] = [
     endBlock: [
       {
         href: routeMap.pdo.detailRequestNew,
+        iconNode: <CreateDetailRequestIcon sx={icon_sx} />,
+        tooltip: createDetailRequestTooltip,
       },
     ],
   },
@@ -37,6 +43,7 @@ export const nav_links: Link[] = [
     endBlock: [
       {
         href: routeMap.pdo.detail.new,
+        tooltip: 'Создать деталь',
       },
     ],
   },
@@ -47,6 +54,7 @@ export const nav_links: Link[] = [
     endBlock: [
       {
         href: routeMap.pdo.material.new,
+        tooltip: 'Создать материал',
       },
     ],
   },

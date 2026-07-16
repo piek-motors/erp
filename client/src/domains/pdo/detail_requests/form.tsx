@@ -25,6 +25,7 @@ import {
 export interface DetailRequestFormModalProps {
   open: boolean
   setOpen(open: boolean): void
+  initialOrderId?: number | string
   initialDetails?: DetailRequestFormDetail[]
   initialProductName?: string
   initialProductQty?: number
@@ -58,6 +59,7 @@ export const DetailRequestFormModal = observer(
       store.hydrate(props)
     }, [
       props.open,
+      props.initialOrderId,
       props.initialDetails,
       props.initialProductName,
       props.initialProductQty,

@@ -9,6 +9,7 @@ import {
   IconButton,
   Stack,
   type StackProps,
+  Tooltip,
 } from '@mui/joy'
 import type { ReactNode } from 'react'
 import { Link as RouterLink, useLocation } from 'react-router'
@@ -20,6 +21,7 @@ export type Link = {
   href: string
   icon?: Icon
   iconNode?: ReactNode
+  tooltip?: string
   childres?: Link[]
   endBlock?: Link[]
 }
@@ -58,7 +60,13 @@ const RenderAction = (props: { action: Link; size: ButtonProps['size'] }) => {
         {action.endBlock?.length && (
           <Stack>
             {action.endBlock?.map(e => (
-              <LinkableIcon href={e.href} small key={e.href} />
+              <LinkableIcon
+                href={e.href}
+                iconNode={e.iconNode}
+                tooltip={e.tooltip}
+                small
+                key={e.href}
+              />
             ))}
           </Stack>
         )}
@@ -101,15 +109,22 @@ function MenuButton(props: {
   )
 }
 
-const LinkableIcon = (props: { href: string; small?: boolean }) => (
+const LinkableIcon = (props: {
+  href: string
+  iconNode?: ReactNode
+  small?: boolean
+  tooltip?: string
+}) => (
   <Box key={props.href}>
     <RouterLink to={props.href} key={props.href}>
-      <IconButton
-        size="sm"
-        variant={props.href === useLocation().pathname ? 'soft' : 'plain'}
-      >
-        <UseIcon icon={AddCircleRounded} small />
-      </IconButton>
+      <Tooltip title={props.tooltip} size="sm" placement="right">
+        <IconButton
+          size="sm"
+          variant={props.href === useLocation().pathname ? 'soft' : 'plain'}
+        >
+          {props.iconNode ?? <UseIcon icon={AddCircleRounded} small />}
+        </IconButton>
+      </Tooltip>
     </RouterLink>
   </Box>
 )

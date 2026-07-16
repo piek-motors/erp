@@ -9,6 +9,7 @@ export interface DetailRequestFormDetail {
 }
 
 export interface DetailRequestFormHydrateProps {
+  initialOrderId?: number | string
   initialDetails?: DetailRequestFormDetail[]
   initialProductName?: string
   initialProductQty?: number
@@ -59,7 +60,7 @@ export class DetailRequestFormStore {
   hydrate(props: DetailRequestFormHydrateProps) {
     const request = props.request?.request
 
-    this.orderId = request?.order_id ?? ''
+    this.orderId = request?.order_id ?? String(props.initialOrderId ?? '')
     this.productName = request?.product_name ?? props.initialProductName ?? ''
     this.productQty = request?.product_qty ?? props.initialProductQty ?? 1
     this.details = (

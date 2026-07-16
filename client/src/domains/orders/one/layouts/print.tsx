@@ -22,7 +22,7 @@ export const PrintLayout = observer(() => {
         </Box>
 
         <Box sx={{ mb: 1 }}>
-          <PositionsList />
+          <PositionsList showRequirementActions={false} />
         </Box>
 
         <Grid container>
