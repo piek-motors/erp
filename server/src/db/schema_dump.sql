@@ -323,7 +323,7 @@ CREATE TABLE hr.intervals (
     ent_event_id integer NOT NULL,
     ext_event_id integer,
     updated_manually boolean,
-    employee_id smallint NOT NULL
+    employee_id integer NOT NULL
 );
 
 
@@ -1794,4 +1794,3 @@ ALTER DEFAULT PRIVILEGES FOR ROLE postgres IN SCHEMA hr GRANT SELECT,INSERT,UPDA
 --
 -- PostgreSQL database dump complete
 --
-
