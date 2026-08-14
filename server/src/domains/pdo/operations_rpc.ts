@@ -13,7 +13,7 @@ import { type DB, db, procedure, requireScope, Scope, z } from '#root/sdk.js'
 import { DetailRepo } from './storage/detail_repo.js'
 import { MaterialRepo } from './storage/material_repo.js'
 
-const Limit = 100
+const Limit = 2000
 const detail_repo = new DetailRepo(db)
 const material_repo = new MaterialRepo(db)
 
