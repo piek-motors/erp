@@ -1,17 +1,11 @@
 import { observer } from 'mobx-react-lite'
 import { useEffect } from 'react'
 import { OperationSubject } from 'shared'
+import { DateRangeInput } from '@/components/inputs/date_range_input'
 import { ScrollableWindow } from '@/components/scrollable_window'
 import { Table } from '@/components/table.impl'
 import { MetalPageTitle } from '@/domains/pdo/shared/basic'
-import {
-  Button,
-  InputLabled,
-  Label,
-  Loading,
-  Row,
-  ToggleButtonGroup,
-} from '@/lib/index'
+import { Button, Label, Loading, Stack, ToggleButtonGroup } from '@/lib/index'
 import type { OperationListItem } from '@/server/domains/pdo/operations_rpc'
 import { MobileNavModal, MobilePadding } from '../root_layout'
 import { inventory_log_vm } from './inventory_log_vm'
@@ -30,7 +24,7 @@ export const InventoryLog = observer((props: Props) => {
   const single_subject_log = materialId || detailId
 
   useEffect(() => {
-    store.load(materialId, detailId)
+    void store.load(materialId, detailId).catch(() => {})
   }, [materialId, detailId])
 
   return (
@@ -55,20 +49,15 @@ export const InventoryLog = observer((props: Props) => {
             </ToggleButtonGroup>
           )}
 
-          <Row px={1} pt={1} alignItems="end">
-            <InputLabled
-              label="Период с"
-              type="date"
-              value={store.dateFrom}
-              onChange={v => store.setDateFrom(v)}
+          <Stack px={1} pt={1}>
+            <DateRangeInput
+              value={{ from: store.dateFrom, to: store.dateTo }}
+              onChange={({ from, to }) => {
+                if (from !== store.dateFrom) store.setDateFrom(from)
+                if (to !== store.dateTo) store.setDateTo(to)
+              }}
             />
-            <InputLabled
-              label="по"
-              type="date"
-              value={store.dateTo}
-              onChange={v => store.setDateTo(v)}
-            />
-          </Row>
+          </Stack>
 
           {store.loader.loading && <Loading />}
           {store.no_data && <Label px={1}>Нет информации</Label>}

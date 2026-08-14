@@ -1,3 +1,5 @@
 export * from '../scrollable_window'
+export * from './date_input'
+export * from './date_range_input'
 export * from './qty_input_with_unit'
 export * from './search_input'

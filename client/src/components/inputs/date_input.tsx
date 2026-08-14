@@ -1,11 +1,14 @@
 import { Stack } from '@mui/joy'
 import { useCallback, useMemo } from 'react'
 import { InputLabled, P } from '@/lib/index'
+import { parseRussianDate } from '@/lib/utils/russian_date'
 
 interface Props {
   label?: string
   value: string
   onChange: (v: string) => void
+  size?: 'sm' | 'md' | 'lg'
+  width?: string | number
 }
 
 const formatDate = (raw: string): string => {
@@ -16,17 +19,11 @@ const formatDate = (raw: string): string => {
   return `${digits.slice(0, 2)}.${digits.slice(2, 4)}.${digits.slice(4)}`
 }
 
-const isValidDateStr = (str: string): boolean => {
-  const [d, m, y] = str.split('.').map(s => parseInt(s, 10))
-  if (![d, m, y].every(n => Number.isInteger(n))) return false
-  return d >= 1 && d <= 31 && m >= 1 && m <= 12
-}
-
-export function DateInput({ value = '', onChange, label }: Props) {
+export function DateInput({ value = '', onChange, label, size, width }: Props) {
   const displayValue = useMemo(() => formatDate(value), [value])
   const isComplete = useMemo(() => displayValue.length === 8, [displayValue])
   const valid = useMemo(
-    () => isComplete && isValidDateStr(displayValue),
+    () => isComplete && Boolean(parseRussianDate(displayValue)),
     [isComplete, displayValue],
   )
 
@@ -44,6 +41,8 @@ export function DateInput({ value = '', onChange, label }: Props) {
         onChange={handleChange}
         placeholder="дд.мм.гг"
         label={label}
+        size={size}
+        width={width}
       />
       {isComplete && !valid && (
         <P color="danger" level="body-xs">

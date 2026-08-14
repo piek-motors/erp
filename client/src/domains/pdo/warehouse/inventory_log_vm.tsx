@@ -4,6 +4,7 @@ import { rpc } from '@/lib/deps'
 import { matrixDecoder } from '@/lib/rpc/matrix_decoder'
 import { LoadingController } from '@/lib/store/loading_controller'
 import { notifier } from '@/lib/store/notifier.store'
+import { parseRussianDate } from '@/lib/utils/russian_date'
 import { app_cache } from '../cache'
 import { detail_columns, material_columns } from './columns'
 import type { InventoryLogRecord } from './inventory_log'
@@ -15,6 +16,7 @@ class InventoryLogVM {
   dateTo = ''
   materialId?: number
   detailId?: number
+  private requestVersion = 0
   constructor() {
     makeAutoObservable(this)
   }
@@ -25,17 +27,34 @@ class InventoryLogVM {
   subject = OperationSubject.Material
   setSubject(v: OperationSubject) {
     this.subject = v
-    this.load(this.materialId, this.detailId)
+    void this.load(this.materialId, this.detailId).catch(() => {})
   }
 
   setDateFrom(v: string) {
     this.dateFrom = v
-    this.load(this.materialId, this.detailId)
+    this.requestVersion += 1
+    this.reloadForDateRange()
   }
 
   setDateTo(v: string) {
     this.dateTo = v
-    this.load(this.materialId, this.detailId)
+    this.requestVersion += 1
+    this.reloadForDateRange()
+  }
+
+  private reloadForDateRange() {
+    if (!this.isDateRangeValid) return
+    void this.load(this.materialId, this.detailId).catch(() => {})
+  }
+
+  get isDateRangeValid() {
+    const dateFrom = this.dateFrom ? parseRussianDate(this.dateFrom) : undefined
+    const dateTo = this.dateTo ? parseRussianDate(this.dateTo, true) : undefined
+    return (
+      (!this.dateFrom || Boolean(dateFrom)) &&
+      (!this.dateTo || Boolean(dateTo)) &&
+      !(dateFrom && dateTo && dateFrom > dateTo)
+    )
   }
 
   async load(materialId?: number, detailId?: number) {
@@ -44,20 +63,21 @@ class InventoryLogVM {
     if (materialId) this.subject = OperationSubject.Material
     if (detailId) this.subject = OperationSubject.Detail
 
-    this.loader.run(async () => {
+    if (!this.isDateRangeValid) return
+
+    const requestVersion = ++this.requestVersion
+    await this.loader.run(async () => {
       const operationsRaw = await rpc.pdo.operations.list.query({
         materialId,
         detailId,
         subject: this.subject,
-        dateFrom: this.dateFrom
-          ? new Date(`${this.dateFrom}T00:00:00`)
-          : undefined,
-        dateTo: this.dateTo
-          ? new Date(`${this.dateTo}T23:59:59.999`)
-          : undefined,
+        dateFrom: parseRussianDate(this.dateFrom),
+        dateTo: parseRussianDate(this.dateTo, true),
       })
       const operations = matrixDecoder<InventoryLogRecord>(operationsRaw)
-      this.setOperations(operations)
+      if (requestVersion === this.requestVersion) {
+        this.setOperations(operations)
+      }
     })
   }
 
