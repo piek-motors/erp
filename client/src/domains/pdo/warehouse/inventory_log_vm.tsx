@@ -11,6 +11,10 @@ import type { InventoryLogRecord } from './inventory_log'
 class InventoryLogVM {
   readonly loader = new LoadingController()
   operations: InventoryLogRecord[] = []
+  dateFrom = ''
+  dateTo = ''
+  materialId?: number
+  detailId?: number
   constructor() {
     makeAutoObservable(this)
   }
@@ -21,10 +25,22 @@ class InventoryLogVM {
   subject = OperationSubject.Material
   setSubject(v: OperationSubject) {
     this.subject = v
-    this.load()
+    this.load(this.materialId, this.detailId)
+  }
+
+  setDateFrom(v: string) {
+    this.dateFrom = v
+    this.load(this.materialId, this.detailId)
+  }
+
+  setDateTo(v: string) {
+    this.dateTo = v
+    this.load(this.materialId, this.detailId)
   }
 
   async load(materialId?: number, detailId?: number) {
+    this.materialId = materialId
+    this.detailId = detailId
     if (materialId) this.subject = OperationSubject.Material
     if (detailId) this.subject = OperationSubject.Detail
 
@@ -33,6 +49,12 @@ class InventoryLogVM {
         materialId,
         detailId,
         subject: this.subject,
+        dateFrom: this.dateFrom
+          ? new Date(`${this.dateFrom}T00:00:00`)
+          : undefined,
+        dateTo: this.dateTo
+          ? new Date(`${this.dateTo}T23:59:59.999`)
+          : undefined,
       })
       const operations = matrixDecoder<InventoryLogRecord>(operationsRaw)
       this.setOperations(operations)
@@ -53,7 +75,7 @@ class InventoryLogVM {
     if (window.confirm(msg)) {
       const res = await rpc.pdo.operations.revert.mutate({ id: operation.id })
       notifier.warn(res.message)
-      await this.load()
+      await this.load(this.materialId, this.detailId)
     }
   }
 

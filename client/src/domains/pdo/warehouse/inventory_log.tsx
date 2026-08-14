@@ -4,7 +4,14 @@ import { OperationSubject } from 'shared'
 import { ScrollableWindow } from '@/components/scrollable_window'
 import { Table } from '@/components/table.impl'
 import { MetalPageTitle } from '@/domains/pdo/shared/basic'
-import { Button, Label, Loading, ToggleButtonGroup } from '@/lib/index'
+import {
+  Button,
+  InputLabled,
+  Label,
+  Loading,
+  Row,
+  ToggleButtonGroup,
+} from '@/lib/index'
 import type { OperationListItem } from '@/server/domains/pdo/operations_rpc'
 import { MobileNavModal, MobilePadding } from '../root_layout'
 import { inventory_log_vm } from './inventory_log_vm'
@@ -47,6 +54,21 @@ export const InventoryLog = observer((props: Props) => {
               <Button value={OperationSubject.Detail.toString()}>Детали</Button>
             </ToggleButtonGroup>
           )}
+
+          <Row px={1} pt={1} alignItems="end">
+            <InputLabled
+              label="Период с"
+              type="date"
+              value={store.dateFrom}
+              onChange={v => store.setDateFrom(v)}
+            />
+            <InputLabled
+              label="по"
+              type="date"
+              value={store.dateTo}
+              onChange={v => store.setDateTo(v)}
+            />
+          </Row>
 
           {store.loader.loading && <Loading />}
           {store.no_data && <Label px={1}>Нет информации</Label>}

@@ -13,7 +13,7 @@ import { type DB, db, procedure, requireScope, Scope, z } from '#root/sdk.js'
 import { DetailRepo } from './storage/detail_repo.js'
 import { MaterialRepo } from './storage/material_repo.js'
 
-const Limit = 2000
+const Limit = 1000
 const detail_repo = new DetailRepo(db)
 const material_repo = new MaterialRepo(db)
 
@@ -40,6 +40,8 @@ export const operations = router({
         materialId: z.number().optional(),
         detailId: z.number().optional(),
         subject: z.enum(OperationSubject),
+        dateFrom: z.coerce.date().optional(),
+        dateTo: z.coerce.date().optional(),
       }),
     )
     .query(async ({ input }) => {
@@ -51,6 +53,12 @@ export const operations = router({
           )
           .$if(!!input.detailId, qb =>
             qb.where('o.detail_id', '=', input.detailId as number),
+          )
+          .$if(!!input.dateFrom, qb =>
+            qb.where('o.timestamp', '>=', input.dateFrom as Date),
+          )
+          .$if(!!input.dateTo, qb =>
+            qb.where('o.timestamp', '<=', input.dateTo as Date),
           )
           .selectAll(['o'])
           .select(eb =>
