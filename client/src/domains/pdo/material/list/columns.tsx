@@ -6,7 +6,7 @@ import { Label, Row } from '@/lib/index'
 import type { AppMaterial } from '../../cache/material_cache'
 import { MaterialName } from '../name'
 
-const formatter = new AdaptiveNumberFormatter(0, 0, true)
+const formatter = new AdaptiveNumberFormatter(0, 2, true)
 
 export const columns: Column<AppMaterial>[] = [
   {
