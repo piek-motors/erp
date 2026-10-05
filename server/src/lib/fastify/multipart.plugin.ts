@@ -40,7 +40,6 @@ export async function handleFileUpload(
             originalname,
           },
           config.S3_BUCKET,
-          'COLD',
         )
 
         files.push({
@@ -73,7 +72,6 @@ function needsEncodingFix(filename: string): boolean {
 async function send_to_s3(
   file: any,
   bucket: string,
-  storageClass: string,
 ): Promise<{ key: string; bucket: string; originalname: string }> {
   const key = randomUUID()
   // Store original filename as-is for database
@@ -86,7 +84,7 @@ async function send_to_s3(
     Key: key,
     Body: file.buffer,
     ContentType: file.mimetype,
-    StorageClass: storageClass as any,
+    StorageClass: 'STANDARD',
     Metadata: {
       originalname: encodedFilename,
     },
